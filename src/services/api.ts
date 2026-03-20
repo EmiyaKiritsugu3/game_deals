@@ -286,3 +286,4 @@ export function generatePriceHistory(retailPrice: number, currentPrice: number, 
 
     return data;
 }
+// force sync
