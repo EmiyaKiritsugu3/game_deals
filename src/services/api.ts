@@ -1,3 +1,5 @@
+import { fallbackDeals } from '@/data/fallbackDeals';
+
 export interface Deal {
     internalName: string;
     title: string;
@@ -125,17 +127,15 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
     }
 
     try {
-        console.log('Fetching deals for production build...');
         const res = await fetch(url.toString(), {
             next: { revalidate: 3600 } // Cache for 1 hour
         });
 
-        if (!res.ok) return [];
-        return res.json();
+        if (!res.ok) return fallbackDeals;
+        const data = await res.json();
+        return data.length > 0 ? data : fallbackDeals;
     } catch (error) {
-        console.error('getDeals error:', error);
-        // Force Vercel update to fix getDeals crash on build
-        return [];
+        return fallbackDeals;
     }
 }
 
@@ -288,4 +288,3 @@ export function generatePriceHistory(retailPrice: number, currentPrice: number, 
 
     return data;
 }
-// force sync
