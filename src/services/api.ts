@@ -125,6 +125,7 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
     }
 
     try {
+        console.log('Fetching deals for production build...');
         const res = await fetch(url.toString(), {
             next: { revalidate: 3600 } // Cache for 1 hour
         });
