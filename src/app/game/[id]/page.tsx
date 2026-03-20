@@ -1,21 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
 import { getGame, getStores, getHighResImage, getStoreLogo, isGreyMarketStore, getDrmType, getRegionTag, GameDeal } from '@/services/api';
 import { estimatePlaytime, calculateCostPerHour } from '@/services/hltb';
 import HeartButton from '@/components/HeartButton';
 import PriceAlertTrigger from '@/components/PriceAlertTrigger';
+import { DynamicPriceHistory, DynamicStoreCompare } from '@/components/DynamicCharts';
 import styles from './page.module.css';
-
-const PriceHistoryChart = dynamic(() => import('@/components/Charts').then(mod => mod.PriceHistoryChart), {
-    ssr: false,
-    loading: () => <div className={styles.chartPlaceholder}>Loading Price History...</div>
-});
-
-const StoreCompareChart = dynamic(() => import('@/components/Charts').then(mod => mod.StoreCompareChart), {
-    ssr: false,
-    loading: () => <div className={styles.chartPlaceholder}>Loading Price Comparison...</div>
-});
 
 export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -194,7 +184,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                     })()}
                 </div>
 
-                <PriceHistoryChart
+                <DynamicPriceHistory
                     currentPrice={sortedDeals[0]?.price || game.cheapestPriceEver.price}
                     lowestPrice={game.cheapestPriceEver.price}
                     lowestDate={game.cheapestPriceEver.date}
@@ -202,7 +192,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                     gameTitle={game.info.title}
                 />
 
-                <StoreCompareChart
+                <DynamicStoreCompare
                     data={sortedDeals.map(d => ({
                         storeName: stores[d.storeID] || `Store ${d.storeID}`,
                         price: d.price
