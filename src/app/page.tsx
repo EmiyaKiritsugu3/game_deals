@@ -20,8 +20,8 @@ export default async function Home() {
     getDeals({ sortBy: 'Recent', pageSize: '8', onSale: '1' }),        // Ending soon (recent = turnover)
   ]);
 
-  // Filter historical lows: savings above 85% as strong HL proxy
-  const hlDeals = historicalLows.filter(d => parseFloat(d.savings) > 85).slice(0, 8);
+  // Filter historical lows: savings above 70% as strong HL proxy
+  const hlDeals = historicalLows.filter(d => parseFloat(d.savings) > 70).slice(0, 8);
 
   const carouselDeals = popular.slice(0, 5);
   const gridDeals = popular.length > 5 ? popular.slice(5) : [];
