@@ -1,10 +1,21 @@
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { getGame, getStores, getHighResImage, getStoreLogo, isGreyMarketStore, getDrmType, getRegionTag, GameDeal } from '@/services/api';
 import { estimatePlaytime, calculateCostPerHour } from '@/services/hltb';
 import SidebarModal from '@/components/SidebarModal';
 import HeartButton from '@/components/HeartButton';
 import PriceAlertTrigger from '@/components/PriceAlertTrigger';
 import styles from './modal.module.css';
+
+const PriceHistoryChart = dynamic(() => import('@/components/Charts').then(mod => mod.PriceHistoryChart), {
+    ssr: false,
+    loading: () => <div className={styles.chartPlaceholder}>Loading History...</div>
+});
+
+const StoreCompareChart = dynamic(() => import('@/components/Charts').then(mod => mod.StoreCompareChart), {
+    ssr: false,
+    loading: () => <div className={styles.chartPlaceholder}>Loading Prices...</div>
+});
 
 export default async function GameModal({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;

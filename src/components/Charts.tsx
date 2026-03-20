@@ -65,11 +65,12 @@ export function StoreCompareChart({ data }: { data: StorePrice[] }) {
     );
 }
 
-import { generatePriceHistory } from '@/services/api';
+import { generatePriceHistory } from '@/utils/pricing';
+import { PriceHistoryPoint } from '@/types/game';
 import { LineChart, Line } from 'recharts';
 
 export function PriceHistoryChart({ currentPrice, lowestPrice, lowestDate, retailPrice = '9.99', gameTitle = 'Default' }: { currentPrice: string, lowestPrice: string, lowestDate: number, retailPrice?: string, gameTitle?: string }) {
-    const historyData = generatePriceHistory(parseFloat(retailPrice), parseFloat(currentPrice), parseFloat(lowestPrice), gameTitle);
+    const historyData: PriceHistoryPoint[] = generatePriceHistory(parseFloat(retailPrice), parseFloat(currentPrice), parseFloat(lowestPrice), gameTitle);
 
     return (
         <div className={styles.chartContainer}>
