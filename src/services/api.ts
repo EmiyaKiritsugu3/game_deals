@@ -134,6 +134,7 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
         return res.json();
     } catch (error) {
         console.error('getDeals error:', error);
+        // Force Vercel update to fix getDeals crash on build
         return [];
     }
 }
