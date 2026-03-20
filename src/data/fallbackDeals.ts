@@ -103,5 +103,26 @@ export const fallbackDeals = [
         "lastChange": 1600214400,
         "dealRating": "9.9",
         "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145360/capsule_616x353.jpg"
+    },
+    {
+        "internalName": "PORTAL2",
+        "title": "Portal 2",
+        "metacriticLink": "/game/pc/portal-2",
+        "dealID": "fallback_6",
+        "storeID": "1",
+        "gameID": "105",
+        "salePrice": "0.99",
+        "normalPrice": "9.99",
+        "isOnSale": "1",
+        "savings": "90.090090",
+        "metacriticScore": "95",
+        "steamRatingText": "Overwhelmingly Positive",
+        "steamRatingPercent": "98",
+        "steamRatingCount": "300000",
+        "steamAppID": "620",
+        "releaseDate": 1303171200,
+        "lastChange": 1603171200,
+        "dealRating": "10.0",
+        "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/620/capsule_616x353.jpg"
     }
 ];
