@@ -124,15 +124,17 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
         url.searchParams.append('pageSize', '20');
     }
 
-    const res = await fetch(url.toString(), {
-        next: { revalidate: 3600 } // Cache for 1 hour
-    });
+    try {
+        const res = await fetch(url.toString(), {
+            next: { revalidate: 3600 } // Cache for 1 hour
+        });
 
-    if (!res.ok) {
-        throw new Error('Failed to fetch deals');
+        if (!res.ok) return [];
+        return res.json();
+    } catch (error) {
+        console.error('getDeals error:', error);
+        return [];
     }
-
-    return res.json();
 }
 
 export async function getStores(): Promise<Record<string, string>> {
@@ -230,32 +232,34 @@ export async function getGame(id: string): Promise<GameDetails> {
     const url = new URL(`${BASE_URL}/games`);
     url.searchParams.append('id', id);
 
-    const res = await fetch(url.toString(), {
-        next: { revalidate: 3600 }
-    });
+    try {
+        const res = await fetch(url.toString(), {
+            next: { revalidate: 3600 }
+        });
 
-    if (!res.ok) {
-        throw new Error('Failed to fetch game details');
-    }
+        if (!res.ok) return null as any;
+        const game: GameDetails = await res.json();
+        
+        // Inject our simulated grey market deals
+        if (game && game.deals && game.deals.length > 0) {
+            const greyDeals = generateGreyMarketDeals(game.deals, id);
+            game.deals = [...game.deals, ...greyDeals];
 
-    const game: GameDetails = await res.json();
-    
-    // Inject our simulated grey market deals
-    if (game && game.deals && game.deals.length > 0) {
-        const greyDeals = generateGreyMarketDeals(game.deals, id);
-        game.deals = [...game.deals, ...greyDeals];
-
-        // Ensure historical low is accurate with injected grey deals
-        const currentLowest = [...game.deals].sort((a, b) => parseFloat(a.price) - parseFloat(b.price))[0];
-        if (currentLowest && game.cheapestPriceEver) {
-            if (parseFloat(currentLowest.price) < parseFloat(game.cheapestPriceEver.price)) {
-                game.cheapestPriceEver.price = currentLowest.price;
-                game.cheapestPriceEver.date = Math.floor(Date.now() / 1000); // Sets HL to live date
+            // Ensure historical low is accurate with injected grey deals
+            const currentLowest = [...game.deals].sort((a, b) => parseFloat(a.price) - parseFloat(b.price))[0];
+            if (currentLowest && game.cheapestPriceEver) {
+                if (parseFloat(currentLowest.price) < parseFloat(game.cheapestPriceEver.price)) {
+                    game.cheapestPriceEver.price = currentLowest.price;
+                    game.cheapestPriceEver.date = Math.floor(Date.now() / 1000); // Sets HL to live date
+                }
             }
         }
-    }
 
-    return game;
+        return game;
+    } catch (error) {
+        console.error('getGame error:', error);
+        return null as any;
+    }
 }
 
 export function generatePriceHistory(retailPrice: number, currentPrice: number, lowestPrice: number, seed: string): { name: string, price: number }[] {
