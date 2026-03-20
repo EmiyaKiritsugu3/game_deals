@@ -25,7 +25,7 @@ The outbound traffic is now fully monetized:
 
 ### New Authentication UI
 The login modal has been upgraded to support industry-standard social login and secure magic links.
-![Login Modal View](file:///home/emiyakiritsugu/.gemini/antigravity/brain/b0b45b07-56a8-4db7-9c5e-e198b84e16e7/login_modal_view_1773879009662.png)
+![Login Modal View](/home/emiyakiritsugu/.gemini/antigravity/brain/b0b45b07-56a8-4db7-9c5e-e198b84e16e7/login_modal_view_1773879009662.png)
 
 ### Automated Price Tracking (Vercel Cron)
 The system is now capable of performing global price audits multiple times per day without manual intervention.
@@ -40,9 +40,7 @@ The system is now capable of performing global price audits multiple times per d
 The project is now stable and running perfectly on `http://localhost:3000`. All sections are populated with real-time data from the CheapShark API, supplemented by our robust fallback system.
 
 ````carousel
-![Top: Hero & Freebies](/home/emiyakiritsugu/.gemini/antigravity/brain/b0b45b07-56a8-4db7-9c5e-e198b84e16e7/home_page_top_1774046816801.png)
-<!-- slide -->
-![Bottom: Flash Sales & Popular Deals](/home/emiyakiritsugu/.gemini/antigravity/brain/b0b45b07-56a8-4db7-9c5e-e198b84e16e7/home_page_bottom.png)
+![Final Restoration View](/home/emiyakiritsugu/.gemini/antigravity/brain/b0b45b07-56a8-4db7-9c5e-e198b84e16e7/full_page_view_1774049705824.png)
 ````
 
 ### Working Features:
