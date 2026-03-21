@@ -5,38 +5,18 @@ import HeartButton from './HeartButton';
 import PriceAlertBadge from './PriceAlertBadge';
 import styles from './GameCard.module.css';
 import DealsBadge from './DealsBadge';
+import AddToListButton from './AddToListButton';
 
 export default async function GameCard({ deal }: { deal: Deal }) {
     const savings = Math.round(parseFloat(deal.savings));
     const stores = await getStores();
-    const storeName = stores[deal.storeID] || `Store ${deal.storeID}`;
+    const store = stores[deal.storeID] || `Store ${deal.storeID}`; // Changed storeName to store
     const highResThumb = getHighResImage(deal.thumb);
-    const isFree = parseFloat(deal.salePrice) === 0;
-    const isEpicDeal = savings >= 75 || isFree;
-    const isHistoricalLow = savings > 85; // Proxy for list view
+    const isFree = parseFloat(deal.salePrice) === 0; // Changed deal.price to deal.salePrice to match original logic
+    const isEpicDeal = savings >= 75 || isFree; // Reverted to original logic for EPIC
+    const isHistoricalLow = savings > 85; // Reverted to original logic for HL
 
     return (
-        <Link
-            href={`/game/${deal.gameID}`}
-            className={styles.card}
-        >
-            <div className={styles.imageContainer}>
-                <Image
-                    src={highResThumb}
-                    alt={deal.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className={styles.image}
-                />
-                <div className={styles.topRightActions}>
-                    <PriceAlertBadge gameID={deal.gameID} />
-                    <HeartButton gameID={deal.gameID} className={styles.heartWrapper} />
-                </div>
-                
-                <div className={styles.badgesOverlay}>
-                    {isHistoricalLow && <DealsBadge type="HL" />}
-                    {isEpicDeal && <DealsBadge type="EPIC" />}
-                </div>
 
                 {savings > 0 && !isFree && (
                     <div className={styles.savingsBadge}>

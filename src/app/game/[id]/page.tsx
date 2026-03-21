@@ -6,6 +6,7 @@ import HeartButton from '@/components/HeartButton';
 import PriceAlertTrigger from '@/components/PriceAlertTrigger';
 import { DynamicPriceHistory, DynamicStoreCompare } from '@/components/DynamicCharts';
 import DealsBadge from '@/components/DealsBadge';
+import AddToListButton from '@/components/AddToListButton';
 import styles from './page.module.css';
 
 export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
@@ -67,6 +68,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                                     currentPrice={bestCurrentPrice} 
                                 />
                                 <HeartButton gameID={id} className={styles.detailsHeart} />
+                                <AddToListButton gameId={id} variant="full" />
                             </div>
                         </div>
 
