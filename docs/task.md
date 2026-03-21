@@ -88,6 +88,12 @@
     - [x] Extract `EndingSoon` logic into a dedicated Server Component.
     - [x] Refactor `page.tsx` to utilize the new modular components.
 
+- [/] **Phase 19: Gamification & Social Foundation (Beta)**
+    - [/] Design Insignia (Badge) System architecture.
+    - [ ] Propose Supabase schema for `badges`, `user_badges`, and `user_stats`.
+    - [ ] Implement playlist creation logic with achievement triggers.
+    - [ ] Design Public Profile page (`/user/[username]`) with Badge Gallery.
+
 ---
 
-**GameDeals is stabilized, optimized, and secured!** 🚀🧹🛡️
+**GameDeals is evolving into a social gaming platform!** 🚀🏆🎮✨
