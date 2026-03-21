@@ -5,6 +5,7 @@ import { estimatePlaytime, calculateCostPerHour } from '@/services/hltb';
 import HeartButton from '@/components/HeartButton';
 import PriceAlertTrigger from '@/components/PriceAlertTrigger';
 import { DynamicPriceHistory, DynamicStoreCompare } from '@/components/DynamicCharts';
+import DealsBadge from '@/components/DealsBadge';
 import styles from './page.module.css';
 
 export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
@@ -143,13 +144,13 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                                         )}
                                         <span className={styles.storeName}>{storeName}</span>
                                         {isBest && <span className={styles.bestTag}>BEST</span>}
-                                        {isEpicDeal && <span className="epicDealBadge">🔥 EPIC</span>}
+                                        {isEpicDeal && <DealsBadge type="EPIC" />}
                                         <span className="drmBadge">{getDrmType(deal.storeID).icon} {getDrmType(deal.storeID).label}</span>
                                         {getRegionTag(deal.storeID) && <span className="regionBadge">{getRegionTag(deal.storeID)}</span>}
                                     </div>
 
                                     <div className={styles.dealPriceInfo}>
-                                        {isDealAtHL && <span className={styles.hlBadge}>HL</span>}
+                                        {isDealAtHL && <DealsBadge type="HL" />}
                                         {savings > 0 && !isFree && <div className={styles.savingsBadge}>-{savings}%</div>}
                                         <div className={styles.prices}>
                                             {savings > 0 && !isFree && <span className={styles.retail}>${deal.retailPrice}</span>}

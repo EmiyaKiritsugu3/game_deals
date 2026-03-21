@@ -1,0 +1,34 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hl {
+  background: hsl(var(--accent-hl));
+  color: hsl(var(--accent-hl-foreground));
+}
+
+.epic {
+  background: linear-gradient(135deg, #ff4d4d, #f9cb28);
+  color: white;
+  box-shadow: 0 0 10px rgba(255, 77, 77, 0.3);
+}
+
+.free {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.rating {
+  background: rgba(var(--foreground), 0.05);
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
+}

@@ -4,6 +4,7 @@ import { Deal, getHighResImage, getStores, getStoreLogo, formatTimeAgo } from '@
 import HeartButton from './HeartButton';
 import PriceAlertBadge from './PriceAlertBadge';
 import styles from './DealRow.module.css';
+import DealsBadge from './DealsBadge';
 
 interface DealRowProps {
     deal: Deal;
@@ -61,16 +62,22 @@ export default async function DealRow({ deal, rank }: DealRowProps) {
                         )}
                         <span className={styles.metaDivider}>·</span>
                         <span className={styles.timeAgo}>{timeAgo}</span>
+                        {deal.steamRatingPercent && deal.steamRatingPercent !== '0' && (
+                            <>
+                                <span className={styles.metaDivider}>·</span>
+                                <DealsBadge type="RATING" value={deal.steamRatingPercent} />
+                            </>
+                        )}
                     </div>
                 </div>
 
                 <div className={styles.priceContainer}>
                     {isHistoricalLow && (
-                        <span className={styles.hlBadge} title="Historical Low Price">HL</span>
+                        <DealsBadge type="HL" />
                     )}
 
                     {isEpicDeal && (
-                        <span className="epicDealBadge">🔥 EPIC</span>
+                        <DealsBadge type="EPIC" compact />
                     )}
 
                     {savings > 0 && !isFree && (

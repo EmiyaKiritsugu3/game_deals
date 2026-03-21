@@ -4,6 +4,7 @@ import { Deal, getStores, getHighResImage } from '../services/api';
 import HeartButton from './HeartButton';
 import PriceAlertBadge from './PriceAlertBadge';
 import styles from './GameCard.module.css';
+import DealsBadge from './DealsBadge';
 
 export default async function GameCard({ deal }: { deal: Deal }) {
     const savings = Math.round(parseFloat(deal.savings));
@@ -12,6 +13,7 @@ export default async function GameCard({ deal }: { deal: Deal }) {
     const highResThumb = getHighResImage(deal.thumb);
     const isFree = parseFloat(deal.salePrice) === 0;
     const isEpicDeal = savings >= 75 || isFree;
+    const isHistoricalLow = savings > 85; // Proxy for list view
 
     return (
         <Link
@@ -30,13 +32,16 @@ export default async function GameCard({ deal }: { deal: Deal }) {
                     <PriceAlertBadge gameID={deal.gameID} />
                     <HeartButton gameID={deal.gameID} className={styles.heartWrapper} />
                 </div>
-                {savings > 0 && (
+                
+                <div className={styles.badgesOverlay}>
+                    {isHistoricalLow && <DealsBadge type="HL" />}
+                    {isEpicDeal && <DealsBadge type="EPIC" />}
+                </div>
+
+                {savings > 0 && !isFree && (
                     <div className={styles.savingsBadge}>
                         -{savings}%
                     </div>
-                )}
-                {isEpicDeal && (
-                    <div className="epicDealBadge" style={{ position: 'absolute', bottom: 6, left: 6 }}>🔥 EPIC</div>
                 )}
             </div>
 

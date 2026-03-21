@@ -1,6 +1,7 @@
 import { getDeals, getGame } from '@/services/api';
 import DealRow from './DealRow';
 import styles from './HistoricalLows.module.css';
+import DealsBadge from './DealsBadge';
 
 export default async function HistoricalLows() {
     // 1. Fetch diverse candidates
@@ -45,7 +46,7 @@ export default async function HistoricalLows() {
             <div className={styles.sectionHeader}>
                 <div className={styles.sectionHeaderRow}>
                     <div>
-                        <h2><span className={styles.hlAccent}>HL</span> Historical Lows</h2>
+                        <h2><DealsBadge type="HL" className={styles.headerHL} /> Historical Lows</h2>
                         <p>Prices at or near their all-time lowest.</p>
                     </div>
                     <a href="/search?sortBy=Savings" className={styles.seeAll}>SEE ALL ▶</a>

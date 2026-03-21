@@ -35,18 +35,28 @@
     transform: scale(1.05);
 }
 
+.badgesOverlay {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  z-index: 2;
+}
+
 .savingsBadge {
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
-    background: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
-    font-weight: 700;
-    padding: 0.25rem 0.5rem;
-    border-radius: calc(var(--radius) - 2px);
-    font-size: 0.85rem;
-    z-index: 10;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #ff4d4d;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .topRightActions {

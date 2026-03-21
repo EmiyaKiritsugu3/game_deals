@@ -1,7 +1,3 @@
-.listSection {
-  /* Container styles if any */
-}
-
 .sectionHeader {
   margin-bottom: 1rem;
 }
@@ -41,16 +37,10 @@
   opacity: 0.75;
 }
 
-.hlAccent {
-  display: inline-block;
-  background: hsl(var(--accent-hl));
-  color: hsl(var(--accent-hl-foreground));
-  font-size: 0.7rem;
-  font-weight: 800;
-  padding: 0.1rem 0.35rem;
-  border-radius: 3px;
-  letter-spacing: 0.06em;
-  margin-right: 0.4rem;
+.headerHL {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  margin-right: 0.5rem;
   vertical-align: middle;
 }
 
