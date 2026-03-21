@@ -6,9 +6,11 @@ Como o projeto utiliza **CSS Modules**, o Jules deve evitar classes globais do T
 
 ---
 
-## 📝 Guia de Correção:
+## 📝 Copie e mande para o Jules:
 
-O projeto **GameDeals** utiliza estritamente **Vanilla CSS via CSS Modules**. Para evitar que as imagens quebrem o layout ou fiquem gigantes, use esta estrutura refinada:
+> **Jules, aqui está a correção para o `ActivityFeed`:**
+> 
+> O projeto **GameDeals** utiliza estritamente **Vanilla CSS via CSS Modules**. Para evitar que as imagens quebrem o layout ou fiquem gigantes, use esta estrutura refinada:
 
 ### 1. No arquivo `ActivityFeed.module.css`:
 ```css
@@ -35,7 +37,7 @@ O projeto **GameDeals** utiliza estritamente **Vanilla CSS via CSS Modules**. Pa
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  overflow: hidden;
+  overflow: hidden; /* Garante que o avatar seja redondo e contido */
   border: 2px solid var(--accent-light);
 }
 
@@ -45,7 +47,7 @@ O projeto **GameDeals** utiliza estritamente **Vanilla CSS via CSS Modules**. Pa
   height: 68px;
   border-radius: 8px;
   overflow: hidden;
-  position: relative;
+  position: relative; /* Importante para o Next/Image 'fill' */
 }
 
 .imageContent {
@@ -56,7 +58,7 @@ O projeto **GameDeals** utiliza estritamente **Vanilla CSS via CSS Modules**. Pa
 
 .content {
   flex: 1;
-  min-width: 0;
+  min-width: 0; /* Previne que o texto quebre o layout flex */
 }
 
 .username {
@@ -111,5 +113,5 @@ export default function ActivityItem({ user, game, review }) {
 
 ---
 
-## 🚩 Nota sobre o Build da Vercel:
+## 🚩 Nota para o Jules sobre o Build da Vercel:
 A correção do erro no build da Vercel já foi feita na branch `main` (utilizando um `try/catch` de fallback no de `api.ts` e forçando `dynamic = 'force-dynamic'`). Por favor, faça um `git pull origin main` dentro da sua branch para não sofrer com commits desatualizados. 🚀
