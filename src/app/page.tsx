@@ -20,9 +20,14 @@ export default async function Home() {
     getDeals({ sortBy: 'Recent', pageSize: '8', onSale: '1' }),        // Ending soon (recent = turnover)
   ]);
 
-  // Strict Filter for True Historical Lows:
-  // We take the top candidates and verify them against their actual 'cheapestPriceEver' metadata
-  const hlCandidates = historicalLows.slice(0, 50);
+  // Comprehensive Filter for True Historical Lows:
+  // We merge multiple deal lists to find as many verified record-breakers as possible
+  const hlSource = [...historicalLows, ...bestDeals, ...popular];
+  const uniqueCandidatesMap = new Map();
+  hlSource.forEach(d => {
+    if (!uniqueCandidatesMap.has(d.gameID)) uniqueCandidatesMap.set(d.gameID, d);
+  });
+  const hlCandidates = Array.from(uniqueCandidatesMap.values()).slice(0, 50);
   const verifiedHLs = await Promise.all(
     hlCandidates.map(async (deal) => {
       const gameInfo = await import('@/services/api').then(m => m.getGame(deal.gameID));
