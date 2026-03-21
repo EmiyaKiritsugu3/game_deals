@@ -16,7 +16,6 @@ export default async function Home() {
     getDeals({ sortBy: 'Recent', pageSize: '10' }),                    // Newest deals
     getDeals({ sortBy: 'Price', pageSize: '8', onSale: '1' }),         // Flash deals
     getDeals({ upperPrice: '0', pageSize: '6' }),                      // 100% OFF Freebies
-    getDeals({ upperPrice: '0', pageSize: '6' }),                      // 100% OFF Freebies
     getDeals({ sortBy: 'Deal Rating', pageSize: '50', onSale: '1' }),  // Broader candidate pool for HL
     getDeals({ sortBy: 'Recent', pageSize: '8', onSale: '1' }),        // Ending soon (recent = turnover)
   ]);
