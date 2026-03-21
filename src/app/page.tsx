@@ -22,7 +22,7 @@ export default async function Home() {
 
   // Strict Filter for True Historical Lows:
   // We take the top candidates and verify them against their actual 'cheapestPriceEver' metadata
-  const hlCandidates = historicalLows.slice(0, 25);
+  const hlCandidates = historicalLows.slice(0, 50);
   const verifiedHLs = await Promise.all(
     hlCandidates.map(async (deal) => {
       const gameInfo = await import('@/services/api').then(m => m.getGame(deal.gameID));
