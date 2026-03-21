@@ -5,11 +5,11 @@ export const fallbackDeals = [
         "metacriticLink": "/game/pc/the-witcher-3-wild-hunt",
         "dealID": "fallback_1",
         "storeID": "1",
-        "gameID": "115",
-        "salePrice": "7.49",
+        "gameID": "112330",
+        "salePrice": "7.99",
         "normalPrice": "29.99",
         "isOnSale": "1",
-        "savings": "75.025008",
+        "savings": "73.35",
         "metacriticScore": "93",
         "steamRatingText": "Very Positive",
         "steamRatingPercent": "97",
@@ -18,7 +18,7 @@ export const fallbackDeals = [
         "releaseDate": 1431993600,
         "lastChange": 1621539200,
         "dealRating": "9.5",
-        "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/292030/capsule_616x353.jpg"
+        "thumb": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/292030/capsule_231x87.jpg"
     },
     {
         "internalName": "ELDENRING",
@@ -30,7 +30,7 @@ export const fallbackDeals = [
         "salePrice": "35.99",
         "normalPrice": "59.99",
         "isOnSale": "1",
-        "savings": "40.006668",
+        "savings": "40.01",
         "metacriticScore": "94",
         "steamRatingText": "Very Positive",
         "steamRatingPercent": "92",
@@ -39,7 +39,7 @@ export const fallbackDeals = [
         "releaseDate": 1645747200,
         "lastChange": 1645747200,
         "dealRating": "8.8",
-        "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/capsule_616x353.jpg"
+        "thumb": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1245620/capsule_231x87.jpg"
     },
     {
         "internalName": "CYBERPUNK2077",
@@ -47,11 +47,11 @@ export const fallbackDeals = [
         "metacriticLink": "/game/pc/cyberpunk-2077",
         "dealID": "fallback_3",
         "storeID": "1",
-        "gameID": "187886",
+        "gameID": "202350",
         "salePrice": "29.99",
         "normalPrice": "59.99",
         "isOnSale": "1",
-        "savings": "50.008335",
+        "savings": "50.01",
         "metacriticScore": "86",
         "steamRatingText": "Very Positive",
         "steamRatingPercent": "82",
@@ -60,7 +60,7 @@ export const fallbackDeals = [
         "releaseDate": 1607558400,
         "lastChange": 1607558400,
         "dealRating": "8.0",
-        "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/capsule_616x353.jpg"
+        "thumb": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/capsule_231x87.jpg"
     },
     {
         "internalName": "REDRADEMPTION2",
@@ -72,7 +72,7 @@ export const fallbackDeals = [
         "salePrice": "19.79",
         "normalPrice": "59.99",
         "isOnSale": "1",
-        "savings": "67.011169",
+        "savings": "67.01",
         "metacriticScore": "93",
         "steamRatingText": "Very Positive",
         "steamRatingPercent": "91",
@@ -81,7 +81,7 @@ export const fallbackDeals = [
         "releaseDate": 1572912000,
         "lastChange": 1572912000,
         "dealRating": "9.2",
-        "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1174180/capsule_616x353.jpg"
+        "thumb": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1174180/capsule_231x87.jpg"
     },
     {
         "internalName": "HADES",
@@ -93,7 +93,7 @@ export const fallbackDeals = [
         "salePrice": "12.49",
         "normalPrice": "24.99",
         "isOnSale": "1",
-        "savings": "50.020008",
+        "savings": "50.02",
         "metacriticScore": "93",
         "steamRatingText": "Overwhelmingly Positive",
         "steamRatingPercent": "98",
@@ -102,7 +102,7 @@ export const fallbackDeals = [
         "releaseDate": 1600214400,
         "lastChange": 1600214400,
         "dealRating": "9.9",
-        "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145360/capsule_616x353.jpg"
+        "thumb": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145360/capsule_231x87.jpg"
     },
     {
         "internalName": "PORTAL2",
@@ -110,11 +110,11 @@ export const fallbackDeals = [
         "metacriticLink": "/game/pc/portal-2",
         "dealID": "fallback_6",
         "storeID": "1",
-        "gameID": "105",
+        "gameID": "36",
         "salePrice": "0.99",
         "normalPrice": "9.99",
         "isOnSale": "1",
-        "savings": "90.090090",
+        "savings": "90.09",
         "metacriticScore": "95",
         "steamRatingText": "Overwhelmingly Positive",
         "steamRatingPercent": "98",
@@ -123,6 +123,6 @@ export const fallbackDeals = [
         "releaseDate": 1303171200,
         "lastChange": 1603171200,
         "dealRating": "10.0",
-        "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/620/capsule_616x353.jpg"
+        "thumb": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/620/capsule_231x87.jpg"
     }
 ];
