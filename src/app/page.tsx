@@ -8,41 +8,18 @@ import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
 
+import HistoricalLows from '@/components/HistoricalLows';
+import EndingSoon from '@/components/EndingSoon';
+
 export default async function Home() {
-  // Fetch multiple distinct lists in parallel to mimic aggregator dashboard
-  const [popular, bestDeals, recentDeals, flashDeals, freebies, historicalLows, endingSoon] = await Promise.all([
+  // Fetch primary static categories in parallel
+  const [popular, bestDeals, recentDeals, flashDeals, freebies] = await Promise.all([
     getDeals({ pageSize: '5' }),                                       // Deal Rating (default)
     getDeals({ sortBy: 'Savings', pageSize: '10' }),                   // Highest discount %
     getDeals({ sortBy: 'Recent', pageSize: '10' }),                    // Newest deals
     getDeals({ sortBy: 'Price', pageSize: '8', onSale: '1' }),         // Flash deals
     getDeals({ upperPrice: '0', pageSize: '6' }),                      // 100% OFF Freebies
-    getDeals({ sortBy: 'Deal Rating', pageSize: '50', onSale: '1' }),  // Broader candidate pool for HL
-    getDeals({ sortBy: 'Recent', pageSize: '8', onSale: '1' }),        // Ending soon (recent = turnover)
   ]);
-
-  // Comprehensive Filter for True Historical Lows:
-  // We merge multiple deal lists to find as many verified record-breakers as possible
-  const hlSource = [...historicalLows, ...bestDeals, ...popular];
-  const uniqueCandidatesMap = new Map();
-  hlSource.forEach(d => {
-    if (!uniqueCandidatesMap.has(d.gameID)) uniqueCandidatesMap.set(d.gameID, d);
-  });
-  const hlCandidates = Array.from(uniqueCandidatesMap.values()).slice(0, 50);
-  const verifiedHLs = await Promise.all(
-    hlCandidates.map(async (deal) => {
-      const gameInfo = await import('@/services/api').then(m => m.getGame(deal.gameID));
-      if (!gameInfo || !gameInfo.cheapestPriceEver) return null;
-      
-      const currentPrice = parseFloat(deal.salePrice);
-      const historicalLow = parseFloat(gameInfo.cheapestPriceEver.price);
-      
-      // Strict HL check: current price must be within 1% of the historical low
-      // This allows us to catch deals regardless of the discount percentage
-      return currentPrice <= historicalLow * 1.01 ? deal : null;
-    })
-  );
-
-  const hlDeals = verifiedHLs.filter((d): d is any => d !== null).slice(0, 8);
 
   const carouselDeals = popular.slice(0, 5);
   const gridDeals = popular.length > 5 ? popular.slice(5) : [];
@@ -107,48 +84,11 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* Historical Lows + Ending Soon */}
-        {(hlDeals.length > 0 || endingSoon.length > 0) && (
-          <div className={styles.splitLayout}>
-            {hlDeals.length > 0 && (
-              <div>
-                <div className={styles.sectionHeader}>
-                  <div className={styles.sectionHeaderRow}>
-                    <div>
-                      <h2><span className={styles.hlAccent}>HL</span> Historical Lows</h2>
-                      <p>Prices at or near their all-time lowest.</p>
-                    </div>
-                    <a href="/search?sortBy=Savings" className={styles.seeAll}>SEE ALL ▶</a>
-                  </div>
-                </div>
-                <div className={styles.listCol}>
-                  {hlDeals.map((deal) => (
-                    <DealRow key={deal.dealID} deal={deal} />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {endingSoon.length > 0 && (
-              <div>
-                <div className={styles.sectionHeader}>
-                  <div className={styles.sectionHeaderRow}>
-                    <div>
-                      <h2>⏰ Ending Soon</h2>
-                      <p>Act fast — these deals won't last.</p>
-                    </div>
-                    <a href="/search?sortBy=Recent" className={styles.seeAll}>SEE ALL ▶</a>
-                  </div>
-                </div>
-                <div className={styles.listCol}>
-                  {endingSoon.map((deal) => (
-                    <DealRow key={deal.dealID} deal={deal} />
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+        {/* Historical Lows + Ending Soon (Now modular) */}
+        <div className={styles.splitLayout}>
+          <HistoricalLows />
+          <EndingSoon />
+        </div>
       </div>
 
       <footer className={styles.footer}>
