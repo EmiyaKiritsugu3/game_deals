@@ -1,6 +1,6 @@
 import { getDeals, getGame } from '@/services/api';
 import DealRow from './DealRow';
-import styles from '../app/page.module.css';
+import styles from './HistoricalLows.module.css';
 
 export default async function HistoricalLows() {
     // 1. Fetch diverse candidates

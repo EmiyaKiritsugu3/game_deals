@@ -1,0 +1,61 @@
+.listSection {
+  /* Container styles if any */
+}
+
+.sectionHeader {
+  margin-bottom: 1rem;
+}
+
+.sectionHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.sectionHeader h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  letter-spacing: -0.02em;
+  margin-bottom: 0.25rem;
+}
+
+.sectionHeader p {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.85rem;
+}
+
+.seeAll {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: hsl(var(--primary));
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.seeAll:hover {
+  opacity: 0.75;
+}
+
+.hlAccent {
+  display: inline-block;
+  background: hsl(var(--accent-hl));
+  color: hsl(var(--accent-hl-foreground));
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  letter-spacing: 0.06em;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+
+.listCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

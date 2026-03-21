@@ -1,6 +1,6 @@
 import { getDeals } from '@/services/api';
 import DealRow from './DealRow';
-import styles from '../app/page.module.css';
+import styles from './EndingSoon.module.css';
 
 export default async function EndingSoon() {
     const deals = await getDeals({ sortBy: 'Recent', pageSize: '8', onSale: '1' });
