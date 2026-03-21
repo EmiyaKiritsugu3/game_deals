@@ -36,14 +36,5 @@ O ambiente local foi verificado após a instalação da dependência `@vercel/sp
 - **Branch `jules-...`**: Sincronizada via `reset --hard main`.
 - **Pasta `/docs`**: Contém todos os artefatos de desenvolvimento atualizados.
 
-### 🩹 Hotfix: Restauração da Seção Historical Lows
-Identificamos e corrigimos um erro crítico de indexação no componente da `Home`. Uma chamada duplicada para "Jogos Gratuitos" no `Promise.all` estava deslocando as variáveis, fazendo com que a seção de Historical Lows recebesse dados vazios.
-
-**Correção:**
-- Remoção da chamada redundante em `src/app/page.tsx`.
-- Verificação local e remota completa.
-
-![Historical Lows Restored](file:///home/emiyakiritsugu/.gemini/antigravity/brain/b0b45b07-56a8-4db7-9c5e-e198b84e16e7/historical_lows_section_localhost_1774059104535.png)
-
 ---
 *Relatório gerado em 20 de Março de 2026 por Antigravity.*

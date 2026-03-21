@@ -83,6 +83,11 @@
     - [x] Perform `npm audit fix --force` to upgrade Next.js to `16.2.1` (Safe version).
     - [x] Verify total application stability post-upgrade.
 
+- [x] **Phase 18: Home Page Modularization**
+    - [x] Extract `HistoricalLows` logic into a dedicated Server Component.
+    - [x] Extract `EndingSoon` logic into a dedicated Server Component.
+    - [x] Refactor `page.tsx` to utilize the new modular components.
+
 ---
 
 **GameDeals is stabilized, optimized, and secured!** 🚀🧹🛡️
