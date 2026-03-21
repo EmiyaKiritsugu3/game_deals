@@ -78,6 +78,11 @@
     - [x] Implement `next/dynamic` for heavy chart components.
     - [x] Sync Sidebar Modal with Standalone feature parity.
 
+- [x] **Phase 17: Security Hardening & Maintenance**
+    - [x] Identify moderate severity vulnerabilities in Next.js (Request Smuggling, image cache growth).
+    - [x] Perform `npm audit fix --force` to upgrade Next.js to `16.2.1` (Safe version).
+    - [x] Verify total application stability post-upgrade.
+
 ---
 
-**GameDeals is stabilized and optimized!** 🚀🧹
+**GameDeals is stabilized, optimized, and secured!** 🚀🧹🛡️
