@@ -16,13 +16,14 @@ export default async function Home() {
     getDeals({ sortBy: 'Recent', pageSize: '10' }),                    // Newest deals
     getDeals({ sortBy: 'Price', pageSize: '8', onSale: '1' }),         // Flash deals
     getDeals({ upperPrice: '0', pageSize: '6' }),                      // 100% OFF Freebies
-    getDeals({ sortBy: 'Savings', pageSize: '40', lowerPrice: '0.01', upperPrice: '99', minimumMetacritic: '0' }), // Candidate pool for HL
+    getDeals({ upperPrice: '0', pageSize: '6' }),                      // 100% OFF Freebies
+    getDeals({ sortBy: 'Deal Rating', pageSize: '50', onSale: '1' }),  // Broader candidate pool for HL
     getDeals({ sortBy: 'Recent', pageSize: '8', onSale: '1' }),        // Ending soon (recent = turnover)
   ]);
 
   // Strict Filter for True Historical Lows:
   // We take the top candidates and verify them against their actual 'cheapestPriceEver' metadata
-  const hlCandidates = historicalLows.slice(0, 15);
+  const hlCandidates = historicalLows.slice(0, 25);
   const verifiedHLs = await Promise.all(
     hlCandidates.map(async (deal) => {
       const gameInfo = await import('@/services/api').then(m => m.getGame(deal.gameID));
@@ -31,7 +32,8 @@ export default async function Home() {
       const currentPrice = parseFloat(deal.salePrice);
       const historicalLow = parseFloat(gameInfo.cheapestPriceEver.price);
       
-      // Allow for a tiny margin of error (1%) due to currency rounding/CheapShark sync delay
+      // Strict HL check: current price must be within 1% of the historical low
+      // This allows us to catch deals regardless of the discount percentage
       return currentPrice <= historicalLow * 1.01 ? deal : null;
     })
   );
