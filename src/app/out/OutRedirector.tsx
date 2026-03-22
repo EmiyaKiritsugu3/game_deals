@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import styles from './out.module.css';
 
 export default function OutRedirector() {
     const searchParams = useSearchParams();
@@ -47,13 +46,13 @@ export default function OutRedirector() {
     }, [url, store]);
 
     return (
-        <div className={styles.redirectContainer}>
-            <div className={styles.spinner}></div>
-            <h2>Aplicando Desconto...</h2>
+        <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 text-center">
+            <div className="mb-6 h-16 w-16 animate-spin rounded-full border-4 border-white/10 border-t-primary"></div>
+            <h2 className="mb-2 text-2xl font-black text-white md:text-3xl">Aplicando Desconto...</h2>
             {store ? (
-                <p>Transferindo você para a loja parceira <strong>{store}</strong>.</p>
+                <p className="text-lg font-medium text-muted-foreground">Transferindo você para a loja parceira <strong className="text-white">{store}</strong>.</p>
             ) : (
-                <p>Preparando conexão segura com a loja parceira.</p>
+                <p className="text-lg font-medium text-muted-foreground">Preparando conexão segura com a loja parceira.</p>
             )}
         </div>
     );

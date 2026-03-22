@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Bell, Trash2, ArrowRight } from 'lucide-react';
 import { useAlerts } from '@/store/alertStore';
-import styles from './PriceAlertModal.module.css';
+import { cn } from '@/lib/utils';
 
 interface PriceAlertModalProps {
     isOpen: boolean;
@@ -62,44 +62,44 @@ export default function PriceAlertModal({ isOpen, onClose, gameID, gameTitle, cu
         <AnimatePresence>
             {isOpen && (
                 <motion.div 
-                    className={styles.modalOverlay}
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={onClose}
                 >
                     <motion.div 
-                        className={styles.modal}
+                        className="relative flex w-full max-w-[480px] flex-col gap-6 rounded-2xl border border-white/10 bg-[#1c1e26] p-6 shadow-2xl md:p-8"
                         initial={{ scale: 0.9, opacity: 0, y: 20 }}
                         animate={{ scale: 1, opacity: 1, y: 0 }}
                         exit={{ scale: 0.9, opacity: 0, y: 20 }}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <button className={styles.closeButton} onClick={onClose}>
+                        <button className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-muted-foreground transition-colors hover:bg-white/10 hover:text-white" onClick={onClose}>
                             <X size={20} />
                         </button>
 
-                        <div className={styles.header}>
-                            <h2><Bell size={24} className={styles.bellIcon} /> Set Price Alert</h2>
-                            <p>We will notify you when <span className={styles.gameTitle}>{gameTitle}</span> hits your target price.</p>
+                        <div className="flex flex-col items-center gap-2 text-center">
+                            <h2 className="flex items-center gap-2 text-2xl font-black text-white"><Bell size={24} className="text-primary" /> Set Price Alert</h2>
+                            <p className="text-sm font-medium text-muted-foreground">We will notify you when <span className="font-bold text-white">{gameTitle}</span> hits your target price.</p>
                         </div>
 
-                        <div className={styles.priceDisplay}>
-                            <div className={styles.priceItem}>
-                                <span className={styles.priceLabel}>Current</span>
-                                <span className={styles.priceValue}>${currentPrice.toFixed(2)}</span>
+                        <div className="flex items-center justify-center gap-6 rounded-xl bg-black/30 p-6 shadow-inner">
+                            <div className="flex flex-col items-center">
+                                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Current</span>
+                                <span className="text-2xl font-black text-white">${currentPrice.toFixed(2)}</span>
                             </div>
-                            <ArrowRight size={20} className={styles.arrow} />
-                            <div className={styles.priceItem}>
-                                <span className={styles.priceLabel}>Target</span>
-                                <span className={styles.priceValue} style={{ color: 'hsl(var(--primary))' }}>
+                            <ArrowRight size={20} className="text-muted-foreground/50" />
+                            <div className="flex flex-col items-center">
+                                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Target</span>
+                                <span className="text-2xl font-black text-primary">
                                     ${targetPrice.toFixed(2)}
                                 </span>
                             </div>
                         </div>
 
-                        <div className={styles.inputSection}>
-                            <label className={styles.inputLabel}>Alert me when price is below:</label>
+                        <div className="flex flex-col gap-4">
+                            <label className="text-sm font-bold text-white">Alert me when price is below:</label>
                             <input 
                                 type="range" 
                                 min={0} 
@@ -107,45 +107,47 @@ export default function PriceAlertModal({ isOpen, onClose, gameID, gameTitle, cu
                                 step={0.01}
                                 value={targetPrice}
                                 onChange={(e) => setTargetPrice(parseFloat(e.target.value))}
-                                className={styles.rangeInput}
+                                className="h-2 w-full appearance-none rounded-full bg-white/10 outline-none [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:shadow-[0_0_10px_hsl(var(--primary)/0.5)]"
                             />
-                            <div className={styles.numberInputGroup}>
-                                <span className={styles.currencySymbol}>$</span>
+                            <div className="relative mx-auto w-[150px]">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-muted-foreground">$</span>
                                 <input 
                                     type="number" 
                                     value={targetPrice}
                                     onChange={(e) => setTargetPrice(parseFloat(e.target.value))}
-                                    className={styles.numberInput}
+                                    className="w-full rounded-lg border border-white/10 bg-white/5 py-3 pl-8 pr-4 text-center text-xl font-black text-white outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
                                     step={0.01}
                                 />
                             </div>
                         </div>
 
-                        <div className={styles.optionsSection}>
+                        <div className="flex flex-col gap-2">
                             <div 
-                                className={styles.checkboxGroup}
+                                className="group flex cursor-pointer items-start gap-4 rounded-xl border border-white/5 bg-white/[0.02] p-4 transition-colors hover:border-white/10 hover:bg-white/5"
                                 onClick={() => setIsKeyshopAllowed(!isKeyshopAllowed)}
                             >
-                                <div className={`${styles.checkbox} ${isKeyshopAllowed ? styles.checked : ''}`}>
-                                    {isKeyshopAllowed && <X size={14} color="white" />}
+                                <div className={cn("mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border border-white/20 transition-colors", isKeyshopAllowed && "border-primary bg-primary")}>
+                                    {isKeyshopAllowed && <X size={14} className="text-primary-foreground" />}
                                 </div>
-                                <div>
-                                    <span className={styles.checkboxLabel}>Include Keyshops (Market Gray)</span>
-                                    <span className={styles.checkboxSublabel}>May result in lower prices but higher risk.</span>
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-bold text-white transition-colors group-hover:text-primary">Include Keyshops (Market Gray)</span>
+                                    <span className="text-xs text-muted-foreground">May result in lower prices but higher risk.</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div className={styles.actionButtons}>
-                            <button className={`${styles.button} ${styles.cancelButton}`} onClick={onClose}>
-                                Cancel
-                            </button>
-                            <button className={`${styles.button} ${styles.saveButton}`} onClick={handleSave}>
-                                {hasAlert(gameID) ? 'Update Alert' : 'Create Alert'}
-                            </button>
+                        <div className="flex flex-col gap-3 pt-2">
+                            <div className="flex gap-3">
+                                <button className="flex-1 rounded-lg border border-white/10 bg-transparent py-3 font-bold text-white transition-colors hover:bg-white/5" onClick={onClose}>
+                                    Cancel
+                                </button>
+                                <button className="flex-1 rounded-lg bg-primary py-3 font-bold text-primary-foreground transition-all hover:scale-[1.02] hover:bg-emerald-400 hover:shadow-[0_5px_20px_hsl(var(--primary)/0.4)] active:scale-95" onClick={handleSave}>
+                                    {hasAlert(gameID) ? 'Update Alert' : 'Create Alert'}
+                                </button>
+                            </div>
                             
                             {hasAlert(gameID) && (
-                                <button className={styles.removeButton} onClick={handleRemove}>
+                                <button className="flex items-center justify-center gap-2 rounded-lg py-2 text-sm font-semibold text-red-400 transition-colors hover:bg-red-400/10 hover:text-red-300" onClick={handleRemove}>
                                     <Trash2 size={14} /> Stop tracking this game
                                 </button>
                             )}

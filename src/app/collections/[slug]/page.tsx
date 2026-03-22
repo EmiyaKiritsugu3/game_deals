@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import { COLLECTIONS } from '@/data/collections';
 import Image from 'next/image';
 import { getGame } from '@/services/api';
-import styles from '../collections.module.css';
 
 export async function generateStaticParams() {
     return COLLECTIONS.map((col) => ({ slug: col.slug }));
@@ -49,38 +48,38 @@ export default async function CollectionDetailPage({ params }: { params: Promise
 
     return (
         <main className="container">
-            <div className={styles.detailPage}>
-                <Link href="/collections" className={styles.detailBackLink}>
+            <div className="mx-auto max-w-4xl py-12 md:py-16">
+                <Link href="/collections" className="mb-8 inline-block text-sm font-bold text-muted-foreground transition-colors hover:text-white">
                     ← Back to Collections
                 </Link>
 
-                <div className={styles.detailHeader}>
-                    <h1>{collection.emoji} {collection.title}</h1>
-                    <p>{collection.description}</p>
+                <div className="mb-12 text-center md:mb-16 md:text-left">
+                    <h1 className="mb-4 text-4xl font-black tracking-tight text-white md:text-5xl lg:text-6xl">{collection.emoji} {collection.title}</h1>
+                    <p className="text-lg font-medium text-muted-foreground md:text-xl">{collection.description}</p>
                 </div>
 
-                <div className={styles.detailGrid}>
+                <div className="flex flex-col gap-4">
                     {games.map((game: CollectionGame) => (
-                        <div key={game.gameID} className={styles.detailGameRow}>
+                        <div key={game.gameID} className="group flex flex-col items-center gap-4 rounded-xl border border-white/5 bg-card/40 p-4 transition-all hover:bg-card hover:shadow-lg sm:flex-row">
                             <Image
                                 src={game.thumb} 
                                 alt={game.title} 
                                 width={120} 
                                 height={56} 
-                                className={styles.detailGameThumb}
+                                className="h-[56px] w-[120px] rounded-md object-cover"
                             />
-                            <div className={styles.detailGameInfo}>
-                                <div className={styles.detailGameTitle}>{game.title}</div>
-                                <div className={styles.detailGamePrice}>
-                                    {parseFloat(game.price) === 0 ? 'FREE' : `$${game.price}`}
+                            <div className="flex-1 text-center sm:text-left">
+                                <div className="mb-1 text-lg font-bold text-white transition-colors group-hover:text-primary">{game.title}</div>
+                                <div className="flex items-center justify-center gap-2 font-black text-white sm:justify-start">
+                                    {parseFloat(game.price) === 0 ? <span className="text-primary">FREE</span> : `$${game.price}`}
                                     {parseFloat(game.retailPrice) > parseFloat(game.price) && (
-                                        <span style={{ textDecoration: 'line-through', color: 'hsl(var(--muted-foreground))', marginLeft: '0.5rem', fontWeight: 400 }}>
+                                        <span className="text-sm font-semibold text-muted-foreground line-through">
                                             ${game.retailPrice}
                                         </span>
                                     )}
                                 </div>
                             </div>
-                            <Link href={`/game/${game.gameID}`} className={styles.detailGameCta}>
+                            <Link href={`/game/${game.gameID}`} className="w-full shrink-0 rounded-lg bg-primary/10 px-6 py-3 text-center text-sm font-bold text-primary transition-colors hover:bg-primary hover:text-primary-foreground sm:w-auto">
                                 View Deal →
                             </Link>
                         </div>

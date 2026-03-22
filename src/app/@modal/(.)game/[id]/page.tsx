@@ -5,7 +5,7 @@ import SidebarModal from '@/components/SidebarModal';
 import HeartButton from '@/components/HeartButton';
 import PriceAlertTrigger from '@/components/PriceAlertTrigger';
 import { DynamicPriceHistory, DynamicStoreCompare } from '@/components/DynamicCharts';
-import styles from './modal.module.css';
+import { cn } from '@/lib/utils';
 
 export default async function GameModal({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -18,8 +18,8 @@ export default async function GameModal({ params }: { params: Promise<{ id: stri
     if (!game || !game.info) {
         return (
             <SidebarModal>
-                <div className={styles.errorContainer}>
-                    <h2>Game not found</h2>
+                <div className="flex h-full items-center justify-center text-center p-8">
+                    <h2 className="text-xl font-bold text-white">Game not found</h2>
                 </div>
             </SidebarModal>
         );
@@ -53,27 +53,30 @@ export default async function GameModal({ params }: { params: Promise<{ id: stri
                     )}&store=${encodeURIComponent(storeName)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`${styles.dealRow} ${isBest ? styles.dealRowBest : ''}`}
+                    className={cn(
+                        "group flex flex-col justify-between gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-4 transition-all hover:border-white/20 hover:bg-white/5 sm:flex-row sm:items-center sm:gap-4",
+                        isBest && "border-primary/50 bg-primary/5 hover:border-primary/80 hover:bg-primary/10"
+                    )}
                 >
-                    <div className={styles.storeInfo}>
+                    <div className="flex flex-wrap items-center gap-2">
                         {logo ? (
-                            <Image src={logo} alt={storeName} className={styles.storeLogo} width={18} height={18} />
+                            <Image src={logo} alt={storeName} className="rounded-sm" width={18} height={18} />
                         ) : (
-                            <div className={styles.storeLogoPlaceholder} />
+                            <div className="h-[18px] w-[18px] rounded-sm bg-white/10" />
                         )}
-                        <span className={styles.storeName}>{storeName}</span>
-                        {isBest && <span className={styles.bestTag}>BEST</span>}
+                        <span className="text-sm font-semibold text-white">{storeName}</span>
+                        {isBest && <span className="rounded bg-primary px-1.5 py-0.5 text-[0.65rem] font-black text-black">BEST</span>}
                         {isEpicDeal && <span className="epicDealBadge">🔥 EPIC</span>}
                         <span className="drmBadge">{getDrmType(deal.storeID).icon} {getDrmType(deal.storeID).label}</span>
                         {getRegionTag(deal.storeID) && <span className="regionBadge">{getRegionTag(deal.storeID)}</span>}
                     </div>
 
-                    <div className={styles.dealPriceInfo}>
-                        {isDealAtHL && <span className={styles.hlBadge}>HL</span>}
-                        {savings > 0 && !isFree && <div className={styles.savingsBadge}>-{savings}%</div>}
-                        <div className={styles.prices}>
-                            {savings > 0 && !isFree && <span className={styles.retail}>${deal.retailPrice}</span>}
-                            {isFree ? <span className={styles.freePrice}>FREE</span> : <span className={styles.price}>${deal.price}</span>}
+                    <div className="flex items-center gap-3 self-end sm:self-auto">
+                        {isDealAtHL && <span className="rounded bg-accent px-1.5 py-0.5 text-[0.7rem] font-bold text-black shadow-[0_0_8px_hsl(var(--accent)/0.6)]">HL</span>}
+                        {savings > 0 && !isFree && <div className="rounded bg-primary/20 px-1.5 py-0.5 text-xs font-bold text-primary">-{savings}%</div>}
+                        <div className="flex flex-col items-end leading-none">
+                            {savings > 0 && !isFree && <span className="text-xs text-muted-foreground line-through">${deal.retailPrice}</span>}
+                            {isFree ? <span className="text-lg font-black text-primary">FREE</span> : <span className="text-lg font-black text-white">${deal.price}</span>}
                         </div>
                     </div>
                 </a>
@@ -89,59 +92,59 @@ export default async function GameModal({ params }: { params: Promise<{ id: stri
 
         return (
             <SidebarModal>
-                <div className={styles.modalHero}>
+                <div className="relative flex aspect-[16/9] w-full flex-col justify-end overflow-hidden p-6 md:p-8">
                     <Image
                         src={highResThumb}
                         alt={game.info.title}
                         fill
-                        className={styles.heroImage}
+                        className="object-cover"
                         priority
                     />
-                    <div className={styles.heroOverlay} />
-                    <div className={styles.heroContent}>
-                        <h1 className={styles.title}>{game.info.title}</h1>
-                        <div className={styles.actionButtons}>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/80 to-transparent" />
+                    <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                        <h1 className="text-3xl font-black leading-tight text-white drop-shadow-md sm:text-4xl">{game.info.title}</h1>
+                        <div className="flex shrink-0 items-center gap-3">
                             <PriceAlertTrigger 
                                 gameID={id} 
                                 gameTitle={game.info.title} 
                                 currentPrice={bestCurrentPrice} 
                             />
-                            <HeartButton gameID={id} className={styles.heartBtn} />
+                            <HeartButton gameID={id} className="!h-[42px] !w-[42px] !p-0" />
                         </div>
                     </div>
                 </div>
 
-                <div className={styles.contentBody}>
-                    <div className={styles.statsRow}>
-                        <div className={styles.statBlock}>
-                            <span className={styles.statLabel}>Best Price Now</span>
-                            <span className={styles.statValue}>
-                                {bestCurrentPrice === 0 ? <span className={styles.freeTag}>FREE</span> : `$${sortedDeals[0]?.price}`}
+                <div className="p-6 md:p-8">
+                    <div className="mb-10 grid grid-cols-1 gap-6 md:grid-cols-[1fr_auto_1fr_auto_1fr]">
+                        <div className="flex flex-col gap-1">
+                            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Best Price Now</span>
+                            <span className="text-3xl font-black text-white">
+                                {bestCurrentPrice === 0 ? <span className="text-primary">FREE</span> : `$${sortedDeals[0]?.price}`}
                             </span>
                         </div>
-                        <div className={styles.statDivider} />
-                        <div className={styles.statBlock}>
-                            <span className={styles.statLabel}>Historical Low</span>
-                            <span className={`${styles.statValue} ${styles.hlValue}`}>
+                        <div className="hidden w-px bg-white/10 md:block" />
+                        <div className="flex flex-col gap-1">
+                            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Historical Low</span>
+                            <span className="flex items-center gap-2 text-3xl font-black text-accent-foreground">
                                 ${game.cheapestPriceEver.price}
-                                {isCurrentlyAtHL && <span className={styles.hlActiveBadge}>LIVE HL</span>}
+                                {isCurrentlyAtHL && <span className="rounded bg-accent px-2 py-0.5 text-xs font-bold text-black shadow-[0_0_10px_hsl(var(--accent)/0.6)]">LIVE HL</span>}
                             </span>
                         </div>
 
-                        <div className={styles.statDivider} />
+                        <div className="hidden w-px bg-white/10 md:block" />
 
-                        <div className={styles.statBlock}>
-                            <span className={styles.statLabel}>🎮 Value</span>
-                            <span className={styles.statValue}>{costPerHour}</span>
-                            <span className={styles.statSub}>~{playtime.mainStory}h campaign</span>
+                        <div className="flex flex-col gap-1">
+                            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">🎮 Value</span>
+                            <span className="text-3xl font-black text-white">{costPerHour}</span>
+                            <span className="text-xs text-muted-foreground">~{playtime.mainStory}h campaign</span>
                         </div>
                     </div>
 
-                    <div className={styles.storeComparison}>
+                    <div className="mb-12 flex flex-col gap-8">
                         {officialDeals.length > 0 && (
                             <>
-                                <h2 className={styles.sectionTitle}>Official Stores</h2>
-                                <div className={styles.dealsList}>
+                                <h2 className="mb-4 border-b border-white/10 pb-2 text-lg font-bold text-white">Official Stores</h2>
+                                <div className="flex flex-col gap-3">
                                     {officialDeals.map((deal) => 
                                         renderDealRow(deal, parseFloat(deal.price) === bestOfficialPrice, cheapestEver)
                                     )}
@@ -151,8 +154,8 @@ export default async function GameModal({ params }: { params: Promise<{ id: stri
 
                         {keyshopDeals.length > 0 && (
                             <>
-                                <h2 className={`${styles.sectionTitle} ${styles.keyshopTitle}`}>Keyshops</h2>
-                                <div className={styles.dealsList}>
+                                <h2 className="mb-4 border-b border-white/10 pb-2 text-lg font-bold text-orange-400">Keyshops</h2>
+                                <div className="flex flex-col gap-3">
                                     {keyshopDeals.map((deal) => 
                                         renderDealRow(deal, parseFloat(deal.price) === bestKeyshopPrice, cheapestEver)
                                     )}
