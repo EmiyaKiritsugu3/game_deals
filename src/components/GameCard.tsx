@@ -54,7 +54,7 @@ export default async function GameCard({ deal }: { deal: Deal }) {
                     </div>
 
                     <div className={styles.meta}>
-                        <span className={styles.storeBadge}>{store?.storeName || 'Store'}</span>
+                        <span className={styles.storeBadge}>{store || 'Store'}</span>
                         {deal.steamRatingPercent && deal.steamRatingPercent !== '0' && (
                             <span className={styles.ratingBadge}>
                                 ★ {deal.steamRatingPercent}%
