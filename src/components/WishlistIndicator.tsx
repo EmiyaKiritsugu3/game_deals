@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { Heart } from 'lucide-react';
 import { useWishlist } from '@/store/wishlistStore';
 import { useHydrated } from '@/hooks/useHydrated';
-import styles from './WishlistIndicator.module.css';
 
 export default function WishlistIndicator() {
     const isHydrated = useHydrated();
@@ -13,16 +12,22 @@ export default function WishlistIndicator() {
     const count = isHydrated ? wishlist.length : 0;
 
     return (
-        <Link href="/wishlist" className={styles.indicator} title="Ver Favoritos">
+        <Link
+            href="/wishlist"
+            className="group relative flex items-center gap-2 rounded-lg bg-card/60 px-4 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:bg-card hover:text-foreground"
+            title="Ver Favoritos"
+        >
             <Heart 
                 size={22} 
-                className={styles.icon} 
+                className="transition-transform group-hover:scale-110"
                 fill={count > 0 ? "#ef4444" : "none"} 
-                color="currentColor"
+                color={count > 0 ? "#ef4444" : "currentColor"}
             />
-            <span className={styles.text}>Wishlist</span>
+            <span className="hidden sm:inline">Wishlist</span>
             {count > 0 && (
-                <span className={styles.badge}>{count}</span>
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-md">
+                    {count}
+                </span>
             )}
         </Link>
     );
