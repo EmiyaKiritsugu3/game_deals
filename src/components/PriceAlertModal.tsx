@@ -16,22 +16,31 @@ interface PriceAlertModalProps {
 
 export default function PriceAlertModal({ isOpen, onClose, gameID, gameTitle, currentPrice }: PriceAlertModalProps) {
     const { addAlert, removeAlert, getAlert, hasAlert } = useAlerts();
-    const existingAlert = getAlert(gameID);
     
-    const [targetPrice, setTargetPrice] = useState(currentPrice);
-    const [isKeyshopAllowed, setIsKeyshopAllowed] = useState(true);
+    // We calculate initial values directly instead of using useEffect
+    const getInitialTargetPrice = () => {
+        const existingAlert = getAlert(gameID);
+        if (existingAlert) return existingAlert.targetPrice;
+        return Math.round(currentPrice * 0.8 * 100) / 100;
+    };
 
+    const getInitialKeyshopAllowed = () => {
+        const existingAlert = getAlert(gameID);
+        if (existingAlert) return existingAlert.isKeyshopAllowed;
+        return true;
+    };
+
+    const [targetPrice, setTargetPrice] = useState(getInitialTargetPrice());
+    const [isKeyshopAllowed, setIsKeyshopAllowed] = useState(getInitialKeyshopAllowed());
+
+    // Reset state whenever the modal opens
     useEffect(() => {
         if (isOpen) {
-            if (existingAlert) {
-                setTargetPrice(existingAlert.targetPrice);
-                setIsKeyshopAllowed(existingAlert.isKeyshopAllowed);
-            } else {
-                // Default target = 20% discount from current
-                setTargetPrice(Math.round(currentPrice * 0.8 * 100) / 100);
-            }
+            setTargetPrice(getInitialTargetPrice());
+            setIsKeyshopAllowed(getInitialKeyshopAllowed());
         }
-    }, [isOpen, existingAlert, currentPrice]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOpen, gameID, currentPrice]);
 
     const handleSave = () => {
         addAlert({
