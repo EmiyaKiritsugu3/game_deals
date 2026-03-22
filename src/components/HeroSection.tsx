@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Monitor, Gamepad2 } from 'lucide-react';
 import { Deal, getHighResImage, getStoreLogo } from '../services/api';
-import styles from './HeroSection.module.css';
+import { cn } from '@/lib/utils';
 
 interface HeroSectionProps {
     deals: Deal[];
@@ -29,25 +29,25 @@ export default function HeroSection({ deals }: HeroSectionProps) {
     if (!deals || deals.length === 0) return null;
 
     return (
-        <section className={styles.hero}>
+        <section className="relative flex min-h-[600px] items-center overflow-hidden bg-background mb-12 after:pointer-events-none after:absolute after:inset-0 after:z-10 after:bg-gradient-to-t after:from-background after:via-transparent after:to-transparent">
             {/* The Infinite Background Matrix layer */}
-            <div className={styles.matrixBackground}>
-                <div className={styles.matrixTrack}>
+            <div className="pointer-events-none absolute -inset-[20%] z-0 flex overflow-hidden [transform:perspective(1000px)_rotateX(20deg)_rotateZ(-5deg)]">
+                <div className="flex h-[150%] w-[150%] flex-wrap content-start gap-4 opacity-70 animate-[matrixDrift_60s_linear_infinite]">
                     {/* Duplicate the deals array to create a dense grid covering the entire background */}
                     {Array(15).fill(deals).flat().map((deal, i) => (
-                        <div key={`matrix-${i}`} className={styles.matrixImgWrapper}>
+                        <div key={`matrix-${i}`} className="relative h-[130px] flex-[1_1_200px] overflow-hidden rounded-lg bg-background shadow-lg">
                             <Image
                                 src={getHighResImage(deal.thumb)} 
                                 alt="" 
                                 fill
                                 sizes="100px"
-                                className={styles.matrixImg}
+                                className="object-cover opacity-80 mix-blend-luminosity"
                             />
                         </div>
                     ))}
                 </div>
             </div>
-            <div className={styles.matrixOverlay} />
+            <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_30%,hsl(var(--background)/0.9)_100%)]" />
 
             {/* The individual Deals carousel */}
             {deals.map((deal, idx) => {
@@ -58,69 +58,72 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                 return (
                     <div
                         key={deal.dealID}
-                        className={`${styles.slide} ${isActive ? styles.active : ''}`}
+                        className={cn(
+                            "absolute inset-0 flex items-center justify-center opacity-0 invisible transition-all duration-700 ease-in-out",
+                            isActive && "opacity-100 visible z-20"
+                        )}
                         aria-hidden={!isActive}
                     >
                         {/* The dynamic colorful glow based on the current deal's thumbnail */}
-                        <div className={styles.backgroundBlur}>
+                        <div className="absolute inset-0 z-0 opacity-40">
                             <Image
                                 src={dealThumb}
                                 alt="background blur"
                                 fill
-                                className={styles.blurImg}
+                                className="object-cover scale-125 blur-[60px] brightness-50 saturate-150"
                             />
                         </div>
                         
                         {/* The Glassmorphism Panel isolated inside the slide */}
-                        <div className="container">
+                        <div className="container relative z-30">
                             <motion.div 
-                                className={styles.glassPanel}
+                                className="flex min-h-[380px] w-full items-center rounded-2xl border border-white/20 bg-card/40 p-8 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(255,255,255,0.05)] backdrop-blur-xl md:min-h-[400px] md:p-12 lg:p-16"
                                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
                                 animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.95, y: isActive ? 0 : 30 }}
                                 transition={{ duration: 0.5, ease: "easeOut" }}
                             >
-                                <div className={styles.heroContainer}>
-                                    <div className={styles.content}>
-                                        <span className={styles.featuredBadge}>FEATURED DEAL</span>
-                                        <h1 className={styles.title}>{deal.title}</h1>
+                                <div className="grid w-full grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-16">
+                                    <div className="flex flex-col items-center gap-6 text-center md:items-start md:text-left">
+                                        <span className="inline-block rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-black tracking-widest text-primary uppercase">FEATURED DEAL</span>
+                                        <h1 className="text-4xl font-black leading-tight tracking-tight text-white drop-shadow-md md:text-5xl lg:text-6xl">{deal.title}</h1>
 
-                                        <div className={styles.metaRow}>
+                                        <div className="flex flex-wrap items-center justify-center gap-6 md:justify-start">
                                             {getStoreLogo(deal.storeID) && (
-                                                <div className={styles.storeBadge}>
-                                                    <Image src={getStoreLogo(deal.storeID)!} alt="Store" width={16} height={16} />
-                                                    <span className={styles.storeNameLabel}>Ver Oferta</span>
+                                                <div className="flex items-center gap-2 rounded border border-white/10 bg-black/40 px-3 py-1.5 text-sm font-bold text-muted-foreground backdrop-blur-md">
+                                                    <Image src={getStoreLogo(deal.storeID)!} alt="Store" width={18} height={18} className="rounded-sm" />
+                                                    <span className="uppercase tracking-wide">Ver Oferta</span>
                                                 </div>
                                             )}
-                                            <div className={styles.platforms}>
-                                                <Monitor size={16} />
-                                                <Gamepad2 size={16} />
+                                            <div className="flex items-center gap-3 text-muted-foreground">
+                                                <Monitor size={20} className="opacity-70 transition-opacity hover:opacity-100" />
+                                                <Gamepad2 size={20} className="opacity-70 transition-opacity hover:opacity-100" />
                                             </div>
                                         </div>
 
-                                        <div className={styles.priceRow}>
-                                            {dealSavings > 0 && <span className={styles.badge}>Save {dealSavings}%</span>}
-                                            <div className={styles.prices}>
-                                                {dealSavings > 0 && <span className={styles.normal}>${deal.normalPrice}</span>}
-                                                <span className={styles.sale}>${deal.salePrice}</span>
+                                        <div className="flex items-center justify-center gap-5 md:justify-start">
+                                            {dealSavings > 0 && <span className="rounded bg-primary px-4 py-2 text-xl font-black text-primary-foreground shadow-lg shadow-primary/30">Save {dealSavings}%</span>}
+                                            <div className="flex flex-col justify-center">
+                                                {dealSavings > 0 && <span className="text-lg font-bold leading-none text-muted-foreground line-through">${deal.normalPrice}</span>}
+                                                <span className="text-3xl font-black leading-none text-white">${deal.salePrice}</span>
                                             </div>
                                         </div>
 
                                         <Link
                                             href={`/game/${deal.gameID}`}
-                                            className={styles.ctaButton}
+                                            className="mt-2 inline-flex items-center justify-center rounded-lg bg-white px-10 py-4 text-lg font-bold text-black transition-all hover:-translate-y-1 hover:bg-primary hover:text-primary-foreground hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.3)] w-full md:w-auto"
                                             tabIndex={isActive ? 0 : -1}
                                         >
                                             Get Deal Now
                                         </Link>
                                     </div>
 
-                                    <div className={styles.imageWrapper}>
+                                    <div className="relative mx-auto aspect-[460/215] w-full max-w-lg overflow-hidden rounded-xl border border-white/20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_30px_rgba(0,0,0,0.3)] [transform:perspective(1000px)_rotateY(-8deg)_rotateX(4deg)] transition-transform duration-500 hover:[transform:perspective(1000px)_rotateY(0deg)_rotateX(0deg)_scale(1.02)] md:max-w-none">
                                         <Image
                                             src={dealThumb}
                                             alt={deal.title}
                                             fill
                                             sizes="(max-width: 768px) 100vw, 50vw"
-                                            className={styles.heroImage}
+                                            className="object-cover bg-card"
                                             priority={idx === 0}
                                         />
                                     </div>
@@ -133,11 +136,14 @@ export default function HeroSection({ deals }: HeroSectionProps) {
 
             {/* Navigation Dots */}
             {deals.length > 1 && (
-                <div className={styles.navigation}>
+                <div className="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 gap-2">
                     {deals.map((_, idx) => (
                         <button
                             key={idx}
-                            className={`${styles.dot} ${idx === currentIndex ? styles.activeDot : ''}`}
+                            className={cn(
+                                "h-1 w-8 rounded-full bg-white/20 transition-all hover:bg-white/50",
+                                idx === currentIndex && "w-12 bg-primary"
+                            )}
                             onClick={() => setCurrentIndex(idx)}
                             aria-label={`Go to slide ${idx + 1}`}
                         />

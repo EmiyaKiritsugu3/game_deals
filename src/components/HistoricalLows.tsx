@@ -1,7 +1,7 @@
 import { getDeals, getGame } from '@/services/api';
 import DealRow from './DealRow';
-import styles from './HistoricalLows.module.css';
 import DealsBadge from './DealsBadge';
+import Link from 'next/link';
 
 export default async function HistoricalLows() {
     // 1. Fetch diverse candidates
@@ -42,17 +42,18 @@ export default async function HistoricalLows() {
     if (hlDeals.length === 0) return null;
 
     return (
-        <div className={styles.listSection}>
-            <div className={styles.sectionHeader}>
-                <div className={styles.sectionHeaderRow}>
-                    <div>
-                        <h2><DealsBadge type="HL" className={styles.headerHL} /> Historical Lows</h2>
-                        <p>Prices at or near their all-time lowest.</p>
-                    </div>
-                    <a href="/search?sortBy=Savings" className={styles.seeAll}>SEE ALL ▶</a>
+        <div>
+            <div className="mb-6 flex flex-col items-baseline justify-between gap-4 border-b border-white/10 pb-4 md:flex-row">
+                <div>
+                    <h2 className="flex items-center gap-3 text-2xl font-black uppercase tracking-tight text-white md:text-3xl">
+                        <DealsBadge type="HL" className="scale-125 shadow-[0_0_15px_hsl(var(--accent)/0.5)]" />
+                        Historical Lows
+                    </h2>
+                    <p className="text-sm font-medium text-muted-foreground">Prices at or near their all-time lowest.</p>
                 </div>
+                <Link href="/search?sortBy=Savings" className="shrink-0 text-sm font-bold text-primary transition-colors hover:text-emerald-400">SEE ALL ▶</Link>
             </div>
-            <div className={styles.listCol}>
+            <div className="flex flex-col gap-4">
                 {hlDeals.map((deal) => (
                     <DealRow key={deal.dealID} deal={deal} />
                 ))}

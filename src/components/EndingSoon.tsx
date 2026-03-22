@@ -1,6 +1,6 @@
 import { getDeals } from '@/services/api';
 import DealRow from './DealRow';
-import styles from './EndingSoon.module.css';
+import Link from 'next/link';
 
 export default async function EndingSoon() {
     const deals = await getDeals({ sortBy: 'Recent', pageSize: '8', onSale: '1' });
@@ -8,17 +8,15 @@ export default async function EndingSoon() {
     if (deals.length === 0) return null;
 
     return (
-        <div className={styles.listSection}>
-            <div className={styles.sectionHeader}>
-                <div className={styles.sectionHeaderRow}>
-                    <div>
-                        <h2>⏰ Ending Soon</h2>
-                        <p>Act fast — these deals won&apos;t last.</p>
-                    </div>
-                    <a href="/search?sortBy=Recent" className={styles.seeAll}>SEE ALL ▶</a>
+        <div>
+            <div className="mb-6 flex flex-col items-baseline justify-between gap-4 border-b border-white/10 pb-4 md:flex-row">
+                <div>
+                    <h2 className="text-2xl font-black uppercase tracking-tight text-white md:text-3xl">⏰ Ending Soon</h2>
+                    <p className="text-sm font-medium text-muted-foreground">Act fast — these deals won&apos;t last.</p>
                 </div>
+                <Link href="/search?sortBy=Recent" className="shrink-0 text-sm font-bold text-primary transition-colors hover:text-emerald-400">SEE ALL ▶</Link>
             </div>
-            <div className={styles.listCol}>
+            <div className="flex flex-col gap-4">
                 {deals.map((deal) => (
                     <DealRow key={deal.dealID} deal={deal} />
                 ))}
