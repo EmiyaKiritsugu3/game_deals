@@ -1,21 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Heart } from 'lucide-react';
 import { useWishlist } from '@/store/wishlistStore';
+import { useHydrated } from '@/hooks/useHydrated';
 import styles from './WishlistIndicator.module.css';
 
 export default function WishlistIndicator() {
-    const [mounted, setMounted] = useState(false);
+    const isHydrated = useHydrated();
     const { wishlist } = useWishlist();
 
-    const [count, setCount] = useState(0);
-
-    useEffect(() => {
-        setMounted(true);
-        setCount(wishlist.length);
-    }, [wishlist.length]);
+    const count = isHydrated ? wishlist.length : 0;
 
     return (
         <Link href="/wishlist" className={styles.indicator} title="Ver Favoritos">

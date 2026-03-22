@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Bell, BellRing } from 'lucide-react';
 import { useAuth } from '@/store/authStore';
 import { useAlerts } from '@/store/alertStore';
+import { useHydrated } from '@/hooks/useHydrated';
 import AuthModal from './AuthModal';
 import PriceAlertModal from './PriceAlertModal';
 import styles from './PriceAlertTrigger.module.css';
@@ -16,18 +17,13 @@ interface PriceAlertTriggerProps {
 }
 
 export default function PriceAlertTrigger({ gameID, gameTitle, currentPrice, className = '' }: PriceAlertTriggerProps) {
+    const isHydrated = useHydrated();
     const { isLoggedIn } = useAuth();
     const { hasAlert } = useAlerts();
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
-    const [mounted, setMounted] = useState(false);
 
-    const [activeAlert, setActiveAlert] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-        setActiveAlert(hasAlert(gameID));
-    }, [gameID, hasAlert]);
+    const activeAlert = isHydrated ? hasAlert(gameID) : false;
 
     const handleClick = () => {
         if (!isLoggedIn) {

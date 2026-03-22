@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
 import { useWishlist } from '@/store/wishlistStore';
+import { useHydrated } from '@/hooks/useHydrated';
 import styles from './HeartButton.module.css';
 
 interface HeartButtonProps {
@@ -11,14 +11,10 @@ interface HeartButtonProps {
 }
 
 export default function HeartButton({ gameID, className = '' }: HeartButtonProps) {
-    const [mounted, setMounted] = useState(false);
+    const isHydrated = useHydrated();
     const { isInWishlist, toggleWishlist } = useWishlist();
-    
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
-    const isSaved = mounted ? isInWishlist(gameID) : false;
+    const isSaved = isHydrated ? isInWishlist(gameID) : false;
 
     const handleToggle = (e: React.MouseEvent) => {
         e.preventDefault(); // Prevent navigating if this is inside a Link

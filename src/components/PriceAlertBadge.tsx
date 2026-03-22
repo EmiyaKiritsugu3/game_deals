@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { BellRing } from 'lucide-react';
 import { useAlerts } from '@/store/alertStore';
+import { useHydrated } from '@/hooks/useHydrated';
 import styles from './PriceAlertBadge.module.css';
 
 interface PriceAlertBadgeProps {
@@ -11,15 +11,11 @@ interface PriceAlertBadgeProps {
 }
 
 export default function PriceAlertBadge({ gameID, className = '' }: PriceAlertBadgeProps) {
-    const [mounted, setMounted] = useState(false);
+    const isHydrated = useHydrated();
     const { hasAlert } = useAlerts();
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
     // Return a placeholder of the same size if not mounted yet
-    if (!mounted) {
+    if (!isHydrated) {
          return <div className={`${styles.badge} ${styles.badgePlaceholder} ${className}`} aria-hidden="true" />;
     }
 
