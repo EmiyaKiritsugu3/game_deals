@@ -1,6 +1,3 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { getActivities } from '@/services/social';
 import { Activity } from '@/types/social';
@@ -57,31 +54,18 @@ export default function ActivityItem({ activity }: ActivityItemProps) {
   );
 }
 
-export function ActivityFeed() {
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchActivities() {
-      try {
-        const data = await getActivities(10);
-        setActivities(data);
-      } catch (error) {
-        console.error('Failed to fetch activities:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchActivities();
-  }, []);
+export async function ActivityFeed() {
+  let activities: Activity[] = [];
+  try {
+      activities = await getActivities(10);
+  } catch (e) {
+      console.error('Failed to fetch activities:', e);
+  }
 
   return (
     <div className={styles.activityContainer}>
       <h2 className={styles.sectionTitle}>Comunidade</h2>
-      {loading ? (
-        <p className={styles.loadingText}>Loading activities...</p>
-      ) : activities.length > 0 ? (
+      {activities.length > 0 ? (
         activities.map((activity) => (
           <ActivityItem key={activity.id} activity={activity} />
         ))
