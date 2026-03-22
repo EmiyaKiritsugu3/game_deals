@@ -1,17 +1,16 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import styles from './Charts.module.css';
 
 // Lazy load Recharts components
 const PriceHistoryChartLazy = dynamic(() => import('./Charts').then(mod => mod.PriceHistoryChart), {
     ssr: false,
-    loading: () => <div className={styles.chartPlaceholder}>Loading History...</div>
+    loading: () => <div className="flex h-[300px] w-full items-center justify-center rounded-xl border border-white/5 bg-card/20 text-muted-foreground">Loading History...</div>
 });
 
 const StoreCompareChartLazy = dynamic(() => import('./Charts').then(mod => mod.StoreCompareChart), {
     ssr: false,
-    loading: () => <div className={styles.chartPlaceholder}>Loading Prices...</div>
+    loading: () => <div className="flex h-[250px] w-full items-center justify-center rounded-xl border border-white/5 bg-card/20 text-muted-foreground">Loading Prices...</div>
 });
 
 interface DynamicPriceHistoryProps {

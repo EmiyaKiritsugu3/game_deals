@@ -5,7 +5,6 @@ import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getGame, getStores, getHighResImage } from '@/services/api';
-import styles from '../page.module.css';
 
 interface SharedGame {
     gameID: string;
@@ -70,70 +69,70 @@ function SharedWishlistContent() {
 
     if (isLoading) {
         return (
-            <div className={styles.emptyState}>
-                <div className={styles.spinner}></div>
-                <p>Carregando a Wishlist compartilhada...</p>
+            <div className="flex flex-col items-center justify-center gap-6 py-20">
+                <div className="h-10 w-10 animate-spin rounded-full border-4 border-white/10 border-t-primary"></div>
+                <p className="text-sm font-medium text-muted-foreground">Carregando a Wishlist compartilhada...</p>
             </div>
         );
     }
 
     if (games.length === 0) {
         return (
-            <div className={styles.emptyState}>
-                <h2>Wishlist não encontrada</h2>
-                <p>O link pode estar expirado ou inválido.</p>
-                <Link href="/" className={styles.browseButton}>Ir para a Home</Link>
+            <div className="flex flex-col items-center justify-center gap-6 rounded-2xl border border-dashed border-white/10 py-20 text-center">
+                <h2 className="text-2xl font-black text-white md:text-3xl">Wishlist não encontrada</h2>
+                <p className="text-sm text-muted-foreground">O link pode estar expirado ou inválido.</p>
+                <Link href="/" className="mt-4 rounded-lg bg-primary px-8 py-3 font-bold text-primary-foreground shadow-lg transition-transform hover:-translate-y-1 hover:shadow-primary/50">Ir para a Home</Link>
             </div>
         );
     }
 
     return (
         <>
-            <div className={styles.heroHeader}>
+            <div className="relative mb-8 flex min-h-[220px] flex-col justify-center overflow-hidden rounded-[2rem] border border-white/5 bg-[#1f222e] p-8 shadow-2xl md:p-12">
                 {games[0]?.thumb && (
                     <div 
-                        className={styles.heroBackground} 
+                        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30 mix-blend-luminosity filter blur-sm"
                         style={{ backgroundImage: `url(${games[0].thumb})` }}
                     />
                 )}
-                <div className={styles.heroOverlay} />
-                <div className={styles.heroContent}>
-                    <h1 className={styles.title}>🎁 Wishlist Compartilhada</h1>
-                    <p className={styles.subtitle}>
+                <div className="absolute inset-0 z-0 bg-gradient-to-r from-background/90 to-background/40" />
+                <div className="relative z-10">
+                    <h1 className="mb-2 text-4xl font-black tracking-tight text-white drop-shadow-md md:text-5xl">🎁 Wishlist Compartilhada</h1>
+                    <p className="text-lg font-medium text-muted-foreground">
                         {games.length} {games.length === 1 ? 'jogo' : 'jogos'} nesta lista · Presenteie usando os links abaixo!
                     </p>
                 </div>
             </div>
 
-            <div className={styles.grid}>
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-6 lg:gap-8">
                 {games.map((game, idx) => (
-                    <div key={`${game.gameID}-${idx}`} className={styles.wishlistCard}>
-                        <div className={styles.imageContainer}>
+                    <div key={`${game.gameID}-${idx}`} className="group flex flex-col overflow-hidden rounded-xl border border-white/5 bg-card transition-all hover:-translate-y-1 hover:border-white/20 hover:shadow-xl">
+                        <div className="relative aspect-[460/215] w-full overflow-hidden bg-black/50">
                             <Image
                                 src={game.thumb}
                                 alt={game.title}
                                 fill
                                 sizes="(max-width: 768px) 100vw, 33vw"
-                                className={styles.image}
+                                className="object-cover transition-transform duration-500 group-hover:scale-110"
                             />
                             {game.savings > 0 && (
-                                <div className={styles.savingsBadge}>
+                                <div className="absolute bottom-2 left-2 rounded bg-primary px-2 py-1 text-sm font-black text-primary-foreground shadow-md transition-transform duration-300 group-hover:scale-110">
                                     -{game.savings}%
                                 </div>
                             )}
                         </div>
-                        <div className={styles.content}>
-                            <h3 className={styles.cardTitle} title={game.title}>{game.title}</h3>
-                            <div className={styles.priceContainer}>
+                        <div className="flex flex-1 flex-col p-4">
+                            <h3 className="mb-2 line-clamp-2 text-base font-bold text-white transition-colors group-hover:text-primary" title={game.title}>{game.title}</h3>
+                            <div className="mb-3 flex items-baseline gap-2">
                                 {game.savings > 0 && (
-                                    <span className={styles.normalPrice}>${game.normalPrice}</span>
+                                    <span className="text-sm font-semibold text-muted-foreground line-through">${game.normalPrice}</span>
                                 )}
-                                <span className={styles.salePrice}>${game.salePrice}</span>
+                                <span className="text-xl font-black text-white">${game.salePrice}</span>
                             </div>
-                            <div className={styles.meta}>
-                                <span className={styles.storeBadge}>{stores[game.storeID] || 'Store'}</span>
-                                <Link href={`/game/${game.gameID}`} className={styles.viewDetailsBtn}>
-                                    🎁 Comprar como Presente
+                            <div className="mt-auto flex items-center justify-between">
+                                <span className="rounded bg-white/5 px-2 py-1 text-xs font-semibold text-muted-foreground">{stores[game.storeID] || 'Store'}</span>
+                                <Link href={`/game/${game.gameID}`} className="rounded bg-primary/10 px-3 py-1.5 text-xs font-bold text-primary transition-colors hover:bg-primary hover:text-primary-foreground">
+                                    🎁 Presentear
                                 </Link>
                             </div>
                         </div>
@@ -146,9 +145,9 @@ function SharedWishlistContent() {
 
 export default function SharedWishlistPage() {
     return (
-        <main className={styles.main}>
-            <div className={`container ${styles.container}`}>
-                <Suspense fallback={<div style={{ padding: '5rem', textAlign: 'center' }}>Carregando...</div>}>
+        <main className="min-h-[100vh] bg-background pb-12">
+            <div className="container mx-auto flex max-w-[1200px] flex-col gap-8 px-4 pt-12">
+                <Suspense fallback={<div className="py-20 text-center text-muted-foreground">Carregando...</div>}>
                     <SharedWishlistContent />
                 </Suspense>
             </div>

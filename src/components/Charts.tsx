@@ -1,7 +1,6 @@
 "use client";
 
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import styles from './Charts.module.css';
 
 interface StorePrice {
     storeName: string;
@@ -16,9 +15,9 @@ export function StoreCompareChart({ data }: { data: StorePrice[] }) {
     }));
 
     return (
-        <div className={styles.chartContainer}>
-            <h3 className={styles.chartTitle}>Current Prices by Store</h3>
-            <div className={styles.chartWrapper}>
+        <div className="flex flex-col gap-4 rounded-xl border border-white/5 bg-card/50 p-6 shadow-lg backdrop-blur-sm">
+            <h3 className="text-lg font-bold text-white">Current Prices by Store</h3>
+            <div className="h-[250px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 20 }}>
                         <XAxis
@@ -75,10 +74,12 @@ export function PriceHistoryChart({ currentPrice, lowestPrice, lowestDate: _lowe
     const historyData: PriceHistoryPoint[] = generatePriceHistory(parseFloat(retailPrice), parseFloat(currentPrice), parseFloat(lowestPrice), gameTitle);
 
     return (
-        <div className={styles.chartContainer}>
-            <h3 className={styles.chartTitle}>Current Price History (6 Months)</h3>
-            <p className={styles.chartSubtitle}>Algorithmic market simulation based on official data drops.</p>
-            <div className={styles.chartWrapper}>
+        <div className="flex flex-col gap-4 rounded-xl border border-white/5 bg-card/50 p-6 shadow-lg backdrop-blur-sm">
+            <div>
+                <h3 className="text-lg font-bold text-white">Current Price History (6 Months)</h3>
+                <p className="text-sm font-medium text-muted-foreground">Algorithmic market simulation based on official data drops.</p>
+            </div>
+            <div className="h-[300px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={historyData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
                         <XAxis

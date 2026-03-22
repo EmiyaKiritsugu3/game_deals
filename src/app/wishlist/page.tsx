@@ -10,7 +10,7 @@ import { useAlerts } from '@/store/alertStore';
 import { getGame, getStores, getHighResImage } from '@/services/api';
 import HeartButton from '@/components/HeartButton';
 import PriceAlertTrigger from '@/components/PriceAlertTrigger';
-import styles from './page.module.css';
+import { cn } from '@/lib/utils';
 
 interface SavedGame {
     gameID: string;
@@ -105,34 +105,40 @@ export default function WishlistPage() {
     }, [savedGames]);
 
     return (
-        <main className={styles.main}>
-            <div className={`container ${styles.container}`}>
-                <div className={styles.heroHeader}>
+        <main className="min-h-[100vh] bg-background pb-12">
+            <div className="container mx-auto flex max-w-[1200px] flex-col gap-8 px-4 pt-12">
+                <div className="relative flex min-h-[220px] flex-col justify-center overflow-hidden rounded-[2rem] border border-white/5 bg-[#1f222e] p-8 shadow-2xl md:p-12">
                     {bestDiscountGame?.thumb && (
                         <div 
-                            className={styles.heroBackground} 
+                            className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30 mix-blend-luminosity filter blur-sm"
                             style={{ backgroundImage: `url(${bestDiscountGame.thumb})` }}
                         />
                     )}
-                    <div className={styles.heroOverlay} />
-                    <div className={styles.heroContent}>
-                        <h1 className={styles.title}>Meu Dashboard ❤️</h1>
-                        <p className={styles.subtitle}>
+                    <div className="absolute inset-0 z-0 bg-gradient-to-r from-background/90 to-background/40" />
+                    <div className="relative z-10">
+                        <h1 className="mb-2 text-4xl font-black tracking-tight text-white drop-shadow-md md:text-5xl">Meu Dashboard ❤️</h1>
+                        <p className="text-lg font-medium text-muted-foreground">
                             Gerencie seus jogos e alertas favoritos.
                         </p>
                     </div>
                 </div>
 
-                <div className={styles.tabContainer}>
+                <div className="flex gap-4 border-b border-white/10 pb-4">
                     <button 
-                        className={`${styles.tab} ${activeTab === 'wishlist' ? styles.activeTab : ''}`}
+                        className={cn(
+                            "flex items-center gap-2 rounded-xl bg-transparent px-5 py-3 font-bold text-muted-foreground transition-all hover:bg-white/5 hover:text-white",
+                            activeTab === 'wishlist' && "bg-white/10 text-white shadow-inner"
+                        )}
                         onClick={() => setActiveTab('wishlist')}
                     >
                         <List size={20} />
                         Wishlist ({wishlist.length})
                     </button>
                     <button 
-                        className={`${styles.tab} ${activeTab === 'alerts' ? styles.activeTab : ''}`}
+                        className={cn(
+                            "flex items-center gap-2 rounded-xl bg-transparent px-5 py-3 font-bold text-muted-foreground transition-all hover:bg-white/5 hover:text-white",
+                            activeTab === 'alerts' && "bg-white/10 text-white shadow-inner"
+                        )}
                         onClick={() => setActiveTab('alerts')}
                     >
                         <Bell size={20} />
@@ -142,33 +148,33 @@ export default function WishlistPage() {
 
                 {activeTab === 'wishlist' ? (
                     isLoading ? (
-                        <div className={styles.emptyState}>
-                            <div className={styles.spinner}></div>
-                            <p>Carregando seus jogos...</p>
+                        <div className="flex flex-col items-center justify-center gap-6 py-20">
+                            <div className="h-10 w-10 animate-spin rounded-full border-4 border-white/10 border-t-primary"></div>
+                            <p className="text-sm font-medium text-muted-foreground">Carregando seus jogos...</p>
                         </div>
                     ) : savedGames.length > 0 ? (
                     <>
-                        <div className={styles.dashboardPanel}>
-                            <div className={styles.statsPanel}>
-                                <div className={styles.statItem}>
-                                    <span className={styles.statLabel}>Valor da Carteira</span>
-                                    <span className={styles.statValue}>${totalValue}</span>
+                        <div className="flex flex-col justify-between gap-6 rounded-2xl border border-white/5 bg-card/50 p-6 backdrop-blur-xl md:flex-row md:items-center">
+                            <div className="flex flex-wrap gap-6 md:gap-12">
+                                <div className="flex flex-col gap-1">
+                                    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Valor da Carteira</span>
+                                    <span className="text-2xl font-black text-white">${totalValue}</span>
                                 </div>
                                 {bestDiscountGame && (
-                                    <div className={styles.statItem}>
-                                        <span className={styles.statLabel}>Maior Desconto</span>
-                                        <span className={styles.statValue}>-{bestDiscountGame.savings}%</span>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Maior Desconto</span>
+                                        <span className="text-2xl font-black text-primary">-{bestDiscountGame.savings}%</span>
                                     </div>
                                 )}
                             </div>
 
                             <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                                <div className={styles.sortControls}>
-                                    <span className={styles.sortLabel}>Ordenar por:</span>
+                                <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/40 px-4 py-2">
+                                    <span className="text-xs font-bold uppercase text-muted-foreground">Ordenar por:</span>
                                     <select 
                                         value={sortMode} 
                                         onChange={(e) => setSortMode(e.target.value as 'discount' | 'price' | 'name')}
-                                        className={styles.sortSelect}
+                                        className="cursor-pointer appearance-none bg-transparent text-sm font-bold text-white outline-none"
                                     >
                                         <option value="discount">Maior Desconto</option>
                                         <option value="price">Menor Preço</option>
@@ -177,7 +183,7 @@ export default function WishlistPage() {
                                 </div>
 
                                 <button
-                                    className={styles.shareButton}
+                                    className="flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:scale-105 hover:bg-emerald-400 hover:shadow-[0_0_15px_hsl(var(--primary)/0.5)] active:scale-95"
                                     onClick={() => {
                                         const encoded = btoa(wishlist.join(','));
                                         const url = `${window.location.origin}/wishlist/shared?ids=${encoded}`;
@@ -192,7 +198,7 @@ export default function WishlistPage() {
                         </div>
 
                         <motion.div 
-                            className={styles.grid}
+                            className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-6 lg:gap-8"
                             initial="hidden"
                             animate="show"
                             variants={{
@@ -206,46 +212,46 @@ export default function WishlistPage() {
                             {displayedGames.map((game, idx) => (
                                 <motion.div 
                                     key={`${game.gameID}-${idx}`} 
-                                    className={styles.wishlistCard}
+                                    className="group flex flex-col overflow-hidden rounded-xl border border-white/5 bg-card transition-all hover:-translate-y-1 hover:border-white/20 hover:shadow-xl"
                                     variants={{
                                         hidden: { opacity: 0, y: 20 },
                                         show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
                                     }}
                                 >
-                                    <div className={styles.imageContainer}>
+                                    <div className="relative aspect-[460/215] w-full overflow-hidden bg-black/50">
                                         <Image
                                             src={game.thumb}
                                             alt={game.title}
                                             fill
                                             sizes="(max-width: 768px) 100vw, 33vw"
-                                            className={styles.image}
+                                            className="object-cover transition-transform duration-500 group-hover:scale-110"
                                         />
-                                        <div className={styles.cardActions}>
+                                        <div className="absolute inset-0 flex flex-col items-end justify-between bg-gradient-to-t from-black/80 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                                             <PriceAlertTrigger 
                                                 gameID={game.gameID} 
                                                 gameTitle={game.title} 
                                                 currentPrice={parseFloat(game.salePrice)}
-                                                className={styles.alertShortcut}
+                                                className="!w-auto scale-90 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100"
                                             />
-                                            <HeartButton gameID={game.gameID} className={styles.heartWrapper} />
+                                            <HeartButton gameID={game.gameID} className="!w-auto scale-90 bg-black/60 opacity-0 transition-all duration-300 hover:bg-black/80 group-hover:scale-100 group-hover:opacity-100" />
                                         </div>
                                         {game.savings > 0 && (
-                                            <div className={styles.savingsBadge}>
+                                            <div className="absolute bottom-2 left-2 rounded bg-primary px-2 py-1 text-sm font-black text-primary-foreground shadow-md transition-transform duration-300 group-hover:scale-110">
                                                 -{game.savings}%
                                             </div>
                                         )}
                                     </div>
-                                    <div className={styles.content}>
-                                        <h3 className={styles.cardTitle} title={game.title}>{game.title}</h3>
-                                        <div className={styles.priceContainer}>
+                                    <div className="flex flex-1 flex-col p-4">
+                                        <h3 className="mb-2 line-clamp-2 text-base font-bold text-white transition-colors group-hover:text-primary" title={game.title}>{game.title}</h3>
+                                        <div className="mb-3 flex items-baseline gap-2">
                                             {game.savings > 0 && (
-                                                <span className={styles.normalPrice}>${game.normalPrice}</span>
+                                                <span className="text-sm font-semibold text-muted-foreground line-through">${game.normalPrice}</span>
                                             )}
-                                            <span className={styles.salePrice}>${game.salePrice}</span>
+                                            <span className="text-xl font-black text-white">${game.salePrice}</span>
                                         </div>
-                                        <div className={styles.meta}>
-                                            <span className={styles.storeBadge}>{stores[game.storeID] || `Store ${game.storeID}`}</span>
-                                            <Link href={`/game/${game.gameID}`} className={styles.viewDetailsBtn}>Ver Detalhes</Link>
+                                        <div className="mt-auto flex items-center justify-between">
+                                            <span className="rounded bg-white/5 px-2 py-1 text-xs font-semibold text-muted-foreground">{stores[game.storeID] || `Store ${game.storeID}`}</span>
+                                            <Link href={`/game/${game.gameID}`} className="rounded bg-primary/10 px-3 py-1.5 text-xs font-bold text-primary transition-colors hover:bg-primary hover:text-primary-foreground">Ver Detalhes</Link>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -254,61 +260,61 @@ export default function WishlistPage() {
                     </>
                 ) : (
                     <motion.div 
-                        className={styles.emptyState}
+                        className="flex flex-col items-center justify-center gap-6 rounded-2xl border border-dashed border-white/10 py-20 text-center"
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         transition={{ duration: 0.4, type: "spring", bounce: 0.5 }}
                     >
-                        <HeartCrack size={64} className={styles.emptyIcon} />
-                        <h2>Sua lista está vazia :(</h2>
-                        <p>Volte para a página principal e clique no coração nos jogos que você deseja rastrear e acompanhar o preço&excl;</p>
-                        <Link href="/" className={styles.browseButton}>Descobrir Ofertas Épicas</Link>
+                        <HeartCrack size={64} className="text-muted-foreground/30" />
+                        <h2 className="text-2xl font-black text-white md:text-3xl">Sua lista está vazia :(</h2>
+                        <p className="max-w-md text-sm text-muted-foreground">Volte para a página principal e clique no coração nos jogos que você deseja rastrear e acompanhar o preço&excl;</p>
+                        <Link href="/" className="mt-2 rounded-lg bg-primary px-8 py-3 font-bold text-primary-foreground shadow-lg transition-transform hover:-translate-y-1 hover:shadow-primary/50">Descobrir Ofertas Épicas</Link>
                     </motion.div>
                 )) : (
                     /* ALERTS TAB */
                     alerts.length > 0 ? (
-                        <div className={styles.grid}>
+                        <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 lg:gap-8">
                             {alerts.map((alert) => (
-                                <div key={alert.gameID} className={styles.wishlistCard}>
-                                    <div className={styles.alertHeader}>
-                                        <Bell size={16} className={styles.activeBell} />
-                                        <span className={styles.alertStatus}>Monitoramento Ativo</span>
+                                <div key={alert.gameID} className="group flex flex-col overflow-hidden rounded-xl border border-primary/20 bg-card transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_10px_30px_rgba(0,191,165,0.15)]">
+                                    <div className="flex items-center gap-2 bg-primary/10 px-4 py-3 text-primary">
+                                        <Bell size={16} className="animate-pulse" />
+                                        <span className="text-xs font-bold uppercase tracking-wider">Monitoramento Ativo</span>
                                     </div>
-                                    <div className={styles.content}>
-                                        <h3 className={styles.cardTitle}>{alert.gameTitle}</h3>
-                                        <div className={styles.alertPrices}>
-                                            <div className={styles.alertPriceBlock}>
-                                                <span className={styles.alertLabel}>Alvo</span>
-                                                <span className={styles.targetValue}>${alert.targetPrice.toFixed(2)}</span>
+                                    <div className="flex flex-col p-5">
+                                        <h3 className="mb-4 line-clamp-1 text-lg font-bold text-white" title={alert.gameTitle}>{alert.gameTitle}</h3>
+                                        <div className="mb-6 flex gap-6">
+                                            <div className="flex flex-col gap-1">
+                                                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Alvo</span>
+                                                <span className="text-2xl font-black text-primary">${alert.targetPrice.toFixed(2)}</span>
                                             </div>
-                                            <div className={styles.alertPriceBlock}>
-                                                <span className={styles.alertLabel}>Atual</span>
-                                                <span className={styles.currentValue}>${alert.currentPrice.toFixed(2)}</span>
+                                            <div className="flex flex-col gap-1">
+                                                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Atual</span>
+                                                <span className="text-2xl font-black text-white">${alert.currentPrice.toFixed(2)}</span>
                                             </div>
                                         </div>
-                                        <div className={styles.alertMeta}>
-                                            <span className={styles.keyshopLabel}>
+                                        <div className="mb-6 flex">
+                                            <span className="rounded bg-white/5 px-3 py-1.5 text-xs font-semibold text-muted-foreground">
                                                 {alert.isKeyshopAllowed ? '✅ Inclui Keyshops' : '❌ Apenas Oficiais'}
                                             </span>
                                         </div>
-                                        <div className={styles.alertFooter}>
+                                        <div className="mt-auto flex items-center justify-between gap-3">
                                             <PriceAlertTrigger 
                                                 gameID={alert.gameID} 
                                                 gameTitle={alert.gameTitle} 
                                                 currentPrice={alert.currentPrice}
-                                                className={styles.editAlertBtn}
+                                                className="!w-auto !bg-white/5 !px-4 !py-2 !text-white hover:!bg-white/10"
                                             />
-                                            <Link href={`/game/${alert.gameID}`} className={styles.viewDetailsBtn}>Ir para Jogo</Link>
+                                            <Link href={`/game/${alert.gameID}`} className="flex items-center justify-center rounded-lg bg-primary/10 px-4 py-2 text-sm font-bold text-primary transition-colors hover:bg-primary hover:text-primary-foreground">Ir para Jogo</Link>
                                         </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     ) : (
-                        <div className={styles.emptyState}>
-                            <Bell size={64} className={styles.emptyIcon} style={{ color: 'hsl(var(--muted-foreground)/0.3)' }} />
-                            <h2>Nenhum alerta configurado</h2>
-                            <p>Abra a página de qualquer jogo e clique em &quot;Alert Me&quot; para ser notificado quando o preço baixar&excl;</p>
+                        <div className="flex flex-col items-center justify-center gap-6 rounded-2xl border border-dashed border-white/10 py-20 text-center">
+                            <Bell size={64} className="text-muted-foreground/30" />
+                            <h2 className="text-2xl font-black text-white md:text-3xl">Nenhum alerta configurado</h2>
+                            <p className="max-w-md text-sm text-muted-foreground">Abra a página de qualquer jogo e clique em &quot;Alert Me&quot; para ser notificado quando o preço baixar&excl;</p>
                         </div>
                     )
                 )}
