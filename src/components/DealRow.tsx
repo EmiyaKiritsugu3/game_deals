@@ -8,10 +8,9 @@ import DealsBadge from './DealsBadge';
 
 interface DealRowProps {
     deal: Deal;
-    rank?: number;
 }
 
-export default async function DealRow({ deal, rank }: DealRowProps) {
+export default async function DealRow({ deal }: DealRowProps) {
     const highResThumb = getHighResImage(deal.thumb);
     const savings = Math.round(parseFloat(deal.savings));
 
@@ -49,7 +48,7 @@ export default async function DealRow({ deal, rank }: DealRowProps) {
                     <h3 className={styles.title}>{deal.title}</h3>
                     <div className={styles.meta}>
                         {storeLogo ? (
-                            <img
+                            <Image
                                 src={storeLogo}
                                 alt={storeName}
                                 title={storeName}

@@ -28,10 +28,6 @@ export default function HeroSection({ deals }: HeroSectionProps) {
 
     if (!deals || deals.length === 0) return null;
 
-    const currentDeal = deals[currentIndex];
-    const savings = Math.round(parseFloat(currentDeal.savings));
-    const highResThumb = getHighResImage(currentDeal.thumb);
-
     return (
         <section className={styles.hero}>
             {/* The Infinite Background Matrix layer */}
@@ -40,10 +36,11 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                     {/* Duplicate the deals array to create a dense grid covering the entire background */}
                     {Array(15).fill(deals).flat().map((deal, i) => (
                         <div key={`matrix-${i}`} className={styles.matrixImgWrapper}>
-                            <img 
+                            <Image
                                 src={getHighResImage(deal.thumb)} 
                                 alt="" 
-                                loading="lazy"
+                                fill
+                                sizes="100px"
                                 className={styles.matrixImg}
                             />
                         </div>
@@ -90,7 +87,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                                         <div className={styles.metaRow}>
                                             {getStoreLogo(deal.storeID) && (
                                                 <div className={styles.storeBadge}>
-                                                    <img src={getStoreLogo(deal.storeID)!} alt="Store" width={16} height={16} />
+                                                    <Image src={getStoreLogo(deal.storeID)!} alt="Store" width={16} height={16} />
                                                     <span className={styles.storeNameLabel}>Ver Oferta</span>
                                                 </div>
                                             )}

@@ -213,3 +213,5 @@ All exports of the module are statically known (It doesn't have dynamic exports)
 ✓ Compiled in 117ms
 ✓ Compiled in 63ms
 ✓ Compiled in 229ms
+✓ Compiled in 107ms
+✓ Compiled in 30ms
