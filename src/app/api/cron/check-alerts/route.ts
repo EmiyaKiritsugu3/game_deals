@@ -24,7 +24,7 @@ export async function GET(request: Request) {
         }
 
         // 3. Group by game_id to avoid redundant API calls
-        const uniqueGameIDs = [...new Set(alerts.map((a: any) => a.game_id))];
+        const uniqueGameIDs = [...new Set(alerts.map((a: { game_id: string }) => a.game_id))];
         const results = [];
 
         for (const gameID of uniqueGameIDs) {
@@ -45,7 +45,7 @@ export async function GET(request: Request) {
             if (updateError) console.error(`Error updating game ${gameID}:`, updateError);
 
             // 6. Identify users who should be notified
-            const triggeredAlerts = alerts.filter((a: any) => a.game_id === gameID && currentBestPrice <= a.target_price);
+            const triggeredAlerts = alerts.filter((a: { game_id: string, target_price: number, user_id: string, game_title: string }) => a.game_id === gameID && currentBestPrice <= a.target_price);
             
             for (const alert of triggeredAlerts) {
                 // In a real app, this is where we call Resend/SendGrid/Twilio
@@ -64,7 +64,7 @@ export async function GET(request: Request) {
             details: results 
         });
 
-    } catch (err: any) {
-        return NextResponse.json({ error: err.message }, { status: 500 });
+    } catch (err: unknown) {
+        return NextResponse.json({ error: err instanceof Error ? err.message : 'Unknown error' }, { status: 500 });
     }
 }

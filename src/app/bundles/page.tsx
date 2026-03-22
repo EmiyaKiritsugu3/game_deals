@@ -6,6 +6,9 @@ export const metadata = {
     description: 'Find the best game bundle deals from Humble Bundle, Fanatical, and more.',
 };
 
+// Make sure this doesn't run during build render as a pure component.
+const now = Date.now();
+
 export default function BundlesPage() {
     return (
         <main className="container">
@@ -18,7 +21,7 @@ export default function BundlesPage() {
                 <div className={styles.bundlesGrid}>
                     {BUNDLES.map((bundle) => {
                         const savings = Math.round(((bundle.totalValue - bundle.price) / bundle.totalValue) * 100);
-                        const daysLeft = Math.max(0, Math.ceil((new Date(bundle.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
+                        const daysLeft = Math.max(0, Math.ceil((new Date(bundle.expiresAt).getTime() - now) / (1000 * 60 * 60 * 24)));
 
                         return (
                             <div key={bundle.id} className={styles.bundleCard}>

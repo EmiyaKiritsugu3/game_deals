@@ -76,7 +76,7 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
               </button>
             ))
           ) : (
-            <p className={styles.empty}>You don't have any playlists yet.</p>
+            <p className={styles.empty}>You don&apos;t have any playlists yet.</p>
           )}
         </div>
 

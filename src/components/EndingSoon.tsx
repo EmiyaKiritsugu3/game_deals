@@ -13,7 +13,7 @@ export default async function EndingSoon() {
                 <div className={styles.sectionHeaderRow}>
                     <div>
                         <h2>⏰ Ending Soon</h2>
-                        <p>Act fast — these deals won't last.</p>
+                        <p>Act fast — these deals won&apos;t last.</p>
                     </div>
                     <a href="/search?sortBy=Recent" className={styles.seeAll}>SEE ALL ▶</a>
                 </div>

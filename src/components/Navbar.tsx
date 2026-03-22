@@ -30,12 +30,12 @@ export default function Navbar() {
 
     useEffect(() => {
         // Initialize user session on mount
-        supabase?.auth.getSession().then(({ data: { session } }: { data: { session: any } }) => {
+        supabase?.auth.getSession().then(({ data: { session } }) => {
             setUser(session?.user ?? null);
         });
 
         // Listen for auth changes
-        const { data: { subscription } } = supabase?.auth.onAuthStateChange((_event: string, session: any) => {
+        const { data: { subscription } } = supabase?.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user ?? null);
             if (session?.user) {
                 setIsAuthModalOpen(false);
