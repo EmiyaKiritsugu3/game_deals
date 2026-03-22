@@ -30,7 +30,9 @@ interface DynamicStoreCompareProps {
 }
 
 export function DynamicPriceHistory(props: DynamicPriceHistoryProps) {
-    return <PriceHistoryChartLazy {...props} />;
+    // Pass `lowestDate` as `_lowestDate` so it matches the underlying chart props
+    const { lowestDate, ...rest } = props;
+    return <PriceHistoryChartLazy _lowestDate={lowestDate} {...rest} />;
 }
 
 export function DynamicStoreCompare(props: DynamicStoreCompareProps) {

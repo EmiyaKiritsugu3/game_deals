@@ -7,10 +7,20 @@ import Link from 'next/link';
 import { getGame, getStores, getHighResImage } from '@/services/api';
 import styles from '../page.module.css';
 
+interface SharedGame {
+    gameID: string;
+    title: string;
+    thumb: string;
+    salePrice: string;
+    normalPrice: string;
+    savings: number;
+    storeID: string;
+}
+
 function SharedWishlistContent() {
     const searchParams = useSearchParams();
     const idsParam = searchParams.get('ids');
-    const [games, setGames] = useState<any[]>([]);
+    const [games, setGames] = useState<SharedGame[]>([]);
     const [stores, setStores] = useState<Record<string, string>>({});
     const [isLoading, setIsLoading] = useState(true);
 
@@ -32,7 +42,7 @@ function SharedWishlistContent() {
                     gameIDs.map(id => getGame(id).catch(() => null))
                 );
 
-                const validGames = results.reduce((acc: any[], gameData, idx) => {
+                const validGames = results.reduce((acc: SharedGame[], gameData, idx) => {
                     if (!gameData || !gameData.info) return acc;
                     const currentBest = [...gameData.deals].sort((a, b) => parseFloat(a.price) - parseFloat(b.price))[0];
                     acc.push({

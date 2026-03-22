@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { COLLECTIONS } from '@/data/collections';
+import Image from 'next/image';
 import { getGame } from '@/services/api';
 import styles from '../collections.module.css';
 
@@ -31,7 +32,9 @@ export default async function CollectionDetailPage({ params }: { params: Promise
         collection.gameIDs.map(id => getGame(id).catch(() => null))
     );
 
-    const games = gamesData.reduce((acc: any[], gameData, idx) => {
+    type CollectionGame = { gameID: string; title: string; thumb: string; price: string; retailPrice: string };
+
+    const games = gamesData.reduce((acc: CollectionGame[], gameData, idx) => {
         if (!gameData || !gameData.info) return acc;
         const bestDeal = [...gameData.deals].sort((a, b) => parseFloat(a.price) - parseFloat(b.price))[0];
         acc.push({
@@ -57,9 +60,9 @@ export default async function CollectionDetailPage({ params }: { params: Promise
                 </div>
 
                 <div className={styles.detailGrid}>
-                    {games.map((game: any) => (
+                    {games.map((game: CollectionGame) => (
                         <div key={game.gameID} className={styles.detailGameRow}>
-                            <img 
+                            <Image
                                 src={game.thumb} 
                                 alt={game.title} 
                                 width={120} 

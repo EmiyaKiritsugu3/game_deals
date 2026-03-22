@@ -12,11 +12,21 @@ import HeartButton from '@/components/HeartButton';
 import PriceAlertTrigger from '@/components/PriceAlertTrigger';
 import styles from './page.module.css';
 
+interface SavedGame {
+    gameID: string;
+    title: string;
+    thumb: string;
+    salePrice: string;
+    normalPrice: string;
+    savings: number;
+    storeID: string;
+}
+
 export default function WishlistPage() {
     const { wishlist } = useWishlist();
     const { alerts } = useAlerts();
     const [activeTab, setActiveTab] = useState<'wishlist' | 'alerts'>('wishlist');
-    const [savedGames, setSavedGames] = useState<any[]>([]);
+    const [savedGames, setSavedGames] = useState<SavedGame[]>([]);
     const [stores, setStores] = useState<Record<string, string>>({});
     const [isLoading, setIsLoading] = useState(true);
     const [copied, setCopied] = useState(false);
@@ -40,7 +50,7 @@ export default function WishlistPage() {
                 const gamePromises = uniqueWishlist.map(id => getGame(id).catch(() => null));
                 const results = await Promise.all(gamePromises);
 
-                const validGames = results.reduce((acc: any[], gameData, idx) => {
+                const validGames = results.reduce((acc: SavedGame[], gameData, idx) => {
                     if (!gameData || !gameData.info) return acc;
 
                     const info = gameData.info;
@@ -157,7 +167,7 @@ export default function WishlistPage() {
                                     <span className={styles.sortLabel}>Ordenar por:</span>
                                     <select 
                                         value={sortMode} 
-                                        onChange={(e) => setSortMode(e.target.value as any)}
+                                        onChange={(e) => setSortMode(e.target.value as 'discount' | 'price' | 'name')}
                                         className={styles.sortSelect}
                                     >
                                         <option value="discount">Maior Desconto</option>
@@ -251,7 +261,7 @@ export default function WishlistPage() {
                     >
                         <HeartCrack size={64} className={styles.emptyIcon} />
                         <h2>Sua lista está vazia :(</h2>
-                        <p>Volte para a página principal e clique no coração nos jogos que você deseja rastrear e acompanhar o preço!</p>
+                        <p>Volte para a página principal e clique no coração nos jogos que você deseja rastrear e acompanhar o preço&excl;</p>
                         <Link href="/" className={styles.browseButton}>Descobrir Ofertas Épicas</Link>
                     </motion.div>
                 )) : (
@@ -298,7 +308,7 @@ export default function WishlistPage() {
                         <div className={styles.emptyState}>
                             <Bell size={64} className={styles.emptyIcon} style={{ color: 'hsl(var(--muted-foreground)/0.3)' }} />
                             <h2>Nenhum alerta configurado</h2>
-                            <p>Abra a página de qualquer jogo e clique em "Alert Me" para ser notificado quando o preço baixar!</p>
+                            <p>Abra a página de qualquer jogo e clique em &quot;Alert Me&quot; para ser notificado quando o preço baixar&excl;</p>
                         </div>
                     )
                 )}
