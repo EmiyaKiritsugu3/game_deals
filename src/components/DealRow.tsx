@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { Deal, getHighResImage, getStores, getStoreLogo, formatTimeAgo } from '@/services/api';
 import HeartButton from './HeartButton';
 import PriceAlertBadge from './PriceAlertBadge';
-import styles from './DealRow.module.css';
 import DealsBadge from './DealsBadge';
 
 interface DealRowProps {
@@ -28,70 +27,77 @@ export default async function DealRow({ deal }: DealRowProps) {
     const isEpicDeal = savings >= 75 || isFree;
 
     return (
-        <Link href={`/game/${deal.gameID}`} className={styles.row}>
-            <div className={styles.imageContainer}>
+        <Link href={`/game/${deal.gameID}`} className="group flex flex-col items-stretch gap-4 rounded-xl border border-white/5 bg-white/5 p-3 transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:bg-white/10 hover:shadow-[0_10px_30px_rgba(0,0,0,0.4)] sm:flex-row sm:items-center">
+            <div className="relative h-[120px] w-full shrink-0 overflow-hidden rounded-lg bg-card sm:h-[68px] sm:w-[150px]">
                 <Image
                     src={highResThumb}
                     alt={deal.title}
                     fill
-                    className={styles.image}
-                    sizes="100px"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, 150px"
                 />
-                <div className={styles.topRightActions}>
+                <div className="absolute right-2 top-2 flex flex-col gap-1 sm:hidden">
                     <PriceAlertBadge gameID={deal.gameID} />
-                    <HeartButton gameID={deal.gameID} className={styles.heartWrapper} />
+                    <HeartButton gameID={deal.gameID} className="!p-1.5" />
                 </div>
             </div>
 
-            <div className={styles.content}>
-                <div className={styles.mainInfo}>
-                    <h3 className={styles.title}>{deal.title}</h3>
-                    <div className={styles.meta}>
+            <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                <div className="flex min-w-0 flex-col gap-1">
+                    <h3 className="truncate text-base font-bold text-foreground transition-colors group-hover:text-primary sm:text-lg">{deal.title}</h3>
+                    <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-muted-foreground">
                         {storeLogo ? (
                             <Image
                                 src={storeLogo}
                                 alt={storeName}
                                 title={storeName}
-                                className={styles.storeLogo}
+                                className="rounded-[2px]"
                                 width={14}
                                 height={14}
                             />
                         ) : (
-                            <span className={styles.storeName}>{storeName}</span>
+                            <span>{storeName}</span>
                         )}
-                        <span className={styles.metaDivider}>·</span>
-                        <span className={styles.timeAgo}>{timeAgo}</span>
+                        <span className="opacity-50">·</span>
+                        <span>{timeAgo}</span>
                         {deal.steamRatingPercent && deal.steamRatingPercent !== '0' && (
                             <>
-                                <span className={styles.metaDivider}>·</span>
+                                <span className="opacity-50">·</span>
                                 <DealsBadge type="RATING" value={deal.steamRatingPercent} />
                             </>
                         )}
                     </div>
                 </div>
 
-                <div className={styles.priceContainer}>
-                    {isHistoricalLow && (
-                        <DealsBadge type="HL" />
-                    )}
+                <div className="flex items-center gap-3">
+                    <div className="hidden flex-col gap-2 sm:flex">
+                        <HeartButton gameID={deal.gameID} className="!p-1.5 hover:!bg-white/20" />
+                        <PriceAlertBadge gameID={deal.gameID} />
+                    </div>
 
-                    {isEpicDeal && (
-                        <DealsBadge type="EPIC" compact />
-                    )}
+                    <div className="flex items-center gap-3 ml-auto sm:ml-0">
+                        {isHistoricalLow && (
+                            <DealsBadge type="HL" />
+                        )}
 
-                    {savings > 0 && !isFree && (
-                        <div className={styles.discountBadge}>-{savings}%</div>
-                    )}
+                        {isEpicDeal && (
+                            <DealsBadge type="EPIC" compact />
+                        )}
 
-                    <div className={styles.prices}>
                         {savings > 0 && !isFree && (
-                            <span className={styles.normalPrice}>${deal.normalPrice}</span>
+                            <div className="flex h-8 items-center justify-center rounded bg-primary/20 px-2 font-bold text-primary">-{savings}%</div>
                         )}
-                        {isFree ? (
-                            <span className={styles.freePrice}>FREE</span>
-                        ) : (
-                            <span className={styles.salePrice}>${deal.salePrice}</span>
-                        )}
+
+                        <div className="flex min-w-[70px] flex-col items-end justify-center text-right">
+                            {savings > 0 && !isFree && (
+                                <span className="text-xs font-semibold text-muted-foreground line-through">${deal.normalPrice}</span>
+                            )}
+                            {isFree ? (
+                                <span className="text-lg font-black text-primary">FREE</span>
+                            ) : (
+                                <span className="text-lg font-black leading-tight text-foreground">${deal.salePrice}</span>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
