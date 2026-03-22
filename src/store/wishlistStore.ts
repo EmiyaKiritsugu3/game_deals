@@ -7,6 +7,7 @@ interface WishlistState {
     removeFromWishlist: (gameID: string) => void;
     toggleWishlist: (gameID: string) => void;
     isInWishlist: (gameID: string) => boolean;
+    setWishlist: (wishlist: string[]) => void;
 }
 
 export const useWishlist = create<WishlistState>()(
@@ -30,6 +31,7 @@ export const useWishlist = create<WishlistState>()(
                 };
             }),
             isInWishlist: (gameID: string) => get().wishlist.includes(gameID),
+            setWishlist: (wishlist: string[]) => set({ wishlist }),
         }),
         {
             name: 'gameDeals_wishlist',

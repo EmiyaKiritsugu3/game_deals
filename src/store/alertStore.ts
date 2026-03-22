@@ -16,6 +16,7 @@ interface AlertState {
     removeAlert: (gameID: string) => void;
     hasAlert: (gameID: string) => boolean;
     getAlert: (gameID: string) => PriceAlert | undefined;
+    setAlerts: (alerts: PriceAlert[]) => void;
 }
 
 export const useAlerts = create<AlertState>()(
@@ -39,6 +40,7 @@ export const useAlerts = create<AlertState>()(
             }),
             hasAlert: (gameID) => get().alerts.some(a => a.gameID === gameID),
             getAlert: (gameID) => get().alerts.find(a => a.gameID === gameID),
+            setAlerts: (alerts: PriceAlert[]) => set({ alerts }),
         }),
         {
             name: 'gamedeals-alerts-storage',
