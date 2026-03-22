@@ -45,7 +45,8 @@ export function StoreCompareChart({ data }: { data: StorePrice[] }) {
                                 borderRadius: '8px',
                                 color: 'hsl(var(--foreground))'
                             }}
-                            formatter={(value: number | string | Array<number | string>) => {
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            formatter={(value: any) => {
                                 const numValue = Number(value);
                                 return [`$${!isNaN(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
                             }}
@@ -69,7 +70,8 @@ import { generatePriceHistory } from '@/utils/pricing';
 import { PriceHistoryPoint } from '@/types/game';
 import { LineChart, Line } from 'recharts';
 
-export function PriceHistoryChart({ currentPrice, lowestPrice, lowestDate, retailPrice = '9.99', gameTitle = 'Default' }: { currentPrice: string, lowestPrice: string, lowestDate: number, retailPrice?: string, gameTitle?: string }) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function PriceHistoryChart({ currentPrice, lowestPrice, lowestDate: _lowestDate, retailPrice = '9.99', gameTitle = 'Default' }: { currentPrice: string, lowestPrice: string, lowestDate: number, retailPrice?: string, gameTitle?: string }) {
     const historyData: PriceHistoryPoint[] = generatePriceHistory(parseFloat(retailPrice), parseFloat(currentPrice), parseFloat(lowestPrice), gameTitle);
 
     return (
@@ -101,7 +103,8 @@ export function PriceHistoryChart({ currentPrice, lowestPrice, lowestDate, retai
                                 borderRadius: '8px',
                                 color: 'hsl(var(--foreground))'
                             }}
-                            formatter={(value: number | string | Array<number | string>) => {
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            formatter={(value: any) => {
                                 const numValue = Number(value);
                                 return [`$${!isNaN(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
                             }}

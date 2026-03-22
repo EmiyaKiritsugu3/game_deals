@@ -14,7 +14,7 @@ async function testHL() {
             const isHL = currentPrice <= historicalLow * 1.01;
             console.log(`- ${deal.title}: Current $${currentPrice}, HL $${historicalLow} -> ${isHL ? 'YES' : 'NO'}`);
             return isHL ? deal : null;
-        } catch (e) {
+        } catch {
             return null;
         }
     }));

@@ -14,7 +14,6 @@ export default function FilterSidebar({ stores }: { stores: StoreInfo[] }) {
     const searchParams = useSearchParams();
 
     // Read current params
-    const currentQuery = searchParams.get('q') || '';
     const currentMaxPrice = searchParams.get('upperPrice') || '';
     const currentStoreStr = searchParams.get('storeID') || '';
 

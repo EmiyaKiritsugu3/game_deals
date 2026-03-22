@@ -41,7 +41,7 @@ export default function OutRedirector() {
             }, 1000);
 
             return () => clearTimeout(timer);
-        } catch (err) {
+        } catch {
             window.location.replace('/');
         }
     }, [url, store]);

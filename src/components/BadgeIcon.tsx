@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic';
 import styles from './BadgeIcon.module.css';
 
 interface BadgeIconProps {

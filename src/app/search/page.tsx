@@ -1,4 +1,4 @@
-import { getDeals, getStores, Store } from '@/services/api';
+import { getDeals, Store } from '@/services/api';
 import GameCard from '@/components/GameCard';
 import FilterSidebar from '@/components/FilterSidebar';
 import styles from '../page.module.css';
@@ -17,13 +17,8 @@ export default async function SearchPage({
     const upperPrice = typeof params.upperPrice === 'string' ? params.upperPrice : undefined;
     const storeID = typeof params.storeID === 'string' ? params.storeID : undefined;
 
-    // Fetch deals and stores in parallel
-    const [storesMap, storesResponse] = await Promise.all([
-        getStores(),
-        fetch('https://www.cheapshark.com/api/1.0/stores').then(res => res.json()) as Promise<Store[]>
-    ]);
-
-    // Format active store array for sidebar
+    // Fetch active stores for the sidebar
+    const storesResponse = await fetch('https://www.cheapshark.com/api/1.0/stores').then(res => res.json()) as Store[];
     const activeStores = storesResponse.filter(s => s.isActive === 1);
 
     const apiParams: Record<string, string> = { onSale: '1' };

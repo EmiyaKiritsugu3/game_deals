@@ -26,6 +26,7 @@ export function getDrmType(storeID: string): { label: string, icon: string } {
     return { label: 'Steam Key', icon: '🔑' };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function getRegionTag(_storeID: string): string | null {
     return '🇧🇷';
 }
