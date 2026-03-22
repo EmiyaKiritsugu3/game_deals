@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Search, Home, User, LogOut, Bell, ChevronDown } from 'lucide-react';
+import Image from 'next/image';
+import { Search, User, LogOut, Bell, ChevronDown } from 'lucide-react';
 import WishlistIndicator from './WishlistIndicator';
 import AuthModal from './AuthModal';
 import { useState, useRef, useEffect } from 'react';
@@ -95,7 +96,7 @@ export default function Navbar() {
                                 {isLoading ? (
                                     <div className={`${styles.dropdownItem} ${styles.loading}`}>Loading...</div>
                                 ) : results && results.length > 0 ? (
-                                    results.map((game: any) => (
+                                    results.map((game: { gameID: string, thumb: string, external: string, cheapest: string }) => (
                                         <Link 
                                             href={`/game/${game.gameID}`} 
                                             key={game.gameID}
@@ -105,7 +106,9 @@ export default function Navbar() {
                                                 setQuery('');
                                             }}
                                         >
-                                            <img src={game.thumb} alt={game.external} className={styles.dropdownThumb} />
+                                            <div className={styles.dropdownThumbWrapper} style={{ position: 'relative', width: '40px', height: '40px', flexShrink: 0, marginRight: '10px' }}>
+                                                <Image src={game.thumb} alt={game.external} fill style={{ objectFit: 'cover', borderRadius: '4px' }} sizes="40px" />
+                                            </div>
                                             <div className={styles.dropdownInfo}>
                                                 <span className={styles.dropdownTitle}>{game.external}</span>
                                                 <span className={styles.dropdownPrice}>From ${game.cheapest}</span>
@@ -124,12 +127,18 @@ export default function Navbar() {
                     <div className={styles.authSection}>
                         {isLoggedIn ? (
                             <div className={styles.userMenu} ref={userMenuRef} onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
-                                <img src={user?.avatar} alt={user?.name} className={styles.avatar} />
+                                <div className={styles.avatarWrapper} style={{ position: 'relative', width: '32px', height: '32px', borderRadius: '50%', overflow: 'hidden' }}>
+                                    <Image src={user?.avatar || '/images/default-avatar.png'} alt={user?.name || 'User Avatar'} fill style={{ objectFit: 'cover' }} sizes="32px" />
+                                </div>
                                 <span className={styles.username}>{user?.name}</span>
                                 <ChevronDown size={14} />
 
                                 {isUserMenuOpen && (
                                     <div className={styles.userDropdown}>
+                                        <Link href="/user" className={styles.menuItem}>
+                                            <User size={16} />
+                                            <span>Profile</span>
+                                        </Link>
                                         <Link href="/wishlist" className={styles.menuItem}>
                                             <Bell size={16} />
                                             <span>Price Alerts</span>

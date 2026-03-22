@@ -10,6 +10,7 @@ export const dynamic = 'force-dynamic';
 
 import HistoricalLows from '@/components/HistoricalLows';
 import EndingSoon from '@/components/EndingSoon';
+import { ActivityFeed } from '@/components/ActivityFeed';
 
 export default async function Home() {
   // Fetch primary static categories in parallel
@@ -89,6 +90,9 @@ export default async function Home() {
           <HistoricalLows />
           <EndingSoon />
         </div>
+
+        {/* Activity Feed */}
+        <ActivityFeed />
       </div>
 
       <footer className={styles.footer}>

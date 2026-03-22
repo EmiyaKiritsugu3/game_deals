@@ -31,13 +31,13 @@ export default async function HistoricalLows() {
 
                 // Strict HL check: current price must be within 1% of the historical low
                 return currentPrice <= historicalLow * 1.01 ? deal : null;
-            } catch (e) {
+            } catch {
                 return null;
             }
         })
     );
 
-    const hlDeals = verifiedHLs.filter((d): d is any => d !== null).slice(0, 8);
+    const hlDeals = verifiedHLs.filter((d): d is NonNullable<typeof d> => d !== null).slice(0, 8);
 
     if (hlDeals.length === 0) return null;
 

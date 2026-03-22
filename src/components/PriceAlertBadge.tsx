@@ -18,7 +18,12 @@ export default function PriceAlertBadge({ gameID, className = '' }: PriceAlertBa
         setMounted(true);
     }, []);
 
-    if (!mounted || !hasAlert(gameID)) return null;
+    // Return a placeholder of the same size if not mounted yet
+    if (!mounted) {
+         return <div className={`${styles.badge} ${styles.badgePlaceholder} ${className}`} aria-hidden="true" />;
+    }
+
+    if (!hasAlert(gameID)) return null;
 
     return (
         <div className={`${styles.badge} ${className}`} title="You have an active price alert for this game">

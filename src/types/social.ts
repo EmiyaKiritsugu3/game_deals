@@ -30,3 +30,19 @@ export interface Playlist {
   games_ids: string[];
   created_at: string;
 }
+
+export interface Activity {
+  id: string;
+  user_id: string;
+  type: 'review' | 'playlist_created' | 'badge_earned' | string;
+  target_id: string;
+  target_name: string;
+  target_thumb?: string;
+  content?: string;
+  rating?: number;
+  created_at: string;
+  user?: {
+    username: string;
+    avatar_url: string; // If avatar URL is in auth.users or user_stats
+  };
+}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Bell, Info, Trash2, ArrowRight } from 'lucide-react';
+import { X, Bell, Trash2, ArrowRight } from 'lucide-react';
 import { useAlerts } from '@/store/alertStore';
 import styles from './PriceAlertModal.module.css';
 
@@ -22,14 +22,16 @@ export default function PriceAlertModal({ isOpen, onClose, gameID, gameTitle, cu
     const [isKeyshopAllowed, setIsKeyshopAllowed] = useState(true);
 
     useEffect(() => {
-        if (existingAlert) {
-            setTargetPrice(existingAlert.targetPrice);
-            setIsKeyshopAllowed(existingAlert.isKeyshopAllowed);
-        } else {
-            // Default target = 20% discount from current
-            setTargetPrice(Math.round(currentPrice * 0.8 * 100) / 100);
+        if (isOpen) {
+            if (existingAlert) {
+                setTargetPrice(existingAlert.targetPrice);
+                setIsKeyshopAllowed(existingAlert.isKeyshopAllowed);
+            } else {
+                // Default target = 20% discount from current
+                setTargetPrice(Math.round(currentPrice * 0.8 * 100) / 100);
+            }
         }
-    }, [existingAlert, currentPrice, isOpen]);
+    }, [isOpen, existingAlert, currentPrice]);
 
     const handleSave = () => {
         addAlert({

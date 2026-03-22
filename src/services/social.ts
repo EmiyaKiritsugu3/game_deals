@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import { Playlist, UserStats, UserBadge, Badge } from '@/types/social';
+import { Playlist, UserStats, UserBadge, Activity } from '@/types/social';
 
 /**
  * SOCIAL & GAMIFICATION SERVICE
@@ -16,6 +16,16 @@ export async function createPlaylist(userId: string, title: string, description?
     .single();
 
   if (error) throw error;
+
+  // Track activity
+  await createActivity({
+    user_id: userId,
+    type: 'playlist_created',
+    target_id: data.id,
+    target_name: title,
+    target_thumb: '/images/default-playlist.png' // Default or dynamic image
+  });
+
   return data as Playlist;
 }
 
@@ -92,11 +102,73 @@ export async function checkAchievements(userId: string) {
 }
 
 async function awardBadge(userId: string, badgeId: string) {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('user_badges')
     .insert([{ user_id: userId, badge_id: badgeId }])
-    .select();
+    .select('*, badge:badges(*)');
     
   // If error is duplicate (23505), ignore it as user already has the badge.
   if (error && error.code !== '23505') throw error;
+
+  if (data && data.length > 0 && data[0].badge) {
+    const badge = data[0].badge;
+    // Track activity
+    await createActivity({
+      user_id: userId,
+      type: 'badge_earned',
+      target_id: badge.id,
+      target_name: badge.name,
+      target_thumb: '' // Can use the svg icon later
+    });
+
+    // TODO: Trigger Toast Notification locally here or via global state
+    if (typeof window !== 'undefined') {
+       // We can dispatch a custom event that the Toast component will listen to.
+       const event = new CustomEvent('badgeAwarded', { detail: badge });
+       window.dispatchEvent(event);
+    }
+  }
+}
+
+// --- ACTIVITIES ---
+
+export async function createActivity(activity: Partial<Activity>) {
+  const { data, error } = await supabase
+    .from('activities')
+    .insert([activity])
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Failed to create activity', error);
+    return null;
+  }
+  return data as Activity;
+}
+
+export async function getActivities(limit: number = 20) {
+  const { data, error } = await supabase
+    .from('activities')
+    .select(`
+      *,
+      user_stats (
+        username
+      )
+    `)
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error('Failed to fetch activities', error);
+    return [];
+  }
+
+  // Map the join properly to simulate a generic feed
+  return data.map((item: Activity & { user_stats?: { username: string } }) => ({
+    ...item,
+    user: {
+      name: item.user_stats?.username || 'Unknown Gamer',
+      avatar: '/images/default-avatar.png'
+    }
+  }));
 }

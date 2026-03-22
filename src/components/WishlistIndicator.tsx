@@ -10,11 +10,12 @@ export default function WishlistIndicator() {
     const [mounted, setMounted] = useState(false);
     const { wishlist } = useWishlist();
 
+    const [count, setCount] = useState(0);
+
     useEffect(() => {
         setMounted(true);
-    }, []);
-
-    const count = mounted ? wishlist.length : 0;
+        setCount(wishlist.length);
+    }, [wishlist.length]);
 
     return (
         <Link href="/wishlist" className={styles.indicator} title="Ver Favoritos">

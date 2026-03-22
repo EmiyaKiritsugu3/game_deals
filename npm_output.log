@@ -1,0 +1,209 @@
+
+> game-deals@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+- Environments: .env.local
+
+✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+✓ Ready in 1303ms
+○ Compiling / ...
+⨯ ./src/components/GameCard.tsx:21:26
+Parsing ecmascript source code failed
+[0m [90m 19 |[39m     [36mreturn[39m (
+ [90m 20 |[39m
+[31m[1m>[22m[39m[90m 21 |[39m                 {savings [33m>[39m [35m0[39m [33m&&[39m [33m![39misFree [33m&&[39m (
+ [90m    |[39m                          [31m[1m^[22m[39m
+ [90m 22 |[39m                     [33m<[39m[33mdiv[39m className[33m=[39m{styles[33m.[39msavingsBadge}[33m>[39m
+ [90m 23 |[39m                         [33m-[39m{savings}[33m%[39m
+ [90m 24 |[39m                     [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+
+Expected a semicolon
+
+Import trace:
+  Server Component:
+    ./src/components/GameCard.tsx
+    ./src/app/page.tsx
+
+
+
+./src/components/GameCard.tsx:21:26
+Parsing ecmascript source code failed
+[0m [90m 19 |[39m     [36mreturn[39m (
+ [90m 20 |[39m
+[31m[1m>[22m[39m[90m 21 |[39m                 {savings [33m>[39m [35m0[39m [33m&&[39m [33m![39misFree [33m&&[39m (
+ [90m    |[39m                          [31m[1m^[22m[39m
+ [90m 22 |[39m                     [33m<[39m[33mdiv[39m className[33m=[39m{styles[33m.[39msavingsBadge}[33m>[39m
+ [90m 23 |[39m                         [33m-[39m{savings}[33m%[39m
+ [90m 24 |[39m                     [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+
+Expression expected
+
+Import trace:
+  Server Component:
+    ./src/components/GameCard.tsx
+    ./src/app/page.tsx
+
+
+ GET / 500 in 8.4s (compile: 8.1s, render: 254ms)
+⨯ ./src/components/GameCard.tsx:21:26
+Parsing ecmascript source code failed
+[0m [90m 19 |[39m     [36mreturn[39m (
+ [90m 20 |[39m
+[31m[1m>[22m[39m[90m 21 |[39m                 {savings [33m>[39m [35m0[39m [33m&&[39m [33m![39misFree [33m&&[39m (
+ [90m    |[39m                          [31m[1m^[22m[39m
+ [90m 22 |[39m                     [33m<[39m[33mdiv[39m className[33m=[39m{styles[33m.[39msavingsBadge}[33m>[39m
+ [90m 23 |[39m                         [33m-[39m{savings}[33m%[39m
+ [90m 24 |[39m                     [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+
+Expected a semicolon
+
+Import trace:
+  Server Component:
+    ./src/components/GameCard.tsx
+    ./src/app/page.tsx
+
+
+
+./src/components/GameCard.tsx:21:26
+Parsing ecmascript source code failed
+[0m [90m 19 |[39m     [36mreturn[39m (
+ [90m 20 |[39m
+[31m[1m>[22m[39m[90m 21 |[39m                 {savings [33m>[39m [35m0[39m [33m&&[39m [33m![39misFree [33m&&[39m (
+ [90m    |[39m                          [31m[1m^[22m[39m
+ [90m 22 |[39m                     [33m<[39m[33mdiv[39m className[33m=[39m{styles[33m.[39msavingsBadge}[33m>[39m
+ [90m 23 |[39m                         [33m-[39m{savings}[33m%[39m
+ [90m 24 |[39m                     [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+
+Expression expected
+
+Import trace:
+  Server Component:
+    ./src/components/GameCard.tsx
+    ./src/app/page.tsx
+
+
+ GET / 500 in 242ms (compile: 220ms, render: 22ms)
+⨯ ./src/components/GameCard.tsx:21:26
+Parsing ecmascript source code failed
+[0m [90m 19 |[39m     [36mreturn[39m (
+ [90m 20 |[39m
+[31m[1m>[22m[39m[90m 21 |[39m                 {savings [33m>[39m [35m0[39m [33m&&[39m [33m![39misFree [33m&&[39m (
+ [90m    |[39m                          [31m[1m^[22m[39m
+ [90m 22 |[39m                     [33m<[39m[33mdiv[39m className[33m=[39m{styles[33m.[39msavingsBadge}[33m>[39m
+ [90m 23 |[39m                         [33m-[39m{savings}[33m%[39m
+ [90m 24 |[39m                     [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+
+Expected a semicolon
+
+Import trace:
+  Server Component:
+    ./src/components/GameCard.tsx
+    ./src/app/page.tsx
+
+
+
+./src/components/GameCard.tsx:21:26
+Parsing ecmascript source code failed
+[0m [90m 19 |[39m     [36mreturn[39m (
+ [90m 20 |[39m
+[31m[1m>[22m[39m[90m 21 |[39m                 {savings [33m>[39m [35m0[39m [33m&&[39m [33m![39misFree [33m&&[39m (
+ [90m    |[39m                          [31m[1m^[22m[39m
+ [90m 22 |[39m                     [33m<[39m[33mdiv[39m className[33m=[39m{styles[33m.[39msavingsBadge}[33m>[39m
+ [90m 23 |[39m                         [33m-[39m{savings}[33m%[39m
+ [90m 24 |[39m                     [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+
+Expression expected
+
+Import trace:
+  Server Component:
+    ./src/components/GameCard.tsx
+    ./src/app/page.tsx
+
+
+ GET / 500 in 188ms (compile: 171ms, render: 16ms)
+⨯ ./src/components/GameCard.tsx:21:26
+Parsing ecmascript source code failed
+[0m [90m 19 |[39m     [36mreturn[39m (
+ [90m 20 |[39m
+[31m[1m>[22m[39m[90m 21 |[39m                 {savings [33m>[39m [35m0[39m [33m&&[39m [33m![39misFree [33m&&[39m (
+ [90m    |[39m                          [31m[1m^[22m[39m
+ [90m 22 |[39m                     [33m<[39m[33mdiv[39m className[33m=[39m{styles[33m.[39msavingsBadge}[33m>[39m
+ [90m 23 |[39m                         [33m-[39m{savings}[33m%[39m
+ [90m 24 |[39m                     [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+
+Expected a semicolon
+
+Import trace:
+  Server Component:
+    ./src/components/GameCard.tsx
+    ./src/app/page.tsx
+
+
+
+./src/components/GameCard.tsx:21:26
+Parsing ecmascript source code failed
+[0m [90m 19 |[39m     [36mreturn[39m (
+ [90m 20 |[39m
+[31m[1m>[22m[39m[90m 21 |[39m                 {savings [33m>[39m [35m0[39m [33m&&[39m [33m![39misFree [33m&&[39m (
+ [90m    |[39m                          [31m[1m^[22m[39m
+ [90m 22 |[39m                     [33m<[39m[33mdiv[39m className[33m=[39m{styles[33m.[39msavingsBadge}[33m>[39m
+ [90m 23 |[39m                         [33m-[39m{savings}[33m%[39m
+ [90m 24 |[39m                     [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+
+Expression expected
+
+Import trace:
+  Server Component:
+    ./src/components/GameCard.tsx
+    ./src/app/page.tsx
+
+
+ GET / 500 in 23ms (compile: 12ms, render: 11ms)
+✓ Compiled in 157ms
+⨯ Error: Event handlers cannot be passed to Client Component props.
+  <div className=... onClick={function onClick} children=...>
+                             ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '2223020139'
+}
+ GET / 200 in 3.2s (compile: 426ms, render: 2.8s)
+⨯ Error: Event handlers cannot be passed to Client Component props.
+  <div className=... onClick={function onClick} children=...>
+                             ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at stringify (<anonymous>) {
+  digest: '2223020139'
+}
+ GET / 200 in 2.2s (compile: 14ms, render: 2.2s)
+✓ Compiled in 16ms
+ GET / 200 in 2.0s (compile: 215ms, render: 1827ms)
+○ Compiling /user ...
+⨯ ./src/app/user/page.tsx:3:1
+Export supabaseServer doesn't exist in target module
+[0m [90m 1 |[39m [36mimport[39m { redirect } [36mfrom[39m [32m'next/navigation'[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m [33mImage[39m [36mfrom[39m [32m'next/image'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { supabaseServer } [36mfrom[39m [32m'@/lib/supabaseServer'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { getUserStats[33m,[39m getUserBadges[33m,[39m getUserPlaylists } [36mfrom[39m [32m'@/services/social'[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m styles [36mfrom[39m [32m'./page.module.css'[39m[33m;[39m
+ [90m 6 |[39m[0m
+
+The export supabaseServer was not found in module [project]/src/lib/supabaseServer.ts [app-rsc] (ecmascript).
+Did you mean to import createClient?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+
+ GET /user 500 in 3.2s (compile: 3.2s, render: 31ms)
+✓ Compiled in 15ms
+✓ Compiled in 6ms
+✓ Compiled in 7ms
+✓ Compiled in 9ms

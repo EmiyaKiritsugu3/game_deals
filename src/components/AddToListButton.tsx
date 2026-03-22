@@ -8,19 +8,20 @@ import styles from './AddToListButton.module.css';
 interface AddToListButtonProps {
   gameId: string;
   variant?: 'icon' | 'full';
+  className?: string;
 }
 
 /**
  * A client component button that triggers the AddToListModal.
  * Stays small to be included in Server Components like GameCard.
  */
-export default function AddToListButton({ gameId, variant = 'icon' }: AddToListButtonProps) {
+export default function AddToListButton({ gameId, variant = 'icon', className = '' }: AddToListButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
       <button 
-        className={`${styles.button} ${styles[variant]}`} 
+        className={`${styles.button} ${styles[variant]} ${className}`}
         onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();

@@ -83,6 +83,14 @@
   overflow: hidden;
 }
 
+.loadingText,
+.emptyText {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 2rem 0;
+}
+
 @media (max-width: 600px) {
     .gameThumbContainer {
         display: none;

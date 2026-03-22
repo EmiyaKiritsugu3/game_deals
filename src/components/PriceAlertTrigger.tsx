@@ -22,11 +22,12 @@ export default function PriceAlertTrigger({ gameID, gameTitle, currentPrice, cla
     const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
 
+    const [activeAlert, setActiveAlert] = useState(false);
+
     useEffect(() => {
         setMounted(true);
-    }, []);
-
-    const activeAlert = mounted ? hasAlert(gameID) : false;
+        setActiveAlert(hasAlert(gameID));
+    }, [gameID, hasAlert]);
 
     const handleClick = () => {
         if (!isLoggedIn) {

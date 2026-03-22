@@ -1,0 +1,89 @@
+.toastContainer {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, rgba(20, 20, 20, 0.95), rgba(40, 40, 40, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  color: #fff;
+  animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, fadeOut 0.5s ease 4.5s forwards;
+  min-width: 300px;
+}
+
+.iconWrapper {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Dynamic colors based on rarity */
+.toast.rarityLegendary { box-shadow: 0 0 20px rgba(250, 204, 21, 0.3); border-color: rgba(250, 204, 21, 0.5); }
+.toast.rarityLegendary .iconWrapper { color: #facc15; filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.6)); }
+
+.toast.rarityEpic { box-shadow: 0 0 20px rgba(192, 132, 252, 0.3); border-color: rgba(192, 132, 252, 0.5); }
+.toast.rarityEpic .iconWrapper { color: #c084fc; filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.6)); }
+
+.toast.rarityRare { box-shadow: 0 0 20px rgba(96, 165, 250, 0.3); border-color: rgba(96, 165, 250, 0.5); }
+.toast.rarityRare .iconWrapper { color: #60a5fa; filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6)); }
+
+.toast.rarityCommon { border-color: rgba(156, 163, 175, 0.3); }
+.toast.rarityCommon .iconWrapper { color: #9ca3af; }
+
+.content {
+  flex: 1;
+}
+
+.title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.badgeName {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.125rem;
+}
+
+.badgeDesc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
