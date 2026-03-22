@@ -1,4 +1,4 @@
-import styles from './DealsBadge.module.css';
+import { cn } from '@/lib/utils';
 
 interface DealsBadgeProps {
   type: 'HL' | 'EPIC' | 'FREE' | 'RATING';
@@ -14,10 +14,12 @@ interface DealsBadgeProps {
  * - EPIC: Savings >= 75%
  */
 export default function DealsBadge({ type, value, className = '', compact = false }: DealsBadgeProps) {
+  const baseClasses = "inline-flex items-center gap-1 rounded text-xs font-extrabold uppercase tracking-wider shadow-sm";
+
   if (type === 'HL') {
     return (
       <span 
-        className={`${styles.badge} ${styles.hl} ${className}`} 
+        className={cn(baseClasses, "bg-accent text-accent-foreground px-1.5 py-0.5", className)}
         title="Historical Low Price (Within 5% of all-time low)"
       >
         HL
@@ -27,7 +29,11 @@ export default function DealsBadge({ type, value, className = '', compact = fals
 
   if (type === 'EPIC') {
     return (
-      <span className={`${styles.badge} ${styles.epic} ${className}`}>
+      <span className={cn(
+          baseClasses,
+          "bg-gradient-to-br from-red-500 to-pink-500 px-2 py-0.5 text-white shadow-[0_0_8px_rgba(255,65,108,0.4)]",
+          className
+      )}>
         {compact ? '🔥' : '🔥 EPIC'}
       </span>
     );
@@ -35,7 +41,7 @@ export default function DealsBadge({ type, value, className = '', compact = fals
 
   if (type === 'FREE') {
     return (
-      <span className={`${styles.badge} ${styles.free} ${className}`}>
+      <span className={cn(baseClasses, "bg-primary text-primary-foreground px-2 py-0.5", className)}>
         FREE
       </span>
     );
@@ -43,7 +49,7 @@ export default function DealsBadge({ type, value, className = '', compact = fals
 
   if (type === 'RATING' && value) {
     return (
-      <span className={`${styles.badge} ${styles.rating} ${className}`}>
+      <span className={cn(baseClasses, "bg-blue-600 text-white px-1.5 py-0.5 shadow-none", className)}>
         ★ {value}%
       </span>
     );

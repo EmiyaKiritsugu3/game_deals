@@ -532,3 +532,16 @@ https://nextjs.org/docs/messages/module-not-found
 ✓ Compiled in 1032ms
 ✓ Compiled in 17ms
 ✓ Compiled in 10ms
+✓ Compiled in 30ms
+Error: Cannot apply unknown utility class `border-border`. Are you using CSS modules or similar and missing `@reference`? https://tailwindcss.com/docs/functions-and-directives#reference-directive
+    [2m[at onInvalidCandidate (/app/node_modules/tailwindcss/dist/lib.js:21:1314)][0m
+    [2m[at Ee (/app/node_modules/tailwindcss/dist/lib.js:16:37066)][0m
+    [2m[at /app/node_modules/tailwindcss/dist/lib.js:21:355][0m
+    [2m[at _r (/app/node_modules/tailwindcss/dist/lib.js:3:1733)][0m
+    [2m[at I (/app/node_modules/tailwindcss/dist/lib.js:3:1377)][0m
+    [2m[at Te (/app/node_modules/tailwindcss/dist/lib.js:21:172)][0m
+    [2m[at mn (/app/node_modules/tailwindcss/dist/lib.js:38:294)][0m
+    [2m[at process.processTicksAndRejections (node:internal/process/task_queues:103:5)][0m
+    [2m[at async gn (/app/node_modules/tailwindcss/dist/lib.js:38:631)][0m
+    [2m[at async Xr (/app/node_modules/@tailwindcss/node/dist/index.js:10:3416)][0m
+✓ Compiled in 443ms
