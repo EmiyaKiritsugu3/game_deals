@@ -208,3 +208,8 @@ All exports of the module are statically known (It doesn't have dynamic exports)
 ✓ Compiled in 7ms
 ✓ Compiled in 9ms
 ✓ Compiled in 2.1s
+✓ Compiled in 209ms
+✓ Compiled in 36ms
+✓ Compiled in 117ms
+✓ Compiled in 63ms
+✓ Compiled in 229ms

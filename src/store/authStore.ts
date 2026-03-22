@@ -35,7 +35,7 @@ export const useAuth = create<AuthState>((set) => ({
         }
     },
     logout: async () => {
-        await supabase.auth.signOut();
+        if (supabase) await supabase.auth.signOut();
         set({ user: null, isLoggedIn: false });
     },
 }));

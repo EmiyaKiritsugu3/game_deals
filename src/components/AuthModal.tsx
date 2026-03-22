@@ -18,6 +18,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
     const handleSocialLogin = async (provider: 'google' | 'discord' | 'github') => {
         setIsLoading(true);
+        if (!supabase) return setIsLoading(false);
         const { error } = await supabase.auth.signInWithOAuth({
             provider,
             options: {
@@ -34,6 +35,8 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         e.preventDefault();
         setIsLoading(true);
         setMessage(null);
+
+        if (!supabase) return setIsLoading(false);
 
         const { error } = await supabase.auth.signInWithOtp({
             email,

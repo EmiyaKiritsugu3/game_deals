@@ -26,7 +26,7 @@ export function getDrmType(storeID: string): { label: string, icon: string } {
     return { label: 'Steam Key', icon: '🔑' };
 }
 
-export function getRegionTag(storeID: string): string | null {
+export function getRegionTag(_storeID: string): string | null {
     return '🇧🇷';
 }
 
@@ -45,7 +45,7 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
         if (!res.ok) return fallbackDeals;
         const data = await res.json();
         return data.length > 0 ? data : fallbackDeals;
-    } catch (error) {
+    } catch {
         return fallbackDeals;
     }
 }
@@ -67,13 +67,13 @@ export async function getStores(): Promise<Record<string, string>> {
     return map;
 }
 
-export async function getGame(id: string): Promise<GameDetails> {
+export async function getGame(id: string): Promise<GameDetails | null> {
     const url = new URL(`${BASE_URL}/games`);
     url.searchParams.append('id', id);
 
     try {
         const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
-        if (!res.ok) return null as any;
+        if (!res.ok) return null;
         const game: GameDetails = await res.json();
         
         if (game && game.deals && game.deals.length > 0) {
@@ -92,6 +92,6 @@ export async function getGame(id: string): Promise<GameDetails> {
         return game;
     } catch (error) {
         console.error('getGame error:', error);
-        return null as any;
+        return null;
     }
 }

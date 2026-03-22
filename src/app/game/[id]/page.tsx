@@ -140,7 +140,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                                 >
                                     <div className={styles.storeInfo}>
                                         {logo ? (
-                                            <img src={logo} alt={storeName} className={styles.storeLogo} width={18} height={18} />
+                                            <Image src={logo} alt={storeName} className={styles.storeLogo} width={18} height={18} />
                                         ) : (
                                             <div className={styles.storeLogoPlaceholder} />
                                         )}

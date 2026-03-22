@@ -5,4 +5,4 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export const supabase = (supabaseUrl && supabaseAnonKey) 
     ? createClient(supabaseUrl, supabaseAnonKey)
-    : null as any; // Cast so TS doesn't complain, usage needs optional chaining if null
+    : null;

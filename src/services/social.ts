@@ -9,6 +9,7 @@ import { Playlist, UserStats, UserBadge, Activity } from '@/types/social';
 // --- PLAYLISTS ---
 
 export async function createPlaylist(userId: string, title: string, description?: string, isPublic: boolean = true) {
+  if (!supabase) throw new Error('Supabase not initialized');
   const { data, error } = await supabase
     .from('playlists')
     .insert([{ user_id: userId, title, description, is_public: isPublic }])
@@ -30,6 +31,7 @@ export async function createPlaylist(userId: string, title: string, description?
 }
 
 export async function getUserPlaylists(userId: string) {
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from('playlists')
     .select('*')
@@ -41,6 +43,7 @@ export async function getUserPlaylists(userId: string) {
 }
 
 export async function addGameToPlaylist(playlistId: string, gameId: string) {
+  if (!supabase) return;
   // First get current games
   const { data: playlist } = await supabase
     .from('playlists')
@@ -64,6 +67,7 @@ export async function addGameToPlaylist(playlistId: string, gameId: string) {
 // --- STATS & BADGES ---
 
 export async function getUserStats(userId: string): Promise<UserStats | null> {
+  if (!supabase) return null;
   const { data, error } = await supabase
     .from('user_stats')
     .select('*')
@@ -75,6 +79,7 @@ export async function getUserStats(userId: string): Promise<UserStats | null> {
 }
 
 export async function getUserBadges(userId: string): Promise<UserBadge[]> {
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from('user_badges')
     .select('*, badge:badges(*)')
@@ -93,7 +98,7 @@ export async function checkAchievements(userId: string) {
   if (!stats) return;
 
   // Badge: Playlist Master (10 lists)
-  if (stats.playlists_count >= 10) {
+  if (stats.playlists_count >= 10 && supabase) {
     const { data: badges } = await supabase.from('badges').select('id').eq('name', 'Playlist Master').single();
     if (badges) {
       await awardBadge(userId, badges.id);
@@ -102,6 +107,7 @@ export async function checkAchievements(userId: string) {
 }
 
 async function awardBadge(userId: string, badgeId: string) {
+  if (!supabase) return;
   const { data, error } = await supabase
     .from('user_badges')
     .insert([{ user_id: userId, badge_id: badgeId }])
@@ -133,6 +139,7 @@ async function awardBadge(userId: string, badgeId: string) {
 // --- ACTIVITIES ---
 
 export async function createActivity(activity: Partial<Activity>) {
+  if (!supabase) return null;
   const { data, error } = await supabase
     .from('activities')
     .insert([activity])
@@ -147,6 +154,7 @@ export async function createActivity(activity: Partial<Activity>) {
 }
 
 export async function getActivities(limit: number = 20) {
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from('activities')
     .select(`
@@ -167,8 +175,8 @@ export async function getActivities(limit: number = 20) {
   return data.map((item: Activity & { user_stats?: { username: string } }) => ({
     ...item,
     user: {
-      name: item.user_stats?.username || 'Unknown Gamer',
-      avatar: '/images/default-avatar.png'
+      username: item.user_stats?.username || 'Unknown Gamer',
+      avatar_url: '/images/default-avatar.png'
     }
   }));
 }

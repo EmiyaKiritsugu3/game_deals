@@ -20,6 +20,7 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
 
   useEffect(() => {
     async function init() {
+      if (!supabase) return setLoading(false);
       const { data } = await supabase.auth.getUser();
       if (data.user) {
         setUserId(data.user.id);
