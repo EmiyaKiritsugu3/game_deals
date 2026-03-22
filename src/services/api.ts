@@ -32,6 +32,53 @@ export function getRegionTag(_storeID: string): string | null {
 }
 
 export async function getDeals(params?: Record<string, string>): Promise<Deal[]> {
+    // 1. Try to read from Drizzle DB cache (if we implemented a sync job)
+    // For now, we check if the DB is accessible. If `DATABASE_URL` is empty, skip gracefully.
+    if (typeof window === 'undefined') {
+        try {
+            if (process.env.DATABASE_URL && Object.keys(params || {}).length === 0) {
+                const { db } = await import('@/db');
+                const { deals: dealsTable } = await import('@/db/schema');
+                const { eq, desc } = await import('drizzle-orm');
+
+                const cachedDeals = await db.query.deals.findMany({
+                    with: { game: true },
+                    limit: 20,
+                    orderBy: [desc(dealsTable.deal_rating)],
+                    where: eq(dealsTable.is_grey_market, false)
+                });
+
+                if (cachedDeals.length > 0) {
+                    // Map Drizzle Schema back to frontend Deal expected format
+                    return cachedDeals.map((d: { game: { title: string, thumb: string | null }, deal_id: string, store_id: string, game_id: string, price: string | null, retail_price: string | null, savings: string | null, steam_rating_percent: number | null, last_change: Date | null, deal_rating: string | null }) => ({
+                        internalName: d.game.title,
+                        title: d.game.title,
+                        metacriticLink: '',
+                        dealID: d.deal_id,
+                        storeID: d.store_id,
+                        gameID: d.game_id,
+                        salePrice: d.price || '0',
+                        normalPrice: d.retail_price || '0',
+                        isOnSale: d.savings ? parseFloat(d.savings) > 0 ? '1' : '0' : '0',
+                        savings: d.savings || '0',
+                        metacriticScore: '0',
+                        steamRatingText: '',
+                        steamRatingPercent: d.steam_rating_percent?.toString() || '0',
+                        steamRatingCount: '0',
+                        steamAppID: '0',
+                        releaseDate: 0,
+                        lastChange: d.last_change ? Math.floor(d.last_change.getTime() / 1000) : 0,
+                        dealRating: d.deal_rating || '0',
+                        thumb: d.game.thumb || ''
+                    })) as unknown as Deal[];
+                }
+            }
+        } catch (e) {
+            console.warn("DB Cache missed or failed, falling back to REST API", e);
+        }
+    }
+
+    // 2. Fallback to HTTP Fetch (Current behavior)
     const url = new URL(`${BASE_URL}/deals`);
     if (params) {
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
@@ -86,6 +133,29 @@ export async function getGame(id: string): Promise<GameDetails | null> {
                 if (parseFloat(currentLowest.price) < parseFloat(game.cheapestPriceEver.price)) {
                     game.cheapestPriceEver.price = currentLowest.price;
                     game.cheapestPriceEver.date = Math.floor(Date.now() / 1000);
+                }
+            }
+        }
+
+        // Merge Drizzle DB Metadata if available (HLTB, DRM)
+        if (typeof window === 'undefined') {
+            if (process.env.DATABASE_URL) {
+                try {
+                    const { db } = await import('@/db');
+                    const { games } = await import('@/db/schema');
+                    const { eq } = await import('drizzle-orm');
+
+                    const dbGame = await db.query.games.findFirst({
+                        where: eq(games.id, id)
+                    });
+
+                    if (dbGame && dbGame.hltb_main) {
+                    // A real app might map this data to a custom frontend property
+                    // For now, we just guarantee the query executes.
+                    // game.hltbTime = dbGame.hltb_main;
+                    }
+                } catch {
+                    // Ignore Drizzle missing schema errors locally
                 }
             }
         }

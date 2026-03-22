@@ -215,3 +215,320 @@ All exports of the module are statically known (It doesn't have dynamic exports)
 ✓ Compiled in 229ms
 ✓ Compiled in 107ms
 ✓ Compiled in 30ms
+⨯ ./node_modules/postgres/src/index.js:2:1
+Module not found: Can't resolve 'fs'
+[0m [90m 1 |[39m [36mimport[39m os [36mfrom[39m [32m'os'[39m
+[31m[1m>[22m[39m[90m 2 |[39m [36mimport[39m fs [36mfrom[39m [32m'fs'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mimport[39m {
+ [90m 5 |[39m   mergeUserTypes[33m,[39m[0m
+
+
+
+Import traces:
+  Server Component:
+    ./node_modules/postgres/src/index.js
+    ./src/db/index.ts
+    ./src/services/api.ts
+    ./src/app/page.tsx
+
+  Client Component Browser:
+    ./node_modules/postgres/src/index.js [Client Component Browser]
+    ./src/db/index.ts [Client Component Browser]
+    ./src/services/api.ts [Client Component Browser]
+    ./src/components/FlashSales.tsx [Client Component Browser]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./node_modules/postgres/src/index.js [Client Component SSR]
+    ./src/db/index.ts [Client Component SSR]
+    ./src/services/api.ts [Client Component SSR]
+    ./src/components/FlashSales.tsx [Client Component SSR]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./node_modules/postgres/src/index.js:2:1
+Module not found: Can't resolve 'fs'
+[0m [90m 1 |[39m [36mimport[39m os [36mfrom[39m [32m'os'[39m
+[31m[1m>[22m[39m[90m 2 |[39m [36mimport[39m fs [36mfrom[39m [32m'fs'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mimport[39m {
+ [90m 5 |[39m   mergeUserTypes[33m,[39m[0m
+
+
+
+Import traces:
+  Server Component:
+    ./node_modules/postgres/src/index.js
+    ./src/db/index.ts
+    ./src/services/api.ts
+    ./src/app/page.tsx
+
+  Client Component Browser:
+    ./node_modules/postgres/src/index.js [Client Component Browser]
+    ./src/db/index.ts [Client Component Browser]
+    ./src/services/api.ts [Client Component Browser]
+    ./src/components/FlashSales.tsx [Client Component Browser]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./node_modules/postgres/src/index.js [Client Component SSR]
+    ./src/db/index.ts [Client Component SSR]
+    ./src/services/api.ts [Client Component SSR]
+    ./src/components/FlashSales.tsx [Client Component SSR]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./node_modules/postgres/src/connection.js:1:1
+Module not found: Can't resolve 'net'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m net [36mfrom[39m [32m'net'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m tls [36mfrom[39m [32m'tls'[39m
+ [90m 3 |[39m [36mimport[39m crypto [36mfrom[39m [32m'crypto'[39m
+ [90m 4 |[39m [36mimport[39m [33mStream[39m [36mfrom[39m [32m'stream'[39m[0m
+
+
+
+Import traces:
+  Server Component:
+    ./node_modules/postgres/src/connection.js
+    ./node_modules/postgres/src/index.js
+    ./src/db/index.ts
+    ./src/services/api.ts
+    ./src/app/page.tsx
+
+  Client Component Browser:
+    ./node_modules/postgres/src/connection.js [Client Component Browser]
+    ./node_modules/postgres/src/index.js [Client Component Browser]
+    ./src/db/index.ts [Client Component Browser]
+    ./src/services/api.ts [Client Component Browser]
+    ./src/components/FlashSales.tsx [Client Component Browser]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./node_modules/postgres/src/connection.js [Client Component SSR]
+    ./node_modules/postgres/src/index.js [Client Component SSR]
+    ./src/db/index.ts [Client Component SSR]
+    ./src/services/api.ts [Client Component SSR]
+    ./src/components/FlashSales.tsx [Client Component SSR]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./node_modules/postgres/src/connection.js:1:1
+Module not found: Can't resolve 'net'
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m net [36mfrom[39m [32m'net'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m tls [36mfrom[39m [32m'tls'[39m
+ [90m 3 |[39m [36mimport[39m crypto [36mfrom[39m [32m'crypto'[39m
+ [90m 4 |[39m [36mimport[39m [33mStream[39m [36mfrom[39m [32m'stream'[39m[0m
+
+
+
+Import traces:
+  Server Component:
+    ./node_modules/postgres/src/connection.js
+    ./node_modules/postgres/src/index.js
+    ./src/db/index.ts
+    ./src/services/api.ts
+    ./src/app/page.tsx
+
+  Client Component Browser:
+    ./node_modules/postgres/src/connection.js [Client Component Browser]
+    ./node_modules/postgres/src/index.js [Client Component Browser]
+    ./src/db/index.ts [Client Component Browser]
+    ./src/services/api.ts [Client Component Browser]
+    ./src/components/FlashSales.tsx [Client Component Browser]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./node_modules/postgres/src/connection.js [Client Component SSR]
+    ./node_modules/postgres/src/index.js [Client Component SSR]
+    ./src/db/index.ts [Client Component SSR]
+    ./src/services/api.ts [Client Component SSR]
+    ./src/components/FlashSales.tsx [Client Component SSR]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./node_modules/postgres/src/connection.js:5:1
+Module not found: Can't resolve 'perf_hooks'
+[0m [90m 3 |[39m [36mimport[39m crypto [36mfrom[39m [32m'crypto'[39m
+ [90m 4 |[39m [36mimport[39m [33mStream[39m [36mfrom[39m [32m'stream'[39m
+[31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { performance } [36mfrom[39m [32m'perf_hooks'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 6 |[39m
+ [90m 7 |[39m [36mimport[39m { stringify[33m,[39m handleValue[33m,[39m arrayParser[33m,[39m arraySerializer } [36mfrom[39m [32m'./types.js'[39m
+ [90m 8 |[39m [36mimport[39m { [33mErrors[39m } [36mfrom[39m [32m'./errors.js'[39m[0m
+
+
+
+Import traces:
+  Server Component:
+    ./node_modules/postgres/src/connection.js
+    ./node_modules/postgres/src/index.js
+    ./src/db/index.ts
+    ./src/services/api.ts
+    ./src/app/page.tsx
+
+  Client Component Browser:
+    ./node_modules/postgres/src/connection.js [Client Component Browser]
+    ./node_modules/postgres/src/index.js [Client Component Browser]
+    ./src/db/index.ts [Client Component Browser]
+    ./src/services/api.ts [Client Component Browser]
+    ./src/components/FlashSales.tsx [Client Component Browser]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./node_modules/postgres/src/connection.js [Client Component SSR]
+    ./node_modules/postgres/src/index.js [Client Component SSR]
+    ./src/db/index.ts [Client Component SSR]
+    ./src/services/api.ts [Client Component SSR]
+    ./src/components/FlashSales.tsx [Client Component SSR]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./node_modules/postgres/src/connection.js:5:1
+Module not found: Can't resolve 'perf_hooks'
+[0m [90m 3 |[39m [36mimport[39m crypto [36mfrom[39m [32m'crypto'[39m
+ [90m 4 |[39m [36mimport[39m [33mStream[39m [36mfrom[39m [32m'stream'[39m
+[31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { performance } [36mfrom[39m [32m'perf_hooks'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 6 |[39m
+ [90m 7 |[39m [36mimport[39m { stringify[33m,[39m handleValue[33m,[39m arrayParser[33m,[39m arraySerializer } [36mfrom[39m [32m'./types.js'[39m
+ [90m 8 |[39m [36mimport[39m { [33mErrors[39m } [36mfrom[39m [32m'./errors.js'[39m[0m
+
+
+
+Import traces:
+  Server Component:
+    ./node_modules/postgres/src/connection.js
+    ./node_modules/postgres/src/index.js
+    ./src/db/index.ts
+    ./src/services/api.ts
+    ./src/app/page.tsx
+
+  Client Component Browser:
+    ./node_modules/postgres/src/connection.js [Client Component Browser]
+    ./node_modules/postgres/src/index.js [Client Component Browser]
+    ./src/db/index.ts [Client Component Browser]
+    ./src/services/api.ts [Client Component Browser]
+    ./src/components/FlashSales.tsx [Client Component Browser]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./node_modules/postgres/src/connection.js [Client Component SSR]
+    ./node_modules/postgres/src/index.js [Client Component SSR]
+    ./src/db/index.ts [Client Component SSR]
+    ./src/services/api.ts [Client Component SSR]
+    ./src/components/FlashSales.tsx [Client Component SSR]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./node_modules/postgres/src/connection.js:2:1
+Module not found: Can't resolve 'tls'
+[0m [90m 1 |[39m [36mimport[39m net [36mfrom[39m [32m'net'[39m
+[31m[1m>[22m[39m[90m 2 |[39m [36mimport[39m tls [36mfrom[39m [32m'tls'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 3 |[39m [36mimport[39m crypto [36mfrom[39m [32m'crypto'[39m
+ [90m 4 |[39m [36mimport[39m [33mStream[39m [36mfrom[39m [32m'stream'[39m
+ [90m 5 |[39m [36mimport[39m { performance } [36mfrom[39m [32m'perf_hooks'[39m[0m
+
+
+
+Import traces:
+  Server Component:
+    ./node_modules/postgres/src/connection.js
+    ./node_modules/postgres/src/index.js
+    ./src/db/index.ts
+    ./src/services/api.ts
+    ./src/app/page.tsx
+
+  Client Component Browser:
+    ./node_modules/postgres/src/connection.js [Client Component Browser]
+    ./node_modules/postgres/src/index.js [Client Component Browser]
+    ./src/db/index.ts [Client Component Browser]
+    ./src/services/api.ts [Client Component Browser]
+    ./src/components/FlashSales.tsx [Client Component Browser]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./node_modules/postgres/src/connection.js [Client Component SSR]
+    ./node_modules/postgres/src/index.js [Client Component SSR]
+    ./src/db/index.ts [Client Component SSR]
+    ./src/services/api.ts [Client Component SSR]
+    ./src/components/FlashSales.tsx [Client Component SSR]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./node_modules/postgres/src/connection.js:2:1
+Module not found: Can't resolve 'tls'
+[0m [90m 1 |[39m [36mimport[39m net [36mfrom[39m [32m'net'[39m
+[31m[1m>[22m[39m[90m 2 |[39m [36mimport[39m tls [36mfrom[39m [32m'tls'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 3 |[39m [36mimport[39m crypto [36mfrom[39m [32m'crypto'[39m
+ [90m 4 |[39m [36mimport[39m [33mStream[39m [36mfrom[39m [32m'stream'[39m
+ [90m 5 |[39m [36mimport[39m { performance } [36mfrom[39m [32m'perf_hooks'[39m[0m
+
+
+
+Import traces:
+  Server Component:
+    ./node_modules/postgres/src/connection.js
+    ./node_modules/postgres/src/index.js
+    ./src/db/index.ts
+    ./src/services/api.ts
+    ./src/app/page.tsx
+
+  Client Component Browser:
+    ./node_modules/postgres/src/connection.js [Client Component Browser]
+    ./node_modules/postgres/src/index.js [Client Component Browser]
+    ./src/db/index.ts [Client Component Browser]
+    ./src/services/api.ts [Client Component Browser]
+    ./src/components/FlashSales.tsx [Client Component Browser]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./node_modules/postgres/src/connection.js [Client Component SSR]
+    ./node_modules/postgres/src/index.js [Client Component SSR]
+    ./src/db/index.ts [Client Component SSR]
+    ./src/services/api.ts [Client Component SSR]
+    ./src/components/FlashSales.tsx [Client Component SSR]
+    ./src/components/FlashSales.tsx [Server Component]
+    ./src/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+✓ Compiled in 1032ms
+✓ Compiled in 17ms
+✓ Compiled in 10ms
