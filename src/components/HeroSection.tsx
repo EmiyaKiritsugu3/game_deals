@@ -77,7 +77,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                         {/* The Glassmorphism Panel isolated inside the slide */}
                         <div className="container relative z-30">
                             <motion.div 
-                                className="flex min-h-[380px] w-full items-center rounded-2xl border border-white/10 bg-black/40 p-8 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(255,255,255,0.05)] backdrop-blur-md md:min-h-[400px] md:p-12 lg:p-16"
+                                className="flex min-h-[380px] w-full items-center rounded-2xl border border-border/50 bg-background/60 p-8 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(255,255,255,0.05)] backdrop-blur-xl md:min-h-[400px] md:p-12 lg:p-16"
                                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
                                 animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.95, y: isActive ? 0 : 30 }}
                                 transition={{ duration: 0.5, ease: "easeOut" }}

@@ -150,7 +150,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                                         <span className="text-sm font-semibold text-white">{storeName}</span>
                                         {isBest && <span className="rounded bg-primary px-1.5 py-0.5 text-[0.65rem] font-black text-black">BEST</span>}
                                         {isEpicDeal && <DealsBadge type="EPIC" />}
-                                        <span className="drmBadge">{getDrmType(deal.storeID).icon} {getDrmType(deal.storeID).label}</span>
+                                        <span className="badge-drm">{getDrmType(deal.storeID).icon} {getDrmType(deal.storeID).label}</span>
                                         {getRegionTag(deal.storeID) && <span className="regionBadge">{getRegionTag(deal.storeID)}</span>}
                                     </div>
 

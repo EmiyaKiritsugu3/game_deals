@@ -66,8 +66,8 @@ export default async function GameModal({ params }: { params: Promise<{ id: stri
                         )}
                         <span className="text-sm font-semibold text-white">{storeName}</span>
                         {isBest && <span className="rounded bg-primary px-1.5 py-0.5 text-[0.65rem] font-black text-black">BEST</span>}
-                        {isEpicDeal && <span className="epicDealBadge">🔥 EPIC</span>}
-                        <span className="drmBadge">{getDrmType(deal.storeID).icon} {getDrmType(deal.storeID).label}</span>
+                        {isEpicDeal && <span className="badge-epic">🔥 EPIC</span>}
+                        <span className="badge-drm">{getDrmType(deal.storeID).icon} {getDrmType(deal.storeID).label}</span>
                         {getRegionTag(deal.storeID) && <span className="regionBadge">{getRegionTag(deal.storeID)}</span>}
                     </div>
 

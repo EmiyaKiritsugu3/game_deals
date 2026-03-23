@@ -1,21 +1,32 @@
 @import "tailwindcss";
 
 @theme {
+  /* Typography */
   --font-inter: var(--font-inter), sans-serif;
 
-  /* gg.deals inspired dark mode ported to v4 theme */
+  /* GG.deals inspired dark mode ported to v4 */
   --color-background: hsl(228 15% 13%);
   --color-foreground: hsl(0 0% 98%);
   --color-card: hsl(226 14% 18%);
   --color-card-foreground: hsl(0 0% 98%);
   --color-border: hsl(226 14% 28%);
+
+  /* Gamer Accents */
   --color-primary: hsl(150 100% 42%);
   --color-primary-foreground: hsl(150 100% 10%);
   --color-accent-hl: hsl(150 88% 27%);
   --color-accent-fire: hsl(22 100% 59%);
   --color-muted: hsl(226 14% 24%);
   --color-muted-foreground: hsl(226 10% 65%);
-  --radius-sm: 4px;
+
+  /* Native v4 Animations */
+  --animate-pulse-flame: pulse-flame 2s infinite ease-in-out;
+
+  @keyframes pulse-flame {
+    0% { box-shadow: 0 0 5px rgba(255, 65, 108, 0.2); }
+    50% { box-shadow: 0 0 15px rgba(255, 65, 108, 0.6); }
+    100% { box-shadow: 0 0 5px rgba(255, 65, 108, 0.2); }
+  }
 }
 
 @layer base {
@@ -29,42 +40,32 @@
   }
 }
 
-@layer utilities {
-  .epicDealBadge {
-    background: linear-gradient(135deg, #ff4b2b, #ff416c);
-    color: white;
-    font-size: 0.7rem;
-    font-weight: 800;
-    padding: 0.15rem 0.5rem;
-    border-radius: 4px;
-    margin-left: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.2rem;
-    box-shadow: 0 0 10px rgba(255, 65, 108, 0.4);
-    animation: pulse-flame 2s infinite ease-in-out;
-  }
+/* Transforming legacy classes into v4 Utilities */
+@utility badge-epic {
+  background: linear-gradient(135deg, #ff4b2b, #ff416c);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  animation: var(--animate-pulse-flame);
+}
 
-  @keyframes pulse-flame {
-    0% { box-shadow: 0 0 5px rgba(255, 65, 108, 0.2); }
-    50% { box-shadow: 0 0 15px rgba(255, 65, 108, 0.6); }
-    100% { box-shadow: 0 0 5px rgba(255, 65, 108, 0.2); }
-  }
-
-  .drmBadge {
-    font-size: 0.65rem;
-    font-weight: 700;
-    padding: 0.1rem 0.4rem;
-    border-radius: 3px;
-    background-color: var(--color-muted);
-    color: var(--color-foreground);
-    margin-left: 0.35rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.2rem;
-    white-space: nowrap;
-    opacity: 0.85;
-  }
+@utility badge-drm {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.1875rem;
+  background-color: var(--color-muted);
+  color: var(--color-foreground);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  white-space: nowrap;
+  opacity: 0.85;
 }
