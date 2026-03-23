@@ -146,7 +146,7 @@ async function awardBadge(userId: string, badgeId: string) {
 
 // --- ACTIVITIES ---
 
-export async function createActivity(activity: { user_id: string; action_type: string; details: any }) {
+export async function createActivity(activity: { user_id: string; action_type: string; details: unknown }) {
   if (!supabase) return null;
   const { data, error } = await supabase
     .from('activities')
@@ -170,7 +170,7 @@ export interface ActivityDetails {
   rating?: number;
   badgeRarity?: 'Common' | 'Rare' | 'Epic' | 'Legendary';
   content?: string;
-  [key: string]: unknown;
+  [key: string]: string | number | boolean | null | undefined;
 }
 
 export interface UserStatsExpanded {
