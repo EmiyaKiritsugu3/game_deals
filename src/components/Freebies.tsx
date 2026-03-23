@@ -30,11 +30,11 @@ export default function Freebies({ deals }: FreebiesProps) {
                                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                                     sizes="220px"
                                 />
-                                <div className="absolute right-0 top-0 rounded-bl-lg bg-deal-free px-3 py-1 text-sm font-black tracking-widest text-white shadow-md">GRÁTIS</div>
+                                <div className="absolute right-0 top-0 rounded-bl-lg bg-deal-free px-3 py-1 text-sm font-black tracking-widest text-deal-free-foreground shadow-md">GRÁTIS</div>
                             </div>
 
                             <div className="flex flex-1 flex-col justify-between gap-3 p-4">
-                                <h3 className="line-clamp-2 text-sm font-bold text-white transition-colors group-hover:text-deal-free" title={deal.title}>{deal.title}</h3>
+                                <h3 className="line-clamp-2 text-sm font-bold text-foreground transition-colors group-hover:text-deal-free" title={deal.title}>{deal.title}</h3>
                                 <div>
                                     <div className="flex h-8 items-center justify-center overflow-hidden rounded bg-deal-free-muted shadow-inner">
                                         <div className="flex h-full flex-1 items-center justify-center bg-deal-free/10 text-[10px] font-bold text-deal-free">CUPOM</div>

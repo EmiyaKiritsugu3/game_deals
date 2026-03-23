@@ -63,7 +63,7 @@ export default async function GameCard({ deal }: { deal: Deal }) {
                     <div className="flex items-center justify-between text-xs font-semibold text-muted-foreground">
                         <span className="rounded bg-white/5 px-2 py-1">{storeName}</span>
                         {deal.steamRatingPercent && deal.steamRatingPercent !== '0' && (
-                            <span className="flex items-center gap-1 rounded bg-blue-500/10 px-2 py-1 text-blue-400">
+                            <span className="flex items-center gap-1 rounded bg-brand-google/10 px-2 py-1 text-brand-google">
                                 ★ {deal.steamRatingPercent}%
                             </span>
                         )}

@@ -77,7 +77,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                         {/* The Glassmorphism Panel isolated inside the slide */}
                         <div className="container relative z-30">
                             <motion.div 
-                                className="flex min-h-[380px] w-full items-center rounded-2xl border border-white/20 bg-card/40 p-8 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(255,255,255,0.05)] backdrop-blur-xl md:min-h-[400px] md:p-12 lg:p-16"
+                                className="flex min-h-[380px] w-full items-center rounded-2xl border border-white/10 bg-black/40 p-8 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(255,255,255,0.05)] backdrop-blur-md md:min-h-[400px] md:p-12 lg:p-16"
                                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
                                 animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.95, y: isActive ? 0 : 30 }}
                                 transition={{ duration: 0.5, ease: "easeOut" }}
@@ -85,7 +85,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                                 <div className="grid w-full grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-16">
                                     <div className="flex flex-col items-center gap-6 text-center md:items-start md:text-left">
                                         <span className="inline-block rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-black tracking-widest text-primary uppercase">FEATURED DEAL</span>
-                                        <h1 className="text-4xl font-black leading-tight tracking-tight text-white drop-shadow-md md:text-5xl lg:text-6xl">{deal.title}</h1>
+                                        <h1 className="text-4xl font-black leading-tight tracking-tight text-foreground drop-shadow-md md:text-5xl lg:text-6xl">{deal.title}</h1>
 
                                         <div className="flex flex-wrap items-center justify-center gap-6 md:justify-start">
                                             {getStoreLogo(deal.storeID) && (
@@ -104,13 +104,13 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                                             {dealSavings > 0 && <span className="rounded bg-primary px-4 py-2 text-xl font-black text-primary-foreground shadow-lg shadow-primary/30">Save {dealSavings}%</span>}
                                             <div className="flex flex-col justify-center">
                                                 {dealSavings > 0 && <span className="text-lg font-bold leading-none text-muted-foreground line-through">${deal.normalPrice}</span>}
-                                                <span className="text-3xl font-black leading-none text-white">${deal.salePrice}</span>
+                                                <span className="text-3xl font-black leading-none text-foreground">${deal.salePrice}</span>
                                             </div>
                                         </div>
 
                                         <Link
                                             href={`/game/${deal.gameID}`}
-                                            className="mt-2 inline-flex items-center justify-center rounded-lg bg-white px-10 py-4 text-lg font-bold text-black transition-all hover:-translate-y-1 hover:bg-primary hover:text-primary-foreground hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.3)] w-full md:w-auto"
+                                            className="mt-2 inline-flex items-center justify-center rounded-lg bg-foreground px-10 py-4 text-lg font-bold text-background transition-all hover:-translate-y-1 hover:bg-primary hover:text-primary-foreground hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.3)] w-full md:w-auto"
                                             tabIndex={isActive ? 0 : -1}
                                         >
                                             Get Deal Now
