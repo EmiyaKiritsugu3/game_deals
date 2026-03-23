@@ -6,6 +6,16 @@ import { generateGreyMarketDeals, getHighResImage, formatTimeAgo, generatePriceH
 
 const BASE_URL = 'https://www.cheapshark.com/api/1.0';
 
+/** Helper to generate a consistent hex color from a string (e.g. gameID) */
+export function getAccentColor(seed: string): string {
+    let hash = 0;
+    for (let i = 0; i < seed.length; i++) {
+        hash = seed.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color = Math.floor(Math.abs((Math.sin(hash) * 10000) % 1 * 16777215)).toString(16);
+    return '#' + '000000'.substring(0, 6 - color.length) + color;
+}
+
 // Re-exporting utils for backward compatibility
 export { getHighResImage, formatTimeAgo, generatePriceHistory };
 
@@ -69,7 +79,8 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
                         releaseDate: 0,
                         lastChange: d.last_change ? Math.floor(d.last_change.getTime() / 1000) : 0,
                         dealRating: d.deal_rating || '0',
-                        thumb: d.game.thumb || ''
+                        thumb: d.game.thumb || '',
+                        accentColor: getAccentColor(d.game_id)
                     })) as unknown as Deal[];
                 }
             }
@@ -90,11 +101,13 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
 
     try {
         const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
-        if (!res.ok) return fallbackDeals;
+        if (!res.ok) {
+            return fallbackDeals.map(d => ({ ...d, accentColor: getAccentColor(d.gameID) }));
+        }
         const data = await res.json();
-        return data.length > 0 ? data : fallbackDeals;
+        return data.length > 0 ? data.map((d: Deal) => ({ ...d, accentColor: getAccentColor(d.gameID) })) : fallbackDeals.map(d => ({ ...d, accentColor: getAccentColor(d.gameID) }));
     } catch {
-        return fallbackDeals;
+        return fallbackDeals.map(d => ({ ...d, accentColor: getAccentColor(d.gameID) }));
     }
 }
 

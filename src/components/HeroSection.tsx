@@ -14,6 +14,7 @@ interface HeroSectionProps {
 
 export default function HeroSection({ deals }: HeroSectionProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const activeAccentColor = deals?.[currentIndex]?.accentColor || '#00d66c';
 
     // Auto-play timer
     useEffect(() => {
@@ -29,7 +30,10 @@ export default function HeroSection({ deals }: HeroSectionProps) {
     if (!deals || deals.length === 0) return null;
 
     return (
-        <section className="relative flex min-h-[600px] items-center overflow-hidden bg-background mb-12 after:pointer-events-none after:absolute after:inset-0 after:z-10 after:bg-linear-to-t after:from-background after:via-transparent after:to-transparent">
+        <section
+            className="relative flex min-h-[600px] items-center overflow-hidden bg-background mb-12 after:pointer-events-none after:absolute after:inset-0 after:z-10 after:bg-linear-to-t after:from-background after:via-transparent after:to-transparent"
+            style={{ '--active-glow': activeAccentColor } as React.CSSProperties}
+        >
             {/* The Infinite Background Matrix layer */}
             <div className="pointer-events-none absolute -inset-[20%] z-0 flex overflow-hidden transform-[perspective(1000px)_rotateX(20deg)_rotateZ(-5deg)]">
                 <div className="flex h-[150%] w-[150%] flex-wrap content-start gap-4 opacity-70 animate-[matrixDrift_60s_linear_infinite]">
@@ -64,20 +68,16 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                         )}
                         aria-hidden={!isActive}
                     >
-                        {/* The dynamic colorful glow based on the current deal's thumbnail */}
-                        <div className="absolute inset-0 z-0 opacity-40">
-                            <Image
-                                src={dealThumb}
-                                alt="background blur-sm"
-                                fill
-                                className="object-cover scale-125 blur-[60px] brightness-50 saturate-150"
-                            />
-                        </div>
+                        {/* The dynamic colorful glow based on the current deal's accent color */}
+                        <div
+                            className="absolute inset-0 z-0 opacity-40 blur-[100px] transition-colors duration-1000 ease-in-out"
+                            style={{ backgroundColor: 'var(--active-glow)' }}
+                        />
                         
                         {/* The Glassmorphism Panel isolated inside the slide */}
                         <div className="container relative z-30">
                             <motion.div 
-                                className="flex min-h-[380px] w-full items-center rounded-2xl border border-border/50 bg-background/60 p-8 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(255,255,255,0.05)] backdrop-blur-xl md:min-h-[400px] md:p-12 lg:p-16"
+                                className="flex min-h-[380px] w-full items-center rounded-2xl border border-border/50 bg-card/60 p-8 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(255,255,255,0.05)] backdrop-blur-xl md:min-h-[400px] md:p-12 lg:p-16"
                                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
                                 animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.95, y: isActive ? 0 : 30 }}
                                 transition={{ duration: 0.5, ease: "easeOut" }}

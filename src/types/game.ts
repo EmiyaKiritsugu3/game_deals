@@ -18,6 +18,7 @@ export interface Deal {
     lastChange: number;
     dealRating: string;
     thumb: string;
+    accentColor?: string; // Appended for dynamic UI glow
 }
 
 export interface Store {
