@@ -35,7 +35,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
             style={{ '--active-glow': activeAccentColor } as React.CSSProperties}
         >
             {/* The Infinite Background Matrix layer */}
-            <div className="pointer-events-none absolute -inset-[10%] z-0 flex overflow-hidden opacity-50">
+            <div className="pointer-events-none absolute -inset-[10%] z-10 flex overflow-hidden opacity-100">
                 <div className="flex h-[150%] w-[150%] flex-wrap content-start gap-4 opacity-50 animate-matrix-drift">
                     {/* Duplicate the deals array to create a dense grid covering the entire background */}
                     {Array(15).fill(deals).flat().map((deal, i) => (
@@ -45,13 +45,13 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                                 alt="" 
                                 fill
                                 sizes="100px"
-                                className="object-cover opacity-60"
+                                className="object-cover opacity-100"
                             />
                         </div>
                     ))}
                 </div>
             </div>
-            <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_30%,hsl(var(--background)/0.9)_100%)]" />
+            <div className="pointer-events-none absolute inset-0 z-5 bg-[radial-gradient(circle_at_center,transparent_30%,hsl(var(--background)/0.9)_100%)]" />
 
             {/* The individual Deals carousel */}
             {deals.map((deal, idx) => {
@@ -70,14 +70,14 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                     >
                         {/* The dynamic colorful glow based on the current deal's accent color */}
                         <div
-                            className="absolute inset-0 z-0 opacity-40 blur-[100px] transition-colors duration-1000 ease-in-out"
+                            className="absolute inset-0 z-5 opacity-40 blur-[100px] transition-colors duration-1000 ease-in-out"
                             style={{ backgroundColor: 'var(--active-glow)' }}
                         />
                         
                         {/* The Glassmorphism Panel isolated inside the slide */}
                         <div className="container relative z-30">
                             <motion.div 
-                                className="flex min-h-[380px] w-full items-center rounded-2xl border border-white/5 bg-black/20 p-8 shadow-[0_25px_80px_-12px_rgba(0,0,0,0.6)] backdrop-blur-2xl md:min-h-[400px] md:p-12 lg:p-16"
+                                className="flex min-h-[380px] w-full items-center rounded-2xl border border-white/10 bg-white/5 p-8 shadow-[0_25px_80px_-12px_rgba(0,0,0,0.6)] backdrop-blur-md md:min-h-[400px] md:p-12 lg:p-16"
                                 initial={{ opacity: 0, scale: 1, y: 0 }}
                                 animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 1, y: isActive ? 0 : 0 }}
                                 transition={{ duration: 0.5, ease: "easeOut" }}
