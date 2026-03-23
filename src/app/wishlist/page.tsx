@@ -107,7 +107,7 @@ export default function WishlistPage() {
     return (
         <main className="min-h-[100vh] bg-background pb-12">
             <div className="container mx-auto flex max-w-[1200px] flex-col gap-8 px-4 pt-12">
-                <div className="relative flex min-h-[220px] flex-col justify-center overflow-hidden rounded-[2rem] border border-white/5 bg-[#1f222e] p-8 shadow-2xl md:p-12">
+                <div className="relative flex min-h-[220px] flex-col justify-center overflow-hidden rounded-[2rem] border border-white/5 bg-surface p-8 shadow-2xl md:p-12">
                     {bestDiscountGame?.thumb && (
                         <div 
                             className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30 mix-blend-luminosity filter blur-sm"

@@ -1,3 +1,5 @@
+@config "../../tailwind.config.ts";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -29,6 +31,21 @@
 
   --muted: 226 14% 24%;
   --muted-foreground: 226 10% 65%;
+
+  /* New Semantic Colors for Promos and Social */
+  --surface: 226 19% 15%; /* #1f222e Deeper card/modal backgrounds */
+
+  --deal-free: 0 100% 65%; /* #ff4d4d Vibrant red for 100% off */
+  --deal-free-foreground: 0 0% 0%;
+  --deal-free-muted: 0 70% 12%; /* #2a1616 Muted red bg */
+
+  --deal-flash: 38 100% 50%; /* #ffaa00 Amber for ending soon */
+  --deal-flash-foreground: 0 0% 0%;
+  --deal-flash-muted: 38 100% 10%; /* #332200 Muted amber bg */
+
+  /* Social Login Brands */
+  --brand-google: 217 89% 61%; /* #4285F4 */
+  --brand-discord: 235 86% 65%; /* #5865F2 */
   
   --radius: 4px; /* Less rounded corners than default */
 }

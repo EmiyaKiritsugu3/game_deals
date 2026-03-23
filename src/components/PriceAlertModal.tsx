@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { X, Bell, Trash2, ArrowRight } from 'lucide-react';
 import { useAlerts } from '@/store/alertStore';
 import { cn } from '@/lib/utils';
+import Modal from '@/components/Modal';
 
 interface PriceAlertModalProps {
     isOpen: boolean;
@@ -59,30 +59,11 @@ export default function PriceAlertModal({ isOpen, onClose, gameID, gameTitle, cu
     };
 
     return (
-        <AnimatePresence>
-            {isOpen && (
-                <motion.div 
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={onClose}
-                >
-                    <motion.div 
-                        className="relative flex w-full max-w-[480px] flex-col gap-6 rounded-2xl border border-white/10 bg-[#1c1e26] p-6 shadow-2xl md:p-8"
-                        initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <button className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-muted-foreground transition-colors hover:bg-white/10 hover:text-white" onClick={onClose}>
-                            <X size={20} />
-                        </button>
-
-                        <div className="flex flex-col items-center gap-2 text-center">
-                            <h2 className="flex items-center gap-2 text-2xl font-black text-white"><Bell size={24} className="text-primary" /> Set Price Alert</h2>
-                            <p className="text-sm font-medium text-muted-foreground">We will notify you when <span className="font-bold text-white">{gameTitle}</span> hits your target price.</p>
-                        </div>
+        <Modal isOpen={isOpen} onClose={onClose} maxWidth="480px" zIndex="50">
+            <div className="flex flex-col items-center gap-2 text-center">
+                <h2 className="flex items-center gap-2 text-2xl font-black text-white"><Bell size={24} className="text-primary" /> Set Price Alert</h2>
+                <p className="text-sm font-medium text-muted-foreground">We will notify you when <span className="font-bold text-white">{gameTitle}</span> hits your target price.</p>
+            </div>
 
                         <div className="flex items-center justify-center gap-6 rounded-xl bg-black/30 p-6 shadow-inner">
                             <div className="flex flex-col items-center">
@@ -136,25 +117,22 @@ export default function PriceAlertModal({ isOpen, onClose, gameID, gameTitle, cu
                             </div>
                         </div>
 
-                        <div className="flex flex-col gap-3 pt-2">
-                            <div className="flex gap-3">
-                                <button className="flex-1 rounded-lg border border-white/10 bg-transparent py-3 font-bold text-white transition-colors hover:bg-white/5" onClick={onClose}>
-                                    Cancel
-                                </button>
-                                <button className="flex-1 rounded-lg bg-primary py-3 font-bold text-primary-foreground transition-all hover:scale-[1.02] hover:bg-emerald-400 hover:shadow-[0_5px_20px_hsl(var(--primary)/0.4)] active:scale-95" onClick={handleSave}>
-                                    {hasAlert(gameID) ? 'Update Alert' : 'Create Alert'}
-                                </button>
-                            </div>
-                            
-                            {hasAlert(gameID) && (
-                                <button className="flex items-center justify-center gap-2 rounded-lg py-2 text-sm font-semibold text-red-400 transition-colors hover:bg-red-400/10 hover:text-red-300" onClick={handleRemove}>
-                                    <Trash2 size={14} /> Stop tracking this game
-                                </button>
-                            )}
-                        </div>
-                    </motion.div>
-                </motion.div>
-            )}
-        </AnimatePresence>
+            <div className="flex flex-col gap-3 pt-2">
+                <div className="flex gap-3">
+                    <button className="flex-1 rounded-lg border border-white/10 bg-transparent py-3 font-bold text-white transition-colors hover:bg-white/5" onClick={onClose}>
+                        Cancel
+                    </button>
+                    <button className="flex-1 rounded-lg bg-primary py-3 font-bold text-primary-foreground transition-all hover:scale-[1.02] hover:bg-emerald-400 hover:shadow-[0_5px_20px_hsl(var(--primary)/0.4)] active:scale-95" onClick={handleSave}>
+                        {hasAlert(gameID) ? 'Update Alert' : 'Create Alert'}
+                    </button>
+                </div>
+
+                {hasAlert(gameID) && (
+                    <button className="flex items-center justify-center gap-2 rounded-lg py-2 text-sm font-semibold text-red-400 transition-colors hover:bg-red-400/10 hover:text-red-300" onClick={handleRemove}>
+                        <Trash2 size={14} /> Stop tracking this game
+                    </button>
+                )}
+            </div>
+        </Modal>
     );
 }

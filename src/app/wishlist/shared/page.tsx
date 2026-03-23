@@ -88,7 +88,7 @@ function SharedWishlistContent() {
 
     return (
         <>
-            <div className="relative mb-8 flex min-h-[220px] flex-col justify-center overflow-hidden rounded-[2rem] border border-white/5 bg-[#1f222e] p-8 shadow-2xl md:p-12">
+            <div className="relative mb-8 flex min-h-[220px] flex-col justify-center overflow-hidden rounded-[2rem] border border-white/5 bg-surface p-8 shadow-2xl md:p-12">
                 {games[0]?.thumb && (
                     <div 
                         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30 mix-blend-luminosity filter blur-sm"

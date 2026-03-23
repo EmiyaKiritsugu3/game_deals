@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import SyncManager from "@/components/SyncManager";
-import AchievementToast from "@/components/AchievementToast";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import AchievementToast from "@/components/AchievementToast";
 import "./globals.css";
 
 const inter = Inter({

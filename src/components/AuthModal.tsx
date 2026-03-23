@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mail, ShieldCheck, Github, Globe } from 'lucide-react';
+import { Mail, ShieldCheck, Github, Globe } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
+import Modal from '@/components/Modal';
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -54,30 +54,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     };
 
     return (
-        <AnimatePresence>
-            {isOpen && (
-                <motion.div 
-                    className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={onClose}
-                >
-                    <motion.div 
-                        className="relative flex w-full max-w-[420px] flex-col gap-6 rounded-2xl border border-white/10 bg-[#1c1e26] p-8 shadow-2xl"
-                        initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <button className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-muted-foreground transition-colors hover:bg-white/10 hover:text-white" onClick={onClose}>
-                            <X size={20} />
-                        </button>
-
-                        <div className="flex flex-col items-center gap-2 text-center">
-                            <h2 className="text-2xl font-black text-white">🚀 Welcome to GameDeals</h2>
-                            <p className="text-sm font-medium text-muted-foreground">Sign in to track price drops and sync your wishlist across all devices.</p>
-                        </div>
+        <Modal isOpen={isOpen} onClose={onClose} maxWidth="420px">
+            <div className="flex flex-col items-center gap-2 text-center">
+                <h2 className="text-2xl font-black text-white">🚀 Welcome to GameDeals</h2>
+                <p className="text-sm font-medium text-muted-foreground">Sign in to track price drops and sync your wishlist across all devices.</p>
+            </div>
 
                         <div className="flex flex-col gap-3">
                             <button 
@@ -85,11 +66,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                                 onClick={() => handleSocialLogin('google')}
                                 disabled={isLoading}
                             >
-                                <Globe size={20} className="text-[#4285F4]" />
+                                <Globe size={20} className="text-brand-google" />
                                 <span>Continue with Google</span>
                             </button>
                             <button 
-                                className="group flex w-full items-center justify-center gap-3 rounded-xl border border-[#5865F2]/30 bg-[#5865F2]/10 py-3 font-bold text-[#5865F2] transition-all hover:-translate-y-0.5 hover:bg-[#5865F2]/20 hover:shadow-lg hover:shadow-[#5865F2]/20 disabled:pointer-events-none disabled:opacity-50"
+                                className="group flex w-full items-center justify-center gap-3 rounded-xl border border-brand-discord/30 bg-brand-discord/10 py-3 font-bold text-brand-discord transition-all hover:-translate-y-0.5 hover:bg-brand-discord/20 hover:shadow-lg hover:shadow-brand-discord/20 disabled:pointer-events-none disabled:opacity-50"
                                 onClick={() => handleSocialLogin('discord')}
                                 disabled={isLoading}
                             >
@@ -134,13 +115,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                             </button>
                         </form>
 
-                        <div className="mt-2 flex flex-col items-center gap-2 rounded-xl bg-black/20 p-4 text-center text-xs font-medium leading-relaxed text-muted-foreground">
-                            <ShieldCheck size={20} className="text-primary" />
-                            <p><strong>Privacy Priority:</strong> We only store your wishlist and alert data. No passwords required.</p>
-                        </div>
-                    </motion.div>
-                </motion.div>
-            )}
-        </AnimatePresence>
+            <div className="mt-2 flex flex-col items-center gap-2 rounded-xl bg-black/20 p-4 text-center text-xs font-medium leading-relaxed text-muted-foreground">
+                <ShieldCheck size={20} className="text-primary" />
+                <p><strong>Privacy Priority:</strong> We only store your wishlist and alert data. No passwords required.</p>
+            </div>
+        </Modal>
     );
 }

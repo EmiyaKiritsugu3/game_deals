@@ -21,11 +21,16 @@ export async function createPlaylist(userId: string, title: string, description?
   // Track activity
   await createActivity({
     user_id: userId,
-    type: 'playlist_created',
-    target_id: data.id,
-    target_name: title,
-    target_thumb: '/images/default-playlist.png' // Default or dynamic image
+    action_type: 'created_list',
+    details: {
+      targetId: data.id,
+      targetName: title,
+      targetThumb: '/images/default-playlist.png' // Default or dynamic image
+    }
   });
+
+  // Check achievements after creating a playlist to potentially award "Playlist Master"
+  await checkAchievements(userId);
 
   return data as Playlist;
 }
@@ -121,10 +126,13 @@ async function awardBadge(userId: string, badgeId: string) {
     // Track activity
     await createActivity({
       user_id: userId,
-      type: 'badge_earned',
-      target_id: badge.id,
-      target_name: badge.name,
-      target_thumb: '' // Can use the svg icon later
+      action_type: 'earned_badge',
+      details: {
+        targetId: badge.id,
+        targetName: badge.name,
+        badgeRarity: badge.rarity as 'Common' | 'Rare' | 'Epic' | 'Legendary',
+        targetThumb: '' // Can use the svg icon later
+      }
     });
 
     // TODO: Trigger Toast Notification locally here or via global state
@@ -138,7 +146,7 @@ async function awardBadge(userId: string, badgeId: string) {
 
 // --- ACTIVITIES ---
 
-export async function createActivity(activity: Partial<Activity>) {
+export async function createActivity(activity: { user_id: string; action_type: string; details: any }) {
   if (!supabase) return null;
   const { data, error } = await supabase
     .from('activities')
@@ -150,7 +158,67 @@ export async function createActivity(activity: Partial<Activity>) {
     console.error('Failed to create activity', error);
     return null;
   }
-  return data as Activity;
+  return data;
+}
+
+export type ActivityType = 'earned_badge' | 'created_list' | 'reviewed_game' | 'upvoted_game';
+
+export interface ActivityDetails {
+  targetId?: string;
+  targetName?: string;
+  targetThumb?: string;
+  rating?: number;
+  badgeRarity?: 'Common' | 'Rare' | 'Epic' | 'Legendary';
+  content?: string;
+  [key: string]: unknown;
+}
+
+export interface UserStatsExpanded {
+  user_id: string;
+  username: string;
+  playlists_count: number;
+  reviews_count: number;
+  xp: number;
+}
+
+export interface ActivityFeedItem {
+  id: string;
+  user_id: string;
+  action_type: ActivityType;
+  details: ActivityDetails;
+  created_at: string;
+  user_stats: UserStatsExpanded;
+}
+
+export async function getRecentActivities(limit: number = 20): Promise<ActivityFeedItem[]> {
+  try {
+    if (!supabase) return [];
+    const { data, error } = await supabase
+      .from('activities')
+      .select(`
+        *,
+        user_stats (
+          user_id,
+          username,
+          playlists_count,
+          reviews_count,
+          xp
+        )
+      `)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      console.error('Supabase Error fetching activities:', error.message);
+      return [];
+    }
+
+    return data as unknown as ActivityFeedItem[];
+
+  } catch (err) {
+    console.error('Unexpected error fetching activity feed:', err);
+    return [];
+  }
 }
 
 export async function getActivities(limit: number = 20) {
