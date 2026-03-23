@@ -68,10 +68,12 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                         )}
                         aria-hidden={!isActive}
                     >
-                        {/* The dynamic colorful glow based on the current deal's accent color */}
+                        {/* The dynamic colorful glow - localized as a radial spotlight behind the card */}
                         <div
-                            className="absolute inset-0 z-5 opacity-40 blur-[100px] transition-colors duration-1000 ease-in-out"
-                            style={{ backgroundColor: 'var(--active-glow)' }}
+                            className="absolute inset-0 z-5 opacity-30 transition-colors duration-1000 ease-in-out"
+                            style={{ 
+                                background: `radial-gradient(circle at center, var(--active-glow) 0%, transparent 70%)` 
+                            }}
                         />
                         
                         {/* The Glassmorphism Panel isolated inside the slide */}
