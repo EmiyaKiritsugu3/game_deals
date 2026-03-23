@@ -17,7 +17,7 @@ export default async function GameCard({ deal }: { deal: Deal }) {
 
     return (
         <Link href={`/game/${deal.gameID}`} className="group flex h-full flex-col overflow-hidden rounded-xl border border-white/5 bg-card transition-all hover:-translate-y-1 hover:border-white/10 hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
-            <div className="relative aspect-[460/215] w-full overflow-hidden bg-black/50">
+            <div className="relative aspect-460/215 w-full overflow-hidden bg-black/50">
                 <Image
                     src={highResThumb}
                     alt={deal.title}
@@ -27,7 +27,7 @@ export default async function GameCard({ deal }: { deal: Deal }) {
                 />
 
                 {/* Hover Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     <div className="absolute left-2 top-2 flex flex-col gap-1.5">
                         {isEpicDeal && <DealsBadge type="EPIC" />}
                         {isHistoricalLow && <DealsBadge type="HL" />}

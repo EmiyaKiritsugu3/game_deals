@@ -29,9 +29,9 @@ export default function HeroSection({ deals }: HeroSectionProps) {
     if (!deals || deals.length === 0) return null;
 
     return (
-        <section className="relative flex min-h-[600px] items-center overflow-hidden bg-background mb-12 after:pointer-events-none after:absolute after:inset-0 after:z-10 after:bg-gradient-to-t after:from-background after:via-transparent after:to-transparent">
+        <section className="relative flex min-h-[600px] items-center overflow-hidden bg-background mb-12 after:pointer-events-none after:absolute after:inset-0 after:z-10 after:bg-linear-to-t after:from-background after:via-transparent after:to-transparent">
             {/* The Infinite Background Matrix layer */}
-            <div className="pointer-events-none absolute -inset-[20%] z-0 flex overflow-hidden [transform:perspective(1000px)_rotateX(20deg)_rotateZ(-5deg)]">
+            <div className="pointer-events-none absolute -inset-[20%] z-0 flex overflow-hidden transform-[perspective(1000px)_rotateX(20deg)_rotateZ(-5deg)]">
                 <div className="flex h-[150%] w-[150%] flex-wrap content-start gap-4 opacity-70 animate-[matrixDrift_60s_linear_infinite]">
                     {/* Duplicate the deals array to create a dense grid covering the entire background */}
                     {Array(15).fill(deals).flat().map((deal, i) => (
@@ -68,7 +68,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                         <div className="absolute inset-0 z-0 opacity-40">
                             <Image
                                 src={dealThumb}
-                                alt="background blur"
+                                alt="background blur-sm"
                                 fill
                                 className="object-cover scale-125 blur-[60px] brightness-50 saturate-150"
                             />
@@ -117,7 +117,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                                         </Link>
                                     </div>
 
-                                    <div className="relative mx-auto aspect-[460/215] w-full max-w-lg overflow-hidden rounded-xl border border-white/20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_30px_rgba(0,0,0,0.3)] [transform:perspective(1000px)_rotateY(-8deg)_rotateX(4deg)] transition-transform duration-500 hover:[transform:perspective(1000px)_rotateY(0deg)_rotateX(0deg)_scale(1.02)] md:max-w-none">
+                                    <div className="relative mx-auto aspect-460/215 w-full max-w-lg overflow-hidden rounded-xl border border-white/20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_30px_rgba(0,0,0,0.3)] transform-[perspective(1000px)_rotateY(-8deg)_rotateX(4deg)] transition-transform duration-500 hover:transform-[perspective(1000px)_rotateY(0deg)_rotateX(0deg)_scale(1.02)] md:max-w-none">
                                         <Image
                                             src={dealThumb}
                                             alt={deal.title}

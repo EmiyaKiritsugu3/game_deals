@@ -20,7 +20,7 @@ export default function CollectionsPage() {
                         <Link 
                             key={col.slug} 
                             href={`/collections/${col.slug}`} 
-                            className="group flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-card/60 p-8 text-center backdrop-blur-sm transition-all hover:-translate-y-1 hover:border-primary/30 hover:bg-card hover:shadow-[0_10px_40px_rgba(0,0,0,0.4)]"
+                            className="group flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-card/60 p-8 text-center backdrop-blur-xs transition-all hover:-translate-y-1 hover:border-primary/30 hover:bg-card hover:shadow-[0_10px_40px_rgba(0,0,0,0.4)]"
                         >
                             <span className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white/5 text-4xl shadow-inner transition-transform group-hover:scale-110">{col.emoji}</span>
                             <h2 className="mb-2 text-xl font-bold text-white transition-colors group-hover:text-primary">{col.title}</h2>

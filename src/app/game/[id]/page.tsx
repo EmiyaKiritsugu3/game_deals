@@ -48,7 +48,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                 <Link href="/" className="mb-6 inline-block text-sm font-bold text-muted-foreground transition-colors hover:text-white">← Back to Deals</Link>
 
                 <div className="mb-12 flex flex-col gap-8 lg:flex-row">
-                    <div className="relative mx-auto aspect-[460/215] w-full max-w-md shrink-0 overflow-hidden rounded-xl border border-white/10 shadow-xl lg:w-[400px]">
+                    <div className="relative mx-auto aspect-460/215 w-full max-w-md shrink-0 overflow-hidden rounded-xl border border-white/10 shadow-xl lg:w-[400px]">
                         <Image
                             src={highResThumb}
                             alt={game.info.title}
@@ -67,12 +67,12 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                                     gameTitle={game.info.title} 
                                     currentPrice={bestCurrentPrice} 
                                 />
-                                <HeartButton gameID={id} className="!h-10 !w-10 !p-0" />
+                                <HeartButton gameID={id} className="h-10! w-10! p-0!" />
                                 <AddToListButton gameId={id} variant="full" />
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-6 rounded-xl border border-white/5 bg-white/[0.02] p-6 sm:grid-cols-[1fr_auto_1fr_auto_1fr]">
+                        <div className="grid grid-cols-1 gap-6 rounded-xl border border-white/5 bg-white/2 p-6 sm:grid-cols-[1fr_auto_1fr_auto_1fr]">
                             <div className="flex flex-col gap-1">
                                 <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Best Price Now</span>
                                 <span className="text-3xl font-black text-white">
@@ -137,7 +137,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className={cn(
-                                        "group flex flex-col justify-between gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-4 transition-all hover:border-white/20 hover:bg-white/5 sm:flex-row sm:items-center sm:gap-4",
+                                        "group flex flex-col justify-between gap-3 rounded-lg border border-white/5 bg-white/2 p-4 transition-all hover:border-white/20 hover:bg-white/5 sm:flex-row sm:items-center sm:gap-4",
                                         isBest && "border-primary/50 bg-primary/5 hover:border-primary/80 hover:bg-primary/10"
                                     )}
                                 >

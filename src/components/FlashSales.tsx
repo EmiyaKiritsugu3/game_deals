@@ -62,7 +62,7 @@ export default function FlashSales({ deals }: FlashSalesProps) {
                     const claimed = getClaimedPercentage(deal.dealID);
                     return (
                         <Link href={`/game/${deal.gameID}`} key={deal.dealID} className="group relative flex w-[180px] shrink-0 snap-center flex-col overflow-hidden rounded-xl border border-white/10 bg-black/40 transition-all hover:-translate-y-2 hover:border-deal-flash/50 hover:shadow-[0_15px_30px_-5px_hsl(var(--deal-flash)/0.2)] md:w-auto">
-                            <div className="relative aspect-[460/215] w-full overflow-hidden bg-black/60">
+                            <div className="relative aspect-460/215 w-full overflow-hidden bg-black/60">
                                 <Image
                                     src={getHighResImage(deal.thumb)}
                                     alt={deal.title}
@@ -80,7 +80,7 @@ export default function FlashSales({ deals }: FlashSalesProps) {
                                 </div>
 
                                 <div className="relative flex h-5 items-center overflow-hidden rounded-full bg-deal-flash-muted">
-                                    <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-orange-500 to-deal-flash transition-all duration-1000" style={{ width: `${claimed}%` }}></div>
+                                    <div className="absolute inset-y-0 left-0 bg-linear-to-r from-orange-500 to-deal-flash transition-all duration-1000" style={{ width: `${claimed}%` }}></div>
                                     <span className="relative z-10 w-full text-center text-[10px] font-bold text-white mix-blend-difference">{claimed}% Resgatado</span>
                                 </div>
                             </div>

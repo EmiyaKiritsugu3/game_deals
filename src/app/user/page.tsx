@@ -60,7 +60,7 @@ export default async function UserProfilePage() {
               if (!userBadge.badge) return null;
               return (
                 <div key={userBadge.badge_id} className={cn(
-                  "flex w-[140px] flex-col items-center rounded-xl border border-white/5 bg-white/[0.02] p-6 text-center transition-all hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(0,0,0,0.2)]",
+                  "flex w-[140px] flex-col items-center rounded-xl border border-white/5 bg-white/2 p-6 text-center transition-all hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(0,0,0,0.2)]",
                   rarityVariants[userBadge.badge.rarity as keyof typeof rarityVariants]
                 )}>
                   {/* Using dangerouslySetInnerHTML for SVG icons from the DB */}

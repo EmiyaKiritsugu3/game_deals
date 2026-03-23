@@ -88,14 +88,14 @@ function SharedWishlistContent() {
 
     return (
         <>
-            <div className="relative mb-8 flex min-h-[220px] flex-col justify-center overflow-hidden rounded-[2rem] border border-white/5 bg-surface p-8 shadow-2xl md:p-12">
+            <div className="relative mb-8 flex min-h-[220px] flex-col justify-center overflow-hidden rounded-4xl border border-white/5 bg-surface p-8 shadow-2xl md:p-12">
                 {games[0]?.thumb && (
                     <div 
-                        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30 mix-blend-luminosity filter blur-sm"
+                        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30 mix-blend-luminosity filter blur-xs"
                         style={{ backgroundImage: `url(${games[0].thumb})` }}
                     />
                 )}
-                <div className="absolute inset-0 z-0 bg-gradient-to-r from-background/90 to-background/40" />
+                <div className="absolute inset-0 z-0 bg-linear-to-r from-background/90 to-background/40" />
                 <div className="relative z-10">
                     <h1 className="mb-2 text-4xl font-black tracking-tight text-white drop-shadow-md md:text-5xl">🎁 Wishlist Compartilhada</h1>
                     <p className="text-lg font-medium text-muted-foreground">
@@ -107,7 +107,7 @@ function SharedWishlistContent() {
             <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-6 lg:gap-8">
                 {games.map((game, idx) => (
                     <div key={`${game.gameID}-${idx}`} className="group flex flex-col overflow-hidden rounded-xl border border-white/5 bg-card transition-all hover:-translate-y-1 hover:border-white/20 hover:shadow-xl">
-                        <div className="relative aspect-[460/215] w-full overflow-hidden bg-black/50">
+                        <div className="relative aspect-460/215 w-full overflow-hidden bg-black/50">
                             <Image
                                 src={game.thumb}
                                 alt={game.title}
@@ -145,7 +145,7 @@ function SharedWishlistContent() {
 
 export default function SharedWishlistPage() {
     return (
-        <main className="min-h-[100vh] bg-background pb-12">
+        <main className="min-h-screen bg-background pb-12">
             <div className="container mx-auto flex max-w-[1200px] flex-col gap-8 px-4 pt-12">
                 <Suspense fallback={<div className="py-20 text-center text-muted-foreground">Carregando...</div>}>
                     <SharedWishlistContent />

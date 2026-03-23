@@ -91,7 +91,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                                         type="email" 
                                         id="email"
                                         placeholder="your@email.com"
-                                        className="w-full rounded-xl border border-white/10 bg-black/40 py-3 pl-4 pr-10 font-medium text-white placeholder-muted-foreground outline-none transition-colors focus:border-primary focus:bg-black/60 focus:ring-1 focus:ring-primary disabled:opacity-50"
+                                        className="w-full rounded-xl border border-white/10 bg-black/40 py-3 pl-4 pr-10 font-medium text-white placeholder-muted-foreground outline-hidden transition-colors focus:border-primary focus:bg-black/60 focus:ring-1 focus:ring-primary disabled:opacity-50"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         required

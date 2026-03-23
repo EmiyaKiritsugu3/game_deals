@@ -41,7 +41,7 @@ export default function SidebarModal({ children }: { children: React.ReactNode }
     return (
         <motion.div 
             ref={overlay} 
-            className="fixed inset-0 z-[100] flex justify-end bg-black/60 p-0 backdrop-blur-sm sm:p-4"
+            className="fixed inset-0 z-100 flex justify-end bg-black/60 p-0 backdrop-blur-xs sm:p-4"
             onClick={onClick}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

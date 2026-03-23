@@ -15,7 +15,7 @@ export function StoreCompareChart({ data }: { data: StorePrice[] }) {
     }));
 
     return (
-        <div className="flex flex-col gap-4 rounded-xl border border-white/5 bg-card/50 p-6 shadow-lg backdrop-blur-sm">
+        <div className="flex flex-col gap-4 rounded-xl border border-white/5 bg-card/50 p-6 shadow-lg backdrop-blur-xs">
             <h3 className="text-lg font-bold text-white">Current Prices by Store</h3>
             <div className="h-[250px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -74,7 +74,7 @@ export function PriceHistoryChart({ currentPrice, lowestPrice, lowestDate: _lowe
     const historyData: PriceHistoryPoint[] = generatePriceHistory(parseFloat(retailPrice), parseFloat(currentPrice), parseFloat(lowestPrice), gameTitle);
 
     return (
-        <div className="flex flex-col gap-4 rounded-xl border border-white/5 bg-card/50 p-6 shadow-lg backdrop-blur-sm">
+        <div className="flex flex-col gap-4 rounded-xl border border-white/5 bg-card/50 p-6 shadow-lg backdrop-blur-xs">
             <div>
                 <h3 className="text-lg font-bold text-white">Current Price History (6 Months)</h3>
                 <p className="text-sm font-medium text-muted-foreground">Algorithmic market simulation based on official data drops.</p>

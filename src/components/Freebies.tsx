@@ -10,7 +10,7 @@ export default function Freebies({ deals }: FreebiesProps) {
     if (!deals || deals.length === 0) return null;
 
     return (
-        <section className="mb-12 rounded-xl bg-gradient-to-r from-deal-free-muted/40 via-deal-free-muted to-deal-free-muted/40 p-6 shadow-[inset_0_0_0_1px_hsl(var(--deal-free)/0.1),0_10px_40px_rgba(0,0,0,0.5)]">
+        <section className="mb-12 rounded-xl bg-linear-to-r from-deal-free-muted/40 via-deal-free-muted to-deal-free-muted/40 p-6 shadow-[inset_0_0_0_1px_hsl(var(--deal-free)/0.1),0_10px_40px_rgba(0,0,0,0.5)]">
             <div className="mb-6 flex flex-col items-center justify-between gap-4 md:flex-row">
                 <div className="flex items-center gap-4">
                     <h2 className="text-xl font-black uppercase tracking-widest text-deal-free drop-shadow-[0_0_10px_hsl(var(--deal-free)/0.5)] md:text-2xl">🎁 JOGOS GRÁTIS! (100% OFF)</h2>
@@ -22,7 +22,7 @@ export default function Freebies({ deals }: FreebiesProps) {
                 {deals.slice(0, 6).map((deal) => {
                     return (
                         <Link href={`/game/${deal.gameID}`} key={deal.dealID} className="group relative flex w-[220px] shrink-0 snap-center flex-col overflow-hidden rounded-xl border border-white/10 bg-black/40 transition-all hover:-translate-y-2 hover:border-deal-free/50 hover:shadow-[0_15px_30px_-5px_hsl(var(--deal-free)/0.3)] md:w-auto">
-                            <div className="relative aspect-[460/215] w-full overflow-hidden bg-black/60">
+                            <div className="relative aspect-460/215 w-full overflow-hidden bg-black/60">
                                 <Image
                                     src={getHighResImage(deal.thumb)}
                                     alt={deal.title}

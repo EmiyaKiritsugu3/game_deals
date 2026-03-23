@@ -28,10 +28,10 @@ export default function AchievementToast() {
   }, []);
 
   const rarityVariants = {
-    Common: "border-l-gray-400 bg-gradient-to-r from-gray-500/10 to-transparent",
-    Rare: "border-l-blue-400 bg-gradient-to-r from-blue-500/10 to-transparent shadow-[0_0_20px_rgba(96,165,250,0.2)]",
-    Epic: "border-l-purple-400 bg-gradient-to-r from-purple-500/15 to-transparent shadow-[0_0_20px_rgba(192,132,252,0.3)]",
-    Legendary: "border-l-yellow-400 bg-gradient-to-r from-yellow-500/20 to-transparent shadow-[0_0_30px_rgba(250,204,21,0.4)]",
+    Common: "border-l-gray-400 bg-linear-to-r from-gray-500/10 to-transparent",
+    Rare: "border-l-blue-400 bg-linear-to-r from-blue-500/10 to-transparent shadow-[0_0_20px_rgba(96,165,250,0.2)]",
+    Epic: "border-l-purple-400 bg-linear-to-r from-purple-500/15 to-transparent shadow-[0_0_20px_rgba(192,132,252,0.3)]",
+    Legendary: "border-l-yellow-400 bg-linear-to-r from-yellow-500/20 to-transparent shadow-[0_0_30px_rgba(250,204,21,0.4)]",
   };
 
   const iconVariants = {
@@ -42,7 +42,7 @@ export default function AchievementToast() {
   };
 
   return (
-    <div className="pointer-events-none fixed bottom-8 right-8 z-[9999] flex flex-col gap-4">
+    <div className="pointer-events-none fixed bottom-8 right-8 z-9999 flex flex-col gap-4">
       <AnimatePresence>
         {badges.map((badge) => (
           <motion.div
@@ -56,7 +56,7 @@ export default function AchievementToast() {
             )}
           >
             {/* Animated background glow/particles effect placeholder */}
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;utf8,<svg_xmlns=\&quot;http://www.w3.org/2000/svg\&quot;_viewBox=\&quot;0_0_100_100\&quot;><circle_cx=\&quot;50\&quot;_cy=\&quot;50\&quot;_r=\&quot;1\&quot;_fill=\&quot;rgba(255,255,255,0.5)\&quot;/></svg>')] bg-[length:20px_20px] opacity-20 mix-blend-screen pointer-events-none" />
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;utf8,<svg_xmlns=\&quot;http://www.w3.org/2000/svg\&quot;_viewBox=\&quot;0_0_100_100\&quot;><circle_cx=\&quot;50\&quot;_cy=\&quot;50\&quot;_r=\&quot;1\&quot;_fill=\&quot;rgba(255,255,255,0.5)\&quot;/></svg>')] bg-size-[20px_20px] opacity-20 mix-blend-screen pointer-events-none" />
 
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 p-2">
                <div

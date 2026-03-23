@@ -14,7 +14,7 @@ export default function Modal({ isOpen, onClose, children, maxWidth = '420px', z
         <AnimatePresence>
             {isOpen && (
                 <motion.div
-                    className={`fixed inset-0 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm z-[${zIndex}]`}
+                    className={`fixed inset-0 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs z-[${zIndex}]`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}

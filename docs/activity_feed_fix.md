@@ -33,7 +33,7 @@ Como o projeto utiliza **CSS Modules**, o Jules deve evitar classes globais do T
 }
 
 .avatarContainer {
-  flex-shrink: 0;
+  shrink: 0;
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -42,7 +42,7 @@ Como o projeto utiliza **CSS Modules**, o Jules deve evitar classes globais do T
 }
 
 .gameThumbContainer {
-  flex-shrink: 0;
+  shrink: 0;
   width: 120px;
   height: 68px;
   border-radius: 8px;

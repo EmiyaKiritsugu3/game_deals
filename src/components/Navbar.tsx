@@ -75,7 +75,7 @@ export default function Navbar() {
                                 type="text"
                                 name="q"
                                 placeholder="Search for games..."
-                                className="w-full rounded-full border border-white/10 bg-black/20 py-2 pl-4 pr-10 text-sm text-white placeholder-muted-foreground outline-none transition-colors focus:border-primary focus:bg-black/40 focus:ring-1 focus:ring-primary"
+                                className="w-full rounded-full border border-white/10 bg-black/20 py-2 pl-4 pr-10 text-sm text-white placeholder-muted-foreground outline-hidden transition-colors focus:border-primary focus:bg-black/40 focus:ring-1 focus:ring-primary"
                                 value={query}
                                 onChange={(e) => {
                                     setQuery(e.target.value);

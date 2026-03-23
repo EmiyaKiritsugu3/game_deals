@@ -79,7 +79,7 @@ export default function FilterSidebar({ stores }: { stores: StoreInfo[] }) {
                         value={maxPrice}
                         onChange={(e) => setMaxPrice(e.target.value)}
                         placeholder="Any"
-                        className="w-full rounded-xl border border-white/10 bg-black/40 py-3 pl-8 pr-4 font-bold text-white outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
+                        className="w-full rounded-xl border border-white/10 bg-black/40 py-3 pl-8 pr-4 font-bold text-white outline-hidden transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
                     />
                 </div>
             </div>

@@ -105,16 +105,16 @@ export default function WishlistPage() {
     }, [savedGames]);
 
     return (
-        <main className="min-h-[100vh] bg-background pb-12">
+        <main className="min-h-screen bg-background pb-12">
             <div className="container mx-auto flex max-w-[1200px] flex-col gap-8 px-4 pt-12">
-                <div className="relative flex min-h-[220px] flex-col justify-center overflow-hidden rounded-[2rem] border border-white/5 bg-surface p-8 shadow-2xl md:p-12">
+                <div className="relative flex min-h-[220px] flex-col justify-center overflow-hidden rounded-4xl border border-white/5 bg-surface p-8 shadow-2xl md:p-12">
                     {bestDiscountGame?.thumb && (
                         <div 
-                            className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30 mix-blend-luminosity filter blur-sm"
+                            className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30 mix-blend-luminosity filter blur-xs"
                             style={{ backgroundImage: `url(${bestDiscountGame.thumb})` }}
                         />
                     )}
-                    <div className="absolute inset-0 z-0 bg-gradient-to-r from-background/90 to-background/40" />
+                    <div className="absolute inset-0 z-0 bg-linear-to-r from-background/90 to-background/40" />
                     <div className="relative z-10">
                         <h1 className="mb-2 text-4xl font-black tracking-tight text-white drop-shadow-md md:text-5xl">Meu Dashboard ❤️</h1>
                         <p className="text-lg font-medium text-muted-foreground">
@@ -174,7 +174,7 @@ export default function WishlistPage() {
                                     <select 
                                         value={sortMode} 
                                         onChange={(e) => setSortMode(e.target.value as 'discount' | 'price' | 'name')}
-                                        className="cursor-pointer appearance-none bg-transparent text-sm font-bold text-white outline-none"
+                                        className="cursor-pointer appearance-none bg-transparent text-sm font-bold text-white outline-hidden"
                                     >
                                         <option value="discount">Maior Desconto</option>
                                         <option value="price">Menor Preço</option>
@@ -218,7 +218,7 @@ export default function WishlistPage() {
                                         show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
                                     }}
                                 >
-                                    <div className="relative aspect-[460/215] w-full overflow-hidden bg-black/50">
+                                    <div className="relative aspect-460/215 w-full overflow-hidden bg-black/50">
                                         <Image
                                             src={game.thumb}
                                             alt={game.title}
@@ -226,14 +226,14 @@ export default function WishlistPage() {
                                             sizes="(max-width: 768px) 100vw, 33vw"
                                             className="object-cover transition-transform duration-500 group-hover:scale-110"
                                         />
-                                        <div className="absolute inset-0 flex flex-col items-end justify-between bg-gradient-to-t from-black/80 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                                        <div className="absolute inset-0 flex flex-col items-end justify-between bg-linear-to-t from-black/80 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                                             <PriceAlertTrigger 
                                                 gameID={game.gameID} 
                                                 gameTitle={game.title} 
                                                 currentPrice={parseFloat(game.salePrice)}
-                                                className="!w-auto scale-90 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100"
+                                                className="w-auto! scale-90 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100"
                                             />
-                                            <HeartButton gameID={game.gameID} className="!w-auto scale-90 bg-black/60 opacity-0 transition-all duration-300 hover:bg-black/80 group-hover:scale-100 group-hover:opacity-100" />
+                                            <HeartButton gameID={game.gameID} className="w-auto! scale-90 bg-black/60 opacity-0 transition-all duration-300 hover:bg-black/80 group-hover:scale-100 group-hover:opacity-100" />
                                         </div>
                                         {game.savings > 0 && (
                                             <div className="absolute bottom-2 left-2 rounded bg-primary px-2 py-1 text-sm font-black text-primary-foreground shadow-md transition-transform duration-300 group-hover:scale-110">
@@ -302,7 +302,7 @@ export default function WishlistPage() {
                                                 gameID={alert.gameID} 
                                                 gameTitle={alert.gameTitle} 
                                                 currentPrice={alert.currentPrice}
-                                                className="!w-auto !bg-white/5 !px-4 !py-2 !text-white hover:!bg-white/10"
+                                                className="w-auto! bg-white/5! px-4! py-2! text-white! hover:bg-white/10!"
                                             />
                                             <Link href={`/game/${alert.gameID}`} className="flex items-center justify-center rounded-lg bg-primary/10 px-4 py-2 text-sm font-bold text-primary transition-colors hover:bg-primary hover:text-primary-foreground">Ir para Jogo</Link>
                                         </div>

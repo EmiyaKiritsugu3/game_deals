@@ -54,7 +54,7 @@ export default async function GameModal({ params }: { params: Promise<{ id: stri
                     target="_blank"
                     rel="noopener noreferrer"
                     className={cn(
-                        "group flex flex-col justify-between gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-4 transition-all hover:border-white/20 hover:bg-white/5 sm:flex-row sm:items-center sm:gap-4",
+                        "group flex flex-col justify-between gap-3 rounded-lg border border-white/5 bg-white/2 p-4 transition-all hover:border-white/20 hover:bg-white/5 sm:flex-row sm:items-center sm:gap-4",
                         isBest && "border-primary/50 bg-primary/5 hover:border-primary/80 hover:bg-primary/10"
                     )}
                 >
@@ -92,7 +92,7 @@ export default async function GameModal({ params }: { params: Promise<{ id: stri
 
         return (
             <SidebarModal>
-                <div className="relative flex aspect-[16/9] w-full flex-col justify-end overflow-hidden p-6 md:p-8">
+                <div className="relative flex aspect-video w-full flex-col justify-end overflow-hidden p-6 md:p-8">
                     <Image
                         src={highResThumb}
                         alt={game.info.title}
@@ -100,7 +100,7 @@ export default async function GameModal({ params }: { params: Promise<{ id: stri
                         className="object-cover"
                         priority
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/80 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-[#141414] via-[#141414]/80 to-transparent" />
                     <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                         <h1 className="text-3xl font-black leading-tight text-white drop-shadow-md sm:text-4xl">{game.info.title}</h1>
                         <div className="flex shrink-0 items-center gap-3">
@@ -109,7 +109,7 @@ export default async function GameModal({ params }: { params: Promise<{ id: stri
                                 gameTitle={game.info.title} 
                                 currentPrice={bestCurrentPrice} 
                             />
-                            <HeartButton gameID={id} className="!h-[42px] !w-[42px] !p-0" />
+                            <HeartButton gameID={id} className="h-[42px]! w-[42px]! p-0!" />
                         </div>
                     </div>
                 </div>

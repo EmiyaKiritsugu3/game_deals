@@ -14,7 +14,7 @@ interface DealsBadgeProps {
  * - EPIC: Savings >= 75%
  */
 export default function DealsBadge({ type, value, className = '', compact = false }: DealsBadgeProps) {
-  const baseClasses = "inline-flex items-center gap-1 rounded text-xs font-extrabold uppercase tracking-wider shadow-sm";
+  const baseClasses = "inline-flex items-center gap-1 rounded text-xs font-extrabold uppercase tracking-wider shadow-xs";
 
   if (type === 'HL') {
     return (
@@ -31,7 +31,7 @@ export default function DealsBadge({ type, value, className = '', compact = fals
     return (
       <span className={cn(
           baseClasses,
-          "bg-gradient-to-br from-red-500 to-pink-500 px-2 py-0.5 text-white shadow-[0_0_8px_rgba(255,65,108,0.4)]",
+          "bg-linear-to-br from-red-500 to-pink-500 px-2 py-0.5 text-white shadow-[0_0_8px_rgba(255,65,108,0.4)]",
           className
       )}>
         {compact ? '🔥' : '🔥 EPIC'}

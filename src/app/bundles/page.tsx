@@ -25,8 +25,8 @@ export default function BundlesPage() {
                         const daysLeft = Math.max(0, Math.ceil((new Date(bundle.expiresAt).getTime() - now) / (1000 * 60 * 60 * 24)));
 
                         return (
-                            <div key={bundle.id} className="group flex flex-col rounded-2xl border border-white/10 bg-card/40 shadow-xl backdrop-blur-sm transition-all hover:-translate-y-1 hover:border-white/20 hover:bg-card hover:shadow-2xl">
-                                <div className="flex items-center justify-between border-b border-white/5 bg-white/[0.02] px-6 py-4">
+                            <div key={bundle.id} className="group flex flex-col rounded-2xl border border-white/10 bg-card/40 shadow-xl backdrop-blur-xs transition-all hover:-translate-y-1 hover:border-white/20 hover:bg-card hover:shadow-2xl">
+                                <div className="flex items-center justify-between border-b border-white/5 bg-white/2 px-6 py-4">
                                     <div className="flex items-center gap-3">
                                         <div className="flex h-8 w-8 items-center justify-center rounded bg-white p-1">
                                             <Image src={bundle.storeIcon} alt={bundle.store} width={20} height={20} className="object-contain" />

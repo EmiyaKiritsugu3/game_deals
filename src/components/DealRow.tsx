@@ -38,7 +38,7 @@ export default async function DealRow({ deal }: DealRowProps) {
                 />
                 <div className="absolute right-2 top-2 flex flex-col gap-1 sm:hidden">
                     <PriceAlertBadge gameID={deal.gameID} />
-                    <HeartButton gameID={deal.gameID} className="!p-1.5" />
+                    <HeartButton gameID={deal.gameID} className="p-1.5!" />
                 </div>
             </div>
 
@@ -71,7 +71,7 @@ export default async function DealRow({ deal }: DealRowProps) {
 
                 <div className="flex items-center gap-3">
                     <div className="hidden flex-col gap-2 sm:flex">
-                        <HeartButton gameID={deal.gameID} className="!p-1.5 hover:!bg-white/20" />
+                        <HeartButton gameID={deal.gameID} className="p-1.5! hover:bg-white/20!" />
                         <PriceAlertBadge gameID={deal.gameID} />
                     </div>
 

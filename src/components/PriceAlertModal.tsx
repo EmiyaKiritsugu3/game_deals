@@ -88,7 +88,7 @@ export default function PriceAlertModal({ isOpen, onClose, gameID, gameTitle, cu
                                 step={0.01}
                                 value={targetPrice}
                                 onChange={(e) => setTargetPrice(parseFloat(e.target.value))}
-                                className="h-2 w-full appearance-none rounded-full bg-white/10 outline-none [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:shadow-[0_0_10px_hsl(var(--primary)/0.5)]"
+                                className="h-2 w-full appearance-none rounded-full bg-white/10 outline-hidden [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:shadow-[0_0_10px_hsl(var(--primary)/0.5)]"
                             />
                             <div className="relative mx-auto w-[150px]">
                                 <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-muted-foreground">$</span>
@@ -96,7 +96,7 @@ export default function PriceAlertModal({ isOpen, onClose, gameID, gameTitle, cu
                                     type="number" 
                                     value={targetPrice}
                                     onChange={(e) => setTargetPrice(parseFloat(e.target.value))}
-                                    className="w-full rounded-lg border border-white/10 bg-white/5 py-3 pl-8 pr-4 text-center text-xl font-black text-white outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
+                                    className="w-full rounded-lg border border-white/10 bg-white/5 py-3 pl-8 pr-4 text-center text-xl font-black text-white outline-hidden transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
                                     step={0.01}
                                 />
                             </div>
@@ -104,7 +104,7 @@ export default function PriceAlertModal({ isOpen, onClose, gameID, gameTitle, cu
 
                         <div className="flex flex-col gap-2">
                             <div 
-                                className="group flex cursor-pointer items-start gap-4 rounded-xl border border-white/5 bg-white/[0.02] p-4 transition-colors hover:border-white/10 hover:bg-white/5"
+                                className="group flex cursor-pointer items-start gap-4 rounded-xl border border-white/5 bg-white/2 p-4 transition-colors hover:border-white/10 hover:bg-white/5"
                                 onClick={() => setIsKeyshopAllowed(!isKeyshopAllowed)}
                             >
                                 <div className={cn("mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border border-white/20 transition-colors", isKeyshopAllowed && "border-primary bg-primary")}>

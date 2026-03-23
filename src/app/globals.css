@@ -1,51 +1,160 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-:root {
-  /* gg.deals inspired dark mode */
-  --background: 228 15% 13%; /* #1c1e26 */
-  --foreground: 0 0% 98%;
-  
-  --card: 226 14% 18%; /* #262933 */
-  --card-foreground: 0 0% 98%;
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
 
-  --border: 226 14% 28%; /* Slightly lighter than card for borders */
-  --input: 226 14% 24%;
-  --ring: 150 100% 42%;
-  
-  --primary: 150 100% 42%; /* #00d66c Vibrant emerald for deals */
-  --primary-foreground: 150 100% 10%;
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
 
-  --secondary: 226 14% 24%;
-  --secondary-foreground: 0 0% 98%;
-  
-  --accent: 150 88% 27%; /* Dark green for Historical Low badge */
-  --accent-foreground: 150 100% 85%;
-  --accent-fire: 22 100% 59%; /* Orange for popular fire icon */
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
 
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 98%;
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
 
-  --muted: 226 14% 24%;
-  --muted-foreground: 226 10% 65%;
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
 
-  /* New Semantic Colors for Promos and Social */
-  --surface: 226 19% 15%; /* #1f222e Deeper card/modal backgrounds */
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
 
-  --deal-free: 0 100% 65%; /* #ff4d4d Vibrant red for 100% off */
-  --deal-free-foreground: 0 0% 0%;
-  --deal-free-muted: 0 70% 12%; /* #2a1616 Muted red bg */
+  --color-surface: hsl(var(--surface));
 
-  --deal-flash: 38 100% 50%; /* #ffaa00 Amber for ending soon */
-  --deal-flash-foreground: 0 0% 0%;
-  --deal-flash-muted: 38 100% 10%; /* #332200 Muted amber bg */
+  --color-deal-free: hsl(var(--deal-free));
+  --color-deal-free-foreground: hsl(var(--deal-free-foreground));
+  --color-deal-free-muted: hsl(var(--deal-free-muted));
 
-  /* Social Login Brands */
-  --brand-google: 217 89% 61%; /* #4285F4 */
-  --brand-discord: 235 86% 65%; /* #5865F2 */
-  
-  --radius: 4px; /* Less rounded corners than default */
+  --color-deal-flash: hsl(var(--deal-flash));
+  --color-deal-flash-foreground: hsl(var(--deal-flash-foreground));
+  --color-deal-flash-muted: hsl(var(--deal-flash-muted));
+
+  --color-brand-google: hsl(var(--brand-google));
+  --color-brand-discord: hsl(var(--brand-discord));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --animate-pulse-slow: pulseIcon 2s infinite;
+
+  @keyframes pulseIcon {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.8;
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility epicDealBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: white;
+  margin-left: 0.5rem;
+  background: linear-gradient(135deg, #ef4444, #ec4899);
+  box-shadow: 0 0 8px rgba(255, 65, 108, 0.4);
+  border-radius: 4px;
+  gap: 0.25rem;
+}
+
+@utility drmBadge {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  background-color: hsl(var(--muted));
+  padding: 0.125rem 0.375rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  opacity: 0.85;
+  border-radius: 3px;
+  margin-left: 0.375rem;
+  gap: 0.25rem;
+}
+
+@utility regionBadge {
+  margin-left: 0.25rem;
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+@layer utilities {
+  :root {
+    /* gg.deals inspired dark mode */
+    --background: 228 15% 13%; /* #1c1e26 */
+    --foreground: 0 0% 98%;
+
+    --card: 226 14% 18%; /* #262933 */
+    --card-foreground: 0 0% 98%;
+
+    --border: 226 14% 28%; /* Slightly lighter than card for borders */
+    --input: 226 14% 24%;
+    --ring: 150 100% 42%;
+
+    --primary: 150 100% 42%; /* #00d66c Vibrant emerald for deals */
+    --primary-foreground: 150 100% 10%;
+
+    --secondary: 226 14% 24%;
+    --secondary-foreground: 0 0% 98%;
+
+    --accent: 150 88% 27%; /* Dark green for Historical Low badge */
+    --accent-foreground: 150 100% 85%;
+    --accent-fire: 22 100% 59%; /* Orange for popular fire icon */
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --muted: 226 14% 24%;
+    --muted-foreground: 226 10% 65%;
+
+    /* New Semantic Colors for Promos and Social */
+    --surface: 226 19% 15%; /* #1f222e Deeper card/modal backgrounds */
+
+    --deal-free: 0 100% 65%; /* #ff4d4d Vibrant red for 100% off */
+    --deal-free-foreground: 0 0% 0%;
+    --deal-free-muted: 0 70% 12%; /* #2a1616 Muted red bg */
+
+    --deal-flash: 38 100% 50%; /* #ffaa00 Amber for ending soon */
+    --deal-flash-foreground: 0 0% 0%;
+    --deal-flash-muted: 38 100% 10%; /* #332200 Muted amber bg */
+
+    /* Social Login Brands */
+    --brand-google: 217 89% 61%; /* #4285F4 */
+    --brand-discord: 235 86% 65%; /* #5865F2 */
+
+    --radius: 4px; /* Less rounded corners than default */
+  }
 }
 
 @layer base {
@@ -61,43 +170,3 @@
     color-scheme: dark;
   }
 }
-
-@layer components {
-  .epicDealBadge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.125rem 0.5rem;
-    font-size: 0.7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: white;
-    margin-left: 0.5rem;
-    background: linear-gradient(135deg, #ef4444, #ec4899);
-    box-shadow: 0 0 8px rgba(255,65,108,0.4);
-    border-radius: 4px;
-    gap: 0.25rem;
-  }
-
-  .drmBadge {
-    display: inline-flex;
-    align-items: center;
-    white-space: nowrap;
-    background-color: hsl(var(--muted));
-    padding: 0.125rem 0.375rem;
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: hsl(var(--foreground));
-    opacity: 0.85;
-    border-radius: 3px;
-    margin-left: 0.375rem;
-    gap: 0.25rem;
-  }
-
-  .regionBadge {
-    margin-left: 0.25rem;
-    font-size: 0.75rem;
-    opacity: 0.9;
-  }
-}
-

@@ -58,7 +58,7 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
   if (loading) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs" onClick={onClose}>
       <div className="relative flex w-full max-w-[400px] flex-col gap-6 rounded-2xl border border-white/10 bg-[#1c1e26] p-6 shadow-2xl md:p-8" onClick={(e) => e.stopPropagation()}>
         <button className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-muted-foreground transition-colors hover:bg-white/10 hover:text-white" onClick={onClose}>
           <X size={20} />
@@ -94,7 +94,7 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
             placeholder="New playlist name..."
             value={newListName}
             onChange={(e) => setNewListName(e.target.value)}
-            className="w-full rounded-xl border border-white/10 bg-black/40 py-3 px-4 font-bold text-white outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
+            className="w-full rounded-xl border border-white/10 bg-black/40 py-3 px-4 font-bold text-white outline-hidden transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
           />
           <button 
             className="w-full rounded-xl bg-primary py-3 font-black text-primary-foreground shadow-[0_0_15px_hsl(var(--primary)/0.3)] transition-all hover:scale-[1.02] hover:shadow-[0_0_20px_hsl(var(--primary)/0.5)] active:scale-95 disabled:pointer-events-none disabled:opacity-50"
