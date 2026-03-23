@@ -36,7 +36,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
         >
             {/* The Infinite Background Matrix layer */}
             <div className="pointer-events-none absolute -inset-[20%] z-0 flex overflow-hidden transform-[perspective(1000px)_rotateX(20deg)_rotateZ(-5deg)]">
-                <div className="flex h-[150%] w-[150%] flex-wrap content-start gap-4 opacity-70 animate-[matrixDrift_60s_linear_infinite]">
+                <div className="flex h-[150%] w-[150%] flex-wrap content-start gap-4 opacity-50 animate-matrix-drift">
                     {/* Duplicate the deals array to create a dense grid covering the entire background */}
                     {Array(15).fill(deals).flat().map((deal, i) => (
                         <div key={`matrix-${i}`} className="relative h-[130px] flex-[1_1_200px] overflow-hidden rounded-lg bg-background shadow-lg">
@@ -45,7 +45,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                                 alt="" 
                                 fill
                                 sizes="100px"
-                                className="object-cover opacity-80 mix-blend-luminosity"
+                                className="object-cover opacity-60"
                             />
                         </div>
                     ))}
