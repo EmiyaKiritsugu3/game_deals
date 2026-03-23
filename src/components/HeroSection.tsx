@@ -35,7 +35,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
             style={{ '--active-glow': activeAccentColor } as React.CSSProperties}
         >
             {/* The Infinite Background Matrix layer */}
-            <div className="pointer-events-none absolute -inset-[10%] z-10 flex overflow-hidden opacity-100">
+            <div className="pointer-events-none absolute -inset-[20%] z-0 flex overflow-hidden transform-[perspective(1000px)_rotateX(20deg)_rotateZ(-5deg)]">
                 <div className="flex h-[150%] w-[150%] flex-wrap content-start gap-4 opacity-50 animate-matrix-drift">
                     {/* Duplicate the deals array to create a dense grid covering the entire background */}
                     {Array(15).fill(deals).flat().map((deal, i) => (
@@ -45,13 +45,13 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                                 alt="" 
                                 fill
                                 sizes="100px"
-                                className="object-cover opacity-100"
+                                className="object-cover opacity-60"
                             />
                         </div>
                     ))}
                 </div>
             </div>
-            <div className="pointer-events-none absolute inset-0 z-5 bg-[radial-gradient(circle_at_center,transparent_30%,hsl(var(--background)/0.9)_100%)]" />
+            <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_30%,hsl(var(--background)/0.9)_100%)]" />
 
             {/* The individual Deals carousel */}
             {deals.map((deal, idx) => {
@@ -68,26 +68,24 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                         )}
                         aria-hidden={!isActive}
                     >
-                        {/* The dynamic colorful glow - localized as a radial spotlight behind the card */}
+                        {/* The dynamic colorful glow based on the current deal's accent color */}
                         <div
-                            className="absolute inset-0 z-5 opacity-30 transition-colors duration-1000 ease-in-out"
-                            style={{ 
-                                background: `radial-gradient(circle at center, var(--active-glow) 0%, transparent 70%)` 
-                            }}
+                            className="absolute inset-0 z-0 opacity-40 blur-[100px] transition-colors duration-1000 ease-in-out"
+                            style={{ backgroundColor: 'var(--active-glow)' }}
                         />
                         
                         {/* The Glassmorphism Panel isolated inside the slide */}
                         <div className="container relative z-30">
                             <motion.div 
-                                className="flex min-h-[380px] w-full items-center rounded-2xl border border-white/10 bg-white/5 p-8 shadow-[0_25px_80px_-12px_rgba(0,0,0,0.6)] backdrop-blur-md md:min-h-[400px] md:p-12 lg:p-16"
-                                initial={{ opacity: 0, scale: 1, y: 0 }}
-                                animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 1, y: isActive ? 0 : 0 }}
+                                className="flex min-h-[380px] w-full items-center rounded-2xl border border-border/50 bg-card/60 p-8 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(255,255,255,0.05)] backdrop-blur-xl md:min-h-[400px] md:p-12 lg:p-16"
+                                initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                                animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.95, y: isActive ? 0 : 30 }}
                                 transition={{ duration: 0.5, ease: "easeOut" }}
                             >
                                 <div className="grid w-full grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-16">
                                     <div className="flex flex-col items-center gap-6 text-center md:items-start md:text-left">
-                                        <span className="inline-block rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[10px] font-black tracking-widest text-primary uppercase">FEATURED DEAL</span>
-                                        <h1 className="text-5xl font-black leading-[0.9] tracking-tighter text-foreground drop-shadow-lg md:text-6xl lg:text-7xl">{deal.title}</h1>
+                                        <span className="inline-block rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-black tracking-widest text-primary uppercase">FEATURED DEAL</span>
+                                        <h1 className="text-4xl font-black leading-tight tracking-tight text-foreground drop-shadow-md md:text-5xl lg:text-6xl">{deal.title}</h1>
 
                                         <div className="flex flex-wrap items-center justify-center gap-6 md:justify-start">
                                             {getStoreLogo(deal.storeID) && (
@@ -119,7 +117,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                                         </Link>
                                     </div>
 
-                                    <div className="relative mx-auto aspect-460/215 w-full max-w-lg overflow-hidden rounded-xl border border-white/10 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.7)] md:max-w-none">
+                                    <div className="relative mx-auto aspect-460/215 w-full max-w-lg overflow-hidden rounded-xl border border-white/20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_30px_rgba(0,0,0,0.3)] transform-[perspective(1000px)_rotateY(-8deg)_rotateX(4deg)] transition-transform duration-500 hover:transform-[perspective(1000px)_rotateY(0deg)_rotateX(0deg)_scale(1.02)] md:max-w-none">
                                         <Image
                                             src={dealThumb}
                                             alt={deal.title}
