@@ -31,12 +31,11 @@ export default function HeroSection({ deals }: HeroSectionProps) {
 
     return (
         <section
-            className="relative flex min-h-[600px] items-center overflow-hidden bg-background mb-12 after:pointer-events-none after:absolute after:inset-0 after:z-10 after:bg-linear-to-t after:from-background after:via-transparent after:to-transparent"
-            style={{ '--active-glow': activeAccentColor } as React.CSSProperties}
+            className="relative min-h-[600px] flex items-center overflow-hidden mb-12 bg-background"
         >
-            {/* The Infinite Background Matrix layer */}
-            <div className="pointer-events-none absolute -inset-[20%] z-0 flex overflow-hidden transform-[perspective(1000px)_rotateX(20deg)_rotateZ(-5deg)]">
-                <div className="flex h-[150%] w-[150%] flex-wrap content-start gap-4 opacity-50 animate-matrix-drift">
+            {/* Layer 0: 3D Matrix Background */}
+            <div className="absolute -inset-[20%] z-0 overflow-hidden flex pointer-events-none transform-[perspective(1000px)_rotateX(20deg)_rotateZ(-5deg)]">
+                <div className="flex flex-wrap content-start gap-4 w-[150%] h-[150%] animate-matrix-drift opacity-70">
                     {/* Duplicate the deals array to create a dense grid covering the entire background */}
                     {Array(15).fill(deals).flat().map((deal, i) => (
                         <div key={`matrix-${i}`} className="relative h-[130px] flex-[1_1_200px] overflow-hidden rounded-lg bg-background shadow-lg">
@@ -45,13 +44,15 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                                 alt="" 
                                 fill
                                 sizes="100px"
-                                className="object-cover opacity-60"
+                                className="w-full h-full object-cover grayscale-[10%] contrast-110"
                             />
                         </div>
                     ))}
                 </div>
             </div>
-            <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,transparent_30%,hsl(var(--background)/0.9)_100%)]" />
+
+            {/* Layer 1: The Dark Vignette */}
+            <div className="absolute inset-0 z-[1] pointer-events-none bg-[radial-gradient(circle_at_center,transparent_30%,var(--color-background)_100%)]" />
 
             {/* The individual Deals carousel */}
             {deals.map((deal, idx) => {
@@ -68,24 +69,36 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                         )}
                         aria-hidden={!isActive}
                     >
-                        {/* The dynamic colorful glow based on the current deal's accent color */}
-                        <div
-                            className="absolute inset-0 z-0 opacity-40 blur-[100px] transition-colors duration-1000 ease-in-out"
-                            style={{ backgroundColor: 'var(--active-glow)' }}
-                        />
+                        {/* Layer 2: Organic Image Glow */}
+                        <div className="absolute inset-0 z-0 opacity-40">
+                            {isActive && (
+                                <Image
+                                    src={dealThumb}
+                                    alt=""
+                                    fill
+                                    className="object-cover blur-[60px] brightness-50 saturate-150 scale-125"
+                                />
+                            )}
+                        </div>
                         
-                        {/* The Glassmorphism Panel isolated inside the slide */}
-                        <div className="container relative z-30">
+                        {/* Layer 3: The Glass Panel */}
+                        <div className="relative z-20 w-full container mx-auto">
                             <motion.div 
-                                className="flex min-h-[380px] w-full items-center rounded-2xl border border-border/50 bg-card/60 p-8 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(255,255,255,0.05)] backdrop-blur-xl md:min-h-[400px] md:p-12 lg:p-16"
+                                className="w-full min-h-[380px] flex items-center relative bg-card/35 backdrop-blur-2xl border border-border/40 rounded-2xl py-12 px-6 md:px-16 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(255,255,255,0.05)]"
                                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
                                 animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.95, y: isActive ? 0 : 30 }}
                                 transition={{ duration: 0.5, ease: "easeOut" }}
                             >
-                                <div className="grid w-full grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-16">
+                                <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
                                     <div className="flex flex-col items-center gap-6 text-center md:items-start md:text-left">
-                                        <span className="inline-block rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-black tracking-widest text-primary uppercase">FEATURED DEAL</span>
-                                        <h1 className="text-4xl font-black leading-tight tracking-tight text-foreground drop-shadow-md md:text-5xl lg:text-6xl">{deal.title}</h1>
+                                        {/* Badges */}
+                                        <span className="self-start text-[0.7rem] font-extrabold tracking-widest text-primary uppercase bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+                                            FEATURED DEAL
+                                        </span>
+                                        {/* Layer 4: Typography & 3D Image Card */}
+                                        <h1 className="text-[clamp(2.5rem,4vw,3.5rem)] font-black leading-[1.1] tracking-tight text-foreground drop-shadow-lg m-0">
+                                            {deal.title}
+                                        </h1>
 
                                         <div className="flex flex-wrap items-center justify-center gap-6 md:justify-start">
                                             {getStoreLogo(deal.storeID) && (
@@ -117,7 +130,10 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                                         </Link>
                                     </div>
 
-                                    <div className="relative mx-auto aspect-460/215 w-full max-w-lg overflow-hidden rounded-xl border border-white/20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_30px_rgba(0,0,0,0.3)] transform-[perspective(1000px)_rotateY(-8deg)_rotateX(4deg)] transition-transform duration-500 hover:transform-[perspective(1000px)_rotateY(0deg)_rotateX(0deg)_scale(1.02)] md:max-w-none">
+                                    <div
+                                        className="relative aspect-[460/215] rounded-lg overflow-hidden border border-border/60 shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:!transform-[perspective(1000px)_rotateY(0deg)_rotateX(0deg)_scale(1.02)]"
+                                        style={{ transform: 'perspective(1000px) rotateY(-8deg) rotateX(4deg)' }}
+                                    >
                                         <Image
                                             src={dealThumb}
                                             alt={deal.title}

@@ -31,9 +31,8 @@
   --animate-matrix-drift: matrixDrift 60s linear infinite;
 
   @keyframes matrixDrift {
-    0% { transform: perspective(1000px) rotateX(20deg) rotateZ(-5deg) translate(0, 0); }
-    50% { transform: perspective(1000px) rotateX(20deg) rotateZ(-5deg) translate(-2%, -2%); }
-    100% { transform: perspective(1000px) rotateX(20deg) rotateZ(-5deg) translate(0, 0); }
+    from { transform: translate(0, 0); }
+    to { transform: translate(-20%, -20%); }
   }
 }
 
