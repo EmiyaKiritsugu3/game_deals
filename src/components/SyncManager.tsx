@@ -31,7 +31,7 @@ export default function SyncManager() {
             // 2. Sync Alerts
             if (alerts.length > 0) {
                 console.log('Syncing alerts to cloud...');
-                const alertsData = alerts.map((alert: unknown) => ({
+                const alertsData = alerts.map((alert: any) => ({
                     user_id: user.id,
                     game_id: alert.gameID,
                     game_title: alert.gameTitle,

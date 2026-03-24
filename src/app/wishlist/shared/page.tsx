@@ -32,7 +32,7 @@ function SharedWishlistContent() {
                     gameIDs.map(id => getGame(id).catch(() => null))
                 );
 
-                const validGames = results.reduce((acc: unknown[], gameData, idx) => {
+                const validGames = results.reduce((acc: any[], gameData, idx) => {
                     if (!gameData || !gameData.info) return acc;
                     const currentBest = [...gameData.deals].sort((a, b) => parseFloat(a.price) - parseFloat(b.price))[0];
                     acc.push({

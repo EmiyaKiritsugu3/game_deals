@@ -1,68 +1,84 @@
+"use client";
 import Image from 'next/image';
 import Link from 'next/link';
-import { Deal, getStores, getHighResImage } from '../services/api';
-import HeartButton from './HeartButton';
-import PriceAlertBadge from './PriceAlertBadge';
-import styles from './GameCard.module.css';
-import DealsBadge from './DealsBadge';
-import AddToListButton from './AddToListButton';
+import { Heart } from 'lucide-react';
+import { Deal, getHighResImage, getStoreLogo } from '../services/api';
 
-export default async function GameCard({ deal }: { deal: Deal }) {
-    const stores = await getStores();
-    const store = stores[deal.storeID];
-    const highResThumb = getHighResImage(deal.thumb);
-    const savings = Math.round(parseFloat(deal.savings));
-    const isFree = parseFloat(deal.salePrice) === 0;
-    const isEpicDeal = savings >= 85 || isFree; 
-    const isHistoricalLow = savings >= 90;
+interface GameCardProps {
+    deal: Deal;
+}
+
+export default function GameCard({ deal }: GameCardProps) {
+    const dealSavings = Math.round(parseFloat(deal.savings));
+    const thumbUrl = getHighResImage(deal.thumb);
 
     return (
-        <div className={styles.card}>
-            <Link href={`/game/${deal.gameID}`} className={styles.imageLink}>
-                <div className={styles.imageWrapper}>
-                    <Image 
-                        src={highResThumb} 
-                        alt={deal.title}
-                        fill
-                        className={styles.image}
-                        sizes="(max-width: 768px) 50vw, 25vw"
-                    />
-                    <div className={styles.topRightActions}>
-                        <PriceAlertBadge gameID={deal.gameID} />
-                        <HeartButton gameID={deal.gameID} className={styles.heartWrapper} />
-                    </div>
-                    <div className={styles.badgesOverlay}>
-                        <AddToListButton gameId={deal.gameID} />
-                        {isEpicDeal && <DealsBadge type="EPIC" />}
-                        {isHistoricalLow && <DealsBadge type="HL" />}
-                    </div>
-                    {savings > 0 && !isFree && (
-                        <div className={styles.savingsBadge}>
-                            -{savings}%
-                        </div>
-                    )}
-                </div>
+        <Link
+            href={`/game/${deal.gameID}`}
+            className="group relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-card/20 transition-all duration-300 hover:bg-card/40 hover:border-white/10 hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        >
+            {/* Thumbnail Container (Strict 16:9) */}
+            <div className="relative aspect-[16/9] w-full overflow-hidden bg-background">
+                <Image
+                    src={thumbUrl}
+                    alt={deal.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] group-hover:scale-110"
+                />
 
-                <div className={styles.content}>
-                    <h3 className={styles.title} title={deal.title}>{deal.title}</h3>
+                {/* OLED Pure Savings Badge */}
+                {dealSavings > 0 && (
+                    <div className="absolute top-2 right-2 rounded bg-primary px-2 py-1 text-xs font-black text-primary-foreground shadow-[0_0_15px_oklch(var(--color-primary)/0.5)]">
+                        -{dealSavings}%
+                    </div>
+                )}
 
-                    <div className={styles.priceContainer}>
-                        {savings > 0 && (
-                            <span className={styles.normalPrice}>${deal.normalPrice}</span>
+                {/* Quick Wishlist Action */}
+                <button
+                    className="absolute top-2 left-2 p-1.5 rounded-full bg-background/60 text-white/70 opacity-0 backdrop-blur-md transition-all duration-300 group-hover:opacity-100 hover:bg-primary hover:text-primary-foreground hover:scale-110 focus:opacity-100 outline-none"
+                    onClick={(e) => { e.preventDefault(); /* To be wired to Zustand */ }}
+                    aria-label="Add to wishlist"
+                >
+                    <Heart size={16} />
+                </button>
+            </div>
+
+            {/* Metadata Container */}
+            <div className="flex flex-1 flex-col justify-between p-4">
+                <h3 className="line-clamp-2 text-[1.05rem] font-bold leading-tight text-foreground group-hover:text-primary transition-colors">
+                    {deal.title}
+                </h3>
+
+                <div className="mt-4 flex items-end justify-between">
+                    {/* Store Logo (Grayscale until hovered) */}
+                    <div className="flex items-center">
+                        {getStoreLogo(deal.storeID) ? (
+                            <Image
+                                src={getStoreLogo(deal.storeID)!}
+                                alt="Store"
+                                width={24}
+                                height={24}
+                                className="rounded-sm opacity-60 grayscale-[80%] transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100"
+                            />
+                        ) : (
+                            <div className="w-6 h-6" /> /* Placeholder to maintain height */
                         )}
-                        <span className={styles.salePrice}>${deal.salePrice}</span>
                     </div>
 
-                    <div className={styles.meta}>
-                        <span className={styles.storeBadge}>{store || 'Store'}</span>
-                        {deal.steamRatingPercent && deal.steamRatingPercent !== '0' && (
-                            <span className={styles.ratingBadge}>
-                                ★ {deal.steamRatingPercent}%
+                    {/* Pricing */}
+                    <div className="flex flex-col items-end justify-end">
+                        {dealSavings > 0 && (
+                            <span className="text-xs font-semibold text-muted-foreground line-through mb-0.5">
+                                ${deal.normalPrice}
                             </span>
                         )}
+                        <span className="text-lg font-black leading-none text-foreground drop-shadow-md">
+                            ${deal.salePrice}
+                        </span>
                     </div>
                 </div>
-            </Link>
-        </div>
+            </div>
+        </Link>
     );
 }

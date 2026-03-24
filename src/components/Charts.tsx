@@ -45,7 +45,7 @@ export function StoreCompareChart({ data }: { data: StorePrice[] }) {
                                 borderRadius: '8px',
                                 color: 'hsl(var(--foreground))'
                             }}
-                            formatter={(value: unknown) => {
+                            formatter={(value: any) => {
                                 const numValue = Number(value);
                                 return [`$${!isNaN(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
                             }}
@@ -101,7 +101,7 @@ export function PriceHistoryChart({ currentPrice, lowestPrice, lowestDate, retai
                                 borderRadius: '8px',
                                 color: 'hsl(var(--foreground))'
                             }}
-                            formatter={(value: unknown) => {
+                            formatter={(value: any) => {
                                 const numValue = Number(value);
                                 return [`$${!isNaN(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
                             }}
