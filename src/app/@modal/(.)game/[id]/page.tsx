@@ -4,7 +4,6 @@ import { estimatePlaytime, calculateCostPerHour } from '@/services/hltb';
 import SidebarModal from '@/components/SidebarModal';
 import HeartButton from '@/components/HeartButton';
 import PriceAlertTrigger from '@/components/PriceAlertTrigger';
-import { DynamicPriceHistory, DynamicStoreCompare } from '@/components/DynamicCharts';
 import styles from './modal.module.css';
 
 export default async function GameModal({ params }: { params: Promise<{ id: string }> }) {
@@ -160,21 +159,6 @@ export default async function GameModal({ params }: { params: Promise<{ id: stri
                             </>
                         )}
                     </div>
-
-                    <DynamicPriceHistory
-                        currentPrice={sortedDeals[0]?.price || game.cheapestPriceEver.price}
-                        lowestPrice={game.cheapestPriceEver.price}
-                        lowestDate={game.cheapestPriceEver.date}
-                        retailPrice={sortedDeals[0]?.retailPrice}
-                        gameTitle={game.info.title}
-                    />
-
-                    <DynamicStoreCompare
-                        data={sortedDeals.map(d => ({
-                            storeName: stores[d.storeID] || `Store ${d.storeID}`,
-                            price: d.price
-                        }))}
-                    />
                 </div>
             </SidebarModal>
         );

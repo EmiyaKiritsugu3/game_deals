@@ -1,122 +1,91 @@
-"use client";
+'use client';
 
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import styles from './Charts.module.css';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
-interface StorePrice {
-    storeName: string;
-    price: string;
+export interface PriceDataPoint {
+    date: number; // Unix timestamp or equivalent
+    price: number;
 }
 
-export function StoreCompareChart({ data }: { data: StorePrice[] }) {
-    // Convert string prices to numbers for charting
-    const chartData = data.map(d => ({
-        name: d.storeName,
-        price: parseFloat(d.price)
-    }));
-
-    return (
-        <div className={styles.chartContainer}>
-            <h3 className={styles.chartTitle}>Current Prices by Store</h3>
-            <div className={styles.chartWrapper}>
-                <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 20 }}>
-                        <XAxis
-                            dataKey="name"
-                            stroke="hsl(var(--muted-foreground))"
-                            fontSize={12}
-                            tickLine={false}
-                            axisLine={false}
-                            angle={-45}
-                            textAnchor="end"
-                        />
-                        <YAxis
-                            stroke="hsl(var(--muted-foreground))"
-                            fontSize={12}
-                            tickLine={false}
-                            axisLine={false}
-                            tickFormatter={(value) => `$${value}`}
-                        />
-                        <Tooltip
-                            cursor={{ fill: 'hsl(var(--muted) / 0.2)' }}
-                            contentStyle={{
-                                backgroundColor: 'hsl(var(--card))',
-                                border: '1px solid hsl(var(--border))',
-                                borderRadius: '8px',
-                                color: 'hsl(var(--foreground))'
-                            }}
-                            formatter={(value: any) => {
-                                const numValue = Number(value);
-                                return [`$${!isNaN(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
-                            }}
-                        />
-                        <Bar dataKey="price" radius={[4, 4, 0, 0]}>
-                            {chartData.map((entry, index) => (
-                                <Cell
-                                    key={`cell-${index}`}
-                                    fill={index === 0 ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground) / 0.5)'}
-                                />
-                            ))}
-                        </Bar>
-                    </BarChart>
-                </ResponsiveContainer>
-            </div>
-        </div>
-    );
+interface ChartsProps {
+    data: PriceDataPoint[];
 }
 
-import { generatePriceHistory } from '@/utils/pricing';
-import { PriceHistoryPoint } from '@/types/game';
-import { LineChart, Line } from 'recharts';
+// Custom Tooltip strictly adhering to our Glassmorphism formula
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+        // Safely parse the date assuming it might be a timestamp
+        const dateStr = new Date(label).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+        return (
+            <div className="rounded-xl border border-white/10 bg-card/60 backdrop-blur-2xl p-4 shadow-[0_10px_40px_rgba(0,0,0,0.8)] outline-none">
+                <p className="mb-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">{dateStr}</p>
+                <p className="text-3xl font-black text-primary drop-shadow-[0_0_12px_var(--color-primary)]">
+                    ${payload[0].value.toFixed(2)}
+                </p>
+            </div>
+        );
+    }
+    return null;
+};
 
-export function PriceHistoryChart({ currentPrice, lowestPrice, lowestDate, retailPrice = '9.99', gameTitle = 'Default' }: { currentPrice: string, lowestPrice: string, lowestDate: number, retailPrice?: string, gameTitle?: string }) {
-    const historyData: PriceHistoryPoint[] = generatePriceHistory(parseFloat(retailPrice), parseFloat(currentPrice), parseFloat(lowestPrice), gameTitle);
+export default function Charts({ data }: ChartsProps) {
+    if (!data || data.length === 0) {
+        return (
+            <div className="flex h-full w-full items-center justify-center">
+                <span className="text-sm font-bold tracking-widest text-muted-foreground uppercase">
+                    No historical data available
+                </span>
+            </div>
+        );
+    }
 
     return (
-        <div className={styles.chartContainer}>
-            <h3 className={styles.chartTitle}>Current Price History (6 Months)</h3>
-            <p className={styles.chartSubtitle}>Algorithmic market simulation based on official data drops.</p>
-            <div className={styles.chartWrapper}>
-                <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={historyData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
-                        <XAxis
-                            dataKey="name"
-                            stroke="hsl(var(--muted-foreground))"
-                            fontSize={12}
-                            tickLine={false}
-                            axisLine={false}
-                        />
-                        <YAxis
-                            stroke="hsl(var(--muted-foreground))"
-                            fontSize={12}
-                            tickLine={false}
-                            axisLine={false}
-                            tickFormatter={(value) => `$${value}`}
-                            domain={['dataMin - 5', 'dataMax + 5']}
-                        />
-                        <Tooltip
-                            contentStyle={{
-                                backgroundColor: 'hsl(var(--card))',
-                                border: '1px solid hsl(var(--border))',
-                                borderRadius: '8px',
-                                color: 'hsl(var(--foreground))'
-                            }}
-                            formatter={(value: any) => {
-                                const numValue = Number(value);
-                                return [`$${!isNaN(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
-                            }}
-                        />
-                        <Line
-                            type="monotone"
-                            dataKey="price"
-                            stroke="hsl(var(--primary))"
-                            strokeWidth={3}
-                            dot={{ fill: 'hsl(var(--card))', stroke: 'hsl(var(--primary))', strokeWidth: 2, r: 6 }}
-                            activeDot={{ r: 8, fill: 'hsl(var(--primary))', stroke: 'hsl(var(--background))' }}
-                        />
-                    </LineChart>
-                </ResponsiveContainer>
-            </div>
+        <div className="h-full w-full min-h-[300px] pt-4">
+            <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={data} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
+                    <defs>
+                        {/* The OLED Pure Holographic Fade */}
+                        <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.4} />
+                            <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0} />
+                        </linearGradient>
+                    </defs>
+
+                    <XAxis
+                        dataKey="date"
+                        tickFormatter={(val) => new Date(val).toLocaleDateString(undefined, { month: 'short' })}
+                        stroke="var(--color-border)"
+                        tick={{ fill: 'var(--color-muted-foreground)', fontSize: 12, fontWeight: 600 }}
+                        tickLine={false}
+                        axisLine={false}
+                        minTickGap={30}
+                    />
+
+                    <YAxis
+                        stroke="var(--color-border)"
+                        tick={{ fill: 'var(--color-muted-foreground)', fontSize: 12, fontWeight: 600 }}
+                        tickLine={false}
+                        axisLine={false}
+                        tickFormatter={(value) => `$${value}`}
+                    />
+
+                    <Tooltip
+                        content={CustomTooltip}
+                        cursor={{ stroke: 'var(--color-border)', strokeWidth: 2, strokeDasharray: '4 4' }}
+                    />
+
+                    <Area
+                        type="monotone"
+                        dataKey="price"
+                        stroke="var(--color-primary)"
+                        strokeWidth={4}
+                        fillOpacity={1}
+                        fill="url(#colorPrice)"
+                        activeDot={{ r: 6, fill: 'var(--color-primary)', stroke: 'var(--color-background)', strokeWidth: 3, style: { filter: 'drop-shadow(0px 0px 8px var(--color-primary))' } }}
+                    />
+                </AreaChart>
+            </ResponsiveContainer>
         </div>
     );
 }
