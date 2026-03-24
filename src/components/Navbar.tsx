@@ -1,158 +1,74 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, Home, User, LogOut, Bell, ChevronDown } from 'lucide-react';
-import WishlistIndicator from './WishlistIndicator';
-import AuthModal from './AuthModal';
-import { useState, useRef, useEffect } from 'react';
-import useSWR from 'swr';
-import { useAuth } from '@/store/authStore';
-import { supabase } from '@/lib/supabase';
-import styles from './Navbar.module.css';
-
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+import { Search, Heart, User } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function Navbar() {
-    const { user, isLoggedIn, logout, setUser } = useAuth();
-    const [query, setQuery] = useState('');
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-    
-    const dropdownRef = useRef<HTMLDivElement>(null);
-    const userMenuRef = useRef<HTMLDivElement>(null);
-
-    const { data: results, isLoading } = useSWR(
-        query.length >= 3 ? `https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(query)}&limit=5` : null,
-        fetcher
-    );
+    const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {
-        // Initialize user session on mount
-        supabase?.auth.getSession().then(({ data: { session } }: { data: { session: any } }) => {
-            setUser(session?.user ?? null);
-        });
-
-        // Listen for auth changes
-        const { data: { subscription } } = supabase?.auth.onAuthStateChange((_event: string, session: any) => {
-            setUser(session?.user ?? null);
-            if (session?.user) {
-                setIsAuthModalOpen(false);
-            }
-        }) ?? { data: { subscription: { unsubscribe: () => {} } } };
-
-        const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setIsDropdownOpen(false);
-            }
-            if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
-                setIsUserMenuOpen(false);
-            }
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 30);
         };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-            subscription.unsubscribe();
-        };
-    }, [setUser]);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     return (
-        <nav className={styles.navbar}>
-            <div className={`container ${styles.navContainer}`}>
-                <Link href="/" className={styles.logo}>
-                    <span className={styles.accent}>Game</span>Deals
+        <header className={cn(
+            "fixed top-0 inset-x-0 z-50 transition-all duration-500 border-b border-transparent",
+            isScrolled ? "bg-background/85 backdrop-blur-2xl border-white/5 shadow-2xl py-3" : "bg-gradient-to-b from-background/80 to-transparent py-6"
+        )}>
+            <div className="container mx-auto px-4 max-w-7xl flex items-center justify-between gap-6">
+
+                {/* Logo */}
+                <Link href="/" className="flex items-center gap-2 group outline-none">
+                    <span className="text-2xl font-black tracking-tighter text-foreground transition-transform group-hover:scale-105">
+                        Game<span className="text-primary drop-shadow-[0_0_8px_var(--color-primary)]">Deals</span>
+                    </span>
                 </Link>
 
-                <div className={styles.navLinks}>
-                    <Link href="/bundles" className={styles.navLink}>🎁 Bundles</Link>
-                    <Link href="/collections" className={styles.navLink}>📚 Collections</Link>
+                {/* Search Bar - Sleek Pill Design */}
+                <div className="hidden md:flex flex-1 max-w-md relative group">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <Search size={16} className="text-muted-foreground group-focus-within:text-primary transition-colors" />
+                    </div>
+                    <input
+                        type="text"
+                        placeholder="Search for games, bundles..."
+                        className="w-full bg-card/50 border border-white/10 rounded-full py-2.5 pl-11 pr-12 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:bg-card/80 focus:border-primary/50 transition-all shadow-inner"
+                    />
+                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                       <kbd className="hidden lg:inline-flex items-center gap-1 rounded-sm border border-white/10 bg-background/50 px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+                         <span className="text-xs">⌘</span>K
+                       </kbd>
+                    </div>
                 </div>
 
-                <div className={styles.actionsContainer}>
-                    <div className={styles.searchContainer} ref={dropdownRef}>
-                        <form action="/search" className={styles.searchForm}>
-                            <input
-                                type="text"
-                                name="q"
-                                placeholder="Search for games..."
-                                className={styles.searchInput}
-                                value={query}
-                                onChange={(e) => {
-                                    setQuery(e.target.value);
-                                    setIsDropdownOpen(true);
-                                }}
-                                onFocus={() => setIsDropdownOpen(true)}
-                                autoComplete="off"
-                                required
-                            />
-                            <button type="submit" className={styles.searchButton}>
-                                <Search size={20} />
-                            </button>
-                        </form>
+                {/* Right Actions */}
+                <div className="flex items-center gap-1 md:gap-3">
+                    {/* Mobile Search Icon */}
+                    <button className="md:hidden p-2 text-muted-foreground hover:text-primary transition-colors outline-none rounded-full focus:bg-white/5">
+                        <Search size={20} />
+                    </button>
 
-                        {isDropdownOpen && query.length >= 3 && (
-                            <div className={styles.searchDropdown}>
-                                {isLoading ? (
-                                    <div className={`${styles.dropdownItem} ${styles.loading}`}>Loading...</div>
-                                ) : results && results.length > 0 ? (
-                                    results.map((game: any) => (
-                                        <Link 
-                                            href={`/game/${game.gameID}`} 
-                                            key={game.gameID}
-                                            className={styles.dropdownItem}
-                                            onClick={() => {
-                                                setIsDropdownOpen(false);
-                                                setQuery('');
-                                            }}
-                                        >
-                                            <img src={game.thumb} alt={game.external} className={styles.dropdownThumb} />
-                                            <div className={styles.dropdownInfo}>
-                                                <span className={styles.dropdownTitle}>{game.external}</span>
-                                                <span className={styles.dropdownPrice}>From ${game.cheapest}</span>
-                                            </div>
-                                        </Link>
-                                    ))
-                                ) : (
-                                    <div className={styles.dropdownItem}>No games found</div>
-                                )}
-                            </div>
-                        )}
-                    </div>
+                    {/* Wishlist */}
+                    <Link href="/wishlist" className="relative p-2 text-muted-foreground hover:text-primary transition-colors outline-none rounded-full focus:bg-white/5">
+                        <Heart size={20} className="transition-transform active:scale-90" />
+                        {/* Placeholder Badge */}
+                        <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-extrabold text-primary-foreground shadow-[0_0_10px_var(--color-primary)]">
+                            0
+                        </span>
+                    </Link>
 
-                    <WishlistIndicator />
-
-                    <div className={styles.authSection}>
-                        {isLoggedIn ? (
-                            <div className={styles.userMenu} ref={userMenuRef} onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
-                                <img src={user?.avatar} alt={user?.name} className={styles.avatar} />
-                                <span className={styles.username}>{user?.name}</span>
-                                <ChevronDown size={14} />
-
-                                {isUserMenuOpen && (
-                                    <div className={styles.userDropdown}>
-                                        <Link href="/wishlist" className={styles.menuItem}>
-                                            <Bell size={16} />
-                                            <span>Price Alerts</span>
-                                        </Link>
-                                        <div className={styles.menuDivider} />
-                                        <button className={`${styles.menuItem} ${styles.logout}`} onClick={logout}>
-                                            <LogOut size={16} />
-                                            <span>Logout</span>
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        ) : (
-                            <button className={styles.loginBtn} onClick={() => setIsAuthModalOpen(true)}>
-                                <User size={18} />
-                                <span>Login</span>
-                            </button>
-                        )}
-                    </div>
+                    {/* User Profile */}
+                    <button className="p-2 text-muted-foreground hover:text-foreground transition-colors outline-none rounded-full focus:bg-white/5">
+                        <User size={20} />
+                    </button>
                 </div>
             </div>
-
-            <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
-        </nav>
+        </header>
     );
 }
