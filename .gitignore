@@ -42,3 +42,5 @@ next-env.d.ts
 
 # credentials
 docs/jules_credentials.md
+dev_server.log
+dev_server.pid
