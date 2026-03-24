@@ -4,9 +4,20 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, Heart, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useWishlist } from '@/store/wishlistStore';
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
+
+    // Read wishlist array length dynamically
+    const wishlistCount = useWishlist((state) => state.wishlist.length);
+    const [mounted, setMounted] = useState(false);
+
+    // Prevent hydration mismatch for persisted store
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -57,10 +68,12 @@ export default function Navbar() {
                     {/* Wishlist */}
                     <Link href="/wishlist" className="relative p-2 text-muted-foreground hover:text-primary transition-colors outline-none rounded-full focus:bg-white/5">
                         <Heart size={20} className="transition-transform active:scale-90" />
-                        {/* Placeholder Badge */}
-                        <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-extrabold text-primary-foreground shadow-[0_0_10px_var(--color-primary)]">
-                            0
-                        </span>
+                        {/* Dynamic OLED Badge */}
+                        {mounted && wishlistCount > 0 && (
+                            <span className="absolute top-0 -right-1 flex h-[18px] min-w-[18px] px-1 items-center justify-center rounded-full bg-primary text-[10px] font-black text-primary-foreground shadow-[0_0_12px_var(--color-primary)]">
+                                {wishlistCount}
+                            </span>
+                        )}
                     </Link>
 
                     {/* User Profile */}

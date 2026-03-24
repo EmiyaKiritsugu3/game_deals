@@ -1,8 +1,11 @@
 "use client";
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Heart } from 'lucide-react';
 import { Deal, getHighResImage, getStoreLogo } from '../services/api';
+import { useWishlist } from '../store/wishlistStore';
+import { cn } from '@/lib/utils';
 
 interface GameCardProps {
     deal: Deal;
@@ -11,6 +14,19 @@ interface GameCardProps {
 export default function GameCard({ deal }: GameCardProps) {
     const dealSavings = Math.round(parseFloat(deal.savings));
     const thumbUrl = getHighResImage(deal.thumb);
+
+    // Zustand Global State
+    const toggleWishlist = useWishlist((state) => state.toggleWishlist);
+    const isInWishlist = useWishlist((state) => state.isInWishlist);
+
+    // Hydration fix for persisted state
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMounted(true);
+    }, []);
+
+    const isSaved = mounted ? isInWishlist(deal.gameID) : false;
 
     return (
         <Link
@@ -36,11 +52,22 @@ export default function GameCard({ deal }: GameCardProps) {
 
                 {/* Quick Wishlist Action */}
                 <button
-                    className="absolute top-2 left-2 p-1.5 rounded-full bg-background/60 text-white/70 opacity-0 backdrop-blur-md transition-all duration-300 group-hover:opacity-100 hover:bg-primary hover:text-primary-foreground hover:scale-110 focus:opacity-100 outline-none"
-                    onClick={(e) => { e.preventDefault(); /* To be wired to Zustand */ }}
-                    aria-label="Add to wishlist"
+                    className={cn(
+                        "absolute top-2 left-2 p-1.5 rounded-full backdrop-blur-md transition-all duration-300 outline-none hover:scale-110",
+                        isSaved
+                            ? "bg-primary/20 text-primary opacity-100 shadow-[0_0_10px_var(--color-primary)] border border-primary/50"
+                            : "bg-background/60 text-white/70 opacity-0 group-hover:opacity-100 hover:bg-primary/20 hover:text-primary border border-transparent"
+                    )}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        toggleWishlist(deal.gameID);
+                    }}
+                    aria-label={isSaved ? "Remove from wishlist" : "Add to wishlist"}
                 >
-                    <Heart size={16} />
+                    <Heart
+                        size={16}
+                        className={cn("transition-all duration-300", isSaved && "fill-currentColor drop-shadow-[0_0_8px_var(--color-primary)]")}
+                    />
                 </button>
             </div>
 

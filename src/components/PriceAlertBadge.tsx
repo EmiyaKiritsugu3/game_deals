@@ -15,6 +15,7 @@ export default function PriceAlertBadge({ gameID, className = '' }: PriceAlertBa
     const { hasAlert } = useAlerts();
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true);
     }, []);
 

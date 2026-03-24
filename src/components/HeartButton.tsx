@@ -15,6 +15,7 @@ export default function HeartButton({ gameID, className = '' }: HeartButtonProps
     const { isInWishlist, toggleWishlist } = useWishlist();
     
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true);
     }, []);
 
