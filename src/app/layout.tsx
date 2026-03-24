@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import SyncManager from "@/components/SyncManager";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import SearchModal from "@/components/SearchModal";
 import "./globals.css";
 
 const inter = Inter({
@@ -33,6 +34,7 @@ export default function RootLayout({
         {modal}
         <Analytics />
         <SpeedInsights />
+        <SearchModal />
       </body>
     </html>
   );
