@@ -1,102 +1,73 @@
-import { getDeals } from '@/services/api';
+import { getDeals } from '../services/api';
 import HeroSection from '@/components/HeroSection';
-import Freebies from '@/components/Freebies';
-import FlashSales from '@/components/FlashSales';
 import GameCard from '@/components/GameCard';
-import DealRow from '@/components/DealRow';
-import styles from './page.module.css';
+import { Flame, Zap } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
-import HistoricalLows from '@/components/HistoricalLows';
-import EndingSoon from '@/components/EndingSoon';
-
 export default async function Home() {
-  // Fetch primary static categories in parallel
-  const [popular, bestDeals, recentDeals, flashDeals, freebies] = await Promise.all([
-    getDeals({ pageSize: '5' }),                                       // Deal Rating (default)
-    getDeals({ sortBy: 'Savings', pageSize: '10' }),                   // Highest discount %
-    getDeals({ sortBy: 'Recent', pageSize: '10' }),                    // Newest deals
-    getDeals({ sortBy: 'Price', pageSize: '8', onSale: '1' }),         // Flash deals
-    getDeals({ upperPrice: '0', pageSize: '6' }),                      // 100% OFF Freebies
-  ]);
+    // Fetch deals from the API
+    const deals = await getDeals();
 
-  const carouselDeals = popular.slice(0, 5);
-  const gridDeals = popular.length > 5 ? popular.slice(5) : [];
+    // Segment the data for different UI sections
+    const heroDeals = deals.slice(0, 5);
+    const trendingDeals = deals.slice(5, 15);
+    const flashSales = deals.slice(15, 25);
 
-  return (
-    <main className={styles.main}>
-      {carouselDeals.length > 0 && <HeroSection deals={carouselDeals} />}
+    return (
+        <main className="flex min-h-screen flex-col bg-background pb-24">
+            {/* Phase 3: The 3D Hero Section */}
+            <HeroSection deals={heroDeals} />
 
-      <div className="container">
-        {freebies.length > 0 && <Freebies deals={freebies} />}
-        <FlashSales deals={flashDeals} />
+            <div className="container mx-auto px-4 max-w-7xl space-y-20 mt-8">
 
-        {/* Most Popular Games */}
-        <div className={styles.sectionHeader}>
-          <div className={styles.sectionHeaderRow}>
-            <div>
-              <h2>Most Popular Games</h2>
-              <p>The best and most sought-after discounts right now.</p>
+                {/* SECTION 1: Trending Grid (Standard Vertical Flow) */}
+                <section>
+                    <div className="flex items-center justify-between mb-8">
+                        <h2 className="text-2xl md:text-3xl font-black tracking-tight text-foreground flex items-center gap-3">
+                            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 border border-primary/20 text-primary shadow-[0_0_15px_oklch(var(--color-primary)/0.2)]">
+                                <Flame size={18} />
+                            </span>
+                            Trending Deals
+                        </h2>
+                        <button className="text-sm font-bold text-muted-foreground hover:text-primary transition-colors">
+                            View All
+                        </button>
+                    </div>
+
+                    {/* Phase 4: GameCards in a responsive Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        {trendingDeals.map(deal => (
+                            <GameCard key={deal.dealID} deal={deal} />
+                        ))}
+                    </div>
+                </section>
+
+                {/* SECTION 2: Flash Sales (Native CSS Horizontal Carousel) */}
+                <section>
+                    <div className="flex items-center justify-between mb-8">
+                        <h2 className="text-2xl md:text-3xl font-black tracking-tight text-foreground flex items-center gap-3">
+                            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                                <Zap size={18} />
+                            </span>
+                            Flash Sales
+                        </h2>
+                        <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground bg-white/5 px-2 py-1 rounded">Ends Soon</span>
+                        </div>
+                    </div>
+
+                    {/* Horizontal Snap Scroll Container - STRICT TAILWIND V4 */}
+                    <div className="flex overflow-x-auto pb-8 -mx-4 px-4 gap-6 snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                        {flashSales.map(deal => (
+                            <div key={deal.dealID} className="min-w-[280px] sm:min-w-[320px] snap-start">
+                                <GameCard deal={deal} />
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
             </div>
-          </div>
-        </div>
-        <div className={styles.grid}>
-          {gridDeals.map((deal) => (
-            <GameCard key={deal.dealID} deal={deal} />
-          ))}
-        </div>
-
-        {/* New Deals + Best Deals */}
-        <div className={styles.splitLayout}>
-          <div>
-            <div className={styles.sectionHeader}>
-              <div className={styles.sectionHeaderRow}>
-                <div>
-                  <h2>New Deals</h2>
-                  <p>Just added to the tracker.</p>
-                </div>
-                <a href="/search?sortBy=Recent" className={styles.seeAll}>SEE ALL ▶</a>
-              </div>
-            </div>
-            <div className={styles.listCol}>
-              {recentDeals.map((deal) => (
-                <DealRow key={deal.dealID} deal={deal} />
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <div className={styles.sectionHeader}>
-              <div className={styles.sectionHeaderRow}>
-                <div>
-                  <h2>Best Deals</h2>
-                  <p>Highest discount percentages available.</p>
-                </div>
-                <a href="/search?sortBy=Savings" className={styles.seeAll}>SEE ALL ▶</a>
-              </div>
-            </div>
-            <div className={styles.listCol}>
-              {bestDeals.map((deal) => (
-                <DealRow key={deal.dealID} deal={deal} />
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Historical Lows + Ending Soon (Now modular) */}
-        <div className={styles.splitLayout}>
-          <HistoricalLows />
-          <EndingSoon />
-        </div>
-      </div>
-
-      <footer className={styles.footer}>
-        <div className="container">
-          <p>© {new Date().getFullYear()} GameDeals</p>
-          <p className={styles.footerMuted}>Powered by CheapShark API</p>
-        </div>
-      </footer>
-    </main>
-  );
+        </main>
+    );
 }
