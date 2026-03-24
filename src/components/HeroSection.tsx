@@ -14,7 +14,6 @@ interface HeroSectionProps {
 
 export default function HeroSection({ deals }: HeroSectionProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const activeAccentColor = deals?.[currentIndex]?.accentColor || '#00d66c';
 
     // Auto-play timer
     useEffect(() => {
@@ -22,7 +21,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
 
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % deals.length);
-        }, 5000); // 5 seconds per slide
+        }, 5000);
 
         return () => clearInterval(interval);
     }, [deals]);
@@ -30,31 +29,32 @@ export default function HeroSection({ deals }: HeroSectionProps) {
     if (!deals || deals.length === 0) return null;
 
     return (
-        <section
-            className="relative min-h-[600px] flex items-center overflow-hidden mb-12 bg-background"
-        >
-            {/* Layer 0: 3D Matrix Background */}
-            <div className="absolute -inset-[20%] z-0 overflow-hidden flex pointer-events-none transform-[perspective(1000px)_rotateX(20deg)_rotateZ(-5deg)]">
-                <div className="flex flex-wrap content-start gap-4 w-[150%] h-[150%] animate-matrix-drift opacity-70">
-                    {/* Duplicate the deals array to create a dense grid covering the entire background */}
+        <section className="relative flex min-h-[600px] items-center overflow-hidden mb-[3rem] bg-background after:pointer-events-none after:absolute after:inset-0 after:z-30 after:bg-[linear-gradient(to_top,var(--color-background)_5%,transparent_70%)]">
+
+            {/* LAYER 0: The 3D Infinite Background Matrix */}
+            <div
+                className="pointer-events-none absolute -inset-[20%] z-0 flex overflow-hidden"
+                style={{ transform: 'perspective(1000px) rotateX(20deg) rotateZ(-5deg)' }}
+            >
+                <div className="flex h-[150%] w-[150%] flex-wrap content-start gap-4 opacity-70 animate-matrix-drift">
                     {Array(15).fill(deals).flat().map((deal, i) => (
-                        <div key={`matrix-${i}`} className="relative h-[130px] flex-[1_1_200px] overflow-hidden rounded-lg bg-background shadow-lg">
+                        <div key={`matrix-${i}`} className="relative h-[130px] flex-[1_1_200px] overflow-hidden rounded bg-background shadow-[0_0_10px_rgba(0,0,0,0.5)]">
                             <Image
                                 src={getHighResImage(deal.thumb)} 
                                 alt="" 
                                 fill
-                                sizes="100px"
-                                className="w-full h-full object-cover grayscale-[10%] contrast-110"
+                                sizes="200px"
+                                className="object-cover grayscale-[10%] contrast-110"
                             />
                         </div>
                     ))}
                 </div>
             </div>
 
-            {/* Layer 1: The Dark Vignette */}
-            <div className="absolute inset-0 z-[1] pointer-events-none bg-[radial-gradient(circle_at_center,transparent_30%,var(--color-background)_100%)]" />
+            {/* LAYER 1: The Dark Vignette (Sinks the edges into darkness) */}
+            <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,transparent_30%,var(--color-background)_100%)]" />
 
-            {/* The individual Deals carousel */}
+            {/* LAYER 2 & 3: The Carousel (Glow and Glass Panel) */}
             {deals.map((deal, idx) => {
                 const isActive = idx === currentIndex;
                 const dealSavings = Math.round(parseFloat(deal.savings));
@@ -64,74 +64,75 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                     <div
                         key={deal.dealID}
                         className={cn(
-                            "absolute inset-0 flex items-center justify-center opacity-0 invisible transition-all duration-700 ease-in-out",
+                            "absolute inset-0 flex items-center justify-center opacity-0 invisible transition-all duration-[600ms] ease-in-out",
                             isActive && "opacity-100 visible z-20"
                         )}
                         aria-hidden={!isActive}
                     >
-                        {/* Layer 2: Organic Image Glow */}
+                        {/* LAYER 2: The Organic Image Glow */}
                         <div className="absolute inset-0 z-0 opacity-40">
-                            {isActive && (
-                                <Image
-                                    src={dealThumb}
-                                    alt=""
-                                    fill
-                                    className="object-cover blur-[60px] brightness-50 saturate-150 scale-125"
-                                />
-                            )}
+                            <Image
+                                src={dealThumb}
+                                alt="glow"
+                                fill
+                                className="object-cover blur-[60px] brightness-[0.6] saturate-150 scale-125 pointer-events-none"
+                                priority={idx === 0}
+                            />
                         </div>
                         
-                        {/* Layer 3: The Glass Panel */}
-                        <div className="relative z-20 w-full container mx-auto">
+                        {/* LAYER 3: The Glassmorphism Panel */}
+                        <div className="container relative z-10 w-full px-4">
                             <motion.div 
-                                className="w-full min-h-[380px] flex items-center relative bg-card/35 backdrop-blur-2xl border border-border/40 rounded-2xl py-12 px-6 md:px-16 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(255,255,255,0.05)]"
+                                className="relative flex min-h-[520px] w-full items-center rounded-2xl border border-border/40 bg-card/35 px-6 py-8 backdrop-blur-[24px] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),inset_0_0_20px_rgba(255,255,255,0.05)] md:min-h-[380px] md:px-16 md:py-12"
                                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
                                 animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.95, y: isActive ? 0 : 30 }}
                                 transition={{ duration: 0.5, ease: "easeOut" }}
                             >
-                                <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
-                                    <div className="flex flex-col items-center gap-6 text-center md:items-start md:text-left">
-                                        {/* Badges */}
-                                        <span className="self-start text-[0.7rem] font-extrabold tracking-widest text-primary uppercase bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+                                <div className="grid w-full grid-cols-1 items-center gap-10 text-center md:grid-cols-2 md:gap-16 md:text-left">
+
+                                    {/* Left Content Column */}
+                                    <div className="flex flex-col gap-6">
+                                        <span className="self-center md:self-start rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[0.7rem] font-extrabold tracking-widest text-primary uppercase">
                                             FEATURED DEAL
                                         </span>
-                                        {/* Layer 4: Typography & 3D Image Card */}
-                                        <h1 className="text-[clamp(2.5rem,4vw,3.5rem)] font-black leading-[1.1] tracking-tight text-foreground drop-shadow-lg m-0">
+
+                                        <h1 className="m-0 text-[clamp(2.5rem,4vw,3.5rem)] font-black leading-[1.1] tracking-tight text-foreground drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
                                             {deal.title}
                                         </h1>
 
-                                        <div className="flex flex-wrap items-center justify-center gap-6 md:justify-start">
+                                        <div className="mb-2 flex items-center justify-center gap-6 md:justify-start">
                                             {getStoreLogo(deal.storeID) && (
-                                                <div className="flex items-center gap-2 rounded border border-white/10 bg-black/40 px-3 py-1.5 text-sm font-bold text-muted-foreground backdrop-blur-md">
-                                                    <Image src={getStoreLogo(deal.storeID)!} alt="Store" width={18} height={18} className="rounded-sm" />
-                                                    <span className="uppercase tracking-wide">Ver Oferta</span>
+                                                <div className="flex items-center gap-2 rounded bg-card/70 px-2.5 py-1 text-sm font-bold text-muted-foreground border border-border/50">
+                                                    <Image src={getStoreLogo(deal.storeID)!} alt="Store" width={16} height={16} className="rounded-sm" />
+                                                    <span className="text-[0.75rem] uppercase tracking-wide">Ver Oferta</span>
                                                 </div>
                                             )}
                                             <div className="flex items-center gap-3 text-muted-foreground">
-                                                <Monitor size={20} className="opacity-70 transition-opacity hover:opacity-100" />
-                                                <Gamepad2 size={20} className="opacity-70 transition-opacity hover:opacity-100" />
+                                                <Monitor size={16} className="opacity-70 transition-opacity hover:opacity-100" />
+                                                <Gamepad2 size={16} className="opacity-70 transition-opacity hover:opacity-100" />
                                             </div>
                                         </div>
 
                                         <div className="flex items-center justify-center gap-5 md:justify-start">
-                                            {dealSavings > 0 && <span className="rounded bg-primary px-4 py-2 text-xl font-black text-primary-foreground shadow-lg shadow-primary/30">Save {dealSavings}%</span>}
+                                            {dealSavings > 0 && <span className="rounded bg-primary px-4 py-2 text-[1.25rem] font-extrabold text-primary-foreground">Save {dealSavings}%</span>}
                                             <div className="flex flex-col justify-center">
-                                                {dealSavings > 0 && <span className="text-lg font-bold leading-none text-muted-foreground line-through">${deal.normalPrice}</span>}
-                                                <span className="text-3xl font-black leading-none text-foreground">${deal.salePrice}</span>
+                                                {dealSavings > 0 && <span className="mb-0.5 text-base font-semibold leading-none text-muted-foreground line-through">${deal.normalPrice}</span>}
+                                                <span className="text-[1.75rem] font-extrabold leading-none text-foreground">${deal.salePrice}</span>
                                             </div>
                                         </div>
 
                                         <Link
                                             href={`/game/${deal.gameID}`}
-                                            className="mt-2 inline-flex items-center justify-center rounded-lg bg-foreground px-10 py-4 text-lg font-bold text-background transition-all hover:-translate-y-1 hover:bg-primary hover:text-primary-foreground hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.3)] w-full md:w-auto"
+                                            className="mt-2 inline-flex w-full md:w-fit items-center justify-center rounded bg-foreground px-10 py-4 text-[1.05rem] font-bold text-background transition-all hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground hover:shadow-[0_10px_25px_-5px_rgba(255,255,255,0.15)]"
                                             tabIndex={isActive ? 0 : -1}
                                         >
                                             Get Deal Now
                                         </Link>
                                     </div>
 
+                                    {/* LAYER 4: The 3D Tilting Image Card */}
                                     <div
-                                        className="relative aspect-[460/215] rounded-lg overflow-hidden border border-border/60 shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:!transform-[perspective(1000px)_rotateY(0deg)_rotateX(0deg)_scale(1.02)]"
+                                        className="relative mx-auto aspect-460/215 w-full max-w-lg overflow-hidden rounded-lg border border-border/60 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_30px_rgba(0,0,0,0.3)] transition-transform duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] md:max-w-none hover:!transform-[perspective(1000px)_rotateY(0deg)_rotateX(0deg)_scale(1.02)]"
                                         style={{ transform: 'perspective(1000px) rotateY(-8deg) rotateX(4deg)' }}
                                     >
                                         <Image
@@ -152,12 +153,12 @@ export default function HeroSection({ deals }: HeroSectionProps) {
 
             {/* Navigation Dots */}
             {deals.length > 1 && (
-                <div className="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 gap-2">
+                <div className="absolute bottom-8 left-1/2 z-40 flex -translate-x-1/2 gap-2">
                     {deals.map((_, idx) => (
                         <button
                             key={idx}
                             className={cn(
-                                "h-1 w-8 rounded-full bg-white/20 transition-all hover:bg-white/50",
+                                "h-1 w-8 rounded-sm bg-muted-foreground/30 transition-all duration-300 hover:bg-muted-foreground/70",
                                 idx === currentIndex && "w-12 bg-primary"
                             )}
                             onClick={() => setCurrentIndex(idx)}
