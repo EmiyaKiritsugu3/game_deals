@@ -1,13 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getGame, getStores, getHighResImage, getStoreLogo, isGreyMarketStore, getDrmType, getRegionTag, GameDeal } from '@/services/api';
-import { estimatePlaytime, calculateCostPerHour } from '@/services/hltb';
-import HeartButton from '@/components/HeartButton';
-import PriceAlertTrigger from '@/components/PriceAlertTrigger';
-import { DynamicPriceHistory, DynamicStoreCompare } from '@/components/DynamicCharts';
-import DealsBadge from '@/components/DealsBadge';
-import AddToListButton from '@/components/AddToListButton';
-import styles from './page.module.css';
+import { getGame, getStores, getHighResImage, getStoreLogo } from '@/services/api';
+import { ArrowLeft, Heart, Bell, TrendingDown, ExternalLink } from 'lucide-react';
 
 export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -19,10 +13,13 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
 
     if (!game || !game.info) {
         return (
-            <main className={styles.main}>
+            <main className="flex min-h-screen flex-col items-center justify-center bg-background pb-24 text-center space-y-4">
                 <div className="container">
-                    <h1>Game not found</h1>
-                    <Link href="/" className={styles.backLink}>← Back to Deals</Link>
+                    <h1 className="text-2xl font-bold text-foreground mb-4">Game not found</h1>
+                    <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                        <ArrowLeft size={18} />
+                        <span className="font-bold text-sm uppercase tracking-wider">Back to Deals</span>
+                    </Link>
                 </div>
             </main>
         );
@@ -33,174 +30,126 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
     // Sort deals by price ascending (best deal first)
     const sortedDeals = [...game.deals].sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
 
-    const cheapestEver = parseFloat(game.cheapestPriceEver.price);
-    const bestCurrentPrice = parseFloat(sortedDeals[0]?.price ?? '9999');
-
-    // If the best current price is within 5% of the all-time low, it's a "live HL"
-    const isCurrentlyAtHL = bestCurrentPrice <= cheapestEver * 1.05;
-
-    const playtime = estimatePlaytime(game.info.title);
-    const costPerHour = calculateCostPerHour(bestCurrentPrice, playtime.mainStory);
-
     return (
-        <main className={styles.main}>
-            <div className="container">
-                <Link href="/" className={styles.backLink}>← Back to Deals</Link>
+        <main className="relative min-h-screen w-full bg-background pb-24">
+            {/* LAYER 0: Full Bleed Atmospheric Glow */}
+            <div className="absolute inset-0 z-0 h-[70vh] w-full overflow-hidden pointer-events-none">
+                {/* Gradient mask to fade smoothly into pure OLED black */}
+                <div className="absolute inset-0 z-10 bg-gradient-to-b from-background/40 via-background/80 to-background" />
+                <Image
+                    src={highResThumb}
+                    alt="Atmosphere"
+                    fill
+                    className="object-cover blur-[100px] saturate-[1.5] opacity-50"
+                    priority
+                />
+            </div>
 
-                <div className={styles.heroLayout}>
-                    <div className={styles.imageWrapper}>
-                        <Image
-                            src={highResThumb}
-                            alt={game.info.title}
-                            fill
-                            className={styles.image}
-                            priority
-                        />
-                    </div>
+            {/* LAYER 1: The Glass Dashboard */}
+            <div className="container relative z-10 mx-auto px-4 max-w-6xl pt-24 md:pt-32">
 
-                    <div className={styles.info}>
-                        <div className={styles.titleRow}>
-                            <h1 className={styles.title}>{game.info.title}</h1>
-                            <div className={styles.actionButtons}>
-                                <PriceAlertTrigger 
-                                    gameID={id} 
-                                    gameTitle={game.info.title} 
-                                    currentPrice={bestCurrentPrice} 
-                                />
-                                <HeartButton gameID={id} className={styles.detailsHeart} />
-                                <AddToListButton gameId={id} variant="full" />
+                <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-8 outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md px-2 py-1 -ml-2">
+                    <ArrowLeft size={18} />
+                    <span className="font-bold text-sm uppercase tracking-wider">Back to Deals</span>
+                </Link>
+
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8 xl:gap-12">
+
+                    {/* LEFT COLUMN: Art, Title, and Charts */}
+                    <div className="space-y-8 lg:space-y-12">
+
+                        {/* Game Presentation */}
+                        <div className="flex flex-col md:flex-row gap-8 items-start">
+                            {/* Main Cover Art */}
+                            <div className="relative w-full max-w-[280px] aspect-[3/4] rounded-2xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] shrink-0 bg-card">
+                                <Image src={highResThumb} fill alt={game.info.title} className="object-cover" priority />
+                            </div>
+
+                            {/* Title & Actions */}
+                            <div className="flex flex-col pt-2">
+                                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-foreground drop-shadow-xl mb-6 leading-tight">
+                                    {game.info.title}
+                                </h1>
+
+                                <div className="flex flex-wrap items-center gap-4">
+                                    <button className="flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-5 py-2.5 text-sm font-bold text-foreground hover:bg-white/10 hover:border-white/20 transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                                        <Heart size={18} className="text-muted-foreground" /> Add to Wishlist
+                                    </button>
+                                    <button className="flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-5 py-2.5 text-sm font-bold text-primary hover:bg-primary/20 hover:border-primary/40 transition-all shadow-[0_0_15px_oklch(var(--color-primary)/0.15)] outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                                        <Bell size={18} /> Price Alert
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
-                        <div className={styles.statsRow}>
-                            <div className={styles.statBlock}>
-                                <span className={styles.statLabel}>Best Price Now</span>
-                                <span className={styles.statValue}>
-                                    {bestCurrentPrice === 0
-                                        ? <span className={styles.freeTag}>FREE</span>
-                                        : `$${sortedDeals[0]?.price}`}
-                                </span>
+                        {/* Charts Placeholder - Glass Panel */}
+                        <div className="rounded-3xl border border-white/5 bg-card/20 backdrop-blur-2xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
+                            <div className="flex items-center justify-between mb-8 relative z-10">
+                                <div className="flex items-center gap-3 text-foreground">
+                                    <div className="p-2 rounded-lg bg-white/5 border border-white/10">
+                                        <TrendingDown size={20} className="text-primary" />
+                                    </div>
+                                    <h2 className="text-2xl font-black tracking-tight">Price History</h2>
+                                </div>
                             </div>
 
-                            <div className={styles.statDivider} />
-
-                            <div className={styles.statBlock}>
-                                <span className={styles.statLabel}>Historical Low</span>
-                                <span className={`${styles.statValue} ${styles.hlValue}`}>
-                                    ${game.cheapestPriceEver.price}
-                                    {isCurrentlyAtHL && (
-                                        <span className={styles.hlActiveBadge}>LIVE HL</span>
-                                    )}
-                                </span>
-                                <span className={styles.statSub}>
-                                    {new Date(game.cheapestPriceEver.date * 1000).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                                </span>
-                            </div>
-
-                            <div className={styles.statDivider} />
-
-                            <div className={styles.statBlock}>
-                                <span className={styles.statLabel}>🎮 Value</span>
-                                <span className={styles.statValue}>{costPerHour}</span>
-                                <span className={styles.statSub}>~{playtime.mainStory}h campaign</span>
+                            {/* Chart Container */}
+                            <div className="h-[300px] w-full flex items-center justify-center border border-dashed border-white/10 rounded-xl bg-background/50 relative z-10">
+                                <span className="font-mono text-sm text-muted-foreground uppercase tracking-widest">Chart Component Integration Pending</span>
                             </div>
                         </div>
                     </div>
+
+                    {/* RIGHT COLUMN: The Store Deals Ledger */}
+                    <div className="space-y-6">
+                        <div className="sticky top-32 rounded-3xl border border-white/10 bg-card/40 backdrop-blur-3xl shadow-2xl overflow-hidden">
+                            <div className="p-6 md:p-8 border-b border-white/5 bg-background/20">
+                                <h2 className="text-2xl font-black tracking-tight text-foreground flex items-center gap-2">
+                                    Available Deals
+                                </h2>
+                            </div>
+
+                            <div className="p-4 md:p-6 space-y-3">
+                                {sortedDeals.map((deal) => {
+                                    const storeName = stores[deal.storeID] || `Store ${deal.storeID}`;
+                                    const logo = getStoreLogo(deal.storeID);
+
+                                    return (
+                                        <a
+                                            key={deal.dealID}
+                                            href={`https://www.cheapshark.com/redirect?dealID=${deal.dealID}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="group flex items-center justify-between p-4 rounded-xl hover:bg-white/5 transition-all border border-transparent hover:border-white/10 hover:shadow-lg outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-10 h-10 rounded-lg bg-background/80 border border-white/10 flex items-center justify-center overflow-hidden relative shrink-0">
+                                                    {logo ? (
+                                                        <Image src={logo} alt={storeName} fill className="object-cover" />
+                                                    ) : (
+                                                        <span className="text-xs">{deal.storeID}</span>
+                                                    )}
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="font-bold text-foreground group-hover:text-primary transition-colors">{storeName}</span>
+                                                    <span className="text-xs font-semibold text-muted-foreground line-through">Retail: ${deal.retailPrice}</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-4">
+                                                <span className="font-black text-xl text-foreground drop-shadow-md">${deal.price}</span>
+                                                <div className="p-2.5 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all group-hover:shadow-[0_0_15px_oklch(var(--color-primary)/0.4)]">
+                                                    <ExternalLink size={18} />
+                                                </div>
+                                            </div>
+                                        </a>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-
-                {/* Store comparison list */}
-                <div className={styles.storeComparison}>
-                    {(() => {
-                        const officialDeals = sortedDeals.filter(d => !isGreyMarketStore(d.storeID));
-                        const keyshopDeals = sortedDeals.filter(d => isGreyMarketStore(d.storeID));
-                        
-                        const bestOfficialPrice = officialDeals.length > 0 ? parseFloat(officialDeals[0].price) : null;
-                        const bestKeyshopPrice = keyshopDeals.length > 0 ? parseFloat(keyshopDeals[0].price) : null;
-
-                        const renderDealRow = (deal: GameDeal, isBest: boolean, cheapestEver: number) => {
-                            const savings = Math.round(parseFloat(deal.savings));
-                            const price = parseFloat(deal.price);
-                            const logo = getStoreLogo(deal.storeID);
-                            const storeName = stores[deal.storeID] || `Store ${deal.storeID}`;
-                            const isDealAtHL = price <= cheapestEver * 1.05;
-                            const isFree = price === 0;
-                            const isEpicDeal = savings >= 75 || isFree;
-
-                            return (
-                                <a
-                                    key={deal.dealID}
-                                    href={`/out?url=${encodeURIComponent(
-                                        deal.dealID.startsWith('grey-')
-                                            ? `https://www.${storeName.toLowerCase().replace(/\s+/g, '')}.com/search?q=${encodeURIComponent(game.info.title)}`
-                                            : `https://www.cheapshark.com/redirect?dealID=${deal.dealID}`
-                                    )}&store=${encodeURIComponent(storeName)}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className={`${styles.dealRow} ${isBest ? styles.dealRowBest : ''}`}
-                                >
-                                    <div className={styles.storeInfo}>
-                                        {logo ? (
-                                            <img src={logo} alt={storeName} className={styles.storeLogo} width={18} height={18} />
-                                        ) : (
-                                            <div className={styles.storeLogoPlaceholder} />
-                                        )}
-                                        <span className={styles.storeName}>{storeName}</span>
-                                        {isBest && <span className={styles.bestTag}>BEST</span>}
-                                        {isEpicDeal && <DealsBadge type="EPIC" />}
-                                        <span className="drmBadge">{getDrmType(deal.storeID).icon} {getDrmType(deal.storeID).label}</span>
-                                        {getRegionTag(deal.storeID) && <span className="regionBadge">{getRegionTag(deal.storeID)}</span>}
-                                    </div>
-
-                                    <div className={styles.dealPriceInfo}>
-                                        {isDealAtHL && <DealsBadge type="HL" />}
-                                        {savings > 0 && !isFree && <div className={styles.savingsBadge}>-{savings}%</div>}
-                                        <div className={styles.prices}>
-                                            {savings > 0 && !isFree && <span className={styles.retail}>${deal.retailPrice}</span>}
-                                            {isFree ? <span className={styles.freePrice}>FREE</span> : <span className={styles.price}>${deal.price}</span>}
-                                        </div>
-                                    </div>
-                                </a>
-                            );
-                        };
-
-                        return (
-                            <>
-                                {officialDeals.length > 0 && (
-                                    <>
-                                        <h2>Official Stores</h2>
-                                        <div className={styles.dealsList}>
-                                            {officialDeals.map((deal) => renderDealRow(deal, parseFloat(deal.price) === bestOfficialPrice, cheapestEver))}
-                                        </div>
-                                    </>
-                                )}
-                                
-                                {keyshopDeals.length > 0 && (
-                                    <>
-                                        <h2 className={styles.keyshopTitle}>Keyshops</h2>
-                                        <div className={styles.dealsList}>
-                                            {keyshopDeals.map((deal) => renderDealRow(deal, parseFloat(deal.price) === bestKeyshopPrice, cheapestEver))}
-                                        </div>
-                                    </>
-                                )}
-                            </>
-                        );
-                    })()}
-                </div>
-
-                <DynamicPriceHistory
-                    currentPrice={sortedDeals[0]?.price || game.cheapestPriceEver.price}
-                    lowestPrice={game.cheapestPriceEver.price}
-                    lowestDate={game.cheapestPriceEver.date}
-                    retailPrice={sortedDeals[0]?.retailPrice || game.cheapestPriceEver.price}
-                    gameTitle={game.info.title}
-                />
-
-                <DynamicStoreCompare
-                    data={sortedDeals.map(d => ({
-                        storeName: stores[d.storeID] || `Store ${d.storeID}`,
-                        price: d.price
-                    }))}
-                />
             </div>
         </main>
     );
