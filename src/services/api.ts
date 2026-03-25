@@ -67,6 +67,31 @@ export async function getStores(): Promise<Record<string, string>> {
     return map;
 }
 
+export interface SearchResult {
+    gameID: string;
+    steamAppID: string;
+    cheapest: string;
+    cheapestDealID: string;
+    external: string;
+    internalName: string;
+    thumb: string;
+}
+
+export async function searchGames(title: string): Promise<SearchResult[]> {
+    const url = new URL(`${BASE_URL}/games`);
+    url.searchParams.append('title', title);
+    url.searchParams.append('limit', '6'); // Max 6 results for the modal
+
+    try {
+        const res = await fetch(url.toString());
+        if (!res.ok) return [];
+        return await res.json();
+    } catch (error) {
+        console.error('Search error:', error);
+        return [];
+    }
+}
+
 export async function getGame(id: string): Promise<GameDetails> {
     const url = new URL(`${BASE_URL}/games`);
     url.searchParams.append('id', id);

@@ -2,11 +2,32 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, X, Gamepad2 } from 'lucide-react';
+import { Search, X, Gamepad2, Loader2 } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { searchGames, SearchResult } from '@/services/api';
 
 export default function SearchModal() {
     const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [results, setResults] = useState<SearchResult[]>([]);
+    const [isSearching, setIsSearching] = useState(false);
+
+    useEffect(() => {
+        if (searchQuery.trim().length > 2) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setIsSearching(true);
+            const timer = setTimeout(async () => {
+                const apiResults = await searchGames(searchQuery);
+                setResults(apiResults);
+                setIsSearching(false);
+            }, 300);
+            return () => clearTimeout(timer);
+        } else {
+            setResults([]);
+            setIsSearching(false);
+        }
+    }, [searchQuery]);
 
     // Global Keyboard Listener for ⌘K or Ctrl+K
     useEffect(() => {
@@ -75,16 +96,44 @@ export default function SearchModal() {
                                 </button>
                             </div>
 
-                            {/* Results Area (Placeholder for actual API mapping later) */}
+                            {/* Results Area */}
                             <div className="max-h-[60vh] overflow-y-auto p-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                                {searchQuery.length === 0 ? (
+                                {isSearching ? (
+                                    <div className="py-12 flex flex-col items-center">
+                                        <Loader2 size={32} className="animate-spin text-primary opacity-50 mb-3" />
+                                        <p className="text-sm text-muted-foreground">Searching database...</p>
+                                    </div>
+                                ) : searchQuery.length === 0 ? (
                                     <div className="px-4 py-12 text-center flex flex-col items-center justify-center text-muted-foreground">
                                         <Gamepad2 size={32} className="mb-3 opacity-20" />
                                         <p className="text-sm">Type a command or search...</p>
                                     </div>
+                                ) : results.length === 0 && searchQuery.length > 2 ? (
+                                    <div className="px-4 py-12 text-center flex flex-col items-center justify-center text-muted-foreground">
+                                        <p className="text-sm">No games found</p>
+                                    </div>
                                 ) : (
-                                    <div className="p-2 text-center text-sm text-muted-foreground">
-                                        Integration with Supabase/API pending for query: <strong className="text-primary">{searchQuery}</strong>
+                                    <div className="flex flex-col space-y-1">
+                                        {results.map((game) => (
+                                            <Link
+                                                key={game.gameID}
+                                                href={`/game/${game.gameID}`}
+                                                onClick={() => setIsOpen(false)}
+                                                className="group flex items-center justify-between p-3 border-b border-white/5 hover:bg-white/5 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                                            >
+                                                <div className="flex items-center">
+                                                    <div className="w-10 h-10 relative rounded overflow-hidden bg-card shrink-0">
+                                                        <Image src={game.thumb} alt={game.external} fill className="object-cover" />
+                                                    </div>
+                                                    <span className="font-bold text-foreground group-hover:text-primary transition-colors ml-4">
+                                                        {game.external}
+                                                    </span>
+                                                </div>
+                                                <span className="font-black text-foreground drop-shadow-md">
+                                                    ${game.cheapest}
+                                                </span>
+                                            </Link>
+                                        ))}
                                     </div>
                                 )}
                             </div>
