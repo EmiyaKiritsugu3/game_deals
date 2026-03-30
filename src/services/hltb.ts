@@ -20,9 +20,13 @@ interface HLTBResult {
  */
 export function estimatePlaytime(gameTitle: string): HLTBResult {
     // Create a simple hash from the title for deterministic results
-    const hash = Array.from(gameTitle).reduce((acc, char, i) => 
-        acc + char.charCodeAt(0) * (i + 1), 0
-    );
+    // Using for...of loop to handle Unicode surrogate pairs correctly
+    let hash = 0;
+    let i = 1;
+    for (const char of gameTitle) {
+        hash += (char.codePointAt(0) || 0) * i;
+        i++;
+    }
 
     // Base hours modulated by hash — range: 6-80 for main story
     const mainStory = 6 + (hash % 74);
