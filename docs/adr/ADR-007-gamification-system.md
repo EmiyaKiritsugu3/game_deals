@@ -1,91 +1,62 @@
-# ADR-007: Gamification System — Badges, XP, Playlists, Social
+# ADR-007: Gamification System — Badges, XP, Playlists
 
-**Status**: Proposto
-**Data**: 2026-06-09
+**Status**: Aceito
+**Data**: 2026-06-09 (Atualizado 2026-06-10)
 **Autor**: EmiyaKiritsugu3
 
 ---
 
 ## Contexto
 
-O GameDeals está evoluindo de "price aggregator" para **plataforma social gamificada** (Phase 19+). Objetivos:
-- **Retenção**: Usuários voltam para completar conquistas, manter streaks
-- **UGC**: Playlists, reviews, collections geram conteúdo SEO + engajamento
-- **Viralidade**: Shareable wishlists, public profiles, badges exibíveis
-- **Dados**: Métricas de comportamento para melhorar recomendações + affiliate conversion
+Engajamento via UGC: playlists, badges, reviews, XP system. Dados atualizados em realtime via **Supabase Realtime**.
+
+---
 
 ## Decisão
 
-### Sistema de Conquistas (Badges)
+### Arquitetura Atualizada (2026)
 
-| Componente | Detalhes |
-|------------|----------|
-| **Tabela `badges`** | Mestre de conquistas disponíveis (name, description, icon_svg, rarity, criteria JSON) |
-| **Tabela `user_stats`** | Contadores incrementais (playlists_count, reviews_count, xp) — evita COUNT(*) em queries |
-| **Tabela `user_badges`** | Junction table (user_id, badge_id, awarded_at) |
-| **Trigger Logic** | Edge Function (Supabase) ou Server Action: no INSERT/UPDATE de playlists/reviews → incrementa `user_stats` → verifica `badges.criteria` → INSERT em `user_badges` se qualificado |
+| Feature | Storage | Realtime | Data Fetching |
+|---------|---------|----------|---------------|
+| Playlists | Supabase (PostgreSQL) | Supabase Realtime subscriptions | Server Actions + TanStack Query |
+| Badges | Supabase (PostgreSQL) | WebSocket push on unlock | Server Actions + `use cache` |
+| XP System | Supabase (PostgreSQL) | WebSocket push on increment | Server Actions (transactional) |
+| Reviews | Supabase (PostgreSQL) | RLS + serve-side rendering | TanStack Query + Server Actions |
 
-#### Exemplo de Badge
-```json
-{
-  "id": "uuid",
-  "name": "Playlist Master",
-  "description": "Created 10 public playlists",
-  "icon_svg": "<svg>...</svg>",
-  "rarity": "Rare",
-  "criteria": { "type": "playlists_count", "threshold": 10, "condition": "public_only": true }
-}
+### Badge System
+
+```typescript
+// src/db/schema/badges.ts
+export const badges = pgTable('badges', {
+  id: uuid().defaultRandom().primaryKey(),
+  name: varchar({ length: 100 }).notNull(),
+  description: varchar({ length: 500 }),
+  icon: varchar({ length: 100 }), // Lucide icon name
+  criteria: jsonb().notNull(),     // { "type": "deals_saved", "threshold": 10, "metric": "count" }
+  xpReward: integer().default(0),
+});
+
+export const userBadges = pgTable('user_badges', {
+  userId: uuid().references(() => users.id).notNull(),
+  badgeId: uuid().references(() => badges.id).notNull(),
+  unlockedAt: timestamp().defaultNow().notNull(),
+});
 ```
 
-### XP & Levels (Futuro)
-- `user_stats.xp` incrementado por ações (playlist: +50, review: +100, daily login: +10)
-- Level = `Math.floor(Math.sqrt(xp / 100))` ou tabela `levels` com thresholds
+### Realtime Updates
 
-### Playlists (UGC Core)
-- **Criação**: User seleciona jogos → salva como playlist pública/privada
-- **Slug**: `/playlist/[slug]` — shareable, SEO-friendly
-- **Discovery**: `/playlists` page com filtros (tags, autor, games count)
-- **Gamificação**: Badges por contagem, curadoria (staff picks), plays/views
+Playlists, badges, notifications usam **Supabase Realtime** (WebSocket) para atualização em tempo real sem polling.
 
-### Reviews
-- **Estrutura**: Rating 1-10, hours_played, is_recommended, content (markdown)
-- **Exibição**: Game detail page + user profile
-- **Moderação**: Report system + auto-filter toxicidade (Perspective API fut.)
-
-### Public Profile (`/user/[username]`)
-- Header: avatar, display_name, bio, badge gallery (horizontal scroll)
-- Tabs: Playlists | Reviews | Wishlist (se público) | Badges | Activity
-- **Privacy**: User controla o que é público (wishlist, playlists, reviews)
-
-### Activity Feed
-- Real-time via Supabase Realtime: novos badges, playlists, reviews de followed users
-- **Gamificação**: "Emiya conquistou 'Playlist Master' 🏆"
+---
 
 ## Consequências
-
-### Positivas
-- **Loop de engajamento**: Cria playlist → ganha badge → exibe no profile → amigos veem → criam suas próprias
-- **SEO UGC**: Playlists públicas = páginas indexáveis com long-tail keywords ("best co-op games 2024", "games under $10")
-- **Dados comportamentais**: Quais jogos aparecem em playlists → sinais de recomendação + affiliate targeting
-- **Diferenciação**: gg.deals/ITAD não têm camada social forte; moat defensável
-
-### Negativas / Trade-offs
-- **Complexidade backend**: Triggers, RLS, realtime, moderação
-- **Abuso potencial**: Users criam playlists spam para badges; mitigado: `criteria.public_only`, rate limits, moderação
-- **Performance**: Badge gallery no profile = múltiplas queries; mitigado: `icon_svg` inline, `user_stats` denormalizado
-- **Privacidade**: LGPD — export/delete de dados UGC; anonimização de activity feed
-
-### Riscos & Mitigações
-| Risco | Mitigação |
-|-------|-----------|
-| Badge inflation (todos viram "Legendary") | Curva de raridade exponencial; novos badges trimestrais |
-| Spam playlists | Min 3 jogos/playlist; cooldown 10min; auto-flag duplicatas |
-| Toxic reviews | Perspective API score > 0.7 → shadowban; report flow |
-| Profile scraping | Rate limit `/user/[username]`; `robots.txt` disallow para bots não-SEO |
+- **Engajamento**: Playlists e badges aumentam retenção
+- **Realtime**: Notificações push e badge unlock via Supabase Realtime (WebSocket)
+- **Drizzle**: Schema type-safe para todas entidades gamificação
 
 ---
 
 ## Referências
-- [Gamification Plan](../gamification_plan.md)
-- [Task.md Phase 19](../task.md#phase-19-gamification--social-foundation-beta)
-- `docs/adr/ADR-004-auth-backend.md` — schema Supabase relacionado
+- [Supabase Realtime Docs](https://supabase.com/docs/guides/realtime)
+- [ADR-001: Tech Stack](ADR-001-tech-stack.md) — Drizzle + Supabase infrastructure
+- [ADR-004: Auth & Backend](ADR-004-auth-backend.md) — User roles + RLS

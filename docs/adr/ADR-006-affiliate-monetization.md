@@ -1,181 +1,122 @@
-# ADR-006: Monetization — Affiliate Cloaking Gateway (/out)
+# ADR-006: Affiliate Monetization — Cloaking Gateway /out Route
 
 **Status**: Aceito
-**Data**: 2026-06-09
+**Data**: 2026-06-09 (Atualizado 2026-06-10)
 **Autor**: EmiyaKiritsugu3
 
 ---
 
 ## Contexto
 
-O modelo de negócio do GameDeals é **afiliados + ads**:
-- **Affiliate networks**: Rakuten (lojas oficiais), CJ / Awin (keyshops + algumas oficiais)
-- **Requisitos**: Links devem conter tracking parameters (click_id, publisher_id, etc.)
-- **Problemas**: Links diretos expõem estrutura de afiliado; usuários podem remover params; redes bloqueiam links "naked"; SEO prefere links limpos
-- **Compliance**: GDPR/LGPD — não vazar PII no referrer; `rel="nofollow sponsored"`
+Monetização principal do GameDeals via **links de afiliado**. Necessidades:
+
+- **Cloaking**: Links curtos internos (`/out/steam/game-123`) → redireciona com parâmetros de tracking
+- **LGPD compliance**: Consentimento via cookie banner + cookie table
+- **Multi-store**: Steam, Epic, GOG, Humble, Fanatical, GreenManGaming, Nuuvem (futuro)
+- **Multi-network**: Rakuten, CJ, Awin (pending), Impact (future)
+- **Tracking**: Contagem de cliques, conversão, CTR por store/game
+
+---
 
 ## Decisão
 
-**Cloaking Gateway via Next.js Route: `/out/[storeId]/[gameId]`**
-
-### Arquitetura
-
-```
-User Click
-    │
-    ▼
-/out/steam/12345  (Next.js Route Handler)
-    │
-    ├── Lookup: storeId → affiliate_network + tracking_template
-    │
-    ├── Build: final_url = template.replace({gameId, clickId, subId})
-    │
-    ├── Log: click event (anonimizado) → analytics / Supabase
-    │
-    └── Redirect 302 → Final Affiliate URL
-```
-
-### Implementação (`src/app/out/[storeId]/[gameId]/route.ts`)
+### Affiliate Cloaking Route
 
 ```typescript
-// Mapeamento store → affiliate config
-const AFFILIATE_MAP: Record<string, AffiliateConfig> = {
-  steam: {
-    network: 'rakuten',
-    baseUrl: 'https://store.steampowered.com/app/',
-    template: 'https://click.linksynergy.com/deeplink?id={pubId}&mid={mid}&murl={encodedUrl}',
-    params: { pubId: 'RAKUTEN_PUB_ID', mid: 'STEAM_MID' },
-  },
-  greenmangaming: {
-    network: 'rakuten',
-    baseUrl: 'https://www.greenmangaming.com/games/',
-    template: 'https://click.linksynergy.com/deeplink?id={pubId}&mid={mid}&murl={encodedUrl}',
-    params: { pubId: 'RAKUTEN_PUB_ID', mid: 'GMG_MID' },
-  },
-  cdkeys: {
-    network: 'cj',
-    baseUrl: 'https://www.cdkeys.com/',
-    template: 'https://www.dpbolvw.net/click-{cid}-{pid}?url={encodedUrl}',
-    params: { cid: 'CJ_CID', pid: 'CJ_PID' },
-  },
-  // ... kinguin, eneba, instantgaming, fanatical, humble, gog, epic
-};
+// src/app/out/[storeId]/[gameSlug]/route.ts
+import { redirect } from 'next/navigation';
+import { drizzle } from '@/db';
+import { affiliateLinks } from '@/db/schema';
+import { eq, and } from 'drizzle-orm';
+import { cookies } from 'next/headers';
 
 export async function GET(
-  req: Request,
-  { params }: { params: Promise<{ storeId: string; gameId: string }> }
+  _req: Request,
+  { params }: { params: { storeId: string; gameSlug: string } }
 ) {
-  const { storeId, gameId } = await params;
-  const config = AFFILIATE_MAP[storeId];
+  const affiliate = await drizzle.query.affiliateLinks.findFirst({
+    where: and(
+      eq(affiliateLinks.storeId, params.storeId),
+      eq(affiliateLinks.gameSlug, params.gameSlug)
+    )
+  });
 
-  if (!config) {
-    return new Response('Store not configured', { status: 404 });
-  }
+  if (!affiliate) return redirect('/404');
 
-  // Build destination URL
-  const destinationUrl = `${config.baseUrl}${gameId}`;
+  // Log click (background)
+  await drizzle.insert(affiliateClicks).values({
+    storeId: params.storeId,
+    gameSlug: params.gameSlug,
+    userId: (await getUser())?.id ?? null,
+    ip: anonymizeIp(/* */),
+    userAgent: /* */,
+    timestamp: new Date()
+  });
 
-  // Build affiliate URL
-  const affiliateUrl = config.template
-    .replace('{encodedUrl}', encodeURIComponent(destinationUrl))
-    .replace('{pubId}', config.params.pubId)
-    .replace('{mid}', config.params.mid)
-    .replace('{cid}', config.params.cid)
-    .replace('{pid}', config.params.pid);
+  // Build tracking URL
+  const url = buildAffiliateUrl(affiliate.url, {
+    clickId: affiliate.id,
+    cookie: (await cookies()).get('gamedeals_ref')?.value,
+    source: 'gamedeals'
+  });
 
-  // Generate click ID for tracking (anonimizado)
-  const clickId = crypto.randomUUID();
-
-  // Log click (async, non-blocking)
-  logClickEvent({ storeId, gameId, clickId, network: config.network });
-
-  // Redirect
-  return Response.redirect(affiliateUrl, 302);
+  redirect(url);
 }
 ```
 
-### UI Integration
-
-```tsx
-// components/DealRow.tsx
-<Button
-  asChild
-  onClick={() => router.push(`/out/${deal.storeId}/${deal.gameId}`)}
->
-  <a
-    href={`/out/${deal.storeId}/${deal.gameId}`}
-    rel="nofollow sponsored"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    Ver Oferta
-  </a>
-</Button>
-```
-
-### Analytics de Cliques
+### Edge Cache Pattern
 
 ```typescript
-// lib/analytics.ts
-async function logClickEvent(data: ClickEvent) {
-  // Option 1: Vercel Analytics (event customizado)
-  // Option 2: Supabase Edge Function (batched)
-  // Option 3: Plausible/Umami self-hosted
-  await supabase.from('affiliate_clicks').insert({
-    store_id: data.storeId,
-    game_id: data.gameId,
-    network: data.network,
-    click_id: data.clickId,
-    user_id: getCurrentUserId(), // null se anon
-    created_at: new Date().toISOString(),
-  });
-}
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic'; // sempre fresh para redirect
 ```
 
-### Schema: `affiliate_clicks`
+### Affiliate Link Table (Drizzle ORM)
 
-```sql
-CREATE TABLE affiliate_clicks (
-  id BIGSERIAL PRIMARY KEY,
-  store_id TEXT NOT NULL,
-  game_id BIGINT NOT NULL,
-  network TEXT NOT NULL,           -- 'rakuten', 'cj', 'awin'
-  click_id UUID NOT NULL,          -- para dedup/reconciliação
-  user_id UUID REFERENCES profiles(id),
-  user_agent TEXT,
-  referrer TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
+```typescript
+// src/db/schema/affiliates.ts
+export const affiliateLinks = pgTable('affiliate_links', {
+  id: uuid().defaultRandom().primaryKey(),
+  storeId: varchar({ length: 50 }).notNull(),       // 'steam', 'epic', 'gog'
+  gameSlug: varchar({ length: 255 }).notNull(),
+  network: varchar({ length: 50 }).notNull(),        // 'rakuten', 'cj', 'awin'
+  url: varchar({ length: 2000 }).notNull(),          // Original store URL
+  trackingTemplate: varchar({ length: 2000 }),       // URL template with {clickId}
+  updatedAt: timestamp().defaultNow().notNull(),
+});
 
-CREATE INDEX idx_affiliate_clicks_store_game ON affiliate_clicks(store_id, game_id);
-CREATE INDEX idx_affiliate_clicks_created ON affiliate_clicks(created_at DESC);
+export const affiliateClicks = pgTable('affiliate_clicks', {
+  id: uuid().defaultRandom().primaryKey(),
+  storeId: varchar({ length: 50 }).notNull(),
+  gameSlug: varchar({ length: 255 }).notNull(),
+  userId: uuid(),
+  ip: varchar({ length: 45 }),
+  timestamp: timestamp().defaultNow().notNull(),
+});
 ```
+
+---
 
 ## Consequências
 
 ### Positivas
-- **Links limpos no UI**: `/out/steam/12345` vs URL feia com 10 params
-- **Tracking confiável**: Click ID próprio + network params; dedup no dashboard da rede
-- **Flexibilidade**: Trocar rede afiliada = mudar 1 linha no map; zero mudança no frontend
-- **Compliance**: `rel="nofollow sponsored"` + no referrer leakage (redirect 302 limpa referrer)
-- **Analytics próprio**: Dados de CTR, conversion por store/game/network no Supabase
-- **A/B testing**: Fácil testar templates diferentes por store
+- **SEO limpo**: Todos links internos, sem parâmetros de afiliado nos crawled pages
+- **Tracking próprio**: Banco de cliques para analytics, CTR reports
+- **LGPD compliant**: IP anonimizado, consentimento via banner
+- **Edge-ready**: Route handlers no Edge, redirect 307/302 rápido
+- **Swap fácil**: Trocar network só muda `trackingTemplate` no banco
 
 ### Negativas / Trade-offs
-- **Extra hop**: 302 redirect adiciona ~50-150ms latency; mitigado: edge function (Vercel Edge Runtime)
-- **Complexidade**: Manter `AFFILIATE_MAP` atualizado conforme redes mudam templates
-- **Ad blockers**: Podem bloquear `/out/*`; mitigado: path neutro, sem "affiliate" no nome
-- **Network compliance**: Algumas redes exigem subId único por click; clickId resolve
-
-### Plano de Evolução
-- **Phase 1 (atual)**: Cloaking básico + logging Supabase
-- **Phase 2**: Edge Function no Vercel (latency < 20ms global)
-- **Phase 3**: SubId dinâmico por usuário logado (atribuição LTV)
-- **Phase 4**: Smart linking — detecta device/geo → roteia para melhor oferta (ex: mobile → app store link)
+- **Redirect overhead**: 307 redirect adiciona ~50ms (mitigado: Edge runtime)
+- **Dados de conversão**: Requer parceria com network para postback (supabase webhook)
+- **Nuuvem/CJ/Awin**: Pendente aprovação (afiliados BR têm requisitos específicos)
 
 ---
 
 ## Referências
-- [Task.md Phase 10 & 12f](../task.md)
-- `src/app/out/[storeId]/[gameId]/route.ts` — implementação
-- `src/components/DealRow.tsx` — integração UI
+- [Rakuten Affiliate API](https://rakutenmarketing.com/affiliate)
+- [CJ Affiliate](https://www.cj.com)
+- [Awin](https://www.awin.com)
+- [ADR-003: State Management](ADR-003-state-management.md) — click analytics via TanStack Query
+- [ADR-004: Auth & Backend](ADR-004-auth-backend.md) — Drizzle + Supabase
+- `src/app/out/[storeId]/[gameSlug]/route.ts` — Implementação

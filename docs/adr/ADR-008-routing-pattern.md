@@ -1,141 +1,113 @@
-# ADR-008: Routing Pattern — Intercepting Routes para Sidebar Modal
+# ADR-008: Routing Pattern — App Router (Next.js 16) + Nuqs + Server Actions
 
 **Status**: Aceito
-**Data**: 2026-06-09
+**Data**: 2026-06-09 (Atualizado 2026-06-10)
 **Autor**: EmiyaKiritsugu3
 
 ---
 
 ## Contexto
 
-O GameDeals usa um **Sidebar Modal** para exibir detalhes do jogo (preços, histórico, metadados, HLTB, DRM badges) sem navegar para fora da Home/Listing page.
+Navegação e URL state management no GameDeals: SSR/ISR para SEO, parámetros de URL para search/filters, modais como rotas hijack, transições de página.
 
-Requisitos:
-- **Desktop**: Sidebar desliza da direita (30-40% viewport), página anterior visível atrás (backdrop blur)
-- **Mobile**: Modal full-screen (bottom sheet style)
-- **Deep linking**: URL reflete jogo aberto (`/game/12345` ou interceptada)
-- **Refresh/F5**: Deve renderizar página standalone completa (SSR/SEO)
-- **Navegação**: Back/Forward do browser fecha sidebar e volta ao estado anterior
-- **Performance**: Carregamento lazy do modal pesado (charts, imagens, tabs)
+---
 
 ## Decisão
 
-**Next.js Intercepting Routes + Parallel Routes**
+### App Router (Next.js 16)
 
-### Estrutura de Arquivos
-
+**Layout hierarchy**:
 ```
-src/app/
-├── @modal/                    # Parallel Route (slot)
-│   └── (.)game/
+app/
+├── (public)/           # Landing, about, legal
+│   └── page.tsx
+├── (main)/             # Authenticated experience
+│   ├── layout.tsx      # Navbar + Sidebar + Auth Guard
+│   ├── page.tsx        # Main feed (Historical Lows, Ending Soon, Hero)
+│   ├── deals/
+│   │   ├── page.tsx    # Deal listing (SSR + infinite scroll)
+│   │   └── loading.tsx # Skeleton loading
+│   ├── search/
+│   │   └── page.tsx    # Search results
+│   ├── game/
+│   │   └── [slug]/
+│   │       └── page.tsx  # Server Component route
+│   └── user/
 │       └── [id]/
-│           └── page.tsx       # Sidebar Modal content (Client Component)
-├── game/
-│   └── [id]/
-│       └── page.tsx           # Standalone page (Server Component) — F5 target
-├── page.tsx                   # Home (Server Component)
-└── layout.tsx                 # Root layout com <@modal />
+│           ├── page.tsx    # Profile page
+│           └── playlists/page.tsx
+├── out/                # Affiliate redirect
+│   └── [storeId]/
+│       └── [gameSlug]/
+│           └── route.ts    # Edge Route Handler
+├── api/                # API routes para Supabase integration
+│   └── search/route.ts
+├── auth/
+│   └── callback/route.ts   # OAuth callback
+└── globals.css
 ```
 
-### Root Layout (`src/app/layout.tsx`)
+### URL State Management: Nuqs
 
-```tsx
-export default function RootLayout({ children, modal }: { children: React.ReactNode; modal: React.ReactNode }) {
-  return (
-    <html lang="pt-BR">
-      <body>
-        {children}
-        {modal}  {/* Parallel route slot */}
-      </body>
-    </html>
-  );
+```typescript
+'use client';
+import { useQueryState } from 'nuqs';
+
+function DealsFilter() {
+  const [sort, setSort] = useQueryState('sort', { defaultValue: 'dealRating' });
+  const [page, setPage] = useQueryState('page', { defaultValue: 1, parse: Number });
+  const [store, setStore] = useQueryState('store');
+
+  return <FilterBar sort={sort} onChangeSort={setSort} />;
 }
 ```
 
-### Intercepting Route (`src/app/@modal/(.)game/[id]/page.tsx`)
+### Modal como Route Intercept
 
-```tsx
-'use client'; // Necessário para Framer Motion, interatividade
+```typescript
+// src/app/game/[slug]/page.tsx (full page)
+export default async function GamePage({ params }: { params: { slug: string } }) {
+  const game = await getGame(params.slug);
+  return <GameDetail game={game} />;
+}
 
-import { SidebarModal } from '@/components/SidebarModal';
-
-export default function ModalGamePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  return <SidebarModal gameId={id} onClose={() => router.back()} />;
+// src/app/@modal/game/[slug]/page.tsx (modal intercept)
+export default async function GameModal({ params }: { params: { slug: string } }) {
+  return <SidebarModal>
+    <GamePanel slug={params.slug} />
+  </SidebarModal>;
 }
 ```
 
-### Standalone Page (`src/app/game/[id]/page.tsx`)
+### Server Actions para Form Submissions
 
-```tsx
-// Server Component — SSR para SEO, F5, share links
-import { GameDetailPage } from '@/components/GameDetailPage';
-import { getGame } from '@/services/api';
-
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const game = await getGame(id);
-  return { title: `${game.title} - GameDeals`, ... };
-}
-
-export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const game = await getGame(id);
-  return <GameDetailPage game={game} />;
+```typescript
+'use server';
+export async function createPlaylistAction(formData: FormData) {
+  // Zod validation + Drizzle insert + revalidation
 }
 ```
 
-### Link no DealRow (Home/Listing)
-
-```tsx
-// components/DealRow.tsx
-import Link from 'next/link';
-
-<Link
-  href={`/game/${deal.gameId}`}           // Target: standalone page
-  onClick={(e) => {
-    e.preventDefault();                   // Prevent default navigation
-    router.push(`/game/${deal.gameId}`);  // Triggers intercepting route
-  }}
->
-  <GameCard game={deal} />
-</Link>
-```
-
-### Comportamento Resultante
-
-| Ação | Comportamento |
-|------|---------------|
-| Click em deal na Home | Abre `@modal/(.)game/[id]` → Sidebar desliza; URL muda para `/game/12345` |
-| F5 / Direct access `/game/12345` | Renderiza `game/[id]/page.tsx` (standalone, SSR) |
-| Back button (browser) | Fecha sidebar; volta para Home (history preserved) |
-| Close button (X no modal) | `router.back()` → fecha intercepting route |
-| Share link | `/game/12345` abre standalone page (SEO, OG tags) |
+---
 
 ## Consequências
 
 ### Positivas
-- **UX Premium**: Sidebar mantém contexto (Home scroll position, filters) — igual gg.deals/Steam
-- **SEO Perfeito**: Standalone page é SSR com metadata completa; crawlers veem conteúdo
-- **Progressive Enhancement**: JS disabled → direct link funciona (standalone page)
-- **Performance**: Modal é Client Component lazy-loaded (`next/dynamic`); standalone é Server Component
-- **Type Safety**: `params` tipados em ambas as rotas
+- **SEO máximo**: Server Components + SSR para todas páginas públicas
+- **URL state compartilhável**: Filters, sort, page via `nuqs` (type-safe, sync com URL)
+- **Modais SEO-friendly**: Rota intercept (`/game/[slug]`) + full page server-rendered
+- **Progressive Enhancement**: Server Actions funcionam sem JS
+- **Edge redirects**: `/out/*` routes no Edge Runtime para mínimo overhead
 
-### Negativas / Trade-offs
-- **Complexidade mental**: Intercepting + Parallel routes são patterns avançados do Next.js 13+
-- **Hidratação**: Modal client-side precisa hidratar dados já fetchados no server (evitar double-fetch)
-- **Mobile UX**: Sidebar → full-screen modal requer CSS condicional + focus trap
-- **Analytics**: Page view duplo potencial (modal + standalone); filtrar por `referrer` ou `document.referrer`
-
-### Implementação Atual
-- `src/app/@modal/(.)game/[id]/page.tsx` — Sidebar Modal entry
-- `src/app/game/[id]/page.tsx` — Standalone page
-- `src/components/SidebarModal.tsx` — Modal content (tabs: Prices, History, Info, HLTB, Reviews)
-- `src/components/DealRow.tsx` — Link com `router.push` interception
+### Negativas
+- **Parallel Routes complexity**: Intercepting modais adicionam complexidade de build (mitigado: pattern claro em `@modal`)
+- **Nuqs + Server Components**: URL state só funciona em Client Components (mitigado: wrapper fine-grained)
+- **Server Actions + forms**: Loading states precisam de `useFormStatus` ou TanStack Query
 
 ---
 
 ## Referências
-- [Tech Stack Dictionary](../tech_stack_dictionary.md#-advanced-routing-patterns)
-- [Project Architecture Analysis](../project_architecture_analysis.md)
-- Next.js Docs: [Intercepting Routes](https://nextjs.org/docs/app/building-your-application/routing/intercepting-routes) | [Parallel Routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes)
+- [Next.js 16 App Router Docs](https://nextjs.org/docs/app)
+- [Nuqs GitHub](https://github.com/47ng/nuqs) — URL state management
+- [Next.js 16 Parallel Routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes)
+- [ADR-006: Affiliate Monetization](ADR-006-affiliate-monetization.md) — `/out` route handler

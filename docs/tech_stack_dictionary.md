@@ -1,53 +1,103 @@
-# 📘 GameDeals: Tech Stack Dictionary & Architecture Guide
+# Tech Stack Dictionary — GameDeals
 
-Este documento serve como a **Fonte da Verdade** técnica para o projeto GameDeals. Se você é o Jules (ou qualquer outro colaborador), siga estas diretrizes para manter a consistência e a performance do sistema.
+Glossário das tecnologias, ferramentas e conceitos usados no projeto.
 
----
+## Core Framework
 
-## 🏗️ Core Framework & Language
-- **Next.js 14 (App Router):** Utilizamos a versão mais recente do Next.js. Quase tudo no diretório `src/app` é **Server Component** por padrão. Use **Client Components** (`'use client'`) apenas quando necessário (hooks, interações).
-- **TypeScript:** Tipagem estrita é obrigatória. Interfaces para APIs estão centralizadas em `src/services/api.ts`.
+| Termo | Descrição | Versão |
+|-------|-----------|--------|
+| **Next.js** | React framework com SSR, ISR, PPR, App Router | 16.2+ |
+| **React** | Biblioteca UI com Server Components, Actions, Compiler | 19 |
+| **TypeScript** | Superset tipado de JavaScript | 5.x (strict) |
+| **Turbopack** | Bundler Rust-based (Next.js 15+) | Default no Next.js 16 |
 
----
+## Frontend
 
-## 🎨 Styling & UI Architecture
-- **CSS Modules (Vanilla CSS):** **NÃO USE TAILWIND.** Cada componente tem seu próprio arquivo `.module.css`. Isso nos dá controle total sobre o design "Glassmorphism" e animações.
-- **Design Tokens:** Use as variáveis definidas em `src/app/globals.css` (ex: `var(--accent-light)`, `var(--bg-dark)`).
-- **Responsive Design:** O layout é mobile-first. Use `flexbox` e `grid` com variáveis CSS.
+| Termo | Descrição | Doc Link |
+|-------|-----------|----------|
+| **Tailwind CSS v4** | CSS-first utility framework com `@theme` para design tokens | [docs](https://tailwindcss.com/docs) |
+| **CSS First-class** | Paradigma Tailwind v4: CSS é a API principal, não JS config | [blog](https://tailwindcss.com/blog/tailwindcss-v4) |
+| **OKLCH** | Espaço de cor perceptual usado pelo Tailwind v4 | |
+| **Nuqs** | Type-safe URL search params state management | [github](https://github.com/47ng/nuqs) |
+| **Framer Motion** | Animation library (page transitions, modals, staggered) | [docs](https://www.framer.com/motion/) |
+| **Lucide React** | Icon library tree-shakable | [website](https://lucide.dev) |
+| **Recharts** | Chart library SSR-compatible (price history) | [website](https://recharts.org) |
+| **Glassmorphism** | Efeito de vidro: `backdrop-filter: blur()` + semi-transparent bg | |
+| **OLED** | Fundo preto verdadeiro (#0a0a0f) para economia de bateria em OLEDs | |
 
----
+## State Management
 
-## 📦 State Management & Data Fetching
-- **Zustand:** Gerencia o estado global (Wishlist, Auth, Alertas de Preço). Os stores estão em `src/store/`.
-- **SWR:** Usado para buscas em tempo real e revalidação de dados no lado do cliente (ex: Search bar no Navbar).
+| Termo | Descrição | Uso |
+|-------|-----------|-----|
+| **Zustand** | Client-side state (wishlist, UI, auth) | Stores centralizadas |
+| **TanStack Query v5** | Server state (API data, caching, dedup, optimistic) | Hooks useQuery/useInfiniteQuery |
+| **Server Actions** | Next.js 16 mutations server-side (form submit, mutations simples) | `'use server'` |
+| **`use cache`** | Next.js 16 cache API para ISR programático | `unstable_cache` wrapper |
+| **Revalidation** | Invalidação de cache via `revalidatePath`/`revalidateTag` | Pós-mutation |
 
----
+## Database & ORM
 
-## 🛠️ Key Libraries
-- **Lucide React:** Nossa biblioteca de ícones padrão. Evite SVGs crus nos componentes.
-- **Framer Motion:** Usado para todas as transições de página, modais e efeitos de entrada (staggered animations).
-- **Recharts:** Renderiza os gráficos de histórico de preços em `SidebarModal.tsx`.
+| Termo | Descrição |
+|-------|-----------|
+| **Supabase** | Backend gerenciado: PostgreSQL + Auth + Realtime + Storage + Edge Functions |
+| **Drizzle ORM** | ORM type-safe para TypeScript, Edge-ready, prepared statements |
+| **TimescaleDB** | Extensão PostgreSQL para séries temporais (price history) |
+| **pgvector** | Extensão PostgreSQL para vector search (busca semântica) |
+| **RLS** | Row Level Security — políticas de segurança no banco de dados |
+| **Continuous Aggregates** | Views automaticamente atualizadas do TimescaleDB (stats price) |
+| **Hypertable** | Tabela particionada por tempo no TimescaleDB |
 
----
+## Auth
 
-## 🔐 Backend & Auth
-- **Supabase:** Nosso backend-as-a-service. 
-    - **Auth:** Gerencia login social e e-mail.
-    - **PostgreSQL:** Armazena perfis, wishlists e alertas de preços.
-- **Environment Variables:** Localizadas em `.env.local`. Nunca as comite no Git.
+| Termo | Descrição |
+|-------|-----------|
+| **`@supabase/ssr`** | SSR session hydration + middleware Next.js |
+| **`@supabase/server`** | Novo (Maio 2026): auth edge functions simplificada |
+| **Social Auth** | Login via Google, Discord, Steam, GitHub |
 
----
+## Search
 
-## 🚀 Deployment & Resilience (Vercel)
-- **SSR Fallback:** A Home Page (`src/app/page.tsx`) usa `export const dynamic = 'force-dynamic'`. Isso garante que a página seja gerada no momento da requisição, evitando erros de build quando a API externa está instável.
-- **API Resilience:** Todas as chamadas de API em `api.ts` possuem blocos `try/catch` que retornam dados de **fallback** (`src/data/fallbackDeals.ts`) em vez de quebrar a aplicação.
+| Termo | Descrição |
+|-------|-----------|
+| **Typesense Cloud** | Search managed service: typo tolerance, faceted, vector, <50ms |
+| **pgvector** | PostgreSQL vector extension (fase 2: hybrid search) |
+| **Full-Text Search** | PostgreSQL `tsvector` + GIN index para busca textual |
 
----
+## Deployment
 
-## 🗺️ Advanced Routing Patterns
-- **Intercepting Routes:** Usamos `src/app/@modal/(.)game/[id]` para abrir o detalhe do jogo em um **Sidebar Modal** lateral sem perder o contexto da página anterior. Se o usuário der F5, o Next.js renderiza a página standalone `src/app/game/[id]`.
+| Termo | Descrição |
+|-------|-----------|
+| **Vercel** | Plataforma de deploy com Edge Network, Cron, Analytics |
+| **OpenNext** | Framework para portar Next.js para AWS/Cloudflare/Netlify |
+| **Adapter API** | API estável de build do Next.js 16.2 (saída portável) |
+| **Vercel Cron Jobs** | Schedule de tarefas (price ingest, search sync) |
+| **ISR** | Incremental Static Regeneration — páginas estáticas com revalidação |
+| **PPR** | Partial Prerendering — partes estáticas + partes dinâmicas na mesma rota |
 
----
+## Tooling & DX
 
-## 💡 Mensagem para o Jules
-> *"Ao implementar novas funcionalidades sociais, sempre crie um arquivo `.module.css` correspondente. Se precisar de dados de jogadores ou reviews, prefira criar mocks em `src/data` antes de subir para o Supabase real. Mantenha o estilo 'Premium Dark' com backgrounds semitransparentes e borrões de vidro (backdrop-filter: blur)."*
+| Termo | Descrição | Versão |
+|-------|-----------|--------|
+| **Biome** | Lint + Format + Import Sort (Rust, 10-30x mais rápido) | 2.4+ |
+| **pnpm** | Package manager rápido, seguro, disk-efficient | 11.5+ |
+| **Vitest** | Test framework Vite-native (unit/integration) | Latest |
+| **Playwright** | Multi-browser E2E testing (Chromium + Firefox + WebKit) | Latest |
+
+## Cron Jobs (Vercel)
+
+| Cron | Schedule | Função |
+|------|----------|--------|
+| **Ingest Prices** | 3am daily | Fetch CheapShark deals → upsert price_history |
+| **Sync Search** | 4am daily | Indexar jogos novos no Typesense |
+| **Refresh Featured** | Every 4h | Atualizar Historical Lows, Ending Soon |
+| **Update Scores** | 6am daily | Recálculo de deal ratings, badges, XP |
+
+## Deployment Settings
+
+| Parâmetro | Valor |
+|-----------|-------|
+| Node version | 22.x |
+| Package manager | pnpm |
+| Build command | `pnpm biome ci . && pnpm build` |
+| Install command | `pnpm install --frozen-lockfile` |
+| Output directory | `.next`

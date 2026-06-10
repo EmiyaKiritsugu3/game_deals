@@ -1,205 +1,172 @@
-# ADR-010: Search Architecture — Meilisearch para Busca Full-Text de Jogos
+# ADR-010: Search Architecture — Typesense Cloud (MVP) → Supabase pgvector+FTS (Scale)
 
-**Status**: Proposto
-**Data**: 2026-06-09
+**Status**: Aceito
+**Data**: 2026-06-09 (Atualizado 2026-06-10)
 **Autor**: EmiyaKiritsugu3
 
 ---
 
 ## Contexto
 
-O GameDeals precisa de busca rápida e relevância alta para jogos:
-- **Search bar no Navbar**: Autocomplete instantâneo (<50ms), typahead enquanto digita
-- **Filtros**: Por plataforma, gênero, loja, faixa de preço, DRM
-- **Typo tolerance**: "stardew valey" → "Stardew Valley"
-- **Fuzzy search**: Sinônimos, abreviações ("GTA V" → "Grand Theft Auto V")
-- **Ranking**: Por popularidade, deal rating, preço, relevância
-- **Volume**: ~50k jogos indexados, ~100-500 queries/min em pico
+GameDeals precisa de busca rápida e relevante no catálogo de jogos (~50k+ titles). Requisitos:
 
-Solução atual: SWR com fetch direto ao CheapShark `games?title=query`. Problemas:
-- Latência 200-500ms (API externa, sem cache server-side)
-- Sem typo tolerance
-- Sem ranking customizado
-- Sem filtros combinados (loja + gênero + preço simultâneos)
-- Rate limit risk (cada keystroke = 1 request)
+- **Typo tolerance**: "witcher", "wicher", "the witcher" → Witcher
+- **Faceted filters**: Store, price range, metacritic score, genre, platform
+- **Instant search**: Resultados em <100ms enquanto usuário digita
+- **Semantic search** (futuro): "jogos tipo Skyrim" → similar RPGs
+- **Cobertura BR**: Nomes em português, acentos, collation pt-BR
 
-Opções avaliadas:
-| Solução | Typo Tolerance | Latência | Filtros | Self-hosted | Custo |
-|---------|---------------|----------|---------|-------------|-------|
-| **Meilisearch** | ✅ Nativo (typo tolerance configurável) | <50ms | ✅ Faceted | ✅ Ou Cloud | Free (self) / $30/mês (cloud) |
-| **Algolia** | ✅ Excelente | <20ms | ✅ Faceted | ❌ SaaS | $1.50/1k search units |
-| **Elasticsearch/OpenSearch** | ✅ Fuzzy queries | ~100ms | ✅ Advanced | ✅ | Free (self) / AWS custo |
-| **PostgreSQL FTS** | ❌ Básico (trigrams) | ~100ms | ✅ | ✅ | Free (Supabase) |
-| **Typesense** | ✅ Nativo | <50ms | ✅ Faceted | ✅ | Free (self) / $25/mês (cloud) |
+---
 
 ## Decisão
 
-**Meilisearch (self-hosted ou Meilisearch Cloud)**
-
-### Por que Meilisearch
-
-| Critério | Vantagem |
-|----------|----------|
-| **Typo tolerance** | Nativo, configurável por campo (1-typo, 2-typos) |
-| **Latência** | <50ms p99; RAM-based index |
-| **Faceted search** | Filtros por plataforma, gênero, loja, DRM nativos |
-| **Sorting** | Ranking rules customizáveis (relevância, preço, deal_rating, popularidade) |
-| **Instant UI** | Integrado com `meilisearch-js` → React component `<InstantSearch>` |
-| **Indexação** | API REST simples; upsert por `game_id`; delta updates via cron |
-| **Open source** | Self-hosted gratuito; MIT license |
-| **Português** | Tokenizer suporta PT-BR; stop words nativas |
-
-### Schema do Índice (`games`)
-
-```json
-{
-  "id": "cheapshark_12345",
-  "title": "Stardew Valley",
-  "slug": "stardew-valley",
-  "cover_url": "https://...",
-  "cheapest_price_brl": 24.99,
-  "cheapest_store": "steam",
-  "historical_low_brl": 14.99,
-  "discount_pct": 50,
-  "deal_rating": 9.5,
-  "metacritic_score": 89,
-  "steam_rating_pct": 98,
-  "platforms": ["windows", "mac", "linux"],
-  "genres": ["simulation", "rpg", "indie"],
-  "drm": ["steam", "gog"],
-  "stores": ["steam", "gog", "humble", "cdkeys"],
-  "is_keyshop_available": true,
-  "hltb_hours": 78,
-  "release_date": "2016-02-26",
-  "updated_at": "2026-06-09T03:00:00Z"
-}
-```
-
-### Ranking Rules
-
-```json
-{
-  "rankingRules": [
-    "words",
-    "typo",
-    "proximity",
-    "attribute",
-    "sort",
-    "exactness",
-    "deal_rating:desc",
-    "discount_pct:desc"
-  ],
-  "searchableAttributes": [
-    "title",
-    "slug"
-  ],
-  "filterableAttributes": [
-    "platforms",
-    "genres",
-    "drm",
-    "stores",
-    "cheapest_price_brl",
-    "discount_pct",
-    "deal_rating",
-    "metacritic_score"
-  ],
-  "sortableAttributes": [
-    "cheapest_price_brl",
-    "discount_pct",
-    "deal_rating",
-    "metacritic_score"
-  ],
-  "typoTolerance": {
-    "enabled": true,
-    "minWordSizeForTypos": {
-      "oneTypo": 4,
-      "twoTypos": 8
-    }
-  },
-  "stopWords": ["de", "da", "do", "the", "of", "and"]
-}
-```
-
-### Indexação (Cron Job)
+### Fase 1 — MVP: Typesense Cloud
 
 ```typescript
-// app/api/cron/sync-search-index/route.ts
-export async function GET() {
-  const meili = new MeiliSearch({ host: MEILI_URL, apiKey: MEILI_KEY });
-  const index = meili.index('games');
+// src/lib/typesense.ts
+import Typesense from 'typesense';
 
-  // 1. Fetch top 10k jogos do CheapShark (sorted by dealRating)
-  const deals = await fetchCheapSharkDeals({ pageSize: 10000, sortBy: 'Deal Rating' });
+export const typesense = new Typesense.Client({
+  nodes: [{ host: process.env.TYPESENSE_HOST!, port: 443, protocol: 'https' }],
+  apiKey: process.env.TYPESENSE_API_KEY!,
+  connectionTimeoutSeconds: 2,
+});
 
-  // 2. Transform para schema Meilisearch
-  const docs = deals.map(transformToSearchDoc);
+export const GAMES_COLLECTION = 'games';
 
-  // 3. Upsert em batches (1000/batch)
-  for (let i = 0; i < docs.length; i += 1000) {
-    await index.updateDocuments(docs.slice(i, i + 1000));
-  }
-
-  return Response.json({ indexed: docs.length });
+export async function searchGames(query: string, filters?: SearchFilters) {
+  return typesense.collections(GAMES_COLLECTION).documents().search({
+    q: query,
+    query_by: 'title,alternativeTitles,developer,publisher',
+    sort_by: '_text_match:desc,dealCount:desc',
+    facet_by: 'platform,genre,store,priceRange',
+    filter_by: filters?.toString(),
+    per_page: 20,
+  });
 }
 ```
 
-Schedule: `0 4 * * *` (4am UTC = 1h BR, após price ingestion)
-
-### Frontend Integration
-
-```tsx
-// components/SearchBar.tsx
-import { instantMeiliSearch } from '@meilisearch/instant-meilisearch';
-import { InstantSearch, SearchBox, Hits, RefinementList } from 'react-instantsearch';
-
-const { searchClient } = instantMeiliSearch(MEILI_URL, MEILI_KEY);
-
-export function SearchBar() {
-  return (
-    <InstantSearch indexName="games" searchClient={searchClient}>
-      <SearchBox placeholder="Buscar jogos..." />
-      <Hits hitComponent={GameSearchHit} />
-      <RefinementList attribute="platforms" />
-      <RefinementList attribute="genres" />
-    </InstantSearch>
-  );
+**Schema Typesense**:
+```json
+{
+  "name": "games",
+  "fields": [
+    {"name": "title", "type": "string", "locale": "pt-BR"},
+    {"name": "alternativeTitles", "type": "string[]", "optional": true},
+    {"name": "developer", "type": "string", "facet": true},
+    {"name": "publisher", "type": "string", "facet": true},
+    {"name": "platform", "type": "string[]", "facet": true},
+    {"name": "genre", "type": "string[]", "facet": true},
+    {"name": "dealCount", "type": "int32"},
+    {"name": "cheapestPrice", "type": "float"},
+    {"name": "metacriticScore", "type": "int32"},
+    {"name": "steamRating", "type": "float"},
+    {"name": "embeddings", "type": "float[]", "num_dim": 384, "optional": true}
+  ],
+  "default_sorting_field": "dealCount"
 }
 ```
 
-### Hosting
+**Sync Cron**:
+- `cron(0 4 * * *)` — Reindexar jogos novos/atualizados nas últimas 24h
+- `drizzle.query.games.findMany({ where: gte(updatedAt, yesterday) })`
+- → Typesense `bulkUpsert` (até 1000 doc/batch)
 
-| Opção | Custo | Latência BR | Ops |
-|-------|-------|-------------|-----|
-| **Self-hosted (Railway/Fly.io)** | Free tier (~$5/mês) | ~80ms | Manual |
-| **Meilisearch Cloud** | $30/mês (100k searches) | ~30ms (edge) | Zero |
-| **Supabase VM** | Incluído (Pro) | ~20ms (same region) | Manual setup |
-| **Docker local** | Free | N/A | Dev only |
+### Fase 2 — Scale: Supabase pgvector + Full-Text Search Híbrido
 
-**Recomendação MVP**: Self-hosted no Railway ($5/mês) → migrar para Cloud quando tráfego justificar.
+```
+┌──────────────────────────────────────────────────────────────┐
+│                    Supabase PostgreSQL                         │
+├──────────────────────────────────────────────────────────────┤
+│  ┌────────────────────┐  ┌──────────────────────────────────┐│
+│  │  Full-Text Search   │  │  pgvector (Embeddings)           ││
+│  │  tsvector index    │  │  ivfflat index (384d)            ││
+│  │  GIN index         │  │  cosine distance                 ││
+│  │  pt-BR config      │  │  MiniLM-L6-v2 embeddings         ││
+│  └────────────────────┘  └──────────────────────────────────┘│
+│  ┌───────────────────────────────────────────────────────────┐│
+│  │  Hybrid Search Function                                   ││
+│  │  SELECT title, price FROM search_games('witcher',         ││
+│  │    where: 'platform=Steam', limit: 20)                     ││
+│  └───────────────────────────────────────────────────────────┘│
+└──────────────────────────────────────────────────────────────┘
+```
+
+```sql
+-- Hybrid search function
+create function search_games(
+  query_text text,
+  where_clause text default '',
+  limit int default 20
+) returns table (
+  title text,
+  developer text,
+  cheapest_price float,
+  relevance float
+) language plpgsql stable as $$
+begin
+  return query
+  with fts as (
+    select id, ts_rank(to_tsvector('portuguese', title), plainto_tsquery('portuguese', query_text)) * 0.7 as score
+    from games
+    where to_tsvector('portuguese', title) @@ plainto_tsquery('portuguese', query_text)
+  ),
+  semantic as (
+    select id, 1 - (embedding <=> llm_embedding(query_text)) * 0.3 as score
+    from games
+    order by embedding <=> llm_embedding(query_text)
+    limit 100
+  )
+  select g.title, g.developer, g.cheapest_price,
+         coalesce(fts.score, 0) + coalesce(semantic.score, 0) as relevance
+  from games g
+  left join fts on g.id = fts.id
+  left join semantic on g.id = semantic.id
+  where fts.id is not null or semantic.id is not null
+  order by relevance desc
+  limit limit;
+end;
+$$;
+```
+
+---
+
+## Decisão Final
+
+| Aspecto | Typesense Cloud (MVP) | Supabase pgvector+FTS (Scale) |
+|---------|----------------------|-------------------------------|
+| **Setup** | 30 min (create cluster + schema) | 4h (function + index + embeddings cron) |
+| **Latência** | <30ms | ~20ms (same region) |
+| **Custo** | Free (50M req/mês) → $30/mês | Incluso no Supabase Pro ($25/mês) |
+| **Manutenção** | Zero (managed) | Funções + índices + embeddings cron |
+| **Vector search** | ✅ v30.2+ nativo | ✅ pgvector nativo |
+| **Typo tolerance** | ✅ Built-in | ⚠️ pg_trgm + fuzzystrmatch |
+| **Faceted filters** | ✅ Nativo | ✅ SQL filters |
+| **Vendor lock-in** | ⚠️ Serviço externo | ✅ PostgreSQL padrão |
+
+**Recomendação**: Iniciar com **Typesense Cloud** (setup rápido, UX premium). Planejar migração para **Supabase pgvector+FTS** na Phase 6+ quando precisar reduzir serviços e unificar no Supabase.
+
+---
 
 ## Consequências
 
 ### Positivas
-- **UX instantânea**: Search results <50ms; typo tolerance reduz frustração
-- **Filtros combinados**: Plataforma + gênero + faixa de preço + loja simultâneos
-- **SEO**: Search results page indexável (`/search?q=stardew&platform=windows`)
-- **Independência**: Index próprio; não depende de CheapShark para search
-- **Ranking customizado**: Deals melhores aparecem primeiro (deal_rating, discount)
+- **MVP rápido**: Typesense Cloud em 30 minutos, search instantâneo no Navbar
+- **UX premium**: Typo tolerance, faceted filters, <50ms response
+- **Vector-ready**: Typesense v30.2 + pgvector — semantic search sem trocar engine
+- **Migração planejada**: pgvector+FTS elimina dependência externa, tudo no Supabase
 
-### Negativas / Trade-offs
-- **Sync overhead**: Cron diário; dados com até 24h de delay no índice
-- **Custo extra**: ~$5-30/mês dependendo do hosting
-- **Índice tamanho**: 50k jogos × ~1KB/doc ≈ 50MB index; 200MB RAM; trivial
-- **Mais um serviço**: Monitoring, backups, updates; mitigado: managed cloud
-
-### Plano de Evolução
-- **Phase 1**: Índice de jogos (título, preço, filtros básicos)
-- **Phase 2**: Índice de playlists, collections, reviews (cross-entity search)
-- **Phase 3**: Personalização (baseado em wishlist/history → boost relevant games)
-- **Phase 4**: AI-powered search (embeddings para semantic search via `meilisearch-vector`)
+### Negativas
+- **Dois serviços**: MVP depende de Typesense + Supabase (mitigado: Typesense é só search)
+- **Sync delay**: Dados podem ter até 24h de delay (cron diário)
+- **Embeddings**: Precisam ser gerados (All-MiniLM-L6-v2 via Edge Function) e armazenados no Supabase
 
 ---
 
 ## Referências
-- [Tech Stack Dictionary](../tech_stack_dictionary.md)
-- Meilisearch Docs: [Getting Started](https://www.meilisearch.com/docs/learn/getting_started), [Typo Tolerance](https://www.meilisearch.com/docs/learn/relevancy/typo_tolerance), [Faceted Search](https://www.meilisearch.com/docs/learn/filtering_and_sorting/faceted_search)
+- [Typesense v30.2 Docs](https://typesense.org/docs/30.2/api/) — Vector search, auto-schema, federated search
+- [Supabase pgvector Docs](https://supabase.com/docs/guides/database/extensions/pgvector)
+- [Supabase Full-Text Search](https://supabase.com/docs/guides/database/full-text-search)
+- [ADR-001: Tech Stack](ADR-001-tech-stack.md) — Search como parte da stack full
+- `src/lib/typesense.ts` — Typesense client implementation
+- `src/actions/search.ts` — Server Actions wrapper for search
