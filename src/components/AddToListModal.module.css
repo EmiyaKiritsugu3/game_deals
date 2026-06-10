@@ -79,14 +79,19 @@
   margin-bottom: 16px;
 }
 
-.divider::before, .divider::after {
-  content: '';
+.divider::before,
+.divider::after {
+  content: "";
   flex: 1;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.divider:not(:empty)::before { margin-right: 12px; }
-.divider:not(:empty)::after { margin-left: 12px; }
+.divider:not(:empty)::before {
+  margin-right: 12px;
+}
+.divider:not(:empty)::after {
+  margin-left: 12px;
+}
 
 .createForm {
   display: flex;

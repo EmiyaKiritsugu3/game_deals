@@ -1,198 +1,205 @@
 .flashSalesSection {
-    background: hsl(var(--card));
-    border: 1px solid hsl(var(--border));
-    border-left: 3px solid hsl(var(--accent-fire));
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 2rem;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-left: 3px solid hsl(var(--accent-fire));
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
 }
 
 .titleArea {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .titleArea h2 {
-    font-size: 1rem;
-    font-weight: 700;
-    color: hsl(var(--foreground));
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
 }
 
 /* Timer blocks */
 .timer {
-    display: flex;
-    align-items: center;
-    gap: 0.2rem;
-    background: hsl(var(--muted));
-    padding: 0.2rem 0.5rem;
-    border-radius: 3px;
-    border: 1px solid hsl(var(--border));
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  background: hsl(var(--muted));
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  border: 1px solid hsl(var(--border));
 }
 
 .timer span {
-    background: transparent;
-    color: hsl(var(--accent-fire));
-    font-weight: 800;
-    font-size: 0.85rem;
-    padding: 0;
-    border-radius: 0;
-    font-feature-settings: "tnum";
-    font-variant-numeric: tabular-nums;
+  background: transparent;
+  color: hsl(var(--accent-fire));
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 0;
+  border-radius: 0;
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
 }
 
 .timer .colon {
-    color: hsl(var(--muted-foreground));
-    font-weight: 800;
-    animation: blink 1s step-end infinite;
+  color: hsl(var(--muted-foreground));
+  font-weight: 800;
+  animation: blink 1s step-end infinite;
 }
 
 @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 .viewAll {
-    color: hsl(var(--primary));
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-decoration: none;
-    letter-spacing: 0.04em;
-    transition: opacity 0.15s;
+  color: hsl(var(--primary));
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: opacity 0.15s;
 }
 
 .viewAll:hover {
-    opacity: 0.75;
+  opacity: 0.75;
 }
 
 /* Carousel */
 .carousel {
-    display: flex;
-    gap: 0.75rem;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--border)) transparent;
-    scroll-snap-type: x mandatory;
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+  scroll-snap-type: x mandatory;
 }
 
 .carousel::-webkit-scrollbar {
-    height: 4px;
+  height: 4px;
 }
 
 .carousel::-webkit-scrollbar-track {
-    background: transparent;
+  background: transparent;
 }
 
 .carousel::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--border));
-    border-radius: 10px;
+  background-color: hsl(var(--border));
+  border-radius: 10px;
 }
 
 /* Flash card */
 .flashCard {
-    flex: 0 0 140px;
-    background: hsl(var(--muted) / 0.4);
-    border-radius: var(--radius);
-    overflow: hidden;
-    text-decoration: none;
-    border: 1px solid hsl(var(--border) / 0.6);
-    transition: transform 0.18s ease, border-color 0.18s ease;
-    scroll-snap-align: start;
+  flex: 0 0 140px;
+  background: hsl(var(--muted) / 0.4);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-decoration: none;
+  border: 1px solid hsl(var(--border) / 0.6);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease;
+  scroll-snap-align: start;
 }
 
 .flashCard:hover {
-    transform: translateY(-3px);
-    border-color: hsl(var(--primary) / 0.5);
+  transform: translateY(-3px);
+  border-color: hsl(var(--primary) / 0.5);
 }
 
 .imageWrapper {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 3/4;
-    background: hsl(var(--muted) / 0.5);
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: hsl(var(--muted) / 0.5);
 }
 
 .image {
-    object-fit: cover;
+  object-fit: cover;
 }
 
 .discountBadge {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
-    font-weight: 800;
-    font-size: 0.75rem;
-    padding: 0.15rem 0.4rem;
-    border-bottom-left-radius: var(--radius);
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 0.15rem 0.4rem;
+  border-bottom-left-radius: var(--radius);
 }
 
 .cardInfo {
-    padding: 0.6rem 0.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
+  padding: 0.6rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
 .priceRow {
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: 0.1rem;
-    color: hsl(var(--primary));
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.1rem;
+  color: hsl(var(--primary));
 }
 
 .currency {
-    font-size: 0.7rem;
-    font-weight: 700;
+  font-size: 0.7rem;
+  font-weight: 700;
 }
 
 .salePrice {
-    font-size: 1.1rem;
-    font-weight: 800;
+  font-size: 1.1rem;
+  font-weight: 800;
 }
 
 /* Progress bar */
 .progressContainer {
-    position: relative;
-    width: 100%;
-    height: 12px;
-    background: hsl(var(--muted));
-    border-radius: 6px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 12px;
+  background: hsl(var(--muted));
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .progressBar {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    background: hsl(var(--primary) / 0.7);
-    border-radius: 6px;
-    z-index: 1;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: hsl(var(--primary) / 0.7);
+  border-radius: 6px;
+  z-index: 1;
 }
 
 .progressText {
-    position: relative;
-    z-index: 2;
-    font-size: 0.55rem;
-    font-weight: 800;
-    color: hsl(var(--foreground));
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+  position: relative;
+  z-index: 2;
+  font-size: 0.55rem;
+  font-weight: 800;
+  color: hsl(var(--foreground));
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }

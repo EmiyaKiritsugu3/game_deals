@@ -1,24 +1,24 @@
-import { getDeals } from '@/services/api';
-import HeroSection from '@/components/HeroSection';
-import Freebies from '@/components/Freebies';
-import FlashSales from '@/components/FlashSales';
-import GameCard from '@/components/GameCard';
 import DealRow from '@/components/DealRow';
+import FlashSales from '@/components/FlashSales';
+import Freebies from '@/components/Freebies';
+import GameCard from '@/components/GameCard';
+import HeroSection from '@/components/HeroSection';
+import { getDeals } from '@/services/api';
 import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
 
-import HistoricalLows from '@/components/HistoricalLows';
 import EndingSoon from '@/components/EndingSoon';
+import HistoricalLows from '@/components/HistoricalLows';
 
 export default async function Home() {
   // Fetch primary static categories in parallel
   const [popular, bestDeals, recentDeals, flashDeals, freebies] = await Promise.all([
-    getDeals({ pageSize: '5' }),                                       // Deal Rating (default)
-    getDeals({ sortBy: 'Savings', pageSize: '10' }),                   // Highest discount %
-    getDeals({ sortBy: 'Recent', pageSize: '10' }),                    // Newest deals
-    getDeals({ sortBy: 'Price', pageSize: '8', onSale: '1' }),         // Flash deals
-    getDeals({ upperPrice: '0', pageSize: '6' }),                      // 100% OFF Freebies
+    getDeals({ pageSize: '5' }), // Deal Rating (default)
+    getDeals({ sortBy: 'Savings', pageSize: '10' }), // Highest discount %
+    getDeals({ sortBy: 'Recent', pageSize: '10' }), // Newest deals
+    getDeals({ sortBy: 'Price', pageSize: '8', onSale: '1' }), // Flash deals
+    getDeals({ upperPrice: '0', pageSize: '6' }), // 100% OFF Freebies
   ]);
 
   const carouselDeals = popular.slice(0, 5);
@@ -56,7 +56,9 @@ export default async function Home() {
                   <h2>New Deals</h2>
                   <p>Just added to the tracker.</p>
                 </div>
-                <a href="/search?sortBy=Recent" className={styles.seeAll}>SEE ALL ▶</a>
+                <a href="/search?sortBy=Recent" className={styles.seeAll}>
+                  SEE ALL ▶
+                </a>
               </div>
             </div>
             <div className={styles.listCol}>
@@ -73,7 +75,9 @@ export default async function Home() {
                   <h2>Best Deals</h2>
                   <p>Highest discount percentages available.</p>
                 </div>
-                <a href="/search?sortBy=Savings" className={styles.seeAll}>SEE ALL ▶</a>
+                <a href="/search?sortBy=Savings" className={styles.seeAll}>
+                  SEE ALL ▶
+                </a>
               </div>
             </div>
             <div className={styles.listCol}>

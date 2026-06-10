@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import { Playlist, UserStats, UserBadge, Badge } from '@/types/social';
+import type { Playlist, UserBadge, UserStats } from '@/types/social';
 
 /**
  * SOCIAL & GAMIFICATION SERVICE
@@ -8,7 +8,12 @@ import { Playlist, UserStats, UserBadge, Badge } from '@/types/social';
 
 // --- PLAYLISTS ---
 
-export async function createPlaylist(userId: string, title: string, description?: string, isPublic: boolean = true) {
+export async function createPlaylist(
+  userId: string,
+  title: string,
+  description?: string,
+  isPublic: boolean = true
+) {
   const { data, error } = await supabase
     .from('playlists')
     .insert([{ user_id: userId, title, description, is_public: isPublic }])
@@ -84,7 +89,11 @@ export async function checkAchievements(userId: string) {
 
   // Badge: Playlist Master (10 lists)
   if (stats.playlists_count >= 10) {
-    const { data: badges } = await supabase.from('badges').select('id').eq('name', 'Playlist Master').single();
+    const { data: badges } = await supabase
+      .from('badges')
+      .select('id')
+      .eq('name', 'Playlist Master')
+      .single();
     if (badges) {
       await awardBadge(userId, badges.id);
     }
@@ -96,7 +105,7 @@ async function awardBadge(userId: string, badgeId: string) {
     .from('user_badges')
     .insert([{ user_id: userId, badge_id: badgeId }])
     .select();
-    
+
   // If error is duplicate (23505), ignore it as user already has the badge.
   if (error && error.code !== '23505') throw error;
 }

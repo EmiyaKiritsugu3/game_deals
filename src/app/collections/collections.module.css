@@ -1,174 +1,177 @@
 .collectionsPage {
-    padding-top: 2rem;
-    padding-bottom: 4rem;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
 }
 
 .collectionsHeader {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 .collectionsHeader h1 {
-    font-size: 2rem;
-    margin-bottom: 0.25rem;
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
 }
 
 .collectionsHeader p {
-    color: hsl(var(--muted-foreground));
+  color: hsl(var(--muted-foreground));
 }
 
 .collectionsGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
 }
 
 .collectionCard {
-    display: flex;
-    flex-direction: column;
-    background: hsl(var(--card));
-    border: 1px solid hsl(var(--border));
-    border-radius: 12px;
-    padding: 1.5rem;
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    border-color 0.2s;
 }
 
 .collectionCard:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-    border-color: hsl(var(--primary));
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  border-color: hsl(var(--primary));
 }
 
 .collectionEmoji {
-    font-size: 2.5rem;
-    margin-bottom: 0.75rem;
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .collectionTitle {
-    font-size: 1.15rem;
-    font-weight: 800;
-    margin-bottom: 0.4rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
 }
 
 .collectionDesc {
-    font-size: 0.85rem;
-    color: hsl(var(--muted-foreground));
-    line-height: 1.5;
-    flex-grow: 1;
+  font-size: 0.85rem;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.5;
+  flex-grow: 1;
 }
 
 .collectionMeta {
-    margin-top: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .collectionCount {
-    font-size: 0.75rem;
-    color: hsl(var(--muted-foreground));
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
 }
 
 .collectionArrow {
-    font-size: 0.85rem;
-    color: hsl(var(--primary));
-    font-weight: 700;
+  font-size: 0.85rem;
+  color: hsl(var(--primary));
+  font-weight: 700;
 }
 
 /* Detail page */
 .detailPage {
-    padding-top: 2rem;
-    padding-bottom: 4rem;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
 }
 
 .detailHeader {
-    margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .detailHeader h1 {
-    font-size: 2rem;
-    margin-bottom: 0.25rem;
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
 }
 
 .detailHeader p {
-    color: hsl(var(--muted-foreground));
+  color: hsl(var(--muted-foreground));
 }
 
 .detailBackLink {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    margin-bottom: 1rem;
-    font-size: 0.85rem;
-    color: hsl(var(--muted-foreground));
-    text-decoration: none;
-    transition: color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: hsl(var(--muted-foreground));
+  text-decoration: none;
+  transition: color 0.15s;
 }
 
 .detailBackLink:hover {
-    color: hsl(var(--primary));
+  color: hsl(var(--primary));
 }
 
 .detailGrid {
-    display: grid;
-    gap: 1rem;
+  display: grid;
+  gap: 1rem;
 }
 
 .detailGameRow {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: hsl(var(--card));
-    border: 1px solid hsl(var(--border));
-    border-radius: 10px;
-    padding: 0.75rem 1rem;
-    transition: border-color 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  transition: border-color 0.15s;
 }
 
 .detailGameRow:hover {
-    border-color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
 }
 
 .detailGameThumb {
-    border-radius: 6px;
-    object-fit: cover;
+  border-radius: 6px;
+  object-fit: cover;
 }
 
 .detailGameInfo {
-    flex: 1;
-    min-width: 0;
+  flex: 1;
+  min-width: 0;
 }
 
 .detailGameTitle {
-    font-weight: 700;
-    font-size: 0.95rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .detailGamePrice {
-    font-size: 0.85rem;
-    color: hsl(var(--primary));
-    font-weight: 800;
+  font-size: 0.85rem;
+  color: hsl(var(--primary));
+  font-weight: 800;
 }
 
 .detailGameCta {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.5rem 1rem;
-    background: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 0.8rem;
-    text-decoration: none;
-    transition: opacity 0.15s;
-    white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 1rem;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: opacity 0.15s;
+  white-space: nowrap;
 }
 
 .detailGameCta:hover {
-    opacity: 0.85;
+  opacity: 0.85;
 }

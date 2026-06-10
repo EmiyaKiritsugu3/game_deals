@@ -13,11 +13,16 @@ interface DealsBadgeProps {
  * - HL: Current price <= Historical Low * 1.05 (5% margin)
  * - EPIC: Savings >= 75%
  */
-export default function DealsBadge({ type, value, className = '', compact = false }: DealsBadgeProps) {
+export default function DealsBadge({
+  type,
+  value,
+  className = '',
+  compact = false,
+}: DealsBadgeProps) {
   if (type === 'HL') {
     return (
-      <span 
-        className={`${styles.badge} ${styles.hl} ${className}`} 
+      <span
+        className={`${styles.badge} ${styles.hl} ${className}`}
         title="Historical Low Price (Within 5% of all-time low)"
       >
         HL
@@ -34,19 +39,11 @@ export default function DealsBadge({ type, value, className = '', compact = fals
   }
 
   if (type === 'FREE') {
-    return (
-      <span className={`${styles.badge} ${styles.free} ${className}`}>
-        FREE
-      </span>
-    );
+    return <span className={`${styles.badge} ${styles.free} ${className}`}>FREE</span>;
   }
 
   if (type === 'RATING' && value) {
-    return (
-      <span className={`${styles.badge} ${styles.rating} ${className}`}>
-        ★ {value}%
-      </span>
-    );
+    return <span className={`${styles.badge} ${styles.rating} ${className}`}>★ {value}%</span>;
   }
 
   return null;
