@@ -1,4 +1,5 @@
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
+const supabase = createClient();
 import type { Playlist, UserBadge, UserStats } from '@/types/social';
 
 /**

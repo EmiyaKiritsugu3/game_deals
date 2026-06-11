@@ -1,6 +1,7 @@
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 import { create } from 'zustand';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
+const supabase = createClient();
 
 interface User {
   id: string;

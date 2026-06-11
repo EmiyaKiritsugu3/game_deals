@@ -3,7 +3,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Github, Globe, Mail, ShieldCheck, X } from 'lucide-react';
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
+const supabase = createClient();
 import styles from './AuthModal.module.css';
 
 interface AuthModalProps {

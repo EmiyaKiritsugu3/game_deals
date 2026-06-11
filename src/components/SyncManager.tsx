@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
+const supabase = createClient();
 import { useAlerts } from '@/store/alertStore';
 import { useAuth } from '@/store/authStore';
 import { useWishlist } from '@/store/wishlistStore';
