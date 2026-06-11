@@ -3,5 +3,6 @@ packages:
 allowBuilds:
   esbuild: false
   sharp: true
+  typesense-instantsearch-adapter: true
   unrs-resolver: true
 onlyBuiltDependencies: '[]'

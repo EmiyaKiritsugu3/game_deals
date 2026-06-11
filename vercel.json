@@ -7,6 +7,10 @@
     {
       "path": "/api/cron/ingest-prices",
       "schedule": "0 */4 * * *"
+    },
+    {
+      "path": "/api/cron/reindex-typesense",
+      "schedule": "0 3 * * *"
     }
   ]
 }

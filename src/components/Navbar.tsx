@@ -4,19 +4,19 @@ import { useQuery } from '@tanstack/react-query';
 import { Bell, ChevronDown, LogOut, Search, User } from 'lucide-react';
 import Link from 'next/link';
 import { useQueryState } from 'nuqs';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { createClient } from '@/utils/supabase/client';
 const supabase = createClient();
 import { useAuth } from '@/store/authStore';
+import { searchGamesAction } from '@/actions/search';
 import AuthModal from './AuthModal';
 import styles from './Navbar.module.css';
 import WishlistIndicator from './WishlistIndicator';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
 export default function Navbar({ serverUser }: { serverUser?: any }) {
   const { user, isLoggedIn, logout, setUser } = useAuth();
   const [query, setQuery] = useQueryState('q', { defaultValue: '' });
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -24,13 +24,19 @@ export default function Navbar({ serverUser }: { serverUser?: any }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [query]);
+
   const { data: results, isLoading } = useQuery({
-    queryKey: ['search', query],
-    queryFn: () =>
-      fetcher(
-        `https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(query)}&limit=5`
-      ),
-    enabled: query.length >= 3,
+    queryKey: ['search', debouncedQuery],
+    queryFn: () => searchGamesAction(debouncedQuery, 5),
+    enabled: debouncedQuery.length >= 3,
+    staleTime: 60 * 1000,
   });
 
   useEffect(() => {
@@ -105,7 +111,7 @@ export default function Navbar({ serverUser }: { serverUser?: any }) {
               </button>
             </form>
 
-            {isDropdownOpen && query.length >= 3 && (
+            {isDropdownOpen && debouncedQuery.length >= 3 && (
               <div className={styles.searchDropdown}>
                 {isLoading ? (
                   <div className={`${styles.dropdownItem} ${styles.loading}`}>Loading...</div>
