@@ -146,8 +146,9 @@ export async function indexGamesBatch(games: Array<{
     cheapestPrice: parseFloat(g.cheapest) || 0,
   }));
 
+  // Use upsert pra evitar duplicatas (document_key = gameID)
   const response = await fetch(
-    `${url}/collections/${TYPESENSE_CONFIG.collectionName}/documents/import`,
+    `${url}/collections/${TYPESENSE_CONFIG.collectionName}/documents/import?action=upsert`,
     {
       method: 'POST',
       headers: {

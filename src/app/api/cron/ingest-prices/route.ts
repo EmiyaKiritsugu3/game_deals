@@ -23,5 +23,6 @@ export async function GET(request: Request) {
     console.error(`[Cron] Failed: ${result.error}`);
   }
 
-  return NextResponse.json(result);
+  const status = result.success ? 200 : 500;
+  return NextResponse.json(result, { status });
 }

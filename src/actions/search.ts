@@ -65,7 +65,7 @@ export async function syncGamesToTypesenseAction(): Promise<{
       steamRating: parseInt(deal.steamRatingPercent) || 0,
     }));
 
-    // Batch index
+    // Batch index com upsert (usa gameID como doc id)
     const ok = await indexGamesBatch(games);
 
     return { success: ok, indexed: games.length };

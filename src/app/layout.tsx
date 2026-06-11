@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { Suspense } from 'react';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import Navbar from '@/components/Navbar';
 import CookieBanner from '@/components/CookieBanner';
@@ -78,10 +79,14 @@ export default async function RootLayout({
   children: React.ReactNode;
   modal: React.ReactNode;
 }>) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user = null;
+  try {
+    const supabase = await createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+    user = authUser;
+  } catch {
+    // Auth lookup failed - render without user
+  }
 
   // JSON-LD structured data
   const jsonLd = {
@@ -106,17 +111,19 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${inter.variable} antialiased`}>
-        <NuqsAdapter>
-          <ReactQueryProvider>
-            <Navbar serverUser={user} />
-            <SyncManager />
-            {children}
-            {modal}
-            <Analytics />
-            <SpeedInsights />
-            <CookieBanner />
-          </ReactQueryProvider>
-        </NuqsAdapter>
+        <Suspense>
+          <NuqsAdapter>
+            <ReactQueryProvider>
+              <Navbar serverUser={user} />
+              <SyncManager />
+              {children}
+              {modal}
+              <Analytics />
+              <SpeedInsights />
+              <CookieBanner />
+            </ReactQueryProvider>
+          </NuqsAdapter>
+        </Suspense>
       </body>
     </html>
   );

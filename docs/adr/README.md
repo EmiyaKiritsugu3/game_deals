@@ -9,7 +9,7 @@ Este diretório contém os **Architecture Decision Records** do GameDeals. Cada 
 | 001 | **Tech Stack** — Next.js 16, React 19, Tailwind v4, TypeScript, Drizzle, Supabase | ✅ Aceito | 2026-06-10 |
 | 002 | **Data Source Strategy** — CheapShark API + Keyshops Simulados + Affiliates | ✅ Aceito | 2026-06-10 |
 | 003 | **State Management** — Zustand + TanStack Query v5 + Server Actions + `use cache` | ✅ Aceito | 2026-06-10 |
-| 004 | **Auth & Backend** — Supabase Auth + `@supabase/server` + Drizzle ORM | ✅ Aceito | 2026-06-10 |
+| 004 | **Auth & Backend** — Supabase Auth + `@supabase/ssr` + Drizzle ORM | ✅ Aceito | 2026-06-10 |
 | 005 | **Deployment Strategy** — Vercel + OpenNext (Exit Strategy) | ✅ Aceito | 2026-06-10 |
 | 006 | **Affiliate Monetization** — Cloaking `/out` Route + Edge Redirect | ✅ Aceito | 2026-06-10 |
 | 007 | **Gamification System** — Badges, XP, Playlists | 📝 Proposed | 2026-06-10 |

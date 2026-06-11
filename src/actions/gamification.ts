@@ -72,18 +72,13 @@ export async function getUserBadgesAction(userId: string) {
  * Conceder badge ao usuário
  */
 export async function awardBadgeAction(userId: string, badgeId: string) {
-  const [existing] = await sql`
-    SELECT id FROM user_badges
-    WHERE "userId" = ${userId} AND "badgeId" = ${badgeId}
-  `;
-
-  if (existing) return false; // Já tem
-
-  await sql`
+  const [result] = await sql`
     INSERT INTO user_badges ("userId", "badgeId", "awardedAt")
     VALUES (${userId}, ${badgeId}, NOW())
+    ON CONFLICT ("userId", "badgeId") DO NOTHING
+    RETURNING *
   `;
-  return true;
+  return !!result;
 }
 
 /**
