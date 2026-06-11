@@ -5,7 +5,9 @@ import postgres from 'postgres';
 
 config({ path: resolve(process.cwd(), '.env.local') });
 
-const sql = postgres(process.env.DATABASE_URL!, { connect_timeout: 5 });
+const dbUrl = process.env.DATABASE_URL;
+if (!dbUrl) throw new Error('DATABASE_URL not set');
+const sql = postgres(dbUrl, { connect_timeout: 5 });
 
 // Mapeamento storeId → affiliate params
 const AFFILIATE_CONFIG: Record<string, {
