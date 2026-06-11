@@ -65,25 +65,24 @@ export function createTypesenseAdapter() {
  */
 export async function searchGames(query: string, limit = 10) {
   const url = `${TYPESENSE_CONFIG.protocol}://${TYPESENSE_CONFIG.host}:${TYPESENSE_CONFIG.port}`;
-
-  const response = await fetch(`${url}/collections/${TYPESENSE_CONFIG.collectionName}/documents/search`, {
-    method: 'GET',
-    headers: {
-      'X-TYPESENSE-API-KEY': TYPESENSE_CONFIG.apiKey,
-    },
-    // Use URLSearchParams pra query
-    ...(() => {
-      const params = new URLSearchParams({
-        q: query,
-        query_by: 'title,developer,publisher',
-        query_by_weights: '100,50,50',
-        limit: limit.toString(),
-        typo_tolerance: 'true',
-        split_join_tokens: 'always',
-      });
-      return { url: `${url}/collections/${TYPESENSE_CONFIG.collectionName}/documents/search?${params}` };
-    })(),
+  
+  const params = new URLSearchParams({
+    q: query,
+    query_by: 'title,developer,publisher',
+    query_by_weights: '100,50,50',
+    limit: limit.toString(),
+    typo_tolerance: 'true',
+    split_join_tokens: 'always',
   });
+
+  const response = await fetch(
+    `${url}/collections/${TYPESENSE_CONFIG.collectionName}/documents/search?${params}`,
+    {
+      headers: {
+        'X-TYPESENSE-API-KEY': TYPESENSE_CONFIG.apiKey,
+      },
+    }
+  );
 
   if (!response.ok) return [];
   const data = await response.json();
