@@ -6,9 +6,11 @@ import HeroSection from '@/components/HeroSection';
 import { getDeals } from '@/services/api';
 import styles from './page.module.css';
 
-
 import EndingSoon from '@/components/EndingSoon';
 import HistoricalLows from '@/components/HistoricalLows';
+
+// ISR: revalida a cada 1h
+export const revalidate = 3600;
 
 export default async function Home() {
   // Fetch primary static categories in parallel
