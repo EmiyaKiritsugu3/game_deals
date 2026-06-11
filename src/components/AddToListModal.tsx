@@ -13,6 +13,7 @@ interface AddToListModalProps {
 
 export default function AddToListModal({ gameId, onClose }: AddToListModalProps) {
   const [newListName, setNewListName] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
@@ -24,8 +25,13 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
 
   const addMutation = useMutation({
     mutationFn: (playlistId: string) => addGameToPlaylist(playlistId, gameId),
-    onMutate: () => {
-      onClose(); // Optimistic Instant Close
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['playlists'] });
+      onClose();
+    },
+    onError: (err) => {
+      setError('Failed to add game to playlist');
+      console.error(err);
     },
   });
 
@@ -35,11 +41,14 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
       const newList = await createPlaylist(user.id, name);
       return addGameToPlaylist(newList.id, gameId);
     },
-    onMutate: () => {
-      onClose(); // Optimistic Instant Close
-    },
-    onSettled: () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['playlists'] });
+      setNewListName('');
+      onClose();
+    },
+    onError: (err) => {
+      setError('Failed to create playlist');
+      console.error(err);
     },
   });
 
@@ -51,6 +60,8 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
         <h3>Add to Playlist</h3>
         <p className={styles.subtitle}>Curate your collections and earn achievements.</p>
 
+        {error && <p className={styles.error}>{error}</p>}
+
         <div className={styles.existingLists}>
           {playlists.length > 0 ? (
             playlists.map((list) => (
@@ -58,13 +69,14 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
                 key={list.id}
                 className={styles.listButton}
                 onClick={() => addMutation.mutate(list.id)}
+                disabled={addMutation.isPending}
               >
                 <span>{list.title}</span>
                 <span className={styles.plusIcon}>+</span>
               </button>
             ))
           ) : (
-            <p className={styles.empty}>You don't have any playlists yet.</p>
+            <p className={styles.empty}>You don&apos;t have any playlists yet.</p>
           )}
         </div>
 
