@@ -6,7 +6,6 @@ import HeroSection from '@/components/HeroSection';
 import { getDeals } from '@/services/api';
 import styles from './page.module.css';
 
-export const dynamic = 'force-dynamic';
 
 import EndingSoon from '@/components/EndingSoon';
 import HistoricalLows from '@/components/HistoricalLows';

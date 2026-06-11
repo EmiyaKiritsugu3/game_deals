@@ -18,8 +18,6 @@ export async function getDealsAction(params?: {
   storeID?: string;
   title?: string;
 }): Promise<Deal[]> {
-  'use cache';
-
   const url = new URL(`${BASE_URL}/deals`);
   url.searchParams.append('sortBy', params?.sortBy ?? 'Deal Rating');
   url.searchParams.append('onSale', params?.onSale ?? '1');
@@ -44,8 +42,6 @@ export async function getDealsAction(params?: {
  * Busca detalhes de um jogo com cache de 1h
  */
 export async function getGameAction(id: string): Promise<GameDetails | null> {
-  'use cache';
-
   const url = new URL(`${BASE_URL}/games`);
   url.searchParams.append('id', id);
 
@@ -62,8 +58,6 @@ export async function getGameAction(id: string): Promise<GameDetails | null> {
  * Busca lista de lojas com cache de 24h
  */
 export async function getStoresAction(): Promise<Record<string, string>> {
-  'use cache';
-
   const map: Record<string, string> = {};
 
   try {
@@ -89,8 +83,6 @@ export async function getStoresAction(): Promise<Record<string, string>> {
  * Busca deals por título (search) com cache de 5min
  */
 export async function searchGamesAction(title: string): Promise<Deal[]> {
-  'use cache';
-
   if (!title || title.length < 2) return [];
 
   const url = new URL(`${BASE_URL}/games`);

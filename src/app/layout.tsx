@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import Navbar from '@/components/Navbar';
+import CookieBanner from '@/components/CookieBanner';
 import SyncManager from '@/components/SyncManager';
 import ReactQueryProvider from '@/providers/ReactQueryProvider';
 import { createClient } from '@/utils/supabase/server';
@@ -41,6 +42,7 @@ export default async function RootLayout({
             {modal}
             <Analytics />
             <SpeedInsights />
+            <CookieBanner />
           </ReactQueryProvider>
         </NuqsAdapter>
       </body>

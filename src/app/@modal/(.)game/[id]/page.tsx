@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Image from 'next/image';
 import { DynamicPriceHistory, DynamicStoreCompare } from '@/components/DynamicCharts';
 import HeartButton from '@/components/HeartButton';
@@ -16,9 +17,7 @@ import {
 import { calculateCostPerHour, estimatePlaytime } from '@/services/hltb';
 import styles from './modal.module.css';
 
-export default async function GameModal({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-
+async function GameModalContent({ id }: { id: string }) {
   const [game, stores] = await Promise.all([getGame(id), getStores()]);
 
   if (!game?.info) {
@@ -147,7 +146,6 @@ export default async function GameModal({ params }: { params: Promise<{ id: stri
           </div>
 
           <div className={styles.statDivider} />
-
           <div className={styles.statBlock}>
             <span className={styles.statLabel}>🎮 Value</span>
             <span className={styles.statValue}>{costPerHour}</span>
@@ -195,5 +193,19 @@ export default async function GameModal({ params }: { params: Promise<{ id: stri
         />
       </div>
     </SidebarModal>
+  );
+}
+
+export default async function GameModal({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+
+  return (
+    <Suspense fallback={
+      <SidebarModal>
+        <div style={{ padding: '2rem', textAlign: 'center' }}>Loading game...</div>
+      </SidebarModal>
+    }>
+      <GameModalContent id={id} />
+    </Suspense>
   );
 }

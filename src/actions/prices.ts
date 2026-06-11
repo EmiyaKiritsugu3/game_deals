@@ -103,8 +103,6 @@ export async function ingestPricesAction(): Promise<{
  * Usado pra páginas que precisam de dados locais
  */
 export async function getDealsFromDBAction(limit = 20) {
-  'use cache';
-
   const deals = await sql`
     SELECT
       d."gameId",
