@@ -43,8 +43,9 @@ export default function WishlistPage() {
         const validGames = results.reduce((acc: any[], gameData, idx) => {
           if (!gameData?.info) return acc;
 
-          const info = gameData.info;
-          const bestDeal = gameData.cheapestPriceEver;
+          const info = gameData?.info;
+          const bestDeal = gameData?.cheapestPriceEver;
+          if (!info) return acc;
           const sortedDeals = [...gameData.deals].sort(
             (a, b) => parseFloat(a.price) - parseFloat(b.price)
           );

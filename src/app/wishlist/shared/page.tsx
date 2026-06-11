@@ -22,8 +22,13 @@ function SharedWishlistContent() {
       }
 
       try {
-        const decoded = atob(idsParam);
-        const gameIDs = decoded.split(',').filter(Boolean);
+        let gameIDs: string[] = [];
+        try {
+          const decoded = atob(idsParam);
+          gameIDs = decoded.split(',').filter(Boolean).filter(id => /^[a-zA-Z0-9]+$/.test(id));
+        } catch {
+          // Invalid base64
+        }
 
         const storesMap = await getStores();
         setStores(storesMap);
