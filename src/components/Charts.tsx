@@ -1,6 +1,8 @@
 'use client';
 
-import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, Cell, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import type { PriceHistoryPoint } from '@/types/game';
+import { generatePriceHistory } from '@/utils/pricing';
 import styles from './Charts.module.css';
 
 interface StorePrice {
@@ -9,7 +11,6 @@ interface StorePrice {
 }
 
 export function StoreCompareChart({ data }: { data: StorePrice[] }) {
-  // Convert string prices to numbers for charting
   const chartData = data.map((d) => ({
     name: d.storeName,
     price: parseFloat(d.price),
@@ -65,9 +66,15 @@ export function StoreCompareChart({ data }: { data: StorePrice[] }) {
   );
 }
 
-import { Line, LineChart } from 'recharts';
-import type { PriceHistoryPoint } from '@/types/game';
-import { generatePriceHistory } from '@/utils/pricing';
+interface PriceHistoryChartProps {
+  currentPrice: string;
+  lowestPrice: string;
+  lowestDate: number;
+  retailPrice?: string;
+  gameTitle?: string;
+  gameId?: string;
+  realData?: Array<{ bucket: string; avg_price: number; min_price: number; max_price: number }>;
+}
 
 export function PriceHistoryChart({
   currentPrice,
@@ -75,29 +82,39 @@ export function PriceHistoryChart({
   lowestDate,
   retailPrice = '9.99',
   gameTitle = 'Default',
-}: {
-  currentPrice: string;
-  lowestPrice: string;
-  lowestDate: number;
-  retailPrice?: string;
-  gameTitle?: string;
-}) {
-  const historyData: PriceHistoryPoint[] = generatePriceHistory(
-    parseFloat(retailPrice),
-    parseFloat(currentPrice),
-    parseFloat(lowestPrice),
-    gameTitle
-  );
+  gameId,
+  realData,
+}: PriceHistoryChartProps) {
+  // Usar dados reais se disponíveis, senão gerar simulados
+  let chartData: PriceHistoryPoint[];
+
+  if (realData && realData.length > 2) {
+    chartData = realData.map((d) => ({
+      name: new Date(d.bucket).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      price: d.avg_price || d.min_price,
+    }));
+  } else {
+    chartData = generatePriceHistory(
+      parseFloat(retailPrice),
+      parseFloat(currentPrice),
+      parseFloat(lowestPrice),
+      gameTitle
+    );
+  }
 
   return (
     <div className={styles.chartContainer}>
-      <h3 className={styles.chartTitle}>Current Price History (6 Months)</h3>
+      <h3 className={styles.chartTitle}>
+        {realData && realData.length > 2 ? 'Price History (Real Data)' : 'Price History (6 Months)'}
+      </h3>
       <p className={styles.chartSubtitle}>
-        Algorithmic market simulation based on official data drops.
+        {realData && realData.length > 2
+          ? `Based on ${realData.length} data points from price tracking`
+          : 'Algorithmic market simulation based on official data drops'}
       </p>
       <div className={styles.chartWrapper}>
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={historyData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
+          <LineChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
             <XAxis
               dataKey="name"
               stroke="hsl(var(--muted-foreground))"

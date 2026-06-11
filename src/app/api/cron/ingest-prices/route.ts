@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { ingestPricesAction } from '@/actions/prices';
+import { ingestPricesAction } from '@/actions/deals';
 
 /**
  * Vercel Cron Job — roda a cada 4h

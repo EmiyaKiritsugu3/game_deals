@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { useDailyPriceHistory } from '@/hooks/usePriceHistory';
 import styles from './Charts.module.css';
 
 // Lazy load Recharts components
@@ -26,6 +27,7 @@ interface DynamicPriceHistoryProps {
   lowestDate: number;
   retailPrice?: string;
   gameTitle?: string;
+  gameId?: string;
 }
 
 interface DynamicStoreCompareProps {
@@ -36,7 +38,15 @@ interface DynamicStoreCompareProps {
 }
 
 export function DynamicPriceHistory(props: DynamicPriceHistoryProps) {
-  return <PriceHistoryChartLazy {...props} />;
+  // Buscar dados reais se gameId disponível
+  const { data: realData } = useDailyPriceHistory(props.gameId || null);
+
+  return (
+    <PriceHistoryChartLazy
+      {...props}
+      realData={realData && realData.length > 0 ? realData as any : undefined}
+    />
+  );
 }
 
 export function DynamicStoreCompare(props: DynamicStoreCompareProps) {

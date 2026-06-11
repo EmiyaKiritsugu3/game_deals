@@ -236,8 +236,9 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
           currentPrice={sortedDeals[0]?.price || game.cheapestPriceEver.price}
           lowestPrice={game.cheapestPriceEver.price}
           lowestDate={game.cheapestPriceEver.date}
-          retailPrice={sortedDeals[0]?.retailPrice || game.cheapestPriceEver.price}
+          retailPrice={sortedDeals[0]?.retailPrice}
           gameTitle={game.info.title}
+          gameId={id}
         />
 
         <DynamicStoreCompare
