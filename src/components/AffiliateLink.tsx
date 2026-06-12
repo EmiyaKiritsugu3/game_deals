@@ -3,11 +3,10 @@
 import type { ReactNode } from 'react';
 
 interface AffiliateLinkProps {
-  storeId: string;
-  gameSlug: string;
-  dealUrl?: string;
-  children: ReactNode;
-  className?: string;
+  readonly storeId: string;
+  readonly gameSlug: string;
+  readonly children: ReactNode;
+  readonly className?: string;
 }
 
 /**
@@ -17,7 +16,6 @@ interface AffiliateLinkProps {
 export default function AffiliateLink({
   storeId,
   gameSlug,
-  dealUrl,
   children,
   className,
 }: AffiliateLinkProps) {

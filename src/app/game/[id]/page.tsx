@@ -8,7 +8,6 @@ import {
   getDrmType,
   getGame,
   getHighResImage,
-  getRegionTag,
   getStoreLogo,
   getStores,
   isGreyMarketStore,
@@ -27,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   }
 
   const bestPrice = [...game.deals]
-    .sort((a, b) => parseFloat(a.price) - parseFloat(b.price))[0];
+    .sort((a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price))[0];
 
   const title = `${game.info.title} — Best Price: $${bestPrice?.price || 'N/A'}`;
   const description = `Find the best deal for ${game.info.title}. Current lowest price: $${bestPrice?.price || 'N/A'}. Historical low: $${game.cheapestPriceEver.price}. Compare prices across ${game.deals.length} stores.`;
@@ -76,8 +75,8 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
   }
 
   const highResThumb = getHighResImage(game.info.thumb);
-  const sortedDeals = [...game.deals].sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
-  const cheapestEver = parseFloat(game.cheapestPriceEver.price);
+  const sortedDeals = [...game.deals].sort((a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price));
+  const cheapestEver = Number.parseFloat(game.cheapestPriceEver.price);
   const bestCurrentPrice = parseFloat(sortedDeals[0]?.price ?? '9999');
   const isCurrentlyAtHL = bestCurrentPrice <= cheapestEver * 1.05;
 
@@ -85,8 +84,8 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
   const costPerHour = calculateCostPerHour(bestCurrentPrice, playtime.mainStory);
 
   const renderDealRow = (deal: GameDeal, isBest: boolean) => {
-    const savings = Math.round(parseFloat(deal.savings));
-    const price = parseFloat(deal.price);
+    const savings = Math.round(Number.parseFloat(deal.savings));
+    const price = Number.parseFloat(deal.price);
     const logo = getStoreLogo(deal.storeID);
     const storeName = stores[deal.storeID] || `Store ${deal.storeID}`;
     const isDealAtHL = price <= cheapestEver * 1.05;
@@ -220,7 +219,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                   <h2 className={styles.sectionTitle}>Official Stores</h2>
                   <div className={styles.dealsList}>
                     {officialDeals.map((deal) =>
-                      renderDealRow(deal, parseFloat(deal.price) === parseFloat(officialDeals[0]?.price))
+                      renderDealRow(deal, Number.parseFloat(deal.price) === parseFloat(officialDeals[0]?.price))
                     )}
                   </div>
                 </>
@@ -231,7 +230,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                   <h2 className={`${styles.sectionTitle} ${styles.keyshopTitle}`}>Keyshops</h2>
                   <div className={styles.dealsList}>
                     {keyshopDeals.map((deal) =>
-                      renderDealRow(deal, parseFloat(deal.price) === parseFloat(keyshopDeals[0]?.price))
+                      renderDealRow(deal, Number.parseFloat(deal.price) === Number.parseFloat(keyshopDeals[0]?.price))
                     )}
                   </div>
                 </>

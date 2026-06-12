@@ -13,7 +13,7 @@ interface StorePrice {
 export function StoreCompareChart({ data }: { data: StorePrice[] }) {
   const chartData = data.map((d) => ({
     name: d.storeName,
-    price: parseFloat(d.price),
+    price: Number.parseFloat(d.price),
   }));
 
   return (
@@ -48,7 +48,7 @@ export function StoreCompareChart({ data }: { data: StorePrice[] }) {
               }}
               formatter={(value: any) => {
                 const numValue = Number(value);
-                return [`$${!Number.isNaN(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
+                return [`$${Number.isFinite(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
               }}
             />
             <Bar dataKey="price" radius={[4, 4, 0, 0]}>
@@ -95,9 +95,9 @@ export function PriceHistoryChart({
     }));
   } else {
     chartData = generatePriceHistory(
-      parseFloat(retailPrice),
-      parseFloat(currentPrice),
-      parseFloat(lowestPrice),
+      Number.parseFloat(retailPrice),
+      Number.parseFloat(currentPrice),
+      Number.parseFloat(lowestPrice),
       gameTitle
     );
   }
@@ -139,7 +139,7 @@ export function PriceHistoryChart({
               }}
               formatter={(value: any) => {
                 const numValue = Number(value);
-                return [`$${!Number.isNaN(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
+                return [`$${Number.isFinite(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
               }}
             />
             <Line

@@ -60,6 +60,7 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
     const data = await res.json();
     return data.length > 0 ? data : fallbackDeals;
   } catch (_error) {
+    console.error('getDeals error:', _error);
     return fallbackDeals;
   }
 }
@@ -95,7 +96,7 @@ export async function getGame(id: string): Promise<GameDetails> {
       game.deals = [...game.deals, ...greyDeals];
 
       const currentLowest = [...game.deals].sort(
-        (a, b) => parseFloat(a.price) - parseFloat(b.price)
+        (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
       )[0];
       if (currentLowest && game.cheapestPriceEver) {
         if (parseFloat(currentLowest.price) < parseFloat(game.cheapestPriceEver.price)) {

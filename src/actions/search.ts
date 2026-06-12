@@ -63,8 +63,8 @@ export async function syncGamesToTypesenseAction(): Promise<{
       title: deal.title,
       thumb: deal.thumb,
       cheapest: deal.salePrice,
-      metacriticScore: parseInt(deal.metacriticScore) || 0,
-      steamRating: parseInt(deal.steamRatingPercent) || 0,
+      metacriticScore: Number.parseInt(deal.metacriticScore) || 0,
+      steamRating: Number.parseInt(deal.steamRatingPercent) || 0,
     }));
 
     const ok = await indexGamesBatch(games);
@@ -83,7 +83,7 @@ export async function syncGamesToTypesenseAction(): Promise<{
  */
 export async function createTypesenseCollectionAction(): Promise<boolean> {
   const host = process.env.TYPESENSE_HOST || 'localhost';
-  const port = parseInt(process.env.TYPESENSE_PORT || '443');
+  const port = Number.parseInt(process.env.TYPESENSE_PORT || '443');
   const protocol = process.env.TYPESENSE_PROTOCOL || 'https';
   const apiKey = process.env.TYPESENSE_ADMIN_KEY || '';
   if (!apiKey) return false;

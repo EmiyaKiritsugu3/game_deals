@@ -7,6 +7,30 @@ import { Suspense, useEffect, useState } from 'react';
 import { getGame, getHighResImage, getStores } from '@/services/api';
 import styles from '../page.module.css';
 
+type GameEntry = {gameID: string; title: string; thumb: string; salePrice: string; normalPrice: string; savings: number; storeID: string};
+
+function processGameResult(
+  acc: GameEntry[],
+  gameData: any,
+  idx: number,
+  gameIDs: string[]
+): GameEntry[] {
+  if (!gameData?.info) return acc;
+  const currentBest = [...gameData.deals].sort(
+    (a: any, b: any) => parseFloat(a.price) - parseFloat(b.price)
+  )[0];
+  acc.push({
+    gameID: gameIDs[idx],
+    title: gameData.info.title,
+    thumb: getHighResImage(gameData.info.thumb),
+    salePrice: currentBest?.price || gameData.cheapestPriceEver.price,
+    normalPrice: currentBest?.retailPrice || gameData.cheapestPriceEver.price,
+    savings: currentBest ? Math.round(parseFloat(currentBest.savings)) : 0,
+    storeID: currentBest?.storeID || '1',
+  });
+  return acc;
+}
+
 function SharedWishlistContent() {
   const searchParams = useSearchParams();
   const idsParam = searchParams.get('ids');
@@ -35,22 +59,7 @@ function SharedWishlistContent() {
 
         const results = await Promise.all(gameIDs.map((id) => getGame(id).catch(() => null)));
 
-        const validGames = results.reduce((acc: Array<{gameID: string; title: string; thumb: string; salePrice: string; normalPrice: string; savings: number; storeID: string}>, gameData, idx) => {
-          if (!gameData?.info) return acc;
-          const currentBest = [...gameData.deals].sort(
-            (a, b) => parseFloat(a.price) - parseFloat(b.price)
-          )[0];
-          acc.push({
-            gameID: gameIDs[idx],
-            title: gameData.info.title,
-            thumb: getHighResImage(gameData.info.thumb),
-            salePrice: currentBest?.price || gameData.cheapestPriceEver.price,
-            normalPrice: currentBest?.retailPrice || gameData.cheapestPriceEver.price,
-            savings: currentBest ? Math.round(parseFloat(currentBest.savings)) : 0,
-            storeID: currentBest?.storeID || '1',
-          });
-          return acc;
-        }, []);
+        const validGames = results.reduce((acc, gameData, idx) => processGameResult(acc, gameData, idx, gameIDs), [] as GameEntry[]);
 
         setGames(validGames);
       } catch (err) {

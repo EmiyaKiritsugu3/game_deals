@@ -27,7 +27,7 @@ export function generateGreyMarketDeals(officialDeals: GameDeal[], dealIDRef: st
 
   // Base it off the current cheapest official deal
   const sortedOfficial = [...officialDeals].sort(
-    (a, b) => parseFloat(a.price) - parseFloat(b.price)
+    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
   );
   const bestOfficial = sortedOfficial[0];
   const retailPrice = parseFloat(bestOfficial.retailPrice);
@@ -41,7 +41,7 @@ export function generateGreyMarketDeals(officialDeals: GameDeal[], dealIDRef: st
   const numShops = 1 + (hash % 3); // 1 to 3 keyshops
 
   const shuffledShops = [...GREY_MARKET_SHOPS].sort(
-    (a, b) => (hash % parseInt(a.id, 10)) - (hash % parseInt(b.id, 10))
+    (a, b) => (hash % Number.parseInt(a.id, 10)) - (hash % Number.parseInt(b.id, 10))
   );
   const selectedShops = shuffledShops.slice(0, numShops);
 

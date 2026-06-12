@@ -1,7 +1,7 @@
 'use server';
 
 import { config } from 'dotenv';
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 import postgres from 'postgres';
 import { createClient } from '@/utils/supabase/server';
 

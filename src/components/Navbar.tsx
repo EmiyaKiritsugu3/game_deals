@@ -14,7 +14,7 @@ import WishlistIndicator from './WishlistIndicator';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ServerUser = any;
 
-export default function Navbar({ serverUser }: { serverUser?: ServerUser | null }) {
+export default function Navbar({ serverUser }: { readonly serverUser?: ServerUser | null }) {
   const { user, logout, setUser } = useAuth();
   const [query, setQuery] = useQueryState('q', { defaultValue: '' });
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -154,6 +154,9 @@ export default function Navbar({ serverUser }: { serverUser?: ServerUser | null 
                 className={styles.userMenu}
                 ref={userMenuRef}
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setIsUserMenuOpen(!isUserMenuOpen); } }}
+                role="button"
+                tabIndex={0}
               >
                 <img
                   src={user?.avatar || (serverUser as ServerUser | undefined)?.user_metadata?.avatar_url || ''}

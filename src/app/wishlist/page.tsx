@@ -31,7 +31,7 @@ export default function WishlistPage() {
       const bestDeal = gameData.cheapestPriceEver;
       if (!info) return acc;
       const sortedDeals = [...gameData.deals].sort(
-        (a, b) => parseFloat(a.price) - parseFloat(b.price)
+        (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
       );
       const currentBest = sortedDeals[0];
 

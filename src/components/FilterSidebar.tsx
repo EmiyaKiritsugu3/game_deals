@@ -14,7 +14,6 @@ export default function FilterSidebar({ stores }: { stores: StoreInfo[] }) {
   const searchParams = useSearchParams();
 
   // Read current params
-  const _currentQuery = searchParams.get('q') || '';
   const currentMaxPrice = searchParams.get('upperPrice') || '';
   const currentStoreStr = searchParams.get('storeID') || '';
 
@@ -90,7 +89,7 @@ export default function FilterSidebar({ stores }: { stores: StoreInfo[] }) {
         <h4 className={styles.groupTitle}>Stores</h4>
         <div className={styles.storeList}>
           {stores
-            .filter((s) => parseInt(s.storeID, 10) <= 25) // Keep list manageable for MVP
+            .filter((s) => Number.parseInt(s.storeID, 10) <= 25) // Keep list manageable for MVP
             .map((store) => (
               <label key={store.storeID} className={styles.storeLabel}>
                 <input

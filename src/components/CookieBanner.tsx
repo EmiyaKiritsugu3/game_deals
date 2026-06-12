@@ -47,9 +47,8 @@ export default function CookieBanner() {
         🍪 Usamos cookies pra melhorar sua experiência e rastrear cliques em
         links de afiliados. Ao continuar navegando, você concisa com nossa{' '}
         <a href="/privacy" style={{ color: '#4ade80' }}>
-          Política de Privacidade
+          Política de Privacidade.
         </a>
-        .
       </p>
       <div style={{ display: 'flex', gap: '0.5rem' }}>
         <button

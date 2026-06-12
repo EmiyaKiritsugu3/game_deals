@@ -26,15 +26,15 @@ export async function getDealsAction(params?: {
     ? params.sortBy
     : 'Deal Rating';
   const pageSizeRaw = params?.pageSize ? parseInt(params.pageSize, 10) : 20;
-  const pageSize = Math.max(1, Math.min(100, isNaN(pageSizeRaw) ? 20 : pageSizeRaw));
+  const pageSize = Math.max(1, Math.min(100, Number.isNaN(pageSizeRaw) ? 20 : pageSizeRaw));
 
   const url = new URL(`${BASE_URL}/deals`);
   url.searchParams.append('sortBy', sortBy);
   url.searchParams.append('onSale', params?.onSale ?? '1');
   url.searchParams.append('pageSize', String(pageSize));
 
-  if (params?.upperPrice && !isNaN(Number(params.upperPrice))) url.searchParams.append('upperPrice', params.upperPrice);
-  if (params?.lowerPrice && !isNaN(Number(params.lowerPrice))) url.searchParams.append('lowerPrice', params.lowerPrice);
+  if (params?.upperPrice && !Number.isNaN(Number(params.upperPrice))) url.searchParams.append('upperPrice', params.upperPrice);
+  if (params?.lowerPrice && !Number.isNaN(Number(params.lowerPrice))) url.searchParams.append('lowerPrice', params.lowerPrice);
   if (params?.storeID && /^\d{1,3}$/.test(params.storeID)) url.searchParams.append('storeID', params.storeID);
   if (params?.title && params.title.length <= 200) url.searchParams.append('title', encodeURIComponent(params.title));
 
