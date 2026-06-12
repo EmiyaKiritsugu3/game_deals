@@ -1,14 +1,10 @@
 'use server';
 
-import { config } from 'dotenv';
-import { resolve } from 'path';
-import postgres from 'postgres';
+import { db } from '@/db';
+import { games, deals as dealsTable, priceHistory } from '@/db/schema';
+import { eq, desc, sql } from 'drizzle-orm';
 import { fallbackDeals } from '@/data/fallbackDeals';
 import type { Deal, GameDetails, Store } from '@/types/game';
-
-config({ path: resolve(process.cwd(), '.env.local') });
-
-const sql = postgres(process.env.DATABASE_URL || '', { connect_timeout: 10 });
 
 const BASE_URL = 'https://www.cheapshark.com/api/1.0';
 
@@ -24,15 +20,23 @@ export async function getDealsAction(params?: {
   storeID?: string;
   title?: string;
 }): Promise<Deal[]> {
-  const url = new URL(`${BASE_URL}/deals`);
-  url.searchParams.append('sortBy', params?.sortBy ?? 'Deal Rating');
-  url.searchParams.append('onSale', params?.onSale ?? '1');
-  url.searchParams.append('pageSize', params?.pageSize ?? '20');
+  // Validate inputs
+  const ALLOWED_SORT = ['Deal Rating', 'Title', 'Savings', 'Price'] as const;
+  const sortBy = params?.sortBy && ALLOWED_SORT.includes(params.sortBy as typeof ALLOWED_SORT[number])
+    ? params.sortBy
+    : 'Deal Rating';
+  const pageSizeRaw = params?.pageSize ? parseInt(params.pageSize, 10) : 20;
+  const pageSize = Math.max(1, Math.min(100, isNaN(pageSizeRaw) ? 20 : pageSizeRaw));
 
-  if (params?.upperPrice) url.searchParams.append('upperPrice', params.upperPrice);
-  if (params?.lowerPrice) url.searchParams.append('lowerPrice', params.lowerPrice);
-  if (params?.storeID) url.searchParams.append('storeID', params.storeID);
-  if (params?.title) url.searchParams.append('title', params.title);
+  const url = new URL(`${BASE_URL}/deals`);
+  url.searchParams.append('sortBy', sortBy);
+  url.searchParams.append('onSale', params?.onSale ?? '1');
+  url.searchParams.append('pageSize', String(pageSize));
+
+  if (params?.upperPrice && !isNaN(Number(params.upperPrice))) url.searchParams.append('upperPrice', params.upperPrice);
+  if (params?.lowerPrice && !isNaN(Number(params.lowerPrice))) url.searchParams.append('lowerPrice', params.lowerPrice);
+  if (params?.storeID && /^\d{1,3}$/.test(params.storeID)) url.searchParams.append('storeID', params.storeID);
+  if (params?.title && params.title.length <= 200) url.searchParams.append('title', encodeURIComponent(params.title));
 
   try {
     const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
@@ -87,25 +91,9 @@ export async function getStoresAction(): Promise<Record<string, string>> {
 }
 
 /**
- * Search jogos por título
+ * Server Actions — wrappers finos sobre CheapShark API.
+ * Para lógica de negócio (keyshops, DRM, pricing), use services/api.ts.
  */
-export async function searchGamesAction(title: string): Promise<Deal[]> {
-  if (!title || title.length < 2) return [];
-
-  const url = new URL(`${BASE_URL}/games`);
-  url.searchParams.append('title', title);
-  url.searchParams.append('limit', '10');
-  url.searchParams.append('exact', '0');
-
-  try {
-    const res = await fetch(url.toString(), { next: { revalidate: 300 } });
-    if (!res.ok) return [];
-    return await res.json();
-  } catch (e) {
-    console.error("searchGames error:", e);
-    return [];
-  }
-}
 
 /**
  * Ingestão de preços — busca deals e salva no banco + price_history
@@ -142,45 +130,47 @@ export async function ingestPricesAction(): Promise<{
       const deal = deals.find((d: any) => d.gameID === gameId);
       if (!deal) continue;
 
-      await sql`
-        INSERT INTO games (id, title, "cheapsharkId", "thumbUrl", "createdAt", "updatedAt")
-        VALUES (${gameId}::uuid, ${deal.title}, ${deal.gameID}, ${deal.thumb}, NOW(), NOW())
-        ON CONFLICT ("cheapsharkId") DO UPDATE SET
-          title = ${deal.title},
-          "thumbUrl" = ${deal.thumb},
-          "updatedAt" = NOW()
-      `;
+      await db.insert(games).values({
+        id: gameId,
+        title: deal.title,
+        cheapsharkId: deal.gameID,
+        thumbUrl: deal.thumb,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }).onConflictDoUpdate({
+        target: games.cheapsharkId,
+        set: { title: deal.title, thumbUrl: deal.thumb, updatedAt: new Date() },
+      });
       gamesUpserted++;
     }
 
-    for (const deal of deals as any[]) {
-      await sql`
-        INSERT INTO deals ("gameId", "storeId", price, "retailPrice", savings, "dealRating", url, "createdAt")
-        VALUES (
-          ${deal.gameID}::uuid,
-          ${deal.storeID},
-          ${deal.salePrice}::real,
-          ${deal.normalPrice}::real,
-          ${deal.savings}::real,
-          ${deal.dealRating}::real,
-          ${'https://www.cheapshark.com/redirect?dealID=' + deal.dealID},
-          NOW()
-        )
-      `;
-      dealsIngested++;
+    // Batch inserts for deals + price_history
+    if (deals.length > 0) {
+      const dealsValues = deals.map((d: any) => ({
+        gameId: d.gameID,
+        storeId: d.storeID,
+        price: parseFloat(d.salePrice),
+        retailPrice: parseFloat(d.normalPrice),
+        savings: parseFloat(d.savings),
+        dealRating: d.dealRating ? parseFloat(d.dealRating) : null,
+        url: 'https://www.cheapshark.com/redirect?dealID=' + d.dealID,
+        createdAt: new Date(),
+      }));
+      await db.insert(dealsTable).values(dealsValues);
+      dealsIngested = dealsValues.length;
 
-      // Registrar preço no histórico
-      await sql`
-        INSERT INTO price_history ("gameId", "storeId", price, "retailPrice", "recordedAt")
-        VALUES (
-          ${deal.gameID}::uuid,
-          ${deal.storeID},
-          ${deal.salePrice}::real,
-          ${deal.normalPrice}::real,
-          NOW()
-        )
-      `;
-      pricesRecorded++;
+      const priceValues = deals.map((d: any) => ({
+        gameId: d.gameID,
+        storeId: d.storeID,
+        price: parseFloat(d.salePrice),
+        retailPrice: parseFloat(d.normalPrice),
+        recordedAt: new Date(),
+      }));
+      // Insert em lotes de 50 para evitar payload muito grande
+      for (let i = 0; i < priceValues.length; i += 50) {
+        await db.insert(priceHistory).values(priceValues.slice(i, i + 50));
+      }
+      pricesRecorded = priceValues.length;
     }
 
     return { success: true, dealsIngested, gamesUpserted, pricesRecorded };
@@ -201,9 +191,9 @@ export async function ingestPricesAction(): Promise<{
  */
 export async function getDailyPriceHistoryAction(gameId: string, days = 90) {
   try {
-    const rows = await sql`
-      SELECT * FROM get_daily_prices(${gameId}, ${days})
-    `;
+    const rows = await db.execute(
+      sql`SELECT * FROM get_daily_prices(${gameId}, ${days})`
+    );
     return rows;
   } catch (e) {
     console.error("getDailyPriceHistory error:", e);
@@ -216,9 +206,9 @@ export async function getDailyPriceHistoryAction(gameId: string, days = 90) {
  */
 export async function getWeeklyPriceHistoryAction(gameId: string, weeks = 26) {
   try {
-    const rows = await sql`
-      SELECT * FROM get_weekly_prices(${gameId}, ${weeks})
-    `;
+    const rows = await db.execute(
+      sql`SELECT * FROM get_weekly_prices(${gameId}, ${weeks})`
+    );
     return rows;
   } catch (e) {
     console.error("getWeeklyPriceHistory error:", e);
@@ -230,21 +220,19 @@ export async function getWeeklyPriceHistoryAction(gameId: string, weeks = 26) {
  * Busca deals do banco
  */
 export async function getDealsFromDBAction(limit = 20) {
-  const deals = await sql`
-    SELECT
-      d."gameId",
-      g.title,
-      d."storeId",
-      d.price,
-      d."retailPrice",
-      d.savings,
-      d."dealRating",
-      g."thumbUrl"
-    FROM deals d
-    JOIN games g ON g.id = d."gameId"
-    ORDER BY d."dealRating" DESC
-    LIMIT ${limit}
-  `;
+  const result = await db.select({
+    gameId: dealsTable.gameId,
+    title: games.title,
+    storeId: dealsTable.storeId,
+    price: dealsTable.price,
+    retailPrice: dealsTable.retailPrice,
+    savings: dealsTable.savings,
+    dealRating: dealsTable.dealRating,
+    thumbUrl: games.thumbUrl,
+  }).from(dealsTable)
+    .innerJoin(games, eq(games.id, dealsTable.gameId))
+    .orderBy(desc(dealsTable.dealRating))
+    .limit(limit);
 
-  return deals as unknown as any[];
+  return result;
 }
