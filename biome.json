@@ -14,10 +14,19 @@
       "recommended": true,
       "style": {
         "noNonNullAssertion": "off",
-        "useShorthandAssign": "error"
+        "useShorthandAssign": "error",
+        "noUselessElse": "error",
+        "useConst": "error",
+        "useTemplate": "error"
       },
       "correctness": {
-        "noUnusedVariables": "warn"
+        "noUnusedVariables": "error",
+        "noUnusedImports": "error"
+      },
+      "a11y": {
+        "useButtonType": "error",
+        "useAltText": "error",
+        "useValidAnchor": "error"
       }
     }
   },

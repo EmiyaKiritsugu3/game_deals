@@ -30,7 +30,7 @@ export default function Navbar({ serverUser }: { readonly serverUser?: any | nul
     return () => clearTimeout(timer);
   }, [query]);
 
-  const { data: results, isLoading } = useQuery({
+  const { data: results, isLoading } = useQuery<Array<Record<string, string>>>({
     queryKey: ['search', debouncedQuery],
     queryFn: () => searchGamesAction(debouncedQuery, 5),
     enabled: debouncedQuery.length >= 3,

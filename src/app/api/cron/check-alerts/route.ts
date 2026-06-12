@@ -35,7 +35,7 @@ export async function GET(request: Request) {
     for (const gameID of uniqueGameIDs) {
       const res = await fetch(`https://www.cheapshark.com/api/1.0/games?id=${gameID}`);
       if (!res.ok) continue;
-      const data = await res.json();
+      const data = (await res.json()) as { deals: Array<{ price: string }> };
 
       if (!data?.deals || data.deals.length === 0) continue;
 

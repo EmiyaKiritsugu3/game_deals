@@ -21,7 +21,7 @@ export default async function HistoricalLows() {
 
   // 3. Strict verification against actual 'cheapestPriceEver'
   const verifiedHLs = await Promise.all(
-    hlCandidates.map(async (deal) => {
+    hlCandidates.map(async (deal: any) => {
       try {
         const gameInfo = await getGame(deal.gameID);
         if (!gameInfo?.cheapestPriceEver) return null;

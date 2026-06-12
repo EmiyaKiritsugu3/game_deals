@@ -15,7 +15,7 @@ export async function searchGamesAction(query: string, limit = 10) {
       `https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(query)}&limit=${limit}`,
     );
     if (!res.ok) return [];
-    return res.json();
+    return (await res.json()) as Array<Record<string, string>>;
   }
 
   try {
@@ -56,7 +56,7 @@ export async function syncGamesToTypesenseAction(): Promise<{
       return { success: false, indexed: 0, error: `CheapShark error: ${res.status}` };
     }
 
-    const deals = await res.json();
+    const deals = (await res.json()) as Array<Record<string, string>>;
 
     const games = deals.map((deal: any) => ({
       gameID: deal.gameID,

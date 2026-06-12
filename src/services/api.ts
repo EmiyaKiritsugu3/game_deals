@@ -51,7 +51,7 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
   try {
     const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
     if (!res.ok) return fallbackDeals;
-    const data = await res.json();
+    const data = (await res.json()) as Deal[];
     return data.length > 0 ? data : fallbackDeals;
   } catch (_error) {
     console.error('getDeals error:', _error);
@@ -64,7 +64,7 @@ export async function getStores(): Promise<Record<string, string>> {
   const map: Record<string, string> = {};
 
   if (res.ok) {
-    const stores: Store[] = await res.json();
+    const stores = (await res.json()) as Store[];
     stores.forEach((s) => (map[s.storeID] = s.storeName));
   }
 
@@ -83,7 +83,7 @@ export async function getGame(id: string): Promise<GameDetails> {
   try {
     const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
     if (!res.ok) return null as any;
-    const game: GameDetails = await res.json();
+    const game = (await res.json()) as GameDetails;
 
     if (game?.deals && game.deals.length > 0) {
       const greyDeals = generateGreyMarketDeals(game.deals, id);

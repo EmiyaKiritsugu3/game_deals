@@ -41,7 +41,7 @@ export async function getDealsAction(params?: {
   try {
     const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
     if (!res.ok) return fallbackDeals;
-    const data: Deal[] = await res.json();
+    const data = (await res.json()) as Deal[];
     return data.length > 0 ? data : fallbackDeals;
   } catch (e) {
     console.error("getDealsAction error:", e);
@@ -59,7 +59,7 @@ export async function getGameAction(id: string): Promise<GameDetails | null> {
   try {
     const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
     if (!res.ok) return null;
-    return await res.json();
+    return (await res.json()) as GameDetails | null;
   } catch (e) {
     console.error("getGameAction error:", e);
     return null;
@@ -75,7 +75,7 @@ export async function getStoresAction(): Promise<Record<string, string>> {
   try {
     const res = await fetch(`${BASE_URL}/stores`, { next: { revalidate: 86400 } });
     if (res.ok) {
-      const stores: Store[] = await res.json();
+      const stores = (await res.json()) as Store[];
       stores.forEach((s) => (map[s.storeID] = s.storeName));
     }
   } catch (e) {
@@ -115,7 +115,7 @@ export async function ingestPricesAction(): Promise<{
       return { success: false, dealsIngested: 0, gamesUpserted: 0, pricesRecorded: 0, error: `CheapShark API error: ${res.status}` };
     }
 
-    const deals = await res.json();
+    const deals = (await res.json()) as any[];
     if (!deals || deals.length === 0) {
       return { success: true, dealsIngested: 0, gamesUpserted: 0, pricesRecorded: 0 };
     }
