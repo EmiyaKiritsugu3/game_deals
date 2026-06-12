@@ -3,22 +3,47 @@ import TypesenseInstantsearchAdapter from 'typesense-instantsearch-adapter';
 /**
  * Typesense client pra search
  * Configura via env vars:
- *   TYPESENSE_HOST, TYPESENSE_PORT, TYPESENSE_API_KEY, TYPESENSE_COLLECTION_NAME
+ *   TYPESENSE_HOST, TYPESENSE_PORT, TYPESENSE_ADMIN_KEY (server), NEXT_PUBLIC_TYPESENSE_SEARCH_KEY (client)
  */
 
-export const TYPESENSE_CONFIG = {
-  host: process.env.TYPESENSE_HOST || 'localhost',
-  port: parseInt(process.env.TYPESENSE_PORT || '8108'),
-  apiKey: process.env.TYPESENSE_API_KEY || '',
-  collectionName: process.env.TYPESENSE_COLLECTION_NAME || 'games',
-  protocol: process.env.TYPESENSE_PROTOCOL || 'http',
-};
+const TYPESENSE_NODES = [
+  {
+    host: process.env.TYPESENSE_HOST || 'localhost',
+    port: parseInt(process.env.TYPESENSE_PORT || '443'),
+    protocol: process.env.TYPESENSE_PROTOCOL || 'https',
+  },
+];
+
+export const TYPESENSE_COLLECTION_NAME = process.env.TYPESENSE_COLLECTION_NAME || 'games';
+
+/**
+ * Typesense admin client — apenas server-side (NEXT_PUBLIC_ nunca!)
+ */
+export function createAdminClient() {
+  const { default: Typesense } = require('typesense') as typeof import('typesense');
+  return new Typesense.Client({
+    nodes: TYPESENSE_NODES,
+    apiKey: process.env.TYPESENSE_ADMIN_KEY || '',
+    connectionTimeoutSeconds: 5,
+  });
+}
+
+/**
+ * Typesense search-only client — seguro pro client bundle
+ */
+export function createSearchClient() {
+  return {
+    nodes: TYPESENSE_NODES,
+    apiKey: process.env.NEXT_PUBLIC_TYPESENSE_SEARCH_KEY || '',
+    collectionName: TYPESENSE_COLLECTION_NAME,
+  };
+}
 
 /**
  * Schema da collection Typesense
  */
 export const GAME_SCHEMA = {
-  name: TYPESENSE_CONFIG.collectionName,
+  name: TYPESENSE_COLLECTION_NAME,
   fields: [
     { name: 'gameID', type: 'string', facet: false },
     { name: 'title', type: 'string', facet: false },
@@ -38,22 +63,16 @@ export const GAME_SCHEMA = {
 };
 
 /**
- * Cria adapter pro InstantSearch (client-side)
+ * Cria adapter pro InstantSearch (client-side) — usa search-only key
  */
 export function createTypesenseAdapter() {
   return new TypesenseInstantsearchAdapter({
     server: {
-      nodes: [
-        {
-          host: TYPESENSE_CONFIG.host,
-          port: TYPESENSE_CONFIG.port,
-          protocol: TYPESENSE_CONFIG.protocol,
-        },
-      ],
-      apiKey: TYPESENSE_CONFIG.apiKey,
+      nodes: TYPESENSE_NODES,
+      apiKey: process.env.NEXT_PUBLIC_TYPESENSE_SEARCH_KEY || '',
     },
     collectionSpecificSearchParameters: {
-      [TYPESENSE_CONFIG.collectionName]: {
+      [TYPESENSE_COLLECTION_NAME]: {
         sort_by: 'cheapestPrice:asc',
       },
     },
@@ -64,8 +83,13 @@ export function createTypesenseAdapter() {
  * Typesense client pra server-side search
  */
 export async function searchGames(query: string, limit = 10) {
-  const url = `${TYPESENSE_CONFIG.protocol}://${TYPESENSE_CONFIG.host}:${TYPESENSE_CONFIG.port}`;
-  
+  const host = process.env.TYPESENSE_HOST || 'localhost';
+  const port = parseInt(process.env.TYPESENSE_PORT || '443');
+  const protocol = process.env.TYPESENSE_PROTOCOL || 'https';
+  const apiKey = process.env.TYPESENSE_ADMIN_KEY || process.env.NEXT_PUBLIC_TYPESENSE_SEARCH_KEY || '';
+
+  const url = `${protocol}://${host}:${port}`;
+
   const params = new URLSearchParams({
     q: query,
     query_by: 'title,developer,publisher',
@@ -76,12 +100,10 @@ export async function searchGames(query: string, limit = 10) {
   });
 
   const response = await fetch(
-    `${url}/collections/${TYPESENSE_CONFIG.collectionName}/documents/search?${params}`,
+    `${url}/collections/${TYPESENSE_COLLECTION_NAME}/documents/search?${params}`,
     {
-      headers: {
-        'X-TYPESENSE-API-KEY': TYPESENSE_CONFIG.apiKey,
-      },
-    }
+      headers: { 'X-TYPESENSE-API-KEY': apiKey },
+    },
   );
 
   if (!response.ok) return [];
@@ -90,7 +112,7 @@ export async function searchGames(query: string, limit = 10) {
 }
 
 /**
- * Indexa um jogo no Typesense
+ * Indexa um jogo no Typesense (server-side com admin key)
  */
 export async function indexGame(game: {
   gameID: string;
@@ -104,21 +126,21 @@ export async function indexGame(game: {
   genre?: string[];
   platform?: string[];
 }) {
-  const url = `${TYPESENSE_CONFIG.protocol}://${TYPESENSE_CONFIG.host}:${TYPESENSE_CONFIG.port}`;
+  const host = process.env.TYPESENSE_HOST || 'localhost';
+  const port = parseInt(process.env.TYPESENSE_PORT || '443');
+  const protocol = process.env.TYPESENSE_PROTOCOL || 'https';
+  const apiKey = process.env.TYPESENSE_ADMIN_KEY || '';
 
   const response = await fetch(
-    `${url}/collections/${TYPESENSE_CONFIG.collectionName}/documents`,
+    `${protocol}://${host}:${port}/collections/${TYPESENSE_COLLECTION_NAME}/documents`,
     {
       method: 'POST',
       headers: {
-        'X-TYPESENSE-API-KEY': TYPESENSE_CONFIG.apiKey,
+        'X-TYPESENSE-API-KEY': apiKey,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        ...game,
-        cheapestPrice: parseFloat(game.cheapest) || 0,
-      }),
-    }
+      body: JSON.stringify({ ...game, cheapestPrice: parseFloat(game.cheapest) || 0 }),
+    },
   );
 
   return response.ok;
@@ -127,37 +149,37 @@ export async function indexGame(game: {
 /**
  * Batch index de jogos
  */
-export async function indexGamesBatch(games: Array<{
-  gameID: string;
-  title: string;
-  thumb: string;
-  cheapest: string;
-  metacriticScore?: number;
-  steamRating?: number;
-  developer?: string;
-  publisher?: string;
-  genre?: string[];
-  platform?: string[];
-}>) {
-  const url = `${TYPESENSE_CONFIG.protocol}://${TYPESENSE_CONFIG.host}:${TYPESENSE_CONFIG.port}`;
+export async function indexGamesBatch(
+  games: Array<{
+    gameID: string;
+    title: string;
+    thumb: string;
+    cheapest: string;
+    metacriticScore?: number;
+    steamRating?: number;
+    developer?: string;
+    publisher?: string;
+    genre?: string[];
+    platform?: string[];
+  }>,
+) {
+  const host = process.env.TYPESENSE_HOST || 'localhost';
+  const port = parseInt(process.env.TYPESENSE_PORT || '443');
+  const protocol = process.env.TYPESENSE_PROTOCOL || 'https';
+  const apiKey = process.env.TYPESENSE_ADMIN_KEY || '';
 
-  const documents = games.map((g) => ({
-    ...g,
-    cheapestPrice: parseFloat(g.cheapest) || 0,
-  }));
+  const documents = games.map((g) => ({ ...g, cheapestPrice: parseFloat(g.cheapest) || 0 }));
 
-  // Use upsert pra evitar duplicatas (document_key = gameID)
-  const response = await fetch(
-    `${url}/collections/${TYPESENSE_CONFIG.collectionName}/documents/import?action=upsert`,
-    {
-      method: 'POST',
-      headers: {
-        'X-TYPESENSE-API-KEY': TYPESENSE_CONFIG.apiKey,
-        'Content-Type': 'application/jsonl',
-      },
-      body: documents.map((d) => JSON.stringify(d)).join('\n'),
-    }
-  );
+  const url = `${protocol}://${host}:${port}/collections/${TYPESENSE_COLLECTION_NAME}/documents/import?action=upsert`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'X-TYPESENSE-API-KEY': apiKey,
+      'Content-Type': 'application/jsonl',
+    },
+    body: documents.map((d) => JSON.stringify(d)).join('\n'),
+  });
 
   return response.ok;
 }
