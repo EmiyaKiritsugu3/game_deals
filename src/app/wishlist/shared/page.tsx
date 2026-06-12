@@ -4,8 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useMemo, useState } from 'react';
-import { getHighResImage } from '@/services/api';
 import { useWishlistGames } from '@/hooks/useWishlistGames';
+import { getHighResImage } from '@/services/api';
 import styles from '../page.module.css';
 
 type GameEntry = {
@@ -20,13 +20,14 @@ type GameEntry = {
 
 function processGameResult(
   acc: GameEntry[],
+  // biome-ignore lint/suspicious/noExplicitAny: CheapShark API shape
   gameData: any,
   idx: number,
   gameIDs: string[]
 ): GameEntry[] {
   if (!gameData?.info) return acc;
   const currentBest = [...gameData.deals].sort(
-    (a: any, b: any) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
+    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
   )[0];
   acc.push({
     gameID: gameIDs[idx],
@@ -115,6 +116,7 @@ function SharedWishlistContent() {
 
       <div className={styles.grid}>
         {games.map((game, idx) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: stable composite key gameID+idx
           <div key={`${game.gameID}-${idx}`} className={styles.wishlistCard}>
             <div className={styles.imageContainer}>
               <Image

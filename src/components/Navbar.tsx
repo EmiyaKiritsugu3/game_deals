@@ -5,12 +5,13 @@ import { Bell, ChevronDown, LogOut, Search, User } from 'lucide-react';
 import Link from 'next/link';
 import { useQueryState } from 'nuqs';
 import { useEffect, useRef, useState } from 'react';
-import { useAuth } from '@/store/authStore';
 import { searchGamesAction } from '@/actions/search';
+import { useAuth } from '@/store/authStore';
 import AuthModal from './AuthModal';
 import styles from './Navbar.module.css';
 import WishlistIndicator from './WishlistIndicator';
 
+// biome-ignore lint/suspicious/noExplicitAny: Supabase user type
 export default function Navbar({ serverUser }: { readonly serverUser?: any | null }) {
   const { user, logout, setUser } = useAuth();
   const [query, setQuery] = useQueryState('q', { defaultValue: '' });
@@ -49,16 +50,19 @@ export default function Navbar({ serverUser }: { readonly serverUser?: any | nul
 
     // Lazy import Supabase client + listen for auth changes
     let subscription: { unsubscribe: () => void } | null = null;
-    import('@/utils/supabase/client').then(({ createClient }) => {
-      const supabase = createClient();
-      const sub = supabase.auth.onAuthStateChange((_event: string, session: any) => {
-        setUser(session?.user ?? null);
-        if (session?.user) {
-          setIsAuthModalOpen(false);
-        }
-      });
-      subscription = sub.data.subscription;
-    }).catch(() => {});
+    import('@/utils/supabase/client')
+      .then(({ createClient }) => {
+        const supabase = createClient();
+        // biome-ignore lint/suspicious/noExplicitAny: Supabase session type
+        const sub = supabase.auth.onAuthStateChange((_event: string, session: any) => {
+          setUser(session?.user ?? null);
+          if (session?.user) {
+            setIsAuthModalOpen(false);
+          }
+        });
+        subscription = sub.data.subscription;
+      })
+      .catch(() => {});
 
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -118,7 +122,7 @@ export default function Navbar({ serverUser }: { readonly serverUser?: any | nul
                 {isLoading ? (
                   <div className={`${styles.dropdownItem} ${styles.loading}`}>Loading...</div>
                 ) : results && results.length > 0 ? (
-                  results.map((game: any) => (
+                  results.map((game) => (
                     <Link
                       href={`/game/${game.gameID}`}
                       key={game.gameID}
@@ -128,7 +132,14 @@ export default function Navbar({ serverUser }: { readonly serverUser?: any | nul
                         setQuery('');
                       }}
                     >
-                      <img src={game.thumb} alt={game.external} className={styles.dropdownThumb} />
+                      {
+                        // biome-ignore lint/performance/noImgElement: search result thumbnails
+                        <img
+                          src={game.thumb}
+                          alt={game.external}
+                          className={styles.dropdownThumb}
+                        />
+                      }
                       <div className={styles.dropdownInfo}>
                         <span className={styles.dropdownTitle}>{game.external}</span>
                         <span className={styles.dropdownPrice}>From ${game.cheapest}</span>
@@ -152,13 +163,18 @@ export default function Navbar({ serverUser }: { readonly serverUser?: any | nul
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                 type="button"
               >
-                <img
-                  src={user?.avatar || (serverUser as any)?.user_metadata?.avatar_url || ''}
-                  alt={user?.name || (serverUser as any)?.user_metadata?.full_name || 'User'}
-                  className={styles.avatar}
-                />
+                {
+                  // biome-ignore lint/performance/noImgElement: user avatar
+                  <img
+                    src={user?.avatar || serverUser?.user_metadata?.avatar_url || ''}
+                    alt={user?.name || serverUser?.user_metadata?.full_name || 'User'}
+                    className={styles.avatar}
+                  />
+                }
                 <span className={styles.username}>
-                  {user?.name || (serverUser as any)?.user_metadata?.full_name || 'User'}
+                  {user?.name || // biome-ignore lint/suspicious/noExplicitAny: serverUser shape
+                    (serverUser as any)?.user_metadata?.full_name ||
+                    'User'}
                 </span>
                 <ChevronDown size={14} />
 
@@ -169,7 +185,11 @@ export default function Navbar({ serverUser }: { readonly serverUser?: any | nul
                       <span>Price Alerts</span>
                     </Link>
                     <div className={styles.menuDivider} />
-                    <button className={`${styles.menuItem} ${styles.logout}`} onClick={logout}>
+                    <button
+                      type="button"
+                      className={`${styles.menuItem} ${styles.logout}`}
+                      onClick={logout}
+                    >
                       <LogOut size={16} />
                       <span>Logout</span>
                     </button>
@@ -177,7 +197,11 @@ export default function Navbar({ serverUser }: { readonly serverUser?: any | nul
                 )}
               </button>
             ) : (
-              <button className={styles.loginBtn} onClick={() => setIsAuthModalOpen(true)}>
+              <button
+                type="button"
+                className={styles.loginBtn}
+                onClick={() => setIsAuthModalOpen(true)}
+              >
                 <User size={18} />
                 <span>Login</span>
               </button>

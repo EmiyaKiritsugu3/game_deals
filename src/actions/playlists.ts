@@ -1,7 +1,7 @@
 'use server';
 
-import { config } from 'dotenv';
 import { resolve } from 'node:path';
+import { config } from 'dotenv';
 import postgres from 'postgres';
 import { createClient } from '@/utils/supabase/server';
 
@@ -12,13 +12,11 @@ const sql = postgres(process.env.DATABASE_URL || '', { connect_timeout: 5 });
 /**
  * Criar playlist (com auth check)
  */
-export async function createPlaylistAction(
-  title: string,
-  description: string,
-  isPublic = false
-) {
+export async function createPlaylistAction(title: string, description: string, isPublic = false) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
   const slug = title
@@ -39,7 +37,9 @@ export async function createPlaylistAction(
  */
 export async function getUserPlaylistsAction() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) return [];
 
   return sql`
@@ -57,7 +57,9 @@ export async function getUserPlaylistsAction() {
  */
 export async function addGameToPlaylistAction(playlistId: string, gameId: string, notes?: string) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
   // Verificar ownership
@@ -78,7 +80,9 @@ export async function addGameToPlaylistAction(playlistId: string, gameId: string
  */
 export async function removeGameFromPlaylistAction(playlistId: string, gameId: string) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
   const [playlist] = await sql`SELECT "userId" FROM playlists WHERE id = ${playlistId}`;
@@ -96,7 +100,9 @@ export async function removeGameFromPlaylistAction(playlistId: string, gameId: s
  */
 export async function deletePlaylistAction(playlistId: string) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
   const [playlist] = await sql`SELECT "userId" FROM playlists WHERE id = ${playlistId}`;

@@ -19,7 +19,7 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
 
   const { data: playlists = [], isLoading } = useQuery({
     queryKey: ['playlists', user?.id],
-    queryFn: () => getUserPlaylists(user?.id ?? ""),
+    queryFn: () => getUserPlaylists(user?.id ?? ''),
     enabled: !!user?.id,
   });
 
@@ -55,8 +55,25 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
   if (isLoading) return null;
 
   return (
-    <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+    <div
+      className={styles.overlay}
+      onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onClose();
+      }}
+      role="dialog"
+      tabIndex={-1}
+      aria-label="Close modal"
+    >
+      <div
+        className={styles.modal}
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') onClose();
+        }}
+        role="dialog"
+        tabIndex={-1}
+      >
         <h3>Add to Playlist</h3>
         <p className={styles.subtitle}>Curate your collections and earn achievements.</p>
 
@@ -66,6 +83,7 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
           {playlists.length > 0 ? (
             playlists.map((list) => (
               <button
+                type="button"
                 key={list.id}
                 className={styles.listButton}
                 onClick={() => addMutation.mutate(list.id)}
@@ -91,6 +109,7 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
             className={styles.input}
           />
           <button
+            type="button"
             className={styles.createButton}
             disabled={createMutation.isPending || !newListName.trim()}
             onClick={() => createMutation.mutate(newListName)}
@@ -99,7 +118,7 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
           </button>
         </div>
 
-        <button className={styles.closeButton} onClick={onClose}>
+        <button type="button" className={styles.closeButton} onClick={onClose}>
           Cancel
         </button>
       </div>

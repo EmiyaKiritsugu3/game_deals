@@ -1,7 +1,12 @@
+import { sql } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 import { db } from '@/db';
-import { sql } from 'drizzle-orm';
-import { affiliateConfig, ALLOWED_DOMAINS, isValidStoreId, isValidGameSlug } from '@/lib/affiliate-config';
+import {
+  ALLOWED_DOMAINS,
+  affiliateConfig,
+  isValidGameSlug,
+  isValidStoreId,
+} from '@/lib/affiliate-config';
 
 /**
  * GET /out/[storeId]/[gameSlug]
@@ -9,7 +14,7 @@ import { affiliateConfig, ALLOWED_DOMAINS, isValidStoreId, isValidGameSlug } fro
  */
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ storeId: string; gameSlug: string }> },
+  { params }: { params: Promise<{ storeId: string; gameSlug: string }> }
 ) {
   const { storeId, gameSlug } = await params;
 
@@ -22,11 +27,11 @@ export async function GET(
   let targetUrl = '';
 
   try {
-    const [deal] = await db.execute(sql`
+    const [deal] = (await db.execute(sql`
       SELECT url, "storeId" FROM deals
       WHERE "storeId" = ${storeId}
       LIMIT 1
-    `) as unknown as Array<{ url: string | null; storeId: string }>;
+    `)) as unknown as Array<{ url: string | null; storeId: string }>;
 
     if (deal?.url) {
       targetUrl = deal.url;

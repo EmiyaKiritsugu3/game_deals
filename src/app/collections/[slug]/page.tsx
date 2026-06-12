@@ -35,6 +35,7 @@ export default async function CollectionDetailPage({
     collection.gameIDs.map((id) => getGame(id).catch(() => null))
   );
 
+  // biome-ignore lint/suspicious/noExplicitAny: CheapShark API shape
   const games = gamesData.reduce((acc: any[], gameData, idx) => {
     if (!gameData?.info) return acc;
     const bestDeal = [...gameData.deals].sort(
@@ -65,38 +66,48 @@ export default async function CollectionDetailPage({
         </div>
 
         <div className={styles.detailGrid}>
-          {games.map((game: any) => (
-            <div key={game.gameID} className={styles.detailGameRow}>
-              <img
-                src={game.thumb}
-                alt={game.title}
-                width={120}
-                height={56}
-                className={styles.detailGameThumb}
-              />
-              <div className={styles.detailGameInfo}>
-                <div className={styles.detailGameTitle}>{game.title}</div>
-                <div className={styles.detailGamePrice}>
-                  {Number.parseFloat(game.price) === 0 ? 'FREE' : `$${game.price}`}
-                  {Number.parseFloat(game.retailPrice) > Number.parseFloat(game.price) && (
-                    <span
-                      style={{
-                        textDecoration: 'line-through',
-                        color: 'hsl(var(--muted-foreground))',
-                        marginLeft: '0.5rem',
-                        fontWeight: 400,
-                      }}
-                    >
-                      ${game.retailPrice}
-                    </span>
-                  )}
+          {games.map(
+            (
+              // biome-ignore lint/suspicious/noExplicitAny: CheapShark API shape
+              game: any
+            ) => {
+              return (
+                <div key={game.gameID} className={styles.detailGameRow}>
+                  {
+                    // biome-ignore lint/performance/noImgElement: external CDN thumbnails
+                    <img
+                      src={game.thumb}
+                      alt={game.title}
+                      width={120}
+                      height={56}
+                      className={styles.detailGameThumb}
+                    />
+                  }
+                  <div className={styles.detailGameInfo}>
+                    <div className={styles.detailGameTitle}>{game.title}</div>
+                    <div className={styles.detailGamePrice}>
+                      {Number.parseFloat(game.price) === 0 ? 'FREE' : `$${game.price}`}
+                      {Number.parseFloat(game.retailPrice) > Number.parseFloat(game.price) && (
+                        <span
+                          style={{
+                            textDecoration: 'line-through',
+                            color: 'hsl(var(--muted-foreground))',
+                            marginLeft: '0.5rem',
+                            fontWeight: 400,
+                          }}
+                        >
+                          ${game.retailPrice}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <Link href={`/game/${game.gameID}`} className={styles.detailGameCta}>
+                    View Deal →
+                  </Link>
                 </div>
-              </div>
-              <Link href={`/game/${game.gameID}`} className={styles.detailGameCta}>
-                View Deal →
-              </Link>
-            </div>
-          ))}
+              );
+            }
+          )}
         </div>
       </div>
     </main>

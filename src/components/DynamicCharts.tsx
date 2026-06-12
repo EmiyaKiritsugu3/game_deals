@@ -41,12 +41,10 @@ export function DynamicPriceHistory(props: DynamicPriceHistoryProps) {
   // Buscar dados reais se gameId disponível
   const { data: realData } = useDailyPriceHistory(props.gameId || null);
 
-  return (
-    <PriceHistoryChartLazy
-      {...props}
-      realData={realData && realData.length > 0 ? realData as any : undefined}
-    />
-  );
+  // biome-ignore lint/suspicious/noExplicitAny: Recharts data shape
+  const chartData: any = realData && realData.length > 0 ? realData : undefined;
+
+  return <PriceHistoryChartLazy {...props} realData={chartData} />;
 }
 
 export function DynamicStoreCompare(props: DynamicStoreCompareProps) {

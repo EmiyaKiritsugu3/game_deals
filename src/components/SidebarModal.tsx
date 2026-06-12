@@ -56,7 +56,12 @@ export default function SidebarModal({ children }: { children: React.ReactNode }
         exit={{ x: '100%' }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
-        <button onClick={dismissModal} className={styles.closeBtn} aria-label="Close sidebar">
+        <button
+          type="button"
+          onClick={dismissModal}
+          className={styles.closeBtn}
+          aria-label="Close sidebar"
+        >
           <X size={24} />
         </button>
         <div className={styles.content}>{children}</div>

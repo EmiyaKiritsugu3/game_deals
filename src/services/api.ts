@@ -41,6 +41,7 @@ export function getRegionTag(_storeID: string): string | null {
 export async function getDeals(params?: Record<string, string>): Promise<Deal[]> {
   const url = new URL(`${BASE_URL}/deals`);
   if (params) {
+    // biome-ignore lint/suspicious/useIterableCallbackReturn: side-effect only
     Object.keys(params).forEach((key) => url.searchParams.append(key, params[key]));
   } else {
     url.searchParams.append('sortBy', 'Deal Rating');
@@ -65,6 +66,7 @@ export async function getStores(): Promise<Record<string, string>> {
 
   if (res.ok) {
     const stores = (await res.json()) as Store[];
+    // biome-ignore lint/suspicious/useIterableCallbackReturn: side-effect only
     stores.forEach((s) => (map[s.storeID] = s.storeName));
   }
 
@@ -82,7 +84,7 @@ export async function getGame(id: string): Promise<GameDetails> {
 
   try {
     const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
-    if (!res.ok) return null as any;
+    if (!res.ok) return null as unknown as never;
     const game = (await res.json()) as GameDetails;
 
     if (game?.deals && game.deals.length > 0) {
@@ -93,7 +95,9 @@ export async function getGame(id: string): Promise<GameDetails> {
         (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
       )[0];
       if (currentLowest && game.cheapestPriceEver) {
-        if (Number.parseFloat(currentLowest.price) < Number.parseFloat(game.cheapestPriceEver.price)) {
+        if (
+          Number.parseFloat(currentLowest.price) < Number.parseFloat(game.cheapestPriceEver.price)
+        ) {
           game.cheapestPriceEver.price = currentLowest.price;
           game.cheapestPriceEver.date = Math.floor(Date.now() / 1000);
         }
@@ -103,6 +107,6 @@ export async function getGame(id: string): Promise<GameDetails> {
     return game;
   } catch (error) {
     console.error('getGame error:', error);
-    return null as any;
+    return null as unknown as never;
   }
 }

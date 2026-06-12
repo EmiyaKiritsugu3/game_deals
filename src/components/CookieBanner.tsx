@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const COOKIE_KEY = 'gd_cookie_consent';
 
@@ -44,14 +44,15 @@ export default function CookieBanner() {
       }}
     >
       <p style={{ margin: 0, fontSize: '0.875rem', color: '#ccc', flex: 1 }}>
-        🍪 Usamos cookies pra melhorar sua experiência e rastrear cliques em
-        links de afiliados. Ao continuar navegando, você concisa com nossa{' '}
+        🍪 Usamos cookies pra melhorar sua experiência e rastrear cliques em links de afiliados. Ao
+        continuar navegando, você concisa com nossa{' '}
         <a href="/privacy" style={{ color: '#4ade80' }}>
           Política de Privacidade.
         </a>
       </p>
       <div style={{ display: 'flex', gap: '0.5rem' }}>
         <button
+          type="button"
           onClick={reject}
           style={{
             background: 'transparent',
@@ -66,6 +67,7 @@ export default function CookieBanner() {
           Rejeitar
         </button>
         <button
+          type="button"
           onClick={accept}
           style={{
             background: '#4ade80',

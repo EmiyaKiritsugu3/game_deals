@@ -29,13 +29,16 @@ export default function BundlesPage() {
               <div key={bundle.id} className={styles.bundleCard}>
                 <div className={styles.bundleCardHeader}>
                   <div className={styles.bundleStoreInfo}>
-                    <img
-                      src={bundle.storeIcon}
-                      alt={bundle.store}
-                      width={20}
-                      height={20}
-                      className={styles.bundleStoreIcon}
-                    />
+                    {
+                      // biome-ignore lint/performance/noImgElement: static store icons
+                      <img
+                        src={bundle.storeIcon}
+                        alt={bundle.store}
+                        width={20}
+                        height={20}
+                        className={styles.bundleStoreIcon}
+                      />
+                    }
                     <span className={styles.bundleStoreName}>{bundle.store}</span>
                   </div>
                   {bundle.tier && <span className={styles.bundleTier}>{bundle.tier}</span>}
@@ -44,15 +47,18 @@ export default function BundlesPage() {
                 <div className={styles.bundleBody}>
                   <h2 className={styles.bundleName}>{bundle.name}</h2>
                   <div className={styles.bundleGamesGrid}>
-                    {bundle.games.map((game, gi) => (
-                      <img
-                        key={gi}
-                        src={game.thumb}
-                        alt={game.title}
-                        title={`${game.title} — $${game.retailPrice.toFixed(2)}`}
-                        className={styles.bundleGameThumb}
-                      />
-                    ))}
+                    {bundle.games.map((game) => {
+                      return (
+                        // biome-ignore lint/performance/noImgElement: static game thumbnails from bundle data
+                        <img
+                          key={game.title}
+                          src={game.thumb}
+                          alt={game.title}
+                          title={`${game.title} — $${game.retailPrice.toFixed(2)}`}
+                          className={styles.bundleGameThumb}
+                        />
+                      );
+                    })}
                   </div>
                 </div>
 

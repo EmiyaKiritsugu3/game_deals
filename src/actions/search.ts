@@ -1,18 +1,19 @@
 'use server';
 
-import { searchGames as typesenseSearch, indexGamesBatch, GAME_SCHEMA } from '@/lib/typesense';
+import { GAME_SCHEMA, indexGamesBatch, searchGames as typesenseSearch } from '@/lib/typesense';
 
 /**
  * Search jogos via Typesense
  * Fallback pra CheapShark API se Typesense não configurado
  */
 export async function searchGamesAction(query: string, limit = 10) {
-  const apiKey = process.env.TYPESENSE_ADMIN_KEY || process.env.NEXT_PUBLIC_TYPESENSE_SEARCH_KEY || '';
+  const apiKey =
+    process.env.TYPESENSE_ADMIN_KEY || process.env.NEXT_PUBLIC_TYPESENSE_SEARCH_KEY || '';
 
   if (!apiKey) {
     // Fallback: CheapShark API
     const res = await fetch(
-      `https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(query)}&limit=${limit}`,
+      `https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(query)}&limit=${limit}`
     );
     if (!res.ok) return [];
     return (await res.json()) as Array<Record<string, string>>;
@@ -20,6 +21,7 @@ export async function searchGamesAction(query: string, limit = 10) {
 
   try {
     const hits = await typesenseSearch(query, limit);
+    // biome-ignore lint/suspicious/noExplicitAny: Typesense hit shape varies
     return hits.map((hit: any) => ({
       gameID: hit.document.gameID,
       external: hit.document.title,
@@ -49,7 +51,7 @@ export async function syncGamesToTypesenseAction(): Promise<{
 
   try {
     const res = await fetch(
-      'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100',
+      'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100'
     );
 
     if (!res.ok) {
@@ -58,13 +60,14 @@ export async function syncGamesToTypesenseAction(): Promise<{
 
     const deals = (await res.json()) as Array<Record<string, string>>;
 
+    // biome-ignore lint/suspicious/noExplicitAny: CheapShark API response
     const games = deals.map((deal: any) => ({
       gameID: deal.gameID,
       title: deal.title,
       thumb: deal.thumb,
       cheapest: deal.salePrice,
-      metacriticScore: Number.parseInt(deal.metacriticScore) || 0,
-      steamRating: Number.parseInt(deal.steamRatingPercent) || 0,
+      metacriticScore: Number.parseInt(deal.metacriticScore, 10) || 0,
+      steamRating: Number.parseInt(deal.steamRatingPercent, 10) || 0,
     }));
 
     const ok = await indexGamesBatch(games);
@@ -83,7 +86,7 @@ export async function syncGamesToTypesenseAction(): Promise<{
  */
 export async function createTypesenseCollectionAction(): Promise<boolean> {
   const host = process.env.TYPESENSE_HOST || 'localhost';
-  const port = Number.parseInt(process.env.TYPESENSE_PORT || '443');
+  const port = Number.parseInt(process.env.TYPESENSE_PORT || '443', 10);
   const protocol = process.env.TYPESENSE_PROTOCOL || 'https';
   const apiKey = process.env.TYPESENSE_ADMIN_KEY || '';
   if (!apiKey) return false;

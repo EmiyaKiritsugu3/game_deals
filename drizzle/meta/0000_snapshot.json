@@ -180,12 +180,8 @@
           "name": "deals_gameId_games_id_fk",
           "tableFrom": "deals",
           "tableTo": "games",
-          "columnsFrom": [
-            "gameId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gameId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -289,9 +285,7 @@
         "games_cheapsharkId_unique": {
           "name": "games_cheapsharkId_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "cheapsharkId"
-          ]
+          "columns": ["cheapsharkId"]
         }
       },
       "policies": {},
@@ -357,9 +351,7 @@
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -422,12 +414,8 @@
           "name": "price_alerts_gameId_games_id_fk",
           "tableFrom": "price_alerts",
           "tableTo": "games",
-          "columnsFrom": [
-            "gameId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gameId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -487,12 +475,8 @@
           "name": "price_history_gameId_games_id_fk",
           "tableFrom": "price_history",
           "tableTo": "games",
-          "columnsFrom": [
-            "gameId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gameId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -546,12 +530,8 @@
           "name": "playlist_games_playlistId_playlists_id_fk",
           "tableFrom": "playlist_games",
           "tableTo": "playlists",
-          "columnsFrom": [
-            "playlistId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["playlistId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -632,24 +612,12 @@
     "public.store": {
       "name": "store",
       "schema": "public",
-      "values": [
-        "steam",
-        "epic",
-        "gog",
-        "humble",
-        "fanatical",
-        "greenmangaming",
-        "nuuvem"
-      ]
+      "values": ["steam", "epic", "gog", "humble", "fanatical", "greenmangaming", "nuuvem"]
     },
     "public.user_role": {
       "name": "user_role",
       "schema": "public",
-      "values": [
-        "user",
-        "mod",
-        "admin"
-      ]
+      "values": ["user", "mod", "admin"]
     }
   },
   "schemas": {},

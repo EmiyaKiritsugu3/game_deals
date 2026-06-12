@@ -2,7 +2,8 @@ import type { User as SupabaseUser } from '@supabase/supabase-js';
 import { create } from 'zustand';
 
 // Supabase client é lazy-init pra evitar crash SSR
-let supabaseClient: ReturnType<typeof import('@/utils/supabase/client')['createClient']> | null = null;
+let supabaseClient: ReturnType<typeof import('@/utils/supabase/client')['createClient']> | null =
+  null;
 async function getSupabase() {
   if (!supabaseClient) {
     const { createClient } = await import('@/utils/supabase/client');

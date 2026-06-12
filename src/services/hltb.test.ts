@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { calculateCostPerHour, estimatePlaytime } from './hltb';
 
 describe('estimatePlaytime', () => {
@@ -10,7 +10,13 @@ describe('estimatePlaytime', () => {
   });
 
   it('returns mainStory in 6-80h range for varied inputs', () => {
-    const titles = ['A', 'Very Long Game Title That Might Affect Hash', '', '!@#$%^&*()', '🎮 Video Game'];
+    const titles = [
+      'A',
+      'Very Long Game Title That Might Affect Hash',
+      '',
+      '!@#$%^&*()',
+      '🎮 Video Game',
+    ];
     titles.forEach((t) => {
       const res = estimatePlaytime(t);
       expect(res.mainStory).toBeGreaterThanOrEqual(6);
@@ -19,7 +25,13 @@ describe('estimatePlaytime', () => {
   });
 
   it('mainStory <= mainExtra <= completionist (hierarchical)', () => {
-    const titles = ['A', 'Very Long Game Title That Might Affect Hash', '', '!@#$%^&*()', '🎮 Video Game'];
+    const titles = [
+      'A',
+      'Very Long Game Title That Might Affect Hash',
+      '',
+      '!@#$%^&*()',
+      '🎮 Video Game',
+    ];
     titles.forEach((t) => {
       const res = estimatePlaytime(t);
       expect(res.mainExtra).toBeGreaterThanOrEqual(res.mainStory);

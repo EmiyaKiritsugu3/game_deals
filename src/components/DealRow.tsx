@@ -11,7 +11,7 @@ interface DealRowProps {
   rank?: number;
 }
 
-export default async function DealRow({ deal, rank }: DealRowProps) {
+export default async function DealRow({ deal, rank: _rank }: DealRowProps) {
   const highResThumb = getHighResImage(deal.thumb);
   const savings = Math.round(Number.parseFloat(deal.savings));
 
@@ -43,6 +43,7 @@ export default async function DealRow({ deal, rank }: DealRowProps) {
           <h3 className={styles.title}>{deal.title}</h3>
           <div className={styles.meta}>
             {storeLogo ? (
+              // biome-ignore lint/performance/noImgElement: store logos from affiliate CDN
               <img
                 src={storeLogo}
                 alt={storeName}

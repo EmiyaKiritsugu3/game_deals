@@ -1,6 +1,16 @@
 'use client';
 
-import { Bar, BarChart, Cell, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import {
+  Bar,
+  BarChart,
+  Cell,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 import type { PriceHistoryPoint } from '@/types/game';
 import { generatePriceHistory } from '@/utils/pricing';
 import styles from './Charts.module.css';
@@ -15,6 +25,12 @@ export function StoreCompareChart({ data }: { readonly data: StorePrice[] }) {
     name: d.storeName,
     price: Number.parseFloat(d.price),
   }));
+
+  // biome-ignore lint/suspicious/noExplicitAny: Recharts Tooltip formatter signature
+  const storeChartFormatter = (value: any) => {
+    const numValue = Number(value);
+    return [`$${Number.isFinite(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
+  };
 
   return (
     <div className={styles.chartContainer}>
@@ -46,18 +62,15 @@ export function StoreCompareChart({ data }: { readonly data: StorePrice[] }) {
                 borderRadius: '8px',
                 color: 'hsl(var(--foreground))',
               }}
-              formatter={(value: any) => {
-                const numValue = Number(value);
-                return [`$${Number.isFinite(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
-              }}
+              formatter={storeChartFormatter}
             />
             <Bar dataKey="price" radius={[4, 4, 0, 0]}>
-              {chartData.map((_entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={index === 0 ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground) / 0.5)'}
-                />
-              ))}
+              {chartData.map((_entry, index) => {
+                const fill =
+                  index === 0 ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground) / 0.5)';
+                // biome-ignore lint/suspicious/noArrayIndexKey: static chart data
+                return <Cell key={`cell-${index}`} fill={fill} />;
+              })}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
@@ -73,16 +86,21 @@ interface PriceHistoryChartProps {
   readonly retailPrice?: string;
   readonly gameTitle?: string;
   readonly gameId?: string;
-  readonly realData?: Array<{ bucket: string; avg_price: number; min_price: number; max_price: number }>;
+  readonly realData?: Array<{
+    bucket: string;
+    avg_price: number;
+    min_price: number;
+    max_price: number;
+  }>;
 }
 
 export function PriceHistoryChart({
   currentPrice,
   lowestPrice,
-  lowestDate,
+  lowestDate: _lowestDate,
   retailPrice = '9.99',
   gameTitle = 'Default',
-  gameId,
+  gameId: _gameId,
   realData,
 }: PriceHistoryChartProps) {
   // Usar dados reais se disponíveis, senão gerar simulados
@@ -101,6 +119,12 @@ export function PriceHistoryChart({
       gameTitle
     );
   }
+
+  // biome-ignore lint/suspicious/noExplicitAny: Recharts Tooltip formatter signature
+  const priceHistoryFormatter = (value: any) => {
+    const numValue = Number(value);
+    return [`$${Number.isFinite(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
+  };
 
   return (
     <div className={styles.chartContainer}>
@@ -137,10 +161,7 @@ export function PriceHistoryChart({
                 borderRadius: '8px',
                 color: 'hsl(var(--foreground))',
               }}
-              formatter={(value: any) => {
-                const numValue = Number(value);
-                return [`$${Number.isFinite(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
-              }}
+              formatter={priceHistoryFormatter}
             />
             <Line
               type="monotone"

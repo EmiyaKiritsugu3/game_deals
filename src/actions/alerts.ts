@@ -1,7 +1,7 @@
 'use server';
 
-import { config } from 'dotenv';
 import { resolve } from 'node:path';
+import { config } from 'dotenv';
 import postgres from 'postgres';
 import { createClient } from '@/utils/supabase/server';
 
@@ -18,7 +18,9 @@ export async function createPriceAlertAction(
   storeId?: string
 ) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
   const [alert] = await sql`
@@ -38,7 +40,9 @@ export async function createPriceAlertAction(
  */
 export async function getUserAlertsAction() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) return [];
 
   return sql`
@@ -55,7 +59,9 @@ export async function getUserAlertsAction() {
  */
 export async function deletePriceAlertAction(alertId: string) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
   const [alert] = await sql`SELECT "userId" FROM price_alerts WHERE id = ${alertId}`;
@@ -80,6 +86,7 @@ export async function checkTriggeredAlertsAction() {
     WHERE pa."isActive" = 1
   `;
 
+  // biome-ignore lint/suspicious/noExplicitAny: raw DB query result
   const alertsToNotify = triggered.filter((alert: any) => {
     const currentLowest = Number.parseFloat(alert.currentLowest || '999');
     return currentLowest <= alert.targetPrice;

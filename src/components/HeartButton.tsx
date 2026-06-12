@@ -28,6 +28,7 @@ export default function HeartButton({ gameID, className = '' }: HeartButtonProps
 
   return (
     <button
+      type="button"
       className={`${styles.heartButton} ${isSaved ? styles.saved : ''} ${className}`}
       onClick={handleToggle}
       aria-label={isSaved ? 'Remove from Wishlist' : 'Add to Wishlist'}

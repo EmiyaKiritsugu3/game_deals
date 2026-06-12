@@ -2,7 +2,9 @@
 
 import { useEffect, useRef } from 'react';
 import { createClient } from '@/utils/supabase/client';
+
 const supabase = createClient();
+
 import { useAlerts } from '@/store/alertStore';
 import { useAuth } from '@/store/authStore';
 import { useWishlist } from '@/store/wishlistStore';
@@ -18,12 +20,10 @@ export default function SyncManager() {
     if (!isLoggedIn || !user || hasLoadedFromCloud.current) return;
 
     const loadFromCloud = async () => {
-      const { data } = await supabase
-        .from('wishlists')
-        .select('gameId')
-        .eq('userId', user.id);
+      const { data } = await supabase.from('wishlists').select('gameId').eq('userId', user.id);
 
       if (data && data.length > 0) {
+        // biome-ignore lint/suspicious/noExplicitAny: Supabase query result shape
         const cloudIds = data.map((r: any) => r.gameId);
         // Merge: cloud + local (sem duplicatas)
         const merged = [...new Set([...wishlist, ...cloudIds])];
@@ -60,6 +60,7 @@ export default function SyncManager() {
     if (!isLoggedIn || !user || alerts.length === 0) return;
 
     const syncAlerts = async () => {
+      // biome-ignore lint/suspicious/noExplicitAny: Supabase query result shape
       const alertsData = alerts.map((alert: any) => ({
         userId: user.id,
         gameId: alert.gameId,

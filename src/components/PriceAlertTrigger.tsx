@@ -44,6 +44,7 @@ export default function PriceAlertTrigger({
   return (
     <>
       <button
+        type="button"
         className={`${styles.trigger} ${activeAlert ? styles.active : ''} ${className}`}
         onClick={handleClick}
         title={activeAlert ? 'Edit Price Alert' : 'Set Price Alert'}
