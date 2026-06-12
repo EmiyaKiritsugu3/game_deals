@@ -102,8 +102,6 @@ export default async function RootLayout({
       'query-input': 'required name=search_term_string',
     },
   };
-
-  // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
   const jsonLdScript = (
     <script
       type="application/ld+json"

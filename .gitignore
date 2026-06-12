@@ -45,6 +45,8 @@ docs/jules_credentials.md
 .env.local
 supabase/.temp/
 
-# Biome ignore: Tailwind v4 @theme parse + Drizzle generated JSON
-src/app/globals.css
+# Tokens generated CSS
+src/app/tokens.css
+
+# Drizzle generated JSON
 drizzle/meta/

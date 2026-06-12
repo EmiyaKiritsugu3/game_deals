@@ -33,7 +33,7 @@ export default function SyncManager() {
     };
 
     loadFromCloud();
-  }, [isLoggedIn, user]);
+  }, [isLoggedIn, user, wishlist, setWishlist]);
 
   // 2. Sync wishlist pro cloud quando muda
   useEffect(() => {

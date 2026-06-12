@@ -125,16 +125,12 @@ export default function PriceAlertModal({
             </div>
 
             <div className={styles.optionsSection}>
-              <div
+              <button
+                type="button"
                 className={styles.checkboxGroup}
                 onClick={() => setIsKeyshopAllowed(!isKeyshopAllowed)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') setIsKeyshopAllowed(!isKeyshopAllowed);
-                }}
                 role="checkbox"
                 aria-checked={isKeyshopAllowed}
-                tabIndex={0}
-                onMouseDown={(e) => e.preventDefault()}
               >
                 <div className={`${styles.checkbox} ${isKeyshopAllowed ? styles.checked : ''}`}>
                   {isKeyshopAllowed && <X size={14} color="white" />}
@@ -145,7 +141,7 @@ export default function PriceAlertModal({
                     May result in lower prices but higher risk.
                   </span>
                 </div>
-              </div>
+              </button>
             </div>
 
             <div className={styles.actionButtons}>

@@ -38,23 +38,19 @@ export default function HeroSection({ deals }: HeroSectionProps) {
       <div className={styles.matrixBackground}>
         <div className={styles.matrixTrack}>
           {/* Duplicate the deals array to create a dense grid covering the entire background */}
-          {Array(15)
-            .fill(deals)
-            .flat()
-            .map((deal, i) => {
-              // biome-ignore lint/performance/noImgElement: matrix background images
-              const matrixImg = (
-                <img
-                  src={getHighResImage(deal.thumb)}
-                  alt=""
-                  loading="lazy"
-                  className={styles.matrixImg}
-                />
-              );
-              // biome-ignore lint/suspicious/noArrayIndexKey: static matrix background
+          {deals.length > 0 &&
+            Array.from({ length: 15 }, (_, i) => {
               return (
-                <div key={`matrix-${i}`} className={styles.matrixImgWrapper}>
-                  {matrixImg}
+                <div key={i} className={styles.matrixImgWrapper}>
+                  {
+                    // biome-ignore lint/performance/noImgElement: matrix bg images
+                    <img
+                      src={getHighResImage(deals[0].thumb)}
+                      alt=""
+                      loading="lazy"
+                      className={styles.matrixImg}
+                    />
+                  }
                 </div>
               );
             })}

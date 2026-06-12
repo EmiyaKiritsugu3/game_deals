@@ -164,8 +164,6 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
       },
     })),
   };
-
-  // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
   const productJsonLdScript = (
     <script
       type="application/ld+json"

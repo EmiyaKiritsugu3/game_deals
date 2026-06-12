@@ -116,7 +116,6 @@ function SharedWishlistContent() {
 
       <div className={styles.grid}>
         {games.map((game, idx) => (
-          // biome-ignore lint/suspicious/noArrayIndexKey: stable composite key gameID+idx
           <div key={`${game.gameID}-${idx}`} className={styles.wishlistCard}>
             <div className={styles.imageContainer}>
               <Image
