@@ -8,6 +8,13 @@
       "when": 1781137838874,
       "tag": "0000_exotic_next_avengers",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": Date.now(),
+      "tag": "0001_gamification_tables",
+      "breakpoints": true
     }
   ]
 }
