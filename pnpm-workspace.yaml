@@ -1,8 +1,9 @@
 packages:
   - '.'
 allowBuilds:
-  esbuild: false
-  sharp: true
-  typesense-instantsearch-adapter: true
-  unrs-resolver: true
-onlyBuiltDependencies: '[]'
+  sharp: set this to true or false
+  typesense-instantsearch-adapter: set this to true or false
+onlyBuiltDependencies:
+  - sharp
+  - typesense-instantsearch-adapter
+  - unrs-resolver
