@@ -50,13 +50,5 @@
     "tailwindcss": "^4.3.0",
     "typescript": "^5",
     "vitest": "^4.1.8"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "sharp",
-      "typesense-instantsearch-adapter",
-      "unrs-resolver"
-    ]
   }
 }

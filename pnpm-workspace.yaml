@@ -1,7 +1,7 @@
 packages:
   - '.'
-onlyBuiltDependencies:
-  - esbuild
-  - sharp
-  - typesense-instantsearch-adapter
-  - unrs-resolver
+allowBuilds:
+  esbuild: true
+  sharp: true
+  typesense-instantsearch-adapter: true
+  unrs-resolver: true
