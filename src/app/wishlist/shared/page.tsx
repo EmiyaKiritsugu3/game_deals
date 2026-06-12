@@ -35,7 +35,7 @@ function SharedWishlistContent() {
 
         const results = await Promise.all(gameIDs.map((id) => getGame(id).catch(() => null)));
 
-        const validGames = results.reduce((acc: any[], gameData, idx) => {
+        const validGames = results.reduce((acc: Array<{gameID: string; title: string; thumb: string; salePrice: string; normalPrice: string; savings: number; storeID: string}>, gameData, idx) => {
           if (!gameData?.info) return acc;
           const currentBest = [...gameData.deals].sort(
             (a, b) => parseFloat(a.price) - parseFloat(b.price)

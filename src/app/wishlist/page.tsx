@@ -40,7 +40,7 @@ export default function WishlistPage() {
         const gamePromises = uniqueWishlist.map((id) => getGame(id).catch(() => null));
         const results = await Promise.all(gamePromises);
 
-        const validGames = results.reduce((acc: any[], gameData, idx) => {
+        const validGames = results.reduce((acc: Array<{gameID: string; title: string; thumb: string; salePrice: string; normalPrice: string; savings: number; storeID: string}>, gameData, idx) => {
           if (!gameData?.info) return acc;
 
           const info = gameData?.info;
