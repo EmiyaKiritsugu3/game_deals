@@ -41,7 +41,7 @@ export default function WishlistPage() {
         thumb: getHighResImage(info.thumb),
         salePrice: currentBest ? currentBest.price : bestDeal.price,
         normalPrice: currentBest ? currentBest.retailPrice : bestDeal.price,
-        savings: currentBest ? Math.round(parseFloat(currentBest.savings)) : 0,
+        savings: currentBest ? Math.round(Number.parseFloat(currentBest.savings)) : 0,
         storeID: currentBest ? currentBest.storeID : '1',
       });
 
@@ -64,7 +64,7 @@ export default function WishlistPage() {
     if (sortMode === 'discount') {
       sorted.sort((a, b) => b.savings - a.savings);
     } else if (sortMode === 'price') {
-      sorted.sort((a, b) => parseFloat(a.salePrice) - parseFloat(b.salePrice));
+      sorted.sort((a, b) => Number.parseFloat(a.salePrice) - Number.parseFloat(b.salePrice));
     } else if (sortMode === 'name') {
       sorted.sort((a, b) => a.title.localeCompare(b.title));
     }
@@ -72,7 +72,7 @@ export default function WishlistPage() {
   }, [savedGames, sortMode]);
 
   const totalValue = useMemo(() => {
-    return savedGames.reduce((acc, game) => acc + parseFloat(game.salePrice), 0).toFixed(2);
+    return savedGames.reduce((acc, game) => acc + Number.parseFloat(game.salePrice), 0).toFixed(2);
   }, [savedGames]);
 
   return (
@@ -204,7 +204,7 @@ export default function WishlistPage() {
                         <PriceAlertTrigger
                           gameID={game.gameID}
                           gameTitle={game.title}
-                          currentPrice={parseFloat(game.salePrice)}
+                          currentPrice={Number.parseFloat(game.salePrice)}
                           className={styles.alertShortcut}
                         />
                         <HeartButton gameID={game.gameID} className={styles.heartWrapper} />

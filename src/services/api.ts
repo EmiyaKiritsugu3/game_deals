@@ -11,24 +11,18 @@ import {
   STORE_FAVICON_MAP,
 } from '@/constants/stores';
 import type { Deal, GameDetails, Store } from '@/types/game';
-import {
-  formatTimeAgo,
-  generateGreyMarketDeals,
-  generatePriceHistory,
-  getHighResImage,
-} from '@/utils/pricing';
+import { generateGreyMarketDeals } from '@/utils/pricing';
 
 const BASE_URL = 'https://www.cheapshark.com/api/1.0';
 
-// Re-exporting utils for backward compatibility
-export { formatTimeAgo, generatePriceHistory, getHighResImage };
+export { formatTimeAgo, generatePriceHistory, getHighResImage } from '@/utils/pricing';
 
 export function getStoreLogo(storeID: string): string | null {
   return STORE_FAVICON_MAP[storeID] ?? null;
 }
 
 export function isGreyMarketStore(storeID: string): boolean {
-  return parseInt(storeID, 10) >= 100;
+  return Number.parseInt(storeID, 10) >= 100;
 }
 
 export function getDrmType(storeID: string): { label: string; icon: string } {
@@ -99,7 +93,7 @@ export async function getGame(id: string): Promise<GameDetails> {
         (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
       )[0];
       if (currentLowest && game.cheapestPriceEver) {
-        if (parseFloat(currentLowest.price) < parseFloat(game.cheapestPriceEver.price)) {
+        if (Number.parseFloat(currentLowest.price) < Number.parseFloat(game.cheapestPriceEver.price)) {
           game.cheapestPriceEver.price = currentLowest.price;
           game.cheapestPriceEver.date = Math.floor(Date.now() / 1000);
         }

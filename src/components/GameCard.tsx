@@ -11,8 +11,8 @@ export default async function GameCard({ deal }: { deal: Deal }) {
   const stores = await getStores();
   const store = stores[deal.storeID];
   const highResThumb = getHighResImage(deal.thumb);
-  const savings = Math.round(parseFloat(deal.savings));
-  const isFree = parseFloat(deal.salePrice) === 0;
+  const savings = Math.round(Number.parseFloat(deal.savings));
+  const isFree = Number.parseFloat(deal.salePrice) === 0;
   const isEpicDeal = savings >= 85 || isFree;
   const isHistoricalLow = savings >= 90;
 

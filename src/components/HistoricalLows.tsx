@@ -26,8 +26,8 @@ export default async function HistoricalLows() {
         const gameInfo = await getGame(deal.gameID);
         if (!gameInfo?.cheapestPriceEver) return null;
 
-        const currentPrice = parseFloat(deal.salePrice);
-        const historicalLow = parseFloat(gameInfo.cheapestPriceEver.price);
+        const currentPrice = Number.parseFloat(deal.salePrice);
+        const historicalLow = Number.parseFloat(gameInfo.cheapestPriceEver.price);
 
         // Strict HL check: current price must be within 1% of the historical low
         return currentPrice <= historicalLow * 1.01 ? deal : null;

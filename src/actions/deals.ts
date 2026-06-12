@@ -25,7 +25,7 @@ export async function getDealsAction(params?: {
   const sortBy = params?.sortBy && ALLOWED_SORT.includes(params.sortBy as typeof ALLOWED_SORT[number])
     ? params.sortBy
     : 'Deal Rating';
-  const pageSizeRaw = params?.pageSize ? parseInt(params.pageSize, 10) : 20;
+  const pageSizeRaw = params?.pageSize ? Number.parseInt(params.pageSize, 10) : 20;
   const pageSize = Math.max(1, Math.min(100, Number.isNaN(pageSizeRaw) ? 20 : pageSizeRaw));
 
   const url = new URL(`${BASE_URL}/deals`);
@@ -149,10 +149,10 @@ export async function ingestPricesAction(): Promise<{
       const dealsValues = deals.map((d: any) => ({
         gameId: d.gameID,
         storeId: d.storeID,
-        price: parseFloat(d.salePrice),
-        retailPrice: parseFloat(d.normalPrice),
-        savings: parseFloat(d.savings),
-        dealRating: d.dealRating ? parseFloat(d.dealRating) : null,
+        price: Number.parseFloat(d.salePrice),
+        retailPrice: Number.parseFloat(d.normalPrice),
+        savings: Number.parseFloat(d.savings),
+        dealRating: d.dealRating ? Number.parseFloat(d.dealRating) : null,
         url: 'https://www.cheapshark.com/redirect?dealID=' + d.dealID,
         createdAt: new Date(),
       }));
@@ -162,8 +162,8 @@ export async function ingestPricesAction(): Promise<{
       const priceValues = deals.map((d: any) => ({
         gameId: d.gameID,
         storeId: d.storeID,
-        price: parseFloat(d.salePrice),
-        retailPrice: parseFloat(d.normalPrice),
+        price: Number.parseFloat(d.salePrice),
+        retailPrice: Number.parseFloat(d.normalPrice),
         recordedAt: new Date(),
       }));
       // Insert em lotes de 50 para evitar payload muito grande

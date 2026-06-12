@@ -39,7 +39,7 @@ export async function GET(request: Request) {
 
       if (!data?.deals || data.deals.length === 0) continue;
 
-      const currentBestPrice = parseFloat(data.deals[0].price);
+      const currentBestPrice = Number.parseFloat(data.deals[0].price);
 
       const { error: updateError } = await supabase
         .from('price_alerts')

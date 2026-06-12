@@ -10,7 +10,7 @@ interface StorePrice {
   price: string;
 }
 
-export function StoreCompareChart({ data }: { data: StorePrice[] }) {
+export function StoreCompareChart({ data }: { readonly data: StorePrice[] }) {
   const chartData = data.map((d) => ({
     name: d.storeName,
     price: Number.parseFloat(d.price),
@@ -67,13 +67,13 @@ export function StoreCompareChart({ data }: { data: StorePrice[] }) {
 }
 
 interface PriceHistoryChartProps {
-  currentPrice: string;
-  lowestPrice: string;
-  lowestDate: number;
-  retailPrice?: string;
-  gameTitle?: string;
-  gameId?: string;
-  realData?: Array<{ bucket: string; avg_price: number; min_price: number; max_price: number }>;
+  readonly currentPrice: string;
+  readonly lowestPrice: string;
+  readonly lowestDate: number;
+  readonly retailPrice?: string;
+  readonly gameTitle?: string;
+  readonly gameId?: string;
+  readonly realData?: Array<{ bucket: string; avg_price: number; min_price: number; max_price: number }>;
 }
 
 export function PriceHistoryChart({

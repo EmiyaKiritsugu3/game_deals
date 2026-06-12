@@ -38,7 +38,7 @@ export default async function CollectionDetailPage({
   const games = gamesData.reduce((acc: any[], gameData, idx) => {
     if (!gameData?.info) return acc;
     const bestDeal = [...gameData.deals].sort(
-      (a, b) => parseFloat(a.price) - parseFloat(b.price)
+      (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
     )[0];
     acc.push({
       gameID: collection.gameIDs[idx],
@@ -77,8 +77,8 @@ export default async function CollectionDetailPage({
               <div className={styles.detailGameInfo}>
                 <div className={styles.detailGameTitle}>{game.title}</div>
                 <div className={styles.detailGamePrice}>
-                  {parseFloat(game.price) === 0 ? 'FREE' : `$${game.price}`}
-                  {parseFloat(game.retailPrice) > parseFloat(game.price) && (
+                  {Number.parseFloat(game.price) === 0 ? 'FREE' : `$${game.price}`}
+                  {Number.parseFloat(game.retailPrice) > Number.parseFloat(game.price) && (
                     <span
                       style={{
                         textDecoration: 'line-through',

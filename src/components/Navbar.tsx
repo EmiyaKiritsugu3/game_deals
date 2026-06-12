@@ -11,10 +11,7 @@ import AuthModal from './AuthModal';
 import styles from './Navbar.module.css';
 import WishlistIndicator from './WishlistIndicator';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ServerUser = any;
-
-export default function Navbar({ serverUser }: { readonly serverUser?: ServerUser | null }) {
+export default function Navbar({ serverUser }: { readonly serverUser?: any | null }) {
   const { user, logout, setUser } = useAuth();
   const [query, setQuery] = useQueryState('q', { defaultValue: '' });
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -23,7 +20,7 @@ export default function Navbar({ serverUser }: { readonly serverUser?: ServerUse
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const userMenuRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLButtonElement>(null);
 
   // Debounce search query
   useEffect(() => {
@@ -44,7 +41,6 @@ export default function Navbar({ serverUser }: { readonly serverUser?: ServerUse
     // Hydrate from SSR session safely
     // Note: currently serverUser is always null (auth moved to client-side)
     if (serverUser) {
-      setUser(serverUser as any);
       setUser(serverUser);
       setIsAuthModalOpen(false);
     } else {
@@ -150,21 +146,19 @@ export default function Navbar({ serverUser }: { readonly serverUser?: ServerUse
 
           <div className={styles.authSection}>
             {user || serverUser ? (
-              <div
+              <button
                 className={styles.userMenu}
                 ref={userMenuRef}
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setIsUserMenuOpen(!isUserMenuOpen); } }}
-                role="button"
-                tabIndex={0}
+                type="button"
               >
                 <img
-                  src={user?.avatar || (serverUser as ServerUser | undefined)?.user_metadata?.avatar_url || ''}
-                  alt={user?.name || (serverUser as ServerUser | undefined)?.user_metadata?.full_name || 'User'}
+                  src={user?.avatar || (serverUser as any)?.user_metadata?.avatar_url || ''}
+                  alt={user?.name || (serverUser as any)?.user_metadata?.full_name || 'User'}
                   className={styles.avatar}
                 />
                 <span className={styles.username}>
-                  {user?.name || (serverUser as ServerUser | undefined)?.user_metadata?.full_name || 'User'}
+                  {user?.name || (serverUser as any)?.user_metadata?.full_name || 'User'}
                 </span>
                 <ChevronDown size={14} />
 
@@ -181,7 +175,7 @@ export default function Navbar({ serverUser }: { readonly serverUser?: ServerUse
                     </button>
                   </div>
                 )}
-              </div>
+              </button>
             ) : (
               <button className={styles.loginBtn} onClick={() => setIsAuthModalOpen(true)}>
                 <User size={18} />

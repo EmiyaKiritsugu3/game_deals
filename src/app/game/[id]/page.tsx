@@ -77,7 +77,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
   const highResThumb = getHighResImage(game.info.thumb);
   const sortedDeals = [...game.deals].sort((a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price));
   const cheapestEver = Number.parseFloat(game.cheapestPriceEver.price);
-  const bestCurrentPrice = parseFloat(sortedDeals[0]?.price ?? '9999');
+  const bestCurrentPrice = Number.parseFloat(sortedDeals[0]?.price ?? '9999');
   const isCurrentlyAtHL = bestCurrentPrice <= cheapestEver * 1.05;
 
   const playtime = estimatePlaytime(game.info.title);
@@ -219,7 +219,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                   <h2 className={styles.sectionTitle}>Official Stores</h2>
                   <div className={styles.dealsList}>
                     {officialDeals.map((deal) =>
-                      renderDealRow(deal, Number.parseFloat(deal.price) === parseFloat(officialDeals[0]?.price))
+                      renderDealRow(deal, Number.parseFloat(deal.price) === Number.parseFloat(officialDeals[0]?.price))
                     )}
                   </div>
                 </>

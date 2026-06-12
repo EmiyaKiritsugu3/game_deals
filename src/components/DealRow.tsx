@@ -13,7 +13,7 @@ interface DealRowProps {
 
 export default async function DealRow({ deal, rank }: DealRowProps) {
   const highResThumb = getHighResImage(deal.thumb);
-  const savings = Math.round(parseFloat(deal.savings));
+  const savings = Math.round(Number.parseFloat(deal.savings));
 
   // Fetch stores map (Next.js deduplicates identical concurrent fetch calls)
   const storesMap = await getStores();
@@ -24,7 +24,7 @@ export default async function DealRow({ deal, rank }: DealRowProps) {
   const isHistoricalLow = savings > 85;
 
   const timeAgo = formatTimeAgo(deal.lastChange);
-  const salePrice = parseFloat(deal.salePrice);
+  const salePrice = Number.parseFloat(deal.salePrice);
   const isFree = salePrice === 0;
   const isEpicDeal = savings >= 75 || isFree;
 

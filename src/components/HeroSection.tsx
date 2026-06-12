@@ -29,7 +29,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
   if (!deals || deals.length === 0) return null;
 
   const currentDeal = deals[currentIndex];
-  const _savings = Math.round(parseFloat(currentDeal.savings));
+  const _savings = Math.round(Number.parseFloat(currentDeal.savings));
   const _highResThumb = getHighResImage(currentDeal.thumb);
 
   return (
@@ -58,7 +58,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
       {/* The individual Deals carousel */}
       {deals.map((deal, idx) => {
         const isActive = idx === currentIndex;
-        const dealSavings = Math.round(parseFloat(deal.savings));
+        const dealSavings = Math.round(Number.parseFloat(deal.savings));
         const dealThumb = getHighResImage(deal.thumb);
 
         return (

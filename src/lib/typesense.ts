@@ -20,7 +20,9 @@ export const TYPESENSE_COLLECTION_NAME = process.env.TYPESENSE_COLLECTION_NAME |
  * Typesense admin client — apenas server-side (NEXT_PUBLIC_ nunca!)
  */
 export function createAdminClient() {
-  const { default: Typesense } = require('typesense') as typeof import('typesense');
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const TypesenseLib = require('typesense');
+  const Typesense = TypesenseLib.default || TypesenseLib;
   return new Typesense.Client({
     nodes: TYPESENSE_NODES,
     apiKey: process.env.TYPESENSE_ADMIN_KEY || '',
@@ -168,7 +170,7 @@ export async function indexGamesBatch(
   const protocol = process.env.TYPESENSE_PROTOCOL || 'https';
   const apiKey = process.env.TYPESENSE_ADMIN_KEY || '';
 
-  const documents = games.map((g) => ({ ...g, cheapestPrice: parseFloat(g.cheapest) || 0 }));
+  const documents = games.map((g) => ({ ...g, cheapestPrice: Number.parseFloat(g.cheapest) || 0 }));
 
   const url = `${protocol}://${host}:${port}/collections/${TYPESENSE_COLLECTION_NAME}/documents/import?action=upsert`;
 

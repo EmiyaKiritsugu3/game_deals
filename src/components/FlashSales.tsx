@@ -77,7 +77,7 @@ export default function FlashSales({ deals }: FlashSalesProps) {
                   className={styles.image}
                   sizes="180px"
                 />
-                <div className={styles.discountBadge}>-{Math.round(parseFloat(deal.savings))}%</div>
+                <div className={styles.discountBadge}>-{Math.round(Number.parseFloat(deal.savings))}%</div>
               </div>
 
               <div className={styles.cardInfo}>

@@ -1,7 +1,7 @@
 'use server';
 
 import { config } from 'dotenv';
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 import postgres from 'postgres';
 import { createClient } from '@/utils/supabase/server';
 
@@ -81,7 +81,7 @@ export async function checkTriggeredAlertsAction() {
   `;
 
   const alertsToNotify = triggered.filter((alert: any) => {
-    const currentLowest = parseFloat(alert.currentLowest || '999');
+    const currentLowest = Number.parseFloat(alert.currentLowest || '999');
     return currentLowest <= alert.targetPrice;
   });
 

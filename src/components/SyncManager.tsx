@@ -19,7 +19,7 @@ export default function SyncManager() {
 
     const loadFromCloud = async () => {
       const { data } = await supabase
-        ?.from('wishlists')
+        .from('wishlists')
         .select('gameId')
         .eq('userId', user.id);
 
@@ -46,7 +46,7 @@ export default function SyncManager() {
           gameId,
         }));
 
-        await supabase?.from('wishlists').upsert(wishlistData, { onConflict: 'userId,gameId' });
+        await supabase.from('wishlists').upsert(wishlistData, { onConflict: 'userId,gameId' });
       }
     };
 
@@ -68,7 +68,7 @@ export default function SyncManager() {
         isActive: 1,
       }));
 
-      await supabase?.from('price_alerts').upsert(alertsData, { onConflict: 'userId,gameId' });
+      await supabase.from('price_alerts').upsert(alertsData, { onConflict: 'userId,gameId' });
     };
 
     const timer = setTimeout(syncAlerts, 1000);

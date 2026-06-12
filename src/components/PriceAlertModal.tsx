@@ -106,7 +106,7 @@ export default function PriceAlertModal({
                 max={currentPrice * 1.2}
                 step={0.01}
                 value={targetPrice}
-                onChange={(e) => setTargetPrice(parseFloat(e.target.value))}
+                onChange={(e) => setTargetPrice(Number.parseFloat(e.target.value))}
                 className={styles.rangeInput}
               />
               <div className={styles.numberInputGroup}>
@@ -114,7 +114,7 @@ export default function PriceAlertModal({
                 <input
                   type="number"
                   value={targetPrice}
-                  onChange={(e) => setTargetPrice(parseFloat(e.target.value))}
+                  onChange={(e) => setTargetPrice(Number.parseFloat(e.target.value))}
                   className={styles.numberInput}
                   step={0.01}
                 />

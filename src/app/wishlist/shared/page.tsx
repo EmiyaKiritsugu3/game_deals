@@ -3,11 +3,20 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
-import { getGame, getHighResImage, getStores } from '@/services/api';
+import { Suspense, useEffect, useMemo, useState } from 'react';
+import { getHighResImage } from '@/services/api';
+import { useWishlistGames } from '@/hooks/useWishlistGames';
 import styles from '../page.module.css';
 
-type GameEntry = {gameID: string; title: string; thumb: string; salePrice: string; normalPrice: string; savings: number; storeID: string};
+type GameEntry = {
+  gameID: string;
+  title: string;
+  thumb: string;
+  salePrice: string;
+  normalPrice: string;
+  savings: number;
+  storeID: string;
+};
 
 function processGameResult(
   acc: GameEntry[],
@@ -17,7 +26,7 @@ function processGameResult(
 ): GameEntry[] {
   if (!gameData?.info) return acc;
   const currentBest = [...gameData.deals].sort(
-    (a: any, b: any) => parseFloat(a.price) - parseFloat(b.price)
+    (a: any, b: any) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
   )[0];
   acc.push({
     gameID: gameIDs[idx],
@@ -25,7 +34,7 @@ function processGameResult(
     thumb: getHighResImage(gameData.info.thumb),
     salePrice: currentBest?.price || gameData.cheapestPriceEver.price,
     normalPrice: currentBest?.retailPrice || gameData.cheapestPriceEver.price,
-    savings: currentBest ? Math.round(parseFloat(currentBest.savings)) : 0,
+    savings: currentBest ? Math.round(Number.parseFloat(currentBest.savings)) : 0,
     storeID: currentBest?.storeID || '1',
   });
   return acc;
@@ -34,43 +43,35 @@ function processGameResult(
 function SharedWishlistContent() {
   const searchParams = useSearchParams();
   const idsParam = searchParams.get('ids');
-  const [games, setGames] = useState<Array<{gameID: string; title: string; thumb: string; salePrice: string; normalPrice: string; savings: number; storeID: string}>>([]);
+
+  const gameIds = useMemo(() => {
+    if (!idsParam) return [];
+    try {
+      const decoded = atob(idsParam);
+      return decoded
+        .split(',')
+        .filter(Boolean)
+        .filter((id) => /^[a-zA-Z0-9]+$/.test(id));
+    } catch {
+      console.error('Invalid wishlist data');
+      return [];
+    }
+  }, [idsParam]);
+
+  const { data, isLoading } = useWishlistGames(gameIds);
   const [stores, setStores] = useState<Record<string, string>>({});
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchGames() {
-      if (!idsParam) {
-        setIsLoading(false);
-        return;
-      }
+    if (data?.stores) setStores(data.stores);
+  }, [data?.stores]);
 
-      try {
-        let gameIDs: string[] = [];
-        try {
-          const decoded = atob(idsParam);
-          gameIDs = decoded.split(',').filter(Boolean).filter(id => /^[a-zA-Z0-9]+$/.test(id));
-        } catch (e) {
-          console.error("Invalid wishlist data:", e);
-        }
-
-        const storesMap = await getStores();
-        setStores(storesMap);
-
-        const results = await Promise.all(gameIDs.map((id) => getGame(id).catch(() => null)));
-
-        const validGames = results.reduce((acc, gameData, idx) => processGameResult(acc, gameData, idx, gameIDs), [] as GameEntry[]);
-
-        setGames(validGames);
-      } catch (err) {
-        console.error('Failed to decode shared wishlist:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchGames();
-  }, [idsParam]);
+  const games = useMemo(() => {
+    if (!data?.games || !gameIds.length) return [];
+    return data.games.reduce(
+      (acc, gameData, idx) => processGameResult(acc, gameData, idx, gameIds),
+      [] as GameEntry[]
+    );
+  }, [data, gameIds]);
 
   if (isLoading) {
     return (

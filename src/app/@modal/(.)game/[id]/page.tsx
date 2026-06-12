@@ -31,17 +31,17 @@ async function GameModalContent({ id }: { id: string }) {
   }
 
   const highResThumb = getHighResImage(game.info.thumb);
-  const sortedDeals = [...game.deals].sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
-  const cheapestEver = parseFloat(game.cheapestPriceEver.price);
-  const bestCurrentPrice = parseFloat(sortedDeals[0]?.price ?? '9999');
+  const sortedDeals = [...game.deals].sort((a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price));
+  const cheapestEver = Number.parseFloat(game.cheapestPriceEver.price);
+  const bestCurrentPrice = Number.parseFloat(sortedDeals[0]?.price ?? '9999');
   const isCurrentlyAtHL = bestCurrentPrice <= cheapestEver * 1.05;
 
   const playtime = estimatePlaytime(game.info.title);
   const costPerHour = calculateCostPerHour(bestCurrentPrice, playtime.mainStory);
 
   const renderDealRow = (deal: GameDeal, isBest: boolean, cheapestEver: number) => {
-    const savings = Math.round(parseFloat(deal.savings));
-    const price = parseFloat(deal.price);
+    const savings = Math.round(Number.parseFloat(deal.savings));
+    const price = Number.parseFloat(deal.price);
     const logo = getStoreLogo(deal.storeID);
     const storeName = stores[deal.storeID] || `Store ${deal.storeID}`;
     const isDealAtHL = price <= cheapestEver * 1.05;
@@ -97,8 +97,8 @@ async function GameModalContent({ id }: { id: string }) {
   const officialDeals = sortedDeals.filter((d) => !isGreyMarketStore(d.storeID));
   const keyshopDeals = sortedDeals.filter((d) => isGreyMarketStore(d.storeID));
 
-  const bestOfficialPrice = officialDeals.length > 0 ? parseFloat(officialDeals[0].price) : null;
-  const bestKeyshopPrice = keyshopDeals.length > 0 ? parseFloat(keyshopDeals[0].price) : null;
+  const bestOfficialPrice = officialDeals.length > 0 ? Number.parseFloat(officialDeals[0].price) : null;
+  const bestKeyshopPrice = keyshopDeals.length > 0 ? Number.parseFloat(keyshopDeals[0].price) : null;
 
   return (
     <SidebarModal>
@@ -159,7 +159,7 @@ async function GameModalContent({ id }: { id: string }) {
               <h2 className={styles.sectionTitle}>Official Stores</h2>
               <div className={styles.dealsList}>
                 {officialDeals.map((deal) =>
-                  renderDealRow(deal, parseFloat(deal.price) === bestOfficialPrice, cheapestEver)
+                  renderDealRow(deal, Number.parseFloat(deal.price) === bestOfficialPrice, cheapestEver)
                 )}
               </div>
             </>
@@ -170,7 +170,7 @@ async function GameModalContent({ id }: { id: string }) {
               <h2 className={`${styles.sectionTitle} ${styles.keyshopTitle}`}>Keyshops</h2>
               <div className={styles.dealsList}>
                 {keyshopDeals.map((deal) =>
-                  renderDealRow(deal, parseFloat(deal.price) === bestKeyshopPrice, cheapestEver)
+                  renderDealRow(deal, Number.parseFloat(deal.price) === bestKeyshopPrice, cheapestEver)
                 )}
               </div>
             </>
@@ -197,7 +197,7 @@ async function GameModalContent({ id }: { id: string }) {
   );
 }
 
-export default async function GameModal({ params }: { params: Promise<{ id: string }> }) {
+export default async function GameModal({ params }: { readonly params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   return (

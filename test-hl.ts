@@ -10,14 +10,15 @@ async function testHL() {
       try {
         const gameInfo = await getGame(deal.gameID);
         if (!gameInfo?.cheapestPriceEver) return null;
-        const currentPrice = parseFloat(deal.salePrice);
-        const historicalLow = parseFloat(gameInfo.cheapestPriceEver.price);
+        const currentPrice = Number.parseFloat(deal.salePrice);
+        const historicalLow = Number.parseFloat(gameInfo.cheapestPriceEver.price);
         const isHL = currentPrice <= historicalLow * 1.01;
         console.log(
           `- ${deal.title}: Current $${currentPrice}, HL $${historicalLow} -> ${isHL ? 'YES' : 'NO'}`
         );
         return isHL ? deal : null;
       } catch (_e) {
+        // Non-fatal: individual game fetch failure
         return null;
       }
     })

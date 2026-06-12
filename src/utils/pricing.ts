@@ -30,8 +30,8 @@ export function generateGreyMarketDeals(officialDeals: GameDeal[], dealIDRef: st
     (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
   );
   const bestOfficial = sortedOfficial[0];
-  const retailPrice = parseFloat(bestOfficial.retailPrice);
-  const bestPrice = parseFloat(bestOfficial.price);
+  const retailPrice = Number.parseFloat(bestOfficial.retailPrice);
+  const bestPrice = Number.parseFloat(bestOfficial.price);
 
   // If it's free or under $1, keyshops rarely sell it
   if (bestPrice < 1) return [];
@@ -54,7 +54,7 @@ export function generateGreyMarketDeals(officialDeals: GameDeal[], dealIDRef: st
       dealID: `grey-${shop.id}-${dealIDRef}`,
       price: keyshopPrice,
       retailPrice: bestOfficial.retailPrice,
-      savings: (((retailPrice - parseFloat(keyshopPrice)) / retailPrice) * 100).toFixed(6),
+      savings: (((retailPrice - Number.parseFloat(keyshopPrice)) / retailPrice) * 100).toFixed(6),
       dealRating: '0.0',
     };
   });
