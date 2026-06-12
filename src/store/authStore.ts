@@ -1,7 +1,15 @@
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 import { create } from 'zustand';
-import { createClient } from '@/utils/supabase/client';
-const supabase = createClient();
+
+// Supabase client é lazy-init pra evitar crash SSR
+let supabaseClient: ReturnType<typeof import('@/utils/supabase/client')['createClient']> | null = null;
+async function getSupabase() {
+  if (!supabaseClient) {
+    const { createClient } = await import('@/utils/supabase/client');
+    supabaseClient = createClient();
+  }
+  return supabaseClient;
+}
 
 interface User {
   id: string;
@@ -39,6 +47,7 @@ export const useAuth = create<AuthState>((set) => ({
     }
   },
   logout: async () => {
+    const supabase = await getSupabase();
     await supabase.auth.signOut();
     set({ user: null, isLoggedIn: false });
   },
