@@ -26,8 +26,8 @@ function SharedWishlistContent() {
         try {
           const decoded = atob(idsParam);
           gameIDs = decoded.split(',').filter(Boolean).filter(id => /^[a-zA-Z0-9]+$/.test(id));
-        } catch {
-          // Invalid base64
+        } catch (e) {
+          console.error("Invalid wishlist data:", e);
         }
 
         const storesMap = await getStores();

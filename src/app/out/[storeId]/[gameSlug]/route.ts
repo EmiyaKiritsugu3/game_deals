@@ -57,7 +57,8 @@ export async function GET(
     if (deal?.url) {
       targetUrl = deal.url;
     }
-  } catch {
+  } catch (e) {
+    console.error("Deal lookup error:", e);
     // Fallback pra CheapShark redirect
     targetUrl = `https://www.cheapshark.com/redirect?dealID=${gameSlug}`;
   }

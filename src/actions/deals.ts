@@ -39,7 +39,8 @@ export async function getDealsAction(params?: {
     if (!res.ok) return fallbackDeals;
     const data: Deal[] = await res.json();
     return data.length > 0 ? data : fallbackDeals;
-  } catch {
+  } catch (e) {
+    console.error("getDealsAction error:", e);
     return fallbackDeals;
   }
 }
@@ -55,7 +56,8 @@ export async function getGameAction(id: string): Promise<GameDetails | null> {
     const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
     if (!res.ok) return null;
     return await res.json();
-  } catch {
+  } catch (e) {
+    console.error("getGameAction error:", e);
     return null;
   }
 }
@@ -72,8 +74,8 @@ export async function getStoresAction(): Promise<Record<string, string>> {
       const stores: Store[] = await res.json();
       stores.forEach((s) => (map[s.storeID] = s.storeName));
     }
-  } catch {
-    // fallback vazio
+  } catch (e) {
+    console.error("getStoresAction error:", e);
   }
 
   map['101'] = 'CDKeys';
@@ -99,7 +101,8 @@ export async function searchGamesAction(title: string): Promise<Deal[]> {
     const res = await fetch(url.toString(), { next: { revalidate: 300 } });
     if (!res.ok) return [];
     return await res.json();
-  } catch {
+  } catch (e) {
+    console.error("searchGames error:", e);
     return [];
   }
 }
@@ -202,7 +205,8 @@ export async function getDailyPriceHistoryAction(gameId: string, days = 90) {
       SELECT * FROM get_daily_prices(${gameId}, ${days})
     `;
     return rows;
-  } catch {
+  } catch (e) {
+    console.error("getDailyPriceHistory error:", e);
     return [];
   }
 }
@@ -216,7 +220,8 @@ export async function getWeeklyPriceHistoryAction(gameId: string, weeks = 26) {
       SELECT * FROM get_weekly_prices(${gameId}, ${weeks})
     `;
     return rows;
-  } catch {
+  } catch (e) {
+    console.error("getWeeklyPriceHistory error:", e);
     return [];
   }
 }

@@ -25,7 +25,8 @@ export async function searchGamesAction(query: string, limit = 10) {
       cheapest: hit.document.cheapest,
      cheapestPrice: hit.document.cheapestPrice,
     }));
-  } catch {
+  } catch (e) {
+    console.error("searchGamesAction error:", e);
     return [];
   }
 }
@@ -97,7 +98,8 @@ export async function createTypesenseCollectionAction(): Promise<boolean> {
     });
 
     return response.ok || response.status === 409; // 409 = already exists
-  } catch {
+  } catch (e) {
+    console.error("createTypesenseCollection error:", e);
     return false;
   }
 }

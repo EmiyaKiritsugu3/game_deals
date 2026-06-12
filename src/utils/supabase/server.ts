@@ -21,8 +21,9 @@ export async function createClient() {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
             );
-          } catch {
+          } catch (e) {
             // Middleware já possui cookie access
+            console.error("Cookie set error:", e);
           }
         },
       },

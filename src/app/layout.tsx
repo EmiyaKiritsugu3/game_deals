@@ -84,8 +84,8 @@ export default async function RootLayout({
     const supabase = await createClient();
     const { data: { user: authUser } } = await supabase.auth.getUser();
     user = authUser;
-  } catch {
-    // Auth lookup failed - render without user
+  } catch (e) {
+    console.error("Auth lookup failed:", e);
   }
 
   // JSON-LD structured data
