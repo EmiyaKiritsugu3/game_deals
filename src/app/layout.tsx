@@ -8,7 +8,6 @@ import Navbar from '@/components/Navbar';
 import CookieBanner from '@/components/CookieBanner';
 import SyncManager from '@/components/SyncManager';
 import ReactQueryProvider from '@/providers/ReactQueryProvider';
-import { createClient } from '@/utils/supabase/server';
 import './globals.css';
 
 const inter = Inter({
@@ -79,15 +78,6 @@ export default async function RootLayout({
   children: React.ReactNode;
   modal: React.ReactNode;
 }>) {
-  let user = null;
-  try {
-    const supabase = await createClient();
-    const { data: { user: authUser } } = await supabase.auth.getUser();
-    user = authUser;
-  } catch (e) {
-    console.error("Auth lookup failed:", e);
-  }
-
   // JSON-LD structured data
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -114,7 +104,7 @@ export default async function RootLayout({
         <Suspense>
           <NuqsAdapter>
             <ReactQueryProvider>
-              <Navbar serverUser={user} />
+              <Navbar serverUser={null} />
               <SyncManager />
               {children}
               {modal}
