@@ -4,76 +4,50 @@ import { motion } from 'framer-motion';
 import { Bell, HeartCrack, List } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import HeartButton from '@/components/HeartButton';
 import PriceAlertTrigger from '@/components/PriceAlertTrigger';
-import { getGame, getHighResImage, getStores } from '@/services/api';
+import { getHighResImage } from '@/services/api';
 import { useAlerts } from '@/store/alertStore';
 import { useWishlist } from '@/store/wishlistStore';
+import { useWishlistGames } from '@/hooks/useWishlistGames';
 import styles from './page.module.css';
 
 export default function WishlistPage() {
   const { wishlist } = useWishlist();
   const { alerts } = useAlerts();
   const [activeTab, setActiveTab] = useState<'wishlist' | 'alerts'>('wishlist');
-  const [savedGames, setSavedGames] = useState<Array<{gameID: string; title: string; thumb: string; salePrice: string; normalPrice: string; savings: number; storeID: string}>>([]);
-  const [stores, setStores] = useState<Record<string, string>>({});
-  const [isLoading, setIsLoading] = useState(true);
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    async function fetchWishlistGames() {
-      if (wishlist.length === 0) {
-        setSavedGames([]);
-        setIsLoading(false);
-        return;
-      }
+  const { data, isLoading } = useWishlistGames(wishlist);
+  const stores = data?.stores ?? {};
+  const gameResults = data?.games ?? [];
 
-      setIsLoading(true);
-      try {
-        // Fetch stores for mapping
-        const storesMap = await getStores();
-        setStores(storesMap);
+  const savedGames = useMemo(() => {
+    return gameResults.reduce((acc: Array<{gameID: string; title: string; thumb: string; salePrice: string; normalPrice: string; savings: number; storeID: string}>, gameData, idx) => {
+      if (!gameData?.info) return acc;
 
-        // Fetch all games in parallel over the /game endpoint
-        const uniqueWishlist = Array.from(new Set(wishlist));
-        const gamePromises = uniqueWishlist.map((id) => getGame(id).catch(() => null));
-        const results = await Promise.all(gamePromises);
+      const info = gameData.info;
+      const bestDeal = gameData.cheapestPriceEver;
+      if (!info) return acc;
+      const sortedDeals = [...gameData.deals].sort(
+        (a, b) => parseFloat(a.price) - parseFloat(b.price)
+      );
+      const currentBest = sortedDeals[0];
 
-        const validGames = results.reduce((acc: Array<{gameID: string; title: string; thumb: string; salePrice: string; normalPrice: string; savings: number; storeID: string}>, gameData, idx) => {
-          if (!gameData?.info) return acc;
+      acc.push({
+        gameID: wishlist[idx],
+        title: info.title,
+        thumb: getHighResImage(info.thumb),
+        salePrice: currentBest ? currentBest.price : bestDeal.price,
+        normalPrice: currentBest ? currentBest.retailPrice : bestDeal.price,
+        savings: currentBest ? Math.round(parseFloat(currentBest.savings)) : 0,
+        storeID: currentBest ? currentBest.storeID : '1',
+      });
 
-          const info = gameData?.info;
-          const bestDeal = gameData?.cheapestPriceEver;
-          if (!info) return acc;
-          const sortedDeals = [...gameData.deals].sort(
-            (a, b) => parseFloat(a.price) - parseFloat(b.price)
-          );
-          const currentBest = sortedDeals[0];
-
-          acc.push({
-            gameID: uniqueWishlist[idx],
-            title: info.title,
-            thumb: getHighResImage(info.thumb),
-            salePrice: currentBest ? currentBest.price : bestDeal.price,
-            normalPrice: currentBest ? currentBest.retailPrice : bestDeal.price,
-            savings: currentBest ? Math.round(parseFloat(currentBest.savings)) : 0,
-            storeID: currentBest ? currentBest.storeID : '1',
-          });
-
-          return acc;
-        }, []);
-
-        setSavedGames(validGames);
-      } catch (error) {
-        console.error('Failed to load wishlist games', error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchWishlistGames();
-  }, [wishlist]);
+      return acc;
+    }, []);
+  }, [gameResults, wishlist]);
 
   const bestDiscountGame =
     savedGames.length > 0
