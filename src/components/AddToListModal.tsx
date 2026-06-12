@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { createPlaylist, getUserPlaylists, addGameToPlaylist } from '@/services/social';
-import { Playlist } from '@/types/social';
-import { supabase } from '@/lib/supabase';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { addGameToPlaylist, createPlaylist, getUserPlaylists } from '@/services/social';
+import { useAuth } from '@/store/authStore';
 import styles from './AddToListModal.module.css';
 
 interface AddToListModalProps {
@@ -12,49 +12,47 @@ interface AddToListModalProps {
 }
 
 export default function AddToListModal({ gameId, onClose }: AddToListModalProps) {
-  const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [newListName, setNewListName] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [creating, setCreating] = useState(false);
-  const [userId, setUserId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    async function init() {
-      const { data } = await supabase.auth.getUser();
-      if (data.user) {
-        setUserId(data.user.id);
-        const list = await getUserPlaylists(data.user.id);
-        setPlaylists(list);
-      }
-      setLoading(false);
-    }
-    init();
-  }, []);
+  const { data: playlists = [], isLoading } = useQuery({
+    queryKey: ['playlists', user?.id],
+    queryFn: () => getUserPlaylists(user?.id ?? ""),
+    enabled: !!user?.id,
+  });
 
-  const handleAdd = async (playlistId: string) => {
-    try {
-      await addGameToPlaylist(playlistId, gameId);
+  const addMutation = useMutation({
+    mutationFn: (playlistId: string) => addGameToPlaylist(playlistId, gameId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['playlists'] });
       onClose();
-    } catch (err) {
-      console.error('Error adding to playlist:', err);
-    }
-  };
+    },
+    onError: (err) => {
+      setError('Failed to add game to playlist');
+      console.error(err);
+    },
+  });
 
-  const handleCreate = async () => {
-    if (!userId || !newListName.trim()) return;
-    setCreating(true);
-    try {
-      const newList = await createPlaylist(userId, newListName);
-      await addGameToPlaylist(newList.id, gameId);
+  const createMutation = useMutation({
+    mutationFn: async (name: string) => {
+      if (!user) throw new Error('Unauthenticated');
+      const newList = await createPlaylist(user.id, name);
+      return addGameToPlaylist(newList.id, gameId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['playlists'] });
+      setNewListName('');
       onClose();
-    } catch (err) {
-      console.error('Error creating playlist:', err);
-    } finally {
-      setCreating(false);
-    }
-  };
+    },
+    onError: (err) => {
+      setError('Failed to create playlist');
+      console.error(err);
+    },
+  });
 
-  if (loading) return null;
+  if (isLoading) return null;
 
   return (
     <div className={styles.overlay} onClick={onClose}>
@@ -62,20 +60,23 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
         <h3>Add to Playlist</h3>
         <p className={styles.subtitle}>Curate your collections and earn achievements.</p>
 
+        {error && <p className={styles.error}>{error}</p>}
+
         <div className={styles.existingLists}>
           {playlists.length > 0 ? (
             playlists.map((list) => (
-              <button 
-                key={list.id} 
+              <button
+                key={list.id}
                 className={styles.listButton}
-                onClick={() => handleAdd(list.id)}
+                onClick={() => addMutation.mutate(list.id)}
+                disabled={addMutation.isPending}
               >
                 <span>{list.title}</span>
                 <span className={styles.plusIcon}>+</span>
               </button>
             ))
           ) : (
-            <p className={styles.empty}>You don't have any playlists yet.</p>
+            <p className={styles.empty}>You don&apos;t have any playlists yet.</p>
           )}
         </div>
 
@@ -89,16 +90,18 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
             onChange={(e) => setNewListName(e.target.value)}
             className={styles.input}
           />
-          <button 
-            className={styles.createButton} 
-            disabled={creating || !newListName.trim()}
-            onClick={handleCreate}
+          <button
+            className={styles.createButton}
+            disabled={createMutation.isPending || !newListName.trim()}
+            onClick={() => createMutation.mutate(newListName)}
           >
-            {creating ? 'Creating...' : 'Create & Add'}
+            {createMutation.isPending ? 'Creating...' : 'Create & Add'}
           </button>
         </div>
 
-        <button className={styles.closeButton} onClick={onClose}>Cancel</button>
+        <button className={styles.closeButton} onClick={onClose}>
+          Cancel
+        </button>
       </div>
     </div>
   );

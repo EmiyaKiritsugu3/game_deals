@@ -1,20 +1,20 @@
 .keyshopTitle {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px dashed hsl(var(--border));
-    position: relative;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed hsl(var(--border));
+  position: relative;
 }
 
 .keyshopTitle::after {
-    content: "GREY MARKET";
-    position: absolute;
-    right: 0;
-    top: 1.5rem;
-    font-size: 0.65rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    color: hsl(var(--muted-foreground));
-    background: hsl(var(--muted));
-    padding: 0.2rem 0.5rem;
-    border-radius: 3px;
+  content: "GREY MARKET";
+  position: absolute;
+  right: 0;
+  top: 1.5rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: hsl(var(--muted-foreground));
+  background: hsl(var(--muted));
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
 }

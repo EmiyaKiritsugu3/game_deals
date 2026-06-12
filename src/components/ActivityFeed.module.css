@@ -23,7 +23,9 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 1rem;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
   overflow: hidden;
   backdrop-filter: blur(12px);
 }
@@ -84,7 +86,7 @@
 }
 
 @media (max-width: 600px) {
-    .gameThumbContainer {
-        display: none;
-    }
+  .gameThumbContainer {
+    display: none;
+  }
 }

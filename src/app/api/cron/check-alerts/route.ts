@@ -1,70 +1,77 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabaseServer';
+import { createClient } from '@/utils/supabase/server';
 
-export const dynamic = 'force-dynamic';
+interface Alert {
+  id: string;
+  gameId: string;
+  userId: string;
+  targetPrice: number;
+  currentPrice: number | null;
+  storeId: string | null;
+  isActive: boolean;
+  createdAt: string;
+}
 
 export async function GET(request: Request) {
-    // 1. Security Check
-    const authHeader = request.headers.get('authorization');
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-        return new Response('Unauthorized', { status: 401 });
+  const authHeader = request.headers.get('authorization');
+  if (!process.env.CRON_SECRET || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const supabase = await createClient();
+
+  try {
+    const { data: alerts, error } = await supabase.from('price_alerts').select('*');
+
+    if (error) throw error;
+    if (!alerts || alerts.length === 0) {
+      return NextResponse.json({ message: 'No alerts to check' });
     }
 
-    const supabase = await createClient();
+    const typedAlerts = alerts as unknown as Alert[];
+    const uniqueGameIDs = [...new Set(typedAlerts.map((a) => a.gameId))];
+    const results: Array<{ user: string; game: string; price: number }> = [];
 
-    try {
-        // 2. Fetch all active alerts
-        const { data: alerts, error } = await supabase
-            .from('price_alerts')
-            .select('*');
+    for (const gameID of uniqueGameIDs) {
+      const res = await fetch(`https://www.cheapshark.com/api/1.0/games?id=${gameID}`);
+      if (!res.ok) continue;
+      const data = await res.json();
 
-        if (error) throw error;
-        if (!alerts || alerts.length === 0) {
-            return NextResponse.json({ message: 'No alerts to check' });
-        }
+      if (!data?.deals || data.deals.length === 0) continue;
 
-        // 3. Group by game_id to avoid redundant API calls
-        const uniqueGameIDs = [...new Set(alerts.map((a: any) => a.game_id))];
-        const results = [];
+      const currentBestPrice = Number.parseFloat(data.deals[0].price);
 
-        for (const gameID of uniqueGameIDs) {
-            // 4. Fetch real-time price from CheapShark
-            const res = await fetch(`https://www.cheapshark.com/api/1.0/games?id=${gameID}`);
-            const data = await res.json();
-            
-            if (!data || !data.deals || data.deals.length === 0) continue;
+      const { error: updateError } = await supabase
+        .from('price_alerts')
+        .update({ currentPrice: currentBestPrice })
+        .eq('gameId', gameID);
 
-            const currentBestPrice = parseFloat(data.deals[0].price);
-            
-            // 5. Update all matching alerts in the DB
-            const { error: updateError } = await supabase
-                .from('price_alerts')
-                .update({ current_price: currentBestPrice })
-                .eq('game_id', gameID);
+      if (updateError) console.error(`Error updating game ${gameID}:`, updateError);
 
-            if (updateError) console.error(`Error updating game ${gameID}:`, updateError);
+      const triggeredAlerts = typedAlerts.filter(
+        (a) => a.gameId === gameID && currentBestPrice <= a.targetPrice
+      );
 
-            // 6. Identify users who should be notified
-            const triggeredAlerts = alerts.filter((a: any) => a.game_id === gameID && currentBestPrice <= a.target_price);
-            
-            for (const alert of triggeredAlerts) {
-                // In a real app, this is where we call Resend/SendGrid/Twilio
-                console.log(`🔔 ALERT TRIGGERED for User ${alert.user_id}: ${alert.game_title} is now $${currentBestPrice} (Target: $${alert.target_price})`);
-                results.push({
-                    user: alert.user_id,
-                    game: alert.game_title,
-                    price: currentBestPrice
-                });
-            }
-        }
-
-        return NextResponse.json({ 
-            processed: uniqueGameIDs.length, 
-            triggered: results.length,
-            details: results 
+      for (const alert of triggeredAlerts) {
+        console.log(
+          `🔔 ALERT TRIGGERED for User ${alert.userId}: Game ${alert.gameId} is now $${currentBestPrice} (Target: $${alert.targetPrice})`
+        );
+        results.push({
+          user: alert.userId,
+          game: alert.gameId,
+          price: currentBestPrice,
         });
-
-    } catch (err: any) {
-        return NextResponse.json({ error: err.message }, { status: 500 });
+      }
     }
+
+    return NextResponse.json({
+      processed: uniqueGameIDs.length,
+      triggered: results.length,
+      details: results,
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    console.error('Alert check error:', message);
+    return NextResponse.json({ error: 'Internal error checking alerts' }, { status: 500 });
+  }
 }

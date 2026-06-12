@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import { Plus } from 'lucide-react';
-import AddToListModal from './AddToListModal';
+import { useState } from 'react';
 import styles from './AddToListButton.module.css';
+import AddToListModal from './AddToListModal';
 
 interface AddToListButtonProps {
   gameId: string;
@@ -19,12 +19,12 @@ export default function AddToListButton({ gameId, variant = 'icon' }: AddToListB
 
   return (
     <>
-      <button 
-        className={`${styles.button} ${styles[variant]}`} 
+      <button
+        className={`${styles.button} ${styles[variant]}`}
         onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setIsOpen(true);
+          e.preventDefault();
+          e.stopPropagation();
+          setIsOpen(true);
         }}
         title="Add to Playlist"
       >
@@ -32,12 +32,7 @@ export default function AddToListButton({ gameId, variant = 'icon' }: AddToListB
         {variant === 'full' && <span>Add to List</span>}
       </button>
 
-      {isOpen && (
-        <AddToListModal 
-            gameId={gameId} 
-            onClose={() => setIsOpen(false)} 
-        />
-      )}
+      {isOpen && <AddToListModal gameId={gameId} onClose={() => setIsOpen(false)} />}
     </>
   );
 }

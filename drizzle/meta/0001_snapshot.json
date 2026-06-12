@@ -1,0 +1,85 @@
+{
+  "id": "0001_gamification_tables",
+  "prevId": "0000_exotic_next_avengers",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "badges": {
+      "name": "badges",
+      "schema": "",
+      "columns": {
+        "id": { "name": "id", "type": "uuid", "primaryKey": true, "notNull": true, "default": "gen_random_uuid()" },
+        "name": { "name": "name", "type": "varchar(100)", "primaryKey": false, "notNull": true },
+        "description": { "name": "description", "type": "text", "primaryKey": false, "notNull": false },
+        "iconSvg": { "name": "iconSvg", "type": "text", "primaryKey": false, "notNull": true },
+        "rarity": { "name": "rarity", "type": "varchar(20)", "primaryKey": false, "notNull": false, "default": "'Common'" },
+        "criteria": { "name": "criteria", "type": "jsonb", "primaryKey": false, "notNull": true }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "badges_name_unique": { "name": "badges_name_unique", "nullsNotDistinct": false, "columns": ["name"] }
+      }
+    },
+    "user_badges": {
+      "name": "user_badges",
+      "schema": "",
+      "columns": {
+        "id": { "name": "id", "type": "uuid", "primaryKey": true, "notNull": true, "default": "gen_random_uuid()" },
+        "userId": { "name": "userId", "type": "uuid", "primaryKey": false, "notNull": true },
+        "badgeId": { "name": "badgeId", "type": "uuid", "primaryKey": false, "notNull": true },
+        "awardedAt": { "name": "awardedAt", "type": "timestamp", "primaryKey": false, "notNull": true, "default": "now()" }
+      },
+      "indexes": {
+        "user_badges_userId_idx": { "name": "user_badges_userId_idx", "columns": ["userId"], "isUnique": false }
+      },
+      "foreignKeys": {
+        "user_badges_badgeId_badges_id_fk": { "name": "user_badges_badgeId_badges_id_fk", "tableFrom": "user_badges", "columnsFrom": ["badgeId"], "tableTo": "badges", "columnsTo": ["id"], "onDelete": "cascade" }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_badges_user_badge_unique": { "name": "user_badges_user_badge_unique", "nullsNotDistinct": false, "columns": ["userId", "badgeId"] }
+      }
+    },
+    "activities": {
+      "name": "activities",
+      "schema": "",
+      "columns": {
+        "id": { "name": "id", "type": "uuid", "primaryKey": true, "notNull": true, "default": "gen_random_uuid()" },
+        "userId": { "name": "userId", "type": "uuid", "primaryKey": false, "notNull": true },
+        "actionType": { "name": "actionType", "type": "varchar(50)", "primaryKey": false, "notNull": true },
+        "details": { "name": "details", "type": "jsonb", "primaryKey": false, "notNull": false },
+        "createdAt": { "name": "createdAt", "type": "timestamp", "primaryKey": false, "notNull": true, "default": "now()" }
+      },
+      "indexes": {
+        "activities_userId_idx": { "name": "activities_userId_idx", "columns": ["userId"], "isUnique": false }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "wishlists": {
+      "name": "wishlists",
+      "schema": "",
+      "columns": {
+        "id": { "name": "id", "type": "uuid", "primaryKey": true, "notNull": true, "default": "gen_random_uuid()" },
+        "userId": { "name": "userId", "type": "uuid", "primaryKey": false, "notNull": true },
+        "gameId": { "name": "gameId", "type": "uuid", "primaryKey": false, "notNull": true },
+        "addedAt": { "name": "addedAt", "type": "timestamp", "primaryKey": false, "notNull": true, "default": "now()" }
+      },
+      "indexes": {
+        "wishlists_userId_idx": { "name": "wishlists_userId_idx", "columns": ["userId"], "isUnique": false },
+        "wishlists_gameId_idx": { "name": "wishlists_gameId_idx", "columns": ["gameId"], "isUnique": false }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "wishlists_user_game_unique": { "name": "wishlists_user_game_unique", "nullsNotDistinct": false, "columns": ["userId", "gameId"] }
+      }
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": { "schemas": {}, "tables": {}, "columns": {} }
+}

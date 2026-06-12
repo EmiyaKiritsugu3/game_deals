@@ -1,53 +1,79 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { createClient } from '@/utils/supabase/client';
+const supabase = createClient();
+import { useAlerts } from '@/store/alertStore';
 import { useAuth } from '@/store/authStore';
 import { useWishlist } from '@/store/wishlistStore';
-import { useAlerts } from '@/store/alertStore';
-import { supabase } from '@/lib/supabase';
 
 export default function SyncManager() {
-    const { user, isLoggedIn } = useAuth();
-    const { wishlist } = useWishlist();
-    const { alerts } = useAlerts();
+  const { user, isLoggedIn } = useAuth();
+  const { wishlist, setWishlist } = useWishlist();
+  const { alerts } = useAlerts();
+  const hasLoadedFromCloud = useRef(false);
 
-    useEffect(() => {
-        if (!isLoggedIn || !user) return;
+  // 1. Carregar wishlist do cloud quando loga
+  useEffect(() => {
+    if (!isLoggedIn || !user || hasLoadedFromCloud.current) return;
 
-        const syncToCloud = async () => {
-            // 1. Sync Wishlist
-            if (wishlist.length > 0) {
-                console.log('Syncing wishlist to cloud...');
-                const wishlistData = wishlist.map((game_id: string) => ({
-                    user_id: user.id,
-                    game_id
-                }));
+    const loadFromCloud = async () => {
+      const { data } = await supabase
+        .from('wishlists')
+        .select('gameId')
+        .eq('userId', user.id);
 
-                await supabase
-                    ?.from('wishlists')
-                    .upsert(wishlistData, { onConflict: 'user_id,game_id' });
-            }
+      if (data && data.length > 0) {
+        const cloudIds = data.map((r: any) => r.gameId);
+        // Merge: cloud + local (sem duplicatas)
+        const merged = [...new Set([...wishlist, ...cloudIds])];
+        setWishlist(merged);
+      }
+      hasLoadedFromCloud.current = true;
+    };
 
-            // 2. Sync Alerts
-            if (alerts.length > 0) {
-                console.log('Syncing alerts to cloud...');
-                const alertsData = alerts.map((alert: any) => ({
-                    user_id: user.id,
-                    game_id: alert.gameID,
-                    game_title: alert.gameTitle,
-                    target_price: alert.targetPrice,
-                    current_price: alert.currentPrice,
-                    is_keyshop_allowed: alert.isKeyshopAllowed
-                }));
+    loadFromCloud();
+  }, [isLoggedIn, user]);
 
-                await supabase
-                    ?.from('price_alerts')
-                    .upsert(alertsData, { onConflict: 'user_id,game_id' });
-            }
-        };
+  // 2. Sync wishlist pro cloud quando muda
+  useEffect(() => {
+    if (!isLoggedIn || !user || !hasLoadedFromCloud.current) return;
 
-        syncToCloud();
-    }, [isLoggedIn, user, wishlist, alerts]);
+    const syncToCloud = async () => {
+      if (wishlist.length > 0) {
+        const wishlistData = wishlist.map((gameId: string) => ({
+          userId: user.id,
+          gameId,
+        }));
 
-    return null; // This is a logic-only component
+        await supabase.from('wishlists').upsert(wishlistData, { onConflict: 'userId,gameId' });
+      }
+    };
+
+    // Debounce sync
+    const timer = setTimeout(syncToCloud, 1000);
+    return () => clearTimeout(timer);
+  }, [isLoggedIn, user, wishlist]);
+
+  // 3. Sync alerts pro cloud
+  useEffect(() => {
+    if (!isLoggedIn || !user || alerts.length === 0) return;
+
+    const syncAlerts = async () => {
+      const alertsData = alerts.map((alert: any) => ({
+        userId: user.id,
+        gameId: alert.gameId,
+        targetPrice: alert.targetPrice,
+        storeId: alert.storeId || null,
+        isActive: 1,
+      }));
+
+      await supabase.from('price_alerts').upsert(alertsData, { onConflict: 'userId,gameId' });
+    };
+
+    const timer = setTimeout(syncAlerts, 1000);
+    return () => clearTimeout(timer);
+  }, [isLoggedIn, user, alerts]);
+
+  return null;
 }
