@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, timestamp, real } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar, timestamp, index } from 'drizzle-orm/pg-core';
 
 export const affiliateLinks = pgTable('affiliate_links', {
   id: uuid().defaultRandom().primaryKey(),
@@ -17,4 +17,6 @@ export const affiliateClicks = pgTable('affiliate_clicks', {
   userId: uuid(),
   ip: varchar({ length: 45 }),
   timestamp: timestamp().defaultNow().notNull(),
-});
+}, (table) => [
+  index('ac_timestamp_idx').on(table.timestamp),
+]);

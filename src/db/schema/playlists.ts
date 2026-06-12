@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, timestamp, boolean } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar, timestamp, boolean, index, uniqueIndex } from 'drizzle-orm/pg-core';
 
 export const playlists = pgTable('playlists', {
   id: uuid().defaultRandom().primaryKey(),
@@ -9,7 +9,10 @@ export const playlists = pgTable('playlists', {
   isPublic: boolean().default(false).notNull(),
   createdAt: timestamp().defaultNow().notNull(),
   updatedAt: timestamp().defaultNow().notNull(),
-});
+}, (table) => [
+  index('pl_userId_idx').on(table.userId),
+  uniqueIndex('pl_user_slug_unique').on(table.userId, table.slug),
+]);
 
 export const playlistGames = pgTable('playlist_games', {
   id: uuid().defaultRandom().primaryKey(),
@@ -17,4 +20,6 @@ export const playlistGames = pgTable('playlist_games', {
   gameId: uuid().notNull(),
   notes: varchar({ length: 500 }),
   addedAt: timestamp().defaultNow().notNull(),
-});
+}, (table) => [
+  uniqueIndex('pg_playlist_game_unique').on(table.playlistId, table.gameId),
+]);
