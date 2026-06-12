@@ -4,17 +4,18 @@ import { useQuery } from '@tanstack/react-query';
 import { Bell, ChevronDown, LogOut, Search, User } from 'lucide-react';
 import Link from 'next/link';
 import { useQueryState } from 'nuqs';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { createClient } from '@/utils/supabase/client';
-const supabase = createClient();
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/store/authStore';
 import { searchGamesAction } from '@/actions/search';
 import AuthModal from './AuthModal';
 import styles from './Navbar.module.css';
 import WishlistIndicator from './WishlistIndicator';
 
-export default function Navbar({ serverUser }: { serverUser?: any }) {
-  const { user, isLoggedIn, logout, setUser } = useAuth();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ServerUser = any;
+
+export default function Navbar({ serverUser }: { serverUser?: ServerUser | null }) {
+  const { user, logout, setUser } = useAuth();
   const [query, setQuery] = useQueryState('q', { defaultValue: '' });
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -41,22 +42,27 @@ export default function Navbar({ serverUser }: { serverUser?: any }) {
 
   useEffect(() => {
     // Hydrate from SSR session safely
+    // Note: currently serverUser is always null (auth moved to client-side)
     if (serverUser) {
+      setUser(serverUser as any);
       setUser(serverUser);
       setIsAuthModalOpen(false);
     } else {
       setUser(null);
     }
 
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase?.auth.onAuthStateChange((_event: string, session: any) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        setIsAuthModalOpen(false);
-      }
-    }) ?? { data: { subscription: { unsubscribe: () => {} } } };
+    // Lazy import Supabase client + listen for auth changes
+    let subscription: { unsubscribe: () => void } | null = null;
+    import('@/utils/supabase/client').then(({ createClient }) => {
+      const supabase = createClient();
+      const sub = supabase.auth.onAuthStateChange((_event: string, session: any) => {
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          setIsAuthModalOpen(false);
+        }
+      });
+      subscription = sub.data.subscription;
+    }).catch(() => {});
 
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -69,7 +75,7 @@ export default function Navbar({ serverUser }: { serverUser?: any }) {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-      subscription.unsubscribe();
+      subscription?.unsubscribe();
     };
   }, [setUser, serverUser]);
 
@@ -150,14 +156,12 @@ export default function Navbar({ serverUser }: { serverUser?: any }) {
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
               >
                 <img
-                  src={
-                    (user || serverUser).avatar || (user || serverUser).user_metadata?.avatar_url
-                  }
-                  alt={(user || serverUser).name || (user || serverUser).user_metadata?.full_name}
+                  src={user?.avatar || (serverUser as ServerUser | undefined)?.user_metadata?.avatar_url || ''}
+                  alt={user?.name || (serverUser as ServerUser | undefined)?.user_metadata?.full_name || 'User'}
                   className={styles.avatar}
                 />
                 <span className={styles.username}>
-                  {(user || serverUser).name || (user || serverUser).user_metadata?.full_name}
+                  {user?.name || (serverUser as ServerUser | undefined)?.user_metadata?.full_name || 'User'}
                 </span>
                 <ChevronDown size={14} />
 

@@ -1,7 +1,8 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { getDealsAction, getGameAction, getStoresAction, searchGamesAction } from '@/actions/deals';
+import { getDealsAction, getGameAction, getStoresAction } from '@/actions/deals';
+import { searchGamesAction } from '@/actions/search';
 
 interface UseDealsParams {
   sortBy?: string;
