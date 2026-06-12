@@ -19,7 +19,7 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
 
   const { data: playlists = [], isLoading } = useQuery({
     queryKey: ['playlists', user?.id],
-    queryFn: () => getUserPlaylists(user!.id),
+    queryFn: () => getUserPlaylists(user?.id ?? ""),
     enabled: !!user?.id,
   });
 
