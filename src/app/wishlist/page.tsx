@@ -16,7 +16,7 @@ export default function WishlistPage() {
   const { wishlist } = useWishlist();
   const { alerts } = useAlerts();
   const [activeTab, setActiveTab] = useState<'wishlist' | 'alerts'>('wishlist');
-  const [savedGames, setSavedGames] = useState<any[]>([]);
+  const [savedGames, setSavedGames] = useState<Array<{gameID: string; title: string; thumb: string; salePrice: string; normalPrice: string; savings: number; storeID: string}>>([]);
   const [stores, setStores] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [copied, setCopied] = useState(false);
@@ -169,7 +169,7 @@ export default function WishlistPage() {
                     <span className={styles.sortLabel}>Ordenar por:</span>
                     <select
                       value={sortMode}
-                      onChange={(e) => setSortMode(e.target.value as any)}
+                      onChange={(e) => setSortMode(e.target.value as 'name' | 'price' | 'discount')}
                       className={styles.sortSelect}
                     >
                       <option value="discount">Maior Desconto</option>

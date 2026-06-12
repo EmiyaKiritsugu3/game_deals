@@ -10,7 +10,7 @@ import styles from '../page.module.css';
 function SharedWishlistContent() {
   const searchParams = useSearchParams();
   const idsParam = searchParams.get('ids');
-  const [games, setGames] = useState<any[]>([]);
+  const [games, setGames] = useState<Array<{gameID: string; title: string; thumb: string; salePrice: string; normalPrice: string; savings: number; storeID: string}>>([]);
   const [stores, setStores] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(true);
 
