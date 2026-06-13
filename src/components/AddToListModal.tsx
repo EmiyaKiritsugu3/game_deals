@@ -1,7 +1,7 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { addGameToPlaylist, createPlaylist, getUserPlaylists } from '@/services/social';
 import { useAuth } from '@/store/authStore';
 import styles from './AddToListModal.module.css';
@@ -16,6 +16,15 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    dialogRef.current?.showModal();
+  }, []);
+
+  const handleClose = () => {
+    dialogRef.current?.close();
+    onClose();
+  };
 
   const { data: playlists = [], isLoading } = useQuery({
     queryKey: ['playlists', user?.id],
@@ -55,24 +64,19 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
   if (isLoading) return null;
 
   return (
-    <div
+    <dialog
+      ref={dialogRef}
       className={styles.overlay}
-      onClick={onClose}
+      onClick={handleClose}
       onKeyDown={(e) => {
-        if (e.key === 'Escape') onClose();
+        if (e.key === 'Escape') handleClose();
       }}
-      role="dialog"
-      tabIndex={-1}
-      aria-label="Close modal"
     >
+      {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation only, not interactive */}
       <div
         className={styles.modal}
         onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => {
-          if (e.key === 'Escape') onClose();
-        }}
-        role="dialog"
-        tabIndex={-1}
+        onKeyDown={(e) => e.stopPropagation()}
       >
         <h3>Add to Playlist</h3>
         <p className={styles.subtitle}>Curate your collections and earn achievements.</p>
@@ -122,6 +126,6 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
           Cancel
         </button>
       </div>
-    </div>
+    </dialog>
   );
 }
