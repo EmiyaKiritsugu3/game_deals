@@ -48,3 +48,6 @@ supabase/.temp/
 
 # Drizzle generated JSON
 drizzle/meta/
+
+# Husky internal
+.husky/_
