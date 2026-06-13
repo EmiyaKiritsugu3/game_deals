@@ -125,6 +125,7 @@ export default function PriceAlertModal({
             </div>
 
             <div className={styles.optionsSection}>
+              {/* biome-ignore lint/a11y/useSemanticElements: custom styled checkbox toggle */}
               <button
                 type="button"
                 className={styles.checkboxGroup}

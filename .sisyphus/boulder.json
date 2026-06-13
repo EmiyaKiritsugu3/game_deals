@@ -1,0 +1,32 @@
+{
+  "active_plan": "/home/emiyakiritsugu/Projetos_Antigravity/game-deals/.sisyphus/plans/pr10-quality-fix.md",
+  "started_at": "2026-06-13T00:26:00.000Z",
+  "session_ids": [
+    "ses_141be6378ffeRC9STzbX22NSfN",
+    "ses_141a006a1ffe47C79k1qreabAD",
+    "ses_141a018aeffew8Jnw1twK6poi0",
+    "ses_1419c165fffeFT9067jcY9veLU"
+  ],
+  "plan_name": "pr10-quality-fix",
+  "worktree_path": null,
+  "task_sessions": {
+    "todo:1": {
+      "task_key": "todo:1",
+      "task_label": "1",
+      "task_title": "Contar viola\u00e7\u00f5es reais de cada regra desabilitada",
+      "session_id": "ses_141a018aeffew8Jnw1twK6poi0",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-06-13T00:28:59.186Z"
+    },
+    "todo:3": {
+      "task_key": "todo:3",
+      "task_label": "3",
+      "task_title": "biome.json \u2014 overrides para JSON-LD (dangerouslySetInnerHtml)",
+      "session_id": "ses_1419c165fffeFT9067jcY9veLU",
+      "agent": "Sisyphus-Junior",
+      "category": "deep",
+      "updated_at": "2026-06-13T00:33:59.793Z"
+    }
+  }
+}

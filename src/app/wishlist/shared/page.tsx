@@ -115,8 +115,8 @@ function SharedWishlistContent() {
       </div>
 
       <div className={styles.grid}>
-        {games.map((game, idx) => (
-          <div key={`${game.gameID}-${idx}`} className={styles.wishlistCard}>
+        {games.map((game) => (
+          <div key={game.gameID} className={styles.wishlistCard}>
             <div className={styles.imageContainer}>
               <Image
                 src={game.thumb}

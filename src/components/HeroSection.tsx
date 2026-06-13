@@ -41,6 +41,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
           {deals.length > 0 &&
             Array.from({ length: 15 }, (_, i) => {
               return (
+                // biome-ignore lint/suspicious/noArrayIndexKey: static 15-item bg grid
                 <div key={i} className={styles.matrixImgWrapper}>
                   {
                     // biome-ignore lint/performance/noImgElement: matrix bg images
@@ -100,7 +101,7 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                               {
                                 // biome-ignore lint/performance/noImgElement: store logo in hero
                                 <img
-                                  src={getStoreLogo(deal.storeID)!}
+                                  src={getStoreLogo(deal.storeID) ?? ''}
                                   alt="Store"
                                   width={16}
                                   height={16}
