@@ -49,7 +49,7 @@
     "*.{js,ts,tsx,jsx,mjs,cjs}": [
       "biome check --write"
     ],
-    "*.{json,css,md,yml,yaml}": [
+    "*.{json,css,md}": [
       "biome check --write"
     ]
   },

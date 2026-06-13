@@ -3,13 +3,15 @@
 import { useEffect, useRef } from 'react';
 import { createClient } from '@/utils/supabase/client';
 
-const supabase = createClient();
+let supabaseClient: ReturnType<typeof createClient> | null = null;
 
 import { type PriceAlert, useAlerts } from '@/store/alertStore';
 import { useAuth } from '@/store/authStore';
 import { useWishlist } from '@/store/wishlistStore';
 
 export default function SyncManager() {
+  if (!supabaseClient) supabaseClient = createClient();
+  const supabase = supabaseClient;
   const { user, isLoggedIn } = useAuth();
   const { wishlist, setWishlist } = useWishlist();
   const { alerts } = useAlerts();
