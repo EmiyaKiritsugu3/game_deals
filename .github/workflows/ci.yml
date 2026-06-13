@@ -32,11 +32,9 @@ jobs:
         run: pnpm exec tsc --noEmit
       - name: Test + Coverage
         run: pnpm test:coverage
+      - name: Setup env
+        run: cp .env.example .env.local
       - name: Build
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
-          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
         run: pnpm build
       - name: Dead code
         run: pnpm run knip
