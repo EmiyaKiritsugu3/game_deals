@@ -3,6 +3,29 @@
 3: ### 2026-06-12: Store favicon CDN remotePatterns
 4: 
 5: - Added 23 unique hostnames from `STORE_FAVICON_MAP` (`src/constants/stores.ts`) to `next.config.ts` `images.remotePatterns`
+
+---
+
+### ⚠️ CRITICAL: OOM — Dev server inside parallel subagent (2026-06-12)
+
+**What happened:**
+- 5 parallel subagents running (T18-T23) + opencode + claude
+- T23 (Playwright E2E, `visual-engineering` category) started `next-server` for testing
+- `next-server` (Next.js 16 + Turbopack + Tailwind v4) allocated **29.7 GB virtual memory**, 602 MB real
+- `kswapd0` detected memory pressure → OOM killer activated
+- `next-server` (PID 1195933, `oom_score_adj: 200`) was killed
+- All processes in the same cgroup (opencode konsole scope) went down with it
+- User's PC shut down, multiple apps lost
+
+**Root cause:** `next-server` compilation inside a parallel subagent, competing with 4+ other subagents each holding their own V8 heap.
+
+**Prevention rules:**
+1. **NEVER** launch dev server (`next dev`, `next-server`, `pnpm dev`) inside a subagent running in parallel with others
+2. Playwright/E2E tests that need a dev server must be **sequential** (last task in wave, or own dedicated wave)
+3. **Cap parallel subagents at 3** when any of them may spawn child processes (Node, browser, compiler)
+4. Before launching `visual-engineering` subagent: check `free -h`, kill orphan `next-server` processes first
+5. Prefer `pnpm build && pnpm start` over `pnpm dev` for E2E tests — production build uses less memory
+6. Virtual memory (VSZ) is not innocent — Node.js V8 reserves address space that counts toward kernel OOM accounting on Linux with `overcommit_memory=0`
 6: - Sorted alphabetically for readability
 7: - Added section comments to separate existing patterns from new store favicon entries
 8: - Build passes with `pnpm build`
