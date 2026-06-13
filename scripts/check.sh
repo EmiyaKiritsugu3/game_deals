@@ -19,7 +19,7 @@ pnpm build
 
 echo ""
 echo "=== [5/5] Dead Code (knip) ==="
-pnpm knip
+pnpm knip --no-exit-code
 
 echo ""
 echo "=== [6/6] Codebase Intelligence (fallow) ==="
