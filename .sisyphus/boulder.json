@@ -5,7 +5,10 @@
     "ses_141be6378ffeRC9STzbX22NSfN",
     "ses_141a006a1ffe47C79k1qreabAD",
     "ses_141a018aeffew8Jnw1twK6poi0",
-    "ses_1419c165fffeFT9067jcY9veLU"
+    "ses_1419c165fffeFT9067jcY9veLU",
+    "ses_1419811b3ffeE3xXMAH0YSF1BR",
+    "ses_1419821f1ffeWg6TTGfS8sgAg8",
+    "ses_14197f990ffemJUUMM5DmeA5k6"
   ],
   "plan_name": "pr10-quality-fix",
   "worktree_path": null,
@@ -27,6 +30,15 @@
       "agent": "Sisyphus-Junior",
       "category": "deep",
       "updated_at": "2026-06-13T00:33:59.793Z"
+    },
+    "todo:5": {
+      "task_key": "todo:5",
+      "task_label": "5",
+      "task_title": "Tipar CheapShark API responses \u2014 `unknown` + narrowing",
+      "session_id": "ses_14197f990ffemJUUMM5DmeA5k6",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-06-13T00:44:08.039Z"
     }
   }
 }

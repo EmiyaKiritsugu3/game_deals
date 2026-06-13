@@ -41,8 +41,15 @@ export function DynamicPriceHistory(props: DynamicPriceHistoryProps) {
   // Buscar dados reais se gameId disponível
   const { data: realData } = useDailyPriceHistory(props.gameId || null);
 
-  // biome-ignore lint/suspicious/noExplicitAny: Recharts data shape
-  const chartData: any = realData && realData.length > 0 ? realData : undefined;
+  const chartData =
+    realData && realData.length > 0
+      ? (realData as Array<{
+          bucket: string;
+          avg_price: number;
+          min_price: number;
+          max_price: number;
+        }>)
+      : undefined;
 
   return <PriceHistoryChartLazy {...props} realData={chartData} />;
 }

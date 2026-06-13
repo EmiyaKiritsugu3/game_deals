@@ -86,10 +86,9 @@ export async function checkTriggeredAlertsAction() {
     WHERE pa."isActive" = 1
   `;
 
-  // biome-ignore lint/suspicious/noExplicitAny: raw DB query result
-  const alertsToNotify = triggered.filter((alert: any) => {
-    const currentLowest = Number.parseFloat(alert.currentLowest || '999');
-    return currentLowest <= alert.targetPrice;
+  const alertsToNotify = triggered.filter((alert): boolean => {
+    const currentLowest = Number.parseFloat(alert.currentLowest ?? '999');
+    return currentLowest <= Number(alert.targetPrice ?? 0);
   });
 
   return alertsToNotify;

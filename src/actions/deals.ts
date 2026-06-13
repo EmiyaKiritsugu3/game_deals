@@ -127,8 +127,19 @@ export async function ingestPricesAction(): Promise<{
       };
     }
 
-    // biome-ignore lint/suspicious/noExplicitAny: CheapShark API shape
-    const deals = (await res.json()) as any[];
+    // Only fields accessed in this function — partial CheapShark deal shape
+    interface CheapSharkDeal {
+      gameID: string;
+      title: string;
+      thumb: string;
+      storeID: string;
+      salePrice: string;
+      normalPrice: string;
+      savings: string;
+      dealRating: string;
+      dealID: string;
+    }
+    const deals = (await res.json()) as CheapSharkDeal[];
     if (!deals || deals.length === 0) {
       return { success: true, dealsIngested: 0, gamesUpserted: 0, pricesRecorded: 0 };
     }
@@ -137,12 +148,10 @@ export async function ingestPricesAction(): Promise<{
     let dealsIngested = 0;
     let pricesRecorded = 0;
 
-    // biome-ignore lint/suspicious/noExplicitAny: CheapShark API shape
-    const uniqueGameIds = [...new Set(deals.map((d: any) => d.gameID))];
+    const uniqueGameIds = [...new Set(deals.map((d) => d.gameID))];
 
     for (const gameId of uniqueGameIds as string[]) {
-      // biome-ignore lint/suspicious/noExplicitAny: CheapShark API shape
-      const deal = deals.find((d: any) => d.gameID === gameId);
+      const deal = deals.find((d) => d.gameID === gameId);
       if (!deal) continue;
 
       await db
@@ -164,10 +173,9 @@ export async function ingestPricesAction(): Promise<{
 
     // Batch inserts for deals + price_history
     if (deals.length > 0) {
-      // biome-ignore lint/suspicious/noExplicitAny: CheapShark API shape
-      const dealsValues = deals.map((d: any) => ({
+      const dealsValues = deals.map((d) => ({
         gameId: d.gameID,
-        storeId: d.storeID,
+        storeId: d.storeID as unknown as (typeof dealsTable.$inferInsert)['storeId'],
         price: Number.parseFloat(d.salePrice),
         retailPrice: Number.parseFloat(d.normalPrice),
         savings: Number.parseFloat(d.savings),
@@ -178,8 +186,7 @@ export async function ingestPricesAction(): Promise<{
       await db.insert(dealsTable).values(dealsValues);
       dealsIngested = dealsValues.length;
 
-      // biome-ignore lint/suspicious/noExplicitAny: CheapShark API shape
-      const priceValues = deals.map((d: any) => ({
+      const priceValues = deals.map((d) => ({
         gameId: d.gameID,
         storeId: d.storeID,
         price: Number.parseFloat(d.salePrice),

@@ -18,10 +18,31 @@ type GameEntry = {
   storeID: string;
 };
 
+interface GameDataInfo {
+  title: string;
+  thumb: string;
+}
+
+interface GameDataDeal {
+  price: string;
+  retailPrice: string;
+  savings: string;
+  storeID: string;
+}
+
+interface GameDataCheapest {
+  price: string;
+}
+
+interface GameDataShape {
+  info?: GameDataInfo;
+  deals: GameDataDeal[];
+  cheapestPriceEver: GameDataCheapest;
+}
+
 function processGameResult(
   acc: GameEntry[],
-  // biome-ignore lint/suspicious/noExplicitAny: CheapShark API shape
-  gameData: any,
+  gameData: GameDataShape | null,
   idx: number,
   gameIDs: string[]
 ): GameEntry[] {

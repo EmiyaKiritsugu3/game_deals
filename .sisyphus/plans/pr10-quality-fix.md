@@ -423,7 +423,7 @@ Wave FINAL (VERIFICAÇÃO — 4 tasks, paralelas):
 
 ### Wave 2: TIPOS (any → tipos reais)
 
-- [ ] 5. Tipar CheapShark API responses — `unknown` + narrowing
+- [x] 5. Tipar CheapShark API responses — `unknown` + narrowing
 
   **What to do**:
   - Arquivos afetados: `src/actions/deals.ts` (6 supressões), `src/services/api.ts` (2 supressões)
@@ -496,7 +496,7 @@ Wave FINAL (VERIFICAÇÃO — 4 tasks, paralelas):
     Evidence: .sisyphus/evidence/task-5-lint.txt
   ```
 
-- [ ] 6. Tipar serverUser no Navbar — usar tipo User do Supabase
+- [x] 6. Tipar serverUser no Navbar — usar tipo User do Supabase
 
   **What to do**:
   - Arquivo: `src/components/Navbar.tsx` (1 supressão noExplicitAny na linha ~175)
@@ -540,7 +540,7 @@ Wave FINAL (VERIFICAÇÃO — 4 tasks, paralelas):
     Evidence: .sisyphus/evidence/task-6-check.txt
   ```
 
-- [ ] 7. Tipar props de componentes — any → tipos inline
+- [x] 7. Tipar props de componentes — any → tipos inline
 
   **What to do**:
   - Arquivos afetados:
@@ -588,7 +588,7 @@ Wave FINAL (VERIFICAÇÃO — 4 tasks, paralelas):
     Evidence: .sisyphus/evidence/task-7-check.txt
   ```
 
-- [ ] 8. Documentar exceções Recharts — manter any com override
+- [x] 8. Documentar exceções Recharts — manter any com override
 
   **What to do**:
   - Identificar todos os Recharts formatters que exigem `any` (a API do Recharts usa `(value: any, name: any, ...)`)

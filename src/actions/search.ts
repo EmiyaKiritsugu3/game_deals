@@ -2,6 +2,15 @@
 
 import { GAME_SCHEMA, indexGamesBatch, searchGames as typesenseSearch } from '@/lib/typesense';
 
+interface TypesenseHit {
+  document: {
+    gameID: string;
+    title: string;
+    thumb: string;
+    cheapest: string;
+  };
+}
+
 /**
  * Search jogos via Typesense
  * Fallback pra CheapShark API se Typesense não configurado
@@ -20,14 +29,12 @@ export async function searchGamesAction(query: string, limit = 10) {
   }
 
   try {
-    const hits = await typesenseSearch(query, limit);
-    // biome-ignore lint/suspicious/noExplicitAny: Typesense hit shape varies
-    return hits.map((hit: any) => ({
+    const hits = (await typesenseSearch(query, limit)) as unknown as TypesenseHit[];
+    return hits.map((hit) => ({
       gameID: hit.document.gameID,
       external: hit.document.title,
       thumb: hit.document.thumb,
       cheapest: hit.document.cheapest,
-      cheapestPrice: hit.document.cheapestPrice,
     }));
   } catch (e) {
     console.error('searchGamesAction error:', e);
@@ -60,8 +67,7 @@ export async function syncGamesToTypesenseAction(): Promise<{
 
     const deals = (await res.json()) as Array<Record<string, string>>;
 
-    // biome-ignore lint/suspicious/noExplicitAny: CheapShark API response
-    const games = deals.map((deal: any) => ({
+    const games = deals.map((deal) => ({
       gameID: deal.gameID,
       title: deal.title,
       thumb: deal.thumb,

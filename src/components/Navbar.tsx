@@ -1,5 +1,6 @@
 'use client';
 
+import type { User as SupabaseUser } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
 import { Bell, ChevronDown, LogOut, Search, User } from 'lucide-react';
 import Link from 'next/link';
@@ -11,8 +12,7 @@ import AuthModal from './AuthModal';
 import styles from './Navbar.module.css';
 import WishlistIndicator from './WishlistIndicator';
 
-// biome-ignore lint/suspicious/noExplicitAny: Supabase user type
-export default function Navbar({ serverUser }: { readonly serverUser?: any | null }) {
+export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseUser | null }) {
   const { user, logout, setUser } = useAuth();
   const [query, setQuery] = useQueryState('q', { defaultValue: '' });
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -172,9 +172,7 @@ export default function Navbar({ serverUser }: { readonly serverUser?: any | nul
                   />
                 }
                 <span className={styles.username}>
-                  {user?.name || // biome-ignore lint/suspicious/noExplicitAny: serverUser shape
-                    (serverUser as any)?.user_metadata?.full_name ||
-                    'User'}
+                  {user?.name || serverUser?.user_metadata?.full_name || 'User'}
                 </span>
                 <ChevronDown size={14} />
 
