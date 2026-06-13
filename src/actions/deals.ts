@@ -151,7 +151,7 @@ export async function ingestPricesAction(): Promise<{
 
     const uniqueGameIds = [...new Set(deals.map((d) => d.gameID))];
 
-    for (const gameId of uniqueGameIds as string[]) {
+    for (const gameId of uniqueGameIds) {
       const deal = deals.find((d) => d.gameID === gameId);
       if (!deal) continue;
 

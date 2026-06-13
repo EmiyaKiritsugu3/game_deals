@@ -166,6 +166,6 @@ describe('CheapShark API type narrowing', () => {
 
     expect(price).toBe(0);
     expect(retail).toBeCloseTo(59.99);
-    expect(saving).toBe(1.0);
+    expect(saving).toBe(1);
   });
 });
