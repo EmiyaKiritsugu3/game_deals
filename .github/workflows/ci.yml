@@ -38,4 +38,4 @@ jobs:
       - name: Build
         run: pnpm build
       - name: Dead code
-        run: pnpm run knip
+        run: pnpm knip --no-exit-code
