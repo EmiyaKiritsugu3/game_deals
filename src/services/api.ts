@@ -41,8 +41,9 @@ export function getRegionTag(_storeID: string): string | null {
 export async function getDeals(params?: Record<string, string>): Promise<Deal[]> {
   const url = new URL(`${BASE_URL}/deals`);
   if (params) {
-    // biome-ignore lint/suspicious/useIterableCallbackReturn: side-effect only
-    Object.keys(params).forEach((key) => url.searchParams.append(key, params[key]));
+    for (const key of Object.keys(params)) {
+      url.searchParams.append(key, params[key]);
+    }
   } else {
     url.searchParams.append('sortBy', 'Deal Rating');
     url.searchParams.append('onSale', '1');
@@ -66,8 +67,9 @@ export async function getStores(): Promise<Record<string, string>> {
 
   if (res.ok) {
     const stores = (await res.json()) as Store[];
-    // biome-ignore lint/suspicious/useIterableCallbackReturn: side-effect only
-    stores.forEach((s) => (map[s.storeID] = s.storeName));
+    for (const s of stores) {
+      map[s.storeID] = s.storeName;
+    }
   }
 
   map['101'] = 'CDKeys';

@@ -886,7 +886,7 @@ Wave FINAL (VERIFICAÇÃO — 4 tasks, paralelas):
 
 ### Wave 4: FOREACH (`.forEach()` side-effects → `for..of`)
 
-- [ ] 13. src/services/api.ts — forEach → for..of
+- [x] 13. src/services/api.ts — forEach → for..of
 
   **What to do**:
   - Arquivo: `src/services/api.ts` (2 supressões useIterableCallbackReturn)
@@ -937,7 +937,7 @@ Wave FINAL (VERIFICAÇÃO — 4 tasks, paralelas):
     Evidence: .sisyphus/evidence/task-13-check.txt
   ```
 
-- [ ] 14. src/utils/ + src/actions/ — forEach → for..of
+- [x] 14. src/utils/ + src/actions/ — forEach → for..of
 
   **What to do**:
   - Arquivos afetados:
@@ -980,7 +980,7 @@ Wave FINAL (VERIFICAÇÃO — 4 tasks, paralelas):
     Evidence: .sisyphus/evidence/task-14-check.txt
   ```
 
-- [ ] 15. Remover supressões useIterableCallbackReturn restantes
+- [x] 15. Remover supressões useIterableCallbackReturn restantes
 
   **What to do**:
   - Após T13 + T14, verificar se alguma supressão de `useIterableCallbackReturn` sobrou

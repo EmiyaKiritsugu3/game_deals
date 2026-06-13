@@ -15,8 +15,9 @@ export async function createClient() {
       },
       setAll(cookiesToSet) {
         try {
-          // biome-ignore lint/suspicious/useIterableCallbackReturn: forEach side-effect only
-          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options));
+          for (const { name, value, options } of cookiesToSet) {
+            cookieStore.set(name, value, options);
+          }
         } catch (e) {
           // Middleware já possui cookie access
           console.error('Cookie set error:', e);

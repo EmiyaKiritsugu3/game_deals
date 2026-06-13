@@ -81,8 +81,9 @@ export async function getStoresAction(): Promise<Record<string, string>> {
     const res = await fetch(`${BASE_URL}/stores`, { next: { revalidate: 86400 } });
     if (res.ok) {
       const stores = (await res.json()) as Store[];
-      // biome-ignore lint/suspicious/useIterableCallbackReturn: side-effect only
-      stores.forEach((s) => (map[s.storeID] = s.storeName));
+      for (const s of stores) {
+        map[s.storeID] = s.storeName;
+      }
     }
   } catch (e) {
     console.error('getStoresAction error:', e);
