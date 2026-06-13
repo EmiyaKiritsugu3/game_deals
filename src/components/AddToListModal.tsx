@@ -64,20 +64,8 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
   if (isLoading) return null;
 
   return (
-    <dialog
-      ref={dialogRef}
-      className={styles.overlay}
-      onClick={handleClose}
-      onKeyDown={(e) => {
-        if (e.key === 'Escape') handleClose();
-      }}
-    >
-      {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation only, not interactive */}
-      <div
-        className={styles.modal}
-        onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => e.stopPropagation()}
-      >
+    <dialog ref={dialogRef} className={styles.overlay} onClose={handleClose}>
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()} role="none">
         <h3>Add to Playlist</h3>
         <p className={styles.subtitle}>Curate your collections and earn achievements.</p>
 
