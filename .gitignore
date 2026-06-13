@@ -31,6 +31,9 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
+.env*
+!.env.example
+.env.local
 
 # vercel
 .vercel
@@ -41,7 +44,6 @@ next-env.d.ts
 
 # credentials
 docs/jules_credentials.md
-.env.local
 supabase/.temp/
 
 # Drizzle generated JSON
