@@ -8,7 +8,10 @@
     "ses_1419c165fffeFT9067jcY9veLU",
     "ses_1419811b3ffeE3xXMAH0YSF1BR",
     "ses_1419821f1ffeWg6TTGfS8sgAg8",
-    "ses_14197f990ffemJUUMM5DmeA5k6"
+    "ses_14197f990ffemJUUMM5DmeA5k6",
+    "ses_1418f31d7ffengDDBG4HLyqqxb",
+    "ses_1418de758ffeZVXxSziGT45wOv",
+    "ses_1418e018bffe5Pt1dn51IKq9cK"
   ],
   "plan_name": "pr10-quality-fix",
   "worktree_path": null,
@@ -39,6 +42,24 @@
       "agent": "Sisyphus-Junior",
       "category": "quick",
       "updated_at": "2026-06-13T00:44:08.039Z"
+    },
+    "todo:9": {
+      "task_key": "todo:9",
+      "task_label": "9",
+      "task_title": "next.config.ts \u2014 remotePatterns para store favicons e CheapShark",
+      "session_id": "ses_1418f31d7ffengDDBG4HLyqqxb",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-06-13T00:46:24.981Z"
+    },
+    "todo:10": {
+      "task_key": "todo:10",
+      "task_label": "10",
+      "task_title": "`<img>` \u2192 `<Image>` optimized \u2014 bundles, collections, game thumbs",
+      "session_id": "ses_1418de758ffeZVXxSziGT45wOv",
+      "agent": "Sisyphus-Junior",
+      "category": "visual-engineering",
+      "updated_at": "2026-06-13T00:49:16.985Z"
     }
   }
 }

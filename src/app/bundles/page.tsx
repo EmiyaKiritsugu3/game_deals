@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { BUNDLES } from '@/data/bundles';
 import styles from './bundles.module.css';
 
@@ -49,12 +50,13 @@ export default function BundlesPage() {
                   <div className={styles.bundleGamesGrid}>
                     {bundle.games.map((game) => {
                       return (
-                        // biome-ignore lint/performance/noImgElement: static game thumbnails from bundle data
-                        <img
+                        <Image
                           key={game.title}
                           src={game.thumb}
                           alt={game.title}
                           title={`${game.title} — $${game.retailPrice.toFixed(2)}`}
+                          width={120}
+                          height={56}
                           className={styles.bundleGameThumb}
                         />
                       );

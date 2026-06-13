@@ -43,15 +43,15 @@ export default function HeroSection({ deals }: HeroSectionProps) {
               return (
                 // biome-ignore lint/suspicious/noArrayIndexKey: static 15-item bg grid
                 <div key={i} className={styles.matrixImgWrapper}>
-                  {
-                    // biome-ignore lint/performance/noImgElement: matrix bg images
-                    <img
-                      src={getHighResImage(deals[0].thumb)}
-                      alt=""
-                      loading="lazy"
-                      className={styles.matrixImg}
-                    />
-                  }
+                  <Image
+                    src={getHighResImage(deals[0].thumb)}
+                    alt=""
+                    aria-hidden={true}
+                    loading="lazy"
+                    width={200}
+                    height={130}
+                    className={styles.matrixImg}
+                  />
                 </div>
               );
             })}
@@ -98,15 +98,13 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                         (() => {
                           return (
                             <div className={styles.storeBadge}>
-                              {
-                                // biome-ignore lint/performance/noImgElement: store logo in hero
-                                <img
-                                  src={getStoreLogo(deal.storeID) ?? ''}
-                                  alt="Store"
-                                  width={16}
-                                  height={16}
-                                />
-                              }
+                              <Image
+                                src={getStoreLogo(deal.storeID) ?? ''}
+                                alt="Store"
+                                width={16}
+                                height={16}
+                                unoptimized
+                              />
                               <span className={styles.storeNameLabel}>Ver Oferta</span>
                             </div>
                           );

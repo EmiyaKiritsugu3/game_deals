@@ -3,6 +3,7 @@
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
 import { Bell, ChevronDown, LogOut, Search, User } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useQueryState } from 'nuqs';
 import { useEffect, useRef, useState } from 'react';
@@ -163,14 +164,14 @@ export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseU
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                 type="button"
               >
-                {
-                  // biome-ignore lint/performance/noImgElement: user avatar
-                  <img
-                    src={user?.avatar || serverUser?.user_metadata?.avatar_url || ''}
-                    alt={user?.name || serverUser?.user_metadata?.full_name || 'User'}
-                    className={styles.avatar}
-                  />
-                }
+                <Image
+                  src={user?.avatar || serverUser?.user_metadata?.avatar_url || ''}
+                  alt={user?.name || serverUser?.user_metadata?.full_name || 'User'}
+                  width={28}
+                  height={28}
+                  unoptimized
+                  className={styles.avatar}
+                />
                 <span className={styles.username}>
                   {user?.name || serverUser?.user_metadata?.full_name || 'User'}
                 </span>

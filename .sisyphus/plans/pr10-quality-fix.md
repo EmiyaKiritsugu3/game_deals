@@ -639,7 +639,7 @@ Wave FINAL (VERIFICAÇÃO — 4 tasks, paralelas):
 
 ### Wave 3: IMAGENS (`<img>` → `<Image>`)
 
-- [ ] 9. next.config.ts — remotePatterns para store favicons e CheapShark
+- [x] 9. next.config.ts — remotePatterns para store favicons e CheapShark
 
   **What to do**:
   - Verificar remotePatterns atual em `next.config.ts`
@@ -682,7 +682,7 @@ Wave FINAL (VERIFICAÇÃO — 4 tasks, paralelas):
     Evidence: .sisyphus/evidence/task-9-build.txt
   ```
 
-- [ ] 10. `<img>` → `<Image>` optimized — bundles, collections, game thumbs
+- [x] 10. `<img>` → `<Image>` optimized — bundles, collections, game thumbs
 
   **What to do**:
   - Arquivos com imagens de hostnames JÁ em remotePatterns (Steam CDN, CheapShark):
@@ -758,7 +758,7 @@ Wave FINAL (VERIFICAÇÃO — 4 tasks, paralelas):
     Evidence: .sisyphus/evidence/task-10-lint.txt
   ```
 
-- [ ] 11. `<img>` → `<Image>` unoptimized — store logos, avatars, hero bg
+- [x] 11. `<img>` → `<Image>` unoptimized — store logos, avatars, hero bg
 
   **What to do**:
   - Arquivos com imagens de CDNs arbitrários (não em remotePatterns ou dinâmicos):

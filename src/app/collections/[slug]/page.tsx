@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { COLLECTIONS } from '@/data/collections';
@@ -76,16 +77,13 @@ export default async function CollectionDetailPage({
           {games.map((game: CollectionGame) => {
             return (
               <div key={game.gameID} className={styles.detailGameRow}>
-                {
-                  // biome-ignore lint/performance/noImgElement: external CDN thumbnails
-                  <img
-                    src={game.thumb}
-                    alt={game.title}
-                    width={120}
-                    height={56}
-                    className={styles.detailGameThumb}
-                  />
-                }
+                <Image
+                  src={game.thumb}
+                  alt={game.title}
+                  width={120}
+                  height={56}
+                  className={styles.detailGameThumb}
+                />
                 <div className={styles.detailGameInfo}>
                   <div className={styles.detailGameTitle}>{game.title}</div>
                   <div className={styles.detailGamePrice}>
