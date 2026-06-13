@@ -13,7 +13,9 @@
     "ses_1418de758ffeZVXxSziGT45wOv",
     "ses_1418e018bffe5Pt1dn51IKq9cK",
     "ses_1418ae135ffeQTpXP2ifvd4ol6",
-    "ses_1418ad421ffe0H0Q6mn7B41oSL"
+    "ses_1418ad421ffe0H0Q6mn7B41oSL",
+    "ses_141892212ffeM5KgrcVtQ63Xqz",
+    "ses_14187daf8ffeow60umID8E1JIM"
   ],
   "plan_name": "pr10-quality-fix",
   "worktree_path": null,
@@ -67,10 +69,10 @@
       "task_key": "todo:12",
       "task_label": "12",
       "task_title": "Playwright screenshot diff — confirmar sem regressão visual",
-      "session_id": "ses_1418ad421ffe0H0Q6mn7B41oSL",
+      "session_id": "ses_14187daf8ffeow60umID8E1JIM",
       "agent": "Sisyphus-Junior",
       "category": "quick",
-      "updated_at": "2026-06-13T00:50:51.562Z"
+      "updated_at": "2026-06-13T00:53:56.472Z"
     }
   }
 }

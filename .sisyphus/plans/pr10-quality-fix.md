@@ -1024,7 +1024,7 @@ Wave FINAL (VERIFICAÇÃO — 4 tasks, paralelas):
 
 ### Wave 5: CSS (globals.css de volta ao lint)
 
-- [ ] 16. Extrair `@theme` para tokens.css
+- [x] 16. Extrair `@theme` para tokens.css
 
   **What to do**:
   - Criar `src/app/tokens.css` com o bloco `@theme` atual de `globals.css:3-22`
@@ -1096,7 +1096,7 @@ Wave FINAL (VERIFICAÇÃO — 4 tasks, paralelas):
     Evidence: .sisyphus/evidence/task-16-build.txt
   ```
 
-- [ ] 17. Remover globals.css do .gitignore
+- [x] 17. Remover globals.css do .gitignore
 
   **What to do**:
   - Remover linha `src/app/globals.css` do `.gitignore` (linha ~49-50)
