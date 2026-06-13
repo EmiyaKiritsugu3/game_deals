@@ -49,5 +49,9 @@ supabase/.temp/
 # Drizzle generated JSON
 drizzle/meta/
 
+# Graphify output
+graphify-out/
+.sisyphus/
+
 # Husky internal
 .husky/_
