@@ -2,6 +2,9 @@
   "name": "game-deals",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "packageManager": "pnpm@11.5.3",
   "scripts": {
     "dev": "next dev",
@@ -16,7 +19,10 @@
     "db:studio": "drizzle-kit studio",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "knip": "knip",
+    "test:coverage": "vitest run --coverage",
+    "audit": "pnpm audit --audit-level=high"
   },
   "dependencies": {
     "@supabase/ssr": "^0.9.0",
@@ -41,12 +47,14 @@
     "@biomejs/biome": "^2.4.16",
     "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4.3.0",
+    "@total-typescript/ts-reset": "^0.6.1",
     "@types/node": "^20",
-        "@types/react": "^19",
+    "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^6.0.2",
+    "@vitest/coverage-istanbul": "^4.1.8",
     "dotenv": "^17.4.2",
     "drizzle-kit": "^0.31.10",
+    "knip": "^6.16.1",
     "tailwindcss": "^4.3.0",
     "typescript": "^5",
     "vitest": "^4.1.8"

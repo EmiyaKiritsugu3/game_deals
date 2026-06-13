@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/utils/supabase/server';
 import { rateLimit } from '@/lib/rate-limit';
+import { createClient } from '@/utils/supabase/server';
 
 export async function GET(request: Request) {
   const ip = request.headers.get('x-forwarded-for') || 'unknown';

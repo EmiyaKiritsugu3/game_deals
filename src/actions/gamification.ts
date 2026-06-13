@@ -1,7 +1,7 @@
 'use server';
 
-import { db } from '@/db';
 import { sql } from 'drizzle-orm';
+import { db } from '@/db';
 
 /**
  * Adicionar XP ao usuário
@@ -26,9 +26,9 @@ export async function addXPAction(userId: string, amount: number, reason: string
  * Buscar XP do usuário
  */
 export async function getUserXPAction(userId: string) {
-  const rows = await db.execute(sql`
+  const rows = (await db.execute(sql`
     SELECT xp FROM profiles WHERE id = ${userId}
-  `) as unknown as Array<{ xp: number }>;
+  `)) as unknown as Array<{ xp: number }>;
   return rows[0]?.xp || 0;
 }
 
@@ -81,22 +81,30 @@ export async function checkAndAwardBadgesAction(userId: string) {
   const playlistCount = playlistRows[0]?.count ?? 0;
 
   if (xp > 0) {
-    const badge = await db.execute(sql`SELECT id FROM badges WHERE name = 'First Steps'`) as unknown as Array<{ id: string }>;
+    const badge = (await db.execute(
+      sql`SELECT id FROM badges WHERE name = 'First Steps'`
+    )) as unknown as Array<{ id: string }>;
     if (badge[0]) await awardBadgeAction(userId, badge[0].id);
   }
 
   if (xp >= 100) {
-    const badge = await db.execute(sql`SELECT id FROM badges WHERE name = 'XP Hunter'`) as unknown as Array<{ id: string }>;
+    const badge = (await db.execute(
+      sql`SELECT id FROM badges WHERE name = 'XP Hunter'`
+    )) as unknown as Array<{ id: string }>;
     if (badge[0]) await awardBadgeAction(userId, badge[0].id);
   }
 
   if (wishlistCount >= 10) {
-    const badge = await db.execute(sql`SELECT id FROM badges WHERE name = 'Wishlist Master'`) as unknown as Array<{ id: string }>;
+    const badge = (await db.execute(
+      sql`SELECT id FROM badges WHERE name = 'Wishlist Master'`
+    )) as unknown as Array<{ id: string }>;
     if (badge[0]) await awardBadgeAction(userId, badge[0].id);
   }
 
   if (playlistCount >= 5) {
-    const badge = await db.execute(sql`SELECT id FROM badges WHERE name = 'Curator'`) as unknown as Array<{ id: string }>;
+    const badge = (await db.execute(
+      sql`SELECT id FROM badges WHERE name = 'Curator'`
+    )) as unknown as Array<{ id: string }>;
     if (badge[0]) await awardBadgeAction(userId, badge[0].id);
   }
 

@@ -1,31 +1,40 @@
 'use server';
 
-import { searchGames as typesenseSearch, indexGamesBatch, GAME_SCHEMA } from '@/lib/typesense';
+import { GAME_SCHEMA, indexGamesBatch, searchGames as typesenseSearch } from '@/lib/typesense';
+
+interface TypesenseHit {
+  document: {
+    gameID: string;
+    title: string;
+    thumb: string;
+    cheapest: string;
+  };
+}
 
 /**
  * Search jogos via Typesense
  * Fallback pra CheapShark API se Typesense não configurado
  */
 export async function searchGamesAction(query: string, limit = 10) {
-  const apiKey = process.env.TYPESENSE_ADMIN_KEY || process.env.NEXT_PUBLIC_TYPESENSE_SEARCH_KEY || '';
+  const apiKey =
+    process.env.TYPESENSE_ADMIN_KEY || process.env.NEXT_PUBLIC_TYPESENSE_SEARCH_KEY || '';
 
   if (!apiKey) {
     // Fallback: CheapShark API
     const res = await fetch(
-      `https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(query)}&limit=${limit}`,
+      `https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(query)}&limit=${limit}`
     );
     if (!res.ok) return [];
-    return res.json();
+    return (await res.json()) as Array<Record<string, string>>;
   }
 
   try {
-    const hits = await typesenseSearch(query, limit);
-    return hits.map((hit: any) => ({
+    const hits = (await typesenseSearch(query, limit)) as unknown as TypesenseHit[];
+    return hits.map((hit) => ({
       gameID: hit.document.gameID,
       external: hit.document.title,
       thumb: hit.document.thumb,
       cheapest: hit.document.cheapest,
-      cheapestPrice: hit.document.cheapestPrice,
     }));
   } catch (e) {
     console.error('searchGamesAction error:', e);
@@ -49,22 +58,22 @@ export async function syncGamesToTypesenseAction(): Promise<{
 
   try {
     const res = await fetch(
-      'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100',
+      'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100'
     );
 
     if (!res.ok) {
       return { success: false, indexed: 0, error: `CheapShark error: ${res.status}` };
     }
 
-    const deals = await res.json();
+    const deals = (await res.json()) as Array<Record<string, string>>;
 
-    const games = deals.map((deal: any) => ({
+    const games = deals.map((deal) => ({
       gameID: deal.gameID,
       title: deal.title,
       thumb: deal.thumb,
       cheapest: deal.salePrice,
-      metacriticScore: Number.parseInt(deal.metacriticScore) || 0,
-      steamRating: Number.parseInt(deal.steamRatingPercent) || 0,
+      metacriticScore: Number.parseInt(deal.metacriticScore, 10) || 0,
+      steamRating: Number.parseInt(deal.steamRatingPercent, 10) || 0,
     }));
 
     const ok = await indexGamesBatch(games);
@@ -83,7 +92,7 @@ export async function syncGamesToTypesenseAction(): Promise<{
  */
 export async function createTypesenseCollectionAction(): Promise<boolean> {
   const host = process.env.TYPESENSE_HOST || 'localhost';
-  const port = Number.parseInt(process.env.TYPESENSE_PORT || '443');
+  const port = Number.parseInt(process.env.TYPESENSE_PORT || '443', 10);
   const protocol = process.env.TYPESENSE_PROTOCOL || 'https';
   const apiKey = process.env.TYPESENSE_ADMIN_KEY || '';
   if (!apiKey) return false;

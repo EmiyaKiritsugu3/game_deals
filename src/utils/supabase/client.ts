@@ -5,8 +5,5 @@ export function createClient() {
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) throw new Error('Supabase env vars not set');
 
-  return createBrowserClient(
-    url,
-    key
-  );
+  return createBrowserClient(url, key);
 }

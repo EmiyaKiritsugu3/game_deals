@@ -1,8 +1,17 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { COLLECTIONS } from '@/data/collections';
 import { getGame } from '@/services/api';
 import styles from '../collections.module.css';
+
+interface CollectionGame {
+  gameID: string;
+  title: string;
+  thumb: string;
+  price: string;
+  retailPrice: string;
+}
 
 export async function generateStaticParams() {
   return COLLECTIONS.map((col) => ({ slug: col.slug }));
@@ -35,7 +44,7 @@ export default async function CollectionDetailPage({
     collection.gameIDs.map((id) => getGame(id).catch(() => null))
   );
 
-  const games = gamesData.reduce((acc: any[], gameData, idx) => {
+  const games = gamesData.reduce((acc: CollectionGame[], gameData, idx) => {
     if (!gameData?.info) return acc;
     const bestDeal = [...gameData.deals].sort(
       (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
@@ -48,7 +57,7 @@ export default async function CollectionDetailPage({
       retailPrice: bestDeal?.retailPrice ?? gameData.cheapestPriceEver.price,
     });
     return acc;
-  }, []);
+  }, [] as CollectionGame[]);
 
   return (
     <main className="container">
@@ -65,38 +74,40 @@ export default async function CollectionDetailPage({
         </div>
 
         <div className={styles.detailGrid}>
-          {games.map((game: any) => (
-            <div key={game.gameID} className={styles.detailGameRow}>
-              <img
-                src={game.thumb}
-                alt={game.title}
-                width={120}
-                height={56}
-                className={styles.detailGameThumb}
-              />
-              <div className={styles.detailGameInfo}>
-                <div className={styles.detailGameTitle}>{game.title}</div>
-                <div className={styles.detailGamePrice}>
-                  {Number.parseFloat(game.price) === 0 ? 'FREE' : `$${game.price}`}
-                  {Number.parseFloat(game.retailPrice) > Number.parseFloat(game.price) && (
-                    <span
-                      style={{
-                        textDecoration: 'line-through',
-                        color: 'hsl(var(--muted-foreground))',
-                        marginLeft: '0.5rem',
-                        fontWeight: 400,
-                      }}
-                    >
-                      ${game.retailPrice}
-                    </span>
-                  )}
+          {games.map((game: CollectionGame) => {
+            return (
+              <div key={game.gameID} className={styles.detailGameRow}>
+                <Image
+                  src={game.thumb}
+                  alt={game.title}
+                  width={120}
+                  height={56}
+                  className={styles.detailGameThumb}
+                />
+                <div className={styles.detailGameInfo}>
+                  <div className={styles.detailGameTitle}>{game.title}</div>
+                  <div className={styles.detailGamePrice}>
+                    {Number.parseFloat(game.price) === 0 ? 'FREE' : `$${game.price}`}
+                    {Number.parseFloat(game.retailPrice) > Number.parseFloat(game.price) && (
+                      <span
+                        style={{
+                          textDecoration: 'line-through',
+                          color: 'hsl(var(--muted-foreground))',
+                          marginLeft: '0.5rem',
+                          fontWeight: 400,
+                        }}
+                      >
+                        ${game.retailPrice}
+                      </span>
+                    )}
+                  </div>
                 </div>
+                <Link href={`/game/${game.gameID}`} className={styles.detailGameCta}>
+                  View Deal →
+                </Link>
               </div>
-              <Link href={`/game/${game.gameID}`} className={styles.detailGameCta}>
-                View Deal →
-              </Link>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </main>

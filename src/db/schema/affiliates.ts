@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, timestamp, index } from 'drizzle-orm/pg-core';
+import { index, pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
 export const affiliateLinks = pgTable('affiliate_links', {
   id: uuid().defaultRandom().primaryKey(),
@@ -10,13 +10,15 @@ export const affiliateLinks = pgTable('affiliate_links', {
   updatedAt: timestamp().defaultNow().notNull(),
 });
 
-export const affiliateClicks = pgTable('affiliate_clicks', {
-  id: uuid().defaultRandom().primaryKey(),
-  storeId: varchar({ length: 50 }).notNull(),
-  gameSlug: varchar({ length: 255 }).notNull(),
-  userId: uuid(),
-  ip: varchar({ length: 45 }),
-  timestamp: timestamp().defaultNow().notNull(),
-}, (table) => [
-  index('ac_timestamp_idx').on(table.timestamp),
-]);
+export const affiliateClicks = pgTable(
+  'affiliate_clicks',
+  {
+    id: uuid().defaultRandom().primaryKey(),
+    storeId: varchar({ length: 50 }).notNull(),
+    gameSlug: varchar({ length: 255 }).notNull(),
+    userId: uuid(),
+    ip: varchar({ length: 45 }),
+    timestamp: timestamp().defaultNow().notNull(),
+  },
+  (table) => [index('ac_timestamp_idx').on(table.timestamp)]
+);

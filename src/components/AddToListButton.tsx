@@ -20,6 +20,7 @@ export default function AddToListButton({ gameId, variant = 'icon' }: AddToListB
   return (
     <>
       <button
+        type="button"
         className={`${styles.button} ${styles[variant]}`}
         onClick={(e) => {
           e.preventDefault();

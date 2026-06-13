@@ -38,19 +38,23 @@ export default function HeroSection({ deals }: HeroSectionProps) {
       <div className={styles.matrixBackground}>
         <div className={styles.matrixTrack}>
           {/* Duplicate the deals array to create a dense grid covering the entire background */}
-          {Array(15)
-            .fill(deals)
-            .flat()
-            .map((deal, i) => (
-              <div key={`matrix-${i}`} className={styles.matrixImgWrapper}>
-                <img
-                  src={getHighResImage(deal.thumb)}
-                  alt=""
-                  loading="lazy"
-                  className={styles.matrixImg}
-                />
-              </div>
-            ))}
+          {deals.length > 0 &&
+            Array.from({ length: 15 }, (_, i) => {
+              return (
+                // biome-ignore lint/suspicious/noArrayIndexKey: static 15-item bg grid
+                <div key={i} className={styles.matrixImgWrapper}>
+                  <Image
+                    src={getHighResImage(deals[0].thumb)}
+                    alt=""
+                    aria-hidden={true}
+                    loading="lazy"
+                    width={200}
+                    height={130}
+                    className={styles.matrixImg}
+                  />
+                </div>
+              );
+            })}
         </div>
       </div>
       <div className={styles.matrixOverlay} />
@@ -90,17 +94,21 @@ export default function HeroSection({ deals }: HeroSectionProps) {
                     <h1 className={styles.title}>{deal.title}</h1>
 
                     <div className={styles.metaRow}>
-                      {getStoreLogo(deal.storeID) && (
-                        <div className={styles.storeBadge}>
-                          <img
-                            src={getStoreLogo(deal.storeID)!}
-                            alt="Store"
-                            width={16}
-                            height={16}
-                          />
-                          <span className={styles.storeNameLabel}>Ver Oferta</span>
-                        </div>
-                      )}
+                      {getStoreLogo(deal.storeID) &&
+                        (() => {
+                          return (
+                            <div className={styles.storeBadge}>
+                              <Image
+                                src={getStoreLogo(deal.storeID) ?? ''}
+                                alt="Store"
+                                width={16}
+                                height={16}
+                                unoptimized
+                              />
+                              <span className={styles.storeNameLabel}>Ver Oferta</span>
+                            </div>
+                          );
+                        })()}
                       <div className={styles.platforms}>
                         <Monitor size={16} />
                         <Gamepad2 size={16} />
@@ -146,14 +154,18 @@ export default function HeroSection({ deals }: HeroSectionProps) {
       {/* Navigation Dots */}
       {deals.length > 1 && (
         <div className={styles.navigation}>
-          {deals.map((_, idx) => (
-            <button
-              key={idx}
-              className={`${styles.dot} ${idx === currentIndex ? styles.activeDot : ''}`}
-              onClick={() => setCurrentIndex(idx)}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
-          ))}
+          {deals.map((deal) => {
+            const uuid = `${deal.dealID}-dot`;
+            return (
+              <button
+                key={uuid}
+                type="button"
+                className={`${styles.dot} ${deals.indexOf(deal) === currentIndex ? styles.activeDot : ''}`}
+                onClick={() => setCurrentIndex(deals.indexOf(deal))}
+                aria-label={`Go to slide ${deals.indexOf(deal) + 1}`}
+              />
+            );
+          })}
         </div>
       )}
     </section>

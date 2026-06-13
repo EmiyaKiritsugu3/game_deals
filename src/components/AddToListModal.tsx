@@ -1,7 +1,7 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { addGameToPlaylist, createPlaylist, getUserPlaylists } from '@/services/social';
 import { useAuth } from '@/store/authStore';
 import styles from './AddToListModal.module.css';
@@ -16,10 +16,19 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    dialogRef.current?.showModal();
+  }, []);
+
+  const handleClose = () => {
+    dialogRef.current?.close();
+    onClose();
+  };
 
   const { data: playlists = [], isLoading } = useQuery({
     queryKey: ['playlists', user?.id],
-    queryFn: () => getUserPlaylists(user?.id ?? ""),
+    queryFn: () => getUserPlaylists(user?.id ?? ''),
     enabled: !!user?.id,
   });
 
@@ -55,8 +64,8 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
   if (isLoading) return null;
 
   return (
-    <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+    <dialog ref={dialogRef} className={styles.overlay} onClose={handleClose}>
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()} role="none">
         <h3>Add to Playlist</h3>
         <p className={styles.subtitle}>Curate your collections and earn achievements.</p>
 
@@ -66,6 +75,7 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
           {playlists.length > 0 ? (
             playlists.map((list) => (
               <button
+                type="button"
                 key={list.id}
                 className={styles.listButton}
                 onClick={() => addMutation.mutate(list.id)}
@@ -91,6 +101,7 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
             className={styles.input}
           />
           <button
+            type="button"
             className={styles.createButton}
             disabled={createMutation.isPending || !newListName.trim()}
             onClick={() => createMutation.mutate(newListName)}
@@ -99,10 +110,10 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
           </button>
         </div>
 
-        <button className={styles.closeButton} onClick={onClose}>
+        <button type="button" className={styles.closeButton} onClick={onClose}>
           Cancel
         </button>
       </div>
-    </div>
+    </dialog>
   );
 }

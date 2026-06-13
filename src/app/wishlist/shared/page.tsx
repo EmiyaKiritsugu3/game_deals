@@ -4,8 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useMemo, useState } from 'react';
-import { getHighResImage } from '@/services/api';
 import { useWishlistGames } from '@/hooks/useWishlistGames';
+import { getHighResImage } from '@/services/api';
 import styles from '../page.module.css';
 
 type GameEntry = {
@@ -18,15 +18,37 @@ type GameEntry = {
   storeID: string;
 };
 
+interface GameDataInfo {
+  title: string;
+  thumb: string;
+}
+
+interface GameDataDeal {
+  price: string;
+  retailPrice: string;
+  savings: string;
+  storeID: string;
+}
+
+interface GameDataCheapest {
+  price: string;
+}
+
+interface GameDataShape {
+  info?: GameDataInfo;
+  deals: GameDataDeal[];
+  cheapestPriceEver: GameDataCheapest;
+}
+
 function processGameResult(
   acc: GameEntry[],
-  gameData: any,
+  gameData: GameDataShape | null,
   idx: number,
   gameIDs: string[]
 ): GameEntry[] {
   if (!gameData?.info) return acc;
   const currentBest = [...gameData.deals].sort(
-    (a: any, b: any) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
+    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
   )[0];
   acc.push({
     gameID: gameIDs[idx],
@@ -114,8 +136,8 @@ function SharedWishlistContent() {
       </div>
 
       <div className={styles.grid}>
-        {games.map((game, idx) => (
-          <div key={`${game.gameID}-${idx}`} className={styles.wishlistCard}>
+        {games.map((game) => (
+          <div key={game.gameID} className={styles.wishlistCard}>
             <div className={styles.imageContainer}>
               <Image
                 src={game.thumb}

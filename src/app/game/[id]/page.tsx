@@ -17,7 +17,11 @@ import styles from './page.module.css';
 
 const SITE_URL = 'https://gamedeals.com.br';
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
   const { id } = await params;
   const game = await getGame(id);
 
@@ -25,8 +29,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     return { title: 'Game Not Found' };
   }
 
-  const bestPrice = [...game.deals]
-    .sort((a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price))[0];
+  const bestPrice = [...game.deals].sort(
+    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
+  )[0];
 
   const title = `${game.info.title} — Best Price: $${bestPrice?.price || 'N/A'}`;
   const description = `Find the best deal for ${game.info.title}. Current lowest price: $${bestPrice?.price || 'N/A'}. Historical low: $${game.cheapestPriceEver.price}. Compare prices across ${game.deals.length} stores.`;
@@ -75,7 +80,9 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
   }
 
   const highResThumb = getHighResImage(game.info.thumb);
-  const sortedDeals = [...game.deals].sort((a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price));
+  const sortedDeals = [...game.deals].sort(
+    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
+  );
   const cheapestEver = Number.parseFloat(game.cheapestPriceEver.price);
   const bestCurrentPrice = Number.parseFloat(sortedDeals[0]?.price ?? '9999');
   const isCurrentlyAtHL = bestCurrentPrice <= cheapestEver * 1.05;
@@ -91,6 +98,14 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
     const isDealAtHL = price <= cheapestEver * 1.05;
     const isFree = price === 0;
 
+    let storeLogoEl = <div className={styles.storeLogoPlaceholder} />;
+    if (logo) {
+      storeLogoEl = (
+        // biome-ignore lint/performance/noImgElement: store logos from affiliate CDN
+        <img src={logo} alt={storeName} className={styles.storeLogo} width={18} height={18} />
+      );
+    }
+
     return (
       <a
         key={deal.dealID}
@@ -104,11 +119,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
         className={`${styles.dealRow} ${isBest ? styles.dealRowBest : ''}`}
       >
         <div className={styles.storeInfo}>
-          {logo ? (
-            <img src={logo} alt={storeName} className={styles.storeLogo} width={18} height={18} />
-          ) : (
-            <div className={styles.storeLogoPlaceholder} />
-          )}
+          {storeLogoEl}
           <span className={styles.storeName}>{storeName}</span>
           {isBest && <span className={styles.bestTag}>BEST</span>}
           <span className="drmBadge">
@@ -153,13 +164,16 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
       },
     })),
   };
+  const productJsonLdScript = (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+    />
+  );
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
-      />
+      {productJsonLdScript}
       <main className="container">
         <div className={styles.gamePage}>
           <div className={styles.gameHero}>
@@ -219,7 +233,10 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                   <h2 className={styles.sectionTitle}>Official Stores</h2>
                   <div className={styles.dealsList}>
                     {officialDeals.map((deal) =>
-                      renderDealRow(deal, Number.parseFloat(deal.price) === Number.parseFloat(officialDeals[0]?.price))
+                      renderDealRow(
+                        deal,
+                        Number.parseFloat(deal.price) === Number.parseFloat(officialDeals[0]?.price)
+                      )
                     )}
                   </div>
                 </>
@@ -230,7 +247,10 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                   <h2 className={`${styles.sectionTitle} ${styles.keyshopTitle}`}>Keyshops</h2>
                   <div className={styles.dealsList}>
                     {keyshopDeals.map((deal) =>
-                      renderDealRow(deal, Number.parseFloat(deal.price) === Number.parseFloat(keyshopDeals[0]?.price))
+                      renderDealRow(
+                        deal,
+                        Number.parseFloat(deal.price) === Number.parseFloat(keyshopDeals[0]?.price)
+                      )
                     )}
                   </div>
                 </>

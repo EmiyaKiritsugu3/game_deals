@@ -41,12 +41,17 @@ export function DynamicPriceHistory(props: DynamicPriceHistoryProps) {
   // Buscar dados reais se gameId disponível
   const { data: realData } = useDailyPriceHistory(props.gameId || null);
 
-  return (
-    <PriceHistoryChartLazy
-      {...props}
-      realData={realData && realData.length > 0 ? realData as any : undefined}
-    />
-  );
+  const chartData =
+    realData && realData.length > 0
+      ? (realData as Array<{
+          bucket: string;
+          avg_price: number;
+          min_price: number;
+          max_price: number;
+        }>)
+      : undefined;
+
+  return <PriceHistoryChartLazy {...props} realData={chartData} />;
 }
 
 export function DynamicStoreCompare(props: DynamicStoreCompareProps) {

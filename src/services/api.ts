@@ -41,7 +41,9 @@ export function getRegionTag(_storeID: string): string | null {
 export async function getDeals(params?: Record<string, string>): Promise<Deal[]> {
   const url = new URL(`${BASE_URL}/deals`);
   if (params) {
-    Object.keys(params).forEach((key) => url.searchParams.append(key, params[key]));
+    for (const key of Object.keys(params)) {
+      url.searchParams.append(key, params[key]);
+    }
   } else {
     url.searchParams.append('sortBy', 'Deal Rating');
     url.searchParams.append('onSale', '1');
@@ -51,7 +53,7 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
   try {
     const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
     if (!res.ok) return fallbackDeals;
-    const data = await res.json();
+    const data = (await res.json()) as Deal[];
     return data.length > 0 ? data : fallbackDeals;
   } catch (_error) {
     console.error('getDeals error:', _error);
@@ -64,8 +66,10 @@ export async function getStores(): Promise<Record<string, string>> {
   const map: Record<string, string> = {};
 
   if (res.ok) {
-    const stores: Store[] = await res.json();
-    stores.forEach((s) => (map[s.storeID] = s.storeName));
+    const stores = (await res.json()) as Store[];
+    for (const s of stores) {
+      map[s.storeID] = s.storeName;
+    }
   }
 
   map['101'] = 'CDKeys';
@@ -82,8 +86,8 @@ export async function getGame(id: string): Promise<GameDetails> {
 
   try {
     const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
-    if (!res.ok) return null as any;
-    const game: GameDetails = await res.json();
+    if (!res.ok) return null as unknown as never;
+    const game = (await res.json()) as GameDetails;
 
     if (game?.deals && game.deals.length > 0) {
       const greyDeals = generateGreyMarketDeals(game.deals, id);
@@ -93,7 +97,9 @@ export async function getGame(id: string): Promise<GameDetails> {
         (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
       )[0];
       if (currentLowest && game.cheapestPriceEver) {
-        if (Number.parseFloat(currentLowest.price) < Number.parseFloat(game.cheapestPriceEver.price)) {
+        if (
+          Number.parseFloat(currentLowest.price) < Number.parseFloat(game.cheapestPriceEver.price)
+        ) {
           game.cheapestPriceEver.price = currentLowest.price;
           game.cheapestPriceEver.date = Math.floor(Date.now() / 1000);
         }
@@ -103,6 +109,6 @@ export async function getGame(id: string): Promise<GameDetails> {
     return game;
   } catch (error) {
     console.error('getGame error:', error);
-    return null as any;
+    return null as unknown as never;
   }
 }

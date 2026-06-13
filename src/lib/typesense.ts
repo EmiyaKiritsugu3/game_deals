@@ -9,7 +9,7 @@ import TypesenseInstantsearchAdapter from 'typesense-instantsearch-adapter';
 const TYPESENSE_NODES = [
   {
     host: process.env.TYPESENSE_HOST || 'localhost',
-    port: Number.parseInt(process.env.TYPESENSE_PORT || '443'),
+    port: Number.parseInt(process.env.TYPESENSE_PORT || '443', 10),
     protocol: process.env.TYPESENSE_PROTOCOL || 'https',
   },
 ];
@@ -86,9 +86,10 @@ export function createTypesenseAdapter() {
  */
 export async function searchGames(query: string, limit = 10) {
   const host = process.env.TYPESENSE_HOST || 'localhost';
-  const port = Number.parseInt(process.env.TYPESENSE_PORT || '443');
+  const port = Number.parseInt(process.env.TYPESENSE_PORT || '443', 10);
   const protocol = process.env.TYPESENSE_PROTOCOL || 'https';
-  const apiKey = process.env.TYPESENSE_ADMIN_KEY || process.env.NEXT_PUBLIC_TYPESENSE_SEARCH_KEY || '';
+  const apiKey =
+    process.env.TYPESENSE_ADMIN_KEY || process.env.NEXT_PUBLIC_TYPESENSE_SEARCH_KEY || '';
 
   const url = `${protocol}://${host}:${port}`;
 
@@ -105,11 +106,11 @@ export async function searchGames(query: string, limit = 10) {
     `${url}/collections/${TYPESENSE_COLLECTION_NAME}/documents/search?${params}`,
     {
       headers: { 'X-TYPESENSE-API-KEY': apiKey },
-    },
+    }
   );
 
   if (!response.ok) return [];
-  const data = await response.json();
+  const data = (await response.json()) as { hits: Array<Record<string, unknown>> };
   return data.hits || [];
 }
 
@@ -129,7 +130,7 @@ export async function indexGame(game: {
   platform?: string[];
 }) {
   const host = process.env.TYPESENSE_HOST || 'localhost';
-  const port = Number.parseInt(process.env.TYPESENSE_PORT || '443');
+  const port = Number.parseInt(process.env.TYPESENSE_PORT || '443', 10);
   const protocol = process.env.TYPESENSE_PROTOCOL || 'https';
   const apiKey = process.env.TYPESENSE_ADMIN_KEY || '';
 
@@ -142,7 +143,7 @@ export async function indexGame(game: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ ...game, cheapestPrice: Number.parseFloat(game.cheapest) || 0 }),
-    },
+    }
   );
 
   return response.ok;
@@ -163,10 +164,10 @@ export async function indexGamesBatch(
     publisher?: string;
     genre?: string[];
     platform?: string[];
-  }>,
+  }>
 ) {
   const host = process.env.TYPESENSE_HOST || 'localhost';
-  const port = Number.parseInt(process.env.TYPESENSE_PORT || '443');
+  const port = Number.parseInt(process.env.TYPESENSE_PORT || '443', 10);
   const protocol = process.env.TYPESENSE_PROTOCOL || 'https';
   const apiKey = process.env.TYPESENSE_ADMIN_KEY || '';
 

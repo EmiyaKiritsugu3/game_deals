@@ -7,10 +7,10 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import HeartButton from '@/components/HeartButton';
 import PriceAlertTrigger from '@/components/PriceAlertTrigger';
+import { useWishlistGames } from '@/hooks/useWishlistGames';
 import { getHighResImage } from '@/services/api';
 import { useAlerts } from '@/store/alertStore';
 import { useWishlist } from '@/store/wishlistStore';
-import { useWishlistGames } from '@/hooks/useWishlistGames';
 import styles from './page.module.css';
 
 export default function WishlistPage() {
@@ -24,29 +24,44 @@ export default function WishlistPage() {
   const gameResults = data?.games ?? [];
 
   const savedGames = useMemo(() => {
-    return gameResults.reduce((acc: Array<{gameID: string; title: string; thumb: string; salePrice: string; normalPrice: string; savings: number; storeID: string}>, gameData, idx) => {
-      if (!gameData?.info) return acc;
+    return gameResults.reduce(
+      (
+        acc: Array<{
+          gameID: string;
+          title: string;
+          thumb: string;
+          salePrice: string;
+          normalPrice: string;
+          savings: number;
+          storeID: string;
+        }>,
+        gameData,
+        idx
+      ) => {
+        if (!gameData?.info) return acc;
 
-      const info = gameData.info;
-      const bestDeal = gameData.cheapestPriceEver;
-      if (!info) return acc;
-      const sortedDeals = [...gameData.deals].sort(
-        (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
-      );
-      const currentBest = sortedDeals[0];
+        const info = gameData.info;
+        const bestDeal = gameData.cheapestPriceEver;
+        if (!info) return acc;
+        const sortedDeals = [...gameData.deals].sort(
+          (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
+        );
+        const currentBest = sortedDeals[0];
 
-      acc.push({
-        gameID: wishlist[idx],
-        title: info.title,
-        thumb: getHighResImage(info.thumb),
-        salePrice: currentBest ? currentBest.price : bestDeal.price,
-        normalPrice: currentBest ? currentBest.retailPrice : bestDeal.price,
-        savings: currentBest ? Math.round(Number.parseFloat(currentBest.savings)) : 0,
-        storeID: currentBest ? currentBest.storeID : '1',
-      });
+        acc.push({
+          gameID: wishlist[idx],
+          title: info.title,
+          thumb: getHighResImage(info.thumb),
+          salePrice: currentBest ? currentBest.price : bestDeal.price,
+          normalPrice: currentBest ? currentBest.retailPrice : bestDeal.price,
+          savings: currentBest ? Math.round(Number.parseFloat(currentBest.savings)) : 0,
+          storeID: currentBest ? currentBest.storeID : '1',
+        });
 
-      return acc;
-    }, []);
+        return acc;
+      },
+      []
+    );
   }, [gameResults, wishlist]);
 
   const bestDiscountGame =
@@ -94,6 +109,7 @@ export default function WishlistPage() {
 
         <div className={styles.tabContainer}>
           <button
+            type="button"
             className={`${styles.tab} ${activeTab === 'wishlist' ? styles.activeTab : ''}`}
             onClick={() => setActiveTab('wishlist')}
           >
@@ -101,6 +117,7 @@ export default function WishlistPage() {
             Wishlist ({wishlist.length})
           </button>
           <button
+            type="button"
             className={`${styles.tab} ${activeTab === 'alerts' ? styles.activeTab : ''}`}
             onClick={() => setActiveTab('alerts')}
           >
@@ -153,6 +170,7 @@ export default function WishlistPage() {
                   </div>
 
                   <button
+                    type="button"
                     className={styles.shareButton}
                     onClick={() => {
                       const encoded = btoa(wishlist.join(','));
@@ -179,9 +197,9 @@ export default function WishlistPage() {
                   },
                 }}
               >
-                {displayedGames.map((game, idx) => (
+                {displayedGames.map((game) => (
                   <motion.div
-                    key={`${game.gameID}-${idx}`}
+                    key={game.gameID}
                     className={styles.wishlistCard}
                     variants={{
                       hidden: { opacity: 0, y: 20 },

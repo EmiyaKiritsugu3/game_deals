@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, text, jsonb, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
+import { jsonb, pgTable, text, timestamp, uniqueIndex, uuid, varchar } from 'drizzle-orm/pg-core';
 
 export const badges = pgTable('badges', {
   id: uuid().defaultRandom().primaryKey(),
@@ -9,14 +9,16 @@ export const badges = pgTable('badges', {
   criteria: jsonb().notNull(),
 });
 
-export const userBadges = pgTable('user_badges', {
-  id: uuid().defaultRandom().primaryKey(),
-  userId: uuid().notNull(),
-  badgeId: uuid().notNull(),
-  awardedAt: timestamp().defaultNow().notNull(),
-}, (table) => [
-  uniqueIndex('user_badges_user_badge_unique').on(table.userId, table.badgeId),
-]);
+export const userBadges = pgTable(
+  'user_badges',
+  {
+    id: uuid().defaultRandom().primaryKey(),
+    userId: uuid().notNull(),
+    badgeId: uuid().notNull(),
+    awardedAt: timestamp().defaultNow().notNull(),
+  },
+  (table) => [uniqueIndex('user_badges_user_badge_unique').on(table.userId, table.badgeId)]
+);
 
 export const activities = pgTable('activities', {
   id: uuid().defaultRandom().primaryKey(),
@@ -26,11 +28,13 @@ export const activities = pgTable('activities', {
   createdAt: timestamp().defaultNow().notNull(),
 });
 
-export const wishlists = pgTable('wishlists', {
-  id: uuid().defaultRandom().primaryKey(),
-  userId: uuid().notNull(),
-  gameId: uuid().notNull(),
-  addedAt: timestamp().defaultNow().notNull(),
-}, (table) => [
-  uniqueIndex('wishlists_user_game_unique').on(table.userId, table.gameId),
-]);
+export const wishlists = pgTable(
+  'wishlists',
+  {
+    id: uuid().defaultRandom().primaryKey(),
+    userId: uuid().notNull(),
+    gameId: uuid().notNull(),
+    addedAt: timestamp().defaultNow().notNull(),
+  },
+  (table) => [uniqueIndex('wishlists_user_game_unique').on(table.userId, table.gameId)]
+);

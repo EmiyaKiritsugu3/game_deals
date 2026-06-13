@@ -6,7 +6,10 @@ export interface AffiliateConfig {
 export const affiliateConfig: Record<string, AffiliateConfig> = {
   '1': { baseUrl: 'https://store.steampowered.com', params: {} },
   '7': { baseUrl: 'https://www.gog.com', params: { affiliate: 'gamedeals' } },
-  '11': { baseUrl: 'https://www.humblebundle.com', params: { charity: 'gamedeals', partner: 'gamedealsBR' } },
+  '11': {
+    baseUrl: 'https://www.humblebundle.com',
+    params: { charity: 'gamedeals', partner: 'gamedealsBR' },
+  },
   '15': { baseUrl: 'https://www.fanatical.com', params: { aff_id: 'gamedeals_fnt' } },
   '21': { baseUrl: 'https://www.wingamestore.com', params: { aff: 'gamedeals' } },
   '24': { baseUrl: 'https://store.epicgames.com', params: {} },
@@ -24,7 +27,7 @@ export const affiliateConfig: Record<string, AffiliateConfig> = {
 };
 
 export const ALLOWED_DOMAINS = new Set(
-  Object.values(affiliateConfig).map((c) => new URL(c.baseUrl).hostname),
+  Object.values(affiliateConfig).map((c) => new URL(c.baseUrl).hostname)
 );
 
 export function isValidStoreId(storeId: string): boolean {

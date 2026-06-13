@@ -13,7 +13,7 @@ export default async function HistoricalLows() {
 
   // 2. Consolidate and de-duplicate candidates
   const hlSource = [...broadPool, ...bestDeals, ...popular];
-  const uniqueCandidatesMap = new Map();
+  const uniqueCandidatesMap = new Map<string, (typeof hlSource)[number]>();
   hlSource.forEach((d) => {
     if (!uniqueCandidatesMap.has(d.gameID)) uniqueCandidatesMap.set(d.gameID, d);
   });
@@ -37,7 +37,9 @@ export default async function HistoricalLows() {
     })
   );
 
-  const hlDeals = verifiedHLs.filter((d): d is any => d !== null).slice(0, 8);
+  const hlDeals = verifiedHLs
+    .filter((d): d is (typeof hlCandidates)[number] => d !== null)
+    .slice(0, 8);
 
   if (hlDeals.length === 0) return null;
 

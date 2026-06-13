@@ -1,13 +1,12 @@
 import DealRow from '@/components/DealRow';
+import EndingSoon from '@/components/EndingSoon';
 import FlashSales from '@/components/FlashSales';
 import Freebies from '@/components/Freebies';
 import GameCard from '@/components/GameCard';
 import HeroSection from '@/components/HeroSection';
+import HistoricalLows from '@/components/HistoricalLows';
 import { getDeals } from '@/services/api';
 import styles from './page.module.css';
-
-import EndingSoon from '@/components/EndingSoon';
-import HistoricalLows from '@/components/HistoricalLows';
 
 // ISR: revalida a cada 1h
 export const revalidate = 3600;

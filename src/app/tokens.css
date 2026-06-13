@@ -1,0 +1,20 @@
+/* ─── GameDeals Design Tokens ─── */
+@theme {
+  /* Core Colors */
+  --color-bg-dark: hsl(228 15% 13%);
+  --color-bg-card: hsl(226 14% 18%);
+  --color-bg-muted: hsl(226 14% 24%);
+  --color-text-primary: hsl(0 0% 98%);
+  --color-text-muted: hsl(226 10% 65%);
+  --color-border: hsl(226 14% 28%);
+
+  /* Accent */
+  --color-primary: hsl(150 100% 42%);
+  --color-primary-foreground: hsl(150 100% 10%);
+  --color-accent-hl: hsl(150 88% 27%);
+  --color-accent-hl-foreground: hsl(150 100% 85%);
+  --color-accent-fire: hsl(22 100% 59%);
+
+  /* Typography */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}

@@ -4,7 +4,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Github, Globe, Mail, ShieldCheck, X } from 'lucide-react';
 import { useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
+
 const supabase = createClient();
+
 import styles from './AuthModal.module.css';
 
 interface AuthModalProps {
@@ -68,7 +70,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <button className={styles.closeButton} onClick={onClose}>
+            <button type="button" className={styles.closeButton} onClick={onClose}>
               <X size={20} />
             </button>
 
@@ -79,6 +81,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
             <div className={styles.socialButtons}>
               <button
+                type="button"
                 className={`${styles.socialBtn} ${styles.google}`}
                 onClick={() => handleSocialLogin('google')}
                 disabled={isLoading}
@@ -87,6 +90,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 <span>Continue with Google</span>
               </button>
               <button
+                type="button"
                 className={`${styles.socialBtn} ${styles.discord}`}
                 onClick={() => handleSocialLogin('discord')}
                 disabled={isLoading}

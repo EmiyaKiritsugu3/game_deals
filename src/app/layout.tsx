@@ -2,10 +2,10 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { Suspense } from 'react';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
-import Navbar from '@/components/Navbar';
+import { Suspense } from 'react';
 import CookieBanner from '@/components/CookieBanner';
+import Navbar from '@/components/Navbar';
 import SyncManager from '@/components/SyncManager';
 import ReactQueryProvider from '@/providers/ReactQueryProvider';
 import './globals.css';
@@ -17,7 +17,8 @@ const inter = Inter({
 
 const SITE_URL = 'https://gamedeals.com.br';
 const SITE_NAME = 'GameDeals';
-const SITE_DESCRIPTION = 'Find the best game prices across Steam, Epic, GOG, and more. Track price drops, set alerts, and never miss a deal.';
+const SITE_DESCRIPTION =
+  'Find the best game prices across Steam, Epic, GOG, and more. Track price drops, set alerts, and never miss a deal.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -26,7 +27,17 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
-  keywords: ['game deals', 'cheap games', 'steam deals', 'epic games', 'gog', 'price tracker', 'game prices', 'best deals', 'game sales'],
+  keywords: [
+    'game deals',
+    'cheap games',
+    'steam deals',
+    'epic games',
+    'gog',
+    'price tracker',
+    'game prices',
+    'best deals',
+    'game sales',
+  ],
   authors: [{ name: SITE_NAME }],
   creator: SITE_NAME,
   publisher: SITE_NAME,
@@ -91,15 +102,16 @@ export default async function RootLayout({
       'query-input': 'required name=search_term_string',
     },
   };
+  const jsonLdScript = (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
+  );
 
   return (
     <html lang="en">
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      </head>
+      <head>{jsonLdScript}</head>
       <body className={`${inter.variable} antialiased`}>
         <Suspense>
           <NuqsAdapter>

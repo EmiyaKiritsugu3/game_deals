@@ -70,7 +70,7 @@ export default function PriceAlertModal({
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <button className={styles.closeButton} onClick={onClose}>
+            <button type="button" className={styles.closeButton} onClick={onClose}>
               <X size={20} />
             </button>
 
@@ -99,8 +99,11 @@ export default function PriceAlertModal({
             </div>
 
             <div className={styles.inputSection}>
-              <label className={styles.inputLabel}>Alert me when price is below:</label>
+              <label className={styles.inputLabel} htmlFor="price-range">
+                Alert me when price is below:
+              </label>
               <input
+                id="price-range"
                 type="range"
                 min={0}
                 max={currentPrice * 1.2}
@@ -122,10 +125,13 @@ export default function PriceAlertModal({
             </div>
 
             <div className={styles.optionsSection}>
-              <div
-                className={styles.checkboxGroup}
-                onClick={() => setIsKeyshopAllowed(!isKeyshopAllowed)}
-              >
+              <label className={styles.checkboxGroup}>
+                <input
+                  type="checkbox"
+                  className={styles.hiddenCheckbox}
+                  checked={isKeyshopAllowed}
+                  onChange={() => setIsKeyshopAllowed(!isKeyshopAllowed)}
+                />
                 <div className={`${styles.checkbox} ${isKeyshopAllowed ? styles.checked : ''}`}>
                   {isKeyshopAllowed && <X size={14} color="white" />}
                 </div>
@@ -135,19 +141,27 @@ export default function PriceAlertModal({
                     May result in lower prices but higher risk.
                   </span>
                 </div>
-              </div>
+              </label>
             </div>
 
             <div className={styles.actionButtons}>
-              <button className={`${styles.button} ${styles.cancelButton}`} onClick={onClose}>
+              <button
+                type="button"
+                className={`${styles.button} ${styles.cancelButton}`}
+                onClick={onClose}
+              >
                 Cancel
               </button>
-              <button className={`${styles.button} ${styles.saveButton}`} onClick={handleSave}>
+              <button
+                type="button"
+                className={`${styles.button} ${styles.saveButton}`}
+                onClick={handleSave}
+              >
                 {hasAlert(gameID) ? 'Update Alert' : 'Create Alert'}
               </button>
 
               {hasAlert(gameID) && (
-                <button className={styles.removeButton} onClick={handleRemove}>
+                <button type="button" className={styles.removeButton} onClick={handleRemove}>
                   <Trash2 size={14} /> Stop tracking this game
                 </button>
               )}
