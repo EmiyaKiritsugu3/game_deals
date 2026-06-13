@@ -125,14 +125,13 @@ export default function PriceAlertModal({
             </div>
 
             <div className={styles.optionsSection}>
-              {/* biome-ignore lint/a11y/useSemanticElements: custom styled checkbox toggle */}
-              <button
-                type="button"
-                className={styles.checkboxGroup}
-                onClick={() => setIsKeyshopAllowed(!isKeyshopAllowed)}
-                role="checkbox"
-                aria-checked={isKeyshopAllowed}
-              >
+              <label className={styles.checkboxGroup}>
+                <input
+                  type="checkbox"
+                  className={styles.hiddenCheckbox}
+                  checked={isKeyshopAllowed}
+                  onChange={() => setIsKeyshopAllowed(!isKeyshopAllowed)}
+                />
                 <div className={`${styles.checkbox} ${isKeyshopAllowed ? styles.checked : ''}`}>
                   {isKeyshopAllowed && <X size={14} color="white" />}
                 </div>
@@ -142,7 +141,7 @@ export default function PriceAlertModal({
                     May result in lower prices but higher risk.
                   </span>
                 </div>
-              </button>
+              </label>
             </div>
 
             <div className={styles.actionButtons}>

@@ -68,8 +68,7 @@ export function StoreCompareChart({ data }: { readonly data: StorePrice[] }) {
               {chartData.map((_entry, index) => {
                 const fill =
                   index === 0 ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground) / 0.5)';
-                // biome-ignore lint/suspicious/noArrayIndexKey: static sorted list, no stable id
-                return <Cell key={index} fill={fill} />;
+                return <Cell key={_entry.name} fill={fill} />;
               })}
             </Bar>
           </BarChart>

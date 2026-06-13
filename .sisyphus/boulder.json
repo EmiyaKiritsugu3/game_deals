@@ -23,7 +23,13 @@
     "ses_14159cdbaffeq7zQTtFXBM2AMq",
     "ses_14158bf78ffe8SAlGFE3PC35hL",
     "ses_14157b167ffeIPrd2sN71wr3D6",
-    "ses_1414ab0c8ffeFnXCDa2rJUTvYe"
+    "ses_1414ab0c8ffeFnXCDa2rJUTvYe",
+    "ses_14102b2c9ffeqWSADXwI8dHugx",
+    "ses_141016975ffedb7J2WQiA2KHpC",
+    "ses_14100a010ffe9C7RAzjpccP9eD",
+    "ses_140fdbb52ffeQQsJ4G0XcNg2tz",
+    "ses_140f58387ffegSmPTeLt64frYP",
+    "ses_140f570cfffeWgO43QJqsh9s5i"
   ],
   "plan_name": "pr10-quality-fix",
   "worktree_path": null,
@@ -31,7 +37,7 @@
     "todo:1": {
       "task_key": "todo:1",
       "task_label": "1",
-      "task_title": "Contar viola\u00e7\u00f5es reais de cada regra desabilitada",
+      "task_title": "Contar violações reais de cada regra desabilitada",
       "session_id": "ses_141a018aeffew8Jnw1twK6poi0",
       "agent": "Sisyphus-Junior",
       "category": "quick",
@@ -40,7 +46,7 @@
     "todo:3": {
       "task_key": "todo:3",
       "task_label": "3",
-      "task_title": "biome.json \u2014 overrides para JSON-LD (dangerouslySetInnerHtml)",
+      "task_title": "biome.json — overrides para JSON-LD (dangerouslySetInnerHtml)",
       "session_id": "ses_1419c165fffeFT9067jcY9veLU",
       "agent": "Sisyphus-Junior",
       "category": "deep",
@@ -49,7 +55,7 @@
     "todo:5": {
       "task_key": "todo:5",
       "task_label": "5",
-      "task_title": "Tipar CheapShark API responses \u2014 `unknown` + narrowing",
+      "task_title": "Tipar CheapShark API responses — `unknown` + narrowing",
       "session_id": "ses_14197f990ffemJUUMM5DmeA5k6",
       "agent": "Sisyphus-Junior",
       "category": "quick",
@@ -58,7 +64,7 @@
     "todo:9": {
       "task_key": "todo:9",
       "task_label": "9",
-      "task_title": "next.config.ts \u2014 remotePatterns para store favicons e CheapShark",
+      "task_title": "next.config.ts — remotePatterns para store favicons e CheapShark",
       "session_id": "ses_1418f31d7ffengDDBG4HLyqqxb",
       "agent": "Sisyphus-Junior",
       "category": "quick",
@@ -67,7 +73,7 @@
     "todo:10": {
       "task_key": "todo:10",
       "task_label": "10",
-      "task_title": "`<img>` \u2192 `<Image>` optimized \u2014 bundles, collections, game thumbs",
+      "task_title": "`<img>` → `<Image>` optimized — bundles, collections, game thumbs",
       "session_id": "ses_1418de758ffeZVXxSziGT45wOv",
       "agent": "Sisyphus-Junior",
       "category": "visual-engineering",
@@ -76,11 +82,11 @@
     "todo:12": {
       "task_key": "todo:12",
       "task_label": "12",
-      "task_title": "Playwright screenshot diff \u2014 confirmar sem regress\u00e3o visual",
-      "session_id": "ses_14187daf8ffeow60umID8E1JIM",
+      "task_title": "Playwright screenshot diff — confirmar sem regressão visual",
+      "session_id": "ses_140f58387ffegSmPTeLt64frYP",
       "agent": "Sisyphus-Junior",
       "category": "quick",
-      "updated_at": "2026-06-13T00:53:56.472Z"
+      "updated_at": "2026-06-13T03:34:00.489Z"
     }
   }
 }
