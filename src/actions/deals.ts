@@ -1,9 +1,9 @@
 'use server';
 
 import { desc, eq, sql } from 'drizzle-orm';
-import { fallbackDeals } from '@/data/fallbackDeals';
 import { db } from '@/db';
 import { deals as dealsTable, games, priceHistory } from '@/db/schema';
+import { fetchDealsWithFallback } from '@/services/fetch-helpers';
 import type { Deal, GameDetails, Store } from '@/types/game';
 
 const BASE_URL = 'https://www.cheapshark.com/api/1.0';
@@ -55,17 +55,7 @@ function buildDealsUrl(params: {
   return url;
 }
 
-async function fetchDealsWithFallback(url: URL): Promise<Deal[]> {
-  try {
-    const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
-    if (!res.ok) return fallbackDeals;
-    const data = (await res.json()) as Deal[];
-    return data.length > 0 ? data : fallbackDeals;
-  } catch (e) {
-    console.error('getDealsAction error:', e);
-    return fallbackDeals;
-  }
-}
+// (fetchDealsWithFallback moved to services/fetch-helpers.ts)
 
 /**
  * Busca deals da CheapShark (com fallback)
@@ -95,7 +85,7 @@ export async function getDealsAction(params?: {
     title,
   });
 
-  return fetchDealsWithFallback(url);
+  return fetchDealsWithFallback(url.toString());
 }
 
 // fallow-ignore-next-line unused-export

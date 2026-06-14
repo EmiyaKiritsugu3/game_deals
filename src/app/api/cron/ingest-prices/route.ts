@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { ingestPricesAction } from '@/actions/deals';
+import { verifyCronAuth } from '@/lib/cron-auth';
 
 /**
  * Vercel Cron Job — roda a cada 4h
@@ -7,11 +8,8 @@ import { ingestPricesAction } from '@/actions/deals';
  * Auth: Bearer token via CRON_SECRET
  */
 export async function GET(request: Request) {
-  // Verificar auth
-  const authHeader = request.headers.get('authorization');
-  if (!process.env.CRON_SECRET || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const authError = verifyCronAuth(request);
+  if (authError) return authError;
 
   console.log('[Cron] Starting price ingestion...');
 
