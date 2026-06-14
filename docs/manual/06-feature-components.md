@@ -1,86 +1,86 @@
 # 06. Feature Components
 
-Componentes maiores que carregam inteligência de negócio independente. Eles podem viver, morrer ou quebrar sozinhos sem derrubar a tela (Graças à arquitetura Next.js App Router).
+Standalone business-logic components that carry independent intelligence. They can live, die, or break on their own without taking down the screen (thanks to Next.js App Router architecture).
 
 ## 1. Historical Lows (`src/components/HistoricalLows.tsx`)
 
-- **Componente Servidor (Server Component):** Executa de forma assíncrona pura, sem `'use client'`. Não usa TanStack Query — busca dados diretamente da CheapShark API.
-- **Lógica de Negócio:**
-  A CheapShark API devolve vitrines de jogos em promoção, mas não avisa proativamente quais bateram o preço histórico. Esse componente:
-  1. Chama `Promise.all` para buscar três listagens: Deal Rating, Savings e Recent.
-  2. Deduplica os resultados com `Array.from(new Map(...).values())`.
-  3. Varre a lista com `Promise.all` chamando `getGame(id)` para cada candidato.
-  4. Filtra apenas deals onde `salePrice <= cheapestPriceEver * 1.01` (tolerância de 1%).
-  5. Retorna `null` se não houver lows — colapsa a UI graças ao layout Flexbox.
-- **Estilização:** Tailwind v4 com tokens `@theme` + estilo local encapsulado.
+- **Server Component:** Purely async execution, no `'use client'`. No TanStack Query — fetches directly from the CheapShark API.
+- **Business Logic:**
+  CheapShark returns deal listings but doesn't proactively flag which ones hit historical lows. This component:
+  1. Calls `Promise.all` to fetch three listings: Deal Rating, Savings, and Recent.
+  2. Deduplicates results with `Array.from(new Map(...).values())`.
+  3. Scans the list with `Promise.all` calling `getGame(id)` for each candidate.
+  4. Filters only deals where `salePrice <= cheapestPriceEver * 1.01` (1% tolerance).
+  5. Returns `null` if no lows found — collapses the UI thanks to Flexbox layout.
+- **Styling:** Tailwind v4 with `@theme` tokens + encapsulated local styles.
 
 ## 2. ActivityFeed (`src/services/social.ts`)
 
-A engrenagem do engajamento (Gamificação).
+The engagement engine (Gamification).
 
-- **Abordagem:** Não existe como componente React isolado. A lógica social vive em `src/services/social.ts`, que consome o cliente Supabase diretamente para operações de playlist, badges e estatísticas.
-- **Integração com Gamificação:**
-  - `createPlaylist()` / `getUserPlaylists()` — CRUD de playlists via Supabase.
-  - `getUserStats()` / `getUserBadges()` — estatísticas e conquistas do usuário.
-  - `checkAchievements()` — lógica de concessão automática de badges.
-- **Server Actions:** Operações críticas de gamificação (XP, badges) são wrappers em `src/actions/gamification.ts`, chamadas de componentes client ou rotas.
-- **Estilização:** Os componentes que consomem esse serviço (`AuthModal`, `AddToListModal`) usam Tailwind v4 com tokens `@theme`.
+- **Approach:** Not an isolated React component. Social logic lives in `src/services/social.ts`, consuming the Supabase client directly for playlists, badges, and stats.
+- **Gamification Integration:**
+  - `createPlaylist()` / `getUserPlaylists()` — CRUD playlists via Supabase.
+  - `getUserStats()` / `getUserBadges()` — user stats and achievements.
+  - `checkAchievements()` — automatic badge award logic.
+- **Server Actions:** Critical gamification operations (XP, badges) are wrappers in `src/actions/gamification.ts`, called from client components or routes.
+- **Styling:** Components consuming this service (`AuthModal`, `AddToListModal`) use Tailwind v4 with `@theme` tokens.
 
 ## 3. Dynamic Charts (`src/components/DynamicCharts.tsx` + `src/components/Charts.tsx`)
 
-- **`'use client'`:** Necessário para interatividade dos gráficos Recharts.
-- **Lazy Loading:** Recharts é importado dinamicamente via `next/dynamic` com `{ ssr: false }` para não inflar o bundle inicial:
+- **`'use client'`:** Required for Recharts chart interactivity.
+- **Lazy Loading:** Recharts is dynamically imported via `next/dynamic` with `{ ssr: false }` to avoid bloating the initial bundle:
   ```typescript
   const PriceHistoryChartLazy = dynamic(
     () => import('./Charts').then((mod) => mod.PriceHistoryChart),
     { ssr: false, loading: () => <div>Loading History...</div> }
   );
   ```
-- **TanStack Query Hook:** `DynamicPriceHistory` chama `useDailyPriceHistory(gameId)` de `@/hooks/usePriceHistory`, que por sua vez chama a Server Action `getDailyPriceHistoryAction()` no banco (Drizzle + PostgreSQL). Se o jogo não tem gameId, o hook é desabilitado via `enabled: !!gameId`.
-- **Render Logic:** O `PriceHistoryChart` renderiza `LineChart` do Recharts. Usa dados reais do banco quando disponíveis (`realData.length > 2`), senão gera dados simulados via `generatePriceHistory()`.
-- **`DynamicStoreCompare`:** Renderiza `BarChart` comparando preços entre lojas.
-- **Estilização:** Tailwind v4 com variáveis CSS `hsl(var(--...))` para cores do tema escuro.
+- **TanStack Query Hook:** `DynamicPriceHistory` calls `useDailyPriceHistory(gameId)` from `@/hooks/usePriceHistory`, which in turn calls the Server Action `getDailyPriceHistoryAction()` against the database (Drizzle + PostgreSQL). If the game has no gameId, the hook is disabled via `enabled: !!gameId`.
+- **Render Logic:** `PriceHistoryChart` renders a `LineChart` from Recharts. Uses real database data when available (`realData.length > 2`), otherwise generates simulated data via `generatePriceHistory()`.
+- **`DynamicStoreCompare`:** Renders a `BarChart` comparing prices across stores.
+- **Styling:** Tailwind v4 with CSS variables `hsl(var(--...))` for dark theme colors.
 
 ## 4. Freebies (`src/components/Freebies.tsx`)
 
-- **Componente Cliente/Servidor Híbrido:** Recebe `deals: Deal[]` como prop, populada pelo Server Component da Home Page.
-- **Query:** A Home Page chama `getDeals({ upperPrice: "0" })` diretamente na CheapShark API (sem TanStack Query — é chamada única server-side).
-- **Tratamento de Vazio:** Se `deals` for vazio, retorna `null` — a linha colapsa automaticamente graças ao Flexbox do layout.
-- **Render:** Slice de 6 deals, cada um com thumbnail (via `next/image`), badge "GRÁTIS" e voucher "-100%".
-- **Estilização:** Tailwind v4 + design tokens do `tokens.css`.
+- **Hybrid Client/Server Component:** Receives `deals: Deal[]` as a prop, populated by the Home Page Server Component.
+- **Query:** The Home Page calls `getDeals({ upperPrice: "0" })` directly on the CheapShark API (no TanStack Query — single server-side call).
+- **Empty State:** If `deals` is empty, returns `null` — the row collapses automatically thanks to Flexbox layout.
+- **Render:** Slice of 6 deals, each with thumbnail (via `next/image`), "FREE" badge, and "-100%" voucher.
+- **Styling:** Tailwind v4 + design tokens from `tokens.css`.
 
 ## 5. Search Results (`src/app/search/page.tsx`)
 
-- **Componente Servidor:** Página de busca server-side com suporte a query params (`q`, `upperPrice`, `storeID`).
-- **Data Fetching:** Chama `getDeals()` com os parâmetros do usuário diretamente da CheapShark API. Para busca textual, envia `title` nos params.
-- **Stores Sidebar:** Busca lojas ativas via `getStores()` + fetch direto da CheapShark.
-- **Render:** Grid de `GameCard` components. Estado vazio com mensagem amigável.
-- **Estilização:** Tailwind v4 com classes utilitárias globais + design tokens do `tokens.css`.
+- **Server Component:** Server-side search page with query param support (`q`, `upperPrice`, `storeID`).
+- **Data Fetching:** Calls `getDeals()` with user parameters directly from CheapShark API. For text search, sends `title` in params.
+- **Stores Sidebar:** Fetches active stores via `getStores()` + direct CheapShark fetch.
+- **Render:** Grid of `GameCard` components. Empty state with friendly message.
+- **Styling:** Tailwind v4 with global utility classes + design tokens from `tokens.css`.
 
 ## 6. Bundles (`src/app/bundles/page.tsx`)
 
-- **Componente Servidor:** Página de bundles agregados de lojas (Humble Bundle, Fanatical).
-- **Data Source:** Dados estáticos em `src/data/bundles.ts` — simulação até integração com APIs reais.
-- **Render:** Grid de cards de bundle, cada um com:
-  - Informações da loja (ícone + nome)
-  - Grid de thumbnails dos jogos inclusos
-  - Preço, valor total e badge de economia
-  - Contagem regressiva de dias restantes
-- **Estilização:** Tailwind v4 com tokens de cor e tipografia do `tokens.css`.
+- **Server Component:** Aggregated bundle listings from stores (Humble Bundle, Fanatical).
+- **Data Source:** Static data in `src/data/bundles.ts` — simulated until real API integration.
+- **Render:** Grid of bundle cards, each with:
+  - Store info (icon + name)
+  - Thumbnail grid of included games
+  - Price, total value, and savings badge
+  - Countdown of remaining days
+- **Styling:** Tailwind v4 with color and typography tokens from `tokens.css`.
 
 ## 7. Collections (`src/app/collections/[slug]/page.tsx`)
 
-- **Componente Servidor:** Página de detalhe de coleção com ISR via `generateStaticParams()`.
-- **Data Source:** Metadados estáticos em `src/data/collections.ts` com lista de gameIDs.
-- **Data Fetching:** Busca todos os jogos em paralelo via `Promise.all(collection.gameIDs.map(id => getGame(id)))`. Ordena deals de cada jogo pelo menor preço.
-- **Render:** Grid de linhas com thumbnail, título, preço (ou FREE) e CTA "View Deal".
-- **Collections Index (`src/app/collections/page.tsx`):** Card grid com metadados estáticos, links para detalhe.
+- **Server Component:** Collection detail page with ISR via `generateStaticParams()`.
+- **Data Source:** Static metadata in `src/data/collections.ts` with a list of gameIDs.
+- **Data Fetching:** Fetches all games in parallel via `Promise.all(collection.gameIDs.map(id => getGame(id)))`. Sorts each game's deals by lowest price.
+- **Render:** Grid rows with thumbnail, title, price (or FREE), and "View Deal" CTA.
+- **Collections Index (`src/app/collections/page.tsx`):** Card grid with static metadata, linking to detail pages.
 
 ---
 
-## Hooks TanStack Query
+## TanStack Query Hooks
 
-Hooks client-side que encapsulam Server Actions com cache e stale-while-revalidate:
+Client-side hooks that wrap Server Actions with cache and stale-while-revalidate:
 
 ### `useDailyPriceHistory(gameId, days)` — `src/hooks/usePriceHistory.ts`
 
@@ -129,9 +129,9 @@ export function useWishlistGames(gameIds: string[]) {
 
 ---
 
-## Estrutura de Estilização
+## Styling Architecture
 
-O projeto usa **Tailwind CSS v4** importado via `@import "tailwindcss"` no `globals.css`. Tokens customizados definidos em `tokens.css` com `@theme`:
+The project uses **Tailwind CSS v4** imported via `@import "tailwindcss"` in `globals.css`. Custom tokens defined in `tokens.css` with `@theme`:
 
 ```css
 @theme {
@@ -142,24 +142,24 @@ O projeto usa **Tailwind CSS v4** importado via `@import "tailwindcss"` no `glob
 }
 ```
 
-O sistema global de design tokens é gerenciado pelo Tailwind v4 via `@theme`, com componentes consumindo as variáveis CSS geradas automaticamente.
+The global design token system is managed by Tailwind v4 via `@theme`, with components consuming the automatically generated CSS variables.
 
 ---
 
 ## Server Actions
 
-As Server Actions em `src/actions/deals.ts` e `src/actions/search.ts` servem como ponte entre componentes client e dados externos:
+Server Actions in `src/actions/deals.ts` and `src/actions/search.ts` serve as the bridge between client components and external data:
 
-| Action | Função | Usada por |
-|--------|--------|-----------|
-| `getDealsAction()` | Busca deals da CheapShark com validação e fallback | Hooks TanStack Query / Server Components |
-| `getGameAction(id)` | Detalhes de um jogo | Server Components |
-| `getStoresAction()` | Mapa lojaID → nome | Hooks / Componentes |
-| `getDailyPriceHistoryAction(gameId, days)` | Histórico diário do banco (Drizzle) | `useDailyPriceHistory` |
-| `getWeeklyPriceHistoryAction(gameId, weeks)` | Histórico semanal do banco | `useWeeklyPriceHistory` |
-| `searchGamesAction(query, limit)` | Busca textual via Typesense (fallback CheapShark) | Componentes de busca |
-| `ingestPricesAction()` | Cron job: ingestão de deals no banco | Rota `/api/cron/ingest-prices` |
+| Action | Function | Used By |
+|--------|----------|---------|
+| `getDealsAction()` | Fetches deals from CheapShark with validation and fallback | TanStack Query Hooks / Server Components |
+| `getGameAction(id)` | Game details | Server Components |
+| `getStoresAction()` | StoreID → name mapping | Hooks / Components |
+| `getDailyPriceHistoryAction(gameId, days)` | Daily history from DB (Drizzle) | `useDailyPriceHistory` |
+| `getWeeklyPriceHistoryAction(gameId, weeks)` | Weekly history from DB | `useWeeklyPriceHistory` |
+| `searchGamesAction(query, limit)` | Text search via Typesense (fallback CheapShark) | Search components |
+| `ingestPricesAction()` | Cron job: deal ingestion into DB | Route `/api/cron/ingest-prices` |
 
 ---
 
-🎉 **Próximo:** Você leu o Manual dos Feature Components. Esses componentes formam a camada de inteligência do GameDeals — combinando Server Components para dados frescos, TanStack Query para cache client-side, Server Actions como ponte segura, e Tailwind v4 para estilização consistente.
+🎉 **Next:** You've read the Feature Components Manual. These components form the intelligence layer of GameDeals — combining Server Components for fresh data, TanStack Query for client-side caching, Server Actions as a safe bridge, and Tailwind v4 for consistent styling.

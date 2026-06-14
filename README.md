@@ -1,41 +1,41 @@
 # GameDeals 🎮
 
-Agregador de ofertas de jogos — Next.js 16, Supabase SSR, Drizzle ORM, TanStack Query, Typesense.
+Game deal aggregator — Next.js 16, Supabase SSR, Drizzle ORM, TanStack Query, Typesense.
 
 ## Stack
 
 | Layer | Tech |
 |-------|------|
 | Framework | Next.js 16 (App Router, Turbopack) |
-| Linguagem | TypeScript (strict) |
-| Estilização | Tailwind CSS v4 |
-| Banco | PostgreSQL (Supabase) + Drizzle ORM |
+| Language | TypeScript (strict) |
+| Styling | Tailwind CSS v4 |
+| Database | PostgreSQL (Supabase) + Drizzle ORM |
 | Auth | Supabase SSR (server + browser client) |
-| Dados | CheapShark API |
-| Busca | Typesense (fallback CheapShark) |
+| Data | CheapShark API |
+| Search | Typesense (fallback CheapShark) |
 | Client State | Zustand (wishlist, auth, alerts) |
 | Server Data | TanStack Query |
-| Linter/Formatter | Biome (único — sem ESLint/Prettier) |
+| Linter/Formatter | Biome (sole — no ESLint/Prettier) |
 | Dead Code | Knip |
-| Auditoria | Fallow |
+| Audit | Fallow |
 | E2E | Playwright |
 | Unit | Vitest |
-| Hooks Git | Husky v9 + lint-staged |
+| Git Hooks | Husky v9 + lint-staged |
 
-## Comandos
+## Commands
 
 ```bash
 pnpm dev                  # Dev server (Turbopack)
-pnpm build                # Build production (precisa .env.local)
-pnpm start                # Servidor produção
+pnpm build                # Production build (needs .env.local)
+pnpm start                # Production server
 pnpm lint                 # Biome check
 pnpm lint:fix             # Biome check + auto-fix
 pnpm format               # Biome format
 pnpm test                 # Vitest unit
 pnpm test:watch           # Vitest watch
-pnpm test:coverage        # Vitest com cobertura
+pnpm test:coverage        # Vitest with coverage
 pnpm test:e2e             # Playwright E2E
-pnpm check                # CI completo local (lint→tsc→test→build→knip→fallow)
+pnpm check                # Local full CI (lint→tsc→test→build→knip→fallow)
 pnpm knip                 # Dead code analysis
 pnpm audit                # pnpm audit --audit-level=high
 pnpm fallow:audit         # Fallow security audit
@@ -45,11 +45,11 @@ pnpm db:push              # Drizzle Kit push schema (dev)
 pnpm db:studio            # Drizzle Studio (visual DB browser)
 ```
 
-## CI Local
+## Local CI
 
-Pre-commit: `pnpm exec lint-staged` (Biome format nos arquivos staged).
+Pre-commit: `pnpm exec lint-staged` (Biome format on staged files).
 Pre-push: `pnpm check` (lint → tsc → test → build → knip → fallow).
-CI (GitHub Actions): `.github/workflows/ci.yml` — mesmos passos.
+CI (GitHub Actions): `.github/workflows/ci.yml` — same steps.
 
 ## Setup
 
@@ -59,54 +59,54 @@ cp .env.example .env.local
 pnpm dev
 ```
 
-## Variáveis de Ambiente
+## Environment Variables
 
-| Variável | Obrigatória | Descrição |
-|----------|-------------|-----------|
-| `DATABASE_URL` | Sim | PostgreSQL (Supabase) |
-| `NEXT_PUBLIC_SUPABASE_URL` | Sim | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Sim | Supabase anon key |
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `DATABASE_URL` | Yes | PostgreSQL (Supabase) |
+| `NEXT_PUBLIC_SUPABASE_URL` | Yes | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Yes | Supabase anon key |
 | `SUPABASE_SERVICE_ROLE_KEY` | Cron | Service role key |
-| `CRON_SECRET` | Cron | Protege endpoints `/api/cron/*` |
+| `CRON_SECRET` | Cron | Protects `/api/cron/*` endpoints |
 | `TYPESENSE_ADMIN_KEY` | Search | Admin key (server-side) |
 | `NEXT_PUBLIC_TYPESENSE_SEARCH_KEY` | Search | Search-only key (client-safe) |
 | `NEXT_PUBLIC_TYPESENSE_URL` | Search | Typesense host |
 
-## Estrutura
+## Structure
 
 ```
 src/
-  app/              # App Router (layout + páginas + rotas)
-    api/cron/       # Endpoints cron (CRON_SECRET)
+  app/              # App Router (layout + pages + routes)
+    api/cron/       # Cron endpoints (CRON_SECRET)
     @modal/         # Intercepted route modal
-    game/[id]/      # Detalhe do jogo
-    out/            # Redirect de afiliado
-    wishlist/       # Wishlist (protegida)
-    search/         # Busca
+    game/[id]/      # Game detail
+    out/            # Affiliate redirect
+    wishlist/       # Wishlist (protected)
+    search/         # Search
     bundles/        # Bundles
-    collections/    # Coleções
+    collections/    # Collections
   actions/          # Server Actions
-  components/       # Componentes React
+  components/       # React components
   db/               # Drizzle client + schema
   hooks/            # TanStack Query hooks
-  lib/              # Configs (Typesense, afiliados)
+  lib/              # Configs (Typesense, affiliates)
   services/         # API client (CheapShark)
   store/            # Zustand stores
   utils/            # Supabase clients (server/middleware/browser)
 ```
 
-## Documentação
+## Documentation
 
-| Documento | Descrição |
-|-----------|-----------|
-| [Index](docs/index.md) | Visão geral da documentação |
-| [Arquitetura](docs/index.md#arquitetura) | Decisões arquiteturais e diagramas C4 |
-| [Release Process](docs/release-process.md) | Checklist de release e rollback |
-| [API Reference](docs/api-reference.md) | Referência de endpoints e Server Actions |
-| [Runbook](docs/runbook.md) | Procedimentos operacionais e troubleshooting |
-| [Glossário](docs/glossary.md) | Termos e conceitos do domínio |
-| [Contribuição](CONTRIBUTING.md) | Guia de contribuição |
-| [Use Cases](docs/use-cases.md) | Fluxos de uso do sistema |
-| [Test Strategy](docs/test-strategy.md) | Estratégia de testes |
-| [Threat Model](docs/security/threat-model.md) | Modelo de ameaças STRIDE |
-| [Templates](docs/templates/README.md) | Templates de postmortem e PR/FAQ |
+| Document | Description |
+|----------|-------------|
+| [Index](docs/index.md) | Documentation overview |
+| [Architecture](docs/index.md#architecture) | Architectural decisions and C4 diagrams |
+| [Release Process](docs/release-process.md) | Release and rollback checklist |
+| [API Reference](docs/api-reference.md) | Endpoint and Server Action reference |
+| [Runbook](docs/runbook.md) | Operational procedures and troubleshooting |
+| [Glossary](docs/glossary.md) | Domain terms and concepts |
+| [Contributing](CONTRIBUTING.md) | Contribution guide |
+| [Use Cases](docs/use-cases.md) | System usage flows |
+| [Test Strategy](docs/test-strategy.md) | Testing strategy |
+| [Threat Model](docs/security/threat-model.md) | STRIDE threat model |
+| [Templates](docs/templates/README.md) | Postmortem and PR/FAQ templates |

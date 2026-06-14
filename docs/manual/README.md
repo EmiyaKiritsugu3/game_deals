@@ -1,29 +1,29 @@
-# 📖 GameDeals: O Manual Absoluto e Enciclopédia do Projeto
+# GameDeals: The Absolute Manual & Project Encyclopedia
 
-Este diretório contém a dissecagem técnica completa, lógica e arquitetural do projeto **GameDeals**. Ele foi projetado não apenas para documentar "o que" o código faz, mas sim **"por que"** ele foi escrito dessa exata maneira, servindo como o mapa definitivo para recreação ou manutenção do sistema.
+This directory contains the complete technical, logical, and architectural dissection of the **GameDeals** project. It is designed not just to document "what" the code does, but **"why"** it was written that exact way — serving as the definitive map for recreating or maintaining the system.
 
 > [!IMPORTANT]
-> A leitura deste manual deve ser feita de forma sequencial para garantir que as decisões de infraestrutura sejam compreendidas antes da dissecagem dos componentes visuais.
+> This manual should be read sequentially to ensure infrastructure decisions are understood before dissecting visual components.
 
-## 🗂️ Índice Estrutural
+## Structural Index
 
-1. **[01. Arquitetura e Decisões Fundamentais](01-architecture-and-decisions.md)**
-   A base filosófica do projeto. Por que Next.js 16 com App Router? Por que Tailwind CSS v4? As escolhas de estado (Zustand + TanStack Query) e persistência (Drizzle ORM + PostgreSQL). Como organizamos o repositório.
+1. **[01. Architecture and Fundamental Decisions](01-architecture-and-decisions.md)**
+   The philosophical foundation of the project. Why Next.js 16 with App Router? Why Tailwind CSS v4? State management choices (Zustand + TanStack Query) and persistence (Drizzle ORM + PostgreSQL). How the repository is organized.
 
-2. **[02. Infraestrutura de API e Serviços](02-api-and-services.md)**
-   A arquitetura de dados completa: Server Actions como camada primária de dados, TanStack Query para cache e refetch no cliente, cron endpoints para pipelines agendados, e a CheapShark API com fallback resiliente e suporte a grey markets.
+2. **[02. API Infrastructure and Services](02-api-and-services.md)**
+   Complete data architecture: Server Actions as the primary data layer, TanStack Query for client-side caching and refetching, cron endpoints for scheduled pipelines, and the CheapShark API with resilient fallback and grey market support.
 
-3. **[03. Gamificação e Gerenciamento de Estado](03-gamification-and-state.md)**
-   As três camadas de estado: Zustand (estado global do cliente com persistência local), TanStack Query (cache de dados do servidor) e Drizzle ORM (persistência relacional). O sistema de gamificação com XP, badges e playlists via Server Actions e PostgreSQL.
+3. **[03. Gamification and State Management](03-gamification-and-state.md)**
+   The three state layers: Zustand (global client state with local persistence), TanStack Query (server data cache), and Drizzle ORM (relational persistence). The gamification system with XP, badges, and playlists via Server Actions and PostgreSQL.
 
-4. **[04. Roteamento e Páginas (App Router)](04-pages-routing.md)**
-   O root layout e seus slots (modal, SyncManager), o loading state com Suspense, a paralelização de requisições na Home Page com `Promise.all`, e o padrão de Intercepting Routes para modais sobrepostos com fallback para rotas estáticas.
+4. **[04. Routing and Pages (App Router)](04-pages-routing.md)**
+   Root layout and its slots (modal, SyncManager), loading states with Suspense, Home Page request parallelization with `Promise.all`, and the Intercepting Routes pattern for overlaid modals with static route fallback.
 
 5. **[05. Core UI Components](05-core-components.md)**
-   Dissecação em blocos lógicos dos componentes base: `GameCard` com micro-interações (wishlist, alertas, playlists), `HeroSection` com Tailwind CSS v4 e carrossel dinâmico, `Navbar` com busca reativa e sessão, e modais de autenticação.
+   Logical block dissection of base components: `GameCard` with micro-interactions (wishlist, alerts, playlists), `HeroSection` with Tailwind CSS v4 and dynamic carousel, `Navbar` with reactive search and session, and authentication modals.
 
 6. **[06. Feature Components](06-feature-components.md)**
-   Dissecação dos componentes autossuficientes: `HistoricalLows` com detecção de preço histórico, `ActivityFeed` reativo integrado à gamificação, `DynamicCharts` com lazy loading via `next/dynamic`, e `Freebies` com tratamento de vazio.
+   Dissection of self-sufficient components: `HistoricalLows` with historical price detection, `ActivityFeed` reactive to gamification, `DynamicCharts` with lazy loading via `next/dynamic`, and `Freebies` with empty state handling.
 
 ---
-*Manual gerado e versionado diretamente junto ao código-fonte.*
+*Manual generated and versioned directly alongside the source code.*
