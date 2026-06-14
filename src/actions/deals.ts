@@ -150,17 +150,17 @@ export async function ingestPricesAction(): Promise<{
     let pricesRecorded = 0;
 
     const uniqueGameIds = [...new Set(deals.map((d) => d.gameID))];
+    const idMap = new Map<string, string>();
 
     for (const gameId of uniqueGameIds) {
       const deal = deals.find((d) => d.gameID === gameId);
       if (!deal) continue;
 
-      await db
+      const inserted = await db
         .insert(games)
         .values({
-          id: gameId,
+          cheapsharkId: gameId,
           title: deal.title,
-          cheapsharkId: deal.gameID,
           thumbUrl: deal.thumb,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -168,33 +168,51 @@ export async function ingestPricesAction(): Promise<{
         .onConflictDoUpdate({
           target: games.cheapsharkId,
           set: { title: deal.title, thumbUrl: deal.thumb, updatedAt: new Date() },
-        });
+        })
+        .returning({ id: games.id });
+
+      const row = inserted[0];
+      if (row?.id) idMap.set(gameId, row.id);
       gamesUpserted++;
     }
 
-    // Batch inserts for deals + price_history
-    if (deals.length > 0) {
-      const dealsValues = deals.map((d) => ({
-        gameId: d.gameID,
-        storeId: d.storeID as unknown as (typeof dealsTable.$inferInsert)['storeId'],
-        price: Number.parseFloat(d.salePrice),
-        retailPrice: Number.parseFloat(d.normalPrice),
-        savings: Number.parseFloat(d.savings),
-        dealRating: d.dealRating ? Number.parseFloat(d.dealRating) : null,
-        url: `https://www.cheapshark.com/redirect?dealID=${d.dealID}`,
-        createdAt: new Date(),
-      }));
-      await db.insert(dealsTable).values(dealsValues);
-      dealsIngested = dealsValues.length;
+    if (deals.length > 0 && idMap.size > 0) {
+      const dealsValues = deals
+        .map((d) => {
+          const uuid = idMap.get(d.gameID);
+          if (!uuid) return null;
+          return {
+            gameId: uuid,
+            storeId: d.storeID,
+            price: Number.parseFloat(d.salePrice),
+            retailPrice: Number.parseFloat(d.normalPrice),
+            savings: Number.parseFloat(d.savings),
+            dealRating: d.dealRating ? Number.parseFloat(d.dealRating) : null,
+            url: `https://www.cheapshark.com/redirect?dealID=${d.dealID}`,
+            createdAt: new Date(),
+          };
+        })
+        .filter((v): v is NonNullable<typeof v> => v !== null);
 
-      const priceValues = deals.map((d) => ({
-        gameId: d.gameID,
-        storeId: d.storeID,
-        price: Number.parseFloat(d.salePrice),
-        retailPrice: Number.parseFloat(d.normalPrice),
-        recordedAt: new Date(),
-      }));
-      // Insert em lotes de 50 para evitar payload muito grande
+      if (dealsValues.length > 0) {
+        await db.insert(dealsTable).values(dealsValues);
+        dealsIngested = dealsValues.length;
+      }
+
+      const priceValues = deals
+        .map((d) => {
+          const uuid = idMap.get(d.gameID);
+          if (!uuid) return null;
+          return {
+            gameId: uuid,
+            storeId: d.storeID,
+            price: Number.parseFloat(d.salePrice),
+            retailPrice: Number.parseFloat(d.normalPrice),
+            recordedAt: new Date(),
+          };
+        })
+        .filter((v): v is NonNullable<typeof v> => v !== null);
+
       for (let i = 0; i < priceValues.length; i += 50) {
         await db.insert(priceHistory).values(priceValues.slice(i, i + 50));
       }
@@ -215,11 +233,91 @@ export async function ingestPricesAction(): Promise<{
 }
 
 /**
+ * Resolve cheapsharkId -> games.id uuid via resolve_game_uuid() RPC.
+ * Returns null when game not yet ingested.
+ */
+export async function resolveGameUuid(cheapsharkId: string): Promise<string | null> {
+  if (!/^\d{1,32}$/.test(cheapsharkId)) return null;
+  try {
+    const rows = await db.execute(
+      sql`SELECT public.resolve_game_uuid(${cheapsharkId})::text AS uuid`
+    );
+    const uuid = (rows as unknown as Array<{ uuid: string | null }>)[0]?.uuid;
+    return uuid ?? null;
+  } catch (e) {
+    console.error('resolveGameUuid error:', e);
+    return null;
+  }
+}
+
+/**
+ * Batch cheapsharkId -> uuid. Returns Map keyed by cheapsharkId.
+ * Unknown ids omitted from map.
+ */
+export async function resolveGameUuidsAction(
+  cheapsharkIds: string[]
+): Promise<Record<string, string>> {
+  const valid = [...new Set(cheapsharkIds.filter((id) => /^\d{1,32}$/.test(id)))];
+  if (valid.length === 0) return {};
+  try {
+    const rows = (await db.execute(
+      sql`SELECT "cheapsharkId", id::text AS uuid FROM public.games WHERE "cheapsharkId" = ANY(${valid})`
+    )) as unknown as Array<{ cheapsharkId: string; uuid: string }>;
+    const map: Record<string, string> = {};
+    for (const r of rows) map[r.cheapsharkId] = r.uuid;
+    return map;
+  } catch (e) {
+    console.error('resolveGameUuidsAction error:', e);
+    return {};
+  }
+}
+
+/**
+ * Reverse lookup: uuid -> cheapsharkId.
+ */
+export async function resolveCheapsharkByUuidAction(uuid: string): Promise<string | null> {
+  if (!/^[0-9a-f-]{36}$/i.test(uuid)) return null;
+  try {
+    const rows = await db.execute(
+      sql`SELECT public.resolve_cheapshark_id(${uuid}::uuid) AS cheapshark_id`
+    );
+    const id = (rows as unknown as Array<{ cheapshark_id: string | null }>)[0]?.cheapshark_id;
+    return id ?? null;
+  } catch (e) {
+    console.error('resolveCheapsharkByUuidAction error:', e);
+    return null;
+  }
+}
+
+/**
+ * Batch uuid -> cheapsharkId. Returns Map keyed by uuid.
+ */
+export async function resolveCheapsharkByUuidsAction(
+  uuids: string[]
+): Promise<Record<string, string>> {
+  const valid = [...new Set(uuids.filter((u) => /^[0-9a-f-]{36}$/i.test(u)))];
+  if (valid.length === 0) return {};
+  try {
+    const rows = (await db.execute(
+      sql`SELECT id::text AS uuid, "cheapsharkId" FROM public.games WHERE id = ANY(${valid}::uuid[])`
+    )) as unknown as Array<{ uuid: string; cheapsharkId: string }>;
+    const map: Record<string, string> = {};
+    for (const r of rows) map[r.uuid] = r.cheapsharkId;
+    return map;
+  } catch (e) {
+    console.error('resolveCheapsharkByUuidsAction error:', e);
+    return {};
+  }
+}
+
+/**
  * Busca preço histórico diário de um jogo
  */
-export async function getDailyPriceHistoryAction(gameId: string, days = 90) {
+export async function getDailyPriceHistoryAction(cheapsharkId: string, days = 90) {
+  const uuid = await resolveGameUuid(cheapsharkId);
+  if (!uuid) return [];
   try {
-    const rows = await db.execute(sql`SELECT * FROM get_daily_prices(${gameId}, ${days})`);
+    const rows = await db.execute(sql`SELECT * FROM get_daily_prices(${uuid}::uuid, ${days})`);
     return rows;
   } catch (e) {
     console.error('getDailyPriceHistory error:', e);
@@ -230,9 +328,11 @@ export async function getDailyPriceHistoryAction(gameId: string, days = 90) {
 /**
  * Busca preço histórico semanal de um jogo
  */
-export async function getWeeklyPriceHistoryAction(gameId: string, weeks = 26) {
+export async function getWeeklyPriceHistoryAction(cheapsharkId: string, weeks = 26) {
+  const uuid = await resolveGameUuid(cheapsharkId);
+  if (!uuid) return [];
   try {
-    const rows = await db.execute(sql`SELECT * FROM get_weekly_prices(${gameId}, ${weeks})`);
+    const rows = await db.execute(sql`SELECT * FROM get_weekly_prices(${uuid}::uuid, ${weeks})`);
     return rows;
   } catch (e) {
     console.error('getWeeklyPriceHistory error:', e);

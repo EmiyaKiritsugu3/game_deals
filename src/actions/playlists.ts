@@ -1,13 +1,9 @@
 'use server';
 
-import { resolve } from 'node:path';
-import { config } from 'dotenv';
-import postgres from 'postgres';
+import { sql } from 'drizzle-orm';
+import { resolveGameUuid } from '@/actions/deals';
+import { db } from '@/db';
 import { createClient } from '@/utils/supabase/server';
-
-config({ path: resolve(process.cwd(), '.env.local') });
-
-const sql = postgres(process.env.DATABASE_URL || '', { connect_timeout: 5 });
 
 /**
  * Criar playlist (com auth check)
@@ -24,12 +20,12 @@ export async function createPlaylistAction(title: string, description: string, i
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
-  const [playlist] = await sql`
+  const inserted = await db.execute(sql`
     INSERT INTO playlists ("userId", title, slug, description, "isPublic", "createdAt", "updatedAt")
-    VALUES (${user.id}, ${title}, ${slug}, ${description}, ${isPublic}, NOW(), NOW())
+    VALUES (${user.id}::uuid, ${title}, ${slug}, ${description}, ${isPublic}, NOW(), NOW())
     RETURNING *
-  `;
-  return playlist;
+  `);
+  return (inserted as unknown as Array<Record<string, unknown>>)[0];
 }
 
 /**
@@ -42,14 +38,14 @@ export async function getUserPlaylistsAction() {
   } = await supabase.auth.getUser();
   if (!user) return [];
 
-  return sql`
+  return db.execute(sql`
     SELECT p.*, COUNT(pg.id) AS "gameCount"
     FROM playlists p
     LEFT JOIN playlist_games pg ON pg."playlistId" = p.id
-    WHERE p."userId" = ${user.id}
+    WHERE p."userId" = ${user.id}::uuid
     GROUP BY p.id
     ORDER BY p."createdAt" DESC
-  `;
+  `);
 }
 
 /**
@@ -62,17 +58,22 @@ export async function addGameToPlaylistAction(playlistId: string, gameId: string
   } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
-  // Verificar ownership
-  const [playlist] = await sql`SELECT "userId" FROM playlists WHERE id = ${playlistId}`;
+  const ownerRows = await db.execute(
+    sql`SELECT "userId" FROM playlists WHERE id = ${playlistId}::uuid`
+  );
+  const playlist = (ownerRows as unknown as Array<{ userId: string }>)[0];
   if (!playlist || playlist.userId !== user.id) throw new Error('Forbidden');
 
-  const [row] = await sql`
+  const uuid = await resolveGameUuid(gameId);
+  if (!uuid) throw new Error('Game not found or not yet ingested');
+
+  const inserted = await db.execute(sql`
     INSERT INTO playlist_games ("playlistId", "gameId", notes, "addedAt")
-    VALUES (${playlistId}, ${gameId}, ${notes || null}, NOW())
+    VALUES (${playlistId}::uuid, ${uuid}::uuid, ${notes ?? null}, NOW())
     ON CONFLICT ("playlistId", "gameId") DO NOTHING
     RETURNING *
-  `;
-  return row;
+  `);
+  return (inserted as unknown as Array<Record<string, unknown>>)[0];
 }
 
 /**
@@ -85,13 +86,19 @@ export async function removeGameFromPlaylistAction(playlistId: string, gameId: s
   } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
-  const [playlist] = await sql`SELECT "userId" FROM playlists WHERE id = ${playlistId}`;
+  const ownerRows = await db.execute(
+    sql`SELECT "userId" FROM playlists WHERE id = ${playlistId}::uuid`
+  );
+  const playlist = (ownerRows as unknown as Array<{ userId: string }>)[0];
   if (!playlist || playlist.userId !== user.id) throw new Error('Forbidden');
 
-  await sql`
+  const uuid = await resolveGameUuid(gameId);
+  if (!uuid) throw new Error('Game not found or not yet ingested');
+
+  await db.execute(sql`
     DELETE FROM playlist_games
-    WHERE "playlistId" = ${playlistId} AND "gameId" = ${gameId}
-  `;
+    WHERE "playlistId" = ${playlistId}::uuid AND "gameId" = ${uuid}::uuid
+  `);
   return true;
 }
 
@@ -105,10 +112,13 @@ export async function deletePlaylistAction(playlistId: string) {
   } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
-  const [playlist] = await sql`SELECT "userId" FROM playlists WHERE id = ${playlistId}`;
+  const ownerRows = await db.execute(
+    sql`SELECT "userId" FROM playlists WHERE id = ${playlistId}::uuid`
+  );
+  const playlist = (ownerRows as unknown as Array<{ userId: string }>)[0];
   if (!playlist || playlist.userId !== user.id) throw new Error('Forbidden');
 
-  await sql`DELETE FROM playlists WHERE id = ${playlistId}`;
+  await db.execute(sql`DELETE FROM playlists WHERE id = ${playlistId}::uuid`);
   return true;
 }
 
@@ -116,20 +126,20 @@ export async function deletePlaylistAction(playlistId: string) {
  * Buscar playlist pública por slug
  */
 export async function getPublicPlaylistAction(slug: string) {
-  const [playlist] = await sql`
+  const playlistRows = await db.execute(sql`
     SELECT p.* FROM playlists p
     WHERE p.slug = ${slug} AND p."isPublic" = true
-  `;
-
+  `);
+  const playlist = (playlistRows as unknown as Array<Record<string, unknown>>)[0];
   if (!playlist) return null;
 
-  const games = await sql`
+  const games = await db.execute(sql`
     SELECT pg.*, g.title, g."thumbUrl"
     FROM playlist_games pg
     JOIN games g ON g.id = pg."gameId"
-    WHERE pg."playlistId" = ${playlist.id}
+    WHERE pg."playlistId" = ${playlist.id}::uuid
     ORDER BY pg."addedAt" DESC
-  `;
+  `);
 
   return { ...playlist, games };
 }

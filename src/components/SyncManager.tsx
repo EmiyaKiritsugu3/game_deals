@@ -1,75 +1,72 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { createClient } from '@/utils/supabase/client';
-
-let supabaseClient: ReturnType<typeof createClient> | null = null;
-
-import { type PriceAlert, useAlerts } from '@/store/alertStore';
+import { resolveGameUuidsAction } from '@/actions/deals';
+import { useAlerts } from '@/store/alertStore';
 import { useAuth } from '@/store/authStore';
 import { useWishlist } from '@/store/wishlistStore';
 
+let supabaseClient: ReturnType<typeof import('@/utils/supabase/client')['createClient']> | null =
+  null;
+
+async function getSupabase() {
+  if (!supabaseClient) {
+    const { createClient } = await import('@/utils/supabase/client');
+    supabaseClient = createClient();
+  }
+  return supabaseClient;
+}
+
 export default function SyncManager() {
-  if (!supabaseClient) supabaseClient = createClient();
-  const supabase = supabaseClient;
   const { user, isLoggedIn } = useAuth();
-  const { wishlist, setWishlist } = useWishlist();
+  const { wishlist } = useWishlist();
   const { alerts } = useAlerts();
-  const hasLoadedFromCloud = useRef(false);
+  const hasMounted = useRef(false);
 
-  // 1. Carregar wishlist do cloud quando loga
   useEffect(() => {
-    if (!isLoggedIn || !user || hasLoadedFromCloud.current) return;
+    if (!isLoggedIn || !user) return;
+    hasMounted.current = true;
+  }, [isLoggedIn, user]);
 
-    const loadFromCloud = async () => {
-      const { data } = await supabase.from('wishlists').select('gameId').eq('userId', user.id);
+  useEffect(() => {
+    if (!isLoggedIn || !user || !hasMounted.current) return;
+    if (wishlist.length === 0) return;
 
-      if (data && data.length > 0) {
-        const cloudIds = data.map((r: { gameId: string }) => r.gameId);
-        // Merge: cloud + local (sem duplicatas)
-        const merged = [...new Set([...wishlist, ...cloudIds])];
-        setWishlist(merged);
-      }
-      hasLoadedFromCloud.current = true;
+    const syncWishlist = async () => {
+      const uuidMap = await resolveGameUuidsAction(wishlist);
+      const uuids = Object.values(uuidMap);
+      if (uuids.length === 0) return;
+      const supabase = await getSupabase();
+      const rows = uuids.map((uuid) => ({ userId: user.id, gameId: uuid }));
+      await supabase.from('wishlists').upsert(rows, { onConflict: 'userId,gameId' });
     };
 
-    loadFromCloud();
-  }, [isLoggedIn, user, wishlist, setWishlist]);
-
-  // 2. Sync wishlist pro cloud quando muda
-  useEffect(() => {
-    if (!isLoggedIn || !user || !hasLoadedFromCloud.current) return;
-
-    const syncToCloud = async () => {
-      if (wishlist.length > 0) {
-        const wishlistData = wishlist.map((gameId: string) => ({
-          userId: user.id,
-          gameId,
-        }));
-
-        await supabase.from('wishlists').upsert(wishlistData, { onConflict: 'userId,gameId' });
-      }
-    };
-
-    // Debounce sync
-    const timer = setTimeout(syncToCloud, 1000);
+    const timer = setTimeout(syncWishlist, 1000);
     return () => clearTimeout(timer);
   }, [isLoggedIn, user, wishlist]);
 
-  // 3. Sync alerts pro cloud
   useEffect(() => {
-    if (!isLoggedIn || !user || alerts.length === 0) return;
+    if (!isLoggedIn || !user || !hasMounted.current) return;
+    if (alerts.length === 0) return;
 
     const syncAlerts = async () => {
-      const alertsData = alerts.map((alert: PriceAlert) => ({
-        userId: user.id,
-        gameId: alert.gameID,
-        targetPrice: alert.targetPrice,
-        storeId: (alert as { storeId?: string }).storeId ?? null,
-        isActive: 1,
-      }));
-
-      await supabase.from('price_alerts').upsert(alertsData, { onConflict: 'userId,gameId' });
+      const uuidMap = await resolveGameUuidsAction(alerts.map((a) => a.gameID));
+      const rows = alerts
+        .map((alert) => {
+          const uuid = uuidMap[alert.gameID];
+          if (!uuid) return null;
+          return {
+            userId: user.id,
+            gameId: uuid,
+            targetPrice: alert.targetPrice,
+            storeId: (alert as { storeId?: string }).storeId ?? null,
+            isActive: 1,
+          };
+        })
+        .filter((r): r is NonNullable<typeof r> => r !== null);
+      if (rows.length === 0) return;
+      const supabase = await getSupabase();
+      await supabase.from('price_alerts').upsert(rows, { onConflict: 'userId,gameId' });
     };
 
     const timer = setTimeout(syncAlerts, 1000);
