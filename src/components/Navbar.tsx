@@ -11,10 +11,11 @@ import { searchGamesAction } from '@/actions/search';
 import { useAuth } from '@/store/authStore';
 import AuthModal from './AuthModal';
 import styles from './Navbar.module.css';
+import NotificationBell from './NotificationBell';
 import WishlistIndicator from './WishlistIndicator';
 
 export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseUser | null }) {
-  const { user, logout, setUser } = useAuth();
+  const { user, isLoggedIn, logout, setUser } = useAuth();
   const [query, setQuery] = useQueryState('q', { defaultValue: '' });
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -154,6 +155,7 @@ export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseU
             )}
           </div>
 
+          {isLoggedIn && <NotificationBell />}
           <WishlistIndicator />
 
           <div className={styles.authSection}>
