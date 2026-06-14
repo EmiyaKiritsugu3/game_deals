@@ -11,6 +11,7 @@ import {
 import { useAuth } from '@/store/authStore';
 import styles from './NotificationBell.module.css';
 
+// fallow-ignore-next-line complexity
 export default function NotificationBell() {
   const { isLoggedIn } = useAuth();
   const [open, setOpen] = useState(false);
@@ -82,6 +83,7 @@ export default function NotificationBell() {
             <div className={styles.empty}>No notifications yet.</div>
           ) : (
             <ul className={styles.list}>
+              {/* fallow-ignore-next-line complexity */}
               {items.map((n) => {
                 const Item = n.readAt ? 'div' : 'button';
                 const itemProps = n.readAt

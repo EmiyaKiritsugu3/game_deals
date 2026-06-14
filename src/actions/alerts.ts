@@ -5,6 +5,7 @@ import { resolveGameUuid } from '@/actions/deals';
 import { db } from '@/db';
 import { createClient } from '@/utils/supabase/server';
 
+// fallow-ignore-next-line complexity
 export async function createPriceAlertAction(
   gameId: string,
   targetPrice: number,

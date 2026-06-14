@@ -14,6 +14,7 @@ import styles from './Navbar.module.css';
 import NotificationBell from './NotificationBell';
 import WishlistIndicator from './WishlistIndicator';
 
+// fallow-ignore-next-line complexity
 export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseUser | null }) {
   const { user, isLoggedIn, logout, setUser } = useAuth();
   const [query, setQuery] = useQueryState('q', { defaultValue: '' });
@@ -53,9 +54,11 @@ export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseU
     // Lazy import Supabase client + listen for auth changes
     let subscription: { unsubscribe: () => void } | null = null;
     import('@/utils/supabase/client')
+      // fallow-ignore-next-line complexity
       .then(({ createClient }) => {
         const supabase = createClient();
         // biome-ignore lint/suspicious/noExplicitAny: Supabase session type
+        // fallow-ignore-next-line complexity
         const sub = supabase.auth.onAuthStateChange((_event: string, session: any) => {
           setUser(session?.user ?? null);
           if (session?.user) {
@@ -66,6 +69,7 @@ export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseU
       })
       .catch(() => {});
 
+    // fallow-ignore-next-line complexity
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);

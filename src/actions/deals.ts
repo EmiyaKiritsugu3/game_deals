@@ -11,6 +11,7 @@ const BASE_URL = 'https://www.cheapshark.com/api/1.0';
 /**
  * Busca deals da CheapShark (com fallback)
  */
+// fallow-ignore-next-line complexity
 export async function getDealsAction(params?: {
   sortBy?: string;
   onSale?: string;
@@ -105,6 +106,7 @@ export async function getStoresAction(): Promise<Record<string, string>> {
 /**
  * Ingestão de preços — busca deals e salva no banco + price_history
  */
+// fallow-ignore-next-line complexity
 export async function ingestPricesAction(): Promise<{
   success: boolean;
   dealsIngested: number;

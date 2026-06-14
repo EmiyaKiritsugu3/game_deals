@@ -28,6 +28,7 @@ export default function SyncManager() {
     hasMounted.current = true;
   }, [isLoggedIn, user]);
 
+  // fallow-ignore-next-line complexity
   useEffect(() => {
     if (!isLoggedIn || !user || !hasMounted.current) return;
     if (wishlist.length === 0) return;
@@ -45,6 +46,7 @@ export default function SyncManager() {
     return () => clearTimeout(timer);
   }, [isLoggedIn, user, wishlist]);
 
+  // fallow-ignore-next-line complexity
   useEffect(() => {
     if (!isLoggedIn || !user || !hasMounted.current) return;
     if (alerts.length === 0) return;

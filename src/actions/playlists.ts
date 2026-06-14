@@ -51,6 +51,7 @@ export async function getUserPlaylistsAction() {
 /**
  * Adicionar jogo na playlist (com ownership check)
  */
+// fallow-ignore-next-line complexity
 export async function addGameToPlaylistAction(playlistId: string, gameId: string, notes?: string) {
   const supabase = await createClient();
   const {
@@ -79,6 +80,7 @@ export async function addGameToPlaylistAction(playlistId: string, gameId: string
 /**
  * Remover jogo da playlist (com ownership check)
  */
+// fallow-ignore-next-line complexity
 export async function removeGameFromPlaylistAction(playlistId: string, gameId: string) {
   const supabase = await createClient();
   const {

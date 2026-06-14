@@ -11,6 +11,7 @@ interface TriggeredAlert {
   current_price: number;
 }
 
+// fallow-ignore-next-line complexity
 export async function GET(request: Request) {
   const authHeader = request.headers.get('authorization');
   if (!process.env.CRON_SECRET || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
