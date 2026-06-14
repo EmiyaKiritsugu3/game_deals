@@ -1,30 +1,30 @@
 # ADR-NNN: Title
 
-**Status**: Proposed | Aceito | Superseded
-**Data**: YYYY-MM-DD
-**Autor**: EmiyaKiritsugu3
+**Status**: Proposed | Accepted | Superseded
+**Date**: YYYY-MM-DD
+**Author**: EmiyaKiritsugu3
 
 ---
 
-## Contexto
+## Context
 
-Qual problema estamos resolvendo? Quais são as restrições? Quais alternativas foram consideradas?
+What problem are we solving? What are the constraints? What alternatives were considered?
 
-## Decisão
+## Decision
 
-O que foi decidido e por quê?
+What was decided and why?
 
-## Consequências
+## Consequences
 
-### Positivas
-- Lista de vantagens
+### Positive
+- List of advantages
 
-### Negativas / Trade-offs
-- Lista de desvantagens e mitigações
+### Negative / Trade-offs
+- List of disadvantages and mitigations
 
 ---
 
-## Referências
-- [Link para documentação relevante]()
-- [Link para ADRs relacionados](./)
-- [Link para código relevante](../)
+## References
+- [Link to relevant documentation]()
+- [Link to related ADRs](./)
+- [Link to relevant code](../)

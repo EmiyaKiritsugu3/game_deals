@@ -1,15 +1,14 @@
 import { NextResponse } from 'next/server';
 import { syncGamesToTypesenseAction } from '@/actions/search';
+import { verifyCronAuth } from '@/lib/cron-auth';
 
 /**
  * Vercel Cron Job — daily reindex Typesense
  * GET /api/cron/reindex-typesense
  */
 export async function GET(request: Request) {
-  const authHeader = request.headers.get('authorization');
-  if (!process.env.CRON_SECRET || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const authError = verifyCronAuth(request);
+  if (authError) return authError;
 
   console.log('[Cron] Starting Typesense reindex...');
 

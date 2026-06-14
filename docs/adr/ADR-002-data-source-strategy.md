@@ -1,40 +1,40 @@
-# ADR-002: Data Source Strategy — CheapShark API + Keyshops Simulados
+# ADR-002: Data Source Strategy — CheapShark API + Simulated Keyshops
 
-**Status**: Aceito
-**Data**: 2026-06-09 (Atualizado 2026-06-10)
-**Autor**: EmiyaKiritsugu3
+**Status**: Accepted
+**Date**: 2026-06-09 (Updated 2026-06-10)
+**Author**: EmiyaKiritsugu3
 
 ---
 
-## Contexto
+## Context
 
-Agregar preços de jogos de múltiplas fontes para:
-- Comparar Official Stores vs Keyshops
-- Historical Lows verificados
+Aggregate game prices from multiple sources to:
+- Compare Official Stores vs Keyshops
+- Verified Historical Lows
 - Affiliate links
-- Mercado brasileiro (região BR prioritária)
+- Brazilian market (BR region priority)
 
 ---
 
-## Decisão
+## Decision
 
-### Estratégia Híbrida
+### Hybrid Strategy
 
-1. **Fonte Primária (Real-time)**: **CheapShark API** para lojas oficiais (Steam, Epic, GOG, Humble, Fanatical, GreenManGaming)
+1. **Primary Source (Real-time)**: **CheapShark API** for official stores (Steam, Epic, GOG, Humble, Fanatical, GreenManGaming)
    - Endpoint: `https://www.cheapshark.com/api/1.0/deals`
    - Cache: `revalidate: 300` (5 min) via Next.js `use cache`
-   - Fallback: `fallbackDeals.ts` em build time (compile-time data)
+   - Fallback: `fallbackDeals.ts` at build time (compile-time data)
 
-2. **Keyshops (Simulados)**: Deals sintéticos para CDKeys, Kinguin, Eneba, G2A, Instant Gaming
-   - Lógica em `api.ts`: preço oficial mais baixo → desconto aleatório 15-35%
-   - Badge visual "Keyshop" + disclaimer de risco
+2. **Simulated Keyshops**: Synthetic deals for CDKeys, Kinguin, Eneba, G2A, Instant Gaming
+   - Logic in `api.ts`: lowest official price → random 15-35% discount
+   - Visual "Keyshop" badge + risk disclaimer
 
-3. **Metadados**: **Steam Web API** + **IGDB** (via Twitch OAuth) para:
+3. **Metadata**: **Steam Web API** + **IGDB** (via Twitch OAuth) for:
    - Cover art, screenshots, genres, platforms
    - HLTB (HowLongToBeat) → cost-per-hour metric
    - DRM detection (Steam/Epic/GOG)
 
-4. **Affiliate Mapping**: Tabela no Supabase (Drizzle ORM) — `storeID` → `affiliate_network` + `tracking_template`
+4. **Affiliate Mapping**: Table in Supabase (Drizzle ORM) — `storeID` → `affiliate_network` + `tracking_template`
 
 5. **Data Fetching Pattern (2026)**:
    ```typescript
@@ -55,16 +55,16 @@ Agregar preços de jogos de múltiplas fontes para:
 
 ---
 
-### Plano de Evolução
+### Evolution Plan
 
-- **Curto prazo**: CheapShark primário + keyshops simulados
-- **Médio prazo**: ITAD quando aprovado → substitui keyshops simulados
-- **Longo prazo**: Próprio scraper com Camofox para Nuuvem + lojas BR adicionais
+- **Short term**: Primary CheapShark + simulated keyshops
+- **Medium term**: ITAD when approved → replaces simulated keyshops
+- **Long term**: Own scraper with Camofox for Nuuvem + additional BR stores
 
 ---
 
-## Referências
+## References
 - [ADR-006: Affiliate Monetization](ADR-006-affiliate-monetization.md) — Cloaking `/out` route
 - [ADR-003: State Management](ADR-003-state-management.md) — TanStack Query + Server Actions pattern
-- `src/services/api.ts` — Lógica híbrida CheapShark + keyshops
+- `src/services/api.ts` — Hybrid CheapShark + keyshops logic
 - `src/data/fallbackDeals.ts` — Fallback compile-time data

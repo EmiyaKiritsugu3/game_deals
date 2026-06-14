@@ -1,28 +1,28 @@
 # ADR-004: Auth & Backend Architecture — Supabase Auth + @supabase/server + Drizzle ORM
 
-**Status**: Aceito
-**Data**: 2026-06-09 (Atualizado 2026-06-10)
-**Autor**: EmiyaKiritsugu3
+**Status**: Accepted
+**Date**: 2026-06-09 (Updated 2026-06-10)
+**Author**: EmiyaKiritsugu3
 
 ---
 
-## Contexto
+## Context
 
-GameDeals precisa de:
-- **Autenticação social** (Google, Discord, Steam, GitHub, Email) com sessão SSR
-- **Autorização granula** via Row Level Security (RLS)
-- **Banco de dados PostgreSQL** com TimescaleDB para price history
-- **Edge Functions** para ingestion/cleanup cron jobs
-- **Realtime** para badges, notificações, feed social
-- Zero overhead operacional (solo dev)
+GameDeals needs:
+- **Social authentication** (Google, Discord, Steam, GitHub, Email) with SSR session
+- **Granular authorization** via Row Level Security (RLS)
+- **PostgreSQL database** with TimescaleDB for price history
+- **Edge Functions** for ingestion/cleanup cron jobs
+- **Realtime** for badges, notifications, social feed
+- Zero operational overhead (solo dev)
 
 ---
 
-## Decisão
+## Decision
 
-**Supabase** escolhido como plataforma unificada de backend.
+**Supabase** chosen as unified backend platform.
 
-### Stack de Autenticação (2026)
+### Authentication Stack (2026)
 
 ```typescript
 // @supabase/server — Novo package (Maio 2026)
@@ -45,9 +45,9 @@ export async function getUserAction() {
 }
 ```
 
-**Componentes**:
-1. **`@supabase/ssr`** — SSR session hydration + middleware (atual)
-2. **`@supabase/server`** — Novo (Maio 2026): Edge Functions, Vercel, Cloudflare, Bun — elimina boilerplate de client setup + JWT verification
+**Components**:
+1. **`@supabase/ssr`** — SSR session hydration + middleware (current)
+2. **`@supabase/server`** — New (May 2026): Edge Functions, Vercel, Cloudflare, Bun — eliminates client setup boilerplate + JWT verification
 3. **`next/middleware`** — Route protection + session refresh
 
 ### Database (Drizzle ORM + Supabase PostgreSQL)
@@ -70,33 +70,33 @@ export const userRole = pgEnum('user_role', ['user', 'mod', 'admin']);
 ### Row Level Security (RLS)
 
 ```sql
--- Exemplo: Apenas usuário pode ver/editar própria wishlist
+-- Example: Only user can view/edit own wishlist
 CREATE POLICY "individual_wishlists" ON wishlists
   FOR ALL USING (auth.uid() = user_id);
 ```
 
 ---
 
-## Consequências
+## Consequences
 
-### Positivas
-- **Vendor-managed**: Zero ops — auth, DB, realtime, edge functions gerenciados
-- **RLS nativo**: Segurança em nível de banco, independente de ORM
-- **`@supabase/server`**: Elimina ~50 linhas de boilerplate por endpoint
-- **Social providers**: Google, Discord, Steam, GitHub — configuração de 5 minutos
-- **TimescaleDB nativo**: `pg_timescaledb` extension ativada
+### Positive
+- **Vendor-managed**: Zero ops — auth, DB, realtime, edge functions managed
+- **Native RLS**: Database-level security, independent of ORM
+- **`@supabase/server`**: Eliminates ~50 lines of boilerplate per endpoint
+- **Social providers**: Google, Discord, Steam, GitHub — 5-minute setup
+- **Native TimescaleDB**: `pg_timescaledb` extension enabled
 
-### Negativas
-- **Vendor lock-in**: Auth e Realtime são proprietários (mitigado: DB é PostgreSQL padrão)
-- **Supabase Pro**: $25/mês para TimescaleDB + pgvector + 500MB database
-- **Edge Functions cold start**: ~100ms-1s (mitigado: cron jobs rodam infra)
+### Negative
+- **Vendor lock-in**: Auth and Realtime are proprietary (mitigated: DB is standard PostgreSQL)
+- **Supabase Pro**: $25/month for TimescaleDB + pgvector + 500MB database
+- **Edge Functions cold start**: ~100ms-1s (mitigated: cron jobs run infra)
 
 ---
 
-## Referências
-- [@supabase/server Announcement](https://supabase.com/blog/introducing-supabase-server) — Maio 2026
+## References
+- [@supabase/server Announcement](https://supabase.com/blog/introducing-supabase-server) — May 2026
 - [Supabase Auth SSR Guide](https://supabase.com/docs/guides/auth/server-side/nextjs)
 - [Supabase RLS Docs](https://supabase.com/docs/guides/database/postgres/row-level-security)
 - [ADR-003: State Management](ADR-003-state-management.md) — Server Actions pattern
-- `src/utils/supabase/` — Implementação atual
+- `src/utils/supabase/` — Current implementation
 - `src/db/schema/` — Drizzle schema

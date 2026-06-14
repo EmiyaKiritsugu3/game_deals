@@ -1,29 +1,29 @@
-# 📖 GameDeals: O Manual Absoluto e Enciclopédia do Projeto
+# GameDeals: The Absolute Manual & Project Encyclopedia
 
-Este diretório contém a dissecagem técnica completa, lógica e arquitetural do projeto **GameDeals**. Ele foi projetado não apenas para documentar "o que" o código faz, mas sim **"por que"** ele foi escrito dessa exata maneira, servindo como o mapa definitivo para recreação ou manutenção do sistema.
+This directory contains the complete technical, logical, and architectural dissection of the **GameDeals** project. It is designed not just to document "what" the code does, but **"why"** it was written that exact way — serving as the definitive map for recreating or maintaining the system.
 
 > [!IMPORTANT]
-> A leitura deste manual deve ser feita de forma sequencial para garantir que as decisões de infraestrutura sejam compreendidas antes da dissecagem dos componentes visuais.
+> This manual should be read sequentially to ensure infrastructure decisions are understood before dissecting visual components.
 
-## 🗂️ Índice Estrutural
+## Structural Index
 
-1. **[01. Arquitetura e Decisões Fundamentais](01-architecture-and-decisions.md)**
-   A base filosófica do projeto. Por que Next.js 14? Por que Vanilla CSS e não Tailwind? Como dividimos o repositório.
+1. **[01. Architecture and Fundamental Decisions](01-architecture-and-decisions.md)**
+   The philosophical foundation of the project. Why Next.js 16 with App Router? Why Tailwind CSS v4? State management choices (Zustand + TanStack Query) and persistence (Drizzle ORM + PostgreSQL). How the repository is organized.
 
-2. **[02. Infraestrutura de API e Serviços (Services)](02-api-and-services.md)**
-   Como lidamos com a limitação de Rate Limit da CheapShark, estratégias agressivas de fallback no Vercel e chamadas de rede resilientes.
+2. **[02. API Infrastructure and Services](02-api-and-services.md)**
+   Complete data architecture: Server Actions as the primary data layer, TanStack Query for client-side caching and refetching, cron endpoints for scheduled pipelines, and the CheapShark API with resilient fallback and grey market support.
 
-3. **[03. Gamificação e Gerenciamento de Estado](03-gamification-and-state.md)**
-   Como o sistema social foi acoplado por cima do Supabase. A lógica de XP, Badges (Insignias) e Playlists, além do papel do Zustand no estado global.
+3. **[03. Gamification and State Management](03-gamification-and-state.md)**
+   The three state layers: Zustand (global client state with local persistence), TanStack Query (server data cache), and Drizzle ORM (relational persistence). The gamification system with XP, badges, and playlists via Server Actions and PostgreSQL.
 
-4. **[04. Roteamento e Páginas (App Router)](04-pages-routing.md)**
-   Por que juntamos as listas no `Promise.all` da Home Page? Como o Intercepting Route abre os modais de jogos e permite que a URL `/game/[id]` funcione perfeitamente.
+4. **[04. Routing and Pages (App Router)](04-pages-routing.md)**
+   Root layout and its slots (modal, SyncManager), loading states with Suspense, Home Page request parallelization with `Promise.all`, and the Intercepting Routes pattern for overlaid modals with static route fallback.
 
 5. **[05. Core UI Components](05-core-components.md)**
-   Dissecação em blocos lógicos (Props -> Hook -> Render Logic -> CSS Modules) dos componentes base, como `GameCard`, `HeroSection`, `Navbar` e Modais.
+   Logical block dissection of base components: `GameCard` with micro-interactions (wishlist, alerts, playlists), `HeroSection` with Tailwind CSS v4 and dynamic carousel, `Navbar` with reactive search and session, and authentication modals.
 
 6. **[06. Feature Components](06-feature-components.md)**
-   Dissecação dos componentes inteligentes e pesados, como `HistoricalLows`, `ActivityFeed`, `DynamicCharts` e `Freebies`.
+   Dissection of self-sufficient components: `HistoricalLows` with historical price detection, `ActivityFeed` reactive to gamification, `DynamicCharts` with lazy loading via `next/dynamic`, and `Freebies` with empty state handling.
 
 ---
-*Manual gerado e versionado diretamente junto ao código-fonte.*
+*Manual generated and versioned directly alongside the source code.*

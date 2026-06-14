@@ -37,5 +37,8 @@ export const playlistGames = pgTable(
     notes: varchar({ length: 500 }),
     addedAt: timestamp().defaultNow().notNull(),
   },
-  (table) => [uniqueIndex('pg_playlist_game_unique').on(table.playlistId, table.gameId)]
+  (table) => [
+    uniqueIndex('pg_playlist_game_unique').on(table.playlistId, table.gameId),
+    index('pg_gameId_idx').on(table.gameId),
+  ]
 );

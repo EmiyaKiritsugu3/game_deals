@@ -1,31 +1,224 @@
-# 🧱 05. Core UI Components
+# 🧱 05. Core Components
 
-Os *Core Components* são a base da interface do usuário. Eles são usados globalmente e formam a espinha dorsal visual da aplicação.
+The core components form the visual backbone of the application. Used globally in the root layout and across multiple pages.
 
-## 1. GameCard (`src/components/GameCard.tsx`)
-A menor unidade vitrine estrutural.
-- **Props:** Recebe um único objeto `deal` (tipo `Deal` da CheapShark).
-- **Lógica e Constantes:** 
-  Calcula na montagem `isEpicDeal` (>= 85% desconto) e `isHistoricalLow` (>= 90% desconto). Isso automatiza a adição mecânica de labels pela interface.
-- **Micro-interações:** Contém internamente os gatilhos sub-componentes:
-  - `<AddToListButton />`: Integra com a gamificação (Playlists).
-  - `<HeartButton />`: Comunica com o `wishlistStore` (Zustand).
-  - `<PriceAlertBadge />`: Comunica com o `alertStore` (Zustand).
-- **Responsabilidade do CSS Module:** Utiliza `:hover` em conjunto com `.imageWrapper` para expor sutilmente o overlay dos botões apenas quando a atenção do mouse está no componente.
+## Rendering Paradigm
 
-## 2. HeroSection (`src/components/HeroSection.tsx`)
-O painel de destaque no topo da aplicação.
-- **Vanilla CSS Exclusivo:** Restaurado de um experimento desastroso de Tailwind, o HeroSection domina a tela puramente pelo seu `HeroSection.module.css`.
-- **Lógica de Estado:** Embora receba múltiplas *deals* do servidor, é forçado a um **Client Component** para rodar um `setInterval` atrelado ao `currentIndex`.
-- **O Fundo Estético:** Um grid denso (usando `Array(15).fill`) clona as capas de jogos para atuar como uma matriz infinita rotacionada em um ângulo Z (`rotateZ`). A imagem do showcase usa blend modes (`mix-blend-luminosity`) e gradientes puramente via CSS dinâmico.
+Server Components by default (App Router Next.js 16). `'use client'` only when necessary:
+- State/effect hooks (`useState`, `useEffect`)
+- Event handlers (`onClick`, `onSubmit`)
+- Browser APIs (`localStorage`, `IntersectionObserver`)
+- Animation libraries (Framer Motion)
+- Context providers
 
-## 3. Navbar (`src/components/Navbar.tsx`)
-O cérebro constante da navegação e do live-search.
-- **Lógica de Busca (SWR):** A barra de pesquisa utiliza um Hook do SWR acoplado a um `useDebounce`. O usuário digita dezenas de letras, o Debounce amortece a carga, e o SWR faz o request ao servidor sem spammar a API.
-- **Lógica de Busto (A sessão):** Ouve o `authStore` do Supabase para transmutar dinamicamente o botão "Login" para o Avatar do usuário, mostrando badges ativas conquistadas via Gamificação.
+## Styling
 
-## 4. Auth & Side Modals (`src/components/*Modal.tsx`)
-- **Modularização de Renderização:** Por que o `SidebarModal` precisa envolver todos os conteúdos periféricos? Ele provê o fundo `backdrop-blur` global e previne que o CSS de scroll vaze (adicionando `.no-scroll` ao `body`). Se o usuário apertar `ESC` ou clicar no fundo preto, o React Router emite um `router.back()`.
+**Tailwind CSS v4** is the primary styling system. Custom design tokens in `src/app/tokens.css` via `@theme` directive:
+
+```css
+@theme {
+  --color-bg-dark: hsl(228 15% 13%);
+  --color-bg-card: hsl(226 14% 18%);
+  --color-primary: hsl(150 100% 42%);
+  --color-accent-fire: hsl(22 100% 59%);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+```
+
+Usage in components:
+```tsx
+<div className="bg-bg-dark text-primary font-sans" />
+```
+
+Legacy components still use CSS Modules (`*.module.css`). The migration to Tailwind v4 is progressive — new code should use utility classes with `@theme` tokens.
 
 ---
-**Próximo Passo:** Explore como a lógica densa se concentra em seções independentes no módulo [06. Feature Components](06-feature-components.md).
+
+## 1. GameCard (`src/components/GameCard.tsx`)
+
+**Type:** Server Component (no `'use client'`)
+**Props:** `{ deal: Deal }` — CheapShark API object
+**Routing:** Renders link to `/game/[gameID]`
+
+The smallest display unit of the system. Displays cover, title, price (normal + sale), promotion badge and metadata.
+
+**Responsibilities:**
+- Fetches `stores` from server (`getStores()`) asynchronously
+- Calculates `isEpicDeal` (≥85% or free) and `isHistoricalLow` (≥90%)
+- Resolves high resolution image via `getHighResImage()`
+- Hover on `imageWrapper` reveals action overlay (wishlist, alerts, playlists)
+
+**Embedded sub-components (all Client Components — interactivity boundaries):**
+| Component | Purpose | Store |
+|---|---|---|
+| `<HeartButton />` | Favorite/remove wishlist | `wishlistStore` (Zustand) |
+| `<PriceAlertBadge />` | Configure price alert | `alertStore` (Zustand) |
+| `<AddToListButton />` | Add to playlist | Gamification |
+| `<DealsBadge />` | Visual badge "EPIC" or "HL" | — |
+
+**Usage example on Home:**
+```tsx
+// src/app/page.tsx — Server Component with Promise.all
+const [deals, stores] = await Promise.all([getDeals(), getStores()]);
+// ...maps deals to <GameCard deal={deal} />
+```
+
+---
+
+## 2. HeroSection (`src/components/HeroSection.tsx`)
+
+**Type:** Client Component (`'use client'`)
+**Props:** `{ deals: Deal[] }`
+**Animations:** Framer Motion (`motion.div` with `initial`/`animate`/`exit`)
+
+Featured carousel at the top of the home page. Auto-play with 5s `setInterval`.
+
+**Visual structure:**
+1. **Matrix background** — dense grid of 15 cloned thumbnails with Z rotation, creating background texture
+2. **Background blur** — current deal cover as diffuse glow (overlay)
+3. **Glass panel** — central frosted glass panel: "FEATURED DEAL" badge, title, store badge, platform badges, prices, CTA
+4. **Navigation dots** — clickable slide indicators at hero footer
+
+**Why Client Component:**
+- `useState` for carousel `currentIndex`
+- `useEffect` for auto-play timer
+- Framer Motion for transition animations
+
+---
+
+## 3. Navbar (`src/components/Navbar.tsx`)
+
+**Type:** Client Component (`'use client'`)
+**Props:** `{ serverUser?: SupabaseUser | null }`
+**Hooks:** TanStack Query (`useQuery`), Zustand (`useAuth`), nuqs (`useQueryState`)
+**Dependencies:** `AuthModal`, `WishlistIndicator`
+
+Fixed navigation bar at the top with:
+
+**Search with debounce:**
+- Input controlled via `useQueryState('q')` (synced with URL)
+- 300ms debounce with `useState` + `useEffect`
+- `useQuery` from TanStack Query calls `searchGamesAction()`
+- Results dropdown with thumb + title + price
+- Form submission navigates to `/search?q=...`
+
+**Session management:**
+- Hydrates from SSR (`serverUser`) or `authStore` (Zustand)
+- Lazy import of Supabase browser client (`@/utils/supabase/client`)
+- `onAuthStateChange` subscription for real-time login/logout
+- "Login" button opens `<AuthModal />`
+- Logged in → avatar + name + dropdown menu (Price Alerts, Logout)
+- Click outside handler to close dropdowns
+
+---
+
+## 4. SyncManager (`src/components/SyncManager.tsx`)
+
+**Type:** Client Component (`'use client'`)
+**Props:** none (renders `null`)
+**Consumes:** `authStore`, `wishlistStore`, `alertStore` (Zustand)
+
+Invisible sync manager between Zustand (client) and Supabase (server). Renders `null` — pure side effects.
+
+**Three flows:**
+
+| Flow | Trigger | Action |
+|---|---|---|
+| Load wishlist from cloud | Login detected | `supabase.from('wishlists').select('gameId')` → merge with local |
+| Sync wishlist to cloud | `wishlist` changes | `upsert` with 1s debounce |
+| Sync alerts to cloud | `alerts` changes | `upsert` in `price_alerts` with 1s debounce |
+
+**Lazy init pattern (session learning):**
+```tsx
+let supabaseClient: ReturnType<typeof createClient> | null = null;
+
+export default function SyncManager() {
+  if (!supabaseClient) supabaseClient = createClient();
+  // ...
+}
+```
+`createClient()` is called inside the component body, not at module level. Avoids SSR issues.
+
+---
+
+## 5. AuthModal (`src/components/AuthModal.tsx`)
+
+**Type:** Client Component (`'use client'`)
+**Props:** `{ isOpen: boolean; onClose: () => void }`
+**Animations:** Framer Motion `AnimatePresence` + `motion.div`
+**Providers:** Google OAuth, Discord OAuth, Magic Link (email)
+
+Authentication modal with three methods:
+
+1. **Google OAuth** — `supabase.auth.signInWithOAuth({ provider: 'google' })`
+2. **Discord OAuth** — `supabase.auth.signInWithOAuth({ provider: 'discord' })`
+3. **Magic Link** — `supabase.auth.signInWithOtp({ email })`
+
+**UX:**
+- Overlay with `backdrop-blur`
+- Close via X button, overlay click, or `ESC` (Framer Motion manages)
+- Loading state during authentication
+- Conditional success/error message
+- Post-login redirect to `/auth/callback`
+
+---
+
+## 6. CookieBanner (`src/components/CookieBanner.tsx`)
+
+**Type:** Client Component (`'use client'`)
+**Props:** none
+**State:** `localStorage` (key `gd_cookie_consent`)
+**Styling:** Inline styles (does not use CSS Module)
+
+GDPR consent banner fixed at the page footer.
+
+**Flow:**
+1. `useEffect` checks `localStorage.getItem('gd_cookie_consent')`
+2. If it doesn't exist → shows banner
+3. "Accept" button → saves `'accepted'`, hides banner
+4. "Reject" button → saves `'rejected'`, hides banner
+
+Included in root layout (`src/app/layout.tsx`) — visible on all pages.
+
+---
+
+## 7. WishlistIndicator (`src/components/WishlistIndicator.tsx`)
+
+**Type:** Client Component (`'use client'`)
+**Props:** none
+**Consumes:** `wishlistStore` (Zustand)
+**Routing:** Link to `/wishlist`
+
+Wishlist indicator in the Navbar.
+
+**Hydration protection:**
+```tsx
+const [mounted, setMounted] = useState(false);
+useEffect(() => { setMounted(true); }, []);
+const count = mounted ? wishlist.length : 0;
+```
+Prevents SSR vs client discrepancy. While not mounted, displays count 0 (empty heart).
+
+**Elements:**
+- `Heart` icon from Lucide — red fill (`#ef4444`) if `count > 0`
+- "Wishlist" text
+- Numeric badge with total count
+
+---
+
+## Component Tree in Root Layout
+
+```tsx
+// src/app/layout.tsx — Server Component
+<NuqsAdapter>
+  <ReactQueryProvider>
+    <Navbar serverUser={null} />      {/* Client — search + auth */}
+    <SyncManager />                    {/* Client — invisible sync */}
+    {children}                         {/* Server — pages */}
+    {modal}                            {/* Server — intercepted route modal */}
+    <CookieBanner />                   {/* Client — GDPR */}
+  </ReactQueryProvider>
+</NuqsAdapter>
+```
+
+**Rule:** Feature components (wishlist, alerts, gamification) are detailed in module [06. Feature Components](06-feature-components.md).

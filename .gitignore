@@ -46,8 +46,8 @@ next-env.d.ts
 docs/jules_credentials.md
 supabase/.temp/
 
-# Drizzle generated JSON
-drizzle/meta/
+# Drizzle snapshot files (auto-generated, but _journal.json is needed for migrate)
+drizzle/meta/*_snapshot.json
 
 # Graphify output
 graphify-out/

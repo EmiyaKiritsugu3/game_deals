@@ -1,9 +1,9 @@
-# Guia de Deploy: GameDeals na Vercel
+# Vercel Deployment Guide — GameDeals
 
-Agora que o código está pronto e conectado ao Supabase, siga estes passos finais para colocar seu site no ar.
+Now that the code is ready and connected to Supabase, follow these final steps to get your site live.
 
-## 1. Subir para o GitHub
-Certifique-se de que todos os arquivos (incluindo o novo `vercel.json`) foram enviados para o seu repositório Git.
+## 1. Push to GitHub
+Make sure all files (including the new `vercel.json`) have been pushed to your Git repository.
 
 ```bash
 git add .
@@ -11,31 +11,31 @@ git commit -m "chore: prepare production build for Vercel"
 git push origin main
 ```
 
-## 2. Importar o Projeto na Vercel
-1. Acesse o [Dashboard da Vercel](https://vercel.com/dashboard).
-2. Clique em **Add New...** > **Project**.
-3. Importe o seu repositório `game-deals`.
+## 2. Import the Project on Vercel
+1. Go to the [Vercel Dashboard](https://vercel.com/dashboard).
+2. Click **Add New...** > **Project**.
+3. Import your `game-deals` repository.
 
-## 3. Configurar Variáveis de Ambiente
-Antes de clicar em "Deploy", abra a seção **Environment Variables** e adicione as 3 chaves que configuramos localmente:
+## 3. Configure Environment Variables
+Before clicking "Deploy", open the **Environment Variables** section and add the 3 keys we configured locally:
 
-| Chave | Valor |
+| Key | Value |
 | :--- | :--- |
-| `NEXT_PUBLIC_SUPABASE_URL` | Sua URL do Supabase |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Sua anon public key |
-| `CRON_SECRET` | A senha longa que você inventou |
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase URL |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Your anon public key |
+| `CRON_SECRET` | The long password you created |
 
-## 4. Deploy e Cron Jobs
-1. Clique em **Deploy**.
-2. Uma vez finalizado, os **Cron Jobs** (o worker de alertas) serão detectados automaticamente por causa do arquivo `vercel.json`.
-3. Para monitorar as execuções, vá na aba **Settings** > **Cron Jobs** no dashboard do seu projeto na Vercel.
+## 4. Deploy and Cron Jobs
+1. Click **Deploy**.
+2. Once finished, the **Cron Jobs** (the alert worker) will be detected automatically because of the `vercel.json` file.
+3. To monitor executions, go to **Settings** > **Cron Jobs** in your project's Vercel dashboard.
 
-## 5. Testar o Worker de Alertas (Cron)
-Você pode testar manualmente se o rastreio de preços está funcionando sem esperar o horário agendado:
-1. Vá na aba **Functions** no dashboard da Vercel.
-2. Lá você verá o log de execução do `/api/cron/check-alerts`.
-3. Se quiser forçar uma execução para testar se ele encontra os alertas no seu banco, você pode clicar no botão **Run** na aba de Cron Jobs.
+## 5. Test the Alert Worker (Cron)
+You can manually test if price tracking is working without waiting for the scheduled time:
+1. Go to the **Functions** tab in the Vercel dashboard.
+2. There you will see the execution log for `/api/cron/check-alerts`.
+3. If you want to force an execution to test whether it finds alerts in your database, click the **Run** button on the Cron Jobs tab.
 
-🚀 **Dica de mestre:** Depois que o site estiver no ar, você pode configurar um domínio customizado (ex: `meusjogosbaratos.com`) na aba **Settings** > **Domains**.
+🚀 **Pro tip:** Once the site is live, you can configure a custom domain (e.g., `mycheapgames.com`) in **Settings** > **Domains**.
 
-**Parabéns! O GameDeals está oficialmente no ar e monitorando ofertas para transformar o mercado brasileiro de jogos.** 🎮💎
+**Congratulations! GameDeals is officially live and monitoring deals!** 🎮💎

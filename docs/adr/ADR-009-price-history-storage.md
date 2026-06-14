@@ -1,29 +1,29 @@
 # ADR-009: Price History Storage — TimescaleDB (via Supabase) + Drizzle ORM
 
-**Status**: Aceito
-**Data**: 2026-06-09 (Atualizado 2026-06-10)
-**Autor**: EmiyaKiritsugu3
+**Status**: Accepted
+**Date**: 2026-06-09 (Updated 2026-06-10)
+**Author**: EmiyaKiritsugu3
 
 ---
 
-## Contexto
+## Context
 
-Armazenar histórico de preços para cada jogo/game×store permite:
-- **Historical Lows**: Menor preço já visto (badge "All-Time Low")
-- **Price Charts**: Visualização no Sidebar Modal (Recharts)
-- **Price Alerts**: Notificar usuário quando preço atinge threshold
+Storing price history for each game/game×store enables:
+- **Historical Lows**: Lowest price ever seen ("All-Time Low" badge)
+- **Price Charts**: Visualization in Sidebar Modal (Recharts)
+- **Price Alerts**: Notify user when price reaches threshold
 - **Trend Analysis**: "Cheaper than average" badges, price drop % badges
-- **SEO**: Schema.org `OfferCatalog` com histórico = dados estruturados enriquecidos
+- **SEO**: Schema.org `OfferCatalog` with history = enriched structured data
 
-TimescaleDB é escolhido sobre PostgreSQL vanilla por:
-- **Continuous Aggregates**: Atualizam automaticamente (sem cron para stats)
-- **Compression**: 90%+ compressão em dados de séries temporais
-- **Time-based partitioning**: `chunk_time_interval` = 1 dia
-- **Retention policies**: Automáticas (ex: manter 2 anos, deletar > 2 anos)
+TimescaleDB is chosen over vanilla PostgreSQL for:
+- **Continuous Aggregates**: Update automatically (no cron for stats)
+- **Compression**: 90%+ compression on time-series data
+- **Time-based partitioning**: `chunk_time_interval` = 1 day
+- **Retention policies**: Automatic (e.g.: keep 2 years, delete > 2 years)
 
 ---
 
-## Decisão
+## Decision
 
 ### Schema Drizzle + TimescaleDB
 
@@ -47,10 +47,10 @@ export const priceHistory = pgTable('price_history', {
 // SELECT create_hypertable('price_history', 'recorded_at', chunk_time_interval => INTERVAL '1 day');
 ```
 
-### Continuous Aggregates (Views automáticas)
+### Continuous Aggregates (Automatic Views)
 
 ```sql
--- Preço mínimo diário por jogo×loja
+-- Daily minimum price per game×store
 CREATE MATERIALIZED VIEW daily_price_min
 WITH (timescaledb.continuous) AS
 SELECT
@@ -62,7 +62,7 @@ SELECT
 FROM price_history
 GROUP BY game_id, store_id, time_bucket('1 day', recorded_at);
 
--- Refresh policy (atualiza a cada hora, janela de 2 dias)
+-- Refresh policy (updates every hour, 2-day window)
 SELECT add_continuous_aggregate_policy('daily_price_min',
   start_offset => INTERVAL '2 days',
   end_offset => INTERVAL '1 hour',
@@ -111,32 +111,32 @@ export async function GET() {
   }));
 
   await drizzle.insert(priceHistory).values(prices);
-  // Se houverem novos Historical Lows, disparar notificação
+  // If there are new Historical Lows, trigger notification
   return Response.json({ ingested: prices.length });
 }
 ```
 
 ---
 
-## Consequências
+## Consequences
 
-### Positivas
-- **Historical Low real**: Baseado em dados reais, não simulado
-- **Sem cron para stats**: Continuous aggregates atualizam automaticamente
-- **Compressão**: 90%+ redução de storage em dados de séries temporais
-- **Retenção automática**: Política de 2 anos, dados antigos deletados automaticamente
-- **Charts otimizados**: Queries agregadas por hora/dia/mês via time_bucket
-- **Alertas**: Comparação preço atual vs histórico para notificações
+### Positive
+- **Real Historical Low**: Based on real data, not simulated
+- **No cron for stats**: Continuous aggregates update automatically
+- **Compression**: 90%+ storage reduction on time-series data
+- **Automatic retention**: 2-year policy, old data deleted automatically
+- **Optimized charts**: Aggregated queries by hour/day/month via time_bucket
+- **Alerts**: Current price vs history comparison for notifications
 
-### Negativas
-- **TimescaleDB**: Necessário ativar extensão no Supabase (ativado no Pro plan)
-- **Storage**: ~100MB/ano para 50k jogos × 30 stores (mitigado: compressão 90%)
-- **Cron ingestion**: Vercel Cron Job com 300s timeout e 512MB memory
-- **Cold query**: Primeira query em hypertable pode ser lenta (cache warming)
+### Negative
+- **TimescaleDB**: Extension must be enabled on Supabase (enabled on Pro plan)
+- **Storage**: ~100MB/year for 50k games × 30 stores (mitigated: 90% compression)
+- **Cron ingestion**: Vercel Cron Job with 300s timeout and 512MB memory
+- **Cold query**: First query on hypertable can be slow (cache warming)
 
 ---
 
-## Referências
+## References
 - [TimescaleDB Continuous Aggregates](https://docs.timescale.com/getting-started/latest/create-caggs/)
 - [Supabase TimescaleDB Docs](https://supabase.com/partners/integrations/timescaledb)
 - [ADR-001: Tech Stack](ADR-001-tech-stack.md) — Drizzle + Supabase infrastructure

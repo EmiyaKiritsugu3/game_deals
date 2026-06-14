@@ -38,6 +38,8 @@ export const priceAlerts = pgTable(
     targetPrice: real().notNull(),
     storeId: varchar({ length: 50 }),
     isActive: integer().default(1).notNull(),
+    currentPrice: real(),
+    lastCheckedAt: timestamp(),
     createdAt: timestamp().defaultNow().notNull(),
   },
   (table) => [

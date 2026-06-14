@@ -1,14 +1,14 @@
-# Guia de Configuração: Supabase & GameDeals
+# Supabase Setup Guide — GameDeals
 
-Siga estes passos para conectar o código que acabamos de preparar ao seu banco de dados real na nuvem.
+Follow these steps to connect the code we just prepared to your real cloud database.
 
-## 1. Criar o Projeto no Supabase
-1. Vá para o [Dashboard do Supabase](https://supabase.com/dashboard).
-2. Clique em **New Project** e selecione sua organização.
-3. Escolha um nome (ex: `GameDeals`), uma senha forte para o banco de dados e a região mais próxima de você (**Brazil - São Paulo** é o ideal).
+## 1. Create the Supabase Project
+1. Go to the [Supabase Dashboard](https://supabase.com/dashboard).
+2. Click **New Project** and select your organization.
+3. Choose a name (e.g., `GameDeals`), a strong database password, and the region closest to you (**Brazil - São Paulo** is ideal).
 
-## 2. Configurar o Banco de Dados (SQL Editor)
-No menu lateral esquerdo, clique em **SQL Editor** > **New Query** e cole o script abaixo para criar as tabelas e as regras de segurança (RLS):
+## 2. Configure the Database (SQL Editor)
+In the left sidebar, click **SQL Editor** > **New Query** and paste the script below to create the tables and security rules (RLS):
 
 ```sql
 -- Profiles table for user metadata
@@ -50,28 +50,28 @@ CREATE POLICY "Users can manage their own profile" ON profiles FOR ALL USING (au
 CREATE POLICY "Users can manage their own wishlist" ON wishlists FOR ALL USING (auth.uid() = user_id);
 CREATE POLICY "Users can manage their own alerts" ON price_alerts FOR ALL USING (auth.uid() = user_id);
 ```
-Clique em **Run**.
+Click **Run**.
 
-## 3. Ativar Autenticação Social
-1. Vá em **Authentication** > **Providers**.
-2. Ative o **Google** e o **Discord**.
-3. Você precisará criar uma aplicação no [Google Cloud Console](https://console.cloud.google.com/) e no [Discord Developer Portal](https://discord.com/developers/applications) para obter o `Client ID` e `Client Secret`.
-4. Em **Redirection URLs**, adicione a URL do seu site (quando estiver no ar na Vercel) terminando em `/auth/callback`.
+## 3. Enable Social Authentication
+1. Go to **Authentication** > **Providers**.
+2. Enable **Google** and **Discord**.
+3. You will need to create an application on the [Google Cloud Console](https://console.cloud.google.com/) and the [Discord Developer Portal](https://discord.com/developers/applications) to get the `Client ID` and `Client Secret`.
+4. In **Redirect URLs**, add your site's URL (once it's live on Vercel) ending in `/auth/callback`.
 
-## 4. Obter as Chaves de API
-1. Vá em **Project Settings** > **API**.
-2. Copie a **Project URL** e a **anon public key**.
+## 4. Get the API Keys
+1. Go to **Project Settings** > **API**.
+2. Copy the **Project URL** and the **anon public key**.
 
-## 5. Configurar Variáveis de Ambiente
-Crie ou edite o arquivo `.env.local` na raiz do seu projeto local (e também no dashboard da Vercel):
+## 5. Configure Environment Variables
+Create or edit the `.env.local` file in the root of your local project (and also in the Vercel dashboard):
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=sua-chave-anon-aqui
-CRON_SECRET=uma-chave-aleatoria-criada-por-voce
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-anon-key-here
+CRON_SECRET=a-random-key-you-create
 ```
 
 > [!TIP]
-> O `CRON_SECRET` deve ser uma string longa e aleatória que você inventar. Ele será usado para proteger a rota de alertas de preços para que apenas a Vercel possa executá-la.
+> The `CRON_SECRET` should be a long, random string you make up. It will be used to protect the price alert route so that only Vercel can execute it.
 
-Pronto! Agora o seu GameDeals está conectado ao "cérebro" na nuvem. 🚀
+Done! Now your GameDeals is connected to the "brain" in the cloud. 🚀

@@ -12,8 +12,50 @@
     {
       "idx": 1,
       "version": "7",
-      "when": Date.now(),
+      "when": 1781137838875,
       "tag": "0001_gamification_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1781137838876,
+      "tag": "0002_check_alerts_rpc",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1781137838877,
+      "tag": "0003_games_uuid_correctness",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1781137838878,
+      "tag": "0004_storeid_varchar",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1781137838879,
+      "tag": "0005_notifications",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1781137838880,
+      "tag": "0006_playlist_games_gameid_idx",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1781137838881,
+      "tag": "0007_deals_alert_lookup_idx",
       "breakpoints": true
     }
   ]

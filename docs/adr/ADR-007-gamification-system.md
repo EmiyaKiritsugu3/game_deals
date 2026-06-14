@@ -1,20 +1,20 @@
 # ADR-007: Gamification System — Badges, XP, Playlists
 
-**Status**: Aceito
-**Data**: 2026-06-09 (Atualizado 2026-06-10)
-**Autor**: EmiyaKiritsugu3
+**Status**: Accepted
+**Date**: 2026-06-09 (Updated 2026-06-10)
+**Author**: EmiyaKiritsugu3
 
 ---
 
-## Contexto
+## Context
 
-Engajamento via UGC: playlists, badges, reviews, XP system. Dados atualizados em realtime via **Supabase Realtime**.
+Engagement via UGC: playlists, badges, reviews, XP system. Data updated in realtime via **Supabase Realtime**.
 
 ---
 
-## Decisão
+## Decision
 
-### Arquitetura Atualizada (2026)
+### Updated Architecture (2026)
 
 | Feature | Storage | Realtime | Data Fetching |
 |---------|---------|----------|---------------|
@@ -45,18 +45,18 @@ export const userBadges = pgTable('user_badges', {
 
 ### Realtime Updates
 
-Playlists, badges, notifications usam **Supabase Realtime** (WebSocket) para atualização em tempo real sem polling.
+Playlists, badges, notifications use **Supabase Realtime** (WebSocket) for real-time updates without polling.
 
 ---
 
-## Consequências
-- **Engajamento**: Playlists e badges aumentam retenção
-- **Realtime**: Notificações push e badge unlock via Supabase Realtime (WebSocket)
-- **Drizzle**: Schema type-safe para todas entidades gamificação
+## Consequences
+- **Engagement**: Playlists and badges increase retention
+- **Realtime**: Push notifications and badge unlock via Supabase Realtime (WebSocket)
+- **Drizzle**: Type-safe schema for all gamification entities
 
 ---
 
-## Referências
+## References
 - [Supabase Realtime Docs](https://supabase.com/docs/guides/realtime)
 - [ADR-001: Tech Stack](ADR-001-tech-stack.md) — Drizzle + Supabase infrastructure
 - [ADR-004: Auth & Backend](ADR-004-auth-backend.md) — User roles + RLS

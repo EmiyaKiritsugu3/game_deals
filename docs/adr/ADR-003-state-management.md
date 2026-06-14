@@ -1,26 +1,26 @@
 # ADR-003: State Management — Zustand + TanStack Query v5 + Server Actions
 
-**Status**: Aceito
-**Data**: 2026-06-09 (Atualizado 2026-06-10)
-**Autor**: EmiyaKiritsugu3
+**Status**: Accepted
+**Date**: 2026-06-09 (Updated 2026-06-10)
+**Author**: EmiyaKiritsugu3
 
 ---
 
-## Contexto
+## Context
 
-O GameDeals precisa gerenciar três tipos de estado distintos:
+GameDeals needs to manage three distinct state types:
 
 1. **Client-side global state**: Wishlist, auth status, price alerts, user preferences, UI state (modals, toasts, sidebar)
-2. **Server-state / Data fetching**: Deals, game details, search results, price history — dados que vêm da API e precisam revalidação, cache, dedup, optimistic updates
-3. **Server mutations / Actions**: Form submissions, playlist creation, affiliate clicks, price alert creation — mutations que rodam no servidor
+2. **Server-state / Data fetching**: Deals, game details, search results, price history — data that comes from the API and needs revalidation, cache, dedup, optimistic updates
+3. **Server mutations / Actions**: Form submissions, playlist creation, affiliate clicks, price alert creation — mutations that run on the server
 
-Anteriormente usava-se SWR para server state. Com Next.js 16 e React 19, **Server Actions + `use cache`** cobrem 60% dos casos de data fetching e mutations simples, enquanto **TanStack Query v5** permanece superior para casos complexos.
+Previously SWR was used for server state. With Next.js 16 and React 19, **Server Actions + `use cache`** cover 60% of data fetching and simple mutation cases, while **TanStack Query v5** remains superior for complex cases.
 
 ---
 
-## Decisão
+## Decision
 
-### Zustand — Global Client State (Inalterado)
+### Zustand — Global Client State (Unchanged)
 
 ```typescript
 // src/store/wishlistStore.ts
@@ -37,18 +37,18 @@ create<WishlistState>()(
 ```
 
 **Use cases**:
-- Wishlist (persistida no localStorage, sync posterior com Supabase)
+- Wishlist (persisted in localStorage, later sync with Supabase)
 - Auth state (user, session, hydration)
 - Price alerts (threshold, notification preferences)
-- UI state: sidebar open/closed, toasts, modais
-- Gamificação: XP, badges conquistados (cache local)
+- UI state: sidebar open/closed, toasts, modals
+- Gamification: XP, earned badges (local cache)
 
-**Por que não Redux/Recoil/Jotai?**
-- Zustand: ~1KB, TypeScript-first, API minimalista, `persist` middleware nativo, sem providers
+**Why not Redux/Recoil/Jotai?**
+- Zustand: ~1KB, TypeScript-first, minimal API, native `persist` middleware, no providers
 
 ---
 
-### TanStack Query v5 — Server State / Data Fetching Complexo
+### TanStack Query v5 — Server State / Complex Data Fetching
 
 ```typescript
 // src/hooks/useDeals.ts
@@ -64,39 +64,31 @@ const { data, error, isLoading, mutate } = useQuery({
 ```
 
 **Use cases**:
-- Home page deals (Historical Lows, Ending Soon, Hero) — **Server Components + `use cache`** para initial load, TanStack Query para client-side interactions
-- Search dropdown no Navbar (real-time, debounced, infinite scroll)
-- Game details no Sidebar Modal (dependent queries: game → prices → history → HLTB)
+- Home page deals (Historical Lows, Ending Soon, Hero) — **Server Components + `use cache`** for initial load, TanStack Query for client-side interactions
+- Search dropdown in Navbar (real-time, debounced, infinite scroll)
+- Game details in Sidebar Modal (dependent queries: game → prices → history → HLTB)
 - Price history charts (paginated queries, background refetch)
 - Bundles page, Collections page (infinite queries)
 
-**Por que não SWR / React Query v4?**
-- TanStack Query v5: **Network Mode** (online/offline), **Persisted Query Client**, **Query Cancellation** nativo, **Optimistic Updates** API melhorada, **Server Components integration** via `dehydrate`/`hydrate`
-- SWR: Em modo manutenção; TanStack Query é padrão da indústria 2026
+**Why not SWR / React Query v4?**
+- TanStack Query v5: **Network Mode** (online/offline), **Persisted Query Client**, **native Query Cancellation**, **improved Optimistic Updates API**, **Server Components integration** via `dehydrate`/`hydrate`
+- SWR: Maintenance mode; TanStack Query is the 2026 industry standard
 
 ---
 
-### Server Actions + `use cache` — Data Fetching & Mutations Simples (Novo 2026)
+### Server Actions + `fetch` — Simple Data Fetching & Mutations (New 2026)
 
 ```typescript
 // src/actions/games.ts
 'use server';
 
-import { unstable_cache as useCache } from 'next/cache';
-import { drizzle } from '@/db';
-import { games, prices } from '@/db/schema';
-
-export const getGame = useCache(
-  async (id: string) => {
-    const game = await drizzle.query.games.findFirst({
-      where: eq(games.id, id),
-      with: { prices: true, history: true },
-    });
-    return game;
-  },
-  ['game', id],
-  { revalidate: 300, tags: ['game', id] } // ISR 5min + on-demand revalidation
-);
+export async function getGame(id: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/games/${id}`, {
+    next: { revalidate: 300, tags: [`game-${id}`] },
+  });
+  if (!res.ok) throw new Error('Failed to fetch game');
+  return res.json();
+}
 
 // Mutation via Server Action
 export async function createPlaylistAction(formData: FormData) {
@@ -113,20 +105,20 @@ export async function createPlaylistAction(formData: FormData) {
 ```
 
 **Use cases**:
-- **Initial data fetching** em Server Components (SSR/ISR/PPR) — substitui `getServerSideProps`/`getStaticProps`
-- **Mutations simples**: create playlist, add to wishlist, create price alert, affiliate click logging
-- **On-demand revalidation**: `revalidatePath`, `revalidateTag` após mutations
-- **Form handling**: `<form action={createPlaylistAction}>` — progressive enhancement nativo
+- **Initial data fetching** in Server Components (SSR/ISR/PPR) — replaces `getServerSideProps`/`getStaticProps`
+- **Simple mutations**: create playlist, add to wishlist, create price alert, affiliate click logging
+- **On-demand revalidation**: `revalidatePath`, `revalidateTag` after mutations
+- **Form handling**: `<form action={createPlaylistAction}>` — native progressive enhancement
 
-**Por que Server Actions?**
-- Next.js 16: **Stable, performático, type-safe** (compartilha types com client)
-- Elimina API routes para mutations simples
-- Funciona com progressive enhancement (JS disabled → form ainda funciona)
-- Integrado com `use cache` para ISR automático
+**Why Server Actions?**
+- Next.js 16: **Stable, performant, type-safe** (shares types with client)
+- Eliminates API routes for simple mutations
+- Works with progressive enhancement (JS disabled → form still works)
+- Integrated with `use cache` for automatic ISR
 
 ---
 
-## Arquitetura de Dados Atualizada (2026)
+## Updated Data Architecture (2026)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -158,9 +150,9 @@ export async function createPlaylistAction(formData: FormData) {
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-### Divisão de Responsabilidades (2026)
+### Responsibility Division (2026)
 
-| Cenário | Tecnologia | Exemplo |
+| Scenario | Technology | Example |
 |---------|------------|---------|
 | **Initial page load (SEO)** | Server Component + `use cache` | `page.tsx` → `getDeals()` cached 5min |
 | **Client navigation** | TanStack Query | Navbar search → `useQuery(['search', q])` |
@@ -174,29 +166,29 @@ export async function createPlaylistAction(formData: FormData) {
 
 ---
 
-## Consequências
+## Consequences
 
-### Positivas
-- **Separação clara**: Server state (TanStack Query + Server Actions) ≠ Client state (Zustand)
-- **Performance**: Server Components para initial load (zero JS), TanStack Query para interatividade
+### Positive
+- **Clear separation**: Server state (TanStack Query + Server Actions) ≠ Client state (Zustand)
+- **Performance**: Server Components for initial load (zero JS), TanStack Query for interactivity
 - **Type safety**: Drizzle types → Server Actions → TanStack Query → Components
-- **SSR/ISR/PPR nativo**: Next.js 16 cache semantics + `use cache` + `revalidateTag`
-- **Progressive Enhancement**: Server Actions funcionam sem JS
-- **Bundle otimizado**: Server Actions não vão para client bundle
+- **Native SSR/ISR/PPR**: Next.js 16 cache semantics + `use cache` + `revalidateTag`
+- **Progressive Enhancement**: Server Actions work without JS
+- **Optimized bundle**: Server Actions don't go to client bundle
 
-### Negativas / Trade-offs
-- **Três paradigmas**: Server Components, Server Actions, TanStack Query — curva de aprendizado
-- **Hidratação**: Cuidado com mismatch server/client (use `suppressHydrationWarning` onde necessário)
-- **Cache invalidation**: `revalidateTag`/`revalidatePath` requer disciplina (mitigado: tags padronizadas)
-- **Supabase sync futuro**: Precisará de middleware para sync Zustand → Supabase on login (Phase 12d)
+### Negative / Trade-offs
+- **Three paradigms**: Server Components, Server Actions, TanStack Query — learning curve
+- **Hydration**: Watch for server/client mismatch (use `suppressHydrationWarning` where needed)
+- **Cache invalidation**: `revalidateTag`/`revalidatePath` requires discipline (mitigated: standardized tags)
+- **Future Supabase sync**: Will need middleware to sync Zustand → Supabase on login (Phase 12d)
 
 ---
 
-## Referências
+## References
 - [TanStack Query v5 Docs](https://tanstack.com/query/v5/docs/framework/react/overview) — Network Mode, Persisted Client, Optimistic Updates
-- [Next.js 16 Server Actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations) — Stable em Next.js 16
-- [Next.js `use cache`](https://nextjs.org/docs/app/api-reference/functions/unstable_cache) — ISR programático
+- [Next.js 16 Server Actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations) — Stable in Next.js 16
+- [Next.js fetch with revalidate](https://nextjs.org/docs/app/building-your-application/caching) — Programmatic ISR
 - [Tech Stack Dictionary](../tech_stack_dictionary.md#-state-management--data-fetching)
-- `src/store/` — implementação dos stores Zustand
-- `src/hooks/` — hooks TanStack Query customizados
-- `src/actions/` — Server Actions para mutations e data fetching
+- `src/store/` — Zustand store implementations
+- `src/hooks/` — Custom TanStack Query hooks
+- `src/actions/` — Server Actions for mutations and data fetching

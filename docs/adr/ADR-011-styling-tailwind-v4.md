@@ -1,28 +1,28 @@
 # ADR-011: Styling Architecture — Tailwind CSS v4 (CSS-first) + Design Tokens
 
-**Status**: Aceito
-**Data**: 2026-06-10
-**Autor**: EmiyaKiritsugu3
+**Status**: Accepted
+**Date**: 2026-06-10
+**Author**: EmiyaKiritsugu3
 
 ---
 
-## Contexto
+## Context
 
-GameDeals tem design system próprio: **glassmorphism, OLED/escuro, glow gradients, animações customizadas**. Originalmente com CSS Modules. Necessitamos:
+GameDeals has its own design system: **glassmorphism, OLED/dark, glow gradients, custom animations**. Originally with CSS Modules. We need:
 
-- **Performance**: Bundle CSS mínimo, zero runtime, build-time compilation
-- **Consistência**: Design tokens centralizados (cores, spacing, typography, effects)
-- **Produtividade**: Utilities para layout, spacing, typography — sem escrever CSS boilerplate
-- **Preservação**: Tokens existentes (glow, glass blur, OLED background) devem continuar funcionando
-- **Futuro-proof**: CSS native features (layers, nesting, container queries, OKLCH, color-mix)
+- **Performance**: Minimal CSS bundle, zero runtime, build-time compilation
+- **Consistency**: Centralized design tokens (colors, spacing, typography, effects)
+- **Productivity**: Utilities for layout, spacing, typography — without writing CSS boilerplate
+- **Preservation**: Existing tokens (glow, glass blur, OLED background) must continue working
+- **Future-proof**: CSS native features (layers, nesting, container queries, OKLCH, color-mix)
 
 ---
 
-## Decisão
+## Decision
 
-**Tailwind CSS v4** (CSS-first configuration) em modo **híbrido** — usa `@theme` para design tokens + utilities para layout/spacing/typography.
+**Tailwind CSS v4** (CSS-first configuration) in **hybrid** mode — uses `@theme` for design tokens + utilities for layout/spacing/typography.
 
-### Arquitetura
+### Architecture
 
 ```css
 /* src/app/globals.css */
@@ -90,7 +90,7 @@ GameDeals tem design system próprio: **glassmorphism, OLED/escuro, glow gradien
 }
 ```
 
-### Uso nos Componentes
+### Usage in Components
 
 ```tsx
 // Hero Section - Antes (CSS Modules)
@@ -114,7 +114,7 @@ GameDeals tem design system próprio: **glassmorphism, OLED/escuro, glow gradien
 ### Framer Motion + Tailwind
 
 ```tsx
-// Animações continuam com Framer Motion
+// Animations continue with Framer Motion
 <motion.div
   initial={{ opacity: 0, y: 20 }}
   animate={{ opacity: 1, y: 0 }}
@@ -123,10 +123,10 @@ GameDeals tem design system próprio: **glassmorphism, OLED/escuro, glow gradien
 >
 ```
 
-### Global Tokens — Preservados
+### Global Tokens — Preserved
 
 ```css
-/* ANIMAÇÕES GLOBAIS - mantidos em globals.css abaixo do @import */
+/* GLOBAL ANIMATIONS - kept in globals.css below @import */
 @keyframes fade-in { /* ... */ }
 @keyframes slide-up { /* ... */ }
 @keyframes shimmer { /* ... */ }
@@ -134,36 +134,36 @@ GameDeals tem design system próprio: **glassmorphism, OLED/escuro, glow gradien
 
 ---
 
-## Consequências
+## Consequences
 
-### Positivas
-- **Produtividade**: 80% do CSS vira utilities inline (flex, grid, spacing, text size)
-- **Consistência**: Design tokens centralizados em um lugar (`@theme`)
-- **Performance**: CSS puro, zero runtime, build-time compilation, tree-shaking automático
-- **Migração gradual**: Pode coexistir com CSS Modules durante transição
-- **Community**: Tailwind é o padrão 2026, plugins oficiais, VS Code extension nativa
-- **OKLCH**: Suporte nativo a espaço de cor perceptual (cores mais vibrantes)
-- **Tailwind v4 CSS-first**: `@import "tailwindcss"` sem JS config — alinhado com padrões modernos
+### Positive
+- **Productivity**: 80% of CSS becomes inline utilities (flex, grid, spacing, text size)
+- **Consistency**: Design tokens centralized in one place (`@theme`)
+- **Performance**: Pure CSS, zero runtime, build-time compilation, automatic tree-shaking
+- **Gradual migration**: Can coexist with CSS Modules during transition
+- **Community**: Tailwind is the 2026 standard, official plugins, native VS Code extension
+- **OKLCH**: Native support for perceptual color space (more vibrant colors)
+- **Tailwind v4 CSS-first**: `@import "tailwindcss"` without JS config — aligned with modern standards
 
-### Negativas / Trade-offs
-- **JSX verboso**: 10+ classes inline pode poluir template (mitigado: `@apply` em `@utility` para repetidos)
-- **CSS Modules existentes**: Conversão manual de componentes (mitigado: gradual, componente por componente)
-- **Curva de aprendizado**: Nomes de utility (mitigado: VS Code autocomplete + IntelliSense)
-- **Build time**: Tailwind v4 é 3.78x mais rápido que v3, mas ainda adiciona ~200ms ao build
+### Negative / Trade-offs
+- **Verbose JSX**: 10+ inline classes can pollute template (mitigated: `@apply` in `@utility` for repeated patterns)
+- **Existing CSS Modules**: Manual component conversion (mitigated: gradual, component by component)
+- **Learning curve**: Utility names (mitigated: VS Code autocomplete + IntelliSense)
+- **Build time**: Tailwind v4 is 3.78x faster than v3, but still adds ~200ms to build
 
-### Roteiro de Migração
+### Migration Roadmap
 
-| Fase | Componentes | Esforço |
+| Phase | Components | Effort |
 |------|------------|---------|
 | 1 | Layout (page.tsx, layout.tsx, globals.css → @import) | 30 min |
 | 2 | UI primitives (Sidebar modal, Glass wrapper, Buttons) | 1h |
-| 3 | Complexos (Navbar search, Hero, Historical Lows, Deal cards) | 2h |
+| 3 | Complex (Navbar search, Hero, Historical Lows, Deal cards) | 2h |
 | 4 | User facing (Wishlist, Profile, Playlists, Badges) | 1h |
-| 5 | Limpeza (remover arquivos .module.css) | 15 min |
+| 5 | Cleanup (remove .module.css files) | 15 min |
 
 ---
 
-## Referências
+## References
 - [Tailwind CSS v4.0 Release](https://tailwindcss.com/blog/tailwindcss-v4) — CSS-first, OKLCH, 3.78x faster
 - [Tailwind CSS v4.3 Release](https://tailwindcss.com/blog/tailwindcss-v4-3) — Custom scrollbars, webpack plugin
 - [Tailwind CSS v4 Docs](https://tailwindcss.com/docs/installation) — `@import`, `@theme`, `@utility`, `@variant`

@@ -1,100 +1,100 @@
 # Tech Stack Dictionary — GameDeals
 
-Glossário das tecnologias, ferramentas e conceitos usados no projeto.
+Glossary of technologies, tools, and concepts used in the project.
 
 ## Core Framework
 
-| Termo | Descrição | Versão |
-|-------|-----------|--------|
-| **Next.js** | React framework com SSR, ISR, PPR, App Router | 16.2+ |
-| **React** | Biblioteca UI com Server Components, Actions, Compiler | 19 |
-| **TypeScript** | Superset tipado de JavaScript | 5.x (strict) |
-| **Turbopack** | Bundler Rust-based (Next.js 15+) | Default no Next.js 16 |
+| Term | Description | Version |
+|------|-------------|---------|
+| **Next.js** | React framework with SSR, ISR, PPR, App Router | 16.2+ |
+| **React** | UI library with Server Components, Actions, Compiler | 19 |
+| **TypeScript** | Typed superset of JavaScript | 5.x (strict) |
+| **Turbopack** | Rust-based bundler (Next.js 15+) | Default in Next.js 16 |
 
 ## Frontend
 
-| Termo | Descrição | Doc Link |
-|-------|-----------|----------|
-| **Tailwind CSS v4** | CSS-first utility framework com `@theme` para design tokens | [docs](https://tailwindcss.com/docs) |
-| **CSS First-class** | Paradigma Tailwind v4: CSS é a API principal, não JS config | [blog](https://tailwindcss.com/blog/tailwindcss-v4) |
-| **OKLCH** | Espaço de cor perceptual usado pelo Tailwind v4 | |
+| Term | Description | Doc Link |
+|------|-------------|----------|
+| **Tailwind CSS v4** | CSS-first utility framework with `@theme` for design tokens | [docs](https://tailwindcss.com/docs) |
+| **CSS First-class** | Tailwind v4 paradigm: CSS is the main API, not JS config | [blog](https://tailwindcss.com/blog/tailwindcss-v4) |
+| **OKLCH** | Perceptual color space used by Tailwind v4 | |
 | **Nuqs** | Type-safe URL search params state management | [github](https://github.com/47ng/nuqs) |
 | **Framer Motion** | Animation library (page transitions, modals, staggered) | [docs](https://www.framer.com/motion/) |
 | **Lucide React** | Icon library tree-shakable | [website](https://lucide.dev) |
 | **Recharts** | Chart library SSR-compatible (price history) | [website](https://recharts.org) |
-| **Glassmorphism** | Efeito de vidro: `backdrop-filter: blur()` + semi-transparent bg | |
-| **OLED** | Fundo preto verdadeiro (#0a0a0f) para economia de bateria em OLEDs | |
+| **Glassmorphism** | Glass effect: `backdrop-filter: blur()` + semi-transparent bg | |
+| **OLED** | True black background (#0a0a0f) for battery saving on OLEDs | |
 
 ## State Management
 
-| Termo | Descrição | Uso |
-|-------|-----------|-----|
-| **Zustand** | Client-side state (wishlist, UI, auth) | Stores centralizadas |
-| **TanStack Query v5** | Server state (API data, caching, dedup, optimistic) | Hooks useQuery/useInfiniteQuery |
-| **Server Actions** | Next.js 16 mutations server-side (form submit, mutations simples) | `'use server'` |
-| **`use cache`** | Next.js 16 cache API para ISR programático | `unstable_cache` wrapper |
-| **Revalidation** | Invalidação de cache via `revalidatePath`/`revalidateTag` | Pós-mutation |
+| Term | Description | Usage |
+|------|-------------|-------|
+| **Zustand** | Client-side state (wishlist, UI, auth) | Centralized stores |
+| **TanStack Query v5** | Server state (API data, caching, dedup, optimistic) | useQuery/useInfiniteQuery hooks |
+| **Server Actions** | Next.js 16 server-side mutations (form submit, simple mutations) | `'use server'` |
+| **`use cache`** | Next.js 16 cache API for programmatic ISR | `unstable_cache` wrapper |
+| **Revalidation** | Cache invalidation via `revalidatePath`/`revalidateTag` | Post-mutation |
 
 ## Database & ORM
 
-| Termo | Descrição |
-|-------|-----------|
-| **Supabase** | Backend gerenciado: PostgreSQL + Auth + Realtime + Storage + Edge Functions |
-| **Drizzle ORM** | ORM type-safe para TypeScript, Edge-ready, prepared statements |
-| **TimescaleDB** | Extensão PostgreSQL para séries temporais (price history) |
-| **pgvector** | Extensão PostgreSQL para vector search (busca semântica) |
-| **RLS** | Row Level Security — políticas de segurança no banco de dados |
-| **Continuous Aggregates** | Views automaticamente atualizadas do TimescaleDB (stats price) |
-| **Hypertable** | Tabela particionada por tempo no TimescaleDB |
+| Term | Description |
+|------|-------------|
+| **Supabase** | Managed backend: PostgreSQL + Auth + Realtime + Storage + Edge Functions |
+| **Drizzle ORM** | Type-safe ORM for TypeScript, Edge-ready, prepared statements |
+| **TimescaleDB** | PostgreSQL extension for time series (price history) |
+| **pgvector** | PostgreSQL extension for vector search (semantic search) |
+| **RLS** | Row Level Security — database security policies |
+| **Continuous Aggregates** | Automatically updated views from TimescaleDB (price stats) |
+| **Hypertable** | Time-partitioned table in TimescaleDB |
 
 ## Auth
 
-| Termo | Descrição |
-|-------|-----------|
-| **`@supabase/ssr`** | SSR session hydration + middleware Next.js |
-| **`@supabase/server`** | Novo (Maio 2026): auth edge functions simplificada |
+| Term | Description |
+|------|-------------|
+| **`@supabase/ssr`** | SSR session hydration + Next.js middleware |
+| **`@supabase/server`** | New (May 2026): simplified auth edge functions |
 | **Social Auth** | Login via Google, Discord, Steam, GitHub |
 
 ## Search
 
-| Termo | Descrição |
+| Term | Description |
 |-------|-----------|
-| **Typesense Cloud** | Search managed service: typo tolerance, faceted, vector, <50ms |
-| **pgvector** | PostgreSQL vector extension (fase 2: hybrid search) |
-| **Full-Text Search** | PostgreSQL `tsvector` + GIN index para busca textual |
+| **Typesense Cloud** | Managed search service: typo tolerance, faceted, vector, <50ms |
+| **pgvector** | PostgreSQL vector extension (phase 2: hybrid search) |
+| **Full-Text Search** | PostgreSQL `tsvector` + GIN index for text search |
 
 ## Deployment
 
-| Termo | Descrição |
-|-------|-----------|
-| **Vercel** | Plataforma de deploy com Edge Network, Cron, Analytics |
-| **OpenNext** | Framework para portar Next.js para AWS/Cloudflare/Netlify |
-| **Adapter API** | API estável de build do Next.js 16.2 (saída portável) |
-| **Vercel Cron Jobs** | Schedule de tarefas (price ingest, search sync) |
-| **ISR** | Incremental Static Regeneration — páginas estáticas com revalidação |
-| **PPR** | Partial Prerendering — partes estáticas + partes dinâmicas na mesma rota |
+| Term | Description |
+|------|-------------|
+| **Vercel** | Deploy platform with Edge Network, Cron, Analytics |
+| **OpenNext** | Framework to port Next.js to AWS/Cloudflare/Netlify |
+| **Adapter API** | Stable Next.js 16.2 build API (portable output) |
+| **Vercel Cron Jobs** | Task scheduling (price ingest, search sync) |
+| **ISR** | Incremental Static Regeneration — static pages with revalidation |
+| **PPR** | Partial Prerendering — static parts + dynamic parts on same route |
 
 ## Tooling & DX
 
-| Termo | Descrição | Versão |
-|-------|-----------|--------|
-| **Biome** | Lint + Format + Import Sort (Rust, 10-30x mais rápido) | 2.4+ |
-| **pnpm** | Package manager rápido, seguro, disk-efficient | 11.5+ |
+| Term | Description | Version |
+|------|-------------|---------|
+| **Biome** | Lint + Format + Import Sort (Rust, 10-30x faster) | 2.4+ |
+| **pnpm** | Fast, secure, disk-efficient package manager | 11.5+ |
 | **Vitest** | Test framework Vite-native (unit/integration) | Latest |
 | **Playwright** | Multi-browser E2E testing (Chromium + Firefox + WebKit) | Latest |
 
 ## Cron Jobs (Vercel)
 
-| Cron | Schedule | Função |
+| Cron | Schedule | Function |
 |------|----------|--------|
 | **Ingest Prices** | 3am daily | Fetch CheapShark deals → upsert price_history |
-| **Sync Search** | 4am daily | Indexar jogos novos no Typesense |
-| **Refresh Featured** | Every 4h | Atualizar Historical Lows, Ending Soon |
-| **Update Scores** | 6am daily | Recálculo de deal ratings, badges, XP |
+| **Sync Search** | 4am daily | Index new games in Typesense |
+| **Refresh Featured** | Every 4h | Update Historical Lows, Ending Soon |
+| **Update Scores** | 6am daily | Recalculate deal ratings, badges, XP |
 
 ## Deployment Settings
 
-| Parâmetro | Valor |
+| Parameter | Value |
 |-----------|-------|
 | Node version | 22.x |
 | Package manager | pnpm |

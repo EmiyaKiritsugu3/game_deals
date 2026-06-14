@@ -11,10 +11,12 @@ import { searchGamesAction } from '@/actions/search';
 import { useAuth } from '@/store/authStore';
 import AuthModal from './AuthModal';
 import styles from './Navbar.module.css';
+import NotificationBell from './NotificationBell';
 import WishlistIndicator from './WishlistIndicator';
 
+// fallow-ignore-next-line complexity
 export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseUser | null }) {
-  const { user, logout, setUser } = useAuth();
+  const { user, isLoggedIn, logout, setUser } = useAuth();
   const [query, setQuery] = useQueryState('q', { defaultValue: '' });
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -54,17 +56,20 @@ export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseU
     import('@/utils/supabase/client')
       .then(({ createClient }) => {
         const supabase = createClient();
-        // biome-ignore lint/suspicious/noExplicitAny: Supabase session type
-        const sub = supabase.auth.onAuthStateChange((_event: string, session: any) => {
-          setUser(session?.user ?? null);
-          if (session?.user) {
-            setIsAuthModalOpen(false);
+        // fallow-ignore-next-line complexity
+        const sub = supabase.auth.onAuthStateChange(
+          (_event: string, session: import('@supabase/supabase-js').Session | null) => {
+            setUser(session?.user ?? null);
+            if (session?.user) {
+              setIsAuthModalOpen(false);
+            }
           }
-        });
+        );
         subscription = sub.data.subscription;
       })
       .catch(() => {});
 
+    // fallow-ignore-next-line complexity
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
@@ -154,6 +159,7 @@ export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseU
             )}
           </div>
 
+          {isLoggedIn && <NotificationBell />}
           <WishlistIndicator />
 
           <div className={styles.authSection}>
