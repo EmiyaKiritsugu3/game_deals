@@ -28,6 +28,7 @@ Start here if you're onboarding or unfamiliar with the codebase.
 | [Manual — README](manual/README.md) | Manual overview and navigation |
 | [Glossary](glossary.md) | Domain terminology and abbreviations |
 | [Tech Stack Dictionary](tech_stack_dictionary.md) | Technology definitions and rationale |
+| [Use Cases](use-cases.md) | User journeys: browse, search, wishlist, alerts, playlists, affiliate, collections |
 
 ---
 

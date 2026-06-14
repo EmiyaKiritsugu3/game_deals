@@ -100,9 +100,13 @@ src/
 | Documento | Descrição |
 |-----------|-----------|
 | [Index](docs/index.md) | Visão geral da documentação |
-| [Arquitetura](docs/architecture/) | Decisões arquiteturais e diagramas |
+| [Arquitetura](docs/index.md#arquitetura) | Decisões arquiteturais e diagramas C4 |
+| [Release Process](docs/release-process.md) | Checklist de release e rollback |
 | [API Reference](docs/api-reference.md) | Referência de endpoints e Server Actions |
 | [Runbook](docs/runbook.md) | Procedimentos operacionais e troubleshooting |
-| [Glossário](docs/glossary.md) | Termos e conceitos do projeto |
+| [Glossário](docs/glossary.md) | Termos e conceitos do domínio |
 | [Contribuição](CONTRIBUTING.md) | Guia de contribuição |
-| [Test Strategy](docs/test-strategy.md) | Estratégia de testes e cobertura |
+| [Use Cases](docs/use-cases.md) | Fluxos de uso do sistema |
+| [Test Strategy](docs/test-strategy.md) | Estratégia de testes |
+| [Threat Model](docs/security/threat-model.md) | Modelo de ameaças STRIDE |
+| [Templates](docs/templates/README.md) | Templates de postmortem e PR/FAQ |
