@@ -47,12 +47,17 @@ DECLARE
   v_lowest  real;
   v_game_title text;
   v_existing_id uuid;
+  v_lock_key  bigint;
 BEGIN
   FOR v_alert IN
     SELECT pa.id, pa."userId", pa."gameId", pa."storeId", pa."targetPrice"
     FROM price_alerts pa
     WHERE pa."isActive" = 1
   LOOP
+    -- Acquire advisory lock for this user+game+targetPrice to prevent race conditions
+    v_lock_key := hashtext(v_alert."userId"::text || ':' || v_alert."gameId"::text || ':' || v_alert."targetPrice"::text);
+    PERFORM pg_advisory_xact_lock(v_lock_key);
+
     SELECT MIN(d.price)::real INTO v_lowest
     FROM deals d
     WHERE d."gameId" = v_alert."gameId"
@@ -71,11 +76,13 @@ BEGIN
       SELECT COALESCE(g.title, 'Your game') INTO v_game_title
       FROM games g WHERE g.id = v_alert."gameId";
 
+      -- Include targetPrice in idempotency key to distinguish different alerts on same game
       SELECT id INTO v_existing_id
       FROM notifications n
       WHERE n."userId" = v_alert."userId"
         AND n.kind = 'price_alert'
         AND (n.payload->>'gameId')::uuid = v_alert."gameId"
+        AND (n.payload->>'targetPrice')::numeric = v_alert."targetPrice"
         AND n."createdAt" > NOW() - INTERVAL '1 hour'
       LIMIT 1;
 
