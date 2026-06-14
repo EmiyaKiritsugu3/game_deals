@@ -1,15 +1,5 @@
-import { index, pgEnum, pgTable, real, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { index, pgTable, real, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 import { games } from './games';
-
-export const store = pgEnum('store', [
-  'steam',
-  'epic',
-  'gog',
-  'humble',
-  'fanatical',
-  'greenmangaming',
-  'nuuvem',
-]);
 
 export const deals = pgTable(
   'deals',
@@ -18,7 +8,7 @@ export const deals = pgTable(
     gameId: uuid()
       .notNull()
       .references(() => games.id),
-    storeId: store().notNull(),
+    storeId: varchar({ length: 50 }).notNull(),
     price: real().notNull(),
     retailPrice: real().notNull(),
     savings: real().notNull(),
