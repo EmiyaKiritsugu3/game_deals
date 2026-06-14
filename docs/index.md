@@ -96,6 +96,14 @@ Full listing: [ADR Index](adr/README.md) | Template: [New ADR](adr/_template.md)
 
 ---
 
+## Technical Debt
+
+| Resource | Description |
+|----------|-------------|
+| [Technical Debt Register](technical-debt.md) | Prioritized list of known tech debt items across the codebase |
+
+---
+
 ## Session Reports
 
 | Report | Description |
