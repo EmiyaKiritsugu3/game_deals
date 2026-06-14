@@ -1,15 +1,5 @@
-import { sql } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
-import { db } from '@/db';
-
-interface TriggeredAlert {
-  alert_id: string;
-  user_id: string;
-  game_id: string;
-  store_id: string | null;
-  target_price: number;
-  current_price: number;
-}
+import { checkTriggeredAlertsAction } from '@/actions/alerts';
 
 // fallow-ignore-next-line complexity
 export async function GET(request: Request) {
@@ -19,18 +9,16 @@ export async function GET(request: Request) {
   }
 
   try {
-    const triggered = (await db.execute(
-      sql`SELECT * FROM public.check_alerts_for_all()`
-    )) as unknown as TriggeredAlert[];
+    const { checked, triggered } = await checkTriggeredAlertsAction();
 
     for (const a of triggered) {
       console.log(
-        `ALERT TRIGGERED user=${a.user_id} game=${a.game_id} price=${a.current_price} target=${a.target_price}`
+        `ALERT TRIGGERED user=${a.userId} game=${a.gameId} price=${a.currentLowest} target=${a.targetPrice}`
       );
     }
 
     return NextResponse.json({
-      processed: triggered.length,
+      processed: checked,
       triggered: triggered.length,
       details: triggered,
     });
