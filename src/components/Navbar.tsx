@@ -54,7 +54,6 @@ export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseU
     // Lazy import Supabase client + listen for auth changes
     let subscription: { unsubscribe: () => void } | null = null;
     import('@/utils/supabase/client')
-      // fallow-ignore-next-line complexity
       .then(({ createClient }) => {
         const supabase = createClient();
         // fallow-ignore-next-line complexity
