@@ -1,16 +1,16 @@
-# 03. Gamificação e Gerenciamento de Estado
+# 03. Gamification and State Management
 
-GameDeals usa três camadas de estado distintas: **Zustand** para estado global do cliente, **TanStack Query** para dados de servidor e cache no cliente, e **Server Actions** + **Drizzle ORM** para mutations e persistência. Cada camada tem responsabilidade bem definida.
+GameDeals uses three distinct state layers: **Zustand** for global client state, **TanStack Query** for server data and client cache, and **Server Actions** + **Drizzle ORM** for mutations and persistence. Each layer has a well-defined responsibility.
 
 ---
 
-## 1. Zustand — Estado Global do Cliente
+## 1. Zustand — Global Client State
 
-Zustand (~1 KB, zero boilerplate, sem providers) substitui Context API e Redux. Três stores independentes, cada uma num arquivo separado em `src/store/`.
+Zustand (~1 KB, zero boilerplate, no providers) replaces Context API and Redux. Three independent stores, each in a separate file under `src/store/`.
 
 ### authStore.ts (`src/store/authStore.ts`)
 
-Gerencia sessão do usuário. **Lazy-init** do Supabase browser client pra evitar crash SSR — o cliente só é carregado via `import()` dinâmico dentro de `getSupabase()`.
+Manages user session. **Lazy-init** of the Supabase browser client to avoid SSR crash — the client is only loaded via dynamic `import()` inside `getSupabase()`.
 
 ```typescript
 interface AuthState {
@@ -21,13 +21,13 @@ interface AuthState {
 }
 ```
 
-- `setUser()` mapeia `SupabaseUser` → `User` local (id, name, email, avatar com fallback DiceBear).
-- `logout()` chama `supabase.auth.signOut()` e limpa o estado.
-- Sem `persist` middleware — sessão é recarregada do SSR no mount via `useEffect` no Navbar + `onAuthStateChange`.
+- `setUser()` maps `SupabaseUser` → local `User` (id, name, email, avatar with DiceBear fallback).
+- `logout()` calls `supabase.auth.signOut()` and clears state.
+- No `persist` middleware — session is reloaded from SSR on mount via `useEffect` in Navbar + `onAuthStateChange`.
 
 ### wishlistStore.ts (`src/store/wishlistStore.ts`)
 
-Array de IDs (`string[]`) persistido no **localStorage** via `persist` middleware do Zustand (chave: `gameDeals_wishlist`).
+Array of IDs (`string[]`) persisted in **localStorage** via Zustand's `persist` middleware (key: `gameDeals_wishlist`).
 
 ```typescript
 interface WishlistState {
@@ -40,14 +40,14 @@ interface WishlistState {
 }
 ```
 
-- Operações são **locais** (sem fetch). Sincronização com Supabase acontece posteriormente via `setWishlist()`.
-- `addToWishlist` previne duplicatas com `includes()` antes de adicionar.
-- `removeFromWishlist` filtra pelo ID.
-- `toggleWishlist` combina add/remove num só método pra uso em botões toggle.
+- Operations are **local** (no fetch). Sync with Supabase happens later via `setWishlist()`.
+- `addToWishlist` prevents duplicates with `includes()` before adding.
+- `removeFromWishlist` filters by ID.
+- `toggleWishlist` combines add/remove in a single method for use in toggle buttons.
 
 ### alertStore.ts (`src/store/alertStore.ts`)
 
-Alertas de preço com `persist` middleware (chave: `gamedeals-alerts-storage`).
+Price alerts with `persist` middleware (key: `gamedeals-alerts-storage`).
 
 ```typescript
 interface PriceAlert {
@@ -68,28 +68,28 @@ interface AlertState {
 }
 ```
 
-- `addAlert` atualiza se existente ou insere novo (com `createdAt: Date.now()`).
-- Alertas persistidos são verificados pelo cron `/api/cron/check-alerts`.
+- `addAlert` updates if existing or inserts new (with `createdAt: Date.now()`).
+- Persisted alerts are checked by cron `/api/cron/check-alerts`.
 
-### Por que Zustand?
+### Why Zustand?
 
-| Alternativa | Problema |
-|-------------|----------|
-| Context API | Re-renderizações em cascata sem `useMemo` rigoroso |
-| Redux | Boilerplate excessivo para necessidades simples |
-| Jotai/Recoil | API mais complexa, ecossistema menor |
+| Alternative | Problem |
+|-------------|---------|
+| Context API | Cascading re-renders without strict `useMemo` |
+| Redux | Excessive boilerplate for simple needs |
+| Jotai/Recoil | More complex API, smaller ecosystem |
 
-Zustand: stores isoladas, `persist` middleware nativo, TypeScript-first, ~1KB.
+Zustand: isolated stores, native `persist` middleware, TypeScript-first, ~1KB.
 
 ---
 
-## 2. TanStack Query — Dados de Servidor no Cliente
+## 2. TanStack Query — Server Data on the Client
 
-**Server state** (deals, preços, histórico) não vai pra Zustand. Usa-se **TanStack Query v5** com hooks em `src/hooks/`.
+**Server state** (deals, prices, history) does not go to Zustand. It uses **TanStack Query v5** with hooks in `src/hooks/`.
 
 ### useWishlistGames (`src/hooks/useWishlistGames.ts`)
 
-Busca detalhes dos jogos na wishlist via CheapShark API.
+Fetches wishlist game details via CheapShark API.
 
 ```typescript
 export function useWishlistGames(gameIds: string[]) {
@@ -108,13 +108,13 @@ export function useWishlistGames(gameIds: string[]) {
 }
 ```
 
-- `enabled: gameIds.length > 0` — não dispara query com lista vazia.
-- `catch(() => null)` — jogo offline não quebra a lista inteira.
-- `staleTime: 5 min` — evita refetch em navegação rápida.
+- `enabled: gameIds.length > 0` — does not fire query with empty list.
+- `catch(() => null)` — offline game does not break the entire list.
+- `staleTime: 5 min` — prevents refetch on fast navigation.
 
 ### usePriceHistory (`src/hooks/usePriceHistory.ts`)
 
-Dois hooks — `useDailyPriceHistory` e `useWeeklyPriceHistory` — que chamam **Server Actions** (`getDailyPriceHistoryAction`, `getWeeklyPriceHistoryAction`).
+Two hooks — `useDailyPriceHistory` and `useWeeklyPriceHistory` — that call **Server Actions** (`getDailyPriceHistoryAction`, `getWeeklyPriceHistoryAction`).
 
 ```typescript
 export function useDailyPriceHistory(gameId: string | null, days = 90) {
@@ -122,33 +122,33 @@ export function useDailyPriceHistory(gameId: string | null, days = 90) {
     queryKey: ['priceHistory', 'daily', gameId, days],
     queryFn: () => getDailyPriceHistoryAction(gameId ?? '', days),
     enabled: !!gameId,
-    staleTime: 60 * 60 * 1000,     // 1 hora
-    gcTime: 24 * 60 * 60 * 1000,   // GC após 24h
+    staleTime: 60 * 60 * 1000,     // 1 hour
+    gcTime: 24 * 60 * 60 * 1000,   // GC after 24h
   });
 }
 ```
 
-### Divisão de Responsabilidade
+### Responsibility Division
 
-| Cenário | Tecnologia | Local |
-|---------|------------|-------|
-| Estado global do cliente | Zustand | `src/store/` |
-| Cache de dados do servidor | TanStack Query | `src/hooks/` |
-| Mutations e persistência | Server Actions | `src/actions/` |
-| Schema type-safe | Drizzle ORM | `src/db/schema/` |
+| Scenario | Technology | Location |
+|----------|------------|----------|
+| Global client state | Zustand | `src/store/` |
+| Server data cache | TanStack Query | `src/hooks/` |
+| Mutations and persistence | Server Actions | `src/actions/` |
+| Type-safe schema | Drizzle ORM | `src/db/schema/` |
 
 ---
 
-## 3. Gamificação — Drizzle + Server Actions
+## 3. Gamification — Drizzle + Server Actions
 
-Sistema de gamificação usa **Drizzle ORM** para schema e **Server Actions** (`'use server'`) para lógica de negócio. Substitui o antigo serviço `src/services/social.ts` que chamava Supabase client diretamente.
+The gamification system uses **Drizzle ORM** for schema and **Server Actions** (`'use server'`) for business logic. Replaces the old `src/services/social.ts` service that called Supabase client directly.
 
-### Schema Drizzle (`src/db/schema/gamification.ts`)
+### Drizzle Schema (`src/db/schema/gamification.ts`)
 
-Quatro tabelas:
+Four tables:
 
 ```typescript
-// Badges disponíveis no sistema
+// Badges available in the system
 export const badges = pgTable('badges', {
   id: uuid().defaultRandom().primaryKey(),
   name: varchar({ length: 100 }).notNull().unique(),
@@ -158,7 +158,7 @@ export const badges = pgTable('badges', {
   criteria: jsonb().notNull(), // { type: "wishlist_count", threshold: 10 }
 });
 
-// Badges conquistadas por usuário (unique index evita duplicatas)
+// Badges earned by user (unique index prevents duplicates)
 export const userBadges = pgTable('user_badges', {
   id: uuid().defaultRandom().primaryKey(),
   userId: uuid().notNull(),
@@ -168,7 +168,7 @@ export const userBadges = pgTable('user_badges', {
   uniqueIndex('user_badges_user_badge_unique').on(table.userId, table.badgeId),
 ]);
 
-// Histórico de atividades do usuário
+// User activity history
 export const activities = pgTable('activities', {
   id: uuid().defaultRandom().primaryKey(),
   userId: uuid().notNull(),
@@ -177,7 +177,7 @@ export const activities = pgTable('activities', {
   createdAt: timestamp().defaultNow().notNull(),
 });
 
-// Wishlist persistida (relacional, por usuário)
+// Persisted wishlist (relational, per user)
 export const wishlists = pgTable('wishlists', {
   id: uuid().defaultRandom().primaryKey(),
   userId: uuid().notNull(),
@@ -188,40 +188,40 @@ export const wishlists = pgTable('wishlists', {
 ]);
 ```
 
-Princípios:
-- `snake_case` nas colunas PostgreSQL (convensão do projeto).
-- `uuid().defaultRandom()` para PKs.
-- `uniqueIndex` para constraints de unicidade (badge por usuário, jogo por wishlist).
-- `jsonb()` para `criteria` e `details` — flexível, sem schema rígido.
-- `ON CONFLICT DO NOTHING` nas inserções via raw SQL.
+Principles:
+- `snake_case` in PostgreSQL columns (project convention).
+- `uuid().defaultRandom()` for PKs.
+- `uniqueIndex` for uniqueness constraints (badge per user, game per wishlist).
+- `jsonb()` for `criteria` and `details` — flexible, no rigid schema.
+- `ON CONFLICT DO NOTHING` in raw SQL insertions.
 
 ### Server Actions (`src/actions/gamification.ts`)
 
-Operações usando `db.execute(sql\`...\`)` com Drizzle + PostgreSQL raw queries.
+Operations using `db.execute(sql\`...\`)` with Drizzle + PostgreSQL raw queries.
 
-| Action | Descrição |
+| Action | Description |
 |--------|-----------|
-| `addXPAction(userId, amount, reason)` | Adiciona XP ao perfil + registra atividade |
-| `getUserXPAction(userId)` | Retorna XP total do usuário |
-| `getBadgesAction()` | Lista todos os badges disponíveis |
-| `getUserBadgesAction(userId)` | Badges do usuário com JOIN e `awardedAt` |
-| `awardBadgeAction(userId, badgeId)` | Concede badge, ignora duplicata (ON CONFLICT DO NOTHING) |
-| `checkAndAwardBadgesAction(userId)` | Verifica métricas e concede badges automáticos |
+| `addXPAction(userId, amount, reason)` | Adds XP to profile + logs activity |
+| `getUserXPAction(userId)` | Returns user's total XP |
+| `getBadgesAction()` | Lists all available badges |
+| `getUserBadgesAction(userId)` | User's badges with JOIN and `awardedAt` |
+| `awardBadgeAction(userId, badgeId)` | Awards badge, ignores duplicate (ON CONFLICT DO NOTHING) |
+| `checkAndAwardBadgesAction(userId)` | Checks metrics and awards automatic badges |
 
-**Fluxo de `addXPAction`:**
-1. `INSERT INTO profiles ... ON CONFLICT (id) DO UPDATE SET xp = xp + amount` — upsert atômico.
-2. `INSERT INTO activities` — log da ação.
-3. Sem transação explícita (cada statement é atômico no PostgreSQL).
+**`addXPAction` Flow:**
+1. `INSERT INTO profiles ... ON CONFLICT (id) DO UPDATE SET xp = xp + amount` — atomic upsert.
+2. `INSERT INTO activities` — action log.
+3. No explicit transaction (each statement is atomic in PostgreSQL).
 
-**Fluxo de `checkAndAwardBadgesAction`:**
-1. Busca XP, contagem de wishlists, contagem de playlists.
-2. Para cada badge (First Steps, XP Hunter, Wishlist Master, Curator), verifica threshold.
-3. Chama `awardBadgeAction` que usa `ON CONFLICT (userId, badgeId) DO NOTHING` — badge já existente é ignorado silenciosamente.
-4. Retorna `true` independente de quantos badges foram concedidos.
+**`checkAndAwardBadgesAction` Flow:**
+1. Fetches XP, wishlist count, playlist count.
+2. For each badge (First Steps, XP Hunter, Wishlist Master, Curator), checks threshold.
+3. Calls `awardBadgeAction` which uses `ON CONFLICT (userId, badgeId) DO NOTHING` — already existing badge is silently ignored.
+4. Returns `true` regardless of how many badges were awarded.
 
-### Sistema de Playlists (`src/actions/playlists.ts` + `src/db/schema/playlists.ts`)
+### Playlist System (`src/actions/playlists.ts` + `src/db/schema/playlists.ts`)
 
-Playlists usam **duas tabelas** relacionais (não array de strings):
+Playlists use **two relational tables** (not an array of strings):
 
 ```typescript
 export const playlists = pgTable('playlists', {
@@ -244,17 +244,17 @@ export const playlistGames = pgTable('playlist_games', {
 });
 ```
 
-Server Actions de playlist (`src/actions/playlists.ts`):
-- `createPlaylistAction(title, description, isPublic)` — gera slug, insere, retorna playlist.
-- `getUserPlaylistsAction()` — lista playlists do usuário com `LEFT JOIN COUNT(gameCount)`.
-- `addGameToPlaylistAction(playlistId, gameId, notes)` — verifica ownership antes de inserir.
-- `removeGameFromPlaylistAction(playlistId, gameId)` — verifica ownership antes de deletar.
-- `deletePlaylistAction(playlistId)` — verifica ownership.
-- `getPublicPlaylistAction(slug)` — busca playlist pública + JOIN com `games` pra dados completos.
+Playlist Server Actions (`src/actions/playlists.ts`):
+- `createPlaylistAction(title, description, isPublic)` — generates slug, inserts, returns playlist.
+- `getUserPlaylistsAction()` — lists user playlists with `LEFT JOIN COUNT(gameCount)`.
+- `addGameToPlaylistAction(playlistId, gameId, notes)` — checks ownership before inserting.
+- `removeGameFromPlaylistAction(playlistId, gameId)` — checks ownership before deleting.
+- `deletePlaylistAction(playlistId)` — checks ownership.
+- `getPublicPlaylistAction(slug)` — fetches public playlist + JOIN with `games` for complete data.
 
-Todas as actions de playlist usam `postgres` raw client (não Drizzle ORM) com `ON CONFLICT DO NOTHING` para evitar duplicatas.
+All playlist actions use `postgres` raw client (not Drizzle ORM) with `ON CONFLICT DO NOTHING` to avoid duplicates.
 
-### Arquitetura de Dados
+### Data Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -280,7 +280,7 @@ Todas as actions de playlist usam `postgres` raw client (não Drizzle ORM) com `
 │    └── usePriceHistory → server actions (Drizzle)        │
 │    │                                                      │
 │    ▼ Zustand stores (src/store/)                         │
-│    ├── authStore.ts     → sessão + lazy Supabase init    │
+│    ├── authStore.ts     → session + lazy Supabase init    │
 │    ├── wishlistStore.ts → localStorage persist           │
 │    └── alertStore.ts    → price alerts persist           │
 └─────────────────────────────────────────────────────────┘
@@ -288,15 +288,15 @@ Todas as actions de playlist usam `postgres` raw client (não Drizzle ORM) com `
 
 ---
 
-## 4. Fluxo Típico de Gamificação
+## 4. Typical Gamification Flow
 
-1. Usuário adiciona jogo na wishlist → `wishlistStore.addToWishlist(id)` (instantâneo, local).
-2. TanStack Query `useWishlistGames` detecta novo ID e faz fetch dos detalhes.
-3. Quando usuário faz login, wishlist local é sincronizada com Supabase via `wishlists` table.
-4. Server Action `addXPAction` é chamada, incrementando XP no perfil.
-5. `checkAndAwardBadgesAction` varre métricas e concede badges automaticamente.
-6. Badges são visíveis via `getUserBadgesAction` (JOIN badges + user_badges).
+1. User adds game to wishlist → `wishlistStore.addToWishlist(id)` (instant, local).
+2. TanStack Query `useWishlistGames` detects new ID and fetches details.
+3. When user logs in, local wishlist is synced with Supabase via `wishlists` table.
+4. Server Action `addXPAction` is called, incrementing XP in profile.
+5. `checkAndAwardBadgesAction` scans metrics and awards badges automatically.
+6. Badges are visible via `getUserBadgesAction` (JOIN badges + user_badges).
 
 ---
 
-**Próximo Passo:** Veja como as engrenagens de UI sustentam tudo isso em [04. Roteamento e Páginas (App Router)](04-pages-routing.md).
+**Next Step:** See how the UI gears support all this in [04. Routing and Pages (App Router)](04-pages-routing.md).

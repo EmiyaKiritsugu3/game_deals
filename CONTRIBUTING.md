@@ -23,7 +23,7 @@ cp .env.example .env.local
 pnpm dev                  # start dev server (Turbopack)
 ```
 
-Environment variables are documented in **[README.md](./README.md#variáveis-de-ambiente)**. You'll need a Supabase project and (optionally) a Typesense instance for search features.
+Environment variables are documented in **[README.md](./README.md#environment-variables)**. You'll need a Supabase project and (optionally) a Typesense instance for search features.
 
 ## Project Structure
 

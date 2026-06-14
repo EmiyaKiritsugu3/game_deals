@@ -1,24 +1,24 @@
 # ADR-006: Affiliate Monetization — Cloaking Gateway /out Route
 
-**Status**: Aceito
-**Data**: 2026-06-09 (Atualizado 2026-06-10)
-**Autor**: EmiyaKiritsugu3
+**Status**: Accepted
+**Date**: 2026-06-09 (Updated 2026-06-10)
+**Author**: EmiyaKiritsugu3
 
 ---
 
-## Contexto
+## Context
 
-Monetização principal do GameDeals via **links de afiliado**. Necessidades:
+GameDeals main monetization via **affiliate links**. Requirements:
 
-- **Cloaking**: Links curtos internos (`/out/steam/game-123`) → redireciona com parâmetros de tracking
-- **LGPD compliance**: Consentimento via cookie banner + cookie table
-- **Multi-store**: Steam, Epic, GOG, Humble, Fanatical, GreenManGaming, Nuuvem (futuro)
+- **Cloaking**: Short internal links (`/out/steam/game-123`) → redirects with tracking parameters
+- **LGPD compliance**: Consent via cookie banner + cookie table
+- **Multi-store**: Steam, Epic, GOG, Humble, Fanatical, GreenManGaming, Nuuvem (future)
 - **Multi-network**: Rakuten, CJ, Awin (pending), Impact (future)
-- **Tracking**: Contagem de cliques, conversão, CTR por store/game
+- **Tracking**: Click counting, conversion, CTR by store/game
 
 ---
 
-## Decisão
+## Decision
 
 ### Affiliate Cloaking Route
 
@@ -68,7 +68,7 @@ export async function GET(
 
 ```typescript
 export const runtime = 'edge';
-export const dynamic = 'force-dynamic'; // sempre fresh para redirect
+export const dynamic = 'force-dynamic'; // always fresh for redirect
 ```
 
 ### Affiliate Link Table (Drizzle ORM)
@@ -97,26 +97,26 @@ export const affiliateClicks = pgTable('affiliate_clicks', {
 
 ---
 
-## Consequências
+## Consequences
 
-### Positivas
-- **SEO limpo**: Todos links internos, sem parâmetros de afiliado nos crawled pages
-- **Tracking próprio**: Banco de cliques para analytics, CTR reports
-- **LGPD compliant**: IP anonimizado, consentimento via banner
-- **Edge-ready**: Route handlers no Edge, redirect 307/302 rápido
-- **Swap fácil**: Trocar network só muda `trackingTemplate` no banco
+### Positive
+- **Clean SEO**: All internal links, no affiliate parameters on crawled pages
+- **Own tracking**: Click database for analytics, CTR reports
+- **LGPD compliant**: Anonymized IP, consent via banner
+- **Edge-ready**: Route handlers on Edge, fast 307/302 redirect
+- **Easy swap**: Changing network only updates `trackingTemplate` in DB
 
-### Negativas / Trade-offs
-- **Redirect overhead**: 307 redirect adiciona ~50ms (mitigado: Edge runtime)
-- **Dados de conversão**: Requer parceria com network para postback (supabase webhook)
-- **Nuuvem/CJ/Awin**: Pendente aprovação (afiliados BR têm requisitos específicos)
+### Negative / Trade-offs
+- **Redirect overhead**: 307 redirect adds ~50ms (mitigated: Edge runtime)
+- **Conversion data**: Requires partnership with network for postback (supabase webhook)
+- **Nuuvem/CJ/Awin**: Pending approval (BR affiliates have specific requirements)
 
 ---
 
-## Referências
+## References
 - [Rakuten Affiliate API](https://rakutenmarketing.com/affiliate)
 - [CJ Affiliate](https://www.cj.com)
 - [Awin](https://www.awin.com)
 - [ADR-003: State Management](ADR-003-state-management.md) — click analytics via TanStack Query
 - [ADR-004: Auth & Backend](ADR-004-auth-backend.md) — Drizzle + Supabase
-- `src/app/out/[storeId]/[gameSlug]/route.ts` — Implementação
+- `src/app/out/[storeId]/[gameSlug]/route.ts` — Implementation

@@ -1,73 +1,73 @@
-# 🛤️ 04. Roteamento e Páginas (App Router)
+# 🛤️ 04. Routing and Pages (App Router)
 
-O GameDeals usa o App Router do Next.js 16 com estrutura de pastas em `src/app/`. Abaixo, a dissecção de cada rota, seus padrões de dados e decisões arquiteturais.
+GameDeals uses the Next.js 16 App Router with a folder structure under `src/app/`. Below is the dissection of each route, its data patterns, and architectural decisions.
 
 ```
 src/app/
 ├── layout.tsx              # Root layout — providers, fonts, JSON-LD
 ├── page.tsx                # Home — ISR revalidate=3600
-├── loading.tsx             # Loading state global (Suspense)
-├── not-found.tsx           # Página 404 customizada
-├── globals.css             # Estilos globais (Tailwind v4)
-├── sitemap.ts              # Sitemap dinâmico
-├── robots.ts               # Configuração robots.txt
+├── loading.tsx             # Global loading state (Suspense)
+├── not-found.tsx           # Custom 404 page
+├── globals.css             # Global styles (Tailwind v4)
+├── sitemap.ts              # Dynamic sitemap
+├── robots.ts               # robots.txt configuration
 │
-├── @modal/                 # Parallel Route — interceptação de rotas
+├── @modal/                 # Parallel Route — route interception
 │   └── (.)game/[id]/
-│       └── page.tsx        # Modal de detalhe do jogo (sidebar overlay)
+│       └── page.tsx        # Game detail modal (sidebar overlay)
 │
 ├── game/
 │   └── [id]/
-│       └── page.tsx        # Página de detalhe do jogo (full page)
+│       └── page.tsx        # Game detail page (full page)
 │
 ├── search/
-│   └── page.tsx            # Busca com filtros (CheapShark)
+│   └── page.tsx            # Search with filters (CheapShark)
 │
 ├── wishlist/
-│   ├── page.tsx            # Dashboard protegido (wishlist + alertas)
+│   ├── page.tsx            # Protected dashboard (wishlist + alerts)
 │   └── shared/
-│       └── page.tsx        # Wishlist compartilhada (pública, base64)
+│       └── page.tsx        # Shared wishlist (public, base64)
 │
 ├── bundles/
-│   └── page.tsx            # Lista de bundles (dados estáticos)
+│   └── page.tsx            # Bundle listing (static data)
 │
 ├── collections/
-│   ├── page.tsx            # Índice de coleções curadas
+│   ├── page.tsx            # Curated collections index
 │   └── [slug]/
-│       └── page.tsx        # Detalhe da coleção (generateStaticParams)
+│       └── page.tsx        # Collection detail (generateStaticParams)
 │
 ├── out/
 │   └── [storeId]/[gameSlug]/
-│       └── route.ts        # Redirect cloak de afiliado
+│       └── route.ts        # Affiliate redirect cloak
 │
 ├── auth/
 │   └── callback/
-│       └── route.ts        # Callback OAuth Supabase
+│       └── route.ts        # Supabase OAuth callback
 │
 └── api/
     └── cron/
-        ├── ingest-prices/     # Cron: ingestão CheapShark (4h)
-        ├── reindex-typesense/ # Cron: reindex Typesense (diário)
-        └── check-alerts/      # Cron: verificação de alertas
+        ├── ingest-prices/     # Cron: CheapShark ingestion (4h)
+        ├── reindex-typesense/ # Cron: Typesense reindex (daily)
+        └── check-alerts/      # Cron: alert verification
 ```
 
 ---
 
 ## 1. Root Layout (`src/app/layout.tsx`)
 
-O layout raiz é um **Server Component** que orquestra toda a aplicação. Seus props incluem `{ children, modal }` — o segundo é um **Parallel Route Slot** que o Next.js preenche automaticamente com o conteúdo de `@modal/`.
+The root layout is a **Server Component** that orchestrates the entire application. Its props include `{ children, modal }` — the second is a **Parallel Route Slot** that Next.js automatically fills with the content of `@modal/`.
 
-Responsabilidades:
+Responsibilities:
 
-- **Fontes:** Inter via `next/font/google` na variável CSS `--font-inter`.
-- **SEO Global:** Metadados Open Graph, Twitter Cards, JSON-LD (WebSite + SearchAction) injetado via `<script type="application/ld+json">`.
+- **Fonts:** Inter via `next/font/google` in CSS variable `--font-inter`.
+- **Global SEO:** Open Graph metadata, Twitter Cards, JSON-LD (WebSite + SearchAction) injected via `<script type="application/ld+json">`.
 - **Providers:** `NuqsAdapter` (query string state), `ReactQueryProvider` (TanStack Query).
-- **Componentes Fixos:** `Navbar` (navegação global), `SyncManager` (sincroniza auth Zustand + Supabase), `CookieBanner`.
-- **Analytics:** `@vercel/analytics/react` + `@vercel/speed-insights/next` no final do `<body>`.
-- **Modal Slot:** `{modal}` renderizado abaixo de `{children}`, permitindo que rotas interceptadas sobreponham o conteúdo.
+- **Fixed Components:** `Navbar` (global navigation), `SyncManager` (syncs Zustand auth + Supabase), `CookieBanner`.
+- **Analytics:** `@vercel/analytics/react` + `@vercel/speed-insights/next` at the end of `<body>`.
+- **Modal Slot:** `{modal}` rendered below `{children}`, allowing intercepted routes to overlay content.
 
 ```tsx
-// layout.tsx — trecho do return
+// layout.tsx — return snippet
 <NuqsAdapter>
   <ReactQueryProvider>
     <Navbar serverUser={null} />
@@ -82,196 +82,196 @@ Responsabilidades:
 ```
 
 > [!IMPORTANT]
-> O slot `modal` é obrigatório no layout. Sem ele, a interceptação de rota `@modal/(.)game/[id]` não funciona.
+> The `modal` slot is required in the layout. Without it, the `@modal/(.)game/[id]` route interception does not work.
 
 ---
 
 ## 2. Loading Global (`src/app/loading.tsx`)
 
-Renderizado automaticamente pelo React Suspense durante transições de rota. Exibe um spinner com a mensagem "Scanning for discounts...". Previne a sensação de travamento enquanto Server Components carregam dados remotos.
+Automatically rendered by React Suspense during route transitions. Displays a spinner with the message "Scanning for discounts...". Prevents the feeling of stalling while Server Components load remote data.
 
 ---
 
 ## 3. Home Page (`src/app/page.tsx`)
 
-**Server Component** com **ISR** configurado via `export const revalidate = 3600` (revalida a cada 1 hora).
+**Server Component** with **ISR** configured via `export const revalidate = 3600` (revalidates every 1 hour).
 
-### Estratégia de Dados
+### Data Strategy
 
-Usa `Promise.all` para buscar 5 categorias em paralelo, eliminando waterfall:
+Uses `Promise.all` to fetch 5 categories in parallel, eliminating waterfall:
 
 ```tsx
 const [popular, bestDeals, recentDeals, flashDeals, freebies] = await Promise.all([
   getDeals({ pageSize: '5' }),            // Deal Rating (default)
-  getDeals({ sortBy: 'Savings', pageSize: '10' }), // Maior %
-  getDeals({ sortBy: 'Recent', pageSize: '10' }),  // Mais recentes
+  getDeals({ sortBy: 'Savings', pageSize: '10' }), // Biggest %
+  getDeals({ sortBy: 'Recent', pageSize: '10' }),  // Most recent
   getDeals({ sortBy: 'Price', pageSize: '8', onSale: '1' }), // Flash
   getDeals({ upperPrice: '0', pageSize: '6' }), // 100% OFF Freebies
 ]);
 ```
 
-### Seções
+### Sections
 
-| Seção | Fonte | Renderização |
-|-------|-------|-------------|
-| Hero Carrossel | `popular.slice(0, 5)` | Server — passa `deals` como prop |
-| Freebies | `freebies` | Server — componente `Freebies` |
+| Section | Source | Rendering |
+|---------|--------|-----------|
+| Hero Carousel | `popular.slice(0, 5)` | Server — passes `deals` as prop |
+| Freebies | `freebies` | Server — `Freebies` component |
 | Flash Sales | `flashDeals` | Server — `FlashSales` |
-| Grid Populares | `popular.slice(5)` | Server — `GameCard` em grid |
-| New Deals | `recentDeals` | Server — `DealRow` em lista |
-| Best Deals | `bestDeals` | Server — `DealRow` em lista |
-| Historical Lows | Hook próprio (`getDeals` interno) | Modular — sem props |
-| Ending Soon | Hook próprio (`getDeals` interno) | Modular — sem props |
+| Popular Grid | `popular.slice(5)` | Server — `GameCard` in grid |
+| New Deals | `recentDeals` | Server — `DealRow` in list |
+| Best Deals | `bestDeals` | Server — `DealRow` in list |
+| Historical Lows | Own Hook (`getDeals` internal) | Modular — no props |
+| Ending Soon | Own Hook (`getDeals` internal) | Modular — no props |
 
-Os dois últimos (`<HistoricalLows />` e `<EndingSoon />`) são módulos autossuficientes que disparam suas próprias requisições `getDeals()`. Isso reduz o tamanho do `page.tsx` e permite que cada um tenha sua própria lógica de loading.
+The last two (`<HistoricalLows />` and `<EndingSoon />`) are self-sufficient modules that fire their own `getDeals()` requests. This reduces `page.tsx` size and allows each to have its own loading logic.
 
 ---
 
-## 4. Detalhe do Jogo (`/game/[id]`)
+## 4. Game Detail (`/game/[id]`)
 
 ### Full Page (`src/app/game/[id]/page.tsx`)
 
-**Server Component** com metadados dinâmicos via `generateMetadata` — busca o jogo pela CheapShark API e gera título OG com melhor preço.
+**Server Component** with dynamic metadata via `generateMetadata` — fetches the game from CheapShark API and generates OG title with best price.
 
-Fluxo:
-1. Extrai `id` de `params` (agora `Promise<{ id: string }>` no Next.js 16).
-2. Busca `getGame(id)` + `getStores()` em paralelo via `Promise.all`.
-3. Renderiza hero image, estatísticas (best price, historical low, cost-per-hour), grid de ofertas (Official Stores + Keyshops), gráfico de histórico de preços, e store comparison chart.
-4. Injeta JSON-LD do tipo Product com as ofertas.
+Flow:
+1. Extracts `id` from `params` (now `Promise<{ id: string }>` in Next.js 16).
+2. Fetches `getGame(id)` + `getStores()` in parallel via `Promise.all`.
+3. Renders hero image, statistics (best price, historical low, cost-per-hour), offer grid (Official Stores + Keyshops), price history chart, and store comparison chart.
+4. Injects Product JSON-LD with the offers.
 
-Tratamento de erro: se `game.info` for null, exibe "Game not found" com link de retorno.
+Error handling: if `game.info` is null, displays "Game not found" with return link.
 
-### Modal Interceptado (`src/app/@modal/(.)game/[id]/page.tsx`)
+### Intercepted Modal (`src/app/@modal/(.)game/[id]/page.tsx`)
 
-**Parallel + Intercepting Route.** O Next.js intercepta navegações internas para `/game/[id]` e renderiza o conteúdo dentro de `<SidebarModal>` — um overlay lateral que não substitui a página atual.
+**Parallel + Intercepting Route.** Next.js intercepts internal navigations to `/game/[id]` and renders the content inside `<SidebarModal>` — a side overlay that does not replace the current page.
 
-- Padrão: `(.)game/[id]` — o `(.)` indica interceptação de segmento do mesmo nível.
-- Hard refresh (F5) rompe a interceptação e cai na rota primária `/game/[id]` (comportamento SEO-friendly).
-- Usa `Suspense` com fallback "Loading game..." enquanto `GameModalContent` busca dados assíncronos.
-- O conteúdo do modal é quase idêntico à página cheia, mas sem `generateMetadata` (modais não têm metadados próprios).
+- Pattern: `(.)game/[id]` — the `(.)` indicates same-level segment interception.
+- Hard refresh (F5) breaks the interception and falls through to the primary route `/game/[id]` (SEO-friendly behavior).
+- Uses `Suspense` with fallback "Loading game..." while `GameModalContent` fetches async data.
+- The modal content is nearly identical to the full page, but without `generateMetadata` (modals don't have their own metadata).
 
 ---
 
-## 5. Busca (`/search?q=&upperPrice=&storeID=`)
+## 5. Search (`/search?q=&upperPrice=&storeID=`)
 
-**Server Component** em `src/app/search/page.tsx`. Metadados estáticos: `title: 'Search Results | Game Deals'`.
+**Server Component** in `src/app/search/page.tsx`. Static metadata: `title: 'Search Results | Game Deals'`.
 
-Fluxo:
-1. Lê `searchParams` (agora `Promise<{ [key: string]: string | string[] | undefined }>` no Next.js 16).
-2. Monta parâmetros da API CheapShark dinamicamente (`title`, `upperPrice`, `storeID`).
-3. Busca stores ativas para alimentar o `<FilterSidebar />`.
-4. Renderiza grid de resultados com `GameCard`.
+Flow:
+1. Reads `searchParams` (now `Promise<{ [key: string]: string | string[] | undefined }>` in Next.js 16).
+2. Dynamically builds CheapShark API parameters (`title`, `upperPrice`, `storeID`).
+3. Fetches active stores to feed `<FilterSidebar />`.
+4. Renders result grid with `GameCard`.
 
-Se deals estiver vazio, exibe "No deals found" com sugestão de ajustar filtros.
+If deals is empty, displays "No deals found" with suggestion to adjust filters.
 
-> Nota: atualmente a busca usa CheapShark diretamente. O Typesense está configurado para fallback futuro via `src/actions/search.ts`.
+> Note: currently the search uses CheapShark directly. Typesense is configured for future fallback via `src/actions/search.ts`.
 
 ---
 
 ## 6. Wishlist (`/wishlist`)
 
-**Client Component** (`'use client'`) em `src/app/wishlist/page.tsx`. Rota protegida pelo middleware — usuário não autenticado é redirecionado para `/` com `?auth=required`.
+**Client Component** (`'use client'`) in `src/app/wishlist/page.tsx`. Route protected by middleware — unauthenticated user is redirected to `/` with `?auth=required`.
 
-### Funcionalidades
+### Features
 
-- **Dashboard** com duas abas: Wishlist (coração) e Alertas (sino).
-- **Ordenação:** por desconto, preço ou nome.
-- **Compartilhamento:** codifica IDs em base64 e gera link `/wishlist/shared?ids=...`.
-- **Card de Jogo:** thumb, preço, % desconto, badge da loja, link "Ver Detalhes".
-- **Ações Inline:** `HeartButton` (remover) e `PriceAlertTrigger` (configurar alerta).
-- **Painel de Estatísticas:** valor total da carteira e maior desconto.
-- **Estado Vazio:** ilustração `HeartCrack` + call to action "Descobrir Ofertas Épicas".
+- **Dashboard** with two tabs: Wishlist (heart) and Alerts (bell).
+- **Sorting:** by discount, price or name.
+- **Sharing:** encodes IDs in base64 and generates link `/wishlist/shared?ids=...`.
+- **Game Card:** thumb, price, % discount, store badge, "See Details" link.
+- **Inline Actions:** `HeartButton` (remove) and `PriceAlertTrigger` (configure alert).
+- **Statistics Panel:** total wallet value and biggest discount.
+- **Empty State:** `HeartCrack` illustration + call to action "Discover Epic Deals".
 
-Dados: usa `useWishlistGames(wishlist)` hook (TanStack Query) que recebe array de game IDs e retorna dados enriquecidos da CheapShark.
+Data: uses `useWishlistGames(wishlist)` hook (TanStack Query) that receives an array of game IDs and returns enriched data from CheapShark.
 
-### Wishlist Compartilhada (`/wishlist/shared`)
+### Shared Wishlist (`/wishlist/shared`)
 
-**Client Component** que lê `ids` de `searchParams`, decodifica base64, valida com regex (`/^[a-zA-Z0-9]+$/`), e busca dados via `useWishlistGames`.
+**Client Component** that reads `ids` from `searchParams`, decodes base64, validates with regex (`/^[a-zA-Z0-9]+$/`), and fetches data via `useWishlistGames`.
 
-- Pública — qualquer um com o link pode ver.
-- Sem autenticação necessária.
-- Botão "Comprar como Presente" aponta para `/game/[id]`.
+- Public — anyone with the link can view.
+- No authentication required.
+- "Buy as Gift" button points to `/game/[id]`.
 
 ---
 
 ## 7. Bundles (`/bundles`)
 
-**Server Component** com dados estáticos de `@/data/bundles`. Metadados: `title: 'Game Bundles | GameDeals'`.
+**Server Component** with static data from `@/data/bundles`. Metadata: `title: 'Game Bundles | GameDeals'`.
 
-Renderiza grid de bundle cards com:
-- Store icon e nome, tier (se houver).
-- Nome do bundle e thumbs dos jogos inclusos.
-- Preço, número de jogos, valor total, % de economia.
-- CTA externo com contagem regressiva de dias restantes.
+Renders bundle card grid with:
+- Store icon and name, tier (if any).
+- Bundle name and thumbs of included games.
+- Price, number of games, total value, % savings.
+- External CTA with countdown of remaining days.
 
-Os bundles são definidos em arquivo TypeScript (`src/data/bundles.ts`) — atualização manual.
-
----
-
-## 8. Coleções (`/collections`)
-
-### Índice (`src/app/collections/page.tsx`)
-
-**Server Component** estático. Lista todas as coleções definidas em `@/data/collections` com emoji, título, descrição e contagem de jogos. Cada card linka para `/collections/[slug]`.
-
-### Detalhe (`src/app/collections/[slug]/page.tsx`)
-
-**Server Component** dinâmico com `generateStaticParams` (gera páginas para todos os slugs de `COLLECTIONS`).
-
-Fluxo:
-1. Matcha `slug` contra `COLLECTIONS`. Se não encontrar, chama `notFound()`.
-2. Busca todos os jogos da coleção em paralelo via `Promise.all(collection.gameIDs.map(id => getGame(id)))`.
-3. Ordena deals pelo menor preço e exibe grid com thumb, título, preço e link "View Deal →".
+Bundles are defined in a TypeScript file (`src/data/bundles.ts`) — manual update.
 
 ---
 
-## 9. Redirect de Afiliado (`/out/[storeId]/[gameSlug]`)
+## 8. Collections (`/collections`)
 
-**Route Handler** (API Route via App Router) em `src/app/out/[storeId]/[gameSlug]/route.ts`.
+### Index (`src/app/collections/page.tsx`)
 
-Funcionamento:
-1. Extrai `storeId` e `gameSlug` de `params`.
-2. Valida `storeId` contra allowlist de 17 lojas (`affiliateConfig`) via regex `/^\d{1,3}$/`.
-3. Valida `gameSlug` via regex `/^[a-zA-Z0-9_-]{1,100}$/`.
-4. Busca URL do deal no banco (`deals` table via Drizzle raw SQL).
-5. Aplica parâmetros de afiliado da config (ex: `?partner=gamedealsBR`, `?aff_id=gamedeals_fnt`).
-6. Valida hostname contra `ALLOWED_DOMAINS` (previne redirecionamento arbitrário).
-7. Loga clique na tabela `affiliate_clicks` (fire-and-forget, sem bloquear redirect).
-8. Redireciona com `302`.
+**Server Component** static. Lists all collections defined in `@/data/collections` with emoji, title, description, and game count. Each card links to `/collections/[slug]`.
 
-Se qualquer validação falhar, redireciona para `/` (safe fallback).
+### Detail (`src/app/collections/[slug]/page.tsx`)
+
+**Server Component** dynamic with `generateStaticParams` (generates pages for all slugs in `COLLECTIONS`).
+
+Flow:
+1. Matches `slug` against `COLLECTIONS`. If not found, calls `notFound()`.
+2. Fetches all collection games in parallel via `Promise.all(collection.gameIDs.map(id => getGame(id)))`.
+3. Orders deals by lowest price and displays grid with thumb, title, price and "View Deal →" link.
+
+---
+
+## 9. Affiliate Redirect (`/out/[storeId]/[gameSlug]`)
+
+**Route Handler** (API Route via App Router) in `src/app/out/[storeId]/[gameSlug]/route.ts`.
+
+Operation:
+1. Extracts `storeId` and `gameSlug` from `params`.
+2. Validates `storeId` against allowlist of 17 stores (`affiliateConfig`) via regex `/^\d{1,3}$/`.
+3. Validates `gameSlug` via regex `/^[a-zA-Z0-9_-]{1,100}$/`.
+4. Fetches deal URL from database (`deals` table via Drizzle raw SQL).
+5. Applies affiliate parameters from config (e.g., `?partner=gamedealsBR`, `?aff_id=gamedeals_fnt`).
+6. Validates hostname against `ALLOWED_DOMAINS` (prevents arbitrary redirect).
+7. Logs click in `affiliate_clicks` table (fire-and-forget, does not block redirect).
+8. Redirects with `302`.
+
+If any validation fails, redirects to `/` (safe fallback).
 
 ---
 
 ## 10. Auth Callback (`/auth/callback`)
 
-**Route Handler** que completa o fluxo OAuth do Supabase.
+**Route Handler** that completes the Supabase OAuth flow.
 
-Fluxo:
-1. Rate limiting por IP (10 requisições por minuto via `@/lib/rate-limit`).
-2. Extrai `code` e `next` da query string.
-3. Valida que `next` é um path local (previne open redirect).
-4. Troca `code` por sessão via `supabase.auth.exchangeCodeForSession(code)`.
-5. Redireciona para `next` (ou `/` se não especificado).
-6. Em caso de erro, redireciona para `/auth/auth-code-error`.
+Flow:
+1. Rate limiting by IP (10 requests per minute via `@/lib/rate-limit`).
+2. Extracts `code` and `next` from query string.
+3. Validates that `next` is a local path (prevents open redirect).
+4. Exchanges `code` for session via `supabase.auth.exchangeCodeForSession(code)`.
+5. Redirects to `next` (or `/` if not specified).
+6. On error, redirects to `/auth/auth-code-error`.
 
 ---
 
 ## 11. Endpoints Cron (`/api/cron/*`)
 
-Protegidos por `CRON_SECRET` — verificam header `Authorization: Bearer ${CRON_SECRET}`. Retornam `401` se ausente ou inválido.
+Protected by `CRON_SECRET` — check `Authorization: Bearer ${CRON_SECRET}` header. Return `401` if missing or invalid.
 
-| Rota | Frequência | Ação |
-|------|-----------|------|
-| `ingest-prices` | A cada 4h | Busca deals da CheapShark, insere em `deals` + `price_history` via `ingestPricesAction()` |
-| `reindex-typesense` | Diário | Reindexa todos os jogos do banco no Typesense via `syncGamesToTypesenseAction()` |
-| `check-alerts` | Periódico | Consulta `price_alerts`, busca preços atuais, atualiza `currentPrice`, loga alertas disparados |
+| Route | Frequency | Action |
+|-------|-----------|--------|
+| `ingest-prices` | Every 4h | Fetches deals from CheapShark, inserts into `deals` + `price_history` via `ingestPricesAction()` |
+| `reindex-typesense` | Daily | Reindexes all games from database in Typesense via `syncGamesToTypesenseAction()` |
+| `check-alerts` | Periodic | Queries `price_alerts`, fetches current prices, updates `currentPrice`, logs triggered alerts |
 
 ---
 
 ## 12. Middleware (`src/middleware.ts`)
 
-Usa `@supabase/ssr` para refresh de sessão em toda requisição.
+Uses `@supabase/ssr` for session refresh on every request.
 
 ```ts
 export const config = {
@@ -279,17 +279,17 @@ export const config = {
 };
 ```
 
-### Proteção de Rotas
+### Route Protection
 
-O middleware verifica `supabase.auth.getUser()` em cada request:
+The middleware checks `supabase.auth.getUser()` on each request:
 
-- **Rotas protegidas** (`/wishlist`, `/alerts`, `/playlists`, `/profile`): redireciona para `/` com `?auth=required` se usuário não estiver autenticado.
-- **Rotas de auth** (`/auth/*`): redireciona para `/profile` se usuário já estiver logado.
-- **Demais rotas:** passa sem alteração.
+- **Protected routes** (`/wishlist`, `/alerts`, `/playlists`, `/profile`): redirects to `/` with `?auth=required` if user is not authenticated.
+- **Auth routes** (`/auth/*`): redirects to `/profile` if user is already logged in.
+- **Other routes:** passes through unchanged.
 
 ### Cookies
 
-Usa `getAll()`/`setAll()` do `@supabase/ssr` para sincronizar cookies entre request e response, garantindo que o token de sessão seja atualizado a cada navegação.
+Uses `getAll()`/`setAll()` from `@supabase/ssr` to sync cookies between request and response, ensuring the session token is updated on every navigation.
 
 ---
 
@@ -297,34 +297,34 @@ Usa `getAll()`/`setAll()` do `@supabase/ssr` para sincronizar cookies entre requ
 
 ### Sitemap (`src/app/sitemap.ts`)
 
-Gera sitemap dinâmico com:
-- Páginas estáticas: `/` (priority 1.0, daily), `/search` (0.8, weekly), `/bundles` (0.7, weekly), `/collections` (0.7, monthly).
-- Coleções dinâmicas: `top-deals`, `under-10`, `free-games`, `new-releases` (0.8, daily).
+Generates dynamic sitemap with:
+- Static pages: `/` (priority 1.0, daily), `/search` (0.8, weekly), `/bundles` (0.7, weekly), `/collections` (0.7, monthly).
+- Dynamic collections: `top-deals`, `under-10`, `free-games`, `new-releases` (0.8, daily).
 
 ### Robots (`src/app/robots.ts`)
 
-Permite rastreamento de todas as rotas exceto:
-- `/api/` — endpoints de API
-- `/auth/` — fluxo de autenticação
-- `/out/` — redirects de afiliado
+Allows crawling of all routes except:
+- `/api/` — API endpoints
+- `/auth/` — authentication flow
+- `/out/` — affiliate redirects
 
 ---
 
-## Resumo de Padrões
+## Patterns Summary
 
-| Padrão | Onde | Por quê |
-|--------|------|---------|
-| `Promise.all` paralelo | Home, Game Detail, Collections | Elimina waterfall de rede |
-| Server Component por padrão | Todas as páginas | Menos JS no cliente, SSR nativo |
-| `'use client'` só quando necessário | Wishlist (interatividade) | Estado local, animações, hooks |
-| ISR (`revalidate`) | Home Page (3600s) | Conteúdo semi-estático com atualização periódica |
-| Intercepting Route `(.)` | `@modal/(.)game/[id]` | UX de modal sem perder URL para SEO |
-| Parallel Route `@modal` | Root layout | Slot dedicado para overlays |
-| Route Handler | `/out/*`, `/auth/callback`, `/api/cron/*` | Lógica server-side sem React |
-| Middleware auth | Toda requisição | Refresh de sessão + proteção de rotas |
-| `generateMetadata` | Game detail, Collections | SEO dinâmico por página |
-| `generateStaticParams` | Collections `[slug]` | Pré-renderização de páginas conhecidas |
+| Pattern | Where | Why |
+|---------|-------|-----|
+| Parallel `Promise.all` | Home, Game Detail, Collections | Eliminates network waterfall |
+| Server Component by default | All pages | Less JS on client, native SSR |
+| `'use client'` only when needed | Wishlist (interactivity) | Local state, animations, hooks |
+| ISR (`revalidate`) | Home Page (3600s) | Semi-static content with periodic update |
+| Intercepting Route `(.)` | `@modal/(.)game/[id]` | Modal UX without losing URL for SEO |
+| Parallel Route `@modal` | Root layout | Dedicated slot for overlays |
+| Route Handler | `/out/*`, `/auth/callback`, `/api/cron/*` | Server-side logic without React |
+| Middleware auth | Every request | Session refresh + route protection |
+| `generateMetadata` | Game detail, Collections | Dynamic SEO per page |
+| `generateStaticParams` | Collections `[slug]` | Pre-rendering known pages |
 
 ---
 
-**Próximo Passo:** Dissecção dos componentes visuais no módulo [05. Core UI Components](05-core-components.md).
+**Next Step:** Dissection of visual components in module [05. Core UI Components](05-core-components.md).

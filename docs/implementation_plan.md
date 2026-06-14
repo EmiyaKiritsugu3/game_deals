@@ -1,13 +1,13 @@
 # Implementation Plan — GameDeals (2026)
 
-Plano de implementação baseado nos ADRs aprovados, priorizado por ROI e validação de mercado 2026.
+Implementation plan based on approved ADRs, prioritized by ROI and 2026 market validation.
 
 ---
 
-## Fase 0 — Fundação (Semana 1)
+## Phase 0 — Foundation (Week 1)
 **Stack**: pnpm, Biome, Tailwind v4, Drizzle schema
 
-| Tarefa | ADR | Esforço | Depende de |
+| Task | ADR | Effort | Depends on |
 |--------|-----|---------|------------|
 | pnpm migration (`pnpm import`) | ADR-012 | 10 min | — |
 | Biome init (`npx biome init`) | ADR-012 | 15 min | — |
@@ -17,16 +17,17 @@ Plano de implementação baseado nos ADRs aprovados, priorizado por ROI e valida
 | Vitest + Playwright setup | ADR-012 | 30 min | — |
 | GitHub Actions CI workflow | ADR-005 | 30 min | — |
 
-**Resultado**: Projeto rodando pnpm + Biome + Tailwind v4 + Drizzle + tests.
+**Result**: Project running pnpm + Biome + Tailwind v4 + Drizzle + tests.
+
 
 ---
 
-## Fase 1 — Core Data (Semanas 2-3)
+## Phase 1 — Core Data (Weeks 2-3)
 **Stack**: Server Actions, TanStack Query, Typesense Cloud
 
-| Tarefa | ADR | Esforço |
-|--------|-----|---------|
-| Deals API (CheapShark + keyshops simulados) | ADR-002 | 4h |
+| Task | ADR | Effort |
+|------|-----|--------|
+| Deals API (CheapShark + simulated keyshops) | ADR-002 | 4h |
 | TanStack Query v5 migration (SWR → RQ) | ADR-003 | 4h |
 | Server Actions setup (deals, games, search) | ADR-003 | 2h |
 | Typesense Cloud setup + indexing | ADR-010 | 2h |
@@ -36,10 +37,10 @@ Plano de implementação baseado nos ADRs aprovados, priorizado por ROI e valida
 
 ---
 
-## Fase 2 — Auth & User (Semanas 3-4)
+## Phase 2 — Auth & User (Weeks 3-4)
 **Stack**: Supabase Auth, @supabase/server, Drizzle
 
-| Tarefa | ADR | Esforço |
+| Task | ADR | Effort |
 |--------|-----|---------|
 | Google + Discord + Steam OAuth | ADR-004 | 2h |
 | SSR middleware (session refresh) | ADR-004 | 1h |
@@ -49,10 +50,10 @@ Plano de implementação baseado nos ADRs aprovados, priorizado por ROI e valida
 
 ---
 
-## Fase 3 — Monetização (Semanas 4-5)
+## Phase 3 — Monetization (Weeks 4-5)
 **Stack**: `/out` route, affiliate tables, analytics
 
-| Tarefa | ADR | Esforço |
+| Task | ADR | Effort |
 |--------|-----|---------|
 | `/out/[storeId]/[gameSlug]` route | ADR-006 | 1h |
 | Affiliate mapping table + CRUD | ADR-006 | 1h |
@@ -61,10 +62,10 @@ Plano de implementação baseado nos ADRs aprovados, priorizado por ROI e valida
 
 ---
 
-## Fase 4 — Social & Gamificação (Semanas 5-6)
+## Phase 4 — Social & Gamification (Weeks 5-6)
 **Stack**: Supabase Realtime, Badge engine
 
-| Tarefa | ADR | Esforço |
+| Task | ADR | Effort |
 |--------|-----|---------|
 | Playlists (CRUD + share + slug) | ADR-007 | 3h |
 | Badge engine (check + unlock + notification) | ADR-007 | 4h |
@@ -74,9 +75,9 @@ Plano de implementação baseado nos ADRs aprovados, priorizado por ROI e valida
 
 ---
 
-## Fase 5 — Infrastructure (Semanas 6-7)
+## Phase 5 — Infrastructure (Weeks 6-7)
 
-| Tarefa | ADR | Esforço |
+| Task | ADR | Effort |
 |--------|-----|---------|
 | Price history cron (TimescaleDB ingestion) | ADR-009 | 2h |
 | Price charts (Recharts + Server Actions) | ADR-009 | 3h |
@@ -86,25 +87,25 @@ Plano de implementação baseado nos ADRs aprovados, priorizado por ROI e valida
 
 ---
 
-## Fase 6 — Scale & Polish (Semanas 8+)
+## Phase 6 — Scale & Polish (Weeks 8+)
 
-| Tarefa | Prioridade |
+| Task | Priority |
 |--------|------------|
-| Supabase pgvector + FTS hybrid search | Alta (reduz custo) |
-| Semantic search ("jogos tipo..." → embeddings) | Média |
-| Twitter/Reddit embeds + social sharing | Média |
-| PWA + offline mode | Baixa |
-| OpenNext ARM migration | Baixa |
+| Supabase pgvector + FTS hybrid search | High (reduces cost) |
+| Semantic search ("games like..." → embeddings) | Medium |
+| Twitter/Reddit embeds + social sharing | Medium |
+| PWA + offline mode | Low |
+| OpenNext ARM migration | Low |
 
 ---
 
-## Estrutura de Diretórios Final
+## Final Directory Structure
 
 ```
 src/
 ├── actions/          # Server Actions (deals, search, auth, admin)
 ├── app/              # App Router (pages, layouts, api, out)
-│   ├── (main)/       # Autenticado
+│   ├── (main)/       # Authenticated
 │   ├── (public)/     # Landing, about, legal
 │   ├── out/          # Affiliate cloaking
 │   ├── api/          # API routes
@@ -121,15 +122,15 @@ src/
 
 ---
 
-## Total Estimado
+## Total Estimated
 
-| Fase | Horas | Entrega |
-|------|-------|---------|
-| 0 — Fundação | ~5h | Setup pronto |
-| 1 — Core Data | ~25h | MVP funcional |
-| 2 — Auth & User | ~10h | Usuários autenticados |
-| 3 — Monetização | ~5h | Receita potencial |
-| 4 — Social & Game | ~15h | Engajamento |
-| 5 — Infra | ~8h | Produção |
-| 6 — Scale | ~15h | Otimização |
-| **Total** | **~83h** | **5-6 semanas (solo dev)** |
+| Phase | Hours | Delivery |
+|-------|-------|----------|
+| 0 — Foundation | ~5h | Setup ready |
+| 1 — Core Data | ~25h | Functional MVP |
+| 2 — Auth & User | ~10h | Authenticated users |
+| 3 — Monetization | ~5h | Potential revenue |
+| 4 — Social & Game | ~15h | Engagement |
+| 5 — Infrastructure | ~8h | Production |
+| 6 — Scale | ~15h | Optimization |
+| **Total** | **~83h** | **5-6 weeks (solo dev)** |

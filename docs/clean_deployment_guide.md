@@ -1,26 +1,26 @@
-# 🧹 Guia para um Novo Deploy (Vercel Clean Start)
+# 🧹 Guide for a Fresh Deploy (Vercel Clean Start)
 
-Como o plano **Hobby** da Vercel é muito restrito com identidades de bots, o melhor caminho é você mesmo fazer o push final para garantir que o seu GitHub seja reconhecido como o único autor.
+Since the Vercel **Hobby** plan is very restrictive with bot identities, the best path is for you to do the final push yourself so that your GitHub is recognized as the sole author.
 
-### 1. Limpeza no Vercel
-1. Vá ao [Vercel Dashboard](https://vercel.com/dashboard).
-2. Selecione o projeto `game-deals`.
-3. Vá em **Settings** > **General** > Scroll até o final e clique em **Delete**.
+### 1. Clean Up on Vercel
+1. Go to the [Vercel Dashboard](https://vercel.com/dashboard).
+2. Select the `game-deals` project.
+3. Go to **Settings** > **General** > Scroll to the bottom and click **Delete**.
 
 ---
 
-### 2. Configurações Locais de Identidade
-Garanta que o Git local está configurado com o seu e-mail e nome oficiais do GitHub:
+### 2. Local Identity Settings
+Make sure local Git is configured with your official GitHub email and name:
 
 ```bash
-git config --global user.email "seu-email@exemplo.com"
-git config --global user.name "SeuNome"
+git config --global user.email "your-email@example.com"
+git config --global user.name "YourName"
 ```
 
 ---
 
-### 3. O "Push" de Ouro (Faça Você Mesmo)
-Para evitar que o Vercel bloqueie o deploy novamente, **você deve executar o comando abaixo no seu terminal local**:
+### 3. The Golden Push (Do It Yourself)
+To prevent Vercel from blocking the deploy again, **you must run the command below in your local terminal**:
 
 ```bash
 git add .
@@ -30,15 +30,15 @@ git push origin main --force
 
 ---
 
-### 4. Criando o Novo Projeto na Vercel
-1. No Vercel, clique em **Add New** > **Project**.
-2. Importe o repositório `game-deals`.
-3. **IMPORTANTE:** Em "Environment Variables", adicione novamente as chaves do Supabase:
+### 4. Creating the New Project on Vercel
+1. In Vercel, click **Add New** > **Project**.
+2. Import the `game-deals` repository.
+3. **IMPORTANT:** Under "Environment Variables", add the Supabase keys again:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-4. Clique em **Deploy**.
+4. Click **Deploy**.
 
 ---
 
-### ✅ Por que isso resolve?
-Ao fazer o push manualmente pelo seu terminal, o GitHub associa o commit e a ação de "push" diretamente à sua conta física. O robô (eu) já preparou todo o código (Analytics, Fallbacks, Estilos corrigidos), então o deploy agora deve passar liso.
+### ✅ Why this fixes it
+By pushing manually from your terminal, GitHub associates the commit and the "push" action directly with your physical account. The bot (me) already prepared all the code (Analytics, Fallbacks, Fixed Styles), so the deploy should now go through smoothly.

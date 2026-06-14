@@ -1,19 +1,19 @@
-# 🌐 02. Infraestrutura de API e Serviços
+# 🌐 02. API Infrastructure and Services
 
-Esta seção detalha como o GameDeals se comunica com o mundo exterior. A fundação de dados do projeto repousa sobre três pilares: **Server Actions** (camada primária de dados), **TanStack Query** (caching e refetch no cliente) e **cron endpoints** (pipeline de dados agendado).
+This section details how GameDeals communicates with the outside world. The project's data foundation rests on three pillars: **Server Actions** (primary data layer), **TanStack Query** (client-side caching and refetch) and **cron endpoints** (scheduled data pipeline).
 
 ---
 
-## 1. Visão Geral da Arquitetura de Dados
+## 1. Data Architecture Overview
 
-O fluxo de dados segue uma hierarquia clara:
+The data flow follows a clear hierarchy:
 
 ```
-CheapShark API (externa)
+CheapShark API (external)
        │
        ▼
 ┌─────────────────────────────┐
-│  Server Actions (src/actions/) │  ← 'use server', camada primária
+│  Server Actions (src/actions/) │  ← 'use server', primary layer
 │  - deals.ts                  │
 │  - search.ts                 │
 │  - alerts.ts                 │
@@ -29,41 +29,41 @@ CheapShark API (externa)
 │  Hooks  │ │  + raw)  │
 └────┬────┘ └──────────┘
      ▼
-  Componentes React (cliente)
+  React Components (client)
 ```
 
-- **Server Components** chamam Server Actions diretamente em server-only contexts.
-- **Client Components** usam TanStack Query hooks que invocam Server Actions.
-- **Cron endpoints** (`/api/cron/*`) disparam Server Actions em segundo plano num schedule fixo.
+- **Server Components** call Server Actions directly in server-only contexts.
+- **Client Components** use TanStack Query hooks that invoke Server Actions.
+- **Cron endpoints** (`/api/cron/*`) trigger Server Actions in the background on a fixed schedule.
 
 ---
 
 ## 2. CheapShark API (`src/services/api.ts`)
 
-O núcleo do GameDeals é alimentado pela API da CheapShark. O cliente raw em `src/services/api.ts` faz chamadas `fetch` diretas com opções de cache do Next.js.
+The core of GameDeals is powered by the CheapShark API. The raw client in `src/services/api.ts` makes direct `fetch` calls with Next.js cache options.
 
-### Estratégia de Caching (`revalidate`)
+### Caching Strategy (`revalidate`)
 
-- **`getDeals()`** — `revalidate: 3600` (1 hora). Listagens de ofertas mudam com frequência moderada.
-- **`getStores()`** — `revalidate: 86400` (24 horas). Lojas raramente mudam.
-- **`getGame()`** — `revalidate: 3600` (1 hora). Detalhes de jogo individual.
+- **`getDeals()`** — `revalidate: 3600` (1 hour). Deal listings change with moderate frequency.
+- **`getStores()`** — `revalidate: 86400` (24 hours). Stores rarely change.
+- **`getGame()`** — `revalidate: 3600` (1 hour). Individual game details.
 
-**O Porquê:** A API da CheapShark é rigorosa contra spam. Sem cache agressivo do Next.js, acessos simultâneos de centenas de usuários causariam bloqueio do IP do servidor (HTTP 429). O cache blindia a API externa.
+**Why:** The CheapShark API is strict against spam. Without aggressive Next.js caching, simultaneous accesses from hundreds of users would cause server IP blocking (HTTP 429). The cache shields the external API.
 
-### Fallback Resiliênte
+### Resilient Fallback
 
-- `getDeals()` envolvido em `try/catch`. Se `res.ok` falhar, retorna `fallbackDeals` (constante local em `src/data/`). A UI renderiza dados antigos pacificamente — sem White Screen of Death.
-- `getGame()` retorna `null` em caso de erro; o componente lida com estado vazio.
+- `getDeals()` wrapped in `try/catch`. If `res.ok` fails, returns `fallbackDeals` (local constant in `src/data/`). The UI peacefully renders old data — no White Screen of Death.
+- `getGame()` returns `null` on error; the component handles empty state.
 
 ### Grey Markets
 
-Lojas não-oficiais (Keyshops: Kinguin, Eneba, CDKeys, Gamivo) não são retornadas nativamente pela CheapShark. Em `api.ts`, a heurística `isGreyMarketStore()` mapeia lojas com ID >= 100. A função `generateGreyMarketDeals()` as injeta nas páginas de detalhe para comparação total de preços.
+Non-official stores (Keyshops: Kinguin, Eneba, CDKeys, Gamivo) are not natively returned by CheapShark. In `api.ts`, the `isGreyMarketStore()` heuristic maps stores with ID >= 100. The `generateGreyMarketDeals()` function injects them into detail pages for full price comparison.
 
-### DRM e Lojas
+### DRM and Stores
 
-`getDrmType()` classifica lojas por tipo de DRM:
+`getDrmType()` classifies stores by DRM type:
 
-| Loja | DRM |
+| Store | DRM |
 |------|-----|
 | GOG | DRM-Free |
 | Epic | Epic Key |
@@ -73,74 +73,74 @@ Lojas não-oficiais (Keyshops: Kinguin, Eneba, CDKeys, Gamivo) não são retorna
 
 ---
 
-## 3. Server Actions (`src/actions/`) — Camada Primária
+## 3. Server Actions (`src/actions/`) — Primary Layer
 
-Toda a lógica de dados que requer autenticação, acesso a banco ou validação vive em Server Actions (`'use server'`). Elas substituem APIs route handlers tradicionais como camada de dados principal.
+All data logic that requires authentication, database access, or validation lives in Server Actions (`'use server'`). They replace traditional API route handlers as the main data layer.
 
 ### `deals.ts`
 
-Funções de busca e ingestão de ofertas:
+Deal fetching and ingestion functions:
 
-| Função | Descrição |
+| Function | Description |
 |--------|-----------|
-| `getDealsAction(params?)` | Busca deals da CheapShark com validação de parâmetros (sortBy, pageSize, upperPrice, etc). Fallback para `fallbackDeals`. |
-| `getGameAction(id)` | Detalhes de um jogo via CheapShark. |
-| `getStoresAction()` | Lista de lojas com grey markets injetados. |
-| `ingestPricesAction()` | Pipeline de ingestão: busca 100 deals da CheapShark, faz upsert em `games`, insere em `deals` e `price_history` (lotes de 50). |
-| `getDailyPriceHistoryAction(gameId, days)` | Histórico diário via função PostgreSQL `get_daily_prices()`. |
-| `getWeeklyPriceHistoryAction(gameId, weeks)` | Histórico semanal via função PostgreSQL `get_weekly_prices()`. |
-| `getDealsFromDBAction(limit)` | Deals do banco com JOIN em `games`. |
+| `getDealsAction(params?)` | Fetches deals from CheapShark with parameter validation (sortBy, pageSize, upperPrice, etc). Fallback to `fallbackDeals`. |
+| `getGameAction(id)` | Game details via CheapShark. |
+| `getStoresAction()` | Store list with injected grey markets. |
+| `ingestPricesAction()` | Ingestion pipeline: fetches 100 deals from CheapShark, upserts into `games`, inserts into `deals` and `price_history` (batches of 50). |
+| `getDailyPriceHistoryAction(gameId, days)` | Daily history via PostgreSQL function `get_daily_prices()`. |
+| `getWeeklyPriceHistoryAction(gameId, weeks)` | Weekly history via PostgreSQL function `get_weekly_prices()`. |
+| `getDealsFromDBAction(limit)` | Deals from the database with JOIN on `games`. |
 
 ### `search.ts`
 
-Busca com fallback Typesense → CheapShark:
+Search with Typesense → CheapShark fallback:
 
-| Função | Descrição |
+| Function | Description |
 |--------|-----------|
-| `searchGamesAction(query, limit)` | Tenta Typesense primeiro; se não configurado, fallback para CheapShark `/api/1.0/games`. |
-| `syncGamesToTypesenseAction()` | Sincroniza 100 melhores deals do CheapShark para Typesense. Chamado pelo cron. |
-| `createTypesenseCollectionAction()` | Setup inicial da collection Typesense (idempotente). |
+| `searchGamesAction(query, limit)` | Tries Typesense first; if not configured, falls back to CheapShark `/api/1.0/games`. |
+| `syncGamesToTypesenseAction()` | Syncs top 100 CheapShark deals to Typesense. Called by cron. |
+| `createTypesenseCollectionAction()` | Initial Typesense collection setup (idempotent). |
 
 ### `alerts.ts`
 
-Alertas de preço com autenticação e raw `postgres`:
+Price alerts with authentication and raw `postgres`:
 
-| Função | Descrição |
+| Function | Description |
 |--------|-----------|
-| `createPriceAlertAction(gameId, targetPrice, storeId?)` | Cria alerta. Verifica auth via Supabase. Usa `ON CONFLICT` para upsert. |
-| `getUserAlertsAction()` | Lista alertas do usuário logado com JOIN em `games`. |
-| `deletePriceAlertAction(alertId)` | Remove alerta com verificação de ownership. |
-| `checkTriggeredAlertsAction()` | Compara preços atuais com target dos alerts. Usado pelo cron. |
+| `createPriceAlertAction(gameId, targetPrice, storeId?)` | Creates alert. Checks auth via Supabase. Uses `ON CONFLICT` for upsert. |
+| `getUserAlertsAction()` | Lists alerts for logged-in user with JOIN on `games`. |
+| `deletePriceAlertAction(alertId)` | Removes alert with ownership verification. |
+| `checkTriggeredAlertsAction()` | Compares current prices with alert targets. Used by cron. |
 
 ### `playlists.ts`
 
-Playlists com ownership check:
+Playlists with ownership check:
 
-| Função | Descrição |
+| Function | Description |
 |--------|-----------|
-| `createPlaylistAction(title, description, isPublic)` | Cria playlist com slug automático. |
-| `getUserPlaylistsAction()` | Lista playlists com contagem de jogos. |
-| `addGameToPlaylistAction(playlistId, gameId, notes?)` | Adiciona jogo com verificação de ownership. |
-| `removeGameFromPlaylistAction(playlistId, gameId)` | Remove jogo. |
-| `deletePlaylistAction(playlistId)` | Deleta playlist. |
-| `getPublicPlaylistAction(slug)` | Busca playlist pública por slug. |
+| `createPlaylistAction(title, description, isPublic)` | Creates playlist with auto-generated slug. |
+| `getUserPlaylistsAction()` | Lists playlists with game count. |
+| `addGameToPlaylistAction(playlistId, gameId, notes?)` | Adds game with ownership verification. |
+| `removeGameFromPlaylistAction(playlistId, gameId)` | Removes game. |
+| `deletePlaylistAction(playlistId)` | Deletes playlist. |
+| `getPublicPlaylistAction(slug)` | Fetches public playlist by slug. |
 
 ### `gamification.ts`
 
-Sistema de XP e badges:
+XP and badges system:
 
-| Função | Descrição |
+| Function | Description |
 |--------|-----------|
-| `addXPAction(userId, amount, reason)` | Adiciona XP e registra atividade. |
-| `getUserXPAction(userId)` | Consulta XP atual. |
-| `getBadgesAction()` | Lista todos os badges. |
-| `getUserBadgesAction(userId)` | Badges conquistados pelo usuário. |
-| `awardBadgeAction(userId, badgeId)` | Concede badge (idempotente). |
-| `checkAndAwardBadgesAction(userId)` | Verifica condições e concede badges automáticos (First Steps, XP Hunter, Wishlist Master, Curator). |
+| `addXPAction(userId, amount, reason)` | Adds XP and logs activity. |
+| `getUserXPAction(userId)` | Queries current XP. |
+| `getBadgesAction()` | Lists all badges. |
+| `getUserBadgesAction(userId)` | Badges earned by the user. |
+| `awardBadgeAction(userId, badgeId)` | Awards badge (idempotent). |
+| `checkAndAwardBadgesAction(userId)` | Checks conditions and awards automatic badges (First Steps, XP Hunter, Wishlist Master, Curator). |
 
-### Padrão de Autenticação em Server Actions
+### Authentication Pattern in Server Actions
 
-Toda ação que modifica dados do usuário segue o mesmo padrão:
+Every action that modifies user data follows the same pattern:
 
 ```typescript
 'use server';
@@ -151,7 +151,7 @@ export async function someProtectedAction() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
-  // ... lógica protegida
+  // ... protected logic
 }
 ```
 
@@ -159,7 +159,7 @@ export async function someProtectedAction() {
 
 ## 4. TanStack Query Hooks (`src/hooks/`)
 
-Os hooks do TanStack Query são a ponte entre Server Actions e componentes React no cliente. Eles gerenciam estados de loading, cache e refetch automático.
+The TanStack Query hooks are the bridge between Server Actions and React components on the client. They manage loading states, cache, and automatic refetch.
 
 ### `useWishlistGames.ts`
 
@@ -178,70 +178,70 @@ export function useWishlistGames(gameIds: string[]) {
 }
 ```
 
-- Busca stores + games em paralelo.
-- `enabled: gameIds.length > 0` evita fetch desnecessário.
-- `staleTime: 5min` reduz refetch em navegação rápida.
+- Fetches stores + games in parallel.
+- `enabled: gameIds.length > 0` prevents unnecessary fetch.
+- `staleTime: 5min` reduces refetch on fast navigation.
 
 ### `usePriceHistory.ts`
 
-Dois hooks para histórico de preços:
+Two hooks for price history:
 
 ```typescript
-// Diário — 90 dias
+// Daily — 90 days
 export function useDailyPriceHistory(gameId: string | null, days = 90)
 
-// Semanal — 26 semanas
+// Weekly — 26 weeks
 export function useWeeklyPriceHistory(gameId: string | null, weeks = 26)
 ```
 
-- Chamam `getDailyPriceHistoryAction` / `getWeeklyPriceHistoryAction` (Server Actions).
-- `enabled: !!gameId` — só executa com ID válido.
-- `staleTime: 1h` — dados históricos mudam uma vez por dia (via cron).
-- `gcTime: 24h` — mantém cache mesmo após desmontagem do componente.
+- Call `getDailyPriceHistoryAction` / `getWeeklyPriceHistoryAction` (Server Actions).
+- `enabled: !!gameId` — only executes with valid ID.
+- `staleTime: 1h` — historical data changes once per day (via cron).
+- `gcTime: 24h` — keeps cache even after component unmount.
 
 ---
 
 ## 5. Cron Endpoints (`src/app/api/cron/`)
 
-Três endpoints agendados no Vercel Cron Jobs. Todos protegidos por `CRON_SECRET` via header `Authorization: Bearer <token>`.
+Three scheduled endpoints in Vercel Cron Jobs. All protected by `CRON_SECRET` via `Authorization: Bearer <token>` header.
 
-### `ingest-prices` (a cada 4h)
+### `ingest-prices` (every 4h)
 
 ```
 GET /api/cron/ingest-prices
 ```
 
-1. Valida `CRON_SECRET`.
-2. Chama `ingestPricesAction()` — busca 100 deals do CheapShark, faz upsert de games, insere deals + price_history em lotes de 50.
-3. Retorna métricas: `dealsIngested`, `gamesUpserted`, `pricesRecorded`.
-4. Status 500 em caso de falha.
+1. Validates `CRON_SECRET`.
+2. Calls `ingestPricesAction()` — fetches 100 deals from CheapShark, upserts games, inserts deals + price_history in batches of 50.
+3. Returns metrics: `dealsIngested`, `gamesUpserted`, `pricesRecorded`.
+4. Status 500 on failure.
 
-### `reindex-typesense` (diário)
+### `reindex-typesense` (daily)
 
 ```
 GET /api/cron/reindex-typesense
 ```
 
-1. Valida `CRON_SECRET`.
-2. Chama `syncGamesToTypesenseAction()` — busca 100 deals, mapeia para schema Typesense, faz index batch.
-3. Retorna `indexed: number`.
+1. Validates `CRON_SECRET`.
+2. Calls `syncGamesToTypesenseAction()` — fetches 100 deals, maps to Typesense schema, batch indexes.
+3. Returns `indexed: number`.
 
-### `check-alerts` (a cada 30min)
+### `check-alerts` (every 30min)
 
 ```
 GET /api/cron/check-alerts
 ```
 
-1. Valida `CRON_SECRET`.
-2. Busca todos `price_alerts` ativos via Supabase client.
-3. Para cada `gameId` único, consulta CheapShark API `/games?id=` para preço atual.
-4. Atualiza `currentPrice` na tabela.
-5. Loga alertas disparados (preço atual <= targetPrice).
-6. Retorna `{ processed, triggered, details }`.
+1. Validates `CRON_SECRET`.
+2. Fetches all active `price_alerts` via Supabase client.
+3. For each unique `gameId`, queries CheapShark API `/games?id=` for current price.
+4. Updates `currentPrice` in the table.
+5. Logs triggered alerts (current price <= targetPrice).
+6. Returns `{ processed, triggered, details }`.
 
-### Padrão de Proteção
+### Protection Pattern
 
-Todos os cron endpoints seguem o mesmo padrão:
+All cron endpoints follow the same pattern:
 
 ```typescript
 const authHeader = request.headers.get('authorization');
@@ -250,17 +250,17 @@ if (!process.env.CRON_SECRET || authHeader !== `Bearer ${process.env.CRON_SECRET
 }
 ```
 
-A variável `CRON_SECRET` é configurada no Vercel Dashboard + GitHub Secrets.
+The `CRON_SECRET` variable is configured in Vercel Dashboard + GitHub Secrets.
 
 ---
 
-## 6. Acesso a Banco de Dados: Drizzle ORM + raw postgres
+## 6. Database Access: Drizzle ORM + raw postgres
 
-O projeto usa **dois padrões de acesso a banco**, cada um com seu propósito.
+The project uses **two database access patterns**, each with its own purpose.
 
-### Drizzle ORM (padrão principal)
+### Drizzle ORM (main pattern)
 
-**Singleton** em `src/db/index.ts`:
+**Singleton** in `src/db/index.ts`:
 
 ```typescript
 import { drizzle } from 'drizzle-orm/postgres-js';
@@ -270,51 +270,51 @@ const queryClient = postgres(dbUrl);
 export const db = drizzle({ client: queryClient });
 ```
 
-Usado para:
+Used for:
 
-- Queries com type safety e schema definitions (`src/db/schema/`).
-- INSERT/UPDATE com `ON CONFLICT` (`ingestPricesAction`).
-- SELECT com JOIN entre tabelas (`getDealsFromDBAction`).
-- Chamada a funções PostgreSQL via `sql` tagged template (`getDailyPriceHistoryAction`).
+- Queries with type safety and schema definitions (`src/db/schema/`).
+- INSERT/UPDATE with `ON CONFLICT` (`ingestPricesAction`).
+- SELECT with JOIN between tables (`getDealsFromDBAction`).
+- Calling PostgreSQL functions via `sql` tagged template (`getDailyPriceHistoryAction`).
 
-### Raw `postgres` client (operações específicas)
+### Raw `postgres` client (specific operations)
 
-Em `alerts.ts` e `playlists.ts`, o client `postgres` é importado diretamente:
+In `alerts.ts` and `playlists.ts`, the `postgres` client is imported directly:
 
 ```typescript
 import postgres from 'postgres';
 const sql = postgres(process.env.DATABASE_URL || '', { connect_timeout: 5 });
 ```
 
-Usado para:
+Used for:
 
-- Queries com colunas snake_case (padrão do Supabase) que o schema Drizzle não cobre.
-- `price_alerts`, `playlists`, `playlist_games` — tabelas que usam `userId`, `gameId` (camelCase nas colunas SQL).
-- Operações que exigem `ON CONFLICT` com retorno completo via `RETURNING *`.
-- `connect_timeout: 5` evita hangs em ambientes serverless.
+- Queries with snake_case columns (Supabase default) that the Drizzle schema does not cover.
+- `price_alerts`, `playlists`, `playlist_games` — tables that use `userId`, `gameId` (camelCase in SQL columns).
+- Operations that require `ON CONFLICT` with full return via `RETURNING *`.
+- `connect_timeout: 5` prevents hangs in serverless environments.
 
-**Por que dois padrões?** O schema Drizzle usa snake_case (`game_id`, `store_id`), mas tabelas legadas no Supabase usam camelCase (`userId`, `gameId`). Para evitar conflito de naming, as ações que acessam tabelas camelCase usam raw `postgres` diretamente.
-
----
-
-## 7. Scraping Acessório (`src/services/hltb.ts`)
-
-- **O Porquê:** A CheapShark não provê dados de tempo estimado de zeramento. Construímos um mini scraper para o HowLongToBeat.
-- **Limitações:** Por ser web scraper, é suscetível a mudanças no HTML do site-alvo. O serviço é encapsulado puramente na Game Details Page, longe da Home, para não comprometer a Performance Inicial (FCP).
-- Testes em `src/services/hltb.test.ts`.
+**Why two patterns?** The Drizzle schema uses snake_case (`game_id`, `store_id`), but legacy tables in Supabase use camelCase (`userId`, `gameId`). To avoid naming conflicts, actions that access camelCase tables use raw `postgres` directly.
 
 ---
 
-## 8. Rate Limit e Resiliência: Estratégias de Fallback
+## 7. Auxiliary Scraping (`src/services/hltb.ts`)
 
-A CheapShark API impõe rate limits rigorosos. Nossa estratégia de defesa em camadas:
-
-1. **Cache Next.js (`revalidate`)** — reduz chamadas repetidas à API externa.
-2. **`try/catch` com fallback local** — se a CheapShark falhar, retornamos dados estáticos (`fallbackDeals`). O usuário nunca vê tela branca.
-3. **Validação de parâmetros** — em `getDealsAction()`, os parâmetros `sortBy`, `pageSize`, `upperPrice`, `lowerPrice`, `storeID` e `title` são validados antes de serem enviados à API.
-4. **Timeout no banco** — `connect_timeout: 5` no client `postgres` para evitar hangs em serverless.
-5. **Logs de erro** — toda falha é logada com `console.error` para diagnóstico.
+- **Why:** CheapShark does not provide estimated completion time data. We built a mini scraper for HowLongToBeat.
+- **Limitations:** Being a web scraper, it is susceptible to changes in the target site's HTML. The service is encapsulated purely in the Game Details Page, away from the Home, so as not to compromise Initial Performance (FCP).
+- Tests in `src/services/hltb.test.ts`.
 
 ---
 
-**Próximo Passo:** Entenda como o backend gerencia perfis de usuário, XP, badges e estado global no módulo [03. Gamificação e Estado Global](03-gamification-and-state.md).
+## 8. Rate Limit and Resilience: Fallback Strategies
+
+The CheapShark API enforces strict rate limits. Our layered defense strategy:
+
+1. **Next.js Cache (`revalidate`)** — reduces repeated calls to the external API.
+2. **`try/catch` with local fallback** — if CheapShark fails, we return static data (`fallbackDeals`). The user never sees a white screen.
+3. **Parameter validation** — in `getDealsAction()`, the `sortBy`, `pageSize`, `upperPrice`, `lowerPrice`, `storeID` and `title` parameters are validated before being sent to the API.
+4. **Database timeout** — `connect_timeout: 5` on the `postgres` client to prevent hangs in serverless.
+5. **Error logs** — every failure is logged with `console.error` for diagnostics.
+
+---
+
+**Next Step:** Understand how the backend manages user profiles, XP, badges and global state in module [03. Gamification and State Management](03-gamification-and-state.md).

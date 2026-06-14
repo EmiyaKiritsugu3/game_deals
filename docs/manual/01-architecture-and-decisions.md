@@ -1,25 +1,25 @@
-# 🏗️ 01. Arquitetura e Decisões Fundamentais
+# 🏗️ 01. Architecture and Fundamental Decisions
 
-Este documento funde o Dicionário da Tech Stack com a Análise de Arquitetura. Ele serve para responder à pergunta mais importante: **Por que o projeto foi construído assim?**
+This document merges the Tech Stack Dictionary with the Architecture Analysis. It serves to answer the most important question: **Why was the project built this way?**
 
-> **Nota sobre versionamento:** Este manual reflete a stack atual (2026). Decisões arquiteturais registradas formalmente estão nos ADRs (`docs/adr/`), que são a fonte da verdade — quando este manual divergir de um ADR, o ADR prevalece.
+> **Versioning note:** This manual reflects the current stack (2026). Formally recorded architectural decisions are in the ADRs (`docs/adr/`), which are the source of truth — when this manual diverges from an ADR, the ADR prevails.
 
-## 1. O Core Framework: Next.js 16 (App Router, Turbopack)
+## 1. The Core Framework: Next.js 16 (App Router, Turbopack)
 
-- **A Escolha:** Next.js 16 com App Router, Turbopack como bundler padrão, React 19 como runtime. A stack roda estritamente sobre Server Components por padrão.
-- **O Porquê:** O GameDeals é um agregador de preços fortemente focado em SEO e Core Web Vitals. O App Router permite que a busca de dados aconteça no servidor, sem enviar JavaScript pesado ao cliente. O Turbopack reduz o tempo de build e refresh em desenvolvimento (~3x mais rápido que webpack). React 19 traz Server Actions estáveis e o Compiler para otimização automática de memos e callbacks.
-- **ISR como Estratégia de Cache:** A home page (`src/app/page.tsx`) usa `export const revalidate = 3600` — Incremental Static Regeneration com revalidação a cada 1 hora. Isso significa que a página é gerada estaticamente no build e revalidada em background a cada 3600 segundos. Diferente de `force-dynamic`, o ISR entrega HTML estático para o usuário final (performance máxima) enquanto mantém os dados atualizados. Se a CheapShark API falhar durante a revalidação, o cache anterior permanece servindo — a página nunca quebra.
-- **Fallback de Dados:** `src/data/fallbackDeals.ts` contém um array de deals hardcoded. Se a API externa retornar vazio ou erro, os componentes recebem esse fallback. A UI nunca exibe um estado vazio ou quebrado.
-- **Regra de Ouro:** `'use client'` é usado de forma cirúrgica. Apenas componentes interativos periféricos (Navbar com busca reativa, modais de wishlist, alertas de preço, indicadores de coração) são Client Components. Toda a estrutura pesada (Hero, listas de deals, gráficos base) nasce no servidor.
+- **The Choice:** Next.js 16 with App Router, Turbopack as the default bundler, React 19 as the runtime. The stack runs strictly on Server Components by default.
+- **The Why:** GameDeals is a price aggregator heavily focused on SEO and Core Web Vitals. The App Router allows data fetching to happen on the server, without sending heavy JavaScript to the client. Turbopack reduces build and refresh time in development (~3x faster than webpack). React 19 brings stable Server Actions and the Compiler for automatic optimization of memos and callbacks.
+- **ISR as Cache Strategy:** The home page (`src/app/page.tsx`) uses `export const revalidate = 3600` — Incremental Static Regeneration with revalidation every 1 hour. This means the page is statically generated at build time and revalidated in the background every 3600 seconds. Unlike `force-dynamic`, ISR delivers static HTML to the end user (maximum performance) while keeping data up to date. If the CheapShark API fails during revalidation, the previous cache continues serving — the page never breaks.
+- **Data Fallback:** `src/data/fallbackDeals.ts` contains a hardcoded array of deals. If the external API returns empty or an error, components receive this fallback. The UI never displays an empty or broken state.
+- **Golden Rule:** `'use client'` is used surgically. Only peripheral interactive components (Navbar with reactive search, wishlist modals, price alerts, heart indicators) are Client Components. All heavy structure (Hero, deal lists, base charts) is born on the server.
 
-**Referências:** [ADR-001: Tech Stack](docs/adr/ADR-001-tech-stack.md)
+**References:** [ADR-001: Tech Stack](docs/adr/ADR-001-tech-stack.md)
 
-## 2. A Filosofia de Estilização: Tailwind CSS v4 com Design Tokens
+## 2. The Styling Philosophy: Tailwind CSS v4 with Design Tokens
 
-- **A Escolha:** Tailwind CSS v4 em modo **CSS-first**, com `@theme` para design tokens customizados e `@utility` para padrões visuais do GameDeals (glassmorphism, glow effects). A configuração vive em `src/app/globals.css` via `@import "tailwindcss"` — sem arquivo `tailwind.config.js`.
-- **O Porquê:**
-    1. **Produtividade:** 80% do CSS vira utilities inline (`flex`, `grid`, `gap-4`, `text-lg`). Layout, espaçamento e tipografia deixam de exigir arquivos `.module.css` para cada componente.
-    2. **Consistência:** Os design tokens do tema OLED/glassmorphism são centralizados no bloco `@theme`:
+- **The Choice:** Tailwind CSS v4 in **CSS-first** mode, with `@theme` for custom design tokens and `@utility` for GameDeals visual patterns (glassmorphism, glow effects). The configuration lives in `src/app/globals.css` via `@import "tailwindcss"` — no `tailwind.config.js` file.
+- **Why:**
+    1. **Productivity:** 80% of CSS becomes inline utilities (`flex`, `grid`, `gap-4`, `text-lg`). Layout, spacing, and typography no longer require `.module.css` files for each component.
+    2. **Consistency:** The OLED/glassmorphism theme design tokens are centralized in the `@theme` block:
         ```css
         @theme {
           --color-oled-black: #0a0a0f;
@@ -29,7 +29,7 @@ Este documento funde o Dicionário da Tech Stack com a Análise de Arquitetura. 
           --color-accent-primary: #8b5cf6;
         }
         ```
-    3. **Glassmorphism preserved:** O visual "glass" (backdrop-filter, blur, bordas translúcidas) não se perdeu — foi encapsulado em uma `@utility glass` que se aplica com `className="glass"`:
+    3. **Glassmorphism preserved:** The 'glass' look (backdrop-filter, blur, translucent borders) was not lost — it was encapsulated in a `@utility glass` that is applied with `className="glass"`:
         ```css
         @utility glass {
           background: var(--color-glass-bg);
@@ -38,29 +38,29 @@ Este documento funde o Dicionário da Tech Stack com a Análise de Arquitetura. 
           border-radius: var(--radius-glass);
         }
         ```
-    4. **Performance:** Tailwind v4 é CSS puro em build-time — zero runtime, tree-shaking automático, 3.78x mais rápido que v3. Para um projeto com tema escuro pesado e animações, isso elimina o CSS não utilizado em produção.
-- **Migração Gradual:** CSS Modules ainda coexistem em componentes legados (como `page.module.css` na home page). A migração é componente por componente, sem pressa. O importante é que *novos* componentes seguem Tailwind v4.
-- **Animações:** Framer Motion para animações declarativas (entrada de modal, transições de página, staggered animations em listas). `@keyframes` complexos permanecem no `globals.css` abaixo do `@import`.
+    4. **Performance:** Tailwind v4 is pure CSS at build-time — zero runtime, automatic tree-shaking, 3.78x faster than v3. For a project with heavy dark theme and animations, this eliminates unused CSS in production.
+- **Gradual Migration:** CSS Modules still coexist in legacy components (like `page.module.css` on the home page). The migration is component by component, without rush. The important thing is that *new* components follow Tailwind v4.
+- **Animations:** Framer Motion for declarative animations (modal entrance, page transitions, staggered animations in lists). Complex `@keyframes` remain in `globals.css` below `@import`.
 
-**Referências:** [ADR-011: Styling Architecture — Tailwind CSS v4](docs/adr/ADR-011-styling-tailwind-v4.md)
+**References:** [ADR-011: Styling Architecture — Tailwind CSS v4](docs/adr/ADR-011-styling-tailwind-v4.md)
 
-## 3. Estado, Fetching & Persistência
+## 3. State, Fetching & Persistence
 
-O GameDeals gerencia três camadas de estado, cada uma com sua ferramenta específica:
+GameDeals manages three state layers, each with its specific tool:
 
-### Zustand — Estado Global do Cliente
-- **O quê:** Wishlist, status de autenticação, alertas de preço, estado de UI (sidebar, toasts, modais).
-- **O Porquê:** Leve (~1KB), TypeScript-first, middleware `persist` nativo para sincronizar localStorage com Supabase. Evita prop drilling sem o peso de Redux.
-- **Padrão:** Stores em `src/store/` com `create<State>()(persist(...))`. Exemplo: `wishlistStore.ts` persiste itens no localStorage com chave `gamedeals-wishlist` e posteriormente sync com o banco via Server Action.
+### Zustand — Global Client State
+- **What:** Wishlist, authentication status, price alerts, UI state (sidebar, toasts, modals).
+- **Why:** Lightweight (~1KB), TypeScript-first, native `persist` middleware to sync localStorage with Supabase. Avoids prop drilling without Redux bloat.
+- **Pattern:** Stores in `src/store/` with `create<State>()(persist(...))`. Example: `wishlistStore.ts` persists items in localStorage with key `gamedeals-wishlist` and later syncs with the database via Server Action.
 
-### TanStack Query v5 — Dados do Servidor (Cache e Refetch)
-- **O quê:** Queries de deals, busca no Navbar, histórico de preços, detalhes de jogo.
-- **O Porquê:** TanStack Query v5 substituiu o SWR por três razões:
-    1. **Network Mode:** Suporte nativo a estados online/offline.
-    2. **Persisted Query Client:** Cache sobrevive a reload da página.
-    3. **Optimistic Updates:** API madura para atualizações otimistas (adicionar à wishlist instantaneamente).
-    4. **Server Components:** Integração via `dehydrate`/`hydrate` para SSR.
-- **Padrão:** Hooks em `src/hooks/` que envolvem chamadas às Server Actions com `useQuery`:
+### TanStack Query v5 — Server Data (Cache and Refetch)
+- **What:** Deals queries, Navbar search, price history, game details.
+- **Why:** TanStack Query v5 replaced SWR for three reasons:
+    1. **Network Mode:** Native support for online/offline states.
+    2. **Persisted Query Client:** Cache survives page reload.
+    3. **Optimistic Updates:** Mature API for optimistic updates (add to wishlist instantly).
+    4. **Server Components:** Integration via `dehydrate`/`hydrate` for SSR.
+- **Pattern:** Hooks in `src/hooks/` that wrap Server Action calls with `useQuery`:
     ```typescript
     export function useWishlistGames(gameIds: string[]) {
       return useQuery({
@@ -75,35 +75,35 @@ O GameDeals gerencia três camadas de estado, cada uma com sua ferramenta espec�
       });
     }
     ```
-    O SWR ainda existe em lugar nenhum — foi removido completamente.
+    SWR no longer exists anywhere — it was completely removed.
 
-### Server Actions — Camada de Mutação e Fetching Nativo
-- **O quê:** Operações que rodam no servidor com `'use server'`. Cobrem 60% dos casos de data fetching e 100% das mutações simples.
-- **O Porquê:** Next.js 16 estabilizou Server Actions. Elas eliminam a necessidade de API routes para operações CRUD comuns: criar playlist, registrar alerta de preço, logar clique de afiliado, buscar deals da CheapShark com cache integrado.
-- **Padrão:** Funções em `src/actions/` que usam `fetch` com `next: { revalidate }` para ISR programático, ou Drizzle ORM para operações no banco:
+### Server Actions — Mutation and Native Fetching Layer
+- **What:** Operations that run on the server with `'use server'`. Cover 60% of data fetching cases and 100% of simple mutations.
+- **Why:** Next.js 16 stabilized Server Actions. They eliminate the need for API routes for common CRUD operations: create playlist, register price alert, log affiliate click, fetch deals from CheapShark with built-in cache.
+- **Pattern:** Functions in `src/actions/` that use `fetch` with `next: { revalidate }` for programmatic ISR, or Drizzle ORM for database operations:
     ```typescript
     'use server';
     export async function getDealsAction(params) {
       const url = new URL('https://www.cheapshark.com/api/1.0/deals');
-      // ... validação de params ...
+      // ... params validation ...
       const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
       if (!res.ok) return fallbackDeals;
       return (await res.json()) as Deal[];
     }
     ```
-- **Divisão de Responsabilidades:**
-    - **Server Components (`page.tsx`):** ISR com `revalidate = 3600` para dados estáticos de SEO.
-    - **Server Actions:** Mutação e fetching com cache granular por endpoint.
-    - **TanStack Query:** Interatividade no cliente (busca reativa, refetch, infinite scroll, optimistic updates).
-    - **Zustand:** Estado que não vem do servidor (sidebar aberta, preferências de tema, wishlist offline).
+- **Responsibility Division:**
+    - **Server Components (`page.tsx`):** ISR with `revalidate = 3600` for static SEO data.
+    - **Server Actions:** Mutation and fetching with granular cache per endpoint.
+    - **TanStack Query:** Client-side interactivity (reactive fetching, refetch, infinite scroll, optimistic updates).
+    - **Zustand:** State that doesn't come from the server (open sidebar, theme preferences, offline wishlist).
 
-### Drizzle ORM — Persistência Relacional
-- **O quê:** ORM type-safe sobre PostgreSQL (Supabase). Schema em `src/db/schema/`, cliente singleton em `src/db/index.ts`.
-- **O Porquê:** Drizzle foi escolhido sobre Prisma por três motivos:
-    1. **Performance:** Prepared statements nativos, 4.6k req/s em benchmarks, sem camada de runtime pesada.
-    2. **Edge-ready:** Funciona em edge functions (sem Node.js binary requirement).
-    3. **Type-safe SQL:** O schema gera tipos TypeScript que fluem para as Server Actions e componentes — sem `any` nem conversão manual.
-- **Padrão:** Tabelas definidas com `pgTable` e `drizzle-orm/pg-core`:
+### Drizzle ORM — Relational Persistence
+- **What:** Type-safe ORM over PostgreSQL (Supabase). Schema in `src/db/schema/`, singleton client in `src/db/index.ts`.
+- **Why:** Drizzle was chosen over Prisma for three reasons:
+    1. **Performance:** Native prepared statements, 4.6k req/s in benchmarks, no heavy runtime layer.
+    2. **Edge-ready:** Works in edge functions (no Node.js binary requirement).
+    3. **Type-safe SQL:** The schema generates TypeScript types that flow into Server Actions and components — no `any` or manual conversion.
+- **Pattern:** Tables defined with `pgTable` and `drizzle-orm/pg-core`:
     ```typescript
     export const games = pgTable('games', {
       id: uuid().defaultRandom().primaryKey(),
@@ -114,20 +114,20 @@ O GameDeals gerencia três camadas de estado, cada uma com sua ferramenta espec�
       updatedAt: timestamp().defaultNow().notNull(),
     });
     ```
-    O cliente é inicializado uma vez em `src/db/index.ts` com `postgres` pool + `drizzle()`. Todas as operações de banco (cron de ingestão, gamificação, playlists, wishlist) usam esse mesmo `db` exportado, garantindo consistência de conexão.
+    The client is initialized once in `src/db/index.ts` with `postgres` pool + `drizzle()`. All database operations (ingestion cron, gamification, playlists, wishlist) use this same exported `db`, ensuring connection consistency.
 
-### Diagrama de Fluxo de Dados (Atualizado)
+### Data Flow Diagram (Updated)
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                    Next.js 16 App Router                      │
 │                                                              │
-│  Servidor                                                     │
+│  Server                                                       │
 │  ┌────────────────────────────────────────────────────────┐   │
 │  │  page.tsx (ISR revalidate=3600)                       │   │
-│  │    │ fetch() com next: { revalidate }                  │   │
+│  │    │ fetch() with next: { revalidate }                  │   │
 │  │    ▼                                                    │   │
-│  │  CheapShark API ── falha? ──► fallbackDeals.ts        │   │
+│  │  CheapShark API ── fails? ──► fallbackDeals.ts        │   │
 │  │                                                         │   │
 │  │  Server Actions (src/actions/*.ts)                      │   │
 │  │    ├── Drizzle ORM ──► PostgreSQL (Supabase)           │   │
@@ -135,24 +135,24 @@ O GameDeals gerencia três camadas de estado, cada uma com sua ferramenta espec�
 │  │    └── fetch() ──► Typesense Cloud                     │   │
 │  └────────────────────────────────────────────────────────┘   │
 │                                                              │
-│  Cliente                                                      │
+│  Client                                                      │
 │  ┌────────────────────────────────────────────────────────┐   │
 │  │  TanStack Query v5 (src/hooks/)                       │   │
 │  │    ├── Cache, dedup, refetch, optimistic              │   │
-│  │    └── Wraps Server Actions para uso no cliente       │   │
+│  │    └── Wraps Server Actions for client use            │   │
 │  │                                                         │   │
 │  │  Zustand (src/store/)                                   │   │
 │  │    ├── wishlistStore, authStore, alertStore, uiStore   │   │
-│  │    └── Persistência localStorage ↔ Supabase           │   │
+│  │    └── Persistence localStorage ↔ Supabase            │   │
 │  └────────────────────────────────────────────────────────┘   │
 └──────────────────────────────────────────────────────────────┘
 ```
 
-**Referências:** [ADR-003: State Management](docs/adr/ADR-003-state-management.md), [ADR-001: Tech Stack](docs/adr/ADR-001-tech-stack.md)
+**References:** [ADR-003: State Management](docs/adr/ADR-003-state-management.md), [ADR-001: Tech Stack](docs/adr/ADR-001-tech-stack.md)
 
-## 4. O Sistema "T3-ish" (Arquitetura Modular)
-- **Estruturação Funcional:** Componentes como `HistoricalLows` e `EndingSoon` foram modularizados para conterem seu próprio fetching interno e seu próprio estilo. Cada seção é autossuficiente.
-- **O Porquê:** Na arquitetura anterior, injetávamos `deals` de todos os tipos via props no componente principal, transformando a raiz na controladora total de dados. A modularização transferiu o "cérebro" para cada Seção. Se a seção de Novidades falhar, a seção de Historical Lows lida em isolamento com a própria falha.
+## 4. The "T3-ish" System (Modular Architecture)
+- **Functional Structuring:** Components like `HistoricalLows` and `EndingSoon` were modularized to contain their own internal fetching and styling. Each section is self-sufficient.
+- **Why:** In the previous architecture, we injected `deals` of all types via props into the main component, turning the root into the total data controller. Modularization transferred the 'brain' to each Section. If the New Deals section fails, the Historical Lows section handles its own failure in isolation.
 
 ---
-**Próximo Passo:** Entenda como as Server Actions e a TanStack Query orquestram o fluxo de dados no módulo [02. Infraestrutura de API e Serviços (Services)](02-api-and-services.md).
+**Next Step:** Understand how Server Actions and TanStack Query orchestrate the data flow in module [02. API Infrastructure and Services](02-api-and-services.md).

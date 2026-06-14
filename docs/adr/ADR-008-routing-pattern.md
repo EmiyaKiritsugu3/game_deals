@@ -1,18 +1,18 @@
 # ADR-008: Routing Pattern — App Router (Next.js 16) + Nuqs + Server Actions
 
-**Status**: Aceito
-**Data**: 2026-06-09 (Atualizado 2026-06-10)
-**Autor**: EmiyaKiritsugu3
+**Status**: Accepted
+**Date**: 2026-06-09 (Updated 2026-06-10)
+**Author**: EmiyaKiritsugu3
 
 ---
 
-## Contexto
+## Context
 
-Navegação e URL state management no GameDeals: SSR/ISR para SEO, parámetros de URL para search/filters, modais como rotas hijack, transições de página.
+Navigation and URL state management in GameDeals: SSR/ISR for SEO, URL parameters for search/filters, modals as route hijacks, page transitions.
 
 ---
 
-## Decisão
+## Decision
 
 ### App Router (Next.js 16)
 
@@ -40,7 +40,7 @@ app/
 │   └── [storeId]/
 │       └── [gameSlug]/
 │           └── route.ts    # Edge Route Handler
-├── api/                # API routes para Supabase integration
+├── api/                # API routes for Supabase integration
 │   └── search/route.ts
 ├── auth/
 │   └── callback/route.ts   # OAuth callback
@@ -79,7 +79,7 @@ export default async function GameModal({ params }: { params: { slug: string } }
 }
 ```
 
-### Server Actions para Form Submissions
+### Server Actions for Form Submissions
 
 ```typescript
 'use server';
@@ -90,23 +90,23 @@ export async function createPlaylistAction(formData: FormData) {
 
 ---
 
-## Consequências
+## Consequences
 
-### Positivas
-- **SEO máximo**: Server Components + SSR para todas páginas públicas
-- **URL state compartilhável**: Filters, sort, page via `nuqs` (type-safe, sync com URL)
-- **Modais SEO-friendly**: Rota intercept (`/game/[slug]`) + full page server-rendered
-- **Progressive Enhancement**: Server Actions funcionam sem JS
-- **Edge redirects**: `/out/*` routes no Edge Runtime para mínimo overhead
+### Positive
+- **Maximum SEO**: Server Components + SSR for all public pages
+- **Shareable URL state**: Filters, sort, page via `nuqs` (type-safe, sync with URL)
+- **SEO-friendly modals**: Intercept route (`/game/[slug]`) + full page server-rendered
+- **Progressive Enhancement**: Server Actions work without JS
+- **Edge redirects**: `/out/*` routes on Edge Runtime for minimal overhead
 
-### Negativas
-- **Parallel Routes complexity**: Intercepting modais adicionam complexidade de build (mitigado: pattern claro em `@modal`)
-- **Nuqs + Server Components**: URL state só funciona em Client Components (mitigado: wrapper fine-grained)
-- **Server Actions + forms**: Loading states precisam de `useFormStatus` ou TanStack Query
+### Negative
+- **Parallel Routes complexity**: Intercepting modals add build complexity (mitigated: clear pattern in `@modal`)
+- **Nuqs + Server Components**: URL state only works in Client Components (mitigated: fine-grained wrapper)
+- **Server Actions + forms**: Loading states need `useFormStatus` or TanStack Query
 
 ---
 
-## Referências
+## References
 - [Next.js 16 App Router Docs](https://nextjs.org/docs/app)
 - [Nuqs GitHub](https://github.com/47ng/nuqs) — URL state management
 - [Next.js 16 Parallel Routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes)
