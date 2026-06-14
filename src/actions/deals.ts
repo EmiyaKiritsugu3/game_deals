@@ -8,42 +8,54 @@ import type { Deal, GameDetails, Store } from '@/types/game';
 
 const BASE_URL = 'https://www.cheapshark.com/api/1.0';
 
-/**
- * Busca deals da CheapShark (com fallback)
- */
-// fallow-ignore-next-line complexity
-export async function getDealsAction(params?: {
-  sortBy?: string;
-  onSale?: string;
-  pageSize?: string;
+const ALLOWED_SORT = ['Deal Rating', 'Title', 'Savings', 'Price'] as const;
+
+function validateSortBy(input?: string): string {
+  if (!input) return 'Deal Rating';
+  return ALLOWED_SORT.includes(input as (typeof ALLOWED_SORT)[number]) ? input : 'Deal Rating';
+}
+
+function validatePageSize(input?: string): number {
+  if (!input) return 20;
+  const parsed = Number.parseInt(input, 10);
+  if (Number.isNaN(parsed)) return 20;
+  return Math.max(1, Math.min(100, parsed));
+}
+
+function isValidPrice(input?: string): boolean {
+  return input !== undefined && !Number.isNaN(Number(input));
+}
+
+function isValidStoreId(input?: string): boolean {
+  return input !== undefined && /^\d{1,3}$/.test(input);
+}
+
+function sanitizeTitle(input?: string): string | undefined {
+  if (!input || input.length > 200) return undefined;
+  return encodeURIComponent(input);
+}
+
+function buildDealsUrl(params: {
+  sortBy: string;
+  onSale: string;
+  pageSize: number;
   upperPrice?: string;
   lowerPrice?: string;
   storeID?: string;
   title?: string;
-}): Promise<Deal[]> {
-  // Validate inputs
-  const ALLOWED_SORT = ['Deal Rating', 'Title', 'Savings', 'Price'] as const;
-  const sortBy =
-    params?.sortBy && ALLOWED_SORT.includes(params.sortBy as (typeof ALLOWED_SORT)[number])
-      ? params.sortBy
-      : 'Deal Rating';
-  const pageSizeRaw = params?.pageSize ? Number.parseInt(params.pageSize, 10) : 20;
-  const pageSize = Math.max(1, Math.min(100, Number.isNaN(pageSizeRaw) ? 20 : pageSizeRaw));
-
+}): URL {
   const url = new URL(`${BASE_URL}/deals`);
-  url.searchParams.append('sortBy', sortBy);
-  url.searchParams.append('onSale', params?.onSale ?? '1');
-  url.searchParams.append('pageSize', String(pageSize));
+  url.searchParams.append('sortBy', params.sortBy);
+  url.searchParams.append('onSale', params.onSale);
+  url.searchParams.append('pageSize', String(params.pageSize));
+  if (params.upperPrice) url.searchParams.append('upperPrice', params.upperPrice);
+  if (params.lowerPrice) url.searchParams.append('lowerPrice', params.lowerPrice);
+  if (params.storeID) url.searchParams.append('storeID', params.storeID);
+  if (params.title) url.searchParams.append('title', params.title);
+  return url;
+}
 
-  if (params?.upperPrice && !Number.isNaN(Number(params.upperPrice)))
-    url.searchParams.append('upperPrice', params.upperPrice);
-  if (params?.lowerPrice && !Number.isNaN(Number(params.lowerPrice)))
-    url.searchParams.append('lowerPrice', params.lowerPrice);
-  if (params?.storeID && /^\d{1,3}$/.test(params.storeID))
-    url.searchParams.append('storeID', params.storeID);
-  if (params?.title && params.title.length <= 200)
-    url.searchParams.append('title', encodeURIComponent(params.title));
-
+async function fetchDealsWithFallback(url: URL): Promise<Deal[]> {
   try {
     const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
     if (!res.ok) return fallbackDeals;
@@ -56,25 +68,37 @@ export async function getDealsAction(params?: {
 }
 
 /**
- * Busca detalhes de um jogo
+ * Busca deals da CheapShark (com fallback)
  */
-export async function getGameAction(id: string): Promise<GameDetails | null> {
-  const url = new URL(`${BASE_URL}/games`);
-  url.searchParams.append('id', id);
+// fallow-ignore-next-line complexity,unused-export
+export async function getDealsAction(params?: {
+  sortBy?: string;
+  onSale?: string;
+  pageSize?: string;
+  upperPrice?: string;
+  lowerPrice?: string;
+  storeID?: string;
+  title?: string;
+}): Promise<Deal[]> {
+  const upperPrice = isValidPrice(params?.upperPrice) ? params?.upperPrice : undefined;
+  const lowerPrice = isValidPrice(params?.lowerPrice) ? params?.lowerPrice : undefined;
+  const storeID = isValidStoreId(params?.storeID) ? params?.storeID : undefined;
+  const title = sanitizeTitle(params?.title);
 
-  try {
-    const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
-    if (!res.ok) return null;
-    return (await res.json()) as GameDetails | null;
-  } catch (e) {
-    console.error('getGameAction error:', e);
-    return null;
-  }
+  const url = buildDealsUrl({
+    sortBy: validateSortBy(params?.sortBy),
+    onSale: params?.onSale ?? '1',
+    pageSize: validatePageSize(params?.pageSize),
+    upperPrice,
+    lowerPrice,
+    storeID,
+    title,
+  });
+
+  return fetchDealsWithFallback(url);
 }
 
-/**
- * Busca lista de lojas
- */
+// fallow-ignore-next-line unused-export
 export async function getStoresAction(): Promise<Record<string, string>> {
   const map: Record<string, string> = {};
 
@@ -96,6 +120,24 @@ export async function getStoresAction(): Promise<Record<string, string>> {
   map['104'] = 'Gamivo';
 
   return map;
+}
+
+/**
+ * Busca detalhes de um jogo
+ */
+// fallow-ignore-next-line unused-export
+export async function getGameAction(id: string): Promise<GameDetails | null> {
+  const url = new URL(`${BASE_URL}/games`);
+  url.searchParams.append('id', id);
+
+  try {
+    const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
+    if (!res.ok) return null;
+    return (await res.json()) as GameDetails | null;
+  } catch (e) {
+    console.error('getGameAction error:', e);
+    return null;
+  }
 }
 
 /**
@@ -345,6 +387,7 @@ export async function getWeeklyPriceHistoryAction(cheapsharkId: string, weeks = 
 /**
  * Busca deals do banco
  */
+// fallow-ignore-next-line unused-export
 export async function getDealsFromDBAction(limit = 20) {
   const result = await db
     .select({
