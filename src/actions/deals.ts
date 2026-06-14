@@ -3,7 +3,7 @@
 import { desc, eq, sql } from 'drizzle-orm';
 import { db } from '@/db';
 import { deals as dealsTable, games, priceHistory } from '@/db/schema';
-import { fetchDealsWithFallback } from '@/services/fetch-helpers';
+import { fetchDealsWithFallback, fetchGameDetails } from '@/services/fetch-helpers';
 import type { Deal, GameDetails, Store } from '@/types/game';
 
 const BASE_URL = 'https://www.cheapshark.com/api/1.0';
@@ -117,17 +117,7 @@ export async function getStoresAction(): Promise<Record<string, string>> {
  */
 // fallow-ignore-next-line unused-export
 export async function getGameAction(id: string): Promise<GameDetails | null> {
-  const url = new URL(`${BASE_URL}/games`);
-  url.searchParams.append('id', id);
-
-  try {
-    const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
-    if (!res.ok) return null;
-    return (await res.json()) as GameDetails | null;
-  } catch (e) {
-    console.error('getGameAction error:', e);
-    return null;
-  }
+  return (await fetchGameDetails(id, 'getGameAction')) as GameDetails | null;
 }
 
 /**
