@@ -19,8 +19,6 @@ BEGIN
   END IF;
 END $$;--> statement-breakpoint
 
-CREATE INDEX IF NOT EXISTS "games_cheapsharkId_idx" ON "games" ("cheapsharkId");--> statement-breakpoint
-
 DROP FUNCTION IF EXISTS public.resolve_game_uuid(public."cheapsharkId"%TYPE);--> statement-breakpoint
 
 CREATE OR REPLACE FUNCTION public.resolve_game_uuid(p_cheapshark_id text)
