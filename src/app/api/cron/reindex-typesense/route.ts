@@ -3,7 +3,7 @@ import { syncGamesToTypesenseAction } from '@/actions/search';
 import { verifyCronAuth } from '@/lib/cron-auth';
 
 /**
- * Verval Cron Job — daily reindex Typesense
+ * Vercel Cron Job — daily reindex Typesense
  * GET /api/cron/reindex-typesense
  */
 export async function GET(request: Request) {

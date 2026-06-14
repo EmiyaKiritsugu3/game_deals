@@ -5,6 +5,16 @@
 
 --> statement-breakpoint
 
+DO $$
+BEGIN
+  -- Defensive cleanup: assign placeholder to any legacy NULL cheapsharkId rows
+  -- before enforcing NOT NULL. Real cheapsharkIds are numeric strings; the
+  -- 'legacy_' prefix ensures no collision.
+  UPDATE games
+  SET "cheapsharkId" = CONCAT('legacy_', REPLACE(id::text, '-', ''))
+  WHERE "cheapsharkId" IS NULL;
+END $$;--> statement-breakpoint
+
 ALTER TABLE "games"
   ALTER COLUMN "cheapsharkId" SET NOT NULL;--> statement-breakpoint
 

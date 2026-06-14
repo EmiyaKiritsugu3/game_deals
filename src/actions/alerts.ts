@@ -70,29 +70,21 @@ export async function checkTriggeredAlertsAction(): Promise<{
   checked: number;
   triggered: Array<Record<string, unknown>>;
 }> {
-  const alerts = await db.execute(sql`
-    SELECT pa.*, g.title, g."thumbUrl",
-           (SELECT MIN(d.price) FROM deals d
-            WHERE d."gameId" = pa."gameId"
-              AND (pa."storeId" IS NULL OR d."storeId" = pa."storeId")
-           ) AS "currentLowest"
-    FROM price_alerts pa
-    JOIN games g ON g.id = pa."gameId"
-    WHERE pa."isActive" = 1
-  `);
+  const countResult = await db.execute(
+    sql`SELECT COUNT(*)::int AS cnt FROM price_alerts WHERE "isActive" = 1`
+  );
+  const checked = Number((countResult as unknown as Array<{ cnt: number }>)[0]?.cnt ?? 0);
 
-  const alertsArray = alerts as unknown as Array<Record<string, unknown>>;
-  const triggered = alertsArray.filter((alert): boolean => {
-    const raw = alert.currentLowest;
-    const currentLowest =
-      raw == null
-        ? Number.POSITIVE_INFINITY
-        : Number.parseFloat(typeof raw === 'string' ? raw : String(raw));
-    return currentLowest <= Number(alert.targetPrice ?? 0);
-  });
+  const rows = await db.execute(sql`SELECT * FROM public.check_alerts_for_all()`);
 
-  return {
-    checked: alertsArray.length,
-    triggered,
-  };
+  const triggered = (rows as unknown as Array<Record<string, unknown>>).map((r) => ({
+    userId: r.user_id,
+    gameId: r.game_id,
+    storeId: r.store_id,
+    targetPrice: r.target_price,
+    currentLowest: r.current_price,
+    notificationId: r.notification_id,
+  }));
+
+  return { checked, triggered };
 }
