@@ -57,8 +57,8 @@ export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseU
       // fallow-ignore-next-line complexity
       .then(({ createClient }) => {
         const supabase = createClient();
-        // biome-ignore lint/suspicious/noExplicitAny: Supabase session type
         // fallow-ignore-next-line complexity
+        // biome-ignore lint/suspicious/noExplicitAny: Supabase session type
         const sub = supabase.auth.onAuthStateChange((_event: string, session: any) => {
           setUser(session?.user ?? null);
           if (session?.user) {
