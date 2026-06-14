@@ -67,7 +67,7 @@ Crie ou edite o arquivo `.env.local` na raiz do seu projeto local (e também no 
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=sua-chave-anon-aqui
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sua-chave-anon-aqui
 CRON_SECRET=uma-chave-aleatoria-criada-por-voce
 ```
 

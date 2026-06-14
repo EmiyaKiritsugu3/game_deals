@@ -35,7 +35,7 @@ git push origin main --force
 2. Importe o repositório `game-deals`.
 3. **IMPORTANTE:** Em "Environment Variables", adicione novamente as chaves do Supabase:
    - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 4. Clique em **Deploy**.
 
 ---

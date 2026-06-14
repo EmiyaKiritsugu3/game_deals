@@ -76,27 +76,19 @@ const { data, error, isLoading, mutate } = useQuery({
 
 ---
 
-### Server Actions + `use cache` — Data Fetching & Mutations Simples (Novo 2026)
+### Server Actions + `fetch` — Data Fetching & Mutations Simples (Novo 2026)
 
 ```typescript
 // src/actions/games.ts
 'use server';
 
-import { unstable_cache as useCache } from 'next/cache';
-import { drizzle } from '@/db';
-import { games, prices } from '@/db/schema';
-
-export const getGame = useCache(
-  async (id: string) => {
-    const game = await drizzle.query.games.findFirst({
-      where: eq(games.id, id),
-      with: { prices: true, history: true },
-    });
-    return game;
-  },
-  ['game', id],
-  { revalidate: 300, tags: ['game', id] } // ISR 5min + on-demand revalidation
-);
+export async function getGame(id: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/games/${id}`, {
+    next: { revalidate: 300, tags: [`game-${id}`] },
+  });
+  if (!res.ok) throw new Error('Failed to fetch game');
+  return res.json();
+}
 
 // Mutation via Server Action
 export async function createPlaylistAction(formData: FormData) {
@@ -195,7 +187,7 @@ export async function createPlaylistAction(formData: FormData) {
 ## Referências
 - [TanStack Query v5 Docs](https://tanstack.com/query/v5/docs/framework/react/overview) — Network Mode, Persisted Client, Optimistic Updates
 - [Next.js 16 Server Actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations) — Stable em Next.js 16
-- [Next.js `use cache`](https://nextjs.org/docs/app/api-reference/functions/unstable_cache) — ISR programático
+- [Next.js fetch with revalidate](https://nextjs.org/docs/app/building-your-application/caching) — ISR programático
 - [Tech Stack Dictionary](../tech_stack_dictionary.md#-state-management--data-fetching)
 - `src/store/` — implementação dos stores Zustand
 - `src/hooks/` — hooks TanStack Query customizados

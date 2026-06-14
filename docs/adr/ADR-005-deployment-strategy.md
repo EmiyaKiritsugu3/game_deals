@@ -63,7 +63,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: '22', cache: 'pnpm' }
       - run: pnpm install --frozen-lockfile
-      - run: pnpm biome ci .           # Lint + format check
+      - run: pnpm lint           # Biome check
       - run: pnpm vitest run --coverage # Unit tests
       - run: pnpm playwright install    # E2E
       - run: pnpm playwright test

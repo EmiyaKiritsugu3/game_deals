@@ -22,7 +22,7 @@ Antes de clicar em "Deploy", abra a seção **Environment Variables** e adicione
 | Chave | Valor |
 | :--- | :--- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Sua URL do Supabase |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Sua anon public key |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Sua anon public key |
 | `CRON_SECRET` | A senha longa que você inventou |
 
 ## 4. Deploy e Cron Jobs
