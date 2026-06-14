@@ -129,9 +129,9 @@ curl -H "Authorization: Bearer $CRON_SECRET" \
 
 **Source:** `src/app/api/cron/check-alerts/route.ts`
 
-Checks all active price alerts against current CheapShark prices. Logs triggered alerts to console.
+Checks all active price alerts against current deal prices in database. Calls `checkTriggeredAlertsAction()` which executes the `check_alerts_for_all()` SECURITY DEFINER SQL function. Logs triggered alerts to console, inserts notifications into `notifications` table.
 
-**Auth:** `CRON_SECRET`
+**Auth:** via `verifyCronAuth()` in `src/lib/cron-auth.ts`
 
 **Response `200` (alerts triggered):**
 ```json
@@ -139,15 +139,14 @@ Checks all active price alerts against current CheapShark prices. Logs triggered
   "processed": 5,
   "triggered": 2,
   "details": [
-    { "user": "uuid-1", "game": "612", "price": 4.99 },
-    { "user": "uuid-2", "game": "148", "price": 9.99 }
+    { "userId": "uuid-1", "gameId": "uuid-2", "currentLowest": 4.99, "targetPrice": 9.99, "notificationId": "uuid-3" }
   ]
 }
 ```
 
 **Response `200` (no alerts):**
 ```json
-{ "message": "No alerts to check" }
+{ "processed": 0, "triggered": 0, "details": [] }
 ```
 
 **Response `401`:**
@@ -170,16 +169,15 @@ curl -H "Authorization: Bearer $CRON_SECRET" \
 
 | Step | Detail |
 |------|--------|
-| 1 | Validate `Authorization: Bearer` against `CRON_SECRET` env |
-| 2 | Fetch all rows from `price_alerts` table via Supabase |
-| 3 | Collect unique `gameId` values |
-| 4 | For each game: fetch `GET https://www.cheapshark.com/api/1.0/games?id={gameID}` |
-| 5 | Extract best deal price, update `price_alerts.currentPrice` |
-| 6 | Filter alerts where `currentBestPrice <= targetPrice` |
-| 7 | Log triggered alerts to console, return summary |
+| 1 | Validate `Authorization` via `verifyCronAuth()` shared helper |
+| 2 | `checkTriggeredAlertsAction()` counts active alerts (`SELECT COUNT(*)`) |
+| 3 | Executes `SELECT * FROM public.check_alerts_for_all()` (SECURITY DEFINER) |
+| 4 | SQL function iterates active alerts: acquires `pg_advisory_xact_lock`, queries `MIN(deals.price)`, updates `price_alerts.currentPrice`/`lastCheckedAt`, inserts notification into `notifications` with 1h idempotency window |
+| 5 | Only triggered alerts returned; logged with userId/gameId/price/target |
+| 6 | Returns `{ processed, triggered, details }` |
 
-**Tables affected:** `price_alerts` (writes `currentPrice`)
-**External dependency:** CheapShark API
+**Tables affected:** `price_alerts` (writes `currentPrice`, `lastCheckedAt`), `notifications` (inserts triggered alerts)
+**External dependency:** None (uses local DB prices, not CheapShark API)
 
 ---
 
@@ -192,6 +190,16 @@ All Server Actions use the `'use server'` directive and are importable from `@/a
 ### `src/actions/deals.ts`
 
 Thin wrappers over CheapShark API. Validation, fallback, and DB persistence.
+
+**Shared helpers** (exported from `src/services/fetch-helpers.ts`):
+- `fetchDealsWithFallback(url)` — fetch with `next.revalidate=3600`, falls back to `fallbackDeals` on error/empty
+- `fetchGameDetails(id)` — fetch game details from CheapShark, returns `null` on error
+
+**UUID resolver functions:**
+- `resolveGameUuid(cheapsharkId)` — calls `resolve_game_uuid()` RPC, returns UUID or `null`
+- `resolveGameUuidsAction(ids)` — batch cheapsharkId → UUID via `SELECT` on `games` table
+- `resolveCheapsharkByUuidAction(uuid)` — reverse lookup via `resolve_cheapshark_id()` RPC
+- `resolveCheapsharkByUuidsAction(uuids)` — batch UUID → cheapsharkId
 
 ---
 
@@ -336,12 +344,12 @@ Internal function (called by cron). Fetches top 100 on-sale deals from CheapShar
 
 ```ts
 async function getDailyPriceHistoryAction(
-  gameId: string,
-  days?: number  // default: 90
+  cheapsharkId: string,  // CheapShark numeric ID
+  days?: number           // default: 90
 ): Promise<unknown>
 ```
 
-Calls PostgreSQL function `get_daily_prices(gameId, days)`. Returns raw query rows. Returns `[]` on error.
+Resolves `cheapsharkId` → UUID via `resolveGameUuid()`, then calls PostgreSQL function `get_daily_prices(uuid, days)`. Returns `[]` if game not in DB or on error.
 
 ---
 
@@ -349,12 +357,12 @@ Calls PostgreSQL function `get_daily_prices(gameId, days)`. Returns raw query ro
 
 ```ts
 async function getWeeklyPriceHistoryAction(
-  gameId: string,
-  weeks?: number  // default: 26
+  cheapsharkId: string,  // CheapShark numeric ID
+  weeks?: number          // default: 26
 ): Promise<unknown>
 ```
 
-Calls PostgreSQL function `get_weekly_prices(gameId, weeks)`. Returns raw query rows. Returns `[]` on error.
+Resolves `cheapsharkId` → UUID via `resolveGameUuid()`, then calls PostgreSQL function `get_weekly_prices(uuid, weeks)`. Returns `[]` if game not in DB or on error.
 
 ---
 
@@ -366,7 +374,7 @@ async function getDealsFromDBAction(
 ): Promise<Array<{
   gameId: string;
   title: string;
-  storeId: 'steam' | 'epic' | 'gog' | 'humble' | 'fanatical' | 'greenmangaming' | 'nuuvem';
+  storeId: string;        // varchar(50) — replaces old pgEnum
   price: number;
   retailPrice: number;
   savings: number;
@@ -452,7 +460,9 @@ Default sort: `cheapestPrice:asc`.
 
 ### `src/actions/alerts.ts`
 
-Price alert CRUD with Supabase auth enforcement. Uses direct `postgres` connection.
+Price alert CRUD with Supabase auth enforcement. Uses Drizzle ORM singleton (`db.execute(sql`).
+
+All functions now resolve `gameId` (CheapShark numeric ID) to internal UUID via `resolveGameUuid()` before database operations.
 
 ---
 
@@ -460,15 +470,16 @@ Price alert CRUD with Supabase auth enforcement. Uses direct `postgres` connecti
 
 ```ts
 async function createPriceAlertAction(
-  gameId: string,
+  gameId: string,      // CheapShark numeric ID (e.g. "612")
   targetPrice: number,
   storeId?: string
 ): Promise<Record<string, unknown>>
 ```
 
-Creates a price alert for the authenticated user. Upserts on conflict (`userId`, `gameId`). Requires valid Supabase session.
+Creates a price alert for the authenticated user. Resolves `cheapsharkId` → UUID via `resolveGameUuid()`. Upserts on conflict (`userId`, `gameId`). Requires valid Supabase session.
 
 **Throws:** `Error('Unauthorized')` if no session.
+**Throws:** `Error('Game not found or not yet ingested')` if cheapsharkId not in DB.
 
 **Tables affected:** `price_alerts`
 
@@ -513,12 +524,80 @@ Deletes a price alert. Verifies ownership (alert's `userId` must match current s
 #### `checkTriggeredAlertsAction`
 
 ```ts
-async function checkTriggeredAlertsAction(): Promise<Array<Record<string, unknown>>>
+async function checkTriggeredAlertsAction(): Promise<{
+  checked: number;    // total active alerts processed
+  triggered: Array<{
+    userId: string;
+    gameId: string;
+    storeId?: string;
+    targetPrice: number;
+    currentLowest: number;
+    notificationId?: string;
+  }>;
+}>
 ```
 
-Query-based check. For each active alert, finds the current lowest deal price (from `deals` table, optionally filtered by `storeId`). Returns alerts where `currentLowest <= targetPrice`.
+Calls the `check_alerts_for_all()` SECURITY DEFINER SQL function which handles:
+- `pg_advisory_xact_lock(hashtext(userId:gameId:targetPrice))` for race-free processing
+- `UPDATE price_alerts SET currentPrice, lastCheckedAt` for each active alert
+- `INSERT INTO notifications` with 1h idempotency window per (userId, gameId, targetPrice)
+- Returns only alerts where currentLowest ≤ targetPrice
 
-**Tables affected:** `price_alerts`, `deals`, `games`
+The `checked` count is obtained via `SELECT COUNT(*) FROM price_alerts WHERE "isActive" = 1` before the function call.
+
+**Tables affected:** `price_alerts` (writes `currentPrice`, `lastCheckedAt`), `notifications` (inserts)
+**Used by:** `GET /api/cron/check-alerts`
+
+---
+
+### `src/actions/notifications.ts`
+
+**Source:** `src/actions/notifications.ts`
+
+In-app notification delivery for price alerts. Uses Drizzle ORM with raw SQL. All functions require Supabase auth session.
+
+---
+
+#### `getNotificationsAction`
+
+```ts
+async function getNotificationsAction(
+  limit?: number  // default: 20
+): Promise<{
+  items: Array<typeof notifications.$inferSelect>;
+  unread: number;
+}>
+```
+
+Single-roundtrip CTE: fetches recent notifications + unread count in one query. Returns `{ items: [], unread: 0 }` if not authenticated. Ordered by `createdAt` DESC.
+
+**Tables affected:** `notifications`
+
+---
+
+#### `markNotificationReadAction`
+
+```ts
+async function markNotificationReadAction(id: string): Promise<void>
+```
+
+Marks a single notification as read (`readAt = NOW()`). Verifies ownership via `userId` filter.
+
+**Throws:** `Error('Unauthorized')` if no session.
+**Tables affected:** `notifications`
+
+---
+
+#### `markAllNotificationsReadAction`
+
+```ts
+async function markAllNotificationsReadAction(): Promise<void>
+```
+
+Marks all unread notifications for the current user as read. Calls `revalidatePath('/')`.
+
+**Throws:** `Error('Unauthorized')` if no session.
+**Tables affected:** `notifications`
 
 ---
 
@@ -749,24 +828,31 @@ Checks `wishlists` and `playlists` tables for counts. Awards badges via `awardBa
 ## Quick Reference
 
 | Endpoint / Action | File | Auth | Purpose |
-|---|---|---|---|
+|---|---|---|---|---|
 | `GET /api/cron/ingest-prices` | `src/app/api/cron/ingest-prices/route.ts` | `CRON_SECRET` | Ingest CheapShark deals → DB |
 | `GET /api/cron/reindex-typesense` | `src/app/api/cron/reindex-typesense/route.ts` | `CRON_SECRET` | Reindex games → Typesense |
-| `GET /api/cron/check-alerts` | `src/app/api/cron/check-alerts/route.ts` | `CRON_SECRET` | Check price alerts |
+| `GET /api/cron/check-alerts` | `src/app/api/cron/check-alerts/route.ts` | `CRON_SECRET` | Check price alerts + insert notifications |
 | `getDealsAction` | `src/actions/deals.ts` | none | Fetch deals from CheapShark |
 | `getGameAction` | `src/actions/deals.ts` | none | Fetch game details |
 | `getStoresAction` | `src/actions/deals.ts` | none | Fetch store list |
-| `ingestPricesAction` | `src/actions/deals.ts` | none | Bulk price ingestion |
-| `getDailyPriceHistoryAction` | `src/actions/deals.ts` | none | Daily price history |
-| `getWeeklyPriceHistoryAction` | `src/actions/deals.ts` | none | Weekly price history |
+| `ingestPricesAction` | `src/actions/deals.ts` | none | Bulk price ingestion (UUID FK) |
+| `getDailyPriceHistoryAction` | `src/actions/deals.ts` | none | Daily price history (resolves cheapsharkId→UUID) |
+| `getWeeklyPriceHistoryAction` | `src/actions/deals.ts` | none | Weekly price history (resolves cheapsharkId→UUID) |
 | `getDealsFromDBAction` | `src/actions/deals.ts` | none | Deals from local DB |
+| `resolveGameUuid` | `src/actions/deals.ts` | none | Single cheapsharkId→UUID resolution |
+| `resolveGameUuidsAction` | `src/actions/deals.ts` | none | Batch cheapsharkId→UUID resolution |
+| `resolveCheapsharkByUuidAction` | `src/actions/deals.ts` | none | Single UUID→cheapsharkId resolution |
+| `resolveCheapsharkByUuidsAction` | `src/actions/deals.ts` | none | Batch UUID→cheapsharkId resolution |
 | `searchGamesAction` | `src/actions/search.ts` | none | Typesense / CheapShark search |
 | `syncGamesToTypesenseAction` | `src/actions/search.ts` | none | Sync games → Typesense |
 | `createTypesenseCollectionAction` | `src/actions/search.ts` | none | Create Typesense collection |
-| `createPriceAlertAction` | `src/actions/alerts.ts` | Supabase session | Create price alert |
+| `createPriceAlertAction` | `src/actions/alerts.ts` | Supabase session | Create price alert (resolves cheapsharkId→UUID) |
 | `getUserAlertsAction` | `src/actions/alerts.ts` | Supabase session | List user alerts |
 | `deletePriceAlertAction` | `src/actions/alerts.ts` | Supabase session | Delete alert (owner only) |
-| `checkTriggeredAlertsAction` | `src/actions/alerts.ts` | none | Query triggered alerts |
+| `checkTriggeredAlertsAction` | `src/actions/alerts.ts` | none | Calls `check_alerts_for_all()` SQL function |
+| `getNotificationsAction` | `src/actions/notifications.ts` | Supabase session | List notifications + unread count |
+| `markNotificationReadAction` | `src/actions/notifications.ts` | Supabase session | Mark single notification read |
+| `markAllNotificationsReadAction` | `src/actions/notifications.ts` | Supabase session | Mark all notifications read |
 | `createPlaylistAction` | `src/actions/playlists.ts` | Supabase session | Create playlist |
 | `getUserPlaylistsAction` | `src/actions/playlists.ts` | Supabase session | List user playlists |
 | `addGameToPlaylistAction` | `src/actions/playlists.ts` | Supabase session | Add game to playlist |
@@ -800,7 +886,7 @@ Checks `wishlists` and `playlists` tables for counts. Awards badges via `awardBa
 | Variable | Used By |
 |----------|---------|
 | `CRON_SECRET` | All cron endpoints |
-| `DATABASE_URL` | `src/actions/alerts.ts`, `src/actions/playlists.ts` |
+| `DATABASE_URL` | `src/db/index.ts` (singleton Drizzle pool, used by all actions) |
 | `TYPESENSE_ADMIN_KEY` | `syncGamesToTypesenseAction`, `createTypesenseCollectionAction` |
 | `NEXT_PUBLIC_TYPESENSE_SEARCH_KEY` | `searchGamesAction` (fallback), client-side search |
 | `TYPESENSE_HOST`, `TYPESENSE_PORT`, `TYPESENSE_PROTOCOL` | Typesense client config |

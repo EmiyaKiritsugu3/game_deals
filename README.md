@@ -110,3 +110,4 @@ src/
 | [Test Strategy](docs/test-strategy.md) | Testing strategy |
 | [Threat Model](docs/security/threat-model.md) | STRIDE threat model |
 | [Templates](docs/templates/README.md) | Postmortem and PR/FAQ templates |
+| [Session — PR #12](docs/reports/pr12-session-report.md) | P0 notifications pipeline + audit fixes |

@@ -96,6 +96,15 @@ Full listing: [ADR Index](adr/README.md) | Template: [New ADR](adr/_template.md)
 
 ---
 
+## Session Reports
+
+| Report | Description |
+|--------|-------------|
+| [PR #10 — Quality Fix](reports/pr10-session-report.md) | Biome quality pipeline fix, removed 4 global `"off"` rules, 35 inline suppressions |
+| [PR #12 — P0 Notifications Pipeline](reports/pr12-session-report.md) | UUID FK fix, storeId varchar, in-app notifications, audit fixes |
+
+---
+
 ## Archives
 
 Outdated or superseded documents are preserved in [archive/](archive/README.md) for historical reference.
