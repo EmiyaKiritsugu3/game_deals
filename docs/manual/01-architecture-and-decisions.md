@@ -12,7 +12,7 @@ Este documento funde o Dicionário da Tech Stack com a Análise de Arquitetura. 
 - **Fallback de Dados:** `src/data/fallbackDeals.ts` contém um array de deals hardcoded. Se a API externa retornar vazio ou erro, os componentes recebem esse fallback. A UI nunca exibe um estado vazio ou quebrado.
 - **Regra de Ouro:** `'use client'` é usado de forma cirúrgica. Apenas componentes interativos periféricos (Navbar com busca reativa, modais de wishlist, alertas de preço, indicadores de coração) são Client Components. Toda a estrutura pesada (Hero, listas de deals, gráficos base) nasce no servidor.
 
-**Referências:** [ADR-001: Tech Stack](/docs/adr/ADR-001-tech-stack.md)
+**Referências:** [ADR-001: Tech Stack](docs/adr/ADR-001-tech-stack.md)
 
 ## 2. A Filosofia de Estilização: Tailwind CSS v4 com Design Tokens
 
