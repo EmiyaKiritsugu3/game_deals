@@ -35,6 +35,8 @@ pnpm test                 # Vitest unit
 pnpm test:watch           # Vitest watch
 pnpm test:coverage        # Vitest with coverage
 pnpm test:e2e             # Playwright E2E
+pnpm test:e2e:visual         # Playwright visual regression
+pnpm test:e2e:visual:update   # Update visual baselines (manual)
 pnpm check                # Local full CI (lint→tsc→test→build→knip→fallow)
 pnpm knip                 # Dead code analysis
 pnpm audit                # pnpm audit --audit-level=high
@@ -95,6 +97,23 @@ src/
   utils/            # Supabase clients (server/middleware/browser)
 ```
 
+## Structure (test)
+
+```
+tests/
+  e2e/              # Playwright E2E + visual regression tests
+    visual.spec.ts  # 6 visual regression snapshots
+playwright.config.ts   # Playwright configuration (maxDiffPixels, webServer)
+```
+
+## Stats
+
+- **Tests**: 207 (95 baseline + 112 new)
+- **Fallow CRITICAL**: 0 (was 1)
+- **Knip unused types**: 0 (was 9)
+- **Unused exports**: 0 (was 4)
+- **Maintainability**: 91.2
+
 ## Documentation
 
 | Document | Description |
@@ -111,3 +130,4 @@ src/
 | [Threat Model](docs/security/threat-model.md) | STRIDE threat model |
 | [Templates](docs/templates/README.md) | Postmortem and PR/FAQ templates |
 | [Session — PR #12](docs/reports/pr12-session-report.md) | P0 notifications pipeline + audit fixes |
+| [Session — PR #14](docs/reports/pr14-session-report.md) | Audit gap-closure + 207 tests + 0 CRITICAL |

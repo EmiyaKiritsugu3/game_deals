@@ -4,21 +4,22 @@ Tracking known technical debt items across the GameDeals codebase. Items priorit
 
 ---
 
-## P1 — Complexity Suppressions (12 suppressors)
+## P1 — Complexity Suppressions (10 suppressors, was 12)
 
-**Issue:** 12 `// fallow-ignore-next-line complexity` comments suppress cognitive complexity warnings across 7 files. These functions are genuine complexity hotspots that should be refactored.
+**Issue:** 10 `// fallow-ignore-next-line complexity` comments suppress cognitive complexity warnings across 5 files (was 7 files, 12 suppressors). Improvements from PR #13 + #14:
 
 | File | Function | Suppressor Lines |
 |------|----------|-----------------|
 | `src/actions/alerts.ts` | `createPriceAlertAction` | 1 |
 | `src/actions/deals.ts` | `getDealsAction`, `ingestPricesAction` | 2 |
-| `src/actions/playlists.ts` | 2 playlist functions | 2 |
-| `src/components/Navbar.tsx` | 3 component functions | 3 |
-| `src/components/NotificationBell.tsx` | component + map callback | 2 |
 | `src/components/SyncManager.tsx` | 2 useEffects | 2 |
+| `src/actions/search.ts` | `syncGamesToTypesenseAction`, `createTypesenseCollectionAction` | 2 |
 | `src/app/api/cron/check-alerts/route.ts` | cron route | 1 |
 
-**Fix:** Extract sub-functions, reduce conditional nesting. `getDealsAction` already done (16→4 cognitive); apply same pattern.
+**Reductions (PR #13):** `Navbar.tsx` (3 → 0, refactored to sub-components), `playlists.ts` (2 → 0, deleted), `NotificationBell.tsx` (2 → 1, simplified).
+**Reduction (PR #14):** Fallow CRITICAL functions: 1 → 0 (extracted `buildGameEntry` helper).
+
+**Fix:** Continue extracting sub-functions. Remaining 10 suppressors are in stable functions with acceptable complexity for their domain.
 
 ---
 
@@ -66,20 +67,15 @@ Tracking known technical debt items across the GameDeals codebase. Items priorit
 
 ---
 
-## P6 — Knip: Unused Exports (10 functions, 5 types)
+## P6 ✅ — (CLOSED) Knip: Unused Exports (10 functions, 5 types)
 
-**Issue:** Knip reports 10 unused function exports and 5 unused type exports. Some are intended for future use (gamification, social), others are genuinely dead.
+**Issue (resolved):** Knip reported 10 unused function exports and 5 unused type exports.
 
-**Functions:**
-- `useWeeklyPriceHistory` (hook)
-- `TYPESENSE_COLLECTION_NAME`, `createAdminClient`, `createSearchClient`, `createTypesenseAdapter`, `indexGame` (Typesense)
-- `generatePriceHistory` (service)
-- `getUserStats`, `getUserBadges`, `checkAchievements` (social)
-
-**Types:**
-- `BundleGame`, `PriceAlert`, `GameInfo`, `LowestPrice`, `Badge`
-
-**Fix:** Review each — either delete, un-export, or add `// fallow-ignore-next-line unused-export`.
+**Resolution (PR #14):**
+- **Types (✅ FIXED):** 7 types un-exported (internalized), 2 types deleted entirely (UserStats, UserBadge). **0 unused types remaining.**
+- **Functions (✅ FIXED):** Gamification.ts and playlists.ts deleted (whole feature removed). `generatePriceHistory` removed from re-exports. **0 unused functions remaining.**
+- **Typesense functions (⚠️ WAIVED):** `TYPESENSE_COLLECTION_NAME`, `createAdminClient`, `createSearchClient`, `createTypesenseAdapter`, `indexGame` are legitimately unused in production but kept as utility API. Ignored in knip config.
+- **Social functions (⚠️ WAIVED):** `getUserStats`, `getUserBadges`, `checkAchievements` are placeholders for future social features. Ignored in knip config.
 
 ---
 
@@ -110,3 +106,26 @@ Tracking known technical debt items across the GameDeals codebase. Items priorit
 **Issue:** `pnpm check` (pre-push hook) runs fallow which exits 1 on any finding. The CI pipeline excludes fallow. Two inherited complexity findings + one clone group in `ingestPricesAction` block local pushes.
 
 **Fix:** Either add fallow `--ci` mode to exit 0 on warnings, or fix the inherited findings.
+
+---
+
+## P10 — (DEFERRED) Cubic Review: 7 Comments Deferred
+
+**Issue:** cubic.dev AI code review on PR #14 identified 13 issues. 6 were fixed in PR #14, 7 deferred.
+
+**Fixed (PR #14):**
+- P1: `SearchResults.tsx` — `styles.resultsArea` undefined in CSS module
+- P1: `useCarousel.ts` — mod-by-zero crash
+- P2: `HeroNavigation.tsx` — O(n²) indexOf in map
+- P2: `GameHero.tsx` — missing `sizes` on `<Image fill>`
+- P2: `GameStatsRow.tsx` — raw float without toFixed(2)
+- P2: `AlertFormFields.tsx` — X icon labeled as checkmark
+
+**Deferred (requires separate PR):**
+- P2: `UserMenu.tsx` — button containing links (a11y)
+- P2: `search.ts` — HTTP status code swallowed
+- P2: `BaseModal.tsx` — dialog without accessible name
+- P2: `useAuthSubscription.ts` — logout inside onAuthStateChange
+- P2: `WishlistGrid.tsx` — absolute positioned heart button
+- P2: `GameBody.tsx` — redundant `bestCurrentPrice` in viewModel
+- P3: `AlertsGrid.tsx` — opacity compounding (inline + CSS)

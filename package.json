@@ -20,6 +20,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "test:e2e:visual": "playwright test tests/e2e/visual.spec.ts",
+    "test:e2e:visual:update": "playwright test tests/e2e/visual.spec.ts --update-snapshots",
     "knip": "knip",
     "test:coverage": "vitest run --coverage",
     "audit": "pnpm audit --audit-level=high",

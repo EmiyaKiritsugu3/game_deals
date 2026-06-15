@@ -1,7 +1,7 @@
 # 📊 Relatório de Estado do Projeto: GameDeals
 
-**Data:** 20 de Março de 2026  
-**Status Global:** 🟢 ESTÁVEL | PRONTO PARA PRODUÇÃO / JULES
+**Data:** 15 de Junho de 2026  
+**Status Global:** 🟢 ESTÁVEL | PÓS-AUDITORIA | 207 TESTES
 
 ---
 
@@ -39,6 +39,29 @@ O projeto foi consolidado seguindo as melhores práticas de Next.js 14+ e modula
     - Perfil de usuário básico implementado.
     - Prontidão para `ActivityFeed` e `Reviews` (Estrutura de tabelas e clientes prontos).
 - **CheapShark API:** Consumo eficiente com revalidação de cache (ISR).
+
+---
+
+## 📈 3.5 Métricas Pós-Auditoria (PR #14)
+
+| Métrica | Antes | Depois | Δ |
+|---------|-------|--------|---|
+| Testes unitários | 95 | **207** | +112 (+118%) |
+| Fallow CRITICAL | 1 | **0** | -100% |
+| Knip unused types | 9 | **0** | -100% |
+| Unused exports | 4 | **0** | -100% |
+| CSS orphans | 1 | **0** | -100% |
+| Biome non-null warnings | 2 | **0** | -100% |
+| Maintainability | 91.1 | **91.2** | +0.1 |
+
+**Principais entregas:**
+- Dead code removal: gamificação, playlists, exports, CSS, tipos não usados
+- Extração de `buildGameEntry` — último CRITICAL de complexidade eliminado
+- 112 novos testes (wishlist-data, pricing, api-client, wishlistStore, alerts)
+- Configuração de Playwright para regressão visual (pendente de setup de CI)
+- 6 fixes de revisão cubic.dev (2 P1 bugs runtime + 4 P2 melhoramentos)
+
+**Relatório completo:** `.sisyphus/evidence/final-qa/audit-gap-closure-report.md`
 
 ---
 
