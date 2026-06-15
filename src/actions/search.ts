@@ -42,6 +42,34 @@ export async function searchGamesAction(query: string, limit = 10) {
   }
 }
 
+interface CheapSharkDeal {
+  gameID: string;
+  title: string;
+  thumb: string;
+  salePrice: string;
+  metacriticScore?: string;
+  steamRatingPercent?: string;
+}
+
+async function fetchDealsForSync(): Promise<CheapSharkDeal[]> {
+  const res = await fetch(
+    'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100'
+  );
+  if (!res.ok) return [];
+  return (await res.json()) as CheapSharkDeal[];
+}
+
+function mapDealsToTypesenseGames(deals: CheapSharkDeal[]) {
+  return deals.map((deal) => ({
+    gameID: deal.gameID,
+    title: deal.title,
+    thumb: deal.thumb,
+    cheapest: deal.salePrice,
+    metacriticScore: Number.parseInt(deal.metacriticScore || '0', 10) || 0,
+    steamRating: Number.parseInt(deal.steamRatingPercent || '0', 10) || 0,
+  }));
+}
+
 /**
  * Sync jogos do CheapShark pra Typesense
  * Chamado pelo cron job
@@ -55,27 +83,12 @@ export async function syncGamesToTypesenseAction(): Promise<{
   if (!apiKey) {
     return { success: false, indexed: 0, error: 'Typesense not configured' };
   }
-
   try {
-    const res = await fetch(
-      'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100'
-    );
-
-    if (!res.ok) {
-      return { success: false, indexed: 0, error: `CheapShark error: ${res.status}` };
+    const deals = await fetchDealsForSync();
+    if (deals.length === 0) {
+      return { success: false, indexed: 0, error: 'No deals fetched' };
     }
-
-    const deals = (await res.json()) as Array<Record<string, string>>;
-
-    const games = deals.map((deal) => ({
-      gameID: deal.gameID,
-      title: deal.title,
-      thumb: deal.thumb,
-      cheapest: deal.salePrice,
-      metacriticScore: Number.parseInt(deal.metacriticScore, 10) || 0,
-      steamRating: Number.parseInt(deal.steamRatingPercent, 10) || 0,
-    }));
-
+    const games = mapDealsToTypesenseGames(deals);
     const ok = await indexGamesBatch(games);
     return { success: ok, indexed: games.length };
   } catch (error) {

@@ -10,8 +10,12 @@ import {
   STEAM_STORES,
   STORE_FAVICON_MAP,
 } from '@/constants/stores';
+import {
+  enrichWithGreyMarketDeals,
+  fetchGameFromCheapShark,
+  updateHistoricalLow,
+} from '@/services/game-enrichment';
 import type { Deal, GameDetails, Store } from '@/types/game';
-import { generateGreyMarketDeals } from '@/utils/pricing';
 
 const BASE_URL = 'https://www.cheapshark.com/api/1.0';
 
@@ -81,31 +85,11 @@ export async function getStores(): Promise<Record<string, string>> {
 }
 
 export async function getGame(id: string): Promise<GameDetails> {
-  const url = new URL(`${BASE_URL}/games`);
-  url.searchParams.append('id', id);
-
   try {
-    const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
-    if (!res.ok) return null as unknown as never;
-    const game = (await res.json()) as GameDetails;
-
-    if (game?.deals && game.deals.length > 0) {
-      const greyDeals = generateGreyMarketDeals(game.deals, id);
-      game.deals = [...game.deals, ...greyDeals];
-
-      const currentLowest = [...game.deals].sort(
-        (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
-      )[0];
-      if (currentLowest && game.cheapestPriceEver) {
-        if (
-          Number.parseFloat(currentLowest.price) < Number.parseFloat(game.cheapestPriceEver.price)
-        ) {
-          game.cheapestPriceEver.price = currentLowest.price;
-          game.cheapestPriceEver.date = Math.floor(Date.now() / 1000);
-        }
-      }
-    }
-
+    const game = await fetchGameFromCheapShark(id);
+    if (!game) return null as unknown as never;
+    enrichWithGreyMarketDeals(game, id);
+    updateHistoricalLow(game);
     return game;
   } catch (error) {
     console.error('getGame error:', error);
