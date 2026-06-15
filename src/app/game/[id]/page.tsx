@@ -1,8 +1,5 @@
 import type { Metadata } from 'next';
-import { DynamicPriceHistory, DynamicStoreCompare } from '@/components/DynamicCharts';
-import GameHero from '@/components/game/GameHero';
-import GameStatsRow from '@/components/game/GameStatsRow';
-import StoreComparison from '@/components/game/StoreComparison';
+import GameBody from '@/components/game/GameBody';
 import { buildGameStats, sortDealsByPrice, splitDealsByGreyMarket } from '@/lib/game-data';
 import {
   buildOG,
@@ -66,6 +63,18 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
   const playtime = estimatePlaytime(game.info.title);
   const costPerHour = calculateCostPerHour(bestCurrentPrice, playtime.mainStory);
 
+  const viewModel = {
+    gameTitle: game.info.title,
+    highResThumb,
+    bestCurrentPrice,
+    bestRawPrice: sortedDeals[0]?.price ?? '0',
+    stats: { ...stats, costPerHour, playtimeMain: playtime.mainStory },
+    official,
+    keyshop,
+    cheapestEverDate: game.cheapestPriceEver.date,
+    stores,
+  };
+
   // JSON-LD for product
   const productJsonLd = {
     '@context': 'https://schema.org',
@@ -92,47 +101,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
       <main className="container">
-        <GameHero
-          gameId={id}
-          gameTitle={game.info.title}
-          thumb={highResThumb}
-          bestCurrentPrice={bestCurrentPrice}
-          priority
-        />
-
-        <GameStatsRow
-          bestCurrentPrice={stats.bestCurrentPrice}
-          isFree={stats.isFree}
-          bestRawPrice={sortedDeals[0]?.price ?? '0'}
-          cheapestEver={stats.cheapestEver}
-          isCurrentlyAtHL={stats.isCurrentlyAtHL}
-          costPerHour={costPerHour}
-          playtimeMain={playtime.mainStory}
-        />
-
-        <StoreComparison
-          officialDeals={official}
-          keyshopDeals={keyshop}
-          cheapestEver={stats.cheapestEver}
-          gameTitle={game.info.title}
-          stores={stores}
-        />
-
-        <DynamicPriceHistory
-          currentPrice={sortedDeals[0]?.price || game.cheapestPriceEver.price}
-          lowestPrice={game.cheapestPriceEver.price}
-          lowestDate={game.cheapestPriceEver.date}
-          retailPrice={sortedDeals[0]?.retailPrice}
-          gameTitle={game.info.title}
-          gameId={id}
-        />
-
-        <DynamicStoreCompare
-          data={sortedDeals.map((d) => ({
-            storeName: stores[d.storeID] || `Store ${d.storeID}`,
-            price: d.price,
-          }))}
-        />
+        <GameBody viewModel={viewModel} id={id} />
       </main>
     </>
   );

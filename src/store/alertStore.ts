@@ -1,14 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-interface PriceAlert {
-  gameID: string;
-  gameTitle: string;
-  targetPrice: number;
-  currentPrice: number;
-  isKeyshopAllowed: boolean;
-  createdAt: number;
-}
+import type { PriceAlert } from '@/types/price-alert';
 
 interface AlertState {
   alerts: PriceAlert[];

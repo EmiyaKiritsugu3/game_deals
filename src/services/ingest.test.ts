@@ -61,13 +61,12 @@ describe('fetchCheapSharkDeals', () => {
     expect(result).toHaveLength(2);
   });
 
-  it('returns empty array when response is not ok', async () => {
+  it('throws when response is not ok', async () => {
     mockFetch.mockResolvedValueOnce({
       ok: false,
       status: 500,
     });
-    const result = await fetchCheapSharkDeals();
-    expect(result).toEqual([]);
+    await expect(fetchCheapSharkDeals()).rejects.toThrow(/CheapShark API/);
   });
 
   it('returns empty array when json is null or undefined', async () => {

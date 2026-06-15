@@ -5,7 +5,71 @@ import { useEffect, useRef, useState } from 'react';
 import { usePlaylistMutations } from '@/hooks/usePlaylistMutations';
 import { getUserPlaylists } from '@/services/social';
 import { useAuth } from '@/store/authStore';
+import type { Playlist } from '@/types/social';
 import styles from './AddToListModal.module.css';
+
+interface ListSelectorProps {
+  playlists: Playlist[];
+  error: string | null;
+  addMutation: { isPending: boolean };
+  createMutation: { isPending: boolean };
+  newListName: string;
+  setNewListName: (value: string) => void;
+  handleAdd: (playlistId: string) => void;
+  handleCreate: () => void;
+}
+function ListSelector({
+  playlists,
+  error,
+  addMutation,
+  createMutation,
+  newListName,
+  setNewListName,
+  handleAdd,
+  handleCreate,
+}: ListSelectorProps) {
+  return (
+    <>
+      {error && <p className={styles.error}>{error}</p>}
+      <div className={styles.existingLists}>
+        {playlists.length > 0 ? (
+          playlists.map((list) => (
+            <button
+              type="button"
+              key={list.id}
+              className={styles.listButton}
+              onClick={() => handleAdd(list.id)}
+              disabled={addMutation.isPending}
+            >
+              <span>{list.title}</span>
+              <span className={styles.plusIcon}>+</span>
+            </button>
+          ))
+        ) : (
+          <p className={styles.empty}>You don&apos;t have any playlists yet.</p>
+        )}
+      </div>
+      <div className={styles.divider}>or</div>
+      <div className={styles.createForm}>
+        <input
+          type="text"
+          placeholder="New playlist name..."
+          value={newListName}
+          onChange={(e) => setNewListName(e.target.value)}
+          className={styles.input}
+        />
+        <button
+          type="button"
+          className={styles.createButton}
+          disabled={createMutation.isPending || !newListName.trim()}
+          onClick={() => handleCreate()}
+        >
+          {createMutation.isPending ? 'Creating...' : 'Create & Add'}
+        </button>
+      </div>
+    </>
+  );
+}
 
 interface AddToListModalProps {
   gameId: string;
@@ -64,46 +128,16 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
         <h3>Add to Playlist</h3>
         <p className={styles.subtitle}>Curate your collections and earn achievements.</p>
 
-        {error && <p className={styles.error}>{error}</p>}
-
-        <div className={styles.existingLists}>
-          {playlists.length > 0 ? (
-            playlists.map((list) => (
-              <button
-                type="button"
-                key={list.id}
-                className={styles.listButton}
-                onClick={() => handleAdd(list.id)}
-                disabled={addMutation.isPending}
-              >
-                <span>{list.title}</span>
-                <span className={styles.plusIcon}>+</span>
-              </button>
-            ))
-          ) : (
-            <p className={styles.empty}>You don&apos;t have any playlists yet.</p>
-          )}
-        </div>
-
-        <div className={styles.divider}>or</div>
-
-        <div className={styles.createForm}>
-          <input
-            type="text"
-            placeholder="New playlist name..."
-            value={newListName}
-            onChange={(e) => setNewListName(e.target.value)}
-            className={styles.input}
-          />
-          <button
-            type="button"
-            className={styles.createButton}
-            disabled={createMutation.isPending || !newListName.trim()}
-            onClick={() => handleCreate()}
-          >
-            {createMutation.isPending ? 'Creating...' : 'Create & Add'}
-          </button>
-        </div>
+        <ListSelector
+          playlists={playlists}
+          error={error}
+          addMutation={addMutation}
+          createMutation={createMutation}
+          newListName={newListName}
+          setNewListName={setNewListName}
+          handleAdd={handleAdd}
+          handleCreate={handleCreate}
+        />
 
         <button type="button" className={styles.closeButton} onClick={onClose}>
           Cancel

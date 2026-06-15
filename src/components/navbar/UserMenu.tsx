@@ -18,6 +18,50 @@ interface UserMenuProps {
   serverUser: SupabaseUser | null;
 }
 
+function MenuItem({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
+  return (
+    <Link href={href} className={styles.menuItem}>
+      {icon}
+      <span>{label}</span>
+    </Link>
+  );
+}
+
+function MenuDivider() {
+  return <div className={styles.menuDivider} />;
+}
+
+function UserMenuDropdown({ isOpen, onLogout }: { isOpen: boolean; onLogout: () => void }) {
+  if (!isOpen) return null;
+  return (
+    <div className={styles.userDropdown}>
+      <MenuItem href="/wishlist" icon={<Bell size={16} />} label="Price Alerts" />
+      <MenuDivider />
+      <button type="button" className={`${styles.menuItem} ${styles.logout}`} onClick={onLogout}>
+        <LogOut size={16} />
+        <span>Logout</span>
+      </button>
+    </div>
+  );
+}
+
+function getUserDisplay(user: UserMenuProps['user'], serverUser: UserMenuProps['serverUser']) {
+  return {
+    avatar: user?.avatar || serverUser?.user_metadata?.avatar_url || '',
+    name: user?.name || serverUser?.user_metadata?.full_name || 'User',
+  };
+}
+
+function UserAvatar({ user, serverUser }: UserMenuProps) {
+  const { avatar, name } = getUserDisplay(user, serverUser);
+  return (
+    <>
+      <Image src={avatar} alt={name} width={28} height={28} unoptimized className={styles.avatar} />
+      <span className={styles.username}>{name}</span>
+    </>
+  );
+}
+
 export function UserMenu({ user, serverUser }: UserMenuProps) {
   const { logout } = useAuth();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -30,32 +74,10 @@ export function UserMenu({ user, serverUser }: UserMenuProps) {
       onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
       type="button"
     >
-      <Image
-        src={user?.avatar || serverUser?.user_metadata?.avatar_url || ''}
-        alt={user?.name || serverUser?.user_metadata?.full_name || 'User'}
-        width={28}
-        height={28}
-        unoptimized
-        className={styles.avatar}
-      />
-      <span className={styles.username}>
-        {user?.name || serverUser?.user_metadata?.full_name || 'User'}
-      </span>
+      <UserAvatar user={user} serverUser={serverUser} />
       <ChevronDown size={14} />
 
-      {isUserMenuOpen && (
-        <div className={styles.userDropdown}>
-          <Link href="/wishlist" className={styles.menuItem}>
-            <Bell size={16} />
-            <span>Price Alerts</span>
-          </Link>
-          <div className={styles.menuDivider} />
-          <button type="button" className={`${styles.menuItem} ${styles.logout}`} onClick={logout}>
-            <LogOut size={16} />
-            <span>Logout</span>
-          </button>
-        </div>
-      )}
+      <UserMenuDropdown isOpen={isUserMenuOpen} onLogout={logout} />
     </button>
   );
 }

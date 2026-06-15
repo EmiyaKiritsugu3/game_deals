@@ -1,5 +1,4 @@
 'use client';
-
 import {
   Bar,
   BarChart,
@@ -11,21 +10,24 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import type { PriceHistoryPoint } from '@/types/game';
-import { generatePriceHistory } from '@/utils/pricing';
+import {
+  axisProps,
+  chartTooltipStyle,
+  formatChartData,
+  priceFormatter,
+  storeFormatter,
+} from '@/lib/chart-data';
 import styles from './Charts.module.css';
 
 interface StorePrice {
   storeName: string;
   price: string;
 }
-
 export function StoreCompareChart({ data }: { readonly data: StorePrice[] }) {
   const chartData = data.map((d) => ({
     name: d.storeName,
     price: Number.parseFloat(d.price),
   }));
-
   return (
     <div className={styles.chartContainer}>
       <h3 className={styles.chartTitle}>Current Prices by Store</h3>
@@ -37,14 +39,15 @@ export function StoreCompareChart({ data }: { readonly data: StorePrice[] }) {
             <Tooltip
               cursor={{ fill: 'hsl(var(--muted) / 0.2)' }}
               contentStyle={chartTooltipStyle}
-              formatter={storeChartFormatter}
+              formatter={storeFormatter}
             />
             <Bar dataKey="price" radius={[4, 4, 0, 0]}>
-              {chartData.map((_entry, index) => {
-                const fill =
-                  index === 0 ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground) / 0.5)';
-                return <Cell key={_entry.name} fill={fill} />;
-              })}
+              {chartData.map((_entry, index) => (
+                <Cell
+                  key={_entry.name}
+                  fill={index === 0 ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground) / 0.5)'}
+                />
+              ))}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
@@ -52,34 +55,6 @@ export function StoreCompareChart({ data }: { readonly data: StorePrice[] }) {
     </div>
   );
 }
-
-// Shared chart configuration
-const chartTooltipStyle: React.CSSProperties = {
-  backgroundColor: 'hsl(var(--card))',
-  border: '1px solid hsl(var(--border))',
-  borderRadius: '8px',
-  color: 'hsl(var(--foreground))',
-};
-
-const axisProps = {
-  stroke: 'hsl(var(--muted-foreground))' as const,
-  fontSize: 12,
-  tickLine: false,
-  axisLine: false,
-};
-
-// biome-ignore lint/suspicious/noExplicitAny: Recharts Tooltip formatter signature
-const storeChartFormatter = (value: any) => {
-  const numValue = Number(value);
-  return [`$${Number.isFinite(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
-};
-
-// biome-ignore lint/suspicious/noExplicitAny: Recharts Tooltip formatter signature
-const priceHistoryFormatter = (value: any) => {
-  const numValue = Number(value);
-  return [`$${Number.isFinite(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
-};
-
 interface PriceHistoryChartProps {
   readonly currentPrice: string;
   readonly lowestPrice: string;
@@ -94,7 +69,6 @@ interface PriceHistoryChartProps {
     max_price: number;
   }>;
 }
-
 export function PriceHistoryChart({
   currentPrice,
   lowestPrice,
@@ -104,23 +78,7 @@ export function PriceHistoryChart({
   gameId: _gameId,
   realData,
 }: PriceHistoryChartProps) {
-  // Usar dados reais se disponíveis, senão gerar simulados
-  let chartData: PriceHistoryPoint[];
-
-  if (realData && realData.length > 2) {
-    chartData = realData.map((d) => ({
-      name: new Date(d.bucket).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      price: d.avg_price || d.min_price,
-    }));
-  } else {
-    chartData = generatePriceHistory(
-      Number.parseFloat(retailPrice),
-      Number.parseFloat(currentPrice),
-      Number.parseFloat(lowestPrice),
-      gameTitle
-    );
-  }
-
+  const chartData = formatChartData(realData, retailPrice, currentPrice, lowestPrice, gameTitle);
   return (
     <div className={styles.chartContainer}>
       <h3 className={styles.chartTitle}>
@@ -140,7 +98,7 @@ export function PriceHistoryChart({
               tickFormatter={(value) => `$${value}`}
               domain={['dataMin - 5', 'dataMax + 5']}
             />
-            <Tooltip contentStyle={chartTooltipStyle} formatter={priceHistoryFormatter} />
+            <Tooltip contentStyle={chartTooltipStyle} formatter={priceFormatter} />
             <Line
               type="monotone"
               dataKey="price"

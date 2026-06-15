@@ -1,21 +1,65 @@
 'use client';
 
-import { Github, Globe, Mail, ShieldCheck } from 'lucide-react';
+import { Github, Globe, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 import BaseModal from '@/components/ui/BaseModal';
 import { createClient } from '@/utils/supabase/client';
+import styles from './AuthModal.module.css';
 
 const supabase = createClient();
-
-import styles from './AuthModal.module.css';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+function AuthFormFields({
+  mode,
+  email,
+  password,
+  name,
+  setEmail,
+  setPassword,
+  setName,
+}: {
+  mode: 'login' | 'register';
+  email: string;
+  password: string;
+  name: string;
+  setEmail: (v: string) => void;
+  setPassword: (v: string) => void;
+  setName: (v: string) => void;
+}) {
+  return (
+    <div className="auth-form" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      {mode === 'register' && (
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      )}
+    </div>
+  );
+}
+
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -23,9 +67,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     setIsLoading(true);
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
     if (error) {
       setMessage({ type: 'error', text: error.message });
@@ -37,14 +79,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     e.preventDefault();
     setIsLoading(true);
     setMessage(null);
-
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
     });
-
     if (error) {
       setMessage({ type: 'error', text: error.message });
     } else {
@@ -59,7 +97,6 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         <h2>🚀 Welcome to GameDeals</h2>
         <p>Sign in to track price drops and sync your wishlist across all devices.</p>
       </div>
-
       <div className={styles.socialButtons}>
         <button
           type="button"
@@ -80,46 +117,26 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           <span>Continue with Discord</span>
         </button>
       </div>
-
       <div className={styles.divider}>
         <span>or use magic link</span>
       </div>
-
       <form className={styles.form} onSubmit={handleMagicLink}>
-        <div className={styles.inputGroup}>
-          <label htmlFor="email">Email Address</label>
-          <div style={{ position: 'relative' }}>
-            <input
-              type="email"
-              id="email"
-              placeholder="your@email.com"
-              className={styles.input}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={isLoading}
-            />
-            <Mail
-              size={16}
-              style={{
-                position: 'absolute',
-                right: 12,
-                top: 12,
-                color: 'hsl(var(--muted-foreground))',
-              }}
-            />
-          </div>
-        </div>
-
+        <AuthFormFields
+          mode="login"
+          email={email}
+          password={password}
+          name={name}
+          setEmail={setEmail}
+          setPassword={setPassword}
+          setName={setName}
+        />
         {message && (
           <div className={`${styles.message} ${styles[message.type]}`}>{message.text}</div>
         )}
-
         <button type="submit" className={styles.loginButton} disabled={isLoading}>
           {isLoading ? 'Sending...' : 'Send Magic Link'}
         </button>
       </form>
-
       <div className={styles.demoNote}>
         <ShieldCheck size={14} style={{ marginBottom: 4, color: 'hsl(var(--primary))' }} />
         <strong>Privacy Priority:</strong> We only store your wishlist and alert data. No passwords

@@ -18,7 +18,7 @@ export async function fetchCheapSharkDeals(): Promise<CheapSharkDeal[]> {
     'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100',
     { next: { revalidate: 0 } }
   );
-  if (!res.ok) return [];
+  if (!res.ok) throw new Error(`CheapShark API returned ${res.status}`);
   const deals = (await res.json()) as CheapSharkDeal[];
   return deals || [];
 }

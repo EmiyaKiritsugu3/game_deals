@@ -3,16 +3,8 @@
 import { Bell } from 'lucide-react';
 import Link from 'next/link';
 import PriceAlertTrigger from '@/components/PriceAlertTrigger';
+import type { PriceAlert } from '@/types/price-alert';
 import styles from './AlertsGrid.module.css';
-
-interface PriceAlert {
-  gameID: string;
-  gameTitle: string;
-  targetPrice: number;
-  currentPrice: number;
-  isKeyshopAllowed: boolean;
-  createdAt: number;
-}
 
 interface AlertsGridProps {
   alerts: PriceAlert[];

@@ -7,12 +7,16 @@ const { execute, authGetUser } = vi.hoisted(() => ({
 
 vi.mock('@/db', () => ({ db: { execute } }));
 
+vi.mock('@/services/ingest');
+
 vi.mock('@/utils/supabase/server', () => ({
   createClient: () => Promise.resolve({ auth: { getUser: () => authGetUser() } }),
 }));
 
+import { fetchCheapSharkDeals, upsertGames } from '@/services/ingest';
 import {
   getDailyPriceHistoryAction,
+  ingestPricesAction,
   resolveCheapsharkByUuidAction,
   resolveCheapsharkByUuidsAction,
   resolveGameUuid,
@@ -151,6 +155,17 @@ describe('resolveCheapsharkByUuidsAction (batch)', () => {
       {}
     );
     errorSpy.mockRestore();
+  });
+});
+
+describe('ingestPricesAction', () => {
+  it('returns success:false on CheapShark error', async () => {
+    vi.mocked(fetchCheapSharkDeals).mockRejectedValueOnce(new Error('CheapShark API returned 500'));
+    vi.mocked(upsertGames).mockResolvedValueOnce(new Map());
+
+    const result = await ingestPricesAction();
+    expect(result.success).toBe(false);
+    expect(result.error).toMatch(/CheapShark API/);
   });
 });
 

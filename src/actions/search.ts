@@ -1,6 +1,8 @@
 'use server';
 
 import { GAME_SCHEMA, indexGamesBatch, searchGames as typesenseSearch } from '@/lib/typesense';
+import type { CheapSharkDeal } from '@/lib/typesense-map';
+import { mapDealsToTypesenseGames } from '@/lib/typesense-map';
 
 interface TypesenseHit {
   document: {
@@ -42,32 +44,12 @@ export async function searchGamesAction(query: string, limit = 10) {
   }
 }
 
-interface CheapSharkDeal {
-  gameID: string;
-  title: string;
-  thumb: string;
-  salePrice: string;
-  metacriticScore?: string;
-  steamRatingPercent?: string;
-}
-
 async function fetchDealsForSync(): Promise<CheapSharkDeal[]> {
   const res = await fetch(
     'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100'
   );
   if (!res.ok) return [];
   return (await res.json()) as CheapSharkDeal[];
-}
-
-function mapDealsToTypesenseGames(deals: CheapSharkDeal[]) {
-  return deals.map((deal) => ({
-    gameID: deal.gameID,
-    title: deal.title,
-    thumb: deal.thumb,
-    cheapest: deal.salePrice,
-    metacriticScore: Number.parseInt(deal.metacriticScore || '0', 10) || 0,
-    steamRating: Number.parseInt(deal.steamRatingPercent || '0', 10) || 0,
-  }));
 }
 
 /**

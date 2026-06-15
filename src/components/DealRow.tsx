@@ -22,6 +22,80 @@ function isEpicDealCheck(savings: number, isFree: boolean): boolean {
   return savings >= 75 || isFree;
 }
 
+function DealMeta({
+  deal,
+  storeName,
+  storeLogo,
+  timeAgo,
+}: {
+  deal: Deal;
+  storeName: string;
+  storeLogo: string | null;
+  timeAgo: string;
+}) {
+  return (
+    <div className={styles.mainInfo}>
+      <h3 className={styles.title}>{deal.title}</h3>
+      <div className={styles.meta}>
+        {storeLogo ? (
+          // biome-ignore lint/performance/noImgElement: store logos from affiliate CDN
+          <img
+            src={storeLogo}
+            alt={storeName}
+            title={storeName}
+            className={styles.storeLogo}
+            width={14}
+            height={14}
+          />
+        ) : (
+          <span className={styles.storeName}>{storeName}</span>
+        )}
+        <span className={styles.metaDivider}>·</span>
+        <span className={styles.timeAgo}>{timeAgo}</span>
+        {deal.steamRatingPercent && deal.steamRatingPercent !== '0' && (
+          <>
+            <span className={styles.metaDivider}>·</span>
+            <DealsBadge type="RATING" value={deal.steamRatingPercent} />
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function DealPrice({
+  deal,
+  savings,
+  isFree,
+  isHistoricalLow,
+  isEpicDeal,
+}: {
+  deal: Deal;
+  savings: number;
+  isFree: boolean;
+  isHistoricalLow: boolean;
+  isEpicDeal: boolean;
+}) {
+  return (
+    <div className={styles.priceContainer}>
+      {isHistoricalLow && <DealsBadge type="HL" />}
+
+      {isEpicDeal && <DealsBadge type="EPIC" compact />}
+
+      {savings > 0 && !isFree && <div className={styles.discountBadge}>-{savings}%</div>}
+
+      <div className={styles.prices}>
+        {savings > 0 && !isFree && <span className={styles.normalPrice}>${deal.normalPrice}</span>}
+        {isFree ? (
+          <span className={styles.freePrice}>FREE</span>
+        ) : (
+          <span className={styles.salePrice}>${deal.salePrice}</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 interface DealRowProps {
   deal: Deal;
   rank?: number;
@@ -54,51 +128,14 @@ export default async function DealRow({ deal, rank: _rank }: DealRowProps) {
       </div>
 
       <div className={styles.content}>
-        <div className={styles.mainInfo}>
-          <h3 className={styles.title}>{deal.title}</h3>
-          <div className={styles.meta}>
-            {storeLogo ? (
-              // biome-ignore lint/performance/noImgElement: store logos from affiliate CDN
-              <img
-                src={storeLogo}
-                alt={storeName}
-                title={storeName}
-                className={styles.storeLogo}
-                width={14}
-                height={14}
-              />
-            ) : (
-              <span className={styles.storeName}>{storeName}</span>
-            )}
-            <span className={styles.metaDivider}>·</span>
-            <span className={styles.timeAgo}>{timeAgo}</span>
-            {deal.steamRatingPercent && deal.steamRatingPercent !== '0' && (
-              <>
-                <span className={styles.metaDivider}>·</span>
-                <DealsBadge type="RATING" value={deal.steamRatingPercent} />
-              </>
-            )}
-          </div>
-        </div>
-
-        <div className={styles.priceContainer}>
-          {isHistoricalLow && <DealsBadge type="HL" />}
-
-          {isEpicDeal && <DealsBadge type="EPIC" compact />}
-
-          {savings > 0 && !isFree && <div className={styles.discountBadge}>-{savings}%</div>}
-
-          <div className={styles.prices}>
-            {savings > 0 && !isFree && (
-              <span className={styles.normalPrice}>${deal.normalPrice}</span>
-            )}
-            {isFree ? (
-              <span className={styles.freePrice}>FREE</span>
-            ) : (
-              <span className={styles.salePrice}>${deal.salePrice}</span>
-            )}
-          </div>
-        </div>
+        <DealMeta deal={deal} storeName={storeName} storeLogo={storeLogo} timeAgo={timeAgo} />
+        <DealPrice
+          deal={deal}
+          savings={savings}
+          isFree={isFree}
+          isHistoricalLow={isHistoricalLow}
+          isEpicDeal={isEpicDeal}
+        />
       </div>
     </Link>
   );
