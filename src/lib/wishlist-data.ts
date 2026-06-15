@@ -69,9 +69,7 @@ export function decodeSharedWishlistIds(idsParam: string | null): string[] {
 }
 
 export function buildSharedGamesList(
-  data:
-    | { games: (GameDataShape | null)[]; stores: Record<string, string> }
-    | undefined,
+  data: { games: (GameDataShape | null)[]; stores: Record<string, string> } | undefined,
   gameIds: string[]
 ): GameEntry[] {
   if (!data?.games || !gameIds.length) return [];
