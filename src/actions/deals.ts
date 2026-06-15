@@ -4,6 +4,12 @@ import { desc, eq, sql } from 'drizzle-orm';
 import { db } from '@/db';
 import { deals as dealsTable, games, priceHistory } from '@/db/schema';
 import { fetchDealsWithFallback, fetchGameDetails } from '@/services/fetch-helpers';
+import {
+  buildDealsInsertValues,
+  buildPriceHistoryValues,
+  fetchCheapSharkDeals,
+  upsertGames,
+} from '@/services/ingest';
 import type { Deal, GameDetails, Store } from '@/types/game';
 
 const BASE_URL = 'https://www.cheapshark.com/api/1.0';
@@ -137,113 +143,35 @@ export async function ingestPricesAction(): Promise<{
   error?: string;
 }> {
   try {
-    const res = await fetch(
-      'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100',
-      { next: { revalidate: 0 } }
-    );
-
-    if (!res.ok) {
-      return {
-        success: false,
-        dealsIngested: 0,
-        gamesUpserted: 0,
-        pricesRecorded: 0,
-        error: `CheapShark API error: ${res.status}`,
-      };
-    }
-
-    // Only fields accessed in this function — partial CheapShark deal shape
-    interface CheapSharkDeal {
-      gameID: string;
-      title: string;
-      thumb: string;
-      storeID: string;
-      salePrice: string;
-      normalPrice: string;
-      savings: string;
-      dealRating: string;
-      dealID: string;
-    }
-    const deals = (await res.json()) as CheapSharkDeal[];
+    const deals = await fetchCheapSharkDeals();
     if (!deals || deals.length === 0) {
       return { success: true, dealsIngested: 0, gamesUpserted: 0, pricesRecorded: 0 };
     }
 
-    let gamesUpserted = 0;
+    const idMap = await upsertGames(deals);
     let dealsIngested = 0;
     let pricesRecorded = 0;
 
-    const uniqueGameIds = [...new Set(deals.map((d) => d.gameID))];
-    const idMap = new Map<string, string>();
-
-    for (const gameId of uniqueGameIds) {
-      const deal = deals.find((d) => d.gameID === gameId);
-      if (!deal) continue;
-
-      const inserted = await db
-        .insert(games)
-        .values({
-          cheapsharkId: gameId,
-          title: deal.title,
-          thumbUrl: deal.thumb,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        })
-        .onConflictDoUpdate({
-          target: games.cheapsharkId,
-          set: { title: deal.title, thumbUrl: deal.thumb, updatedAt: new Date() },
-        })
-        .returning({ id: games.id });
-
-      const row = inserted[0];
-      if (row?.id) idMap.set(gameId, row.id);
-      gamesUpserted++;
-    }
-
-    if (deals.length > 0 && idMap.size > 0) {
-      const dealsValues = deals
-        .map((d) => {
-          const uuid = idMap.get(d.gameID);
-          if (!uuid) return null;
-          return {
-            gameId: uuid,
-            storeId: d.storeID,
-            price: Number.parseFloat(d.salePrice),
-            retailPrice: Number.parseFloat(d.normalPrice),
-            savings: Number.parseFloat(d.savings),
-            dealRating: d.dealRating ? Number.parseFloat(d.dealRating) : null,
-            url: `https://www.cheapshark.com/redirect?dealID=${d.dealID}`,
-            createdAt: new Date(),
-          };
-        })
-        .filter((v): v is NonNullable<typeof v> => v !== null);
-
+    if (idMap.size > 0) {
+      const dealsValues = buildDealsInsertValues(deals, idMap);
       if (dealsValues.length > 0) {
         await db.insert(dealsTable).values(dealsValues);
         dealsIngested = dealsValues.length;
       }
 
-      const priceValues = deals
-        .map((d) => {
-          const uuid = idMap.get(d.gameID);
-          if (!uuid) return null;
-          return {
-            gameId: uuid,
-            storeId: d.storeID,
-            price: Number.parseFloat(d.salePrice),
-            retailPrice: Number.parseFloat(d.normalPrice),
-            recordedAt: new Date(),
-          };
-        })
-        .filter((v): v is NonNullable<typeof v> => v !== null);
-
+      const priceValues = buildPriceHistoryValues(deals, idMap);
       for (let i = 0; i < priceValues.length; i += 50) {
         await db.insert(priceHistory).values(priceValues.slice(i, i + 50));
       }
       pricesRecorded = priceValues.length;
     }
 
-    return { success: true, dealsIngested, gamesUpserted, pricesRecorded };
+    return {
+      success: true,
+      dealsIngested,
+      gamesUpserted: idMap.size,
+      pricesRecorded,
+    };
   } catch (error) {
     console.error('Ingest error:', error);
     return {

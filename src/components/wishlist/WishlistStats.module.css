@@ -1,0 +1,105 @@
+.dashboardPanel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: hsl(var(--card));
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.statsPanel {
+  display: flex;
+  gap: 2rem;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.statLabel {
+  font-size: 0.8rem;
+  color: hsl(var(--muted-foreground));
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.statValue {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: hsl(var(--primary));
+}
+
+.sortControls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sortLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: hsl(var(--muted-foreground));
+}
+
+.sortSelect {
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.sortSelect:focus {
+  border-color: hsl(var(--primary));
+}
+
+.shareButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.2rem;
+  border-radius: 8px;
+  background: linear-gradient(135deg, hsl(220 80% 55%), hsl(260 70% 60%));
+  color: white;
+  font-weight: 700;
+  font-size: 0.82rem;
+  border: none;
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    box-shadow 0.2s,
+    opacity 0.2s;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.shareButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(100, 100, 255, 0.35);
+}
+
+.shareButton:active {
+  transform: scale(0.97);
+}
+
+@media (max-width: 640px) {
+  .dashboardPanel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .statsPanel {
+    justify-content: space-between;
+  }
+}
