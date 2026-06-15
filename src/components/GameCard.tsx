@@ -7,14 +7,30 @@ import styles from './GameCard.module.css';
 import HeartButton from './HeartButton';
 import PriceAlertBadge from './PriceAlertBadge';
 
+export function computeSavings(savings: string): number {
+  return Math.round(Number.parseFloat(savings));
+}
+
+export function isPriceFree(price: string): boolean {
+  return Number.parseFloat(price) === 0;
+}
+
+export function isEpicDealCheck(savings: number, isFree: boolean): boolean {
+  return savings >= 85 || isFree;
+}
+
+export function isHistoricalLowCheck(savings: number): boolean {
+  return savings >= 90;
+}
+
 export default async function GameCard({ deal }: { deal: Deal }) {
   const stores = await getStores();
   const store = stores[deal.storeID];
   const highResThumb = getHighResImage(deal.thumb);
-  const savings = Math.round(Number.parseFloat(deal.savings));
-  const isFree = Number.parseFloat(deal.salePrice) === 0;
-  const isEpicDeal = savings >= 85 || isFree;
-  const isHistoricalLow = savings >= 90;
+  const savings = computeSavings(deal.savings);
+  const isFree = isPriceFree(deal.salePrice);
+  const isEpicDeal = isEpicDealCheck(savings, isFree);
+  const isHistoricalLow = isHistoricalLowCheck(savings);
 
   return (
     <div className={styles.card}>

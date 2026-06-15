@@ -62,23 +62,36 @@ function processGameResult(
   return acc;
 }
 
+function decodeSharedWishlistIds(idsParam: string | null): string[] {
+  if (!idsParam) return [];
+  try {
+    const decoded = atob(idsParam);
+    return decoded
+      .split(',')
+      .filter(Boolean)
+      .filter((id) => /^[a-zA-Z0-9]+$/.test(id));
+  } catch {
+    console.error('Invalid wishlist data');
+    return [];
+  }
+}
+
+function buildSharedGamesList(
+  data: { games: (GameDataShape | null)[]; stores: Record<string, string> } | undefined,
+  gameIds: string[]
+): GameEntry[] {
+  if (!data?.games || !gameIds.length) return [];
+  return data.games.reduce(
+    (acc, gameData, idx) => processGameResult(acc, gameData, idx, gameIds),
+    [] as GameEntry[]
+  );
+}
+
 function SharedWishlistContent() {
   const searchParams = useSearchParams();
   const idsParam = searchParams.get('ids');
 
-  const gameIds = useMemo(() => {
-    if (!idsParam) return [];
-    try {
-      const decoded = atob(idsParam);
-      return decoded
-        .split(',')
-        .filter(Boolean)
-        .filter((id) => /^[a-zA-Z0-9]+$/.test(id));
-    } catch {
-      console.error('Invalid wishlist data');
-      return [];
-    }
-  }, [idsParam]);
+  const gameIds = useMemo(() => decodeSharedWishlistIds(idsParam), [idsParam]);
 
   const { data, isLoading } = useWishlistGames(gameIds);
   const [stores, setStores] = useState<Record<string, string>>({});
@@ -87,13 +100,7 @@ function SharedWishlistContent() {
     if (data?.stores) setStores(data.stores);
   }, [data?.stores]);
 
-  const games = useMemo(() => {
-    if (!data?.games || !gameIds.length) return [];
-    return data.games.reduce(
-      (acc, gameData, idx) => processGameResult(acc, gameData, idx, gameIds),
-      [] as GameEntry[]
-    );
-  }, [data, gameIds]);
+  const games = useMemo(() => buildSharedGamesList(data, gameIds), [data, gameIds]);
 
   if (isLoading) {
     return (

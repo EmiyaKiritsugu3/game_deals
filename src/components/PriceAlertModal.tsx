@@ -1,8 +1,8 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, Bell, Trash2, X } from 'lucide-react';
+import { ArrowRight, Bell, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import BaseModal from '@/components/ui/BaseModal';
 import { useAlerts } from '@/store/alertStore';
 import styles from './PriceAlertModal.module.css';
 
@@ -54,121 +54,114 @@ export default function PriceAlertModal({
   };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          className={styles.modalOverlay}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+    <BaseModal isOpen={isOpen} onClose={onClose} ariaLabel="Set price alert">
+      <div className={styles.header}>
+        <h2>
+          <Bell size={24} className={styles.bellIcon} /> Set Price Alert
+        </h2>
+        <p>
+          We will notify you when <span className={styles.gameTitle}>{gameTitle}</span> hits your
+          target price.
+        </p>
+      </div>
+
+      <div className={styles.priceDisplay}>
+        <div className={styles.priceItem}>
+          <span className={styles.priceLabel}>Current</span>
+          <span className={styles.priceValue}>${currentPrice.toFixed(2)}</span>
+        </div>
+        <ArrowRight size={20} className={styles.arrow} />
+        <div className={styles.priceItem}>
+          <span className={styles.priceLabel}>Target</span>
+          <span className={styles.priceValue} style={{ color: 'hsl(var(--primary))' }}>
+            ${targetPrice.toFixed(2)}
+          </span>
+        </div>
+      </div>
+
+      <div className={styles.inputSection}>
+        <label className={styles.inputLabel} htmlFor="price-range">
+          Alert me when price is below:
+        </label>
+        <input
+          id="price-range"
+          type="range"
+          min={0}
+          max={currentPrice * 1.2}
+          step={0.01}
+          value={targetPrice}
+          onChange={(e) => setTargetPrice(Number.parseFloat(e.target.value))}
+          className={styles.rangeInput}
+        />
+        <div className={styles.numberInputGroup}>
+          <span className={styles.currencySymbol}>$</span>
+          <input
+            type="number"
+            value={targetPrice}
+            onChange={(e) => setTargetPrice(Number.parseFloat(e.target.value))}
+            className={styles.numberInput}
+            step={0.01}
+          />
+        </div>
+      </div>
+
+      <div className={styles.optionsSection}>
+        <label className={styles.checkboxGroup}>
+          <input
+            type="checkbox"
+            className={styles.hiddenCheckbox}
+            checked={isKeyshopAllowed}
+            onChange={() => setIsKeyshopAllowed(!isKeyshopAllowed)}
+          />
+          <div className={`${styles.checkbox} ${isKeyshopAllowed ? styles.checked : ''}`}>
+            {isKeyshopAllowed && (
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-label="Checked"
+              >
+                <path d="M18 6L6 18" />
+                <path d="M6 6l12 12" />
+              </svg>
+            )}
+          </div>
+          <div>
+            <span className={styles.checkboxLabel}>Include Keyshops (Market Gray)</span>
+            <span className={styles.checkboxSublabel}>
+              May result in lower prices but higher risk.
+            </span>
+          </div>
+        </label>
+      </div>
+
+      <div className={styles.actionButtons}>
+        <button
+          type="button"
+          className={`${styles.button} ${styles.cancelButton}`}
           onClick={onClose}
         >
-          <motion.div
-            className={styles.modal}
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button type="button" className={styles.closeButton} onClick={onClose}>
-              <X size={20} />
-            </button>
+          Cancel
+        </button>
+        <button
+          type="button"
+          className={`${styles.button} ${styles.saveButton}`}
+          onClick={handleSave}
+        >
+          {hasAlert(gameID) ? 'Update Alert' : 'Create Alert'}
+        </button>
 
-            <div className={styles.header}>
-              <h2>
-                <Bell size={24} className={styles.bellIcon} /> Set Price Alert
-              </h2>
-              <p>
-                We will notify you when <span className={styles.gameTitle}>{gameTitle}</span> hits
-                your target price.
-              </p>
-            </div>
-
-            <div className={styles.priceDisplay}>
-              <div className={styles.priceItem}>
-                <span className={styles.priceLabel}>Current</span>
-                <span className={styles.priceValue}>${currentPrice.toFixed(2)}</span>
-              </div>
-              <ArrowRight size={20} className={styles.arrow} />
-              <div className={styles.priceItem}>
-                <span className={styles.priceLabel}>Target</span>
-                <span className={styles.priceValue} style={{ color: 'hsl(var(--primary))' }}>
-                  ${targetPrice.toFixed(2)}
-                </span>
-              </div>
-            </div>
-
-            <div className={styles.inputSection}>
-              <label className={styles.inputLabel} htmlFor="price-range">
-                Alert me when price is below:
-              </label>
-              <input
-                id="price-range"
-                type="range"
-                min={0}
-                max={currentPrice * 1.2}
-                step={0.01}
-                value={targetPrice}
-                onChange={(e) => setTargetPrice(Number.parseFloat(e.target.value))}
-                className={styles.rangeInput}
-              />
-              <div className={styles.numberInputGroup}>
-                <span className={styles.currencySymbol}>$</span>
-                <input
-                  type="number"
-                  value={targetPrice}
-                  onChange={(e) => setTargetPrice(Number.parseFloat(e.target.value))}
-                  className={styles.numberInput}
-                  step={0.01}
-                />
-              </div>
-            </div>
-
-            <div className={styles.optionsSection}>
-              <label className={styles.checkboxGroup}>
-                <input
-                  type="checkbox"
-                  className={styles.hiddenCheckbox}
-                  checked={isKeyshopAllowed}
-                  onChange={() => setIsKeyshopAllowed(!isKeyshopAllowed)}
-                />
-                <div className={`${styles.checkbox} ${isKeyshopAllowed ? styles.checked : ''}`}>
-                  {isKeyshopAllowed && <X size={14} color="white" />}
-                </div>
-                <div>
-                  <span className={styles.checkboxLabel}>Include Keyshops (Market Gray)</span>
-                  <span className={styles.checkboxSublabel}>
-                    May result in lower prices but higher risk.
-                  </span>
-                </div>
-              </label>
-            </div>
-
-            <div className={styles.actionButtons}>
-              <button
-                type="button"
-                className={`${styles.button} ${styles.cancelButton}`}
-                onClick={onClose}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className={`${styles.button} ${styles.saveButton}`}
-                onClick={handleSave}
-              >
-                {hasAlert(gameID) ? 'Update Alert' : 'Create Alert'}
-              </button>
-
-              {hasAlert(gameID) && (
-                <button type="button" className={styles.removeButton} onClick={handleRemove}>
-                  <Trash2 size={14} /> Stop tracking this game
-                </button>
-              )}
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        {hasAlert(gameID) && (
+          <button type="button" className={styles.removeButton} onClick={handleRemove}>
+            <Trash2 size={14} /> Stop tracking this game
+          </button>
+        )}
+      </div>
+    </BaseModal>
   );
 }
