@@ -7,19 +7,19 @@ import styles from './GameCard.module.css';
 import HeartButton from './HeartButton';
 import PriceAlertBadge from './PriceAlertBadge';
 
-export function computeSavings(savings: string): number {
+function computeSavings(savings: string): number {
   return Math.round(Number.parseFloat(savings));
 }
 
-export function isPriceFree(price: string): boolean {
+function isPriceFree(price: string): boolean {
   return Number.parseFloat(price) === 0;
 }
 
-export function isEpicDealCheck(savings: number, isFree: boolean): boolean {
+function isEpicDealCheck(savings: number, isFree: boolean): boolean {
   return savings >= 85 || isFree;
 }
 
-export function isHistoricalLowCheck(savings: number): boolean {
+function isHistoricalLowCheck(savings: number): boolean {
   return savings >= 90;
 }
 
