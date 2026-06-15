@@ -26,42 +26,17 @@ export function StoreCompareChart({ data }: { readonly data: StorePrice[] }) {
     price: Number.parseFloat(d.price),
   }));
 
-  // biome-ignore lint/suspicious/noExplicitAny: Recharts Tooltip formatter signature
-  const storeChartFormatter = (value: any) => {
-    const numValue = Number(value);
-    return [`$${Number.isFinite(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
-  };
-
   return (
     <div className={styles.chartContainer}>
       <h3 className={styles.chartTitle}>Current Prices by Store</h3>
       <div className={styles.chartWrapper}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 20 }}>
-            <XAxis
-              dataKey="name"
-              stroke="hsl(var(--muted-foreground))"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-              angle={-45}
-              textAnchor="end"
-            />
-            <YAxis
-              stroke="hsl(var(--muted-foreground))"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(value) => `$${value}`}
-            />
+            <XAxis dataKey="name" {...axisProps} angle={-45} textAnchor="end" />
+            <YAxis {...axisProps} tickFormatter={(value) => `$${value}`} />
             <Tooltip
               cursor={{ fill: 'hsl(var(--muted) / 0.2)' }}
-              contentStyle={{
-                backgroundColor: 'hsl(var(--card))',
-                border: '1px solid hsl(var(--border))',
-                borderRadius: '8px',
-                color: 'hsl(var(--foreground))',
-              }}
+              contentStyle={chartTooltipStyle}
               formatter={storeChartFormatter}
             />
             <Bar dataKey="price" radius={[4, 4, 0, 0]}>
@@ -77,6 +52,33 @@ export function StoreCompareChart({ data }: { readonly data: StorePrice[] }) {
     </div>
   );
 }
+
+// Shared chart configuration
+const chartTooltipStyle: React.CSSProperties = {
+  backgroundColor: 'hsl(var(--card))',
+  border: '1px solid hsl(var(--border))',
+  borderRadius: '8px',
+  color: 'hsl(var(--foreground))',
+};
+
+const axisProps = {
+  stroke: 'hsl(var(--muted-foreground))' as const,
+  fontSize: 12,
+  tickLine: false,
+  axisLine: false,
+};
+
+// biome-ignore lint/suspicious/noExplicitAny: Recharts Tooltip formatter signature
+const storeChartFormatter = (value: any) => {
+  const numValue = Number(value);
+  return [`$${Number.isFinite(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
+};
+
+// biome-ignore lint/suspicious/noExplicitAny: Recharts Tooltip formatter signature
+const priceHistoryFormatter = (value: any) => {
+  const numValue = Number(value);
+  return [`$${Number.isFinite(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
+};
 
 interface PriceHistoryChartProps {
   readonly currentPrice: string;
@@ -119,12 +121,6 @@ export function PriceHistoryChart({
     );
   }
 
-  // biome-ignore lint/suspicious/noExplicitAny: Recharts Tooltip formatter signature
-  const priceHistoryFormatter = (value: any) => {
-    const numValue = Number(value);
-    return [`$${Number.isFinite(numValue) ? numValue.toFixed(2) : '0.00'}`, 'Price'];
-  };
-
   return (
     <div className={styles.chartContainer}>
       <h3 className={styles.chartTitle}>
@@ -138,30 +134,13 @@ export function PriceHistoryChart({
       <div className={styles.chartWrapper}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
-            <XAxis
-              dataKey="name"
-              stroke="hsl(var(--muted-foreground))"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-            />
+            <XAxis dataKey="name" {...axisProps} />
             <YAxis
-              stroke="hsl(var(--muted-foreground))"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
+              {...axisProps}
               tickFormatter={(value) => `$${value}`}
               domain={['dataMin - 5', 'dataMax + 5']}
             />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: 'hsl(var(--card))',
-                border: '1px solid hsl(var(--border))',
-                borderRadius: '8px',
-                color: 'hsl(var(--foreground))',
-              }}
-              formatter={priceHistoryFormatter}
-            />
+            <Tooltip contentStyle={chartTooltipStyle} formatter={priceHistoryFormatter} />
             <Line
               type="monotone"
               dataKey="price"

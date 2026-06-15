@@ -1,8 +1,9 @@
 'use client';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
-import { addGameToPlaylist, createPlaylist, getUserPlaylists } from '@/services/social';
+import { usePlaylistMutations } from '@/hooks/usePlaylistMutations';
+import { getUserPlaylists } from '@/services/social';
 import { useAuth } from '@/store/authStore';
 import styles from './AddToListModal.module.css';
 
@@ -14,9 +15,9 @@ interface AddToListModalProps {
 export default function AddToListModal({ gameId, onClose }: AddToListModalProps) {
   const [newListName, setNewListName] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const { user } = useAuth();
-  const queryClient = useQueryClient();
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const { addMutation, createMutation } = usePlaylistMutations(gameId);
+  const { user } = useAuth();
   useEffect(() => {
     dialogRef.current?.showModal();
   }, []);
@@ -32,34 +33,28 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
     enabled: !!user?.id,
   });
 
-  const addMutation = useMutation({
-    mutationFn: (playlistId: string) => addGameToPlaylist(playlistId, gameId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['playlists'] });
-      onClose();
-    },
-    onError: (err) => {
-      setError('Failed to add game to playlist');
-      console.error(err);
-    },
-  });
+  const handleAdd = (playlistId: string) => {
+    addMutation.mutate(playlistId, {
+      onSuccess: () => onClose(),
+      onError: (err) => {
+        setError('Failed to add game to playlist');
+        console.error(err);
+      },
+    });
+  };
 
-  const createMutation = useMutation({
-    mutationFn: async (name: string) => {
-      if (!user) throw new Error('Unauthenticated');
-      const newList = await createPlaylist(user.id, name);
-      return addGameToPlaylist(newList.id, gameId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['playlists'] });
-      setNewListName('');
-      onClose();
-    },
-    onError: (err) => {
-      setError('Failed to create playlist');
-      console.error(err);
-    },
-  });
+  const handleCreate = () => {
+    createMutation.mutate(newListName, {
+      onSuccess: () => {
+        setNewListName('');
+        onClose();
+      },
+      onError: (err) => {
+        setError('Failed to create playlist');
+        console.error(err);
+      },
+    });
+  };
 
   if (isLoading) return null;
 
@@ -78,7 +73,7 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
                 type="button"
                 key={list.id}
                 className={styles.listButton}
-                onClick={() => addMutation.mutate(list.id)}
+                onClick={() => handleAdd(list.id)}
                 disabled={addMutation.isPending}
               >
                 <span>{list.title}</span>
@@ -104,7 +99,7 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
             type="button"
             className={styles.createButton}
             disabled={createMutation.isPending || !newListName.trim()}
-            onClick={() => createMutation.mutate(newListName)}
+            onClick={() => handleCreate()}
           >
             {createMutation.isPending ? 'Creating...' : 'Create & Add'}
           </button>

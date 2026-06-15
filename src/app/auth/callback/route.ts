@@ -2,6 +2,12 @@ import { NextResponse } from 'next/server';
 import { rateLimit } from '@/lib/rate-limit';
 import { createClient } from '@/utils/supabase/server';
 
+async function exchangeAuthCode(code: string): Promise<boolean> {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.exchangeCodeForSession(code);
+  return !error;
+}
+
 export async function GET(request: Request) {
   const ip = request.headers.get('x-forwarded-for') || 'unknown';
   if (!rateLimit(`auth:${ip}`, 10, 60000)) {
@@ -18,9 +24,8 @@ export async function GET(request: Request) {
   }
 
   if (code) {
-    const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
+    const success = await exchangeAuthCode(code);
+    if (success) {
       return NextResponse.redirect(`${origin}${next}`);
     }
   }
