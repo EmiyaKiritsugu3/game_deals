@@ -1,16 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
-import {
-  buildGameEntry,
-  buildSharedGamesList,
-  decodeSharedWishlistIds,
-} from './wishlist-data';
 import type { GameDataShape } from './wishlist-data';
+import { buildGameEntry, buildSharedGamesList, decodeSharedWishlistIds } from './wishlist-data';
 
 vi.mock('@/utils/pricing', () => ({
   getHighResImage: vi.fn((url: string) =>
-    url.includes('capsule_sm_120')
-      ? url.replace('capsule_sm_120', 'header')
-      : url,
+    url.includes('capsule_sm_120') ? url.replace('capsule_sm_120', 'header') : url
   ),
 }));
 
@@ -78,20 +72,24 @@ describe('buildGameEntry', () => {
   });
 
   it('returns null for undefined gameData.info', () => {
-    const data = { info: undefined, deals: [], cheapestPriceEver: { price: '10' } } as unknown as GameDataShape;
+    const data = {
+      info: undefined,
+      deals: [],
+      cheapestPriceEver: { price: '10' },
+    } as unknown as GameDataShape;
     expect(buildGameEntry(data, 'game-1')).toBeNull();
   });
 
   it('returns entry with best deal when gameData has deals', () => {
     const entry = buildGameEntry(mockGameData, 'game-1');
     expect(entry).not.toBeNull();
-    expect(entry!.gameID).toBe('game-1');
-    expect(entry!.title).toBe('Test Game');
-    expect(entry!.thumb).toBe('https://example.com/header_123.jpg');
-    expect(entry!.salePrice).toBe('19.99');
-    expect(entry!.normalPrice).toBe('59.99');
-    expect(entry!.savings).toBe(67);
-    expect(entry!.storeID).toBe('1');
+    expect(entry?.gameID).toBe('game-1');
+    expect(entry?.title).toBe('Test Game');
+    expect(entry?.thumb).toBe('https://example.com/header_123.jpg');
+    expect(entry?.salePrice).toBe('19.99');
+    expect(entry?.normalPrice).toBe('59.99');
+    expect(entry?.savings).toBe(67);
+    expect(entry?.storeID).toBe('1');
   });
 
   it('sorts deals and picks the cheapest price', () => {
@@ -105,19 +103,19 @@ describe('buildGameEntry', () => {
       cheapestPriceEver: { price: '5.99' },
     };
     const entry = buildGameEntry(data, 'sorted-1');
-    expect(entry!.salePrice).toBe('9.99');
-    expect(entry!.storeID).toBe('1');
+    expect(entry?.salePrice).toBe('9.99');
+    expect(entry?.storeID).toBe('1');
   });
 
   it('uses cheapestPriceEver when no currentBest (deals empty)', () => {
     const entry = buildGameEntry(mockGameDataNoDeals, 'no-deals-1');
     expect(entry).not.toBeNull();
-    expect(entry!.gameID).toBe('no-deals-1');
-    expect(entry!.title).toBe('No Deal Game');
-    expect(entry!.salePrice).toBe('14.99');
-    expect(entry!.normalPrice).toBe('14.99');
-    expect(entry!.savings).toBe(0);
-    expect(entry!.storeID).toBe('1');
+    expect(entry?.gameID).toBe('no-deals-1');
+    expect(entry?.title).toBe('No Deal Game');
+    expect(entry?.salePrice).toBe('14.99');
+    expect(entry?.normalPrice).toBe('14.99');
+    expect(entry?.savings).toBe(0);
+    expect(entry?.storeID).toBe('1');
   });
 
   it('uses cheapestPriceEver.price as normalPrice when currentBest.retailPrice is falsy', () => {
@@ -127,7 +125,7 @@ describe('buildGameEntry', () => {
       cheapestPriceEver: { price: '7.99' },
     };
     const entry = buildGameEntry(data, 'no-retail-1');
-    expect(entry!.normalPrice).toBe('7.99');
+    expect(entry?.normalPrice).toBe('7.99');
   });
 
   it('defaults storeID to "1" when currentBest.storeID is falsy', () => {
@@ -137,7 +135,7 @@ describe('buildGameEntry', () => {
       cheapestPriceEver: { price: '5.99' },
     };
     const entry = buildGameEntry(data, 'no-store-1');
-    expect(entry!.storeID).toBe('1');
+    expect(entry?.storeID).toBe('1');
   });
 
   it('rounds savings to nearest integer', () => {
@@ -147,7 +145,7 @@ describe('buildGameEntry', () => {
       cheapestPriceEver: { price: '9.99' },
     };
     const entry = buildGameEntry(data, 'savings-1');
-    expect(entry!.savings).toBe(50);
+    expect(entry?.savings).toBe(50);
   });
 });
 
@@ -157,11 +155,20 @@ describe('buildSharedGamesList', () => {
   });
 
   it('returns [] when data.games is undefined', () => {
-    expect(buildSharedGamesList({ games: undefined as unknown as (GameDataShape | null)[], stores: {} }, ['a'])).toEqual([]);
+    expect(
+      buildSharedGamesList(
+        { games: undefined as unknown as (GameDataShape | null)[], stores: {} },
+        ['a']
+      )
+    ).toEqual([]);
   });
 
   it('returns [] when data.games is null', () => {
-    expect(buildSharedGamesList({ games: null as unknown as (GameDataShape | null)[], stores: {} }, ['a'])).toEqual([]);
+    expect(
+      buildSharedGamesList({ games: null as unknown as (GameDataShape | null)[], stores: {} }, [
+        'a',
+      ])
+    ).toEqual([]);
   });
 
   it('returns [] when gameIds is empty', () => {
