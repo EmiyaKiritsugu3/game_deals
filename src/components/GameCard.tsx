@@ -23,6 +23,23 @@ function isHistoricalLowCheck(savings: number): boolean {
   return savings >= 90;
 }
 
+function PriceBlock({
+  savings,
+  normalPrice,
+  salePrice,
+}: {
+  savings: number;
+  normalPrice: string;
+  salePrice: string;
+}) {
+  return (
+    <div className={styles.priceContainer}>
+      {savings > 0 && <span className={styles.normalPrice}>${normalPrice}</span>}
+      <span className={styles.salePrice}>${salePrice}</span>
+    </div>
+  );
+}
+
 export default async function GameCard({ deal }: { deal: Deal }) {
   const stores = await getStores();
   const store = stores[deal.storeID];
@@ -60,10 +77,7 @@ export default async function GameCard({ deal }: { deal: Deal }) {
             {deal.title}
           </h3>
 
-          <div className={styles.priceContainer}>
-            {savings > 0 && <span className={styles.normalPrice}>${deal.normalPrice}</span>}
-            <span className={styles.salePrice}>${deal.salePrice}</span>
-          </div>
+          <PriceBlock savings={savings} normalPrice={deal.normalPrice} salePrice={deal.salePrice} />
 
           <div className={styles.meta}>
             <span className={styles.storeBadge}>{store || 'Store'}</span>

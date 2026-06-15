@@ -8,7 +8,7 @@ import {
   isValidStoreId,
 } from '@/lib/affiliate-config';
 
-export async function lookupDealUrl(storeId: string): Promise<string> {
+async function lookupDealUrl(storeId: string): Promise<string> {
   try {
     const [deal] = (await db.execute(sql`
       SELECT url, "storeId" FROM deals
@@ -23,11 +23,11 @@ export async function lookupDealUrl(storeId: string): Promise<string> {
   }
 }
 
-export function isDomainAllowed(url: URL): boolean {
+function isDomainAllowed(url: URL): boolean {
   return ALLOWED_DOMAINS.has(url.hostname);
 }
 
-export function applyAffiliateParams(url: string, storeId: string): string {
+function applyAffiliateParams(url: string, storeId: string): string {
   const config = affiliateConfig[storeId];
   if (!config) return url;
 
@@ -45,7 +45,7 @@ export function applyAffiliateParams(url: string, storeId: string): string {
   return parsedUrl.toString();
 }
 
-export function logClick(storeId: string, gameSlug: string, ip: string): void {
+function logClick(storeId: string, gameSlug: string, ip: string): void {
   db.execute(sql`
     INSERT INTO affiliate_clicks ("storeId", "gameSlug", ip, "timestamp")
     VALUES (${storeId}, ${gameSlug}, ${ip}, NOW())

@@ -61,13 +61,12 @@ describe('fetchCheapSharkDeals', () => {
     expect(result).toHaveLength(2);
   });
 
-  it('returns empty array when response is not ok', async () => {
+  it('throws when response is not ok', async () => {
     mockFetch.mockResolvedValueOnce({
       ok: false,
       status: 500,
     });
-    const result = await fetchCheapSharkDeals();
-    expect(result).toEqual([]);
+    await expect(fetchCheapSharkDeals()).rejects.toThrow(/CheapShark API/);
   });
 
   it('returns empty array when json is null or undefined', async () => {
@@ -106,7 +105,9 @@ describe('upsertGames', () => {
   it('dedupes duplicate gameIds in input', async () => {
     mockReturning.mockResolvedValueOnce([{ id: 'uuid-187203' }]);
 
-    const dupes = [sampleDeals[0]!, { ...sampleDeals[0]!, dealID: 'different-deal' }];
+    const firstDeal = sampleDeals[0];
+    if (!firstDeal) throw new Error('sampleDeals[0] should be defined');
+    const dupes = [firstDeal, { ...firstDeal, dealID: 'different-deal' }];
     const result = await upsertGames(dupes);
 
     expect(result.get('187203')).toBe('uuid-187203');

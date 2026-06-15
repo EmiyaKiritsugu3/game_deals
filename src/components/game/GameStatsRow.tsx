@@ -35,7 +35,7 @@ export default function GameStatsRow({
       <div className={styles.statBlock}>
         <span className={styles.statLabel}>Historical Low</span>
         <span className={`${styles.statValue} ${styles.hlValue}`}>
-          ${cheapestEver}
+          ${cheapestEver.toFixed(2)}
           {isCurrentlyAtHL && <span className={styles.hlActiveBadge}>LIVE HL</span>}
         </span>
       </div>

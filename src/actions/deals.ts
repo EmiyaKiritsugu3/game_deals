@@ -278,21 +278,6 @@ export async function getDailyPriceHistoryAction(cheapsharkId: string, days = 90
 }
 
 /**
- * Busca preço histórico semanal de um jogo
- */
-export async function getWeeklyPriceHistoryAction(cheapsharkId: string, weeks = 26) {
-  const uuid = await resolveGameUuid(cheapsharkId);
-  if (!uuid) return [];
-  try {
-    const rows = await db.execute(sql`SELECT * FROM get_weekly_prices(${uuid}::uuid, ${weeks})`);
-    return rows;
-  } catch (e) {
-    console.error('getWeeklyPriceHistory error:', e);
-    return [];
-  }
-}
-
-/**
  * Busca deals do banco
  */
 // fallow-ignore-next-line unused-export

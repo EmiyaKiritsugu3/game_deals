@@ -13,6 +13,59 @@ export interface GameDealRowProps {
   showEpicBadge?: boolean;
 }
 
+function StoreLogo({ name, logo }: { name: string; logo: string | null }) {
+  return logo ? (
+    // biome-ignore lint/performance/noImgElement: store logos from affiliate CDN
+    <img src={logo} alt={name} className={styles.storeLogo} width={18} height={18} />
+  ) : (
+    <div className={styles.storeLogoPlaceholder} />
+  );
+}
+
+function DealBadges({
+  isBest,
+  isEpicDeal,
+  showEpicBadge,
+}: {
+  isBest: boolean;
+  isEpicDeal: boolean;
+  showEpicBadge: boolean;
+}) {
+  return (
+    <>
+      {isBest && <span className={styles.bestTag}>BEST</span>}
+      {showEpicBadge && isEpicDeal && <span className="epicDealBadge">🔥 EPIC</span>}
+    </>
+  );
+}
+
+function DealPrices({
+  deal,
+  savings,
+  isFree,
+  isDealAtHL,
+}: {
+  deal: GameDeal;
+  savings: number;
+  isFree: boolean;
+  isDealAtHL: boolean;
+}) {
+  return (
+    <div className={styles.dealPriceInfo}>
+      {isDealAtHL && <span className={styles.hlBadge}>HL</span>}
+      {savings > 0 && !isFree && <div className={styles.savingsBadge}>-{savings}%</div>}
+      <div className={styles.prices}>
+        {savings > 0 && !isFree && <span className={styles.retail}>${deal.retailPrice}</span>}
+        {isFree ? (
+          <span className={styles.freePrice}>FREE</span>
+        ) : (
+          <span className={styles.price}>${deal.price}</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function GameDealRow({
   deal,
   isBest,
@@ -28,13 +81,6 @@ export default function GameDealRow({
   const logo = getStoreLogo(deal.storeID);
   const drm = getDrmType(deal.storeID);
 
-  const storeLogoEl = logo ? (
-    // biome-ignore lint/performance/noImgElement: store logos from affiliate CDN
-    <img src={logo} alt={storeName} className={styles.storeLogo} width={18} height={18} />
-  ) : (
-    <div className={styles.storeLogoPlaceholder} />
-  );
-
   return (
     <a
       key={deal.dealID}
@@ -44,10 +90,9 @@ export default function GameDealRow({
       className={`${styles.dealRow} ${isBest ? styles.dealRowBest : ''}`}
     >
       <div className={styles.storeInfo}>
-        {storeLogoEl}
+        <StoreLogo name={storeName} logo={logo} />
         <span className={styles.storeName}>{storeName}</span>
-        {isBest && <span className={styles.bestTag}>BEST</span>}
-        {showEpicBadge && isEpicDeal && <span className="epicDealBadge">🔥 EPIC</span>}
+        <DealBadges isBest={isBest} isEpicDeal={isEpicDeal} showEpicBadge={showEpicBadge} />
         <span className="drmBadge">
           {drm.icon} {drm.label}
         </span>
@@ -56,18 +101,7 @@ export default function GameDealRow({
         )}
       </div>
 
-      <div className={styles.dealPriceInfo}>
-        {isDealAtHL && <span className={styles.hlBadge}>HL</span>}
-        {savings > 0 && !isFree && <div className={styles.savingsBadge}>-{savings}%</div>}
-        <div className={styles.prices}>
-          {savings > 0 && !isFree && <span className={styles.retail}>${deal.retailPrice}</span>}
-          {isFree ? (
-            <span className={styles.freePrice}>FREE</span>
-          ) : (
-            <span className={styles.price}>${deal.price}</span>
-          )}
-        </div>
-      </div>
+      <DealPrices deal={deal} savings={savings} isFree={isFree} isDealAtHL={isDealAtHL} />
     </a>
   );
 }

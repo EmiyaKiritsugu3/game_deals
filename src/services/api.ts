@@ -19,7 +19,7 @@ import type { Deal, GameDetails, Store } from '@/types/game';
 
 const BASE_URL = 'https://www.cheapshark.com/api/1.0';
 
-export { formatTimeAgo, generatePriceHistory, getHighResImage } from '@/utils/pricing';
+export { formatTimeAgo, getHighResImage } from '@/utils/pricing';
 
 export function getStoreLogo(storeID: string): string | null {
   return STORE_FAVICON_MAP[storeID] ?? null;
