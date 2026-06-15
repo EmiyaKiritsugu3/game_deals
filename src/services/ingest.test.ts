@@ -105,7 +105,9 @@ describe('upsertGames', () => {
   it('dedupes duplicate gameIds in input', async () => {
     mockReturning.mockResolvedValueOnce([{ id: 'uuid-187203' }]);
 
-    const dupes = [sampleDeals[0]!, { ...sampleDeals[0]!, dealID: 'different-deal' }];
+    const firstDeal = sampleDeals[0];
+    if (!firstDeal) throw new Error('sampleDeals[0] should be defined');
+    const dupes = [firstDeal, { ...firstDeal, dealID: 'different-deal' }];
     const result = await upsertGames(dupes);
 
     expect(result.get('187203')).toBe('uuid-187203');

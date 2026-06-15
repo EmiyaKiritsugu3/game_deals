@@ -26,13 +26,13 @@ export interface Store {
   isActive: number;
 }
 
-export interface GameInfo {
+interface GameInfo {
   title: string;
   steamAppID: string | null;
   thumb: string;
 }
 
-export interface LowestPrice {
+interface LowestPrice {
   price: string;
   date: number;
 }

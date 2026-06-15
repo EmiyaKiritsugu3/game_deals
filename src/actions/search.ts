@@ -1,6 +1,6 @@
 'use server';
 
-import { GAME_SCHEMA, indexGamesBatch, searchGames as typesenseSearch } from '@/lib/typesense';
+import { indexGamesBatch, searchGames as typesenseSearch } from '@/lib/typesense';
 import type { CheapSharkDeal } from '@/lib/typesense-map';
 import { mapDealsToTypesenseGames } from '@/lib/typesense-map';
 
@@ -79,34 +79,5 @@ export async function syncGamesToTypesenseAction(): Promise<{
       indexed: 0,
       error: error instanceof Error ? error.message : 'Unknown error',
     };
-  }
-}
-
-/**
- * Criar collection Typesense (setup inicial)
- */
-export async function createTypesenseCollectionAction(): Promise<boolean> {
-  const host = process.env.TYPESENSE_HOST || 'localhost';
-  const port = Number.parseInt(process.env.TYPESENSE_PORT || '443', 10);
-  const protocol = process.env.TYPESENSE_PROTOCOL || 'https';
-  const apiKey = process.env.TYPESENSE_ADMIN_KEY || '';
-  if (!apiKey) return false;
-
-  const url = `${protocol}://${host}:${port}`;
-
-  try {
-    const response = await fetch(`${url}/collections`, {
-      method: 'POST',
-      headers: {
-        'X-TYPESENSE-API-KEY': apiKey,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(GAME_SCHEMA),
-    });
-
-    return response.ok || response.status === 409;
-  } catch (e) {
-    console.error('createTypesenseCollection error:', e);
-    return false;
   }
 }

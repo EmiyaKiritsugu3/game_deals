@@ -3,7 +3,7 @@
  * In production, this would come from APIs like Humble Bundle, Fanatical, etc.
  */
 
-export interface BundleGame {
+interface BundleGame {
   title: string;
   retailPrice: number;
   thumb: string;

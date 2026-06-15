@@ -10,19 +10,19 @@ export type GameEntry = {
   storeID: string;
 };
 
-export interface GameDataInfo {
+interface GameDataInfo {
   title: string;
   thumb: string;
 }
 
-export interface GameDataDeal {
+interface GameDataDeal {
   price: string;
   retailPrice: string;
   savings: string;
   storeID: string;
 }
 
-export interface GameDataCheapest {
+interface GameDataCheapest {
   price: string;
 }
 
@@ -46,25 +46,41 @@ export function decodeSharedWishlistIds(idsParam: string | null): string[] {
   }
 }
 
+function buildGameEntry(gameData: GameDataShape | null, gameId: string): GameEntry | null {
+  if (!gameData?.info) return null;
+  const [currentBest] = [...gameData.deals].sort(
+    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
+  );
+  if (currentBest) {
+    return {
+      gameID: gameId,
+      title: gameData.info.title,
+      thumb: getHighResImage(gameData.info.thumb),
+      salePrice: currentBest.price,
+      normalPrice: currentBest.retailPrice || gameData.cheapestPriceEver.price,
+      savings: Math.round(Number.parseFloat(currentBest.savings)),
+      storeID: currentBest.storeID || '1',
+    };
+  }
+  return {
+    gameID: gameId,
+    title: gameData.info.title,
+    thumb: getHighResImage(gameData.info.thumb),
+    salePrice: gameData.cheapestPriceEver.price,
+    normalPrice: gameData.cheapestPriceEver.price,
+    savings: 0,
+    storeID: '1',
+  };
+}
+
 export function buildSharedGamesList(
   data: { games: (GameDataShape | null)[]; stores: Record<string, string> } | undefined,
   gameIds: string[]
 ): GameEntry[] {
   if (!data?.games || !gameIds.length) return [];
   return data.games.reduce((acc: GameEntry[], gameData, idx) => {
-    if (!gameData?.info) return acc;
-    const currentBest = [...gameData.deals].sort(
-      (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
-    )[0];
-    acc.push({
-      gameID: gameIds[idx],
-      title: gameData.info.title,
-      thumb: getHighResImage(gameData.info.thumb),
-      salePrice: currentBest?.price || gameData.cheapestPriceEver.price,
-      normalPrice: currentBest?.retailPrice || gameData.cheapestPriceEver.price,
-      savings: currentBest ? Math.round(Number.parseFloat(currentBest.savings)) : 0,
-      storeID: currentBest?.storeID || '1',
-    });
+    const entry = buildGameEntry(gameData, gameIds[idx]);
+    if (entry) acc.push(entry);
     return acc;
   }, []);
 }
