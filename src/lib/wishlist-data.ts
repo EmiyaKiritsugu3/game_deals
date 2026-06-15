@@ -46,7 +46,7 @@ export function decodeSharedWishlistIds(idsParam: string | null): string[] {
   }
 }
 
-function buildGameEntry(gameData: GameDataShape | null, gameId: string): GameEntry | null {
+export function buildGameEntry(gameData: GameDataShape | null, gameId: string): GameEntry | null {
   if (!gameData?.info) return null;
   const [currentBest] = [...gameData.deals].sort(
     (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
