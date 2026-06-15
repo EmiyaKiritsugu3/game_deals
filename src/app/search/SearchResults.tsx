@@ -28,7 +28,7 @@ export async function getDealsWithParams(
 
 export function SearchResults({ deals, query }: { deals: Deal[]; query: string }) {
   return (
-    <div className={styles.resultsArea}>
+    <div className={styles.sectionHeader}>
       <div className={styles.sectionHeader}>
         <h2>Search Results {query ? `for "${query}"` : 'All Deals'}</h2>
         <p>Found {deals.length} deals matching your criteria.</p>

@@ -13,13 +13,13 @@ export function HeroNavigation({
 }) {
   return (
     <div className={styles.navigation}>
-      {deals.map((deal) => (
+      {deals.map((deal, index) => (
         <button
           key={`${deal.dealID}-dot`}
           type="button"
-          className={`${styles.dot} ${deals.indexOf(deal) === currentIndex ? styles.activeDot : ''}`}
-          onClick={() => goTo(deals.indexOf(deal))}
-          aria-label={`Go to slide ${deals.indexOf(deal) + 1}`}
+          className={`${styles.dot} ${index === currentIndex ? styles.activeDot : ''}`}
+          onClick={() => goTo(index)}
+          aria-label={`Go to slide ${index + 1}`}
         />
       ))}
     </div>
