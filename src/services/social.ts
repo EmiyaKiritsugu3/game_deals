@@ -2,7 +2,7 @@ import { createClient } from '@/utils/supabase/client';
 
 const supabase = createClient();
 
-import type { Playlist, UserBadge, UserStats } from '@/types/social';
+import type { Playlist } from '@/types/social';
 
 /**
  * SOCIAL & GAMIFICATION SERVICE
@@ -57,58 +57,4 @@ export async function addGameToPlaylist(playlistId: string, gameId: string) {
     .eq('id', playlistId);
 
   if (error) throw error;
-}
-
-// --- STATS & BADGES ---
-
-export async function getUserStats(userId: string): Promise<UserStats | null> {
-  const { data, error } = await supabase
-    .from('user_stats')
-    .select('*')
-    .eq('user_id', userId)
-    .single();
-
-  if (error && error.code !== 'PGRST116') throw error; // PGRST116 = Not found
-  return data as UserStats;
-}
-
-export async function getUserBadges(userId: string): Promise<UserBadge[]> {
-  const { data, error } = await supabase
-    .from('user_badges')
-    .select('*, badge:badges(*)')
-    .eq('user_id', userId);
-
-  if (error) throw error;
-  return data as UserBadge[];
-}
-
-/**
- * Logic to check and award badges based on stats.
- * Should be called after significant actions if not handled by DB triggers.
- */
-export async function checkAchievements(userId: string) {
-  const stats = await getUserStats(userId);
-  if (!stats) return;
-
-  // Badge: Playlist Master (10 lists)
-  if (stats.playlists_count >= 10) {
-    const { data: badges } = await supabase
-      .from('badges')
-      .select('id')
-      .eq('name', 'Playlist Master')
-      .single();
-    if (badges) {
-      await awardBadge(userId, badges.id);
-    }
-  }
-}
-
-async function awardBadge(userId: string, badgeId: string) {
-  const { error } = await supabase
-    .from('user_badges')
-    .insert([{ user_id: userId, badge_id: badgeId }])
-    .select();
-
-  // If error is duplicate (23505), ignore it as user already has the badge.
-  if (error && error.code !== '23505') throw error;
 }

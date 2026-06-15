@@ -6,6 +6,22 @@ import DealsBadge from './DealsBadge';
 import HeartButton from './HeartButton';
 import PriceAlertBadge from './PriceAlertBadge';
 
+function computeSavings(savings: string): number {
+  return Math.round(Number.parseFloat(savings));
+}
+
+function isHistoricalLowDeal(savings: number): boolean {
+  return savings > 85;
+}
+
+function isFreePrice(price: string): boolean {
+  return Number.parseFloat(price) === 0;
+}
+
+function isEpicDealCheck(savings: number, isFree: boolean): boolean {
+  return savings >= 75 || isFree;
+}
+
 interface DealRowProps {
   deal: Deal;
   rank?: number;
@@ -13,7 +29,7 @@ interface DealRowProps {
 
 export default async function DealRow({ deal, rank: _rank }: DealRowProps) {
   const highResThumb = getHighResImage(deal.thumb);
-  const savings = Math.round(Number.parseFloat(deal.savings));
+  const savings = computeSavings(deal.savings);
 
   // Fetch stores map (Next.js deduplicates identical concurrent fetch calls)
   const storesMap = await getStores();
@@ -21,12 +37,11 @@ export default async function DealRow({ deal, rank: _rank }: DealRowProps) {
   const storeLogo = getStoreLogo(deal.storeID);
 
   // HL badge: savings > 85% is a strong proxy. Real HL needs per-game endpoint.
-  const isHistoricalLow = savings > 85;
+  const isHistoricalLow = isHistoricalLowDeal(savings);
 
   const timeAgo = formatTimeAgo(deal.lastChange);
-  const salePrice = Number.parseFloat(deal.salePrice);
-  const isFree = salePrice === 0;
-  const isEpicDeal = savings >= 75 || isFree;
+  const isFree = isFreePrice(deal.salePrice);
+  const isEpicDeal = isEpicDealCheck(savings, isFree);
 
   return (
     <Link href={`/game/${deal.gameID}`} className={styles.row}>

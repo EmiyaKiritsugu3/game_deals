@@ -1,21 +1,18 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { DynamicPriceHistory, DynamicStoreCompare } from '@/components/DynamicCharts';
-import HeartButton from '@/components/HeartButton';
-import PriceAlertTrigger from '@/components/PriceAlertTrigger';
+import GameHero from '@/components/game/GameHero';
+import GameStatsRow from '@/components/game/GameStatsRow';
+import StoreComparison from '@/components/game/StoreComparison';
+import { buildGameStats, sortDealsByPrice, splitDealsByGreyMarket } from '@/lib/game-data';
 import {
-  type GameDeal,
-  getDrmType,
-  getGame,
-  getHighResImage,
-  getStoreLogo,
-  getStores,
-  isGreyMarketStore,
-} from '@/services/api';
+  buildOG,
+  buildTwitter,
+  extractDescription,
+  extractTitle,
+  SITE_URL,
+} from '@/lib/metadata-helpers';
+import { getGame, getHighResImage, getStores, isGreyMarketStore } from '@/services/api';
 import { calculateCostPerHour, estimatePlaytime } from '@/services/hltb';
-import styles from './page.module.css';
-
-const SITE_URL = 'https://gamedeals.com.br';
 
 export async function generateMetadata({
   params,
@@ -29,40 +26,22 @@ export async function generateMetadata({
     return { title: 'Game Not Found' };
   }
 
-  const bestPrice = [...game.deals].sort(
-    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
-  )[0];
-
-  const title = `${game.info.title} — Best Price: $${bestPrice?.price || 'N/A'}`;
-  const description = `Find the best deal for ${game.info.title}. Current lowest price: $${bestPrice?.price || 'N/A'}. Historical low: $${game.cheapestPriceEver.price}. Compare prices across ${game.deals.length} stores.`;
+  const sortedDeals = sortDealsByPrice(game.deals);
+  const bestPrice = sortedDeals[0]?.price;
+  const title = extractTitle(game.info.title, bestPrice);
+  const description = extractDescription(
+    game.info.title,
+    bestPrice,
+    game.cheapestPriceEver.price,
+    game.deals.length
+  );
 
   return {
     title,
     description,
-    openGraph: {
-      title,
-      description,
-      url: `${SITE_URL}/game/${id}`,
-      siteName: 'GameDeals',
-      images: [
-        {
-          url: getHighResImage(game.info.thumb),
-          width: 600,
-          height: 300,
-          alt: game.info.title,
-        },
-      ],
-      type: 'website',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      images: [getHighResImage(game.info.thumb)],
-    },
-    alternates: {
-      canonical: `${SITE_URL}/game/${id}`,
-    },
+    openGraph: buildOG(title, description, game.info.thumb, id),
+    twitter: buildTwitter(title, description, game.info.thumb),
+    alternates: { canonical: `${SITE_URL}/game/${id}` },
   };
 }
 
@@ -80,71 +59,12 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
   }
 
   const highResThumb = getHighResImage(game.info.thumb);
-  const sortedDeals = [...game.deals].sort(
-    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
-  );
-  const cheapestEver = Number.parseFloat(game.cheapestPriceEver.price);
+  const sortedDeals = sortDealsByPrice(game.deals);
   const bestCurrentPrice = Number.parseFloat(sortedDeals[0]?.price ?? '9999');
-  const isCurrentlyAtHL = bestCurrentPrice <= cheapestEver * 1.05;
-
+  const { official, keyshop } = splitDealsByGreyMarket(sortedDeals, isGreyMarketStore);
+  const stats = buildGameStats(game, bestCurrentPrice);
   const playtime = estimatePlaytime(game.info.title);
   const costPerHour = calculateCostPerHour(bestCurrentPrice, playtime.mainStory);
-
-  const renderDealRow = (deal: GameDeal, isBest: boolean) => {
-    const savings = Math.round(Number.parseFloat(deal.savings));
-    const price = Number.parseFloat(deal.price);
-    const logo = getStoreLogo(deal.storeID);
-    const storeName = stores[deal.storeID] || `Store ${deal.storeID}`;
-    const isDealAtHL = price <= cheapestEver * 1.05;
-    const isFree = price === 0;
-
-    let storeLogoEl = <div className={styles.storeLogoPlaceholder} />;
-    if (logo) {
-      storeLogoEl = (
-        // biome-ignore lint/performance/noImgElement: store logos from affiliate CDN
-        <img src={logo} alt={storeName} className={styles.storeLogo} width={18} height={18} />
-      );
-    }
-
-    return (
-      <a
-        key={deal.dealID}
-        href={`/out?url=${encodeURIComponent(
-          deal.dealID.startsWith('grey-')
-            ? `https://www.${storeName.toLowerCase().replace(/\s+/g, '')}.com/search?q=${encodeURIComponent(game.info.title)}`
-            : `https://www.cheapshark.com/redirect?dealID=${deal.dealID}`
-        )}&store=${encodeURIComponent(storeName)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`${styles.dealRow} ${isBest ? styles.dealRowBest : ''}`}
-      >
-        <div className={styles.storeInfo}>
-          {storeLogoEl}
-          <span className={styles.storeName}>{storeName}</span>
-          {isBest && <span className={styles.bestTag}>BEST</span>}
-          <span className="drmBadge">
-            {getDrmType(deal.storeID).icon} {getDrmType(deal.storeID).label}
-          </span>
-        </div>
-
-        <div className={styles.dealPriceInfo}>
-          {isDealAtHL && <span className={styles.hlBadge}>HL</span>}
-          {savings > 0 && !isFree && <div className={styles.savingsBadge}>-{savings}%</div>}
-          <div className={styles.prices}>
-            {savings > 0 && !isFree && <span className={styles.retail}>${deal.retailPrice}</span>}
-            {isFree ? (
-              <span className={styles.freePrice}>FREE</span>
-            ) : (
-              <span className={styles.price}>${deal.price}</span>
-            )}
-          </div>
-        </div>
-      </a>
-    );
-  };
-
-  const officialDeals = sortedDeals.filter((d) => !isGreyMarketStore(d.storeID));
-  const keyshopDeals = sortedDeals.filter((d) => isGreyMarketStore(d.storeID));
 
   // JSON-LD for product
   const productJsonLd = {
@@ -164,116 +84,55 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
       },
     })),
   };
-  const productJsonLdScript = (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
-    />
-  );
 
   return (
     <>
-      {productJsonLdScript}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <main className="container">
-        <div className={styles.gamePage}>
-          <div className={styles.gameHero}>
-            <Image
-              src={highResThumb}
-              alt={game.info.title}
-              width={600}
-              height={300}
-              className={styles.heroImage}
-              priority
-            />
-            <div className={styles.heroOverlay} />
-            <div className={styles.heroContent}>
-              <h1 className={styles.title}>{game.info.title}</h1>
-              <div className={styles.actionButtons}>
-                <PriceAlertTrigger
-                  gameID={id}
-                  gameTitle={game.info.title}
-                  currentPrice={bestCurrentPrice}
-                />
-                <HeartButton gameID={id} className={styles.heartBtn} />
-              </div>
-            </div>
-          </div>
+        <GameHero
+          gameId={id}
+          gameTitle={game.info.title}
+          thumb={highResThumb}
+          bestCurrentPrice={bestCurrentPrice}
+          priority
+        />
 
-          <div className={styles.contentBody}>
-            <div className={styles.statsRow}>
-              <div className={styles.statBlock}>
-                <span className={styles.statLabel}>Best Price Now</span>
-                <span className={styles.statValue}>
-                  {bestCurrentPrice === 0 ? (
-                    <span className={styles.freeTag}>FREE</span>
-                  ) : (
-                    `$${sortedDeals[0]?.price}`
-                  )}
-                </span>
-              </div>
-              <div className={styles.statDivider} />
-              <div className={styles.statBlock}>
-                <span className={styles.statLabel}>Historical Low</span>
-                <span className={`${styles.statValue} ${styles.hlValue}`}>
-                  ${game.cheapestPriceEver.price}
-                  {isCurrentlyAtHL && <span className={styles.hlActiveBadge}>LIVE HL</span>}
-                </span>
-              </div>
-              <div className={styles.statDivider} />
-              <div className={styles.statBlock}>
-                <span className={styles.statLabel}>🎮 Value</span>
-                <span className={styles.statValue}>{costPerHour}</span>
-                <span className={styles.statSub}>~{playtime.mainStory}h campaign</span>
-              </div>
-            </div>
+        <GameStatsRow
+          bestCurrentPrice={stats.bestCurrentPrice}
+          isFree={stats.isFree}
+          bestRawPrice={sortedDeals[0]?.price ?? '0'}
+          cheapestEver={stats.cheapestEver}
+          isCurrentlyAtHL={stats.isCurrentlyAtHL}
+          costPerHour={costPerHour}
+          playtimeMain={playtime.mainStory}
+        />
 
-            <div className={styles.storeComparison}>
-              {officialDeals.length > 0 && (
-                <>
-                  <h2 className={styles.sectionTitle}>Official Stores</h2>
-                  <div className={styles.dealsList}>
-                    {officialDeals.map((deal) =>
-                      renderDealRow(
-                        deal,
-                        Number.parseFloat(deal.price) === Number.parseFloat(officialDeals[0]?.price)
-                      )
-                    )}
-                  </div>
-                </>
-              )}
+        <StoreComparison
+          officialDeals={official}
+          keyshopDeals={keyshop}
+          cheapestEver={stats.cheapestEver}
+          gameTitle={game.info.title}
+          stores={stores}
+        />
 
-              {keyshopDeals.length > 0 && (
-                <>
-                  <h2 className={`${styles.sectionTitle} ${styles.keyshopTitle}`}>Keyshops</h2>
-                  <div className={styles.dealsList}>
-                    {keyshopDeals.map((deal) =>
-                      renderDealRow(
-                        deal,
-                        Number.parseFloat(deal.price) === Number.parseFloat(keyshopDeals[0]?.price)
-                      )
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
+        <DynamicPriceHistory
+          currentPrice={sortedDeals[0]?.price || game.cheapestPriceEver.price}
+          lowestPrice={game.cheapestPriceEver.price}
+          lowestDate={game.cheapestPriceEver.date}
+          retailPrice={sortedDeals[0]?.retailPrice}
+          gameTitle={game.info.title}
+          gameId={id}
+        />
 
-            <DynamicPriceHistory
-              currentPrice={sortedDeals[0]?.price || game.cheapestPriceEver.price}
-              lowestPrice={game.cheapestPriceEver.price}
-              lowestDate={game.cheapestPriceEver.date}
-              retailPrice={sortedDeals[0]?.retailPrice}
-              gameTitle={game.info.title}
-              gameId={id}
-            />
-
-            <DynamicStoreCompare
-              data={sortedDeals.map((d) => ({
-                storeName: stores[d.storeID] || `Store ${d.storeID}`,
-                price: d.price,
-              }))}
-            />
-          </div>
-        </div>
+        <DynamicStoreCompare
+          data={sortedDeals.map((d) => ({
+            storeName: stores[d.storeID] || `Store ${d.storeID}`,
+            price: d.price,
+          }))}
+        />
       </main>
     </>
   );

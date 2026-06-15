@@ -8,24 +8,7 @@ import {
   isValidStoreId,
 } from '@/lib/affiliate-config';
 
-/**
- * GET /out/[storeId]/[gameSlug]
- * Redireciona pro deal com affiliate tracking
- */
-export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ storeId: string; gameSlug: string }> }
-) {
-  const { storeId, gameSlug } = await params;
-
-  // Validar inputs
-  if (!isValidStoreId(storeId) || !isValidGameSlug(gameSlug)) {
-    return NextResponse.redirect('/', 302);
-  }
-
-  // Buscar deal link do banco ou usar baseUrl da config
-  let targetUrl = '';
-
+export async function lookupDealUrl(storeId: string): Promise<string> {
   try {
     const [deal] = (await db.execute(sql`
       SELECT url, "storeId" FROM deals
@@ -33,40 +16,62 @@ export async function GET(
       LIMIT 1
     `)) as unknown as Array<{ url: string | null; storeId: string }>;
 
-    if (deal?.url) {
-      targetUrl = deal.url;
-    }
+    return deal?.url ?? '';
   } catch {
     console.error('Deal lookup error');
+    return '';
   }
+}
 
-  // Aplicar affiliate params
+export function isDomainAllowed(url: URL): boolean {
+  return ALLOWED_DOMAINS.has(url.hostname);
+}
+
+export function applyAffiliateParams(url: string, storeId: string): string {
   const config = affiliateConfig[storeId];
-  if (config) {
-    const url = new URL(targetUrl || config.baseUrl);
+  if (!config) return url;
 
-    // Validar hostname antes de redirecionar
-    if (!ALLOWED_DOMAINS.has(url.hostname)) {
-      console.warn(`Blocked redirect to non-allowlisted domain: ${url.hostname}`);
-      return NextResponse.redirect('/', 302);
-    }
+  const parsedUrl = new URL(url || config.baseUrl);
 
-    Object.entries(config.params).forEach(([key, value]) => {
-      url.searchParams.append(key, value);
-    });
-    targetUrl = url.toString();
+  if (!isDomainAllowed(parsedUrl)) {
+    console.warn(`Blocked redirect to non-allowlisted domain: ${parsedUrl.hostname}`);
+    return '';
   }
 
-  // Log click no banco (fire-and-forget)
+  Object.entries(config.params).forEach(([key, value]) => {
+    parsedUrl.searchParams.append(key, value);
+  });
+
+  return parsedUrl.toString();
+}
+
+export function logClick(storeId: string, gameSlug: string, ip: string): void {
+  db.execute(sql`
+    INSERT INTO affiliate_clicks ("storeId", "gameSlug", ip, "timestamp")
+    VALUES (${storeId}, ${gameSlug}, ${ip}, NOW())
+  `).catch(() => {});
+}
+
+/**
+ * GET /out/[storeId]/[gameSlug]
+ * Redirect to deal with affiliate tracking.
+ */
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ storeId: string; gameSlug: string }> }
+) {
+  const { storeId, gameSlug } = await params;
+
+  if (!isValidStoreId(storeId) || !isValidGameSlug(gameSlug)) {
+    return NextResponse.redirect('/', 302);
+  }
+
+  let targetUrl = await lookupDealUrl(storeId);
+  targetUrl = applyAffiliateParams(targetUrl, storeId);
+
   if (targetUrl) {
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
-    db.execute(sql`
-      INSERT INTO affiliate_clicks ("storeId", "gameSlug", ip, "timestamp")
-      VALUES (${storeId}, ${gameSlug}, ${ip}, NOW())
-    `).catch(() => {});
-  }
-
-  if (targetUrl) {
+    logClick(storeId, gameSlug, ip);
     return NextResponse.redirect(targetUrl, 302);
   }
 

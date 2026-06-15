@@ -1,120 +1,76 @@
 'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useWishlistGames } from '@/hooks/useWishlistGames';
-import { getHighResImage } from '@/services/api';
+import { buildSharedGamesList, decodeSharedWishlistIds, type GameEntry } from '@/lib/wishlist-data';
 import styles from '../page.module.css';
 
-type GameEntry = {
-  gameID: string;
-  title: string;
-  thumb: string;
-  salePrice: string;
-  normalPrice: string;
-  savings: number;
-  storeID: string;
-};
-
-interface GameDataInfo {
-  title: string;
-  thumb: string;
+function EmptySharedState() {
+  return (
+    <div className={styles.emptyState}>
+      <h2>Wishlist não encontrada</h2>
+      <p>O link pode estar expirado ou inválido.</p>
+      <Link href="/" className={styles.browseButton}>
+        Ir para a Home
+      </Link>
+    </div>
+  );
 }
 
-interface GameDataDeal {
-  price: string;
-  retailPrice: string;
-  savings: string;
-  storeID: string;
-}
-
-interface GameDataCheapest {
-  price: string;
-}
-
-interface GameDataShape {
-  info?: GameDataInfo;
-  deals: GameDataDeal[];
-  cheapestPriceEver: GameDataCheapest;
-}
-
-function processGameResult(
-  acc: GameEntry[],
-  gameData: GameDataShape | null,
-  idx: number,
-  gameIDs: string[]
-): GameEntry[] {
-  if (!gameData?.info) return acc;
-  const currentBest = [...gameData.deals].sort(
-    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
-  )[0];
-  acc.push({
-    gameID: gameIDs[idx],
-    title: gameData.info.title,
-    thumb: getHighResImage(gameData.info.thumb),
-    salePrice: currentBest?.price || gameData.cheapestPriceEver.price,
-    normalPrice: currentBest?.retailPrice || gameData.cheapestPriceEver.price,
-    savings: currentBest ? Math.round(Number.parseFloat(currentBest.savings)) : 0,
-    storeID: currentBest?.storeID || '1',
-  });
-  return acc;
+function SharedGameCard({ game, stores }: { game: GameEntry; stores: Record<string, string> }) {
+  return (
+    <div className={styles.wishlistCard}>
+      <div className={styles.imageContainer}>
+        <Image
+          src={game.thumb}
+          alt={game.title}
+          fill
+          sizes="(max-width: 768px) 100vw, 33vw"
+          className={styles.image}
+        />
+        {game.savings > 0 && <div className={styles.savingsBadge}>-{game.savings}%</div>}
+      </div>
+      <div className={styles.content}>
+        <h3 className={styles.cardTitle} title={game.title}>
+          {game.title}
+        </h3>
+        <div className={styles.priceContainer}>
+          {game.savings > 0 && <span className={styles.normalPrice}>${game.normalPrice}</span>}
+          <span className={styles.salePrice}>${game.salePrice}</span>
+        </div>
+        <div className={styles.meta}>
+          <span className={styles.storeBadge}>{stores[game.storeID] || 'Store'}</span>
+          <Link href={`/game/${game.gameID}`} className={styles.viewDetailsBtn}>
+            🎁 Comprar como Presente
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function SharedWishlistContent() {
   const searchParams = useSearchParams();
   const idsParam = searchParams.get('ids');
-
-  const gameIds = useMemo(() => {
-    if (!idsParam) return [];
-    try {
-      const decoded = atob(idsParam);
-      return decoded
-        .split(',')
-        .filter(Boolean)
-        .filter((id) => /^[a-zA-Z0-9]+$/.test(id));
-    } catch {
-      console.error('Invalid wishlist data');
-      return [];
-    }
-  }, [idsParam]);
-
+  const gameIds = useMemo(() => decodeSharedWishlistIds(idsParam), [idsParam]);
   const { data, isLoading } = useWishlistGames(gameIds);
   const [stores, setStores] = useState<Record<string, string>>({});
-
   useEffect(() => {
     if (data?.stores) setStores(data.stores);
   }, [data?.stores]);
+  const games = useMemo(() => buildSharedGamesList(data, gameIds), [data, gameIds]);
 
-  const games = useMemo(() => {
-    if (!data?.games || !gameIds.length) return [];
-    return data.games.reduce(
-      (acc, gameData, idx) => processGameResult(acc, gameData, idx, gameIds),
-      [] as GameEntry[]
-    );
-  }, [data, gameIds]);
-
-  if (isLoading) {
+  if (isLoading)
     return (
       <div className={styles.emptyState}>
         <div className={styles.spinner}></div>
         <p>Carregando a Wishlist compartilhada...</p>
       </div>
     );
-  }
 
-  if (games.length === 0) {
-    return (
-      <div className={styles.emptyState}>
-        <h2>Wishlist não encontrada</h2>
-        <p>O link pode estar expirado ou inválido.</p>
-        <Link href="/" className={styles.browseButton}>
-          Ir para a Home
-        </Link>
-      </div>
-    );
-  }
+  if (games.length === 0) return <EmptySharedState />;
 
   return (
     <>
@@ -134,38 +90,9 @@ function SharedWishlistContent() {
           </p>
         </div>
       </div>
-
       <div className={styles.grid}>
         {games.map((game) => (
-          <div key={game.gameID} className={styles.wishlistCard}>
-            <div className={styles.imageContainer}>
-              <Image
-                src={game.thumb}
-                alt={game.title}
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className={styles.image}
-              />
-              {game.savings > 0 && <div className={styles.savingsBadge}>-{game.savings}%</div>}
-            </div>
-            <div className={styles.content}>
-              <h3 className={styles.cardTitle} title={game.title}>
-                {game.title}
-              </h3>
-              <div className={styles.priceContainer}>
-                {game.savings > 0 && (
-                  <span className={styles.normalPrice}>${game.normalPrice}</span>
-                )}
-                <span className={styles.salePrice}>${game.salePrice}</span>
-              </div>
-              <div className={styles.meta}>
-                <span className={styles.storeBadge}>{stores[game.storeID] || 'Store'}</span>
-                <Link href={`/game/${game.gameID}`} className={styles.viewDetailsBtn}>
-                  🎁 Comprar como Presente
-                </Link>
-              </div>
-            </div>
-          </div>
+          <SharedGameCard key={game.gameID} game={game} stores={stores} />
         ))}
       </div>
     </>

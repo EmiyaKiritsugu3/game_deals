@@ -23,6 +23,35 @@ const ALLOWED_HOSTNAMES = new Set([
   'www.gamivo.com',
 ]);
 
+function isHostnameAllowed(hostname: string): boolean {
+  return ALLOWED_HOSTNAMES.has(hostname);
+}
+
+function applyOutAffiliateParams(url: URL, store: string | null): void {
+  const storeLower = store?.toLowerCase() || '';
+  if (storeLower.includes('humble')) {
+    url.searchParams.append('charity', 'gamedeals');
+    url.searchParams.append('partner', 'gamedealsBR');
+  } else if (storeLower.includes('eneba')) {
+    url.searchParams.append('af_id', 'gamedeals_prod');
+  } else if (storeLower.includes('cdkeys')) {
+    url.searchParams.append('mw_aref', 'gamedeals_link');
+  } else if (storeLower.includes('fanatical')) {
+    url.searchParams.append('aff_id', 'gamedeals_fnt');
+  } else {
+    url.searchParams.append('ref', 'gamedealsBR_gen');
+  }
+}
+
+function redirectWithDelay(url: string, delay: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      window.location.replace(url);
+      resolve();
+    }, delay);
+  });
+}
+
 export default function OutRedirector() {
   const searchParams = useSearchParams();
   const url = searchParams.get('url');
@@ -33,37 +62,15 @@ export default function OutRedirector() {
       window.location.replace('/');
       return;
     }
-
     try {
       const targetUrl = new URL(url);
-
-      // Validar contra allowlist
-      if (!ALLOWED_HOSTNAMES.has(targetUrl.hostname)) {
+      if (!isHostnameAllowed(targetUrl.hostname)) {
         console.warn(`Blocked redirect to non-allowlisted domain: ${targetUrl.hostname}`);
         window.location.replace('/');
         return;
       }
-
-      // Affiliate params
-      const storeLower = store?.toLowerCase() || '';
-      if (storeLower.includes('humble')) {
-        targetUrl.searchParams.append('charity', 'gamedeals');
-        targetUrl.searchParams.append('partner', 'gamedealsBR');
-      } else if (storeLower.includes('eneba')) {
-        targetUrl.searchParams.append('af_id', 'gamedeals_prod');
-      } else if (storeLower.includes('cdkeys')) {
-        targetUrl.searchParams.append('mw_aref', 'gamedeals_link');
-      } else if (storeLower.includes('fanatical')) {
-        targetUrl.searchParams.append('aff_id', 'gamedeals_fnt');
-      } else {
-        targetUrl.searchParams.append('ref', 'gamedealsBR_gen');
-      }
-
-      const timer = setTimeout(() => {
-        window.location.replace(targetUrl.toString());
-      }, 1000);
-
-      return () => clearTimeout(timer);
+      applyOutAffiliateParams(targetUrl, store);
+      redirectWithDelay(targetUrl.toString(), 1000);
     } catch {
       window.location.replace('/');
     }

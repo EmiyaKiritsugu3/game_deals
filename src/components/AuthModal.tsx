@@ -1,8 +1,8 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
-import { Github, Globe, Mail, ShieldCheck, X } from 'lucide-react';
+import { Github, Globe, Mail, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
+import BaseModal from '@/components/ui/BaseModal';
 import { createClient } from '@/utils/supabase/client';
 
 const supabase = createClient();
@@ -54,99 +54,77 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          className={styles.modalOverlay}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
+    <BaseModal isOpen={isOpen} onClose={onClose} ariaLabel="Authentication">
+      <div className={styles.header}>
+        <h2>🚀 Welcome to GameDeals</h2>
+        <p>Sign in to track price drops and sync your wishlist across all devices.</p>
+      </div>
+
+      <div className={styles.socialButtons}>
+        <button
+          type="button"
+          className={`${styles.socialBtn} ${styles.google}`}
+          onClick={() => handleSocialLogin('google')}
+          disabled={isLoading}
         >
-          <motion.div
-            className={styles.modal}
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button type="button" className={styles.closeButton} onClick={onClose}>
-              <X size={20} />
-            </button>
+          <Globe size={20} />
+          <span>Continue with Google</span>
+        </button>
+        <button
+          type="button"
+          className={`${styles.socialBtn} ${styles.discord}`}
+          onClick={() => handleSocialLogin('discord')}
+          disabled={isLoading}
+        >
+          <Github size={20} />
+          <span>Continue with Discord</span>
+        </button>
+      </div>
 
-            <div className={styles.header}>
-              <h2>🚀 Welcome to GameDeals</h2>
-              <p>Sign in to track price drops and sync your wishlist across all devices.</p>
-            </div>
+      <div className={styles.divider}>
+        <span>or use magic link</span>
+      </div>
 
-            <div className={styles.socialButtons}>
-              <button
-                type="button"
-                className={`${styles.socialBtn} ${styles.google}`}
-                onClick={() => handleSocialLogin('google')}
-                disabled={isLoading}
-              >
-                <Globe size={20} />
-                <span>Continue with Google</span>
-              </button>
-              <button
-                type="button"
-                className={`${styles.socialBtn} ${styles.discord}`}
-                onClick={() => handleSocialLogin('discord')}
-                disabled={isLoading}
-              >
-                <Github size={20} />
-                <span>Continue with Discord</span>
-              </button>
-            </div>
+      <form className={styles.form} onSubmit={handleMagicLink}>
+        <div className={styles.inputGroup}>
+          <label htmlFor="email">Email Address</label>
+          <div style={{ position: 'relative' }}>
+            <input
+              type="email"
+              id="email"
+              placeholder="your@email.com"
+              className={styles.input}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={isLoading}
+            />
+            <Mail
+              size={16}
+              style={{
+                position: 'absolute',
+                right: 12,
+                top: 12,
+                color: 'hsl(var(--muted-foreground))',
+              }}
+            />
+          </div>
+        </div>
 
-            <div className={styles.divider}>
-              <span>or use magic link</span>
-            </div>
+        {message && (
+          <div className={`${styles.message} ${styles[message.type]}`}>{message.text}</div>
+        )}
 
-            <form className={styles.form} onSubmit={handleMagicLink}>
-              <div className={styles.inputGroup}>
-                <label htmlFor="email">Email Address</label>
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type="email"
-                    id="email"
-                    placeholder="your@email.com"
-                    className={styles.input}
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    disabled={isLoading}
-                  />
-                  <Mail
-                    size={16}
-                    style={{
-                      position: 'absolute',
-                      right: 12,
-                      top: 12,
-                      color: 'hsl(var(--muted-foreground))',
-                    }}
-                  />
-                </div>
-              </div>
+        <button type="submit" className={styles.loginButton} disabled={isLoading}>
+          {isLoading ? 'Sending...' : 'Send Magic Link'}
+        </button>
+      </form>
 
-              {message && (
-                <div className={`${styles.message} ${styles[message.type]}`}>{message.text}</div>
-              )}
-
-              <button type="submit" className={styles.loginButton} disabled={isLoading}>
-                {isLoading ? 'Sending...' : 'Send Magic Link'}
-              </button>
-            </form>
-
-            <div className={styles.demoNote}>
-              <ShieldCheck size={14} style={{ marginBottom: 4, color: 'hsl(var(--primary))' }} />
-              <strong>Privacy Priority:</strong> We only store your wishlist and alert data. No
-              passwords required.
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      <div className={styles.demoNote}>
+        <ShieldCheck size={14} style={{ marginBottom: 4, color: 'hsl(var(--primary))' }} />
+        <strong>Privacy Priority:</strong> We only store your wishlist and alert data. No passwords
+        required.
+      </div>
+    </BaseModal>
   );
 }
