@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export interface PriceAlert {
+interface PriceAlert {
   gameID: string;
   gameTitle: string;
   targetPrice: number;
