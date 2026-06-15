@@ -46,7 +46,12 @@ describe('createPriceAlertAction', () => {
   it('inserts alert and returns raw row', async () => {
     authGetUser.mockResolvedValueOnce({ data: { user: { id: 'user-1' } } });
     resolveGameUuid.mockResolvedValueOnce('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa');
-    const fakeRow = { id: 'alert-1', userId: 'user-1', gameId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', targetPrice: 9.99 };
+    const fakeRow = {
+      id: 'alert-1',
+      userId: 'user-1',
+      gameId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+      targetPrice: 9.99,
+    };
     execute.mockResolvedValueOnce([fakeRow]);
     const result = await createPriceAlertAction('123', 9.99);
     expect(result).toEqual(fakeRow);
@@ -111,9 +116,7 @@ describe('deletePriceAlertAction', () => {
 
   it('deletes alert when owner matches', async () => {
     authGetUser.mockResolvedValueOnce({ data: { user: { id: 'user-1' } } });
-    execute
-      .mockResolvedValueOnce([{ userId: 'user-1' }])
-      .mockResolvedValueOnce(undefined);
+    execute.mockResolvedValueOnce([{ userId: 'user-1' }]).mockResolvedValueOnce(undefined);
     const result = await deletePriceAlertAction('alert-own');
     expect(result).toBe(true);
     expect(execute).toHaveBeenCalledTimes(2);
@@ -137,15 +140,15 @@ describe('checkTriggeredAlertsAction', () => {
         game_id: 'g1',
         store_id: 's1',
         target_price: 9.99,
-        current_price: 7.50,
+        current_price: 7.5,
         notification_id: 'n1',
       },
       {
         user_id: 'u2',
         game_id: 'g2',
         store_id: null,
-        target_price: 5.00,
-        current_price: 4.00,
+        target_price: 5.0,
+        current_price: 4.0,
         notification_id: 'n2',
       },
     ]);
@@ -158,15 +161,15 @@ describe('checkTriggeredAlertsAction', () => {
           gameId: 'g1',
           storeId: 's1',
           targetPrice: 9.99,
-          currentLowest: 7.50,
+          currentLowest: 7.5,
           notificationId: 'n1',
         },
         {
           userId: 'u2',
           gameId: 'g2',
           storeId: null,
-          targetPrice: 5.00,
-          currentLowest: 4.00,
+          targetPrice: 5.0,
+          currentLowest: 4.0,
           notificationId: 'n2',
         },
       ],

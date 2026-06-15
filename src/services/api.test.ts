@@ -190,7 +190,7 @@ describe('getDeals', () => {
 
     expect(mockFetch).toHaveBeenCalledWith(
       'https://www.cheapshark.com/api/1.0/deals?storeID=1&pageSize=5',
-      { next: { revalidate: 3600 } },
+      { next: { revalidate: 3600 } }
     );
   });
 
@@ -291,10 +291,9 @@ describe('getStores', () => {
 
     await getStores();
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      'https://www.cheapshark.com/api/1.0/stores',
-      { next: { revalidate: 86400 } },
-    );
+    expect(mockFetch).toHaveBeenCalledWith('https://www.cheapshark.com/api/1.0/stores', {
+      next: { revalidate: 86400 },
+    });
   });
 });
 
@@ -313,7 +312,14 @@ describe('getGame', () => {
     info: { title: 'Test Game', steamAppID: '12345', thumb: 'https://example.com/thumb.jpg' },
     cheapestPriceEver: { price: '9.99', date: 1600000000 },
     deals: [
-      { storeID: '1', dealID: 'd1', price: '9.99', retailPrice: '19.99', savings: '50.00', dealRating: '8.5' },
+      {
+        storeID: '1',
+        dealID: 'd1',
+        price: '9.99',
+        retailPrice: '19.99',
+        savings: '50.00',
+        dealRating: '8.5',
+      },
     ],
   };
 
