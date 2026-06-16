@@ -33,6 +33,12 @@ jobs:
         run: pnpm exec tsc --noEmit
       - name: Test + Coverage
         run: pnpm test:coverage
+      - name: SonarCloud Scan
+        if: ${{ github.event_name == 'pull_request' || github.ref == 'refs/heads/main' }}
+        uses: SonarSource/sonarqube-scan-action@9d0b5a4bf0aff8e0d7a9b0edb937ae9b6856de1e # v4.1.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN || '' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup env
         run: cp .env.example .env.local
       - name: Build
