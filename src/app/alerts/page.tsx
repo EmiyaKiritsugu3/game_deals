@@ -78,10 +78,6 @@ export default function AlertsPage() {
     onSuccess: (_data, params) => {
       if (params.cheapsharkId) {
         removeAlert(params.cheapsharkId);
-      } else {
-        console.warn(
-          '[alerts] delete success but cheapshark_id is empty — localStorage not synced'
-        );
       }
       setDeleteError(null);
       queryClient.invalidateQueries({ queryKey: ['alerts'] });
