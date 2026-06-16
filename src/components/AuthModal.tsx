@@ -3,10 +3,8 @@
 import { Github, Globe, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 import BaseModal from '@/components/ui/BaseModal';
-import { createClient } from '@/utils/supabase/client';
+import { getBrowserClient } from '@/lib/supabase-browser';
 import styles from './AuthModal.module.css';
-
-const supabase = createClient();
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -65,7 +63,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   const handleSocialLogin = async (provider: 'google' | 'discord' | 'github') => {
     setIsLoading(true);
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { error } = await getBrowserClient().auth.signInWithOAuth({
       provider,
       options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
@@ -79,7 +77,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     e.preventDefault();
     setIsLoading(true);
     setMessage(null);
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await getBrowserClient().auth.signInWithOtp({
       email,
       options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
     });
