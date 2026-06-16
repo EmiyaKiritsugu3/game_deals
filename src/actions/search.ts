@@ -24,7 +24,8 @@ export async function searchGamesAction(query: string, limit = 10) {
   if (!apiKey) {
     // Fallback: CheapShark API
     const res = await fetch(
-      `https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(query)}&limit=${limit}`
+      `https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(query)}&limit=${limit}`,
+      { headers: { 'User-Agent': 'GameDeals/1.0' } }
     );
     if (!res.ok) return [];
     return (await res.json()) as Array<Record<string, string>>;
@@ -46,7 +47,8 @@ export async function searchGamesAction(query: string, limit = 10) {
 
 async function fetchDealsForSync(): Promise<CheapSharkDeal[]> {
   const res = await fetch(
-    'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100'
+    'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100',
+    { headers: { 'User-Agent': 'GameDeals/1.0' } }
   );
   if (!res.ok) return [];
   return (await res.json()) as CheapSharkDeal[];

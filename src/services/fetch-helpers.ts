@@ -6,7 +6,10 @@ export async function fetchDealsWithFallback(
   errorContext = 'fetchDeals'
 ): Promise<Deal[]> {
   try {
-    const res = await fetch(url, { next: { revalidate: 3600 } });
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'GameDeals/1.0' },
+      next: { revalidate: 3600 },
+    });
     if (!res.ok) return fallbackDeals;
     const data = (await res.json()) as Deal[];
     return data.length > 0 ? data : fallbackDeals;
@@ -23,7 +26,10 @@ export async function fetchGameDetails(
   const url = new URL('https://www.cheapshark.com/api/1.0/games');
   url.searchParams.append('id', id);
   try {
-    const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
+    const res = await fetch(url.toString(), {
+      headers: { 'User-Agent': 'GameDeals/1.0' },
+      next: { revalidate: 3600 },
+    });
     if (!res.ok) return null;
     return await res.json();
   } catch (e) {

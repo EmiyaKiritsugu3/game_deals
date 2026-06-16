@@ -175,6 +175,7 @@ describe('getDeals', () => {
     const result = await getDeals();
 
     expect(mockFetch).toHaveBeenCalledWith(defaultDealUrl, {
+      headers: { 'User-Agent': 'GameDeals/1.0 (https://gamedeals.com.br)' },
       next: { revalidate: 3600 },
     });
     expect(result).toEqual(sampleDeals);
@@ -190,7 +191,10 @@ describe('getDeals', () => {
 
     expect(mockFetch).toHaveBeenCalledWith(
       'https://www.cheapshark.com/api/1.0/deals?storeID=1&pageSize=5',
-      { next: { revalidate: 3600 } }
+      {
+        headers: { 'User-Agent': 'GameDeals/1.0 (https://gamedeals.com.br)' },
+        next: { revalidate: 3600 },
+      }
     );
   });
 
@@ -292,6 +296,7 @@ describe('getStores', () => {
     await getStores();
 
     expect(mockFetch).toHaveBeenCalledWith('https://www.cheapshark.com/api/1.0/stores', {
+      headers: { 'User-Agent': 'GameDeals/1.0 (https://gamedeals.com.br)' },
       next: { revalidate: 86400 },
     });
   });
