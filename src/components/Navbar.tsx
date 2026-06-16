@@ -20,13 +20,13 @@ export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseU
   useAuthSubscription();
 
   useEffect(() => {
-    if (serverUser) {
+    // Only call setUser if there is a serverUser and the client store isn't logged in yet
+    // This avoids an infinite loop of resetting state to null on every render
+    if (serverUser && !isLoggedIn) {
       setUser(serverUser);
       setIsAuthModalOpen(false);
-    } else {
-      setUser(null);
     }
-  }, [setUser, serverUser]);
+  }, [setUser, serverUser, isLoggedIn]);
 
   return (
     <nav className={styles.navbar}>
