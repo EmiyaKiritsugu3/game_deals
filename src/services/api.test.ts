@@ -11,6 +11,7 @@ vi.mock('@/services/game-enrichment', () => ({
 }));
 
 import { fallbackDeals } from '@/data/fallbackDeals';
+import { CHEAPSHARK_HEADERS } from '@/services/fetch-helpers';
 import {
   formatTimeAgo,
   getDeals,
@@ -175,6 +176,7 @@ describe('getDeals', () => {
     const result = await getDeals();
 
     expect(mockFetch).toHaveBeenCalledWith(defaultDealUrl, {
+      headers: CHEAPSHARK_HEADERS,
       next: { revalidate: 3600 },
     });
     expect(result).toEqual(sampleDeals);
@@ -190,7 +192,7 @@ describe('getDeals', () => {
 
     expect(mockFetch).toHaveBeenCalledWith(
       'https://www.cheapshark.com/api/1.0/deals?storeID=1&pageSize=5',
-      { next: { revalidate: 3600 } }
+      { headers: CHEAPSHARK_HEADERS, next: { revalidate: 3600 } }
     );
   });
 
@@ -292,6 +294,7 @@ describe('getStores', () => {
     await getStores();
 
     expect(mockFetch).toHaveBeenCalledWith('https://www.cheapshark.com/api/1.0/stores', {
+      headers: CHEAPSHARK_HEADERS,
       next: { revalidate: 86400 },
     });
   });

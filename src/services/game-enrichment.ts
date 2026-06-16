@@ -1,3 +1,4 @@
+import { CHEAPSHARK_HEADERS } from '@/services/fetch-helpers';
 import type { GameDetails } from '@/types/game';
 import { generateGreyMarketDeals } from '@/utils/pricing';
 
@@ -9,6 +10,7 @@ export async function fetchGameFromCheapShark(id: string): Promise<GameDetails |
     const timeout = setTimeout(() => controller.abort(), 5000);
     const res = await fetch(url.toString(), {
       signal: controller.signal,
+      headers: CHEAPSHARK_HEADERS,
       next: { revalidate: 3600 },
     });
     clearTimeout(timeout);

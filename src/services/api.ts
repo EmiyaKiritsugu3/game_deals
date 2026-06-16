@@ -1,4 +1,5 @@
 import { fallbackDeals } from '@/data/fallbackDeals';
+import { CHEAPSHARK_HEADERS } from '@/services/fetch-helpers';
 
 export * from '@/types/game';
 
@@ -55,7 +56,10 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
   }
 
   try {
-    const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
+    const res = await fetch(url.toString(), {
+      headers: CHEAPSHARK_HEADERS,
+      next: { revalidate: 3600 },
+    });
     if (!res.ok) return fallbackDeals;
     const data = (await res.json()) as Deal[];
     return data.length > 0 ? data : fallbackDeals;
@@ -66,7 +70,10 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
 }
 
 export async function getStores(): Promise<Record<string, string>> {
-  const res = await fetch(`${BASE_URL}/stores`, { next: { revalidate: 86400 } });
+  const res = await fetch(`${BASE_URL}/stores`, {
+    headers: CHEAPSHARK_HEADERS,
+    next: { revalidate: 86400 },
+  });
   const map: Record<string, string> = {};
 
   if (res.ok) {
