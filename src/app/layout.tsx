@@ -113,19 +113,29 @@ export default async function RootLayout({
     <html lang="en">
       <head>{jsonLdScript}</head>
       <body className={`${inter.variable} antialiased`}>
-        <Suspense>
-          <NuqsAdapter>
-            <ReactQueryProvider>
+        <NuqsAdapter>
+          <ReactQueryProvider>
+            <Suspense
+              fallback={
+                <nav
+                  style={{
+                    height: 60,
+                    borderBottom: '1px solid hsl(var(--border))',
+                    background: 'hsl(var(--background))',
+                  }}
+                />
+              }
+            >
               <Navbar serverUser={null} />
-              <SyncManager />
-              {children}
-              {modal}
-              <Analytics />
-              <SpeedInsights />
-              <CookieBanner />
-            </ReactQueryProvider>
-          </NuqsAdapter>
-        </Suspense>
+            </Suspense>
+            <SyncManager />
+            {children}
+            {modal}
+            <Analytics />
+            <SpeedInsights />
+            <CookieBanner />
+          </ReactQueryProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );
