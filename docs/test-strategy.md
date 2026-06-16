@@ -3,8 +3,8 @@
 | Metadata | |
 |---|---|
 | Document owner | Engineering Team |
-| Version | 1.0 |
-| Last updated | 2026-06-13 |
+| Version | 1.1 |
+| Last updated | 2026-06-15 |
 | Status | Active |
 
 ---
@@ -43,20 +43,23 @@
 
 ## 3. Test Approach
 
-### Current State Assessment
+### Current State Assessment (Sprint 15 — updated 2026-06-15)
 
-The project has **limited test coverage today**:
+The project has **substantial test coverage (215 tests across 13 files)**:
 
 | Aspect | Current Status |
 |---|---|
-| **Unit test files** | 2 files (`biome-config.test.ts`, `type-guards.test.ts`) |
-| **Total test assertions** | ~20 (all passing) |
-| **Coverage thresholds** | 0% (lines, functions, branches, statements) |
+| **Unit test files** | 11 (actions, services, utils, stores, type guards) |
+| **Total test count** | **215** (207 action/service + 8 component in jsdom) |
+| **Component test files** | 1 (`alerts-page.test.tsx` — 8 tests) |
+| **E2E test files** | 2 (`alerts.spec.ts` — 6 tests, `visual.spec.ts` — 6 snapshots) |
+| **Coverage thresholds** | 0% (all, no enforced minimum yet) |
 | **Coverage provider** | Istanbul (via `@vitest/coverage-istanbul`) |
-| **Test runner** | Vitest v4 (node environment, globals enabled) |
-| **E2E framework** | Playwright installed as devDependency (`@playwright/test@^1.60.0`) |
-| **E2E config** | **No `playwright.config.ts` exists** — `pnpm test:e2e` would fail |
-| **E2E test files** | None |
+| **Test runner** | Vitest v4 (node default + jsdom per-file for components) |
+| **Component test deps** | jsdom, @testing-library/react, @testing-library/jest-dom |
+| **E2E framework** | Playwright v1.60 (configured with webserver, CDP screenshots) |
+| **E2E config** | `playwright.config.ts` exists (production build, sequential) |
+| **Test directory** | `src/**/*.test.{ts,tsx}`, `tests/**/*.test.{ts,tsx}` |
 | **CI test step** | `pnpm test:coverage` runs as step 3 of 6 in `check.sh` |
 | **Pre-push gate** | Tests block push on failure (step 3 in `check.sh`) |
 
@@ -64,12 +67,12 @@ The project has **limited test coverage today**:
 
 | Level | Target Automation | Current Coverage | Owner | Notes |
 |---|---|---|---|---|
-| **Unit** | 100% of type guards, utilities, pure functions | ~20 tests in 2 files | Engineering | Highest priority for new code. Vitest + node environment. |
+| **Unit (node)** | 100% of type guards, utilities, pure functions | 207 tests in 11 files | Engineering | Action/service/utility tests. Vitest + node environment. |
+| **Component (jsdom)** | Component rendering + user interactions | 8 tests in 1 file | Engineering | Vitest + jsdom + RTL. Mock TanStack Query hooks. |
 | **Integration** | DB queries, API client, Server Actions | 0% | Engineering | Requires DB connection. Use test containers or Supabase local. |
-| **E2E** | Critical user journeys | **0%** (no config) | Engineering | **Playwright installed but not configured.** Must create `playwright.config.ts` before use. |
-| **Visual** | UI component snapshots | 0% | Engineering | Planned: Playwright screenshot diffing or Chromatic. |
+| **E2E** | Critical user journeys | 12 tests (2 spec files) | Engineering | Playwright with webserver, production build, CDP screenshots. |
+| **Visual** | UI component snapshots | 6 snapshots | Engineering | Playwright screenshot diffing with `maxDiffPixels: 100`. |
 | **Performance** | Typesense search latency, ISR cache hit rate | 0% | Engineering | Ad-hoc only. No formal benchmarks yet. |
-
 ### Test Data Strategy
 
 - **Unit tests**: Mock CheapShark API responses using inline fixtures (see `tests/type-guards.test.ts` pattern).
@@ -126,7 +129,8 @@ The project has **limited test coverage today**:
 {
   test: {
     globals: true,                    // describe/it/expect available without import
-    environment: 'node',              // No jsdom — tests run in Node only
+    environment: 'node',              // Default: Node env for action/service tests
+    setupFiles: ['./tests/setup.ts'], // jest-dom matchers (loaded for all envs)
     include: ['src/**/*.test.{ts,tsx}', 'tests/**/*.test.{ts,tsx}'],
     exclude: ['node_modules', '.next'],
     coverage: {
@@ -148,6 +152,41 @@ The project has **limited test coverage today**:
   },
 }
 ```
+
+### Component Tests (jsdom)
+
+Component tests (e.g. `tests/unit/app/alerts-page.test.tsx`) use a **per-file jsdoc directive** to switch to jsdom environment:
+
+```ts
+/**
+ * @vitest-environment jsdom
+ */
+```
+
+This keeps the default `node` environment for existing action/service tests (which are faster and don't need DOM). Only tests under `tests/unit/` use jsdom.
+
+**Stack (added Sprint 15):**
+- `jsdom` — browser-like environment for component rendering
+- `@testing-library/react` — React component rendering (`render`, `screen`)
+- `@testing-library/jest-dom` — custom matchers (`toBeInTheDocument`, `toBeVisible`)
+- `@testing-library/user-event` — simulated user interactions
+
+**Mocking pattern (component level):** Unlike action/service tests which mock `db.execute` directly, component tests mock TanStack Query hooks (`useQuery`, `useMutation`) via `vi.mock('@tanstack/react-query', ...)`. This is the correct boundary for component tests — they verify the component's interaction with its hooks, not the SQL layer.
+
+```ts
+const mocks = vi.hoisted(() => ({
+  queryMock: vi.fn(),
+  mutationMock: vi.fn(),
+}));
+
+vi.mock('@tanstack/react-query', () => ({
+  useQuery: mocks.queryMock,
+  useMutation: mocks.mutationMock,
+  useQueryClient: () => ({ invalidateQueries: vi.fn() }),
+}));
+```
+
+**Test count:** 215 total (207 action/service + 8 component). 13 test files.
 
 ### Playwright Gap
 

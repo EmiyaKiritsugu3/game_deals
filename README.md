@@ -19,7 +19,8 @@ Game deal aggregator — Next.js 16, Supabase SSR, Drizzle ORM, TanStack Query, 
 | Dead Code | Knip |
 | Audit | Fallow |
 | E2E | Playwright |
-| Unit | Vitest |
+| Unit (node) | Vitest |
+| Component (jsdom) | Vitest + React Testing Library |
 | Git Hooks | Husky v9 + lint-staged |
 
 ## Commands
@@ -31,7 +32,7 @@ pnpm start                # Production server
 pnpm lint                 # Biome check
 pnpm lint:fix             # Biome check + auto-fix
 pnpm format               # Biome format
-pnpm test                 # Vitest unit
+pnpm test                 # Vitest unit (215 tests)
 pnpm test:watch           # Vitest watch
 pnpm test:coverage        # Vitest with coverage
 pnpm test:e2e             # Playwright E2E
@@ -84,6 +85,7 @@ src/
     game/[id]/      # Game detail
     out/            # Affiliate redirect
     wishlist/       # Wishlist (protected)
+    alerts/         # Price alerts (protected)
     search/         # Search
     bundles/        # Bundles
     collections/    # Collections
@@ -102,13 +104,18 @@ src/
 ```
 tests/
   e2e/              # Playwright E2E + visual regression tests
+    alerts.spec.ts  # 6 alerts page + cron E2E tests
     visual.spec.ts  # 6 visual regression snapshots
+  unit/             # Vitest component tests (jsdom)
+    app/            # App component tests
+  setup.ts          # jest-dom matchers for component tests
 playwright.config.ts   # Playwright configuration (maxDiffPixels, webServer)
+vitest.config.ts       # Vitest configuration (node + jsdom per-file)
 ```
 
 ## Stats
 
-- **Tests**: 207 (95 baseline + 112 new)
+- **Tests**: 215 (95 baseline + 112 + 8 component)
 - **Fallow CRITICAL**: 0 (was 1)
 - **Knip unused types**: 0 (was 9)
 - **Unused exports**: 0 (was 4)
@@ -131,3 +138,4 @@ playwright.config.ts   # Playwright configuration (maxDiffPixels, webServer)
 | [Templates](docs/templates/README.md) | Postmortem and PR/FAQ templates |
 | [Session — PR #12](docs/reports/pr12-session-report.md) | P0 notifications pipeline + audit fixes |
 | [Session — PR #14](docs/reports/pr14-session-report.md) | Audit gap-closure + 207 tests + 0 CRITICAL |
+| [Session — PR #15](docs/reports/pr15-session-report.md) | Price alerts end-to-end: /alerts page, cron infra, type safety, component tests |

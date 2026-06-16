@@ -109,7 +109,55 @@ Tracking known technical debt items across the GameDeals codebase. Items priorit
 
 ---
 
-## P10 — (DEFERRED) Cubic Review: 7 Comments Deferred
+## P10 — Sprint 15: Dual-Storage Architecture for Alerts
+
+**Issue:** Price alerts have two sources of truth:
+1. **`useAlerts`** (Zustand + localStorage) — populated by `PriceAlertModal.tsx`, read by game page badge and wishlist AlertsGrid
+2. **`price_alerts` table** (Supabase) — populated by `SyncManager` (1s debounce), read by standalone `/alerts` page via `getUserAlertsAction`
+
+**Impact:** Alerts created via the modal never display on `/alerts` until SyncManager runs. If user closes tab in <1s, the alert is lost from DB but persisted in localStorage — then SyncManager on next page visit re-creates it (divergence).
+
+**Introduced:** Preexisting (worse after Sprint 15 added DB-first `/alerts` page).
+
+**Fix:** Refactor `PriceAlertModal` to call server actions directly (`createPriceAlertAction`/`deletePriceAlertAction`) instead of localStorage-only. Remove `SyncManager` alerts sync. Migrate consumers to read from DB via TanStack Query.
+
+**Estimate:** 1-2 days.
+
+---
+
+## P11 — Sprint 15: deletePriceAlertAction Non-Atomic
+
+**Issue:** `deletePriceAlertAction` does SELECT then DELETE in separate queries. Race condition if ownership changes between the two (low risk — user IDs don't change).
+
+**Fix:** `DELETE FROM price_alerts WHERE id = $1 AND "userId" = $2` — single atomic query.
+
+---
+
+## P12 — Sprint 15: alerts/page.tsx Complexity
+
+**Issue:** `AlertsPage` component has 78 lines of JSX, 13 cyclomatic complexity, 49.5 CRAP score. Fallow flags as high-risk.
+
+**Fix:** Extract `AlertCard` sub-component (reduces page from 205 to ~100 lines).
+
+---
+
+## P13 — Sprint 15: BrowseButton Shadow Color
+
+**Resolved:** `src/app/alerts/page.module.css` — `browseButton:hover` shadow changed from hardcoded `rgba(220, 38, 38, 0.4)` to `hsl(var(--primary) / 0.4)` (brand color). Same fix applied to `wishlist/page.module.css`.
+
+---
+
+## P14 — Sprint 15: E2E Test Gap
+
+**Issue:** No E2E test covers the actual alerts CRUD flow (create → list → delete). All 6 E2E tests are smoke tests (page renders, cron auth). To fully test end-to-end, an auth flow is needed — requires seeded Supabase user or per-test auth session.
+
+**Fix:** Add a Playwright test that authenticates as a test user, navigates to game page, creates alert via modal, navigates to `/alerts`, asserts card renders, clicks Remove, asserts card removed.
+
+**Estimate:** 4h.
+
+---
+
+## P15 — (DEFERRED) Cubic Review: 7 Comments Deferred
 
 **Issue:** cubic.dev AI code review on PR #14 identified 13 issues. 6 were fixed in PR #14, 7 deferred.
 
