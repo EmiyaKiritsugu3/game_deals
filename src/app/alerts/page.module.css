@@ -281,7 +281,7 @@
   border-radius: var(--radius);
   border: 1px solid hsl(0 65% 50% / 0.3);
   background: hsl(0 65% 50% / 0.08);
-  color: hsl(0 70% 30%);
+  color: hsl(0 80% 20%);
   font-weight: 700;
   font-size: 0.85rem;
   cursor: pointer;
@@ -310,7 +310,7 @@
   background: hsl(0 65% 50% / 0.1);
   border: 1px solid hsl(0 65% 50% / 0.3);
   border-radius: var(--radius);
-  color: hsl(0 70% 30%);
+  color: hsl(0 80% 20%);
   font-size: 0.9rem;
   font-weight: 600;
 }
