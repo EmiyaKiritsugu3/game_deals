@@ -1,17 +1,4 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "crons": [
-    {
-      "path": "/api/cron/ingest-prices",
-      "schedule": "0 */4 * * *"
-    },
-    {
-      "path": "/api/cron/reindex-typesense",
-      "schedule": "0 2 * * *"
-    },
-    {
-      "path": "/api/cron/check-alerts",
-      "schedule": "0 * * * *"
-    }
-  ]
+  "crons": []
 }

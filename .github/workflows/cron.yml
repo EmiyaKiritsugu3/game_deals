@@ -1,0 +1,33 @@
+name: Cron Jobs
+on:
+  schedule:
+    - cron: '0 */4 * * *'   # ingest-prices every 4h
+    - cron: '0 2 * * *'      # reindex-typesense daily 2am UTC
+    - cron: '0 * * * *'      # check-alerts hourly
+  workflow_dispatch:
+
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: ingest-prices
+        run: |
+          curl -sSf -X POST "${{ secrets.VERCEL_APP_URL }}/api/cron/ingest-prices" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -w "ingest-prices: HTTP %{http_code}\n"
+        timeout-minutes: 4
+
+      - name: reindex-typesense
+        run: |
+          curl -sSf -X POST "${{ secrets.VERCEL_APP_URL }}/api/cron/reindex-typesense" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -w "reindex-typesense: HTTP %{http_code}\n"
+        timeout-minutes: 4
+
+      - name: check-alerts
+        run: |
+          curl -sSf -X POST "${{ secrets.VERCEL_APP_URL }}/api/cron/check-alerts" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -w "check-alerts: HTTP %{http_code}\n"
+        timeout-minutes: 4
