@@ -3,6 +3,7 @@
 import { sql } from 'drizzle-orm';
 import { resolveGameUuid } from '@/actions/deals';
 import { db } from '@/db';
+import type { PriceAlertWithGame } from '@/types/price-alert';
 import { createClient } from '@/utils/supabase/server';
 
 // fallow-ignore-next-line complexity
@@ -41,13 +42,14 @@ export async function getUserAlertsAction() {
   } = await supabase.auth.getUser();
   if (!user) return [];
 
-  return db.execute(sql`
-    SELECT pa.*, g.title, g."thumbUrl"
+  const rows = await db.execute(sql`
+    SELECT pa.*, g.title, g."thumbUrl", g."cheapsharkId" AS cheapshark_id
     FROM price_alerts pa
     JOIN games g ON g.id = pa."gameId"
     WHERE pa."userId" = ${user.id}::uuid AND pa."isActive" = 1
     ORDER BY pa."createdAt" DESC
   `);
+  return Array.from(rows as unknown as Array<PriceAlertWithGame>);
 }
 
 // fallow-ignore-next-line unused-export
