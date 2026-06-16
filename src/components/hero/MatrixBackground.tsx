@@ -21,6 +21,7 @@ export function MatrixBackground({ deals }: { deals: Deal[] }) {
                     width={200}
                     height={130}
                     className={styles.matrixImg}
+                    unoptimized
                   />
                 </div>
               );

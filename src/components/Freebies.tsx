@@ -30,6 +30,7 @@ export default function Freebies({ deals }: FreebiesProps) {
                   fill
                   className={styles.image}
                   sizes="220px"
+                  unoptimized
                 />
                 <div className={styles.freeBadge}>GRÁTIS</div>
               </div>
