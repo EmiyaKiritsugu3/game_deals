@@ -1041,7 +1041,7 @@ Check `src/utils/supabase/middleware.ts` for:
 src/middleware.ts: matcher includes all routes except static files
 ```
 
-If the middleware runs on `/api/cron/*` routes, it could interfere with cron endpoints.
+Cron routes (`/api/cron/*`) are excluded from the auth middleware matcher in `src/middleware.ts` via negative lookahead (`api/cron`). If you add new cron routes, ensure they remain excluded.
 
 ### Mitigation
 
