@@ -23,6 +23,9 @@ src/app/
 ├── search/
 │   └── page.tsx            # Search with filters (CheapShark)
 │
+├── alerts/
+│   └── page.tsx            # Price alerts list with delete + View Game
+│
 ├── wishlist/
 │   ├── page.tsx            # Protected dashboard (wishlist + alerts)
 │   └── shared/
@@ -168,7 +171,30 @@ If deals is empty, displays "No deals found" with suggestion to adjust filters.
 
 ---
 
-## 6. Wishlist (`/wishlist`)
+## 6. Alerts (`/alerts`) — NEW (Sprint 15)
+
+**Route:** `src/app/alerts/page.tsx` — Client Component with TanStack Query.
+
+**Data flow:**
+1. Page mounts → checks `useAuth().isLoggedIn` (Zustand store)
+2. If authed: `useQuery({ queryKey: ['alerts'], queryFn: getUserAlertsAction })` fetches from Supabase via server action
+3. The server action does `SELECT pa.*, g.title, g."thumbUrl", g."cheapsharkId" AS cheapshark_id FROM price_alerts pa JOIN games g ...`
+4. Returns typed `Array<PriceAlertWithGame>` (not `Record<string, unknown>`)
+
+**States:** SignInPrompt (unauthed), LoadingState, ErrorState, EmptyState, populated card grid.
+
+**Delete flow:**
+1. User clicks "Remove" → `useMutation({ mutationFn: deletePriceAlertAction })`
+2. `onSuccess` → calls `useAlerts.removeAlert(cheapsharkId)` (localStorage sync) + `invalidateQueries(['alerts'])` (TanStack refetch)
+3. Without the localStorage sync, `SyncManager` would re-upsert the deleted alert within 1s.
+
+**Standalone page vs wishlist tab:** The `AlertsGrid` component on the wishlist page reads from `useAlerts` (Zustand localStorage). The standalone `/alerts` page reads from Supabase DB. These two views can diverge — the modal creates alerts in localStorage only; SyncManager bridges to DB asynchronously.
+
+**Vercel cron schedule:** `/api/cron/check-alerts` (hourly, via `vercel.json`).
+
+---
+
+## 7. Wishlist (`/wishlist`)
 
 **Client Component** (`'use client'`) in `src/app/wishlist/page.tsx`. Route protected by middleware — unauthenticated user is redirected to `/` with `?auth=required`.
 

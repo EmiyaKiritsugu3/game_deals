@@ -104,7 +104,7 @@
 | # | Component | Data Flow | Threat Description | STRIDE | Risk | Mitigation |
 |---|-----------|-----------|--------------------|--------|------|------------|
 | T5.1 | CheapShark API | TB5 | Rate-limiting by CheapShark if too many requests sent. | DoS | Low | `revalidate: 3600` cache on `getDealsAction` and `getGameAction`. Cron job runs every 4h with single batch request (100 deals). ISR home page caches for 1h. |
-| T5.2 | Database | TB2 | Expensive queries or bulk inserts overwhelm Postgres. | DoS | Medium | Batch inserts in chunks of 50 (price_history). Indexes on `deals_gameId_idx`, `deals_store_game_idx`, `deals_rating_idx`, `ph_game_store_recorded_idx`, `pa_user_game_idx`. Drizzle ORM protects against N+1 via eager loading. |
+| T5.2 | Database | TB2 | Expensive queries or bulk inserts overwhelm Postgres. | DoS | Medium | Batch inserts in chunks of 50 (price_history). Indexes on `deals_gameId_idx`, `deals_store_game_idx`, `deals_rating_idx`, `ph_game_store_recorded_idx`, `pa_user_game_unique`. Drizzle ORM protects against N+1 via eager loading. |
 | T5.3 | Typesense | TB4 | Unauthenticated search flooding. | DoS | Low | Typesense search uses `NEXT_PUBLIC_TYPESENSE_SEARCH_KEY` (not secret but rate-limited). Server-side indexing uses admin key. No rate limiting implemented — rely on Typesense host-level controls. |
 | T5.4 | Cron Jobs | TB3 | Malicious actor triggers `/api/cron/*` repeatedly. | DoS | Medium | `CRON_SECRET` Bearer token protection prevents unauthorized invocation. In Vercel production, cron endpoints additionally restricted to Vercel Cron system. |
 

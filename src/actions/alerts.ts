@@ -3,6 +3,7 @@
 import { sql } from 'drizzle-orm';
 import { resolveGameUuid } from '@/actions/deals';
 import { db } from '@/db';
+import type { PriceAlertWithGame } from '@/types/price-alert';
 import { createClient } from '@/utils/supabase/server';
 
 // fallow-ignore-next-line complexity
@@ -30,7 +31,7 @@ export async function createPriceAlertAction(
       "isActive" = 1
     RETURNING *
   `);
-  return (inserted as unknown as Array<Record<string, unknown>>)[0];
+  return inserted[0] as Record<string, unknown>;
 }
 
 // fallow-ignore-next-line unused-export
@@ -41,13 +42,14 @@ export async function getUserAlertsAction() {
   } = await supabase.auth.getUser();
   if (!user) return [];
 
-  return db.execute(sql`
-    SELECT pa.*, g.title, g."thumbUrl"
+  const result = await db.execute<PriceAlertWithGame>(sql`
+    SELECT pa.*, g.title, g."thumbUrl", g."cheapsharkId" AS cheapshark_id
     FROM price_alerts pa
     JOIN games g ON g.id = pa."gameId"
     WHERE pa."userId" = ${user.id}::uuid AND pa."isActive" = 1
     ORDER BY pa."createdAt" DESC
   `);
+  return result;
 }
 
 // fallow-ignore-next-line unused-export
@@ -59,7 +61,7 @@ export async function deletePriceAlertAction(alertId: string) {
   if (!user) throw new Error('Unauthorized');
 
   const rows = await db.execute(sql`SELECT "userId" FROM price_alerts WHERE id = ${alertId}::uuid`);
-  const alert = (rows as unknown as Array<{ userId: string }>)[0];
+  const alert = rows[0] as { userId: string } | undefined;
   if (!alert || alert.userId !== user.id) throw new Error('Forbidden');
 
   await db.execute(sql`DELETE FROM price_alerts WHERE id = ${alertId}::uuid`);
@@ -73,11 +75,14 @@ export async function checkTriggeredAlertsAction(): Promise<{
   const countResult = await db.execute(
     sql`SELECT COUNT(*)::int AS cnt FROM price_alerts WHERE "isActive" = 1`
   );
-  const checked = Number((countResult as unknown as Array<{ cnt: number }>)[0]?.cnt ?? 0);
+  const countRow = countResult[0] as { cnt: number } | undefined;
+  const checked = Number(countRow?.cnt ?? 0);
 
-  const rows = await db.execute(sql`SELECT * FROM public.check_alerts_for_all()`);
+  const triggeredRows = await db.execute<Record<string, unknown>>(
+    sql`SELECT * FROM public.check_alerts_for_all()`
+  );
 
-  const triggered = (rows as unknown as Array<Record<string, unknown>>).map((r) => ({
+  const triggered = triggeredRows.map((r) => ({
     userId: r.user_id,
     gameId: r.game_id,
     storeId: r.store_id,

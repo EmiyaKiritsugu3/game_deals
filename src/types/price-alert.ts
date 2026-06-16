@@ -6,3 +6,19 @@ export interface PriceAlert {
   isKeyshopAllowed: boolean;
   createdAt: number;
 }
+
+export interface PriceAlertWithGame {
+  id: string;
+  userId: string;
+  gameId: string;
+  targetPrice: number;
+  storeId: string | null;
+  isActive: number;
+  currentPrice: number | null;
+  lastCheckedAt: Date | null;
+  createdAt: Date;
+  title: string;
+  thumbUrl: string | null;
+  cheapshark_id: string;
+  [key: string]: unknown;
+}

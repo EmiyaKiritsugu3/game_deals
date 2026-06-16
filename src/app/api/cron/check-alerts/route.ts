@@ -8,7 +8,12 @@ export async function GET(request: Request) {
   if (authError) return authError;
 
   try {
-    const { checked, triggered } = await checkTriggeredAlertsAction();
+    const { checked, triggered } = await Promise.race([
+      checkTriggeredAlertsAction(),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('check-alerts timed out after 290s')), 290_000)
+      ),
+    ]);
 
     for (const a of triggered) {
       console.log(

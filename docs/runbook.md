@@ -1041,7 +1041,32 @@ Check `src/utils/supabase/middleware.ts` for:
 src/middleware.ts: matcher includes all routes except static files
 ```
 
-If the middleware runs on `/api/cron/*` routes, it could interfere with cron endpoints.
+Cron routes (`/api/cron/*`) are excluded from the auth middleware matcher in `src/middleware.ts` via negative lookahead (`api/cron`). If you add new cron routes, ensure they remain excluded.
+
+### Cron Runner Migration (Sprint 15)
+
+As of Sprint 15, cron jobs run on **GitHub Actions** (`.github/workflows/cron.yml`), not Vercel Cron Jobs, due to Vercel Hobby plan limits (1 execution per cron per day).
+
+**Current setup:**
+- 3 schedules defined in `.github/workflows/cron.yml` (same timing as before)
+- `vercel.json` crons array is empty (all scheduling handled by GH Actions)
+- The API endpoints (`/api/cron/*`) still run on Vercel — called via HTTP from GH Actions with `CRON_SECRET` auth
+- Endpoints are still excluded from auth middleware
+
+**Adding a new cron job:**
+1. Add the job to `.github/workflows/cron.yml` (same format as existing jobs)
+2. Ensure the Vercel endpoint exists (e.g., `src/app/api/cron/<name>/route.ts`)
+3. The endpoint must use `verifyCronAuth(request)` for auth
+4. No changes needed to `vercel.json`
+
+**Manual trigger:**
+```bash
+# Trigger all cron jobs
+gh workflow run cron.yml
+
+# Trigger a specific job (if workflow_dispatch inputs configured)
+gh workflow run cron.yml
+```
 
 ### Mitigation
 
