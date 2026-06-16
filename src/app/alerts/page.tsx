@@ -47,7 +47,7 @@ function SignInPrompt() {
   );
 }
 
-function ErrorState({ message }: { message: string }) {
+function ErrorState({ message }: { readonly message: string }) {
   return (
     <div className={styles.emptyState}>
       <h2 className={styles.emptyTitle}>Something went wrong</h2>
@@ -151,7 +151,7 @@ export default function AlertsPage() {
                             : styles.currentPrice
                         }
                       >
-                        {row.currentPrice != null
+                        {row.currentPrice !== null && row.currentPrice !== undefined
                           ? `$${Number(row.currentPrice).toFixed(2)}`
                           : 'N/A'}
                       </span>
