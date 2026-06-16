@@ -34,6 +34,7 @@ This runs 6 gates in sequence (stops on first failure):
 |------|---------|----------------|
 | 1. Lint | `pnpm lint` | Biome code style & correctness |
 | 2. Type check | `pnpm exec tsc --noEmit` | TypeScript compilation errors |
+| 7. SonarCloud quality gate | `.github/workflows/ci.yml` | Static analysis via SonarCloud (Security, Reliability, Maintainability) |
 | 3. Tests + Coverage | `pnpm test:coverage` | Vitest unit tests pass, coverage threshold met |
 | 4. Build | `pnpm build` | Production build succeeds (requires `.env.local`) |
 | 5. Dead code | `pnpm knip --no-exit-code` | Unused exports/dependencies (warning only) |
@@ -129,7 +130,7 @@ Feature branch → Pull Request → CI checks → Merge to main → Tag → Verc
    - Link to related issue (if applicable)
 
 5. CI runs automatically on PR (see `.github/workflows/ci.yml`):
-   - Lint → TypeScript check → Tests + Coverage → Build → Dead code analysis
+   - Lint → TypeScript check → Tests + Coverage → Build → Dead code analysis → SonarCloud quality gate
    - All steps must pass green.
    - Required secrets use `${{ secrets.X || 'placeholder' }}` pattern, so CI passes on forks.
 
@@ -214,7 +215,7 @@ Deployment is fully automated. No manual CLI commands needed.
 
 ### 4.2 Cron Jobs
 
-After deployment, verify that cron jobs are registered:
+After deployment, verify that cron jobs are registered in **GitHub Actions** (not Vercel):
 
 | Endpoint | Schedule | Purpose |
 |----------|----------|---------|
@@ -222,7 +223,13 @@ After deployment, verify that cron jobs are registered:
 | `/api/cron/reindex-typesense` | Daily | Rebuild Typesense search index |
 | `/api/cron/check-alerts` | Every hour | Check price alerts |
 
-Cron jobs are defined in `vercel.json` and auto-detected on deploy.
+Cron jobs are defined in `.github/workflows/cron.yml`. The API endpoints still run on Vercel — GitHub Actions calls them via HTTP with `CRON_SECRET` auth. To trigger manually:
+
+```bash
+gh workflow run cron.yml
+```
+
+> **Note:** This migration from Vercel Cron (Hobby limit: 1 execution/day) to GitHub Actions was done in Sprint 15.
 
 ### 4.3 Vercel Environment Variables
 

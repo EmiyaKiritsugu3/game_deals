@@ -27,14 +27,21 @@ Before clicking "Deploy", open the **Environment Variables** section and add the
 
 ## 4. Deploy and Cron Jobs
 1. Click **Deploy**.
-2. Once finished, the **Cron Jobs** (the alert worker) will be detected automatically because of the `vercel.json` file.
-3. To monitor executions, go to **Settings** > **Cron Jobs** in your project's Vercel dashboard.
+2. Cron scheduling is handled by **GitHub Actions** (`.github/workflows/cron.yml`), not Vercel.
+3. The API endpoints run on Vercel and are called by GitHub Actions via HTTP with `CRON_SECRET` auth.
+4. To monitor cron executions, go to **GitHub > Actions > Cron Jobs**.
+5. To trigger manually: `gh workflow run cron.yml`
 
 ## 5. Test the Alert Worker (Cron)
 You can manually test if price tracking is working without waiting for the scheduled time:
-1. Go to the **Functions** tab in the Vercel dashboard.
-2. There you will see the execution log for `/api/cron/check-alerts`.
-3. If you want to force an execution to test whether it finds alerts in your database, click the **Run** button on the Cron Jobs tab.
+1. Open **GitHub > Actions > Cron Jobs**.
+2. Click **Run workflow > Run workflow** (uses `workflow_dispatch`).
+3. Or trigger locally:
+   ```bash
+   curl -v http://localhost:3000/api/cron/check-alerts \
+     -H "authorization: Bearer $CRON_SECRET"
+   ```
+4. Check the execution logs in GitHub Actions tab.
 
 🚀 **Pro tip:** Once the site is live, you can configure a custom domain (e.g., `mycheapgames.com`) in **Settings** > **Domains**.
 

@@ -5,7 +5,13 @@ export async function fetchGameFromCheapShark(id: string): Promise<GameDetails |
   const url = new URL('https://www.cheapshark.com/api/1.0/games');
   url.searchParams.append('id', id);
   try {
-    const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    const res = await fetch(url.toString(), {
+      signal: controller.signal,
+      next: { revalidate: 3600 },
+    });
+    clearTimeout(timeout);
     if (!res.ok) return null;
     return (await res.json()) as GameDetails;
   } catch {

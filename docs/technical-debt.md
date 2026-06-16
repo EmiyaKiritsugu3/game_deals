@@ -109,6 +109,26 @@ Tracking known technical debt items across the GameDeals codebase. Items priorit
 
 ---
 
+## P0 ✅ — (CLOSED) SonarQube: CRON_SECRET Exposure in Run Block
+
+**Issue:** `${{ secrets.CRON_SECRET }}` and `${{ secrets.VERCEL_APP_URL }}` were interpolated directly in `run:` blocks in `.github/workflows/cron.yml`. The secret values appeared in process arguments (`/proc/PID/cmdline`), visible to any process on the same runner.
+
+**Resolution (today):** Moved both secrets to `jobs.cron.env` and referenced as `$CRON_SECRET` / `$VERCEL_APP_URL` — standard GitHub security hardening.
+
+---
+
+## P0 — SonarCloud Quality Gate Active
+
+**Status:** Integrated in Sprint 15 (commit c1934e6). CI now runs SonarCloud analysis on every PR and push to main. Quality gate must pass before merge.
+
+**SonarQube fixes applied:**
+- Middleware matcher: replaced `String.raw` template literal with `RegExp` constructor
+- Component props: marked as `Readonly`
+- CSS contrast: darkened red for `browseButton` hover (WCAG AA)
+- Cron secrets: moved to `env` block (above)
+
+---
+
 ## P10 — Sprint 15: Dual-Storage Architecture for Alerts
 
 **Issue:** Price alerts have two sources of truth:

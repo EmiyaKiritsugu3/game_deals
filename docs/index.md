@@ -110,6 +110,7 @@ Full listing: [ADR Index](adr/README.md) | Template: [New ADR](adr/_template.md)
 |--------|-------------|
 | [PR #10 — Quality Fix](reports/pr10-session-report.md) | Biome quality pipeline fix, removed 4 global `"off"` rules, 35 inline suppressions |
 | [PR #12 — P0 Notifications Pipeline](reports/pr12-session-report.md) | UUID FK fix, storeId varchar, in-app notifications, audit fixes |
+| [PR #15 — Price Alerts E2E](reports/pr15-session-report.md) | /alerts page, GitHub Actions cron, SonarCloud, component tests, 215 tests |
 
 ---
 

@@ -20,22 +20,25 @@ export default async function HistoricalLows() {
   const hlCandidates = Array.from(uniqueCandidatesMap.values()).slice(0, 50);
 
   // 3. Strict verification against actual 'cheapestPriceEver'
-  const verifiedHLs = await Promise.all(
+  const results = await Promise.allSettled(
     hlCandidates.map(async (deal) => {
-      try {
-        const gameInfo = await getGame(deal.gameID);
-        if (!gameInfo?.cheapestPriceEver) return null;
+      const gameInfo = await getGame(deal.gameID);
+      if (!gameInfo?.cheapestPriceEver) return null;
 
-        const currentPrice = Number.parseFloat(deal.salePrice);
-        const historicalLow = Number.parseFloat(gameInfo.cheapestPriceEver.price);
+      const currentPrice = Number.parseFloat(deal.salePrice);
+      const historicalLow = Number.parseFloat(gameInfo.cheapestPriceEver.price);
 
-        // Strict HL check: current price must be within 1% of the historical low
-        return currentPrice <= historicalLow * 1.01 ? deal : null;
-      } catch (_e) {
-        return null;
-      }
+      // Strict HL check: current price must be within 1% of the historical low
+      return currentPrice <= historicalLow * 1.01 ? deal : null;
     })
   );
+  const verifiedHLs = results
+    .filter(
+      (r): r is PromiseFulfilledResult<(typeof hlCandidates)[number] | null> =>
+        r.status === 'fulfilled'
+    )
+    .map((r) => r.value)
+    .filter((d): d is (typeof hlCandidates)[number] => d !== null);
 
   const hlDeals = verifiedHLs
     .filter((d): d is (typeof hlCandidates)[number] => d !== null)

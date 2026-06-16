@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import DealRow from '@/components/DealRow';
 import EndingSoon from '@/components/EndingSoon';
 import FlashSales from '@/components/FlashSales';
@@ -90,8 +91,12 @@ export default async function Home() {
 
         {/* Historical Lows + Ending Soon (Now modular) */}
         <div className={styles.splitLayout}>
-          <HistoricalLows />
-          <EndingSoon />
+          <Suspense fallback={null}>
+            <HistoricalLows />
+          </Suspense>
+          <Suspense fallback={null}>
+            <EndingSoon />
+          </Suspense>
         </div>
       </div>
 
