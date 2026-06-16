@@ -228,3 +228,57 @@ Final cumulative report: `.sisyphus/evidence/final-qa/audit-gap-closure-report.m
 ### Technical Debt Changes
 - P6 (knip unused types/exports) closed: 9 unused types removed, 4 unused exports removed.
 - P1 (complexity suppressions): 1 function extracted (buildGameEntry), remaining CRITICAL count: 0.
+
+---
+
+## Session Learnings (PR #19 — Production Freeze Fix — 2026-06-16)
+
+### ⚠️ CRITICAL: `else logout()` in `onAuthStateChange` = Infinite Loop
+
+**NEVER** call `logout()` (which calls `supabase.auth.signOut()`) inside the callback of `onAuthStateChange`. 
+
+**The loop**: `onAuthStateChange` fires `SIGNED_OUT` → `logout()` → `supabase.auth.signOut()` → triggers `SIGNED_OUT` event → `onAuthStateChange` fires again → **∞**
+
+**Correct pattern**:
+```tsx
+supabase.auth.onAuthStateChange((_event, session) => {
+  if (session?.user) setUser(session.user);
+  else setUser(null);  // ✅ Just clear local state. NO signOut() call.
+});
+```
+
+**Wrong pattern** (FREEZES THE SITE):
+```tsx
+supabase.auth.onAuthStateChange((_event, session) => {
+  if (session?.user) setUser(session.user);
+  else logout();  // ❌ signOut() → SIGNED_OUT event → loop!
+});
+```
+
+**Source of bug**: Commit `75fd0db` on `chore/audit-gap-closure` branch — Navbar refactor extracted auth subscription to `useAuthSubscription.ts` and changed `setUser(null)` (inline) to `else logout()` (extracted hook).
+
+**Evidence**: Playwright test — 26s, 9 page navigations, zero auth errors. Single line change resolved the freeze.
+
+### NuqsAdapter Already Has Internal Suspense
+
+`NuqsAdapter` (`nuqs/adapters/next/app`) wraps `NavigationSpy` in its own `<Suspense>` internally. Placing NuqsAdapter outside an external `<Suspense>` does NOT cause BAILOUT. The external Suspense should wrap only the consumer components (Navbar/SearchBox), not NuqsAdapter itself.
+
+### Multiple Supabase Clients = Auth State Chaos
+
+Always use a SINGLETON `createBrowserClient` pattern:
+```ts
+let client: ReturnType<typeof createClient> | null = null;
+export function getBrowserClient() {
+  if (!client) client = createClient();
+  return client;
+}
+```
+Never: module-level `const supabase = createClient()` (AuthModal anti-pattern), separate `createClient()` calls per effect, or duplicate `getSupabase()` functions.
+
+### Supabase `signOut()` Always Fires `SIGNED_OUT` Event
+
+Context7-confirmed: `signOut()` fires `SIGNED_OUT` which triggers `onAuthStateChange` callback — even if no session exists. This is what makes the `else logout()` loop possible.
+
+### Playwright + Font Blocking
+
+Font requests (`.woff2`) can cause `page.screenshot` to hang. Use `page.route` to abort font requests before taking screenshots.
