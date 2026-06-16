@@ -31,6 +31,7 @@ export default function GameHero({
         className={styles.heroImage}
         priority={priority}
         sizes="(max-width: 768px) 100vw, 50vw"
+        unoptimized
       />
       <div className={styles.heroOverlay} />
       <div className={styles.heroContent}>

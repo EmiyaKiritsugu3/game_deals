@@ -120,7 +120,14 @@ export default async function DealRow({ deal, rank: _rank }: DealRowProps) {
   return (
     <Link href={`/game/${deal.gameID}`} className={styles.row}>
       <div className={styles.imageContainer}>
-        <Image src={highResThumb} alt={deal.title} fill className={styles.image} sizes="100px" />
+        <Image
+          src={highResThumb}
+          alt={deal.title}
+          fill
+          className={styles.image}
+          sizes="100px"
+          unoptimized
+        />
         <div className={styles.topRightActions}>
           <PriceAlertBadge gameID={deal.gameID} />
           <HeartButton gameID={deal.gameID} className={styles.heartWrapper} />

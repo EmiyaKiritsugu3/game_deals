@@ -82,6 +82,7 @@ export default function WishlistGrid({ games, stores, isLoading = false }: Wishl
               fill
               sizes="(max-width: 768px) 100vw, 33vw"
               className={styles.image}
+              unoptimized
             />
             <div className={styles.cardActions}>
               <PriceAlertTrigger

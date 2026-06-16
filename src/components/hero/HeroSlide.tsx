@@ -21,7 +21,7 @@ export function HeroSlide({
   return (
     <div className={`${styles.slide} ${isActive ? styles.active : ''}`} aria-hidden={!isActive}>
       <div className={styles.backgroundBlur}>
-        <Image src={dealThumb} alt="background blur" fill className={styles.blurImg} />
+        <Image src={dealThumb} alt="background blur" fill className={styles.blurImg} unoptimized />
       </div>
 
       <div className="container">
@@ -87,6 +87,7 @@ export function HeroSlide({
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className={styles.heroImage}
                 priority={index === 0}
+                unoptimized
               />
             </div>
           </div>

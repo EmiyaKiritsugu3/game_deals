@@ -59,6 +59,7 @@ export default async function GameCard({ deal }: { deal: Deal }) {
             fill
             className={styles.image}
             sizes="(max-width: 768px) 50vw, 25vw"
+            unoptimized
           />
           <div className={styles.topRightActions}>
             <PriceAlertBadge gameID={deal.gameID} />
