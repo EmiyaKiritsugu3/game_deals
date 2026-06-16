@@ -1,0 +1,327 @@
+.main {
+  padding: 3rem 0;
+  min-height: calc(100vh - 120px);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: hsl(var(--foreground));
+  margin: 0;
+}
+
+.subtitle {
+  color: hsl(var(--muted-foreground));
+  font-size: 1rem;
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: hsl(var(--card));
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.5);
+  border-color: hsl(var(--primary) / 0.3);
+}
+
+.cardHeader {
+  padding: 0.75rem 1.25rem;
+  background: hsl(var(--primary) / 0.05);
+  border-bottom: 1px solid hsl(var(--primary) / 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.activeBell {
+  color: hsl(var(--primary));
+}
+
+.alertStatus {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: hsl(var(--primary));
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cardBody {
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex-grow: 1;
+}
+
+.thumbWrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: calc(var(--radius) - 2px);
+  background: hsl(var(--muted));
+}
+
+.thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cardTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+  color: hsl(var(--foreground));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.priceGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+  background: hsl(var(--muted) / 0.3);
+  border-radius: 12px;
+}
+
+.priceBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.priceLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: hsl(var(--muted-foreground));
+  text-transform: uppercase;
+}
+
+.targetPrice {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: hsl(var(--primary));
+}
+
+.currentPrice {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: hsl(var(--foreground));
+}
+
+.currentPriceMet {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: hsl(142 76% 36%);
+}
+
+.storeInfo {
+  font-size: 0.85rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.cardFooter {
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid hsl(var(--border) / 0.5);
+  display: flex;
+  gap: 0.75rem;
+}
+
+.viewGameBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius);
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition:
+    transform 0.15s,
+    box-shadow 0.2s;
+}
+
+.viewGameBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px hsl(var(--primary) / 0.3);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem;
+  background: hsl(var(--card) / 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px dashed hsl(var(--border) / 0.6);
+  border-radius: var(--radius);
+  gap: 1rem;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.emptyIcon {
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+}
+
+.emptyTitle {
+  font-size: 1.75rem;
+  color: hsl(var(--foreground));
+  margin: 0;
+}
+
+.emptyText {
+  color: hsl(var(--muted-foreground));
+  max-width: 400px;
+  margin-bottom: 1rem;
+}
+
+.browseButton {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.browseButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px hsl(var(--primary) / 0.4);
+}
+
+.centerState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem;
+  gap: 1rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid hsl(var(--muted));
+  border-top-color: hsl(var(--primary));
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.viewGameBtnDisabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius);
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+  font-weight: 700;
+  font-size: 0.85rem;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.deleteBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid hsl(0 65% 50% / 0.3);
+  background: hsl(0 65% 50% / 0.08);
+  color: hsl(0 65% 50%);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    background 0.2s,
+    border-color 0.2s;
+}
+
+.deleteBtn:hover:not(:disabled) {
+  background: hsl(0 65% 50% / 0.15);
+  border-color: hsl(0 65% 50%);
+  transform: translateY(-2px);
+}
+
+.deleteBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.deleteError {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: hsl(0 65% 50% / 0.1);
+  border: 1px solid hsl(0 65% 50% / 0.3);
+  border-radius: var(--radius);
+  color: hsl(0 65% 50%);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.dismissError {
+  background: none;
+  border: 1px solid hsl(0 65% 50% / 0.3);
+  color: hsl(0 65% 50%);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
