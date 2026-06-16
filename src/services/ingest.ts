@@ -16,7 +16,7 @@ interface CheapSharkDeal {
 export async function fetchCheapSharkDeals(): Promise<CheapSharkDeal[]> {
   const res = await fetch(
     'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100',
-    { next: { revalidate: 0 } }
+    { headers: { 'User-Agent': 'GameDeals/1.0' }, next: { revalidate: 0 } }
   );
   if (!res.ok) throw new Error(`CheapShark API returned ${res.status}`);
   const deals = (await res.json()) as CheapSharkDeal[];

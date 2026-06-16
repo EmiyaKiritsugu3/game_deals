@@ -19,6 +19,10 @@ import type { Deal, GameDetails, Store } from '@/types/game';
 
 const BASE_URL = 'https://www.cheapshark.com/api/1.0';
 
+const API_HEADERS = {
+  'User-Agent': 'GameDeals/1.0 (https://gamedeals.com.br)',
+};
+
 export { formatTimeAgo, getHighResImage } from '@/utils/pricing';
 
 export function getStoreLogo(storeID: string): string | null {
@@ -55,7 +59,10 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
   }
 
   try {
-    const res = await fetch(url.toString(), { next: { revalidate: 3600 } });
+    const res = await fetch(url.toString(), {
+      headers: API_HEADERS,
+      next: { revalidate: 3600 },
+    });
     if (!res.ok) return fallbackDeals;
     const data = (await res.json()) as Deal[];
     return data.length > 0 ? data : fallbackDeals;
@@ -66,7 +73,10 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
 }
 
 export async function getStores(): Promise<Record<string, string>> {
-  const res = await fetch(`${BASE_URL}/stores`, { next: { revalidate: 86400 } });
+  const res = await fetch(`${BASE_URL}/stores`, {
+    headers: API_HEADERS,
+    next: { revalidate: 86400 },
+  });
   const map: Record<string, string> = {};
 
   if (res.ok) {
