@@ -49,7 +49,7 @@ export async function getUserAlertsAction() {
     WHERE pa."userId" = ${user.id}::uuid AND pa."isActive" = 1
     ORDER BY pa."createdAt" DESC
   `);
-  return Array.from(result) as unknown as PriceAlertWithGame[];
+  return result as unknown as PriceAlertWithGame[];
 }
 
 // fallow-ignore-next-line unused-export
@@ -82,7 +82,7 @@ export async function checkTriggeredAlertsAction(): Promise<{
     sql`SELECT * FROM public.check_alerts_for_all()`
   );
 
-  const triggered = Array.from(triggeredRows).map((r) => ({
+  const triggered = triggeredRows.map((r) => ({
     userId: r.user_id,
     gameId: r.game_id,
     storeId: r.store_id,

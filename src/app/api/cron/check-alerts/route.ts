@@ -7,11 +7,13 @@ export async function GET(request: Request) {
   const authError = verifyCronAuth(request);
   if (authError) return authError;
 
-  const ac = new AbortController();
-  const timeout = setTimeout(() => ac.abort('check-alerts timeout'), 290_000);
-
   try {
-    const { checked, triggered } = await checkTriggeredAlertsAction();
+    const { checked, triggered } = await Promise.race([
+      checkTriggeredAlertsAction(),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('check-alerts timed out after 290s')), 290_000)
+      ),
+    ]);
 
     for (const a of triggered) {
       console.log(
@@ -28,7 +30,5 @@ export async function GET(request: Request) {
     const message = err instanceof Error ? err.message : 'Unknown error';
     console.error('check-alerts error:', message);
     return NextResponse.json({ error: 'Internal error checking alerts' }, { status: 500 });
-  } finally {
-    clearTimeout(timeout);
   }
 }
