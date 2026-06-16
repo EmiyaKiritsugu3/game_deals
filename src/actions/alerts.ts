@@ -88,7 +88,7 @@ export async function checkTriggeredAlertsAction(): Promise<{
     storeId: r.store_id,
     targetPrice: r.target_price,
     currentLowest: r.current_price,
-    alertId: r.alert_id,
+    notificationId: r.notification_id,
   }));
 
   return { checked, triggered };

@@ -141,7 +141,7 @@ describe('checkTriggeredAlertsAction', () => {
         store_id: 's1',
         target_price: 9.99,
         current_price: 7.5,
-        alert_id: 'n1',
+        notification_id: 'n1',
       },
       {
         user_id: 'u2',
@@ -149,7 +149,7 @@ describe('checkTriggeredAlertsAction', () => {
         store_id: null,
         target_price: 5.0,
         current_price: 4.0,
-        alert_id: 'n2',
+        notification_id: 'n2',
       },
     ]);
     const result = await checkTriggeredAlertsAction();
@@ -162,7 +162,7 @@ describe('checkTriggeredAlertsAction', () => {
           storeId: 's1',
           targetPrice: 9.99,
           currentLowest: 7.5,
-          alertId: 'n1',
+          notificationId: 'n1',
         },
         {
           userId: 'u2',
@@ -170,7 +170,7 @@ describe('checkTriggeredAlertsAction', () => {
           storeId: null,
           targetPrice: 5.0,
           currentLowest: 4.0,
-          alertId: 'n2',
+          notificationId: 'n2',
         },
       ],
     });
