@@ -1,0 +1,54 @@
+'use client';
+
+import { useEffect } from 'react';
+
+// biome-ignore lint/suspicious/noShadowRestrictedNames: Next.js error boundary convention
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  useEffect(() => {
+    console.error('Page error:', error);
+  }, [error]);
+
+  return (
+    <main
+      style={{
+        minHeight: '50vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem',
+        textAlign: 'center',
+      }}
+    >
+      <div>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.75rem' }}>
+          Something went wrong
+        </h1>
+        <p style={{ color: 'hsl(226 10% 65%)', marginBottom: '1.5rem', maxWidth: '400px' }}>
+          We couldn&apos;t load the deals right now. This might be temporary — please try again.
+        </p>
+        <button
+          type="button"
+          onClick={reset}
+          style={{
+            padding: '0.625rem 1.5rem',
+            backgroundColor: 'hsl(150 88% 27%)',
+            color: 'hsl(150 100% 85%)',
+            border: 'none',
+            borderRadius: '4px',
+            fontSize: '0.9rem',
+            fontWeight: 500,
+            cursor: 'pointer',
+          }}
+        >
+          Try again
+        </button>
+      </div>
+    </main>
+  );
+}

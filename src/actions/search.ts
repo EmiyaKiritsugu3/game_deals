@@ -23,12 +23,21 @@ export async function searchGamesAction(query: string, limit = 10) {
 
   if (!apiKey) {
     // Fallback: CheapShark API
-    const res = await fetch(
-      `https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(query)}&limit=${limit}`,
-      { headers: { 'User-Agent': 'GameDeals/1.0' } }
-    );
-    if (!res.ok) return [];
-    return (await res.json()) as Array<Record<string, string>>;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    try {
+      const res = await fetch(
+        `https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(query)}&limit=${limit}`,
+        { headers: { 'User-Agent': 'GameDeals/1.0' }, signal: controller.signal }
+      );
+      clearTimeout(timeout);
+      if (!res.ok) return [];
+      return (await res.json()) as Array<Record<string, string>>;
+    } catch (e) {
+      clearTimeout(timeout);
+      console.error('searchGamesAction (CheapShark fallback) error:', e);
+      return [];
+    }
   }
 
   try {
@@ -46,12 +55,21 @@ export async function searchGamesAction(query: string, limit = 10) {
 }
 
 async function fetchDealsForSync(): Promise<CheapSharkDeal[]> {
-  const res = await fetch(
-    'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100',
-    { headers: { 'User-Agent': 'GameDeals/1.0' } }
-  );
-  if (!res.ok) return [];
-  return (await res.json()) as CheapSharkDeal[];
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
+  try {
+    const res = await fetch(
+      'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100',
+      { headers: { 'User-Agent': 'GameDeals/1.0' }, signal: controller.signal }
+    );
+    clearTimeout(timeout);
+    if (!res.ok) return [];
+    return (await res.json()) as CheapSharkDeal[];
+  } catch (e) {
+    clearTimeout(timeout);
+    console.error('fetchDealsForSync error:', e);
+    return [];
+  }
 }
 
 /**
