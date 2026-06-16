@@ -42,14 +42,14 @@ export async function getUserAlertsAction() {
   } = await supabase.auth.getUser();
   if (!user) return [];
 
-  const result = await db.execute(sql`
+  const result = await db.execute<PriceAlertWithGame>(sql`
     SELECT pa.*, g.title, g."thumbUrl", g."cheapsharkId" AS cheapshark_id
     FROM price_alerts pa
     JOIN games g ON g.id = pa."gameId"
     WHERE pa."userId" = ${user.id}::uuid AND pa."isActive" = 1
     ORDER BY pa."createdAt" DESC
   `);
-  return result as unknown as PriceAlertWithGame[];
+  return result;
 }
 
 // fallow-ignore-next-line unused-export
@@ -88,7 +88,7 @@ export async function checkTriggeredAlertsAction(): Promise<{
     storeId: r.store_id,
     targetPrice: r.target_price,
     currentLowest: r.current_price,
-    notificationId: r.notification_id,
+    alertId: r.alert_id,
   }));
 
   return { checked, triggered };

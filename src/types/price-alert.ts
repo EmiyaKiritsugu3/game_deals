@@ -20,4 +20,5 @@ export interface PriceAlertWithGame {
   title: string;
   thumbUrl: string | null;
   cheapshark_id: string;
+  [key: string]: unknown;
 }
