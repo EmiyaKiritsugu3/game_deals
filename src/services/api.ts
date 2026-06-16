@@ -77,21 +77,26 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
 }
 
 export async function getStores(): Promise<Record<string, string>> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
-  const res = await fetch(`${BASE_URL}/stores`, {
-    headers: API_HEADERS,
-    signal: controller.signal,
-    next: { revalidate: 86400 },
-  });
-  clearTimeout(timeout);
   const map: Record<string, string> = {};
 
-  if (res.ok) {
-    const stores = (await res.json()) as Store[];
-    for (const s of stores) {
-      map[s.storeID] = s.storeName;
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(`${BASE_URL}/stores`, {
+      headers: API_HEADERS,
+      signal: controller.signal,
+      next: { revalidate: 86400 },
+    });
+    clearTimeout(timeout);
+
+    if (res.ok) {
+      const stores = (await res.json()) as Store[];
+      for (const s of stores) {
+        map[s.storeID] = s.storeName;
+      }
     }
+  } catch (_error) {
+    console.error('getStores error:', _error);
   }
 
   map['101'] = 'CDKeys';
