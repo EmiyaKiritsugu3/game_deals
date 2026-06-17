@@ -1,1 +1,22 @@
-pnpm check
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "=== Lint + Type Check ==="
+pnpm lint
+pnpm exec tsc --noEmit
+
+echo ""
+echo "=== Tests + Coverage ==="
+pnpm test:coverage
+
+echo ""
+echo "=== Build ==="
+[ ! -f .env.local ] && cp .env.example .env.local
+pnpm build
+
+echo ""
+echo "=== Dead Code ==="
+pnpm knip --no-exit-code
+
+echo ""
+echo "✓ Pre-push gates passed."
