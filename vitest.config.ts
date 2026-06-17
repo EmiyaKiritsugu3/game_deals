@@ -19,6 +19,12 @@ export default defineConfig({
         'src/scripts/**',
         'src/data/**',
         'src/db/**',
+        'src/app/global-error.tsx',
+        'src/app/auth/error/**',
+        'src/app/auth/auth-code-error/**',
+        'src/app/og.png/**',
+        'sentry.*.config.ts',
+        'src/instrumentation.ts',
       ],
       thresholds: {
         lines: 30,
