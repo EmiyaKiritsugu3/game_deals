@@ -32,7 +32,7 @@ describe('GET /api/cron/check-alerts', () => {
     checkTriggeredAlertsAction.mockResolvedValueOnce({
       checked: 10,
       triggered: [
-        { userId: 'u1', gameId: 'g1', currentLowest: 5.0, targetPrice: 10.0, notificationId: 'n1' },
+        { userId: 'u1', gameId: 'g1', currentLowest: 5, targetPrice: 10, notificationId: 'n1' },
       ],
     });
     const response = await GET(buildRequest());

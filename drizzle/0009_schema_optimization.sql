@@ -13,20 +13,14 @@
 --> statement-breakpoint
 
 -- Index 1: Partial index on active price_alerts for check_alerts_for_all() cron query
--- Query pattern: SELECT ... FROM price_alerts WHERE "isActive" = 1
--- Without this index, the cron job scans all rows every 4 hours.
 CREATE INDEX CONCURRENTLY IF NOT EXISTS "pa_active_game_idx"
   ON "public"."price_alerts" ("isActive", "gameId")
   WHERE "isActive" = 1;--> statement-breakpoint
 
 -- Index 2: Composite index on deals for ingest upsert dedup
--- Query pattern: SELECT ... FROM deals WHERE "gameId" = X AND "storeId" = Y AND "price" = Z
--- Used by buildDealsInsertValues() to detect duplicate rows before insert.
 CREATE INDEX CONCURRENTLY IF NOT EXISTS "deals_game_store_price_idx"
   ON "public"."deals" ("gameId", "storeId", "price");--> statement-breakpoint
 
 -- Index 3: Index on notifications for feed queries
--- Query pattern: SELECT ... FROM notifications WHERE "userId" = X ORDER BY "createdAt" DESC
--- Used by getNotificationsAction() and markAllNotificationsReadAction().
 CREATE INDEX CONCURRENTLY IF NOT EXISTS "notifications_user_created_idx"
   ON "public"."notifications" ("userId", "createdAt" DESC);

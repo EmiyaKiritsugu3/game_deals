@@ -2,14 +2,13 @@
 
 import { useEffect } from 'react';
 
-// biome-ignore lint/suspicious/noShadowRestrictedNames: Next.js error boundary convention
-export default function Error({
+export default function ErrorBoundary({
   error,
   reset,
-}: {
+}: Readonly<{
   error: Error & { digest?: string };
   reset: () => void;
-}) {
+}>) {
   useEffect(() => {
     console.error('Page error:', error);
   }, [error]);

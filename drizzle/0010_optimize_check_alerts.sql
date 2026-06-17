@@ -31,6 +31,7 @@ SET search_path = public, pg_temp
 AS $$
 DECLARE
   v_lock_key bigint;
+  c_kind CONSTANT text := 'price_alert';
 BEGIN
   -- Acquire 64-bit advisory lock (md5 → bigint) to prevent concurrent cron race conditions.
   -- Uses full 64-bit range vs 32-bit hashtext() which only has 2^32 slots.
@@ -77,7 +78,7 @@ BEGIN
   INSERT INTO notifications ("userId", kind, title, body, payload)
   SELECT
     d."userId",
-    'price_alert',
+    c_kind,
     format('Price drop: %s', d.game_title),
     format('Now $%s (target $%s)', d.lowest_price::text, d."targetPrice"::text),
     jsonb_build_object(
@@ -90,7 +91,7 @@ BEGIN
   WHERE NOT EXISTS (
     SELECT 1 FROM notifications n
     WHERE n."userId" = d."userId"
-      AND n.kind = 'price_alert'
+      AND n.kind = c_kind
       AND (n.payload->>'gameId')::uuid = d."gameId"
       AND (n.payload->>'targetPrice')::numeric = d."targetPrice"
       AND n."createdAt" > NOW() - INTERVAL '1 hour'
