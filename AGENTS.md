@@ -354,13 +354,41 @@ const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {  // ✅ bas
 
 **Key insight**: Use the namespace (`React.SyntheticEvent`) not the direct import (`import { SyntheticEvent }`). This matches the pattern in React docs examples (`React.ChangeEvent<HTMLInputElement>`) and avoids import confusion.
 
-### SonarCloud API vs UI Discrepancy
-The SonarCloud API (`api/issues/search`) can return 0 open issues even when the SonarCloud PR dashboard shows issues. This happens when:
-- The PR analysis hasn't been indexed yet (often a processing delay)
-- The issues are in a different scope (e.g., "new code" period only visible in the UI)
-- The API requires authentication for private projects
-
-**Always cross-reference**: If the API shows 0 but the user reports issues, check the PR analysis task status (`api/ce/task?id=...`) and the PR's quality gate. The UI is often more up-to-date than the API.
-
 ### SonarCloud S1874 Is Not Just About Import Style
 The rule fires for ANY usage of a `@deprecated` type, regardless of import style. Changing `React.FormEvent` to `import { FormEvent }` does NOT fix it — both are deprecated. The fix must replace the deprecated type entirely with a non-deprecated alternative. Always check `node_modules/@types/react/index.d.ts` for `@deprecated` tags to find the correct replacement.
+
+### Lucide-React v0.577 Deprecated All Brand Icons — Use simple-icons
+In lucide-react v0.577+, ALL brand icons (Github, Twitter, Slack, Facebook, Youtube, etc.) are `@deprecated` and will be removed in v1.0. They recommend migrating to [simple-icons](https://simpleicons.org/).
+
+**Wrong (S1874 — deprecated):**
+```tsx
+import { Github, Globe, ShieldCheck } from 'lucide-react';  // ❌ Github is deprecated
+<Github size={20} />
+```
+
+**Also wrong (S1874 — still deprecated):**
+```tsx
+import { GithubIcon, Globe, ShieldCheck } from 'lucide-react';  // ❌ GithubIcon = Github alias
+<GithubIcon size={20} />
+```
+
+**Right (S1874 — clean):**
+```tsx
+import { siGithub } from 'simple-icons';  // ✅ official simple-icons package
+
+<svg viewBox="0 0 24 24" width="20" height="20" fill={`#${siGithub.hex}`} aria-label={siGithub.title}>
+  <path d={siGithub.path} />
+</svg>
+```
+
+**Why this works**: `simple-icons` is the official replacement recommended by lucide-react. The package exports `si{BrandName}` objects with `path`, `title`, `hex`, and `slug` properties. Import only what you need — the package is tree-shakeable.
+
+**How to find @deprecated icons**: Check `node_modules/lucide-react/dist/lucide-react.d.ts` for `@deprecated Brand icons` and `q={brand}` in the message to identify which brands are deprecated.
+
+### SonarCloud Investigation: API vs UI Reliability
+When SonarCloud PR dashboard shows issues but the API returns 0, the UI is more reliable. The API may return 0 because:
+- The PR analysis hasn't been indexed yet (processing delay, observed delays of 30-90s)
+- The API requires authentication for private projects
+- The branch analysis (not PR-specific) may not match
+
+**Pragmatic workflow**: Trust the user's UI paste over the API. Investigate directly from `node_modules/@types/` for `@deprecated` annotations to confirm each issue.
