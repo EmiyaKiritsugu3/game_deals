@@ -32,6 +32,10 @@ AS $$
 DECLARE
   v_lock_key bigint;
   c_kind CONSTANT text := 'price_alert';
+  c_game_id CONSTANT text := 'gameId';
+  c_alert_id CONSTANT text := 'alertId';
+  c_current_price CONSTANT text := 'currentPrice';
+  c_target_price CONSTANT text := 'targetPrice';
 BEGIN
   -- Acquire 64-bit advisory lock (md5 → bigint) to prevent concurrent cron race conditions.
   -- Uses full 64-bit range vs 32-bit hashtext() which only has 2^32 slots.
@@ -82,27 +86,27 @@ BEGIN
     format('Price drop: %s', d.game_title),
     format('Now $%s (target $%s)', d.lowest_price::text, d."targetPrice"::text),
     jsonb_build_object(
-      'gameId', d."gameId",
-      'alertId', d.alert_id,
-      'currentPrice', d.lowest_price,
-      'targetPrice', d."targetPrice"
+      c_game_id, d."gameId",
+      c_alert_id, d.alert_id,
+      c_current_price, d.lowest_price,
+      c_target_price, d."targetPrice"
     )
   FROM deduped d
   WHERE NOT EXISTS (
     SELECT 1 FROM notifications n
     WHERE n."userId" = d."userId"
       AND n.kind = c_kind
-      AND (n.payload->>'gameId')::uuid = d."gameId"
-      AND (n.payload->>'targetPrice')::numeric = d."targetPrice"
+      AND (n.payload->>c_game_id)::uuid = d."gameId"
+      AND (n.payload->>c_target_price)::numeric = d."targetPrice"
       AND n."createdAt" > NOW() - INTERVAL '1 hour'
   )
   RETURNING
     id               AS notification_id,
     "userId"         AS user_id,
-    ("payload"->>'gameId')::uuid AS game_id,
+    ("payload"->>c_game_id)::uuid AS game_id,
     NULL::varchar    AS store_id,
-    ("payload"->>'targetPrice')::real AS target_price,
-    ("payload"->>'currentPrice')::real AS current_price;
+    ("payload"->>c_target_price)::real AS target_price,
+    ("payload"->>c_current_price)::real AS current_price;
 END;
 $$;--> statement-breakpoint
 
