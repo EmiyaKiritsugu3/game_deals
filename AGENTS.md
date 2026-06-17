@@ -327,3 +327,40 @@ expect(await response.json()).toMatchObject({ ... });
 
 ### Drizzle Schema Tests Are Declarative
 Schema files are pure type definitions — they define table shapes and indexes but produce no runtime code. TypeScript compilation (`tsc --noEmit`) is the only meaningful validation. Do not create artificial "schema tests" that just import and re-export — `tsc` already catches mismatches.
+
+---
+
+## Session Learnings (PR #19 — SonarCloud Fixes — 2026-06-17)
+
+### React 19 Types: FormEvent Is Deprecated — Use SyntheticEvent
+Both `FormEvent` and `FormEventHandler` are marked `@deprecated` in React 19 types with the message `"FormEvent doesn't actually exist"`. Forms fire native `SubmitEvent`, not `FormEvent` — the React type was always fictional.
+
+**Wrong (S1874 — deprecated):**
+```tsx
+import { type FormEvent } from 'react';  // ❌ imported FormEvent
+const handleSubmit = (e: FormEvent<HTMLFormElement>) => {  // ❌ deprecated usage
+  e.preventDefault();
+};
+```
+
+**Right (S1874 — clean):**
+```tsx
+const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {  // ✅ base event type
+  e.preventDefault();
+};
+```
+
+**Why this works**: `React.SyntheticEvent<T>` is the non-deprecated base type for all React synthetic events. It supports `preventDefault()`, `stopPropagation()`, `currentTarget`, `target`, etc. — everything a form handler needs. The React docs explicitly recommend it: *"If you need to use an event that is not included in this list, you can use the `React.SyntheticEvent` type."*
+
+**Key insight**: Use the namespace (`React.SyntheticEvent`) not the direct import (`import { SyntheticEvent }`). This matches the pattern in React docs examples (`React.ChangeEvent<HTMLInputElement>`) and avoids import confusion.
+
+### SonarCloud API vs UI Discrepancy
+The SonarCloud API (`api/issues/search`) can return 0 open issues even when the SonarCloud PR dashboard shows issues. This happens when:
+- The PR analysis hasn't been indexed yet (often a processing delay)
+- The issues are in a different scope (e.g., "new code" period only visible in the UI)
+- The API requires authentication for private projects
+
+**Always cross-reference**: If the API shows 0 but the user reports issues, check the PR analysis task status (`api/ce/task?id=...`) and the PR's quality gate. The UI is often more up-to-date than the API.
+
+### SonarCloud S1874 Is Not Just About Import Style
+The rule fires for ANY usage of a `@deprecated` type, regardless of import style. Changing `React.FormEvent` to `import { FormEvent }` does NOT fix it — both are deprecated. The fix must replace the deprecated type entirely with a non-deprecated alternative. Always check `node_modules/@types/react/index.d.ts` for `@deprecated` tags to find the correct replacement.
