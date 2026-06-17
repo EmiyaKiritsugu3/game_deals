@@ -14,13 +14,25 @@ interface CheapSharkDeal {
 }
 
 export async function fetchCheapSharkDeals(): Promise<CheapSharkDeal[]> {
-  const res = await fetch(
-    'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100',
-    { headers: { 'User-Agent': 'GameDeals/1.0' }, next: { revalidate: 0 } }
-  );
-  if (!res.ok) throw new Error(`CheapShark API returned ${res.status}`);
-  const deals = (await res.json()) as CheapSharkDeal[];
-  return deals || [];
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
+  try {
+    const res = await fetch(
+      'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100',
+      {
+        headers: { 'User-Agent': 'GameDeals/1.0' },
+        signal: controller.signal,
+        next: { revalidate: 0 },
+      }
+    );
+    clearTimeout(timeout);
+    if (!res.ok) throw new Error(`CheapShark API returned ${res.status}`);
+    const deals = (await res.json()) as CheapSharkDeal[];
+    return deals || [];
+  } catch (e) {
+    clearTimeout(timeout);
+    throw e;
+  }
 }
 
 export async function upsertGames(deals: CheapSharkDeal[]): Promise<Map<string, string>> {

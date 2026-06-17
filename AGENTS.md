@@ -4,7 +4,7 @@ This file provides guidance to OpenCode agent when working with code in this rep
 
 ## Repository Overview
 
-GameDeals is a game deal aggregator built with Next.js 16 App Router (React 19), Supabase SSR auth, Drizzle ORM, and TanStack Query. Data source is CheapShark API with Typesense search acceleration. Tests: 207 (Vitest) + Playwright visual regression.
+GameDeals is a game deal aggregator built with Next.js 16 App Router (React 19), Supabase SSR auth, Drizzle ORM, and TanStack Query. Data source is CheapShark API with Typesense search acceleration. Tests: 227 (Vitest) + Playwright visual regression + E2E.
 
 ## Commands
 
@@ -228,3 +228,167 @@ Final cumulative report: `.sisyphus/evidence/final-qa/audit-gap-closure-report.m
 ### Technical Debt Changes
 - P6 (knip unused types/exports) closed: 9 unused types removed, 4 unused exports removed.
 - P1 (complexity suppressions): 1 function extracted (buildGameEntry), remaining CRITICAL count: 0.
+
+---
+
+## Session Learnings (PR #19 — Production Freeze Fix — 2026-06-16)
+
+### ⚠️ CRITICAL: `else logout()` in `onAuthStateChange` = Infinite Loop
+
+**NEVER** call `logout()` (which calls `supabase.auth.signOut()`) inside the callback of `onAuthStateChange`. 
+
+**The loop**: `onAuthStateChange` fires `SIGNED_OUT` → `logout()` → `supabase.auth.signOut()` → triggers `SIGNED_OUT` event → `onAuthStateChange` fires again → **∞**
+
+**Correct pattern**:
+```tsx
+supabase.auth.onAuthStateChange((_event, session) => {
+  if (session?.user) setUser(session.user);
+  else setUser(null);  // ✅ Just clear local state. NO signOut() call.
+});
+```
+
+**Wrong pattern** (FREEZES THE SITE):
+```tsx
+supabase.auth.onAuthStateChange((_event, session) => {
+  if (session?.user) setUser(session.user);
+  else logout();  // ❌ signOut() → SIGNED_OUT event → loop!
+});
+```
+
+**Source of bug**: Commit `75fd0db` on `chore/audit-gap-closure` branch — Navbar refactor extracted auth subscription to `useAuthSubscription.ts` and changed `setUser(null)` (inline) to `else logout()` (extracted hook).
+
+**Evidence**: Playwright test — 26s, 9 page navigations, zero auth errors. Single line change resolved the freeze.
+
+### NuqsAdapter Already Has Internal Suspense
+
+`NuqsAdapter` (`nuqs/adapters/next/app`) wraps `NavigationSpy` in its own `<Suspense>` internally. Placing NuqsAdapter outside an external `<Suspense>` does NOT cause BAILOUT. The external Suspense should wrap only the consumer components (Navbar/SearchBox), not NuqsAdapter itself.
+
+### Multiple Supabase Clients = Auth State Chaos
+
+Always use a SINGLETON `createBrowserClient` pattern:
+```ts
+let client: ReturnType<typeof createClient> | null = null;
+export function getBrowserClient() {
+  if (!client) client = createClient();
+  return client;
+}
+```
+Never: module-level `const supabase = createClient()` (AuthModal anti-pattern), separate `createClient()` calls per effect, or duplicate `getSupabase()` functions.
+
+### Supabase `signOut()` Always Fires `SIGNED_OUT` Event
+
+Context7-confirmed: `signOut()` fires `SIGNED_OUT` which triggers `onAuthStateChange` callback — even if no session exists. This is what makes the `else logout()` loop possible.
+
+### Playwright + Font Blocking
+
+Font requests (`.woff2`) can cause `page.screenshot` to hang. Use `page.route` to abort font requests before taking screenshots.
+
+---
+
+## Session Learnings (PR #20 — DB Schema Optimization — 2026-06-16)
+
+### Set-Based SQL Functions Beat Cursor Loops
+`check_alerts_for_all()` was rewritten from cursor-based (N+1 queries) to CTE-based set processing (4 steps in one query). The CTE chain: `alert_targets` (MIN price per alert) → `triggered` (price ≤ target) → `deduped` (UPDATE currentPrice, return matched) → `INSERT ... NOT EXISTS` (1-hour dedup). This reduces query count from O(n) to O(1).
+
+### 64-Bit Advisory Locks via md5 → bigint
+Replace `hashtext('key')` (32-bit, 2^32 collision slots) with `('x' || substr(md5('key'), 1, 16))::bit(64)::bigint` (64-bit, 2^64 slots). PostgreSQL's `pg_advisory_xact_lock()` accepts `bigint`, so the lock mechanism is identical — just with vastly more address space.
+
+### Cron Route Timeout Pattern (Promise.race)
+Standardized timeout pattern across all 3 cron routes:
+```typescript
+const result = await Promise.race([
+  action(),
+  new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new CronError('TIMEOUT', 'action timed out after Ns')), N_000)
+  ),
+]);
+```
+Using `CronError` (from `src/app/api/cron/_lib/errors.ts`) instead of raw `Error` allows `handleCronError()` to return structured JSON with `{ error, code, timestamp }`.
+
+### Migration Naming — Index Files vs. Function Files
+- `0009_schema_optimization.sql`: Pure index additions (`CONCURRENTLY`, `IF NOT EXISTS`). Safe to apply at any time.
+- `0010_optimize_check_alerts.sql`: `DROP/CREATE FUNCTION` + 64-bit lock conversion. Requires the function to exist first (depends on 0005).
+
+Always separate migration files by concern — index changes are reversible, function changes are not.
+
+### Schema Files Must Reflect Migrations
+After adding raw SQL migrations, update Drizzle schema files to match. The `index()` calls in `pgTable()`'s third argument must stay in sync with the SQL `CREATE INDEX` statements. Drizzle does NOT auto-detect raw SQL changes.
+
+### Test Structure for Next.js Route Handlers
+Route handler tests use `vi.mock()` to mock Server Actions and auth, then call `GET(request)` with a plain `Request` object. Pattern:
+```typescript
+import { GET } from './route';
+const response = await GET(new Request('http://localhost/api/endpoint', {
+  headers: { authorization: 'Bearer valid-secret' },
+}));
+expect(response.status).toBe(200);
+expect(await response.json()).toMatchObject({ ... });
+```
+
+### Drizzle Schema Tests Are Declarative
+Schema files are pure type definitions — they define table shapes and indexes but produce no runtime code. TypeScript compilation (`tsc --noEmit`) is the only meaningful validation. Do not create artificial "schema tests" that just import and re-export — `tsc` already catches mismatches.
+
+---
+
+## Session Learnings (PR #19 — SonarCloud Fixes — 2026-06-17)
+
+### React 19 Types: FormEvent Is Deprecated — Use SyntheticEvent
+Both `FormEvent` and `FormEventHandler` are marked `@deprecated` in React 19 types with the message `"FormEvent doesn't actually exist"`. Forms fire native `SubmitEvent`, not `FormEvent` — the React type was always fictional.
+
+**Wrong (S1874 — deprecated):**
+```tsx
+import { type FormEvent } from 'react';  // ❌ imported FormEvent
+const handleSubmit = (e: FormEvent<HTMLFormElement>) => {  // ❌ deprecated usage
+  e.preventDefault();
+};
+```
+
+**Right (S1874 — clean):**
+```tsx
+const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {  // ✅ base event type
+  e.preventDefault();
+};
+```
+
+**Why this works**: `React.SyntheticEvent<T>` is the non-deprecated base type for all React synthetic events. It supports `preventDefault()`, `stopPropagation()`, `currentTarget`, `target`, etc. — everything a form handler needs. The React docs explicitly recommend it: *"If you need to use an event that is not included in this list, you can use the `React.SyntheticEvent` type."*
+
+**Key insight**: Use the namespace (`React.SyntheticEvent`) not the direct import (`import { SyntheticEvent }`). This matches the pattern in React docs examples (`React.ChangeEvent<HTMLInputElement>`) and avoids import confusion.
+
+### SonarCloud S1874 Is Not Just About Import Style
+The rule fires for ANY usage of a `@deprecated` type, regardless of import style. Changing `React.FormEvent` to `import { FormEvent }` does NOT fix it — both are deprecated. The fix must replace the deprecated type entirely with a non-deprecated alternative. Always check `node_modules/@types/react/index.d.ts` for `@deprecated` tags to find the correct replacement.
+
+### Lucide-React v0.577 Deprecated All Brand Icons — Use simple-icons
+In lucide-react v0.577+, ALL brand icons (Github, Twitter, Slack, Facebook, Youtube, etc.) are `@deprecated` and will be removed in v1.0. They recommend migrating to [simple-icons](https://simpleicons.org/).
+
+**Wrong (S1874 — deprecated):**
+```tsx
+import { Github, Globe, ShieldCheck } from 'lucide-react';  // ❌ Github is deprecated
+<Github size={20} />
+```
+
+**Also wrong (S1874 — still deprecated):**
+```tsx
+import { GithubIcon, Globe, ShieldCheck } from 'lucide-react';  // ❌ GithubIcon = Github alias
+<GithubIcon size={20} />
+```
+
+**Right (S1874 — clean):**
+```tsx
+import { siGithub } from 'simple-icons';  // ✅ official simple-icons package
+
+<svg viewBox="0 0 24 24" width="20" height="20" fill={`#${siGithub.hex}`} aria-label={siGithub.title}>
+  <path d={siGithub.path} />
+</svg>
+```
+
+**Why this works**: `simple-icons` is the official replacement recommended by lucide-react. The package exports `si{BrandName}` objects with `path`, `title`, `hex`, and `slug` properties. Import only what you need — the package is tree-shakeable.
+
+**How to find @deprecated icons**: Check `node_modules/lucide-react/dist/lucide-react.d.ts` for `@deprecated Brand icons` and `q={brand}` in the message to identify which brands are deprecated.
+
+### SonarCloud Investigation: API vs UI Reliability
+When SonarCloud PR dashboard shows issues but the API returns 0, the UI is more reliable. The API may return 0 because:
+- The PR analysis hasn't been indexed yet (processing delay, observed delays of 30-90s)
+- The API requires authentication for private projects
+- The branch analysis (not PR-specific) may not match
+
+**Pragmatic workflow**: Trust the user's UI paste over the API. Investigate directly from `node_modules/@types/` for `@deprecated` annotations to confirm each issue.

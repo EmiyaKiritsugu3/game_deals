@@ -1,9 +1,5 @@
 name: Cron Jobs
 on:
-  schedule:
-    - cron: '0 */4 * * *'   # ingest-prices every 4h
-    - cron: '0 2 * * *'      # reindex-typesense daily 2am UTC
-    - cron: '0 * * * *'      # check-alerts hourly
   workflow_dispatch:
 
 jobs:

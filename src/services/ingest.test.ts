@@ -55,7 +55,11 @@ describe('fetchCheapSharkDeals', () => {
     const result = await fetchCheapSharkDeals();
     expect(mockFetch).toHaveBeenCalledWith(
       'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100',
-      { headers: { 'User-Agent': 'GameDeals/1.0' }, next: { revalidate: 0 } }
+      {
+        headers: { 'User-Agent': 'GameDeals/1.0' },
+        signal: expect.any(AbortSignal),
+        next: { revalidate: 0 },
+      }
     );
     expect(result).toEqual(sampleDeals);
     expect(result).toHaveLength(2);
