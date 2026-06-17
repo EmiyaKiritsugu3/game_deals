@@ -6,4 +6,5 @@ export * from './notifications';
 export * from './playlists';
 export * from './price_alerts';
 export * from './price_history';
+export * from './rate-limits';
 export * from './users';

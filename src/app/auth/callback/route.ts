@@ -10,7 +10,7 @@ async function exchangeAuthCode(code: string): Promise<boolean> {
 
 export async function GET(request: Request) {
   const ip = request.headers.get('x-forwarded-for') || 'unknown';
-  if (!rateLimit(`auth:${ip}`, 10, 60000)) {
+  if (!(await rateLimit(`auth:${ip}`, 10, 60000))) {
     return NextResponse.redirect(new URL('/auth/error?reason=rate_limit', request.url));
   }
 

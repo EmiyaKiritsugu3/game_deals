@@ -1,5 +1,6 @@
 'use server';
 
+import * as Sentry from '@sentry/nextjs';
 import { desc, eq, sql } from 'drizzle-orm';
 import { db } from '@/db';
 import { deals as dealsTable, games, priceHistory } from '@/db/schema';
@@ -173,7 +174,7 @@ export async function ingestPricesAction(): Promise<{
       pricesRecorded,
     };
   } catch (error) {
-    console.error('Ingest error:', error);
+    Sentry.captureException(error instanceof Error ? error : new Error(String(error)));
     return {
       success: false,
       dealsIngested: 0,

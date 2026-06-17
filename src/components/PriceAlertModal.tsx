@@ -2,6 +2,7 @@
 
 import { Bell, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { createPriceAlertAction, deletePriceAlertAction } from '@/actions/alerts';
 import BaseModal from '@/components/ui/BaseModal';
 import { useAlerts } from '@/store/alertStore';
 import AlertFormFields from './AlertFormFields';
@@ -22,11 +23,13 @@ export default function PriceAlertModal({
   gameTitle,
   currentPrice,
 }: PriceAlertModalProps) {
-  const { addAlert, removeAlert, getAlert, hasAlert } = useAlerts();
+  const { addAlert, removeAlert, getAlert, hasAlert, setAlertId } = useAlerts();
   const existingAlert = getAlert(gameID);
 
   const [targetPrice, setTargetPrice] = useState(currentPrice);
   const [isKeyshopAllowed, setIsKeyshopAllowed] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
     if (existingAlert) {
@@ -37,14 +40,57 @@ export default function PriceAlertModal({
     }
   }, [existingAlert, currentPrice]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    setIsSaving(true);
+    setSaveError(null);
+
+    // 1. Write to localStorage immediately (no data loss if tab closes)
     addAlert({ gameID, gameTitle, targetPrice, currentPrice, isKeyshopAllowed });
-    onClose();
+
+    try {
+      // 2. Persist to PostgreSQL via server action
+      const result = await createPriceAlertAction(gameID, targetPrice);
+
+      // 3. Store the server-returned alert ID for future deletes
+      if (result && typeof (result as Record<string, unknown>).id === 'string') {
+        setAlertId(gameID, (result as Record<string, unknown>).id as string);
+      }
+
+      onClose();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to save alert';
+      setSaveError(
+        `Saved locally but could not sync: ${message}. The alert will be saved automatically later.`
+      );
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  const handleRemove = () => {
-    removeAlert(gameID);
-    onClose();
+  const handleRemove = async () => {
+    if (!existingAlert) {
+      removeAlert(gameID);
+      onClose();
+      return;
+    }
+
+    setIsSaving(true);
+    setSaveError(null);
+
+    try {
+      // 1. Delete from PostgreSQL first (server-first for deletes)
+      if (existingAlert.alertId) {
+        await deletePriceAlertAction(existingAlert.alertId);
+      }
+      // 2. Then remove from localStorage
+      removeAlert(gameID);
+      onClose();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to remove alert';
+      setSaveError(message);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -67,11 +113,21 @@ export default function PriceAlertModal({
         onKeyshopAllowedChange={setIsKeyshopAllowed}
       />
 
+      {saveError && (
+        <div className={styles.error}>
+          <span>{saveError}</span>
+          <button type="button" className={styles.dismissError} onClick={() => setSaveError(null)}>
+            Dismiss
+          </button>
+        </div>
+      )}
+
       <div className={styles.actionButtons}>
         <button
           type="button"
           className={`${styles.button} ${styles.cancelButton}`}
           onClick={onClose}
+          disabled={isSaving}
         >
           Cancel
         </button>
@@ -79,11 +135,17 @@ export default function PriceAlertModal({
           type="button"
           className={`${styles.button} ${styles.saveButton}`}
           onClick={handleSave}
+          disabled={isSaving}
         >
-          {hasAlert(gameID) ? 'Update Alert' : 'Create Alert'}
+          {isSaving ? 'Saving\u2026' : hasAlert(gameID) ? 'Update Alert' : 'Create Alert'}
         </button>
         {hasAlert(gameID) && (
-          <button type="button" className={styles.removeButton} onClick={handleRemove}>
+          <button
+            type="button"
+            className={styles.removeButton}
+            onClick={handleRemove}
+            disabled={isSaving}
+          >
             <Trash2 size={14} /> Stop tracking this game
           </button>
         )}

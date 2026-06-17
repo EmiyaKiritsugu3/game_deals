@@ -24,12 +24,16 @@ export default function SyncManager() {
     if (wishlist.length === 0) return;
 
     const syncWishlist = async () => {
-      const uuidMap = await resolveGameUuidsAction(wishlist);
-      const uuids = Object.values(uuidMap);
-      if (uuids.length === 0) return;
-      const supabase = getBrowserClient();
-      const rows = uuids.map((uuid) => ({ userId: user.id, gameId: uuid }));
-      await supabase.from('wishlists').upsert(rows, { onConflict: 'userId,gameId' });
+      try {
+        const uuidMap = await resolveGameUuidsAction(wishlist);
+        const uuids = Object.values(uuidMap);
+        if (uuids.length === 0) return;
+        const supabase = getBrowserClient();
+        const rows = uuids.map((uuid) => ({ userId: user.id, gameId: uuid }));
+        await supabase.from('wishlists').upsert(rows, { onConflict: 'userId,gameId' });
+      } catch (err) {
+        console.error('SyncManager: wishlist sync failed', err);
+      }
     };
 
     const timer = setTimeout(syncWishlist, 1000);
@@ -42,23 +46,27 @@ export default function SyncManager() {
     if (alerts.length === 0) return;
 
     const syncAlerts = async () => {
-      const uuidMap = await resolveGameUuidsAction(alerts.map((a) => a.gameID));
-      const rows = alerts
-        .map((alert) => {
-          const uuid = uuidMap[alert.gameID];
-          if (!uuid) return null;
-          return {
-            userId: user.id,
-            gameId: uuid,
-            targetPrice: alert.targetPrice,
-            storeId: (alert as { storeId?: string }).storeId ?? null,
-            isActive: 1,
-          };
-        })
-        .filter((r): r is NonNullable<typeof r> => r !== null);
-      if (rows.length === 0) return;
-      const supabase = getBrowserClient();
-      await supabase.from('price_alerts').upsert(rows, { onConflict: 'userId,gameId' });
+      try {
+        const uuidMap = await resolveGameUuidsAction(alerts.map((a) => a.gameID));
+        const rows = alerts
+          .map((alert) => {
+            const uuid = uuidMap[alert.gameID];
+            if (!uuid) return null;
+            return {
+              userId: user.id,
+              gameId: uuid,
+              targetPrice: alert.targetPrice,
+              storeId: alert.storeId ?? null,
+              isActive: 1,
+            };
+          })
+          .filter((r): r is NonNullable<typeof r> => r !== null);
+        if (rows.length === 0) return;
+        const supabase = getBrowserClient();
+        await supabase.from('price_alerts').upsert(rows, { onConflict: 'userId,gameId' });
+      } catch (err) {
+        console.error('SyncManager: alerts sync failed', err);
+      }
     };
 
     const timer = setTimeout(syncAlerts, 1000);

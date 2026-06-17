@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import { NextResponse } from 'next/server';
 import { checkTriggeredAlertsAction } from '@/actions/alerts';
 import { verifyCronAuth } from '@/lib/cron-auth';
@@ -31,7 +32,7 @@ export async function GET(request: Request) {
       details: triggered,
     });
   } catch (err) {
-    console.error('check-alerts error:', err instanceof Error ? err.message : err);
+    Sentry.captureException(err instanceof Error ? err : new Error(String(err)));
     return handleCronError(err);
   }
 }
