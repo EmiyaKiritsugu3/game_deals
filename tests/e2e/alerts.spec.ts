@@ -69,16 +69,50 @@ test.describe('Cron endpoint', () => {
     );
     expect(result).toBe('401');
   });
+
+  test('5. ingest-prices responds 200/500 with valid auth', { tag: '@cron' }, async () => {
+    const result = execSync(
+      `curl -s -o /dev/null -w "%{http_code}" -H "authorization: Bearer ${CRON_AUTH}" ${BASE}/api/cron/ingest-prices`,
+      { timeout: 30_000, encoding: 'utf-8' }
+    );
+    expect(result).not.toBe('401');
+    expect(['200', '500']).toContain(result);
+  });
+
+  test('6. ingest-prices returns 401 without auth header', { tag: '@cron' }, async () => {
+    const result = execSync(
+      `curl -s -o /dev/null -w "%{http_code}" ${BASE}/api/cron/ingest-prices`,
+      { timeout: 10_000, encoding: 'utf-8' }
+    );
+    expect(result).toBe('401');
+  });
+
+  test('7. reindex-typesense responds 200/500 with valid auth', { tag: '@cron' }, async () => {
+    const result = execSync(
+      `curl -s -o /dev/null -w "%{http_code}" -H "authorization: Bearer ${CRON_AUTH}" ${BASE}/api/cron/reindex-typesense`,
+      { timeout: 30_000, encoding: 'utf-8' }
+    );
+    expect(result).not.toBe('401');
+    expect(['200', '500']).toContain(result);
+  });
+
+  test('8. reindex-typesense returns 401 without auth header', { tag: '@cron' }, async () => {
+    const result = execSync(
+      `curl -s -o /dev/null -w "%{http_code}" ${BASE}/api/cron/reindex-typesense`,
+      { timeout: 10_000, encoding: 'utf-8' }
+    );
+    expect(result).toBe('401');
+  });
 });
 
 test.describe('Navigation', () => {
-  test('5. Page renders with main element visible', async ({ page }) => {
+  test('9. Page renders with main element visible', async ({ page }) => {
     await page.goto('/alerts', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(1_500);
     await expect(page.locator('main')).toBeVisible();
   });
 
-  test('6. Home page has accessible navigation', async ({ page }) => {
+  test('10. Home page has accessible navigation', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(1_500);
     const bodyText = await page.locator('body').innerText();
