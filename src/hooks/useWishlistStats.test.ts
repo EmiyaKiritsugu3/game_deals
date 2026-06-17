@@ -36,8 +36,8 @@ describe('useWishlistStats', () => {
     const { result } = renderHook(() => useWishlistStats(games));
 
     expect(result.current.bestDiscountGame).not.toBeNull();
-    expect(result.current.bestDiscountGame!.savings).toBe(50);
-    expect(result.current.bestDiscountGame!.title).toBe('High');
+    expect(result.current.bestDiscountGame?.savings).toBe(50);
+    expect(result.current.bestDiscountGame?.title).toBe('High');
   });
 
   it('returns bestDiscountGame correctly when there is a tie', () => {
@@ -50,8 +50,8 @@ describe('useWishlistStats', () => {
 
     // reduce picks the later element when savings are equal (prev > current is false)
     expect(result.current.bestDiscountGame).not.toBeNull();
-    expect(result.current.bestDiscountGame!.savings).toBe(50);
-    expect(result.current.bestDiscountGame!.title).toBe('Second');
+    expect(result.current.bestDiscountGame?.savings).toBe(50);
+    expect(result.current.bestDiscountGame?.title).toBe('Second');
   });
 
   it('calculates total value correctly', () => {

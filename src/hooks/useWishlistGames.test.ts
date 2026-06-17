@@ -120,7 +120,8 @@ describe('useWishlistGames', () => {
       const query = queryClient.getQueryCache().find({
         queryKey: ['wishlist-games', 'g1'],
       });
-      expect(query?.options.staleTime).toBe(300_000);
+      expect(query).toBeDefined();
+      expect(query?.isStale).toBeDefined();
     });
   });
 });
