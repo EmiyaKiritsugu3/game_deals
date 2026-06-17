@@ -20,30 +20,31 @@ export async function rateLimit(key: string, maxAttempts = 10, windowMs = 60000)
 
   const windowSeconds = Math.max(1, Math.floor(windowMs / 1000));
 
-  // Use a 64-bit advisory lock keyed on the rate-limit key to prevent concurrent race conditions
-  const lockKey = sql`('x' || substr(md5('rl:' || ${key}), 1, 16))::bit(64)::bigint`;
-  await db.execute(sql`SELECT pg_advisory_xact_lock(${lockKey})`);
+  // Use a transaction to ensure the advisory lock protects the upsert atomically
+  const rows = await db.transaction(async (tx) => {
+    const lockKey = sql`('x' || substr(md5('rl:' || ${key}), 1, 16))::bit(64)::bigint`;
+    await tx.execute(sql`SELECT pg_advisory_xact_lock(${lockKey})`);
 
-  // Upsert: insert if missing or reset if window expired, otherwise increment
-  const rows = await db.execute(sql`
-    INSERT INTO rate_limits (key, count, reset_at)
-    VALUES (
-      ${key},
-      1,
-      now() + make_interval(secs => ${windowSeconds})
-    )
-    ON CONFLICT (key) DO UPDATE SET
-      count = CASE
-        WHEN rate_limits.reset_at < now() THEN 1
-        ELSE rate_limits.count + 1
-      END,
-      reset_at = CASE
-        WHEN rate_limits.reset_at < now()
-        THEN now() + make_interval(secs => ${windowSeconds})
-        ELSE rate_limits.reset_at
-      END
-    RETURNING count, reset_at
-  `);
+    return tx.execute(sql`
+      INSERT INTO rate_limits (key, count, reset_at)
+      VALUES (
+        ${key},
+        1,
+        now() + make_interval(secs => ${windowSeconds})
+      )
+      ON CONFLICT (key) DO UPDATE SET
+        count = CASE
+          WHEN rate_limits.reset_at < now() THEN 1
+          ELSE rate_limits.count + 1
+        END,
+        reset_at = CASE
+          WHEN rate_limits.reset_at < now()
+          THEN now() + make_interval(secs => ${windowSeconds})
+          ELSE rate_limits.reset_at
+        END
+      RETURNING count, reset_at
+    `);
+  });
 
   if (rows.length === 0) return true;
   const row = rows[0] as { count: number };

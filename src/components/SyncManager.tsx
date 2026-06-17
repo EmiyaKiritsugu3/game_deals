@@ -1,5 +1,6 @@
 'use client';
 
+import * as Sentry from '@sentry/nextjs';
 import { useEffect, useRef } from 'react';
 import { resolveGameUuidsAction } from '@/actions/deals';
 import { getBrowserClient } from '@/lib/supabase-browser';
@@ -32,7 +33,7 @@ export default function SyncManager() {
         const rows = uuids.map((uuid) => ({ userId: user.id, gameId: uuid }));
         await supabase.from('wishlists').upsert(rows, { onConflict: 'userId,gameId' });
       } catch (err) {
-        console.error('SyncManager: wishlist sync failed', err);
+        Sentry.captureException(err);
       }
     };
 
@@ -65,7 +66,7 @@ export default function SyncManager() {
         const supabase = getBrowserClient();
         await supabase.from('price_alerts').upsert(rows, { onConflict: 'userId,gameId' });
       } catch (err) {
-        console.error('SyncManager: alerts sync failed', err);
+        Sentry.captureException(err);
       }
     };
 

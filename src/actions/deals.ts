@@ -174,6 +174,7 @@ export async function ingestPricesAction(): Promise<{
       pricesRecorded,
     };
   } catch (error) {
+    console.error('Ingest error:', error);
     Sentry.captureException(error instanceof Error ? error : new Error(String(error)));
     return {
       success: false,

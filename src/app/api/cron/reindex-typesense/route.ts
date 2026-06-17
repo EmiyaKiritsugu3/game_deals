@@ -28,12 +28,14 @@ export async function GET(request: Request) {
     if (result.success) {
       console.log(`[Cron] Success: ${result.indexed} games indexed`);
     } else {
+      console.error(`[Cron] reindex-typesense failed: ${result.error}`);
       Sentry.captureException(new Error(`[Cron] reindex-typesense failed: ${result.error}`));
     }
 
     const status = result.success ? 200 : 500;
     return NextResponse.json(result, { status });
   } catch (err) {
+    console.error('reindex-typesense error:', err instanceof Error ? err.message : err);
     Sentry.captureException(err instanceof Error ? err : new Error(String(err)));
     return handleCronError(err);
   }

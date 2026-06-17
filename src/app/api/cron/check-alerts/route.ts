@@ -32,6 +32,7 @@ export async function GET(request: Request) {
       details: triggered,
     });
   } catch (err) {
+    console.error('check-alerts error:', err instanceof Error ? err.message : err);
     Sentry.captureException(err instanceof Error ? err : new Error(String(err)));
     return handleCronError(err);
   }

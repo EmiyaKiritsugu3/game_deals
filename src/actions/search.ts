@@ -36,6 +36,7 @@ export async function searchGamesAction(query: string, limit = 10) {
       return (await res.json()) as Array<Record<string, string>>;
     } catch (e) {
       clearTimeout(timeout);
+      console.error('searchGamesAction (CheapShark fallback) error:', e);
       Sentry.captureException(e instanceof Error ? e : new Error(String(e)));
       return [];
     }

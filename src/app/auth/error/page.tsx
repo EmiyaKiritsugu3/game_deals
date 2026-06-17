@@ -14,7 +14,7 @@ function AuthErrorContent() {
   const reason = searchParams.get('reason');
 
   const message =
-    (reason && ERROR_MESSAGES[reason]) ?? 'An error occurred during sign-in. Please try again.';
+    ERROR_MESSAGES[reason ?? ''] ?? 'An error occurred during sign-in. Please try again.';
 
   return (
     <main className={styles.container}>
