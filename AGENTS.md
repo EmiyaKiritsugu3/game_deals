@@ -4,7 +4,7 @@ This file provides guidance to OpenCode agent when working with code in this rep
 
 ## Repository Overview
 
-GameDeals is a game deal aggregator built with Next.js 16 App Router (React 19), Supabase SSR auth, Drizzle ORM, and TanStack Query. Data source is CheapShark API with Typesense search acceleration. Tests: 207 (Vitest) + Playwright visual regression.
+GameDeals is a game deal aggregator built with Next.js 16 App Router (React 19), Supabase SSR auth, Drizzle ORM, and TanStack Query. Data source is CheapShark API with Typesense search acceleration. Tests: 227 (Vitest) + Playwright visual regression + E2E.
 
 ## Commands
 
@@ -282,3 +282,48 @@ Context7-confirmed: `signOut()` fires `SIGNED_OUT` which triggers `onAuthStateCh
 ### Playwright + Font Blocking
 
 Font requests (`.woff2`) can cause `page.screenshot` to hang. Use `page.route` to abort font requests before taking screenshots.
+
+---
+
+## Session Learnings (PR #20 — DB Schema Optimization — 2026-06-16)
+
+### Set-Based SQL Functions Beat Cursor Loops
+`check_alerts_for_all()` was rewritten from cursor-based (N+1 queries) to CTE-based set processing (4 steps in one query). The CTE chain: `alert_targets` (MIN price per alert) → `triggered` (price ≤ target) → `deduped` (UPDATE currentPrice, return matched) → `INSERT ... NOT EXISTS` (1-hour dedup). This reduces query count from O(n) to O(1).
+
+### 64-Bit Advisory Locks via md5 → bigint
+Replace `hashtext('key')` (32-bit, 2^32 collision slots) with `('x' || substr(md5('key'), 1, 16))::bit(64)::bigint` (64-bit, 2^64 slots). PostgreSQL's `pg_advisory_xact_lock()` accepts `bigint`, so the lock mechanism is identical — just with vastly more address space.
+
+### Cron Route Timeout Pattern (Promise.race)
+Standardized timeout pattern across all 3 cron routes:
+```typescript
+const result = await Promise.race([
+  action(),
+  new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new CronError('TIMEOUT', 'action timed out after Ns')), N_000)
+  ),
+]);
+```
+Using `CronError` (from `src/app/api/cron/_lib/errors.ts`) instead of raw `Error` allows `handleCronError()` to return structured JSON with `{ error, code, timestamp }`.
+
+### Migration Naming — Index Files vs. Function Files
+- `0009_schema_optimization.sql`: Pure index additions (`CONCURRENTLY`, `IF NOT EXISTS`). Safe to apply at any time.
+- `0010_optimize_check_alerts.sql`: `DROP/CREATE FUNCTION` + 64-bit lock conversion. Requires the function to exist first (depends on 0005).
+
+Always separate migration files by concern — index changes are reversible, function changes are not.
+
+### Schema Files Must Reflect Migrations
+After adding raw SQL migrations, update Drizzle schema files to match. The `index()` calls in `pgTable()`'s third argument must stay in sync with the SQL `CREATE INDEX` statements. Drizzle does NOT auto-detect raw SQL changes.
+
+### Test Structure for Next.js Route Handlers
+Route handler tests use `vi.mock()` to mock Server Actions and auth, then call `GET(request)` with a plain `Request` object. Pattern:
+```typescript
+import { GET } from './route';
+const response = await GET(new Request('http://localhost/api/endpoint', {
+  headers: { authorization: 'Bearer valid-secret' },
+}));
+expect(response.status).toBe(200);
+expect(await response.json()).toMatchObject({ ... });
+```
+
+### Drizzle Schema Tests Are Declarative
+Schema files are pure type definitions — they define table shapes and indexes but produce no runtime code. TypeScript compilation (`tsc --noEmit`) is the only meaningful validation. Do not create artificial "schema tests" that just import and re-export — `tsc` already catches mismatches.
