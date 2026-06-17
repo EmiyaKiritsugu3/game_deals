@@ -1,7 +1,7 @@
 'use client';
 
-import { Github, Globe, ShieldCheck } from 'lucide-react';
-import { useState } from 'react';
+import { GithubIcon, Globe, ShieldCheck } from 'lucide-react';
+import { type FormEvent, useState } from 'react';
 import BaseModal from '@/components/ui/BaseModal';
 import { getBrowserClient } from '@/lib/supabase-browser';
 import styles from './AuthModal.module.css';
@@ -73,7 +73,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     }
   };
 
-  const handleMagicLink = async (e: React.FormEvent) => {
+  const handleMagicLink = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setMessage(null);
@@ -111,7 +111,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           onClick={() => handleSocialLogin('discord')}
           disabled={isLoading}
         >
-          <Github size={20} />
+          <GithubIcon size={20} />
           <span>Continue with Discord</span>
         </button>
       </div>
