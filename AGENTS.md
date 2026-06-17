@@ -392,3 +392,69 @@ When SonarCloud PR dashboard shows issues but the API returns 0, the UI is more 
 - The branch analysis (not PR-specific) may not match
 
 **Pragmatic workflow**: Trust the user's UI paste over the API. Investigate directly from `node_modules/@types/` for `@deprecated` annotations to confirm each issue.
+
+---
+
+## TDD Workflow (Session Learning — 2026-06-17)
+
+### Strict Red-Green-Refactor
+Every feature or bugfix follows this cycle:
+1. Write failing test → commit `test(scope): description`
+2. Write minimal code → commit `feat(scope): description`
+3. Refactor → commit `refactor(scope): description`
+
+### Tiered Gates
+| Gate | Runs | Max Time |
+|------|------|----------|
+| Pre-commit | lint-staged + `pnpm test --changed` | <10s |
+| Pre-push | lint → tsc → test:coverage → build → knip | <3min |
+| CI (PR) | quality + e2e (parallel jobs) | <20min |
+| CI (nightly) | mutation testing (Stryker) — planned | <60min |
+
+### Coverage Thresholds
+| Metric | Phase 1 (now) | Phase 2 (next) | Phase 3 (target) |
+|--------|---------------|----------------|------------------|
+| Lines | 26% | 42% | 80% |
+| Branches | 20% | 35% | 70% |
+| Functions | 19% | 38% | 70% |
+| Statements | 25% | 42% | 80% |
+
+### Commit Convention
+| Type | TDD Phase | Example |
+|------|-----------|---------|
+| test | RED | test(api): add failing test for price sort |
+| feat | GREEN | feat(api): implement price sort |
+| fix | GREEN | fix(api): handle null price edge case |
+| refactor | REFACTOR | refactor(api): extract sort comparator |
+
+### Test File Naming
+- `*.test.ts` — Unit test (node environment)
+- `*.test.tsx` — Component test (jsdom via `// @vitest-environment jsdom`)
+- `*.integration.test.ts` — Integration test (real PostgreSQL in CI)
+- `*.pbtest.ts` — Property-based test (fast-check, planned)
+
+### What to Test
+| Layer | Test Level | Example |
+|-------|-----------|---------|
+| Utils/Pure Functions | Unit (node) | `src/utils/pricing.test.ts` |
+| Type Guards | Unit (node) | `tests/type-guards.test.ts` |
+| Server Actions | Unit (node) | `src/actions/deals.test.ts` |
+| Zustand Stores | Unit (node) | `src/store/wishlistStore.test.ts` |
+| DB Queries | Integration (real DB) | `src/actions/deals.integration.test.ts` |
+| TanStack Query Hooks | Unit (jsdom) | `src/hooks/useWishlistGames.test.ts` |
+| Components | Unit (jsdom) | `src/components/Navbar.test.tsx` |
+| Pages (RSC) | E2E (Playwright) | `tests/e2e/critical-journeys.spec.ts` |
+| Cron Routes | Unit (node) | `src/app/api/cron/ingest-prices/route.test.ts` |
+| API Contract | Integration | `tests/contracts/cheapshark-api.test.ts` |
+
+### Shared Test Utilities
+```
+tests/
+  setup.ts             # jest-dom matchers
+  factories/           # createMockDeal(), createMockGame(), createMockStore()
+    deals.ts
+    games.ts
+    stores.ts
+    index.ts
+  test-utils.tsx       # renderWithProviders(), createMockQueryClient()
+```
