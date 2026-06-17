@@ -2,18 +2,12 @@ import * as Sentry from '@sentry/nextjs';
 
 export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
-    await Sentry.init({
-      dsn: process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN || '',
-      environment: process.env.NEXT_PUBLIC_VERCEL_ENV || 'development',
-      tracesSampleRate: 0.1,
-    });
+    await import('../sentry.server.config');
   }
 
   if (process.env.NEXT_RUNTIME === 'edge') {
-    await Sentry.init({
-      dsn: process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN || '',
-      environment: process.env.NEXT_PUBLIC_VERCEL_ENV || 'development',
-      tracesSampleRate: 0.1,
-    });
+    await import('../sentry.edge.config');
   }
 }
+
+export const onRequestError = Sentry.captureRequestError;
