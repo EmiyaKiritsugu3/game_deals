@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { checkTriggeredAlertsAction } from '@/actions/alerts';
 import { verifyCronAuth } from '@/lib/cron-auth';
+import { CronError, handleCronError } from '../_lib/errors';
 
 // fallow-ignore-next-line complexity
 export async function GET(request: Request) {
@@ -11,7 +12,10 @@ export async function GET(request: Request) {
     const { checked, triggered } = await Promise.race([
       checkTriggeredAlertsAction(),
       new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('check-alerts timed out after 290s')), 290_000)
+        setTimeout(
+          () => reject(new CronError('TIMEOUT', 'check-alerts timed out after 290s')),
+          290_000
+        )
       ),
     ]);
 
@@ -27,8 +31,7 @@ export async function GET(request: Request) {
       details: triggered,
     });
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Unknown error';
-    console.error('check-alerts error:', message);
-    return NextResponse.json({ error: 'Internal error checking alerts' }, { status: 500 });
+    console.error('check-alerts error:', err instanceof Error ? err.message : err);
+    return handleCronError(err);
   }
 }

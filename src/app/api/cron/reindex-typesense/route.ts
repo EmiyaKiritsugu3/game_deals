@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { syncGamesToTypesenseAction } from '@/actions/search';
 import { verifyCronAuth } from '@/lib/cron-auth';
+import { CronError, handleCronError } from '../_lib/errors';
 
 /**
  * Vercel Cron Job — daily reindex Typesense
@@ -12,14 +13,27 @@ export async function GET(request: Request) {
 
   console.log('[Cron] Starting Typesense reindex...');
 
-  const result = await syncGamesToTypesenseAction();
+  try {
+    const result = await Promise.race([
+      syncGamesToTypesenseAction(),
+      new Promise<never>((_, reject) =>
+        setTimeout(
+          () => reject(new CronError('TIMEOUT', 'reindex-typesense timed out after 300s')),
+          300_000
+        )
+      ),
+    ]);
 
-  if (result.success) {
-    console.log(`[Cron] Success: ${result.indexed} games indexed`);
-  } else {
-    console.error(`[Cron] Failed: ${result.error}`);
+    if (result.success) {
+      console.log(`[Cron] Success: ${result.indexed} games indexed`);
+    } else {
+      console.error(`[Cron] Failed: ${result.error}`);
+    }
+
+    const status = result.success ? 200 : 500;
+    return NextResponse.json(result, { status });
+  } catch (err) {
+    console.error('reindex-typesense error:', err instanceof Error ? err.message : err);
+    return handleCronError(err);
   }
-
-  const status = result.success ? 200 : 500;
-  return NextResponse.json(result, { status });
 }
