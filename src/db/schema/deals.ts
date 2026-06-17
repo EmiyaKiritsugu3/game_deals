@@ -20,5 +20,6 @@ export const deals = pgTable(
     index('deals_gameId_idx').on(table.gameId),
     index('deals_store_game_idx').on(table.storeId, table.gameId),
     index('deals_rating_idx').on(table.dealRating),
+    index('deals_game_store_price_idx').on(table.gameId, table.storeId, table.price),
   ]
 );
