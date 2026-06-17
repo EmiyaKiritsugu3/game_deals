@@ -1,7 +1,7 @@
 'use client';
 
 import { GithubIcon, Globe, ShieldCheck } from 'lucide-react';
-import { type FormEvent, useState } from 'react';
+import { useState } from 'react';
 import BaseModal from '@/components/ui/BaseModal';
 import { getBrowserClient } from '@/lib/supabase-browser';
 import styles from './AuthModal.module.css';
@@ -73,7 +73,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     }
   };
 
-  const handleMagicLink = async (e: FormEvent<HTMLFormElement>) => {
+  const handleMagicLink = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setMessage(null);
