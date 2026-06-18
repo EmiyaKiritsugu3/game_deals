@@ -16,7 +16,8 @@ vi.mock('@/actions/playlists', () => ({
 }));
 
 vi.mock('@tanstack/react-query', async () => {
-  const actual = await vi.importActual<typeof import('@tanstack/react-query')>('@tanstack/react-query');
+  const actual =
+    await vi.importActual<typeof import('@tanstack/react-query')>('@tanstack/react-query');
   return {
     ...actual,
     useQueryClient: () => ({ invalidateQueries: mocks.invalidateMock }),
@@ -85,9 +86,7 @@ describe('usePlaylistDetail', () => {
     const fakeDetail = {
       id: 'p1',
       title: 'My List',
-      games: [
-        { gameId: 'g1', cheapsharkId: '123', title: 'Game A' },
-      ],
+      games: [{ gameId: 'g1', cheapsharkId: '123', title: 'Game A' }],
     };
     mocks.getPlaylistByIdAction.mockResolvedValueOnce(fakeDetail);
 

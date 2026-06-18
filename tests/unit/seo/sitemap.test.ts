@@ -22,9 +22,7 @@ describe('sitemap', () => {
 
     const result = await sitemap();
 
-    const gameEntries = result.filter((entry) =>
-      entry.url.includes('/game/')
-    );
+    const gameEntries = result.filter((entry) => entry.url.includes('/game/'));
 
     expect(gameEntries.length).toBeGreaterThan(0);
     for (const entry of gameEntries) {

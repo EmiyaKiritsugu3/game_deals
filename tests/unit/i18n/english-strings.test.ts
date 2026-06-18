@@ -1,7 +1,7 @@
-import { readFileSync, readdirSync } from 'node:fs';
-import { join, extname, resolve } from 'node:path';
+import { readdirSync, readFileSync } from 'node:fs';
+import { extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 const ROOT = resolve(fileURLToPath(import.meta.url), '..', '..', '..', '..', 'src');
 
@@ -31,12 +31,18 @@ const PORTUGUESE_PATTERNS: Array<{ pattern: RegExp; description: string }> = [
   { pattern: /Aplicando\s+Desconto/gu, description: 'Aplicando Desconto (Applying Discount)' },
   { pattern: /Transferindo\s+você/gu, description: 'Transferindo você (Transferring you)' },
   { pattern: /Preparando\s+conexão/gu, description: 'Preparando conexão (Preparing connection)' },
-  { pattern: /Carregando\s+link\s+seguro/gu, description: 'Carregando link seguro (Loading secure link)' },
+  {
+    pattern: /Carregando\s+link\s+seguro/gu,
+    description: 'Carregando link seguro (Loading secure link)',
+  },
   { pattern: /Wishlist\s+não\s+encontrada/gu, description: 'Wishlist não encontrada' },
   { pattern: /O\s+link\s+pode\s+estar\s+expirado/gu, description: 'Link expirado (Expired link)' },
   { pattern: /Ir\s+para\s+a\s+Home/gu, description: 'Ir para a Home (Go to Home)' },
   { pattern: /Comprar\s+como\s+Presente/gu, description: 'Comprar como Presente (Buy as Gift)' },
-  { pattern: /Wishlist\s+Compartilhada/gu, description: 'Wishlist Compartilhada (Shared Wishlist)' },
+  {
+    pattern: /Wishlist\s+Compartilhada/gu,
+    description: 'Wishlist Compartilhada (Shared Wishlist)',
+  },
   { pattern: /Presenteie\s+usando/gu, description: 'Presenteie usando (Gift using)' },
   { pattern: /[Pp]reço\s+baixar/gu, description: 'preço baixar (price drop)' },
   { pattern: /Meu\s+Dashboard/gu, description: 'Meu Dashboard (My Dashboard)' },
@@ -44,11 +50,7 @@ const PORTUGUESE_PATTERNS: Array<{ pattern: RegExp; description: string }> = [
   { pattern: /Inclui\s+Keyshops|Apenas\s+Oficiais/gu, description: 'Keyshop labels' },
 ];
 
-const IGNORE_FILES = new Set([
-  'english-strings.test.ts',
-  'node_modules',
-  '.next',
-]);
+const IGNORE_FILES = new Set(['english-strings.test.ts', 'node_modules', '.next']);
 
 const INCLUDE_EXT = new Set(['.tsx', '.ts']);
 
@@ -103,10 +105,7 @@ describe('User-facing strings must be in English', () => {
   it('should have no Portuguese user-facing strings in source files', () => {
     if (violations.length > 0) {
       const message = violations
-        .map(
-          (v) =>
-            `  ${v.file}: Found "${v.match}" (matched: ${v.pattern})`
-        )
+        .map((v) => `  ${v.file}: Found "${v.match}" (matched: ${v.pattern})`)
         .join('\n');
       expect.fail(`Found ${violations.length} Portuguese string(s):\n${message}`);
     }

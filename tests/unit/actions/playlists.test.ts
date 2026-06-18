@@ -24,7 +24,7 @@ import {
   updatePlaylistAction,
 } from '@/actions/playlists';
 
-const UUID_V4_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const _UUID_V4_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 beforeEach(() => {
   execute.mockReset();
@@ -161,9 +161,7 @@ describe('getPlaylistByIdAction', () => {
         thumbUrl: null,
       },
     ];
-    execute
-      .mockResolvedValueOnce([fakePlaylist])
-      .mockResolvedValueOnce(fakeGames);
+    execute.mockResolvedValueOnce([fakePlaylist]).mockResolvedValueOnce(fakeGames);
 
     const result = await getPlaylistByIdAction('p1');
     expect(result).toEqual({

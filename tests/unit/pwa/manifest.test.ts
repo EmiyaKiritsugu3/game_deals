@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { describe, expect, it } from 'vitest';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -33,15 +33,12 @@ describe('PWA Manifest', () => {
   it('should have manifest link tag in layout.tsx', () => {
     const layoutPath = join(appDir, 'layout.tsx');
     const content = readFileSync(layoutPath, 'utf-8');
-    expect(content).toContain(
-      '<link rel="manifest" href="/manifest.json" />',
-    );
+    expect(content).toContain('<link rel="manifest" href="/manifest.json" />');
   });
 
   it('should have a favicon file in public/', () => {
     const faviconExists =
-      existsSync(join(publicDir, 'favicon.ico')) ||
-      existsSync(join(publicDir, 'favicon.svg'));
+      existsSync(join(publicDir, 'favicon.ico')) || existsSync(join(publicDir, 'favicon.svg'));
     expect(faviconExists).toBe(true);
   });
 });

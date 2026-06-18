@@ -1,7 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -9,22 +9,31 @@ const mocks = vi.hoisted(() => {
   const store: {
     isLoggedIn: boolean;
     user: { id: string; name: string; email: string; avatar: string } | null;
-    playlistsData: Array<{
-      id: string;
-      title: string;
-      description: string | null;
-      isPublic: boolean;
-      _gameCount: number;
-    }> | undefined;
+    playlistsData:
+      | Array<{
+          id: string;
+          title: string;
+          description: string | null;
+          isPublic: boolean;
+          _gameCount: number;
+        }>
+      | undefined;
     playlistsLoading: boolean;
-    detailData: {
-      id: string;
-      title: string;
-      description: string | null;
-      isPublic: boolean;
-      userId: string;
-      games: Array<{ gameId: string; cheapsharkId: string; title: string; thumbUrl: string | null }>;
-    } | undefined;
+    detailData:
+      | {
+          id: string;
+          title: string;
+          description: string | null;
+          isPublic: boolean;
+          userId: string;
+          games: Array<{
+            gameId: string;
+            cheapsharkId: string;
+            title: string;
+            thumbUrl: string | null;
+          }>;
+        }
+      | undefined;
     detailLoading: boolean;
     addMutation: { isPending: boolean; mutate: ReturnType<typeof vi.fn> };
     createMutation: { isPending: boolean; mutate: ReturnType<typeof vi.fn> };
@@ -46,7 +55,7 @@ vi.mock('@/hooks/usePlaylists', () => ({
     data: mocks.playlistsData,
     isLoading: mocks.playlistsLoading,
   }),
-  usePlaylistDetail: (id: string) => ({
+  usePlaylistDetail: (_id: string) => ({
     data: mocks.detailData,
     isLoading: mocks.detailLoading,
   }),
@@ -97,7 +106,9 @@ describe('PlaylistsListPage', () => {
     mocks.isLoggedIn = false;
     const { default: PlaylistsPage } = await import('@/app/playlists/page');
     render(React.createElement(PlaylistsPage));
-    expect(screen.getByRole('heading', { name: /sign in to see your playlists/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /sign in to see your playlists/i })
+    ).toBeInTheDocument();
   });
 
   it('renders loading state', async () => {
@@ -141,7 +152,9 @@ describe('PlaylistDetailPage', () => {
     mocks.isLoggedIn = false;
     const { default: PlaylistDetailPage } = await import('@/app/playlists/[id]/page');
     render(React.createElement(PlaylistDetailPage, { params: { id: 'p1' } }));
-    expect(screen.getByRole('heading', { name: /sign in to see this playlist/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /sign in to see this playlist/i })
+    ).toBeInTheDocument();
   });
 
   it('renders loading state', async () => {
