@@ -1,7 +1,7 @@
 'use client';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuthSubscription } from '@/hooks/useAuthSubscription';
 import { useAuth } from '@/store/authStore';
 import AuthModal from './AuthModal';
@@ -33,7 +33,8 @@ export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseU
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   useAuthSubscription();
-  useServerUserSync(serverUser, () => setIsAuthModalOpen(false));
+  const closeAuthModal = useCallback(() => setIsAuthModalOpen(false), []);
+  useServerUserSync(serverUser, closeAuthModal);
 
   return (
     <nav className={styles.navbar}>

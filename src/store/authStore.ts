@@ -16,11 +16,14 @@ interface AuthState {
   logout: () => Promise<void>;
 }
 
-export const useAuth = create<AuthState>((set) => ({
+export const useAuth = create<AuthState>((set, get) => ({
   user: null,
   isLoggedIn: false,
   setUser: (supabaseUser) => {
     if (supabaseUser) {
+      // Skip update if user data hasn't changed (prevents infinite re-render loops)
+      const current = get().user;
+      if (current?.id === supabaseUser.id) return;
       set({
         user: {
           id: supabaseUser.id,
@@ -34,6 +37,7 @@ export const useAuth = create<AuthState>((set) => ({
         isLoggedIn: true,
       });
     } else {
+      if (!get().user) return;
       set({ user: null, isLoggedIn: false });
     }
   },
