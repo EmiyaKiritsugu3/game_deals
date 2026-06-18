@@ -101,7 +101,20 @@ describe('getHighResImage', () => {
 });
 
 describe('formatTimeAgo', () => {
-  const now = Math.floor(Date.now() / 1000);
+  // Freeze time at a known epoch so Date.now() inside formatTimeAgo
+  // returns the same value as the now constant used in test inputs.
+  // If Date.now() drifts even 1s between capture and execution,
+  // boundary values (3599→3600) fall into the wrong branch.
+  const frozenEpoch = 1_750_000_000; // 2025-06-15 approximately
+  const now = frozenEpoch;
+
+  beforeAll(() => {
+    vi.spyOn(Date, 'now').mockReturnValue(frozenEpoch * 1000);
+  });
+
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
 
   it('returns "just now" for < 60 seconds', () => {
     expect(formatTimeAgo(now - 30)).toBe('just now');
