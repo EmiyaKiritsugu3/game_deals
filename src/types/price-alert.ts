@@ -5,6 +5,8 @@ export interface PriceAlert {
   currentPrice: number;
   isKeyshopAllowed: boolean;
   createdAt: number;
+  alertId?: string;
+  storeId?: string;
 }
 
 export interface PriceAlertWithGame {

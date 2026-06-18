@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import { NextResponse } from 'next/server';
 import { ingestPricesAction } from '@/actions/deals';
 import { verifyCronAuth } from '@/lib/cron-auth';
@@ -28,13 +29,15 @@ export async function GET(request: Request) {
     if (result.success) {
       console.log(`[Cron] Success: ${result.dealsIngested} deals, ${result.gamesUpserted} games`);
     } else {
-      console.error(`[Cron] Failed: ${result.error}`);
+      console.error(`[Cron] ingest-prices failed: ${result.error}`);
+      Sentry.captureException(new Error(`[Cron] ingest-prices failed: ${result.error}`));
     }
 
     const status = result.success ? 200 : 500;
     return NextResponse.json(result, { status });
   } catch (err) {
     console.error('ingest-prices error:', err instanceof Error ? err.message : err);
+    Sentry.captureException(err instanceof Error ? err : new Error(String(err)));
     return handleCronError(err);
   }
 }

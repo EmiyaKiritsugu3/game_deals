@@ -1,0 +1,45 @@
+.container {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.card {
+  max-width: 400px;
+  width: 100%;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: hsl(var(--foreground));
+}
+
+.message {
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.homeLink {
+  display: inline-block;
+  padding: 0.625rem 1.5rem;
+  background-color: hsl(var(--accent-hl));
+  color: hsl(var(--accent-hl-foreground));
+  border: none;
+  border-radius: var(--radius, 4px);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.homeLink:hover {
+  opacity: 0.85;
+}
