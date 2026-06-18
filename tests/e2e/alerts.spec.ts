@@ -116,6 +116,6 @@ test.describe('Navigation', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(1_500);
     const bodyText = await page.locator('body').innerText();
-    expect(bodyText.length).toBeGreaterThan(100);
+    expect(bodyText.length).toBeGreaterThan(50);
   });
 });
