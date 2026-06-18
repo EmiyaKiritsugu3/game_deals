@@ -27,7 +27,7 @@ export async function fetchDealsWithFallback(
 export async function fetchGameDetails(
   id: string,
   errorContext = 'fetchGameDetails'
-): Promise<unknown | null> {
+): Promise<unknown> {
   const url = new URL('https://www.cheapshark.com/api/1.0/games');
   url.searchParams.append('id', id);
   const controller = new AbortController();

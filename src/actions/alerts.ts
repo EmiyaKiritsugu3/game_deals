@@ -34,7 +34,7 @@ export async function createPriceAlertAction(
       "isActive" = 1
     RETURNING *
   `);
-  return inserted[0] as Record<string, unknown>;
+  return inserted[0];
 }
 
 // fallow-ignore-next-line unused-export

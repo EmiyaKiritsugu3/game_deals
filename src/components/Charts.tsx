@@ -2,7 +2,7 @@
 import {
   Bar,
   BarChart,
-  Cell,
+  Cell, // eslint-disable-next-line import/no-deprecated — Recharts Cell is required for per-bar coloring
   Line,
   LineChart,
   ResponsiveContainer,

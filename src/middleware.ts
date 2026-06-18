@@ -15,7 +15,7 @@ export const config = {
      * - api/cron (cron endpoints — match cron routes specifically, not entire api/*)
      * - public files (images, etc)
      */
-    // nosonar S7780 — String.raw would break Next.js static analysis of the matcher
+    // NOSONAR — String.raw would break Next.js static analysis of the matcher
     '/((?!_next/static|_next/image|favicon.ico|api/cron(?:/|$)|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
