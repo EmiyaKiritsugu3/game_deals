@@ -26,7 +26,7 @@ export async function getDealsWithParams(
   }
 }
 
-export function SearchResults({ deals, query }: { deals: Deal[]; query: string }) {
+export function SearchResults({ deals, query }: Readonly<{ deals: Deal[]; query: string }>) {
   return (
     <div className={styles.sectionHeader}>
       <div className={styles.sectionHeader}>

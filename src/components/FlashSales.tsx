@@ -39,7 +39,7 @@ export default function FlashSales({ deals }: FlashSalesProps) {
 
   // Helper to generate a consistent "claimed" percentage based on dealID so it doesn't change on re-render
   const getClaimedPercentage = (id: string) => {
-    const hash = Array.from(id).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const hash = Array.from(id).reduce((acc, char) => acc + (char.codePointAt(0) ?? 0), 0);
     // Return a number between 60 and 98 to look highly claimed
     return 60 + (hash % 38);
   };

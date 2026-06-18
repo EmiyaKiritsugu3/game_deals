@@ -46,7 +46,7 @@ function applyOutAffiliateParams(url: URL, store: string | null): void {
 function redirectWithDelay(url: string, delay: number): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(() => {
-      window.location.replace(url);
+      globalThis.location.replace(url);
       resolve();
     }, delay);
   });
@@ -59,20 +59,20 @@ export default function OutRedirector() {
 
   useEffect(() => {
     if (!url) {
-      window.location.replace('/');
+      globalThis.location.replace('/');
       return;
     }
     try {
       const targetUrl = new URL(url);
       if (!isHostnameAllowed(targetUrl.hostname)) {
         console.warn(`Blocked redirect to non-allowlisted domain: ${targetUrl.hostname}`);
-        window.location.replace('/');
+        globalThis.location.replace('/');
         return;
       }
       applyOutAffiliateParams(targetUrl, store);
       redirectWithDelay(targetUrl.toString(), 1000);
     } catch {
-      window.location.replace('/');
+      globalThis.location.replace('/');
     }
   }, [url, store]);
 

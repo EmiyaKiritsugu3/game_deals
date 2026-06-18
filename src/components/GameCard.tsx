@@ -27,11 +27,11 @@ function PriceBlock({
   savings,
   normalPrice,
   salePrice,
-}: {
+}: Readonly<{
   savings: number;
   normalPrice: string;
   salePrice: string;
-}) {
+}>) {
   return (
     <div className={styles.priceContainer}>
       {savings > 0 && <span className={styles.normalPrice}>${normalPrice}</span>}
@@ -40,7 +40,7 @@ function PriceBlock({
   );
 }
 
-export default async function GameCard({ deal }: { deal: Deal }) {
+export default async function GameCard({ deal }: Readonly<{ deal: Deal }>) {
   const stores = await getStores();
   const store = stores[deal.storeID];
   const highResThumb = getHighResImage(deal.thumb);

@@ -13,7 +13,7 @@ export interface GameDealRowProps {
   showEpicBadge?: boolean;
 }
 
-function StoreLogo({ name, logo }: { name: string; logo: string | null }) {
+function StoreLogo({ name, logo }: Readonly<{ name: string; logo: string | null }>) {
   return logo ? (
     // biome-ignore lint/performance/noImgElement: store logos from affiliate CDN
     <img src={logo} alt={name} className={styles.storeLogo} width={18} height={18} />
@@ -26,11 +26,11 @@ function DealBadges({
   isBest,
   isEpicDeal,
   showEpicBadge,
-}: {
+}: Readonly<{
   isBest: boolean;
   isEpicDeal: boolean;
   showEpicBadge: boolean;
-}) {
+}>) {
   return (
     <>
       {isBest && <span className={styles.bestTag}>BEST</span>}
@@ -44,12 +44,12 @@ function DealPrices({
   savings,
   isFree,
   isDealAtHL,
-}: {
+}: Readonly<{
   deal: GameDeal;
   savings: number;
   isFree: boolean;
   isDealAtHL: boolean;
-}) {
+}>) {
   return (
     <div className={styles.dealPriceInfo}>
       {isDealAtHL && <span className={styles.hlBadge}>HL</span>}

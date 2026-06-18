@@ -20,7 +20,7 @@ function AuthFormFields({
   setEmail,
   setPassword,
   setName,
-}: {
+}: Readonly<{
   mode: 'login' | 'register';
   email: string;
   password: string;
@@ -28,7 +28,7 @@ function AuthFormFields({
   setEmail: (v: string) => void;
   setPassword: (v: string) => void;
   setName: (v: string) => void;
-}) {
+}>) {
   return (
     <div className="auth-form" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <input
@@ -66,7 +66,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     setIsLoading(true);
     const { error } = await getBrowserClient().auth.signInWithOAuth({
       provider,
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
+      options: { redirectTo: `${globalThis.location.origin}/auth/callback` },
     });
     if (error) {
       setMessage({ type: 'error', text: error.message });
@@ -80,7 +80,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     setMessage(null);
     const { error } = await getBrowserClient().auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      options: { emailRedirectTo: `${globalThis.location.origin}/auth/callback` },
     });
     if (error) {
       setMessage({ type: 'error', text: error.message });

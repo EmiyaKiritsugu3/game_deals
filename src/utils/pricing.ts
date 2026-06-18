@@ -37,7 +37,7 @@ export function generateGreyMarketDeals(officialDeals: GameDeal[], dealIDRef: st
   if (bestPrice < 1) return [];
 
   // Keyshops usually undercult official sales by 5% to 35%
-  const hash = Array.from(dealIDRef).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const hash = Array.from(dealIDRef).reduce((acc, char) => acc + (char.codePointAt(0) ?? 0), 0);
   const numShops = 1 + (hash % 3); // 1 to 3 keyshops
 
   const shuffledShops = [...GREY_MARKET_SHOPS].sort(
@@ -68,7 +68,7 @@ export function generatePriceHistory(
   seed: string
 ): PriceHistoryPoint[] {
   const months = ['Out', 'Nov', 'Dez', 'Jan', 'Fev', 'Mar'];
-  const hash = Array.from(seed).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const hash = Array.from(seed).reduce((acc, char) => acc + (char.codePointAt(0) ?? 0), 0);
 
   const data = months.map((month, i) => {
     if (i === 5) return { name: month, price: currentPrice };

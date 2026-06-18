@@ -9,7 +9,7 @@ interface StoreInfo {
   storeName: string;
 }
 
-export default function FilterSidebar({ stores }: { stores: StoreInfo[] }) {
+export default function FilterSidebar({ stores }: Readonly<{ stores: StoreInfo[] }>) {
   const router = useRouter();
   const searchParams = useSearchParams();
 

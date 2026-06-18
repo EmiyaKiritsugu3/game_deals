@@ -7,7 +7,7 @@ export function useShareWishlist(wishlist: string[]) {
 
   const share = useCallback(() => {
     const encoded = btoa(wishlist.join(','));
-    const url = `${window.location.origin}/wishlist/shared?ids=${encoded}`;
+    const url = `${globalThis.location.origin}/wishlist/shared?ids=${encoded}`;
     navigator.clipboard.writeText(url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);

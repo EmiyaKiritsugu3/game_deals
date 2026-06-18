@@ -13,9 +13,9 @@ import { calculateCostPerHour, estimatePlaytime } from '@/services/hltb';
 
 export async function generateMetadata({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ id: string }>;
-}): Promise<Metadata> {
+}>): Promise<Metadata> {
   const { id } = await params;
   const game = await getGame(id);
 
@@ -42,7 +42,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
+export default async function GamePage({ params }: Readonly<{ params: Promise<{ id: string }> }>) {
   const { id } = await params;
   const [game, stores] = await Promise.all([getGame(id), getStores()]);
 

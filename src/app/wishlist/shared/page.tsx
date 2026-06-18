@@ -19,7 +19,10 @@ function EmptySharedState() {
   );
 }
 
-function SharedGameCard({ game, stores }: { game: GameEntry; stores: Record<string, string> }) {
+function SharedGameCard({
+  game,
+  stores,
+}: Readonly<{ game: GameEntry; stores: Record<string, string> }>) {
   return (
     <div className={styles.wishlistCard}>
       <div className={styles.imageContainer}>

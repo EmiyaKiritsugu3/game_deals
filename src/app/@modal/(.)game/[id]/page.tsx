@@ -6,7 +6,7 @@ import { getGame, getHighResImage, getStores, isGreyMarketStore } from '@/servic
 import { calculateCostPerHour, estimatePlaytime } from '@/services/hltb';
 import styles from './modal.module.css';
 
-async function GameModalContent({ id }: { id: string }) {
+async function GameModalContent({ id }: Readonly<{ id: string }>) {
   const [game, stores] = await Promise.all([getGame(id), getStores()]);
 
   if (!game?.info) {

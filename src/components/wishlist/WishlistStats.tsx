@@ -4,11 +4,13 @@ import { useShareWishlist } from '@/hooks/useShareWishlist';
 import type { SavedGame } from '@/hooks/useSortedGames';
 import styles from './WishlistStats.module.css';
 
+type SortMode = 'discount' | 'price' | 'name';
+
 interface WishlistStatsProps {
   totalValue: string;
   bestDiscountGame: SavedGame | null;
-  sortMode: 'discount' | 'price' | 'name';
-  onSortModeChange: (mode: 'discount' | 'price' | 'name') => void;
+  sortMode: SortMode;
+  onSortModeChange: (mode: SortMode) => void;
   wishlist: string[];
 }
 
@@ -48,7 +50,7 @@ export default function WishlistStats({
           <span className={styles.sortLabel}>Sort by:</span>
           <select
             value={sortMode}
-            onChange={(e) => onSortModeChange(e.target.value as 'name' | 'price' | 'discount')}
+            onChange={(e) => onSortModeChange(e.target.value as SortMode)}
             className={styles.sortSelect}
           >
             <option value="discount">Best Discount</option>
