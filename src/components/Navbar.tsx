@@ -12,21 +12,28 @@ import { SearchBox } from './navbar/SearchBox';
 import { UserMenu } from './navbar/UserMenu';
 import WishlistIndicator from './WishlistIndicator';
 
-// fallow-ignore-next-line complexity
-export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseUser | null }) {
-  const { user, isLoggedIn, setUser } = useAuth();
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-
-  useAuthSubscription();
+function useServerUserSync(
+  serverUser: SupabaseUser | null | undefined,
+  closeAuthModal: () => void
+) {
+  const { setUser } = useAuth();
 
   useEffect(() => {
     if (serverUser) {
       setUser(serverUser);
-      setIsAuthModalOpen(false);
+      closeAuthModal();
     } else {
       setUser(null);
     }
-  }, [setUser, serverUser]);
+  }, [setUser, serverUser, closeAuthModal]);
+}
+
+export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseUser | null }) {
+  const { user, isLoggedIn } = useAuth();
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  useAuthSubscription();
+  useServerUserSync(serverUser, () => setIsAuthModalOpen(false));
 
   return (
     <nav className={styles.navbar}>

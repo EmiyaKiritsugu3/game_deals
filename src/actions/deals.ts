@@ -8,6 +8,7 @@ import { fetchDealsWithFallback, fetchGameDetails } from '@/services/fetch-helpe
 import {
   buildDealsInsertValues,
   buildPriceHistoryValues,
+  type CheapSharkDeal,
   fetchCheapSharkDeals,
   upsertGames,
 } from '@/services/ingest';
@@ -64,10 +65,30 @@ function buildDealsUrl(params: {
 
 // (fetchDealsWithFallback moved to services/fetch-helpers.ts)
 
+function sanitizeDealParams(params?: {
+  sortBy?: string;
+  onSale?: string;
+  pageSize?: string;
+  upperPrice?: string;
+  lowerPrice?: string;
+  storeID?: string;
+  title?: string;
+}) {
+  return {
+    sortBy: validateSortBy(params?.sortBy),
+    onSale: params?.onSale ?? '1',
+    pageSize: validatePageSize(params?.pageSize),
+    upperPrice: isValidPrice(params?.upperPrice) ? params?.upperPrice : undefined,
+    lowerPrice: isValidPrice(params?.lowerPrice) ? params?.lowerPrice : undefined,
+    storeID: isValidStoreId(params?.storeID) ? params?.storeID : undefined,
+    title: sanitizeTitle(params?.title),
+  };
+}
+
 /**
  * Busca deals da CheapShark (com fallback)
  */
-// fallow-ignore-next-line complexity,unused-export
+// fallow-ignore-next-line unused-export
 export async function getDealsAction(params?: {
   sortBy?: string;
   onSale?: string;
@@ -77,21 +98,8 @@ export async function getDealsAction(params?: {
   storeID?: string;
   title?: string;
 }): Promise<Deal[]> {
-  const upperPrice = isValidPrice(params?.upperPrice) ? params?.upperPrice : undefined;
-  const lowerPrice = isValidPrice(params?.lowerPrice) ? params?.lowerPrice : undefined;
-  const storeID = isValidStoreId(params?.storeID) ? params?.storeID : undefined;
-  const title = sanitizeTitle(params?.title);
-
-  const url = buildDealsUrl({
-    sortBy: validateSortBy(params?.sortBy),
-    onSale: params?.onSale ?? '1',
-    pageSize: validatePageSize(params?.pageSize),
-    upperPrice,
-    lowerPrice,
-    storeID,
-    title,
-  });
-
+  const sanitized = sanitizeDealParams(params);
+  const url = buildDealsUrl(sanitized);
   return fetchDealsWithFallback(url.toString());
 }
 
@@ -132,10 +140,33 @@ export async function getGameAction(id: string): Promise<GameDetails | null> {
  * Para lógica de negócio (keyshops, DRM, pricing), use services/api.ts.
  */
 
+async function performIngestion(
+  deals: CheapSharkDeal[]
+): Promise<{ dealsIngested: number; gamesUpserted: number; pricesRecorded: number }> {
+  const idMap = await upsertGames(deals);
+  let dealsIngested = 0;
+  let pricesRecorded = 0;
+
+  if (idMap.size > 0) {
+    const dealsValues = buildDealsInsertValues(deals, idMap);
+    if (dealsValues.length > 0) {
+      await db.insert(dealsTable).values(dealsValues);
+      dealsIngested = dealsValues.length;
+    }
+
+    const priceValues = buildPriceHistoryValues(deals, idMap);
+    for (let i = 0; i < priceValues.length; i += 50) {
+      await db.insert(priceHistory).values(priceValues.slice(i, i + 50));
+    }
+    pricesRecorded = priceValues.length;
+  }
+
+  return { dealsIngested, gamesUpserted: idMap.size, pricesRecorded };
+}
+
 /**
  * Ingestão de preços — busca deals e salva no banco + price_history
  */
-// fallow-ignore-next-line complexity
 export async function ingestPricesAction(): Promise<{
   success: boolean;
   dealsIngested: number;
@@ -149,28 +180,12 @@ export async function ingestPricesAction(): Promise<{
       return { success: true, dealsIngested: 0, gamesUpserted: 0, pricesRecorded: 0 };
     }
 
-    const idMap = await upsertGames(deals);
-    let dealsIngested = 0;
-    let pricesRecorded = 0;
-
-    if (idMap.size > 0) {
-      const dealsValues = buildDealsInsertValues(deals, idMap);
-      if (dealsValues.length > 0) {
-        await db.insert(dealsTable).values(dealsValues);
-        dealsIngested = dealsValues.length;
-      }
-
-      const priceValues = buildPriceHistoryValues(deals, idMap);
-      for (let i = 0; i < priceValues.length; i += 50) {
-        await db.insert(priceHistory).values(priceValues.slice(i, i + 50));
-      }
-      pricesRecorded = priceValues.length;
-    }
+    const { dealsIngested, gamesUpserted, pricesRecorded } = await performIngestion(deals);
 
     return {
       success: true,
       dealsIngested,
-      gamesUpserted: idMap.size,
+      gamesUpserted,
       pricesRecorded,
     };
   } catch (error) {

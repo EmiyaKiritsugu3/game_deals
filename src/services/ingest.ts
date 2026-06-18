@@ -1,7 +1,7 @@
 import { db } from '@/db';
 import { games } from '@/db/schema';
 
-interface CheapSharkDeal {
+export interface CheapSharkDeal {
   gameID: string;
   title: string;
   thumb: string;
