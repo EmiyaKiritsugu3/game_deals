@@ -52,8 +52,8 @@ export default function PriceAlertModal({
       const result = await createPriceAlertAction(gameID, targetPrice);
 
       // 3. Store the server-returned alert ID for future deletes
-      if (result && typeof (result as Record<string, unknown>).id === 'string') {
-        setAlertId(gameID, (result as Record<string, unknown>).id as string);
+      if (result && typeof result.id === 'string') {
+        setAlertId(gameID, result.id);
       }
 
       onClose();
@@ -92,6 +92,12 @@ export default function PriceAlertModal({
       setIsSaving(false);
     }
   };
+
+  const buttonLabel = isSaving
+    ? 'Saving\u2026'
+    : hasAlert(gameID)
+      ? 'Update Alert'
+      : 'Create Alert';
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} ariaLabel="Set price alert">
@@ -137,7 +143,7 @@ export default function PriceAlertModal({
           onClick={handleSave}
           disabled={isSaving}
         >
-          {isSaving ? 'Saving\u2026' : hasAlert(gameID) ? 'Update Alert' : 'Create Alert'}
+          {buttonLabel}
         </button>
         {hasAlert(gameID) && (
           <button
