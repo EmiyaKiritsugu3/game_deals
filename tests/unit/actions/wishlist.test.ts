@@ -1,17 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { authGetUser, wishlistSelect } = vi.hoisted(() => ({
+const { authGetUser, dbExecute } = vi.hoisted(() => ({
   authGetUser: vi.fn(),
-  wishlistSelect: vi.fn(),
+  dbExecute: vi.fn(),
 }));
 
-vi.mock('@/lib/supabase-browser', () => ({
-  getBrowserClient: () => ({
-    auth: { getUser: () => authGetUser() },
-    from: () => ({
-      select: () => wishlistSelect(),
+vi.mock('@/utils/supabase/server', () => ({
+  createClient: () =>
+    Promise.resolve({
+      auth: { getUser: () => authGetUser() },
     }),
-  }),
+}));
+
+vi.mock('@/db', () => ({
+  db: { execute: dbExecute },
 }));
 
 vi.mock('@/actions/deals', () => ({
@@ -23,20 +25,17 @@ import { getUserWishlistAction } from '@/actions/wishlist';
 
 beforeEach(() => {
   authGetUser.mockReset();
-  wishlistSelect.mockReset();
+  dbExecute.mockReset();
   vi.mocked(resolveCheapsharkByUuidsAction).mockReset();
 });
 
 describe('getUserWishlistAction', () => {
-  it('returns cheapsharkIds for authenticated user', async () => {
+  it('returns cheapsharkIds for authenticated user with userId filter', async () => {
     authGetUser.mockResolvedValue({
       data: { user: { id: 'user-123' } },
       error: null,
     });
-    wishlistSelect.mockResolvedValue({
-      data: [{ gameId: 'uuid-aaa' }, { gameId: 'uuid-bbb' }],
-      error: null,
-    });
+    dbExecute.mockResolvedValue([{ gameId: 'uuid-aaa' }, { gameId: 'uuid-bbb' }]);
     vi.mocked(resolveCheapsharkByUuidsAction).mockResolvedValue({
       'uuid-aaa': '111',
       'uuid-bbb': '222',
@@ -45,7 +44,7 @@ describe('getUserWishlistAction', () => {
     const result = await getUserWishlistAction();
 
     expect(result).toEqual(['111', '222']);
-    expect(wishlistSelect).toHaveBeenCalled();
+    expect(dbExecute).toHaveBeenCalledTimes(1);
   });
 
   it('returns empty array when user has no wishlist items', async () => {
@@ -53,7 +52,7 @@ describe('getUserWishlistAction', () => {
       data: { user: { id: 'user-123' } },
       error: null,
     });
-    wishlistSelect.mockResolvedValue({ data: [], error: null });
+    dbExecute.mockResolvedValue([]);
 
     const result = await getUserWishlistAction();
 
@@ -69,21 +68,18 @@ describe('getUserWishlistAction', () => {
     const result = await getUserWishlistAction();
 
     expect(result).toEqual([]);
-    expect(wishlistSelect).not.toHaveBeenCalled();
+    expect(dbExecute).not.toHaveBeenCalled();
   });
 
-  it('handles Supabase errors gracefully', async () => {
+  it('handles auth errors gracefully', async () => {
     authGetUser.mockResolvedValue({
-      data: { user: { id: 'user-123' } },
-      error: null,
-    });
-    wishlistSelect.mockResolvedValue({
-      data: null,
-      error: { message: 'DB error' },
+      data: { user: null },
+      error: { message: 'Auth error' },
     });
 
     const result = await getUserWishlistAction();
 
     expect(result).toEqual([]);
+    expect(dbExecute).not.toHaveBeenCalled();
   });
 });

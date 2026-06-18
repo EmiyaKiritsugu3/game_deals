@@ -85,7 +85,7 @@ export async function getPlaylistByIdAction(id: string): Promise<PlaylistDetail 
   if (!userId) return null;
 
   const playlists = (await db.execute(
-    sql`SELECT * FROM playlists WHERE "id" = ${id}`
+    sql`SELECT * FROM playlists WHERE "id" = ${id}::uuid AND "userId" = ${userId}::uuid`
   )) as unknown as PlaylistRow[];
 
   if (playlists.length === 0) return null;
@@ -106,7 +106,7 @@ export async function addGameToPlaylistAction(
   playlistId: string,
   cheapsharkId: string
 ): Promise<boolean> {
-  await getAuthenticatedUserId();
+  const userId = await getAuthenticatedUserId();
 
   const gameUuid = await resolveGameUuid(cheapsharkId);
   if (!gameUuid) throw new Error('Game not found or not yet ingested');
@@ -114,7 +114,11 @@ export async function addGameToPlaylistAction(
   const result = (await db.execute(
     sql`INSERT INTO playlist_games ("playlistId", "gameId")
         SELECT ${playlistId}::uuid, ${gameUuid}::uuid
-        WHERE NOT EXISTS (
+        WHERE EXISTS (
+          SELECT 1 FROM playlists
+          WHERE "id" = ${playlistId}::uuid AND "userId" = ${userId}::uuid
+        )
+        AND NOT EXISTS (
           SELECT 1 FROM playlist_games
           WHERE "playlistId" = ${playlistId}::uuid AND "gameId" = ${gameUuid}::uuid
         )
@@ -128,11 +132,15 @@ export async function removeGameFromPlaylistAction(
   playlistId: string,
   gameId: string
 ): Promise<boolean> {
-  await getAuthenticatedUserId();
+  const userId = await getAuthenticatedUserId();
 
   const result = (await db.execute(
     sql`DELETE FROM playlist_games
         WHERE "playlistId" = ${playlistId}::uuid AND "gameId" = ${gameId}::uuid
+        AND EXISTS (
+          SELECT 1 FROM playlists
+          WHERE "id" = ${playlistId}::uuid AND "userId" = ${userId}::uuid
+        )
         RETURNING id`
   )) as Array<{ id: string }>;
 
