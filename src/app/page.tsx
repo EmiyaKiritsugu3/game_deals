@@ -25,7 +25,7 @@ export default async function Home() {
   const gridDeals = popular.length > 5 ? popular.slice(5) : [];
 
   return (
-    <main className={styles.main}>
+    <div className={styles.main}>
       {carouselDeals.length > 0 && <HeroSection deals={carouselDeals} />}
 
       <div className="container">
@@ -101,6 +101,6 @@ export default async function Home() {
           <p className={styles.footerMuted}>Powered by CheapShark API</p>
         </div>
       </footer>
-    </main>
+    </div>
   );
 }

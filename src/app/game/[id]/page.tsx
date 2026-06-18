@@ -48,10 +48,10 @@ export default async function GamePage({ params }: Readonly<{ params: Promise<{ 
 
   if (!game?.info) {
     return (
-      <main className="container" style={{ padding: '4rem', textAlign: 'center' }}>
+      <div className="container" style={{ padding: '4rem', textAlign: 'center' }}>
         <h1>Game not found</h1>
         <p>The game you&apos;re looking for doesn&apos;t exist or has been removed.</p>
-      </main>
+      </div>
     );
   }
 
@@ -100,9 +100,9 @@ export default async function GamePage({ params }: Readonly<{ params: Promise<{ 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      <main className="container">
+      <div className="container">
         <GameBody viewModel={viewModel} id={id} />
-      </main>
+      </div>
     </>
   );
 }

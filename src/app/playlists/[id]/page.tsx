@@ -95,7 +95,7 @@ export default function PlaylistDetailPage({ params }: Readonly<PlaylistDetailPa
   const isOwner = user?.id === playlist.userId;
 
   return (
-    <main className={styles.main}>
+    <div className={styles.main}>
       <div className={`container ${styles.container}`}>
         <div className={styles.header}>
           <div>
@@ -131,6 +131,6 @@ export default function PlaylistDetailPage({ params }: Readonly<PlaylistDetailPa
           </div>
         )}
       </div>
-    </main>
+    </div>
   );
 }

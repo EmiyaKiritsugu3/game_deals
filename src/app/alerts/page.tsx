@@ -93,7 +93,7 @@ export default function AlertsPage() {
   if (!alerts || alerts.length === 0) return <EmptyState />;
 
   return (
-    <main className={styles.main}>
+    <div className={styles.main}>
       <div className={`container ${styles.container}`}>
         <div className={styles.header}>
           <h1 className={styles.title}>My Price Alerts</h1>
@@ -196,6 +196,6 @@ export default function AlertsPage() {
           })}
         </div>
       </div>
-    </main>
+    </div>
   );
 }

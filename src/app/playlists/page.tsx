@@ -65,7 +65,7 @@ export default function PlaylistsPage() {
   if (!playlists || playlists.length === 0) return <EmptyState />;
 
   return (
-    <main className={styles.main}>
+    <div className={styles.main}>
       <div className={`container ${styles.container}`}>
         <div className={styles.header}>
           <h1 className={styles.title}>My Playlists</h1>
@@ -80,6 +80,6 @@ export default function PlaylistsPage() {
           ))}
         </div>
       </div>
-    </main>
+    </div>
   );
 }
