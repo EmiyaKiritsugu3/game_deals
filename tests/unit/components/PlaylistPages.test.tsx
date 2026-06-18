@@ -97,7 +97,7 @@ describe('PlaylistsListPage', () => {
     mocks.isLoggedIn = false;
     const { default: PlaylistsPage } = await import('@/app/playlists/page');
     render(React.createElement(PlaylistsPage));
-    expect(screen.getByText(/Sign in/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /sign in to see your playlists/i })).toBeInTheDocument();
   });
 
   it('renders loading state', async () => {
@@ -141,7 +141,7 @@ describe('PlaylistDetailPage', () => {
     mocks.isLoggedIn = false;
     const { default: PlaylistDetailPage } = await import('@/app/playlists/[id]/page');
     render(React.createElement(PlaylistDetailPage, { params: { id: 'p1' } }));
-    expect(screen.getByText(/Sign in/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /sign in to see this playlist/i })).toBeInTheDocument();
   });
 
   it('renders loading state', async () => {

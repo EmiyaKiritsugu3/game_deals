@@ -1,6 +1,6 @@
 'use client';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
-import { Bell, ChevronDown, LogOut } from 'lucide-react';
+import { Bell, ChevronDown, List, LogOut } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -35,6 +35,7 @@ function UserMenuDropdown({ isOpen, onLogout }: { isOpen: boolean; onLogout: () 
   if (!isOpen) return null;
   return (
     <div className={styles.userDropdown}>
+      <MenuItem href="/playlists" icon={<List size={16} />} label="Playlists" />
       <MenuItem href="/wishlist" icon={<Bell size={16} />} label="Price Alerts" />
       <MenuDivider />
       <button type="button" className={`${styles.menuItem} ${styles.logout}`} onClick={onLogout}>

@@ -1,7 +1,14 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addGameToPlaylist, createPlaylist } from '@/services/social';
+import { resolveGameUuid } from '@/actions/deals';
+import {
+  addGameToPlaylistAction,
+  createPlaylistAction,
+  deletePlaylistAction,
+  removeGameFromPlaylistAction,
+  updatePlaylistAction,
+} from '@/actions/playlists';
 import { useAuth } from '@/store/authStore';
 
 export function usePlaylistMutations(gameId: string) {
@@ -9,7 +16,11 @@ export function usePlaylistMutations(gameId: string) {
   const { user } = useAuth();
 
   const addMutation = useMutation({
-    mutationFn: (playlistId: string) => addGameToPlaylist(playlistId, gameId),
+    mutationFn: async (playlistId: string) => {
+      const resolvedId = await resolveGameUuid(gameId);
+      if (!resolvedId) throw new Error('Game not found');
+      return addGameToPlaylistAction(playlistId, gameId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['playlists'] });
     },
@@ -18,13 +29,50 @@ export function usePlaylistMutations(gameId: string) {
   const createMutation = useMutation({
     mutationFn: async (name: string) => {
       if (!user) throw new Error('Unauthenticated');
-      const newList = await createPlaylist(user.id, name);
-      return addGameToPlaylist(newList.id, gameId);
+      const newList = await createPlaylistAction(user.id, name);
+      await addGameToPlaylistAction(newList.id, gameId);
+      return newList;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['playlists'] });
     },
   });
 
-  return { addMutation, createMutation };
+  const removeGameMutation = useMutation({
+    mutationFn: async (params: { playlistId: string; gameId: string }) => {
+      return removeGameFromPlaylistAction(params.playlistId, params.gameId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['playlists'] });
+    },
+  });
+
+  const deletePlaylistMutation = useMutation({
+    mutationFn: async (playlistId: string) => {
+      return deletePlaylistAction(playlistId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['playlists'] });
+    },
+  });
+
+  const updatePlaylistMutation = useMutation({
+    mutationFn: async (params: {
+      id: string;
+      data: { title?: string; description?: string | null; isPublic?: boolean };
+    }) => {
+      return updatePlaylistAction(params.id, params.data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['playlists'] });
+    },
+  });
+
+  return {
+    addMutation,
+    createMutation,
+    removeGameMutation,
+    deletePlaylistMutation,
+    updatePlaylistMutation,
+  };
 }
