@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { ThemeProvider } from 'next-themes';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Suspense } from 'react';
 import CookieBanner from '@/components/CookieBanner';
@@ -110,7 +111,7 @@ export default async function RootLayout({
   );
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {jsonLdScript}
         <link rel="manifest" href="/manifest.json" />
@@ -121,7 +122,8 @@ export default async function RootLayout({
           Skip to main content
         </a>
         <main id="main-content">
-          <NuqsAdapter>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <NuqsAdapter>
             <ReactQueryProvider>
               <Suspense
                 fallback={
@@ -144,6 +146,7 @@ export default async function RootLayout({
               <CookieBanner />
             </ReactQueryProvider>
           </NuqsAdapter>
+          </ThemeProvider>
         </main>
       </body>
     </html>

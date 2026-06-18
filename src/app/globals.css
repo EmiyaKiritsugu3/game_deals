@@ -1,8 +1,29 @@
 @import "./tokens.css";
 @import "tailwindcss";
 
-/* ─── Keep existing CSS variables for backward compat ─── */
+/* ─── Tailwind dark variant: use .dark class (next-themes) ─── */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── Light theme (default) ─── */
 :root {
+  --background: 0 0% 100%;
+  --foreground: 228 15% 13%;
+  --card: 0 0% 96%;
+  --card-foreground: 228 15% 13%;
+  --border: 0 0% 85%;
+  --primary: 150 100% 35%;
+  --primary-foreground: 0 0% 100%;
+  --accent-hl: 150 88% 40%;
+  --accent-hl-foreground: 0 0% 100%;
+  --accent-fire: 22 100% 50%;
+  --muted: 0 0% 90%;
+  --muted-foreground: 0 0% 45%;
+  --radius: 4px;
+  color-scheme: light;
+}
+
+/* ─── Dark theme ─── */
+.dark {
   --background: 228 15% 13%;
   --foreground: 0 0% 98%;
   --card: 226 14% 18%;
@@ -16,6 +37,7 @@
   --muted: 226 14% 24%;
   --muted-foreground: 226 10% 65%;
   --radius: 4px;
+  color-scheme: dark;
 }
 
 html,
@@ -25,7 +47,6 @@ body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
   font-family: var(--font-inter), sans-serif;
-  color-scheme: dark;
 }
 
 * {

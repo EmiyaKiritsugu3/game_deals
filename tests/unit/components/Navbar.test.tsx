@@ -53,6 +53,10 @@ vi.mock('@/components/navbar/SearchBox', () => ({
   SearchBox: () => React.createElement('div', { 'data-testid': 'search-box' }),
 }));
 
+vi.mock('@/components/ThemeToggle', () => ({
+  default: () => React.createElement('button', { 'data-testid': 'theme-toggle' }, '🌙'),
+}));
+
 vi.mock('@/components/Navbar.module.css', () => ({
   default: new Proxy({}, { get: () => 'mock-css-class' }),
 }));
@@ -145,6 +149,12 @@ describe('Navbar', () => {
 
     expect(screen.getByTestId('search-box')).toBeInTheDocument();
     expect(screen.getByTestId('wishlist-indicator')).toBeInTheDocument();
+  });
+
+  it('renders ThemeToggle button', () => {
+    render(<Navbar />);
+
+    expect(screen.getByTestId('theme-toggle')).toBeInTheDocument();
   });
 
   it('calls setUser when serverUser is provided', () => {

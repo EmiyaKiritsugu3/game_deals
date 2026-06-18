@@ -1,3 +1,4 @@
+import { track } from '@vercel/analytics/server';
 import * as Sentry from '@sentry/nextjs';
 import { NextResponse } from 'next/server';
 import { checkTriggeredAlertsAction } from '@/actions/alerts';
@@ -19,6 +20,13 @@ async function executeCheckAlerts(): Promise<NextResponse> {
     console.log(
       `ALERT TRIGGERED user=${a.userId} game=${a.gameId} price=${a.currentLowest} target=${a.targetPrice}`
     );
+    track('alert_triggered', {
+      user_id: a.userId as string,
+      game_id: a.gameId as string,
+      price: a.currentLowest as number,
+      target: a.targetPrice as number,
+      store_id: a.storeId as string | null,
+    }).catch(() => {});
   }
 
   return NextResponse.json({
