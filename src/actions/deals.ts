@@ -150,7 +150,19 @@ async function performIngestion(
   if (idMap.size > 0) {
     const dealsValues = buildDealsInsertValues(deals, idMap);
     if (dealsValues.length > 0) {
-      await db.insert(dealsTable).values(dealsValues);
+      await db
+        .insert(dealsTable)
+        .values(dealsValues)
+        .onConflictDoUpdate({
+          target: [dealsTable.gameId, dealsTable.storeId],
+          set: {
+            price: sql`EXCLUDED."price"`,
+            retailPrice: sql`EXCLUDED."retailPrice"`,
+            savings: sql`EXCLUDED."savings"`,
+            dealRating: sql`EXCLUDED."dealRating"`,
+            url: sql`EXCLUDED."url"`,
+          },
+        });
       dealsIngested = dealsValues.length;
     }
 
