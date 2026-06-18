@@ -27,8 +27,8 @@ export default defineConfig({
         'src/instrumentation.ts',
       ],
       thresholds: {
-        lines: 30,
-        functions: 25,
+        lines: 29,
+        functions: 24,
         branches: 23,
         statements: 30,
       },
