@@ -21,8 +21,9 @@ export function usePlaylistMutations(gameId: string) {
       if (!resolvedId) throw new Error('Game not found');
       return addGameToPlaylistAction(playlistId, gameId);
     },
-    onSuccess: () => {
+    onSuccess: (_data, playlistId) => {
       queryClient.invalidateQueries({ queryKey: ['playlists'] });
+      queryClient.invalidateQueries({ queryKey: ['playlist', playlistId] });
     },
   });
 
@@ -42,8 +43,9 @@ export function usePlaylistMutations(gameId: string) {
     mutationFn: async (params: { playlistId: string; gameId: string }) => {
       return removeGameFromPlaylistAction(params.playlistId, params.gameId);
     },
-    onSuccess: () => {
+    onSuccess: (_data, params) => {
       queryClient.invalidateQueries({ queryKey: ['playlists'] });
+      queryClient.invalidateQueries({ queryKey: ['playlist', params.playlistId] });
     },
   });
 
@@ -63,8 +65,9 @@ export function usePlaylistMutations(gameId: string) {
     }) => {
       return updatePlaylistAction(params.id, params.data);
     },
-    onSuccess: () => {
+    onSuccess: (_data, params) => {
       queryClient.invalidateQueries({ queryKey: ['playlists'] });
+      queryClient.invalidateQueries({ queryKey: ['playlist', params.id] });
     },
   });
 

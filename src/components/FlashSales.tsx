@@ -90,7 +90,7 @@ export default function FlashSales({ deals }: FlashSalesProps) {
 
                 <div className={styles.progressContainer}>
                   <div className={styles.progressBar} style={{ width: `${claimed}%` }}></div>
-                  <span className={styles.progressText}>{claimed}% Resgatado</span>
+                  <span className={styles.progressText}>{claimed}% Claimed</span>
                 </div>
               </div>
             </Link>

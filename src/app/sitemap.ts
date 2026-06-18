@@ -35,7 +35,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  const games = await db.execute<{ cheapsharkId: string }>(sql`SELECT "cheapsharkId" FROM games`);
+  const games = await db.execute<{ cheapsharkId: string }>(
+    sql`SELECT "cheapsharkId" FROM games LIMIT 50000`
+  );
   const gameEntries = (games as { cheapsharkId: string }[]).map((game) => ({
     url: `${SITE_URL}/game/${game.cheapsharkId}`,
     lastModified: new Date(),
