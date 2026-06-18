@@ -60,11 +60,12 @@ export async function deletePriceAlertAction(alertId: string) {
   } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
-  const rows = await db.execute(sql`SELECT "userId" FROM price_alerts WHERE id = ${alertId}::uuid`);
-  const alert = rows[0] as { userId: string } | undefined;
-  if (!alert || alert.userId !== user.id) throw new Error('Forbidden');
+  const result = await db.execute(
+    sql`DELETE FROM price_alerts WHERE id = ${alertId}::uuid AND "userId" = ${user.id}::uuid RETURNING id`
+  );
+  const rows = result as unknown as Array<{ id: string }>;
+  if (rows.length === 0) throw new Error('Forbidden');
 
-  await db.execute(sql`DELETE FROM price_alerts WHERE id = ${alertId}::uuid`);
   return true;
 }
 
