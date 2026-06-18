@@ -34,7 +34,7 @@ All colors use CSS custom properties via Tailwind's `hsl(var(--*))` pattern for 
 |-------|-------|-------|
 | `--border` | Gray-200 / Gray-700 | Card borders, dividers |
 | `--ring` | Green-500 | Focus rings |
-| `--radius` | `0.5rem` (8px) | Border radius (cards, buttons, inputs) |
+| `--radius` | `4px` | Border radius (cards, buttons, inputs) |
 | `--destructive` | Red-500 `#ef4444` | Delete buttons, errors |
 
 ## Typography
@@ -67,7 +67,7 @@ Based on Tailwind's 4px grid (`1 = 0.25rem`):
 | `p-6 / gap-6` | 1.5rem | Sections, modals |
 | `p-8` | 2rem | Page sections, hero |
 
-Container: `max-w-7xl` (1280px), centered `mx-auto`, pad `px-6`.
+Container: `max-width: 1200px`, centered `mx-auto`, pad `px-6`.
 
 ## Component Patterns
 

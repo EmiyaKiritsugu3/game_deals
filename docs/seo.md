@@ -45,9 +45,9 @@ These pages use `export const metadata`:
 
 | Page | Title |
 |------|-------|
-| `/search` | "Search Results" |
+| `/search` | "Search Results \| Game Deals" |
 | `/bundles` | "Game Bundles" |
-| `/collections` | "Game Collections" |
+| `/collections` | "Curated Collections \| GameDeals" |
 | `/offline` | "Offline — GameDeals" |
 
 ## Structured Data (JSON-LD)
@@ -101,7 +101,8 @@ Dynamic sitemap generated at build/request time. Structure:
 | Section | Entries | Priority | Change Freq |
 |---------|---------|----------|-------------|
 | Home | 1 | 1.0 | daily |
-| Search, Bundles, Collections | 3 | 0.7–0.8 | weekly |
+| Search, Bundles | 2 | 0.7–0.8 | weekly |
+| Collections | 1 | 0.7 | monthly |
 | Collection detail pages | 4 | 0.8 | daily |
 | Game detail pages | up to 50k | 0.7 | weekly |
 

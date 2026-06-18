@@ -64,7 +64,7 @@ Events tracked via `src/lib/analytics.ts`:
 
 | Event | Trigger | Location |
 |-------|---------|----------|
-| `affiliate_click` | User clicks outbound deal link | `src/app/out/[...]/route.ts` |
+| `affiliate_click` | User clicks outbound deal link | `src/app/out/[storeId]/[gameSlug]/route.ts` |
 | `alert_triggered` | Price alert fires | `src/app/api/cron/check-alerts/route.ts` |
 | `alert_created` | User creates price alert | `src/components/PriceAlertModal.tsx` |
 | `alert_deleted` | User removes price alert | `src/components/AlertCard.tsx` |
@@ -82,8 +82,8 @@ Check **Vercel Dashboard → Analytics** for:
 
 | Endpoint | Schedule | Timeout | Purpose |
 |----------|----------|---------|---------|
-| `/api/cron/ingest-prices` | Every 4h | 120s | Fetch CheapShark deals → upsert DB |
-| `/api/cron/check-alerts` | Every 15min | 60s | Compare prices → trigger notifications |
+| `/api/cron/ingest-prices` | Every 4h | 240s | Fetch CheapShark deals → upsert DB |
+| `/api/cron/check-alerts` | Every 15min | 290s | Compare prices → trigger notifications |
 | `/api/cron/reindex-typesense` | Daily | 300s | Rebuild Typesense search index |
 
 ### Monitoring via Vercel Cron
