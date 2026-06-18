@@ -3,6 +3,7 @@
 import * as Sentry from '@sentry/nextjs';
 import { useEffect, useRef } from 'react';
 import { resolveGameUuidsAction } from '@/actions/deals';
+import { getUserWishlistAction } from '@/actions/wishlist';
 import { getBrowserClient } from '@/lib/supabase-browser';
 import { useAlerts } from '@/store/alertStore';
 import { useAuth } from '@/store/authStore';
@@ -10,14 +11,36 @@ import { useWishlist } from '@/store/wishlistStore';
 
 export default function SyncManager() {
   const { user, isLoggedIn } = useAuth();
-  const { wishlist } = useWishlist();
+  const { wishlist, setWishlist } = useWishlist();
   const { alerts } = useAlerts();
   const hasMounted = useRef(false);
+  const cloudSynced = useRef(false);
 
   useEffect(() => {
     if (!isLoggedIn || !user) return;
     hasMounted.current = true;
   }, [isLoggedIn, user]);
+
+  // fallow-ignore-next-line complexity
+  useEffect(() => {
+    if (!isLoggedIn || !user) {
+      cloudSynced.current = false;
+      return;
+    }
+    if (cloudSynced.current) return;
+    cloudSynced.current = true;
+
+    const syncCloudToLocal = async () => {
+      try {
+        const cloudIds = await getUserWishlistAction();
+        const merged = [...new Set([...wishlist, ...cloudIds])];
+        setWishlist(merged);
+      } catch (err) {
+        Sentry.captureException(err);
+      }
+    };
+    syncCloudToLocal();
+  }, [isLoggedIn, user, wishlist, setWishlist]);
 
   // fallow-ignore-next-line complexity
   useEffect(() => {
