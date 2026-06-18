@@ -118,4 +118,36 @@ test.describe('Navigation', () => {
     const bodyText = await page.locator('body').innerText();
     expect(bodyText.length).toBeGreaterThan(50);
   });
+
+  test('11. Full alerts CRUD flow', async ({ page }) => {
+    // Step 1: Navigate to a game detail page (Outer Wilds, CheapShark ID 612)
+    await page.goto('/game/612', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(2_000);
+
+    // Verify the game detail page loaded — should show the game title
+    await expect(page.locator('h1')).toBeVisible();
+
+    // Step 2: Click "Alert Me" button
+    const alertButton = page.getByRole('button', { name: /alert me/i });
+    await expect(alertButton).toBeVisible();
+    await alertButton.click();
+
+    // Step 3: Auth modal appears (unauthed user)
+    await page.waitForTimeout(500);
+    const authModal = page.getByText(/sign in to track price drops/i);
+    await expect(authModal).toBeVisible();
+
+    // Step 4: Close modal via Escape
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(500);
+    await expect(authModal).not.toBeVisible();
+
+    // Step 5: Navigate to /alerts page
+    await page.goto('/alerts', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1_500);
+
+    // Step 6: Verify sign-in prompt appears (unauthed)
+    const signInPrompt = page.getByText(/sign in to see your alerts/i);
+    await expect(signInPrompt).toBeVisible();
+  });
 });

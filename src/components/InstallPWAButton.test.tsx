@@ -1,7 +1,11 @@
 /**
  * @vitest-environment jsdom
  */
+<<<<<<< Updated upstream
 import { render, screen } from '@testing-library/react';
+=======
+import { render } from '@testing-library/react';
+>>>>>>> Stashed changes
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import InstallPWAButton from './InstallPWAButton';
 

@@ -7,9 +7,11 @@ import { useAuth } from '@/store/authStore';
 import AuthModal from './AuthModal';
 import styles from './Navbar.module.css';
 import NotificationBell from './NotificationBell';
+import ThemeToggle from './ThemeToggle';
 import { AuthSection } from './navbar/AuthSection';
 import { SearchBox } from './navbar/SearchBox';
 import { UserMenu } from './navbar/UserMenu';
+import InstallPWAButton from './InstallPWAButton';
 import WishlistIndicator from './WishlistIndicator';
 
 function useServerUserSync(
@@ -54,6 +56,8 @@ export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseU
           <SearchBox />
           {isLoggedIn && <NotificationBell />}
           <WishlistIndicator />
+          <InstallPWAButton />
+          <ThemeToggle />
           <div className={styles.authSection}>
             {user || serverUser ? (
               <UserMenu user={user} serverUser={serverUser ?? null} />

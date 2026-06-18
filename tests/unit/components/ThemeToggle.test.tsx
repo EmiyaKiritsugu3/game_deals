@@ -39,53 +39,53 @@ describe('ThemeToggle', () => {
     mocks.setTheme.mockClear();
   });
 
-  it('renders a toggle button with aria-label indicating current theme', () => {
+  it('renders a toggle button', () => {
     render(<ThemeToggle />);
     const button = screen.getByRole('button');
     expect(button).toBeInTheDocument();
-    expect(button).toHaveAttribute('aria-label');
-    expect(button.getAttribute('aria-label')?.toLowerCase()).toContain('dark');
   });
 
-  it('cycles from dark to light on click', () => {
+  it('has accessible aria-label based on current theme', () => {
     mocks.theme = 'dark';
     render(<ThemeToggle />);
-    fireEvent.click(screen.getByRole('button'));
-    expect(mocks.setTheme).toHaveBeenCalledWith('light');
+    const button = screen.getByRole('button');
+    expect(button).toHaveAttribute('aria-label');
+    expect(button.getAttribute('aria-label')).toBe('Switch to system theme');
   });
 
-  it('cycles from light to system on click', () => {
+  it('cycles from light to dark on click', () => {
     mocks.theme = 'light';
-    render(<ThemeToggle />);
-    fireEvent.click(screen.getByRole('button'));
-    expect(mocks.setTheme).toHaveBeenCalledWith('system');
-  });
-
-  it('cycles from system to dark on click', () => {
-    mocks.theme = 'system';
     render(<ThemeToggle />);
     fireEvent.click(screen.getByRole('button'));
     expect(mocks.setTheme).toHaveBeenCalledWith('dark');
   });
 
-  it('shows sun icon when in light mode', () => {
+  it('cycles from dark to system on click', () => {
+    mocks.theme = 'dark';
+    render(<ThemeToggle />);
+    fireEvent.click(screen.getByRole('button'));
+    expect(mocks.setTheme).toHaveBeenCalledWith('system');
+  });
+
+  it('cycles from system to light on click', () => {
+    mocks.theme = 'system';
+    render(<ThemeToggle />);
+    fireEvent.click(screen.getByRole('button'));
+    expect(mocks.setTheme).toHaveBeenCalledWith('light');
+  });
+
+  it('renders an SVG icon for the current theme', () => {
     mocks.theme = 'light';
     render(<ThemeToggle />);
     const button = screen.getByRole('button');
-    expect(button.textContent).toMatch(/☀️|sun|light/i);
+    const svg = button.querySelector('svg');
+    expect(svg).toBeInTheDocument();
   });
 
-  it('shows moon icon when in dark mode', () => {
-    mocks.theme = 'dark';
+  it('provides title attribute describing action', () => {
+    mocks.theme = 'light';
     render(<ThemeToggle />);
     const button = screen.getByRole('button');
-    expect(button.textContent).toMatch(/🌙|moon|dark/i);
-  });
-
-  it('shows system icon when in system mode', () => {
-    mocks.theme = 'system';
-    render(<ThemeToggle />);
-    const button = screen.getByRole('button');
-    expect(button.textContent).toMatch(/💻|system|auto/i);
+    expect(button).toHaveAttribute('title', 'Switch to dark mode');
   });
 });

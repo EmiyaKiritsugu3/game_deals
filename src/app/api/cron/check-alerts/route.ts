@@ -1,5 +1,5 @@
-import { track } from '@vercel/analytics/server';
 import * as Sentry from '@sentry/nextjs';
+import { track } from '@vercel/analytics/server';
 import { NextResponse } from 'next/server';
 import { checkTriggeredAlertsAction } from '@/actions/alerts';
 import { verifyCronAuth } from '@/lib/cron-auth';
