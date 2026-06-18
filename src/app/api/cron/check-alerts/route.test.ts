@@ -22,6 +22,7 @@ import { GET } from './route';
 
 beforeEach(() => {
   vi.clearAllMocks();
+  track.mockResolvedValue(undefined);
 });
 
 function buildRequest(auth = 'Bearer valid-secret'): Request {
@@ -123,5 +124,18 @@ describe('GET /api/cron/check-alerts', () => {
     });
     const response = await GET(buildRequest());
     expect(response.status).toBe(200);
+  });
+
+  it('returns 200 with zero triggered alerts', async () => {
+    checkTriggeredAlertsAction.mockResolvedValueOnce({
+      checked: 25,
+      triggered: [],
+    });
+    const response = await GET(buildRequest());
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body).toMatchObject({ processed: 25, triggered: 0 });
+    expect(body).toHaveProperty('details');
+    expect(track).not.toHaveBeenCalled();
   });
 });

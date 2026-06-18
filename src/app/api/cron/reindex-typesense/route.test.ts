@@ -60,4 +60,15 @@ describe('GET /api/cron/reindex-typesense', () => {
     const response = await GET(buildRequest('Bearer wrong-secret'));
     expect(response.status).toBe(401);
   });
+
+  it('handles empty games table gracefully', async () => {
+    syncGamesToTypesenseAction.mockResolvedValueOnce({
+      success: true,
+      indexed: 0,
+    });
+    const response = await GET(buildRequest());
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body).toMatchObject({ success: true, indexed: 0 });
+  });
 });

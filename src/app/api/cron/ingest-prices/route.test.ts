@@ -60,4 +60,16 @@ describe('GET /api/cron/ingest-prices', () => {
     const response = await GET(buildRequest('Bearer wrong-secret'));
     expect(response.status).toBe(401);
   });
+
+  it('returns 200 when deals array is empty', async () => {
+    ingestPricesAction.mockResolvedValueOnce({
+      success: true,
+      dealsIngested: 0,
+      gamesUpserted: 0,
+    });
+    const response = await GET(buildRequest());
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body).toMatchObject({ success: true, dealsIngested: 0, gamesUpserted: 0 });
+  });
 });
