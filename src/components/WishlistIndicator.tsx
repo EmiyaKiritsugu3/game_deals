@@ -17,7 +17,7 @@ export default function WishlistIndicator() {
   const count = mounted ? wishlist.length : 0;
 
   return (
-    <Link href="/wishlist" className={styles.indicator} title="Ver Favoritos">
+    <Link href="/wishlist" className={styles.indicator} title="View Favorites">
       <Heart
         size={22}
         className={styles.icon}

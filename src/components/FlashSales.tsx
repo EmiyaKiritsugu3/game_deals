@@ -39,7 +39,7 @@ export default function FlashSales({ deals }: FlashSalesProps) {
 
   // Helper to generate a consistent "claimed" percentage based on dealID so it doesn't change on re-render
   const getClaimedPercentage = (id: string) => {
-    const hash = Array.from(id).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const hash = Array.from(id).reduce((acc, char) => acc + (char.codePointAt(0) ?? 0), 0);
     // Return a number between 60 and 98 to look highly claimed
     return 60 + (hash % 38);
   };
@@ -50,7 +50,7 @@ export default function FlashSales({ deals }: FlashSalesProps) {
     <section className={styles.flashSalesSection}>
       <div className={styles.header}>
         <div className={styles.titleArea}>
-          <h2>⚡ Ofertas Relâmpago</h2>
+          <h2>⚡ Flash Deals</h2>
           <div className={styles.timer}>
             <span>{String(timeLeft.hours).padStart(2, '0')}</span>
             <span className={styles.colon}>:</span>
@@ -60,7 +60,7 @@ export default function FlashSales({ deals }: FlashSalesProps) {
           </div>
         </div>
         <Link href="/search" className={styles.viewAll}>
-          Ver Tudo &gt;
+          View All &gt;
         </Link>
       </div>
 
@@ -90,7 +90,7 @@ export default function FlashSales({ deals }: FlashSalesProps) {
 
                 <div className={styles.progressContainer}>
                   <div className={styles.progressBar} style={{ width: `${claimed}%` }}></div>
-                  <span className={styles.progressText}>{claimed}% Resgatado</span>
+                  <span className={styles.progressText}>{claimed}% Claimed</span>
                 </div>
               </div>
             </Link>

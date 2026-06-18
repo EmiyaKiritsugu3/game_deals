@@ -11,7 +11,61 @@ import {
 import { useAuth } from '@/store/authStore';
 import styles from './NotificationBell.module.css';
 
-// fallow-ignore-next-line complexity
+function NotificationBellButton({
+  unread,
+  onClick,
+}: Readonly<{ unread: number; onClick: () => void }>) {
+  return (
+    <button
+      type="button"
+      className={styles.bell}
+      onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      aria-label="Notifications"
+    >
+      <Bell size={20} />
+      {unread > 0 && <span className={styles.badge}>{unread > 99 ? '99+' : unread}</span>}
+    </button>
+  );
+}
+
+function NotificationItem({
+  notification,
+  onRead,
+}: Readonly<{
+  notification: {
+    id: string;
+    title: string;
+    body: string | null;
+    createdAt: Date;
+    readAt: Date | null;
+  };
+  onRead: (id: string) => void;
+}>) {
+  const Item = notification.readAt ? 'div' : 'button';
+  const itemProps = notification.readAt
+    ? {}
+    : {
+        type: 'button' as const,
+        onClick: () => onRead(notification.id),
+        className: styles.itemBtn,
+      };
+  return (
+    <li key={notification.id} className={notification.readAt ? styles.itemRead : styles.item}>
+      <Item {...itemProps}>
+        <div className={styles.title}>{notification.title}</div>
+        {notification.body && <div className={styles.body}>{notification.body}</div>}
+        <div className={styles.time}>{new Date(notification.createdAt).toLocaleString()}</div>
+      </Item>
+    </li>
+  );
+}
+
 export default function NotificationBell() {
   const { isLoggedIn } = useAuth();
   const [open, setOpen] = useState(false);
@@ -39,21 +93,7 @@ export default function NotificationBell() {
 
   return (
     <div className={styles.wrapper} ref={ref}>
-      <button
-        type="button"
-        className={styles.bell}
-        onClick={() => setOpen((v) => !v)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            setOpen((v) => !v);
-          }
-        }}
-        aria-label="Notifications"
-      >
-        <Bell size={20} />
-        {unread > 0 && <span className={styles.badge}>{unread > 99 ? '99+' : unread}</span>}
-      </button>
+      <NotificationBellButton unread={unread} onClick={() => setOpen((v) => !v)} />
 
       {open && (
         <div className={styles.panel}>
@@ -83,29 +123,16 @@ export default function NotificationBell() {
             <div className={styles.empty}>No notifications yet.</div>
           ) : (
             <ul className={styles.list}>
-              {/* fallow-ignore-next-line complexity */}
-              {items.map((n) => {
-                const Item = n.readAt ? 'div' : 'button';
-                const itemProps = n.readAt
-                  ? {}
-                  : {
-                      type: 'button' as const,
-                      onClick: async () => {
-                        await markNotificationReadAction(n.id);
-                        await refetch();
-                      },
-                      className: styles.itemBtn,
-                    };
-                return (
-                  <li key={n.id} className={n.readAt ? styles.itemRead : styles.item}>
-                    <Item {...itemProps}>
-                      <div className={styles.title}>{n.title}</div>
-                      {n.body && <div className={styles.body}>{n.body}</div>}
-                      <div className={styles.time}>{new Date(n.createdAt).toLocaleString()}</div>
-                    </Item>
-                  </li>
-                );
-              })}
+              {items.map((n) => (
+                <NotificationItem
+                  key={n.id}
+                  notification={n}
+                  onRead={async (id) => {
+                    await markNotificationReadAction(id);
+                    await refetch();
+                  }}
+                />
+              ))}
             </ul>
           )}
         </div>

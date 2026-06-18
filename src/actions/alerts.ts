@@ -6,19 +6,22 @@ import { db } from '@/db';
 import type { PriceAlertWithGame } from '@/types/price-alert';
 import { createClient } from '@/utils/supabase/server';
 
-// fallow-ignore-next-line complexity
+async function requireAuth() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error('Unauthorized');
+  return user;
+}
+
 // fallow-ignore-next-line unused-export
 export async function createPriceAlertAction(
   gameId: string,
   targetPrice: number,
   storeId?: string
 ) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error('Unauthorized');
-
+  const user = await requireAuth();
   const uuid = await resolveGameUuid(gameId);
   if (!uuid) throw new Error('Game not found or not yet ingested');
 
@@ -60,11 +63,12 @@ export async function deletePriceAlertAction(alertId: string) {
   } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
-  const rows = await db.execute(sql`SELECT "userId" FROM price_alerts WHERE id = ${alertId}::uuid`);
-  const alert = rows[0] as { userId: string } | undefined;
-  if (!alert || alert.userId !== user.id) throw new Error('Forbidden');
+  const result = await db.execute(
+    sql`DELETE FROM price_alerts WHERE id = ${alertId}::uuid AND "userId" = ${user.id}::uuid RETURNING id`
+  );
+  const rows = result as unknown as Array<{ id: string }>;
+  if (rows.length === 0) throw new Error('Forbidden');
 
-  await db.execute(sql`DELETE FROM price_alerts WHERE id = ${alertId}::uuid`);
   return true;
 }
 

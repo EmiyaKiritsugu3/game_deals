@@ -17,7 +17,9 @@ export async function generateStaticParams() {
   return COLLECTIONS.map((col) => ({ slug: col.slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({
+  params,
+}: Readonly<{ params: Promise<{ slug: string }> }>) {
   const { slug } = await params;
   const collection = COLLECTIONS.find((c) => c.slug === slug);
   if (!collection) return { title: 'Not Found' };
@@ -29,9 +31,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function CollectionDetailPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ slug: string }>;
-}) {
+}>) {
   const { slug } = await params;
   const collection = COLLECTIONS.find((c) => c.slug === slug);
 

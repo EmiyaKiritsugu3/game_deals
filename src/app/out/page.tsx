@@ -10,7 +10,7 @@ export default function OutPage() {
     <main className="container">
       <Suspense
         fallback={
-          <div style={{ padding: '5rem', textAlign: 'center' }}>Carregando link seguro...</div>
+          <div style={{ padding: '5rem', textAlign: 'center' }}>Loading secure link...</div>
         }
       >
         <OutRedirector />

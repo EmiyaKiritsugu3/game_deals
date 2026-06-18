@@ -31,7 +31,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'www.epic.com', pathname: '/**' },
       { protocol: 'https', hostname: 'www.fanatical.com', pathname: '/**' },
       { protocol: 'https', hostname: 'www.gamebillet.com', pathname: '/**' },
-      { protocol: 'https', hostname: 'www.gamersgate.com', pathname: '/**' },
+      { protocol: 'https', hostname: '*.gamersgate.com', pathname: '/**' },
       { protocol: 'https', hostname: 'www.gamesplanet.com', pathname: '/**' },
       { protocol: 'https', hostname: 'www.gamivo.com', pathname: '/**' },
       { protocol: 'https', hostname: 'www.gog.com', pathname: '/**' },

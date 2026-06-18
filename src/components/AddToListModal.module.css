@@ -73,7 +73,7 @@
   display: flex;
   align-items: center;
   text-align: center;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.5);
   font-size: 0.8rem;
   text-transform: uppercase;
   margin-bottom: 16px;
@@ -128,7 +128,7 @@
 .closeButton {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.55);
   width: 100%;
   padding: 8px;
   cursor: pointer;
@@ -136,7 +136,7 @@
 
 .empty {
   text-align: center;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.5);
   font-size: 0.85rem;
   padding: 12px;
 }

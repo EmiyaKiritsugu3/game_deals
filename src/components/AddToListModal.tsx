@@ -1,15 +1,12 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { usePlaylistMutations } from '@/hooks/usePlaylistMutations';
-import { getUserPlaylists } from '@/services/social';
-import { useAuth } from '@/store/authStore';
-import type { Playlist } from '@/types/social';
+import { usePlaylists } from '@/hooks/usePlaylists';
 import styles from './AddToListModal.module.css';
 
 interface ListSelectorProps {
-  playlists: Playlist[];
+  playlists: Array<{ id: string; title: string }>;
   error: string | null;
   addMutation: { isPending: boolean };
   createMutation: { isPending: boolean };
@@ -81,7 +78,7 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
   const [error, setError] = useState<string | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const { addMutation, createMutation } = usePlaylistMutations(gameId);
-  const { user } = useAuth();
+  const { data: playlists = [], isLoading } = usePlaylists();
   useEffect(() => {
     dialogRef.current?.showModal();
   }, []);
@@ -90,12 +87,6 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
     dialogRef.current?.close();
     onClose();
   };
-
-  const { data: playlists = [], isLoading } = useQuery({
-    queryKey: ['playlists', user?.id],
-    queryFn: () => getUserPlaylists(user?.id ?? ''),
-    enabled: !!user?.id,
-  });
 
   const handleAdd = (playlistId: string) => {
     addMutation.mutate(playlistId, {

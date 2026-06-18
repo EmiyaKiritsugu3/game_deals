@@ -18,8 +18,8 @@ export default function WishlistHero({ bestDiscountGame }: WishlistHeroProps) {
       )}
       <div className={styles.heroOverlay} />
       <div className={styles.heroContent}>
-        <h1 className={styles.title}>Meu Dashboard ❤️</h1>
-        <p className={styles.subtitle}>Gerencie seus jogos e alertas favoritos.</p>
+        <h1 className={styles.title}>My Dashboard ❤️</h1>
+        <p className={styles.subtitle}>Manage your favorite games and alerts.</p>
       </div>
     </div>
   );

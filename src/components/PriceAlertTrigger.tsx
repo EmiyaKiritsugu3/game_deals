@@ -34,10 +34,10 @@ export default function PriceAlertTrigger({
   const activeAlert = mounted ? hasAlert(gameID) : false;
 
   const handleClick = () => {
-    if (!isLoggedIn) {
-      setIsAuthModalOpen(true);
-    } else {
+    if (isLoggedIn) {
       setIsAlertModalOpen(true);
+    } else {
+      setIsAuthModalOpen(true);
     }
   };
 

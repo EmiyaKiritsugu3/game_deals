@@ -4,11 +4,13 @@ import { useShareWishlist } from '@/hooks/useShareWishlist';
 import type { SavedGame } from '@/hooks/useSortedGames';
 import styles from './WishlistStats.module.css';
 
+type SortMode = 'discount' | 'price' | 'name';
+
 interface WishlistStatsProps {
   totalValue: string;
   bestDiscountGame: SavedGame | null;
-  sortMode: 'discount' | 'price' | 'name';
-  onSortModeChange: (mode: 'discount' | 'price' | 'name') => void;
+  sortMode: SortMode;
+  onSortModeChange: (mode: SortMode) => void;
   wishlist: string[];
 }
 
@@ -25,12 +27,12 @@ export default function WishlistStats({
     <div className={styles.dashboardPanel}>
       <div className={styles.statsPanel}>
         <div className={styles.statItem}>
-          <span className={styles.statLabel}>Valor da Carteira</span>
+          <span className={styles.statLabel}>Portfolio Value</span>
           <span className={styles.statValue}>${totalValue}</span>
         </div>
         {bestDiscountGame && (
           <div className={styles.statItem}>
-            <span className={styles.statLabel}>Maior Desconto</span>
+            <span className={styles.statLabel}>Best Discount</span>
             <span className={styles.statValue}>-{bestDiscountGame.savings}%</span>
           </div>
         )}
@@ -45,20 +47,20 @@ export default function WishlistStats({
         }}
       >
         <div className={styles.sortControls}>
-          <span className={styles.sortLabel}>Ordenar por:</span>
+          <span className={styles.sortLabel}>Sort by:</span>
           <select
             value={sortMode}
-            onChange={(e) => onSortModeChange(e.target.value as 'name' | 'price' | 'discount')}
+            onChange={(e) => onSortModeChange(e.target.value as SortMode)}
             className={styles.sortSelect}
           >
-            <option value="discount">Maior Desconto</option>
-            <option value="price">Menor Preço</option>
-            <option value="name">Ordem Alfabética</option>
+            <option value="discount">Best Discount</option>
+            <option value="price">Lowest Price</option>
+            <option value="name">Alphabetical</option>
           </select>
         </div>
 
         <button type="button" className={styles.shareButton} onClick={share}>
-          {copied ? '✅ Link copiado!' : '🔗 Compartilhar Wishlist'}
+          {copied ? '✅ Link copied!' : '🔗 Share Wishlist'}
         </button>
       </div>
     </div>

@@ -1,6 +1,6 @@
 'use client';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
-import { Bell, ChevronDown, LogOut } from 'lucide-react';
+import { Bell, ChevronDown, List, LogOut } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -18,7 +18,11 @@ interface UserMenuProps {
   serverUser: SupabaseUser | null;
 }
 
-function MenuItem({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
+function MenuItem({
+  href,
+  icon,
+  label,
+}: Readonly<{ href: string; icon: React.ReactNode; label: string }>) {
   return (
     <Link href={href} className={styles.menuItem}>
       {icon}
@@ -31,10 +35,14 @@ function MenuDivider() {
   return <div className={styles.menuDivider} />;
 }
 
-function UserMenuDropdown({ isOpen, onLogout }: { isOpen: boolean; onLogout: () => void }) {
+function UserMenuDropdown({
+  isOpen,
+  onLogout,
+}: Readonly<{ isOpen: boolean; onLogout: () => void }>) {
   if (!isOpen) return null;
   return (
     <div className={styles.userDropdown}>
+      <MenuItem href="/playlists" icon={<List size={16} />} label="Playlists" />
       <MenuItem href="/wishlist" icon={<Bell size={16} />} label="Price Alerts" />
       <MenuDivider />
       <button type="button" className={`${styles.menuItem} ${styles.logout}`} onClick={onLogout}>

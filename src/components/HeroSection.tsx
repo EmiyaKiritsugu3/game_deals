@@ -6,7 +6,7 @@ import { HeroNavigation } from './hero/HeroNavigation';
 import { HeroSlide } from './hero/HeroSlide';
 import { MatrixBackground } from './hero/MatrixBackground';
 
-export default function HeroSection({ deals }: { deals: Deal[] }) {
+export default function HeroSection({ deals }: Readonly<{ deals: Deal[] }>) {
   const { currentIndex, goTo } = useCarousel(deals.length);
   if (!deals.length) return null;
 

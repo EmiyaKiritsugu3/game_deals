@@ -52,7 +52,7 @@ export function HeroSlide({
                           height={16}
                           unoptimized
                         />
-                        <span className={styles.storeNameLabel}>Ver Oferta</span>
+                        <span className={styles.storeNameLabel}>View Deal</span>
                       </div>
                     );
                   })()}

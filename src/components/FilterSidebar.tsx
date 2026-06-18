@@ -9,7 +9,7 @@ interface StoreInfo {
   storeName: string;
 }
 
-export default function FilterSidebar({ stores }: { stores: StoreInfo[] }) {
+export default function FilterSidebar({ stores }: Readonly<{ stores: StoreInfo[] }>) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -61,7 +61,7 @@ export default function FilterSidebar({ stores }: { stores: StoreInfo[] }) {
   };
 
   return (
-    <aside className={styles.sidebar}>
+    <aside className={styles.sidebar} aria-label="Filters">
       <div className={styles.header}>
         <h3 className={styles.title}>Filters</h3>
         <button onClick={clearFilters} className={styles.clearBtn} type="button">
@@ -81,6 +81,7 @@ export default function FilterSidebar({ stores }: { stores: StoreInfo[] }) {
             onChange={(e) => setMaxPrice(e.target.value)}
             placeholder="Any"
             className={styles.priceInput}
+            aria-label="Maximum price"
           />
         </div>
       </div>
@@ -97,6 +98,7 @@ export default function FilterSidebar({ stores }: { stores: StoreInfo[] }) {
                   checked={selectedStores.has(store.storeID)}
                   onChange={() => handleStoreToggle(store.storeID)}
                   className={styles.checkbox}
+                  aria-label={store.storeName}
                 />
                 <span className={styles.storeName}>{store.storeName}</span>
               </label>

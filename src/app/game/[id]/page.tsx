@@ -13,9 +13,9 @@ import { calculateCostPerHour, estimatePlaytime } from '@/services/hltb';
 
 export async function generateMetadata({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ id: string }>;
-}): Promise<Metadata> {
+}>): Promise<Metadata> {
   const { id } = await params;
   const game = await getGame(id);
 
@@ -42,16 +42,16 @@ export async function generateMetadata({
   };
 }
 
-export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
+export default async function GamePage({ params }: Readonly<{ params: Promise<{ id: string }> }>) {
   const { id } = await params;
   const [game, stores] = await Promise.all([getGame(id), getStores()]);
 
   if (!game?.info) {
     return (
-      <main className="container" style={{ padding: '4rem', textAlign: 'center' }}>
+      <div className="container" style={{ padding: '4rem', textAlign: 'center' }}>
         <h1>Game not found</h1>
         <p>The game you&apos;re looking for doesn&apos;t exist or has been removed.</p>
-      </main>
+      </div>
     );
   }
 
@@ -100,9 +100,9 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      <main className="container">
+      <div className="container">
         <GameBody viewModel={viewModel} id={id} />
-      </main>
+      </div>
     </>
   );
 }

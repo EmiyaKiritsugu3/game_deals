@@ -111,31 +111,40 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <head>{jsonLdScript}</head>
+      <head>
+        {jsonLdScript}
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      </head>
       <body className={`${inter.variable} antialiased`}>
-        <NuqsAdapter>
-          <ReactQueryProvider>
-            <Suspense
-              fallback={
-                <nav
-                  style={{
-                    height: 60,
-                    borderBottom: '1px solid hsl(var(--border))',
-                    background: 'hsl(var(--background))',
-                  }}
-                />
-              }
-            >
-              <Navbar serverUser={null} />
-            </Suspense>
-            <SyncManager />
-            {children}
-            {modal}
-            <Analytics />
-            <SpeedInsights />
-            <CookieBanner />
-          </ReactQueryProvider>
-        </NuqsAdapter>
+        <a href="#main-content" className="skip-to-content">
+          Skip to main content
+        </a>
+        <main id="main-content">
+          <NuqsAdapter>
+            <ReactQueryProvider>
+              <Suspense
+                fallback={
+                  <nav
+                    style={{
+                      height: 60,
+                      borderBottom: '1px solid hsl(var(--border))',
+                      background: 'hsl(var(--background))',
+                    }}
+                  />
+                }
+              >
+                <Navbar serverUser={null} />
+              </Suspense>
+              <SyncManager />
+              {children}
+              {modal}
+              <Analytics />
+              <SpeedInsights />
+              <CookieBanner />
+            </ReactQueryProvider>
+          </NuqsAdapter>
+        </main>
       </body>
     </html>
   );

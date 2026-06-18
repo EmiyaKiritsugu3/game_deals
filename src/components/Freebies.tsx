@@ -14,8 +14,8 @@ export default function Freebies({ deals }: FreebiesProps) {
     <section className={styles.freebiesSection}>
       <div className={styles.header}>
         <div className={styles.titleArea}>
-          <h2>🎁 JOGOS GRÁTIS! (100% OFF)</h2>
-          <span className={styles.pulseBadge}>Resgate Agora</span>
+          <h2>🎁 FREE GAMES! (100% OFF)</h2>
+          <span className={styles.pulseBadge}>Claim Now</span>
         </div>
       </div>
 
@@ -32,14 +32,14 @@ export default function Freebies({ deals }: FreebiesProps) {
                   sizes="220px"
                   unoptimized
                 />
-                <div className={styles.freeBadge}>GRÁTIS</div>
+                <div className={styles.freeBadge}>FREE</div>
               </div>
 
               <div className={styles.cardInfo}>
                 <h3 className={styles.title}>{deal.title}</h3>
                 <div className={styles.voucherContainer}>
                   <div className={styles.voucher}>
-                    <div className={styles.voucherLeft}>CUPOM</div>
+                    <div className={styles.voucherLeft}>COUPON</div>
                     <div className={styles.voucherSeparator}></div>
                     <div className={styles.voucherRight}>-100%</div>
                   </div>

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef } from 'react';
 import styles from './SidebarModal.module.css';
 
-export default function SidebarModal({ children }: { children: React.ReactNode }) {
+export default function SidebarModal({ children }: Readonly<{ children: React.ReactNode }>) {
   const router = useRouter();
   const overlay = useRef<HTMLDivElement>(null);
 

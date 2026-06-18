@@ -32,7 +32,8 @@ export function SearchBox() {
 
   return (
     <div className={styles.searchContainer} ref={dropdownRef}>
-      <form action="/search" className={styles.searchForm}>
+      {/* biome-ignore lint/a11y/useSemanticElements: form with role search is correct for search forms */}
+      <form action="/search" className={styles.searchForm} role="search">
         <input
           type="text"
           name="q"
@@ -46,6 +47,7 @@ export function SearchBox() {
           onFocus={() => setIsDropdownOpen(true)}
           autoComplete="off"
           required
+          aria-label="Search games"
         />
         <button type="submit" className={styles.searchButton}>
           <Search size={20} />
@@ -54,32 +56,34 @@ export function SearchBox() {
 
       {isDropdownOpen && debouncedQuery.length >= 3 && (
         <div className={styles.searchDropdown}>
-          {isLoading ? (
-            <div className={`${styles.dropdownItem} ${styles.loading}`}>Loading...</div>
-          ) : results && results.length > 0 ? (
-            results.map((game) => (
-              <Link
-                href={`/game/${game.gameID}`}
-                key={game.gameID}
-                className={styles.dropdownItem}
-                onClick={() => {
-                  setIsDropdownOpen(false);
-                  setQuery('');
-                }}
-              >
-                {
-                  // biome-ignore lint/performance/noImgElement: search result thumbnails
-                  <img src={game.thumb} alt={game.external} className={styles.dropdownThumb} />
-                }
-                <div className={styles.dropdownInfo}>
-                  <span className={styles.dropdownTitle}>{game.external}</span>
-                  <span className={styles.dropdownPrice}>From ${game.cheapest}</span>
-                </div>
-              </Link>
-            ))
-          ) : (
-            <div className={styles.dropdownItem}>No games found</div>
-          )}
+          {(() => {
+            if (isLoading) {
+              return <div className={`${styles.dropdownItem} ${styles.loading}`}>Loading...</div>;
+            }
+            if (results && results.length > 0) {
+              return results.map((game) => (
+                <Link
+                  href={`/game/${game.gameID}`}
+                  key={game.gameID}
+                  className={styles.dropdownItem}
+                  onClick={() => {
+                    setIsDropdownOpen(false);
+                    setQuery('');
+                  }}
+                >
+                  {
+                    // biome-ignore lint/performance/noImgElement: search result thumbnails
+                    <img src={game.thumb} alt={game.external} className={styles.dropdownThumb} />
+                  }
+                  <div className={styles.dropdownInfo}>
+                    <span className={styles.dropdownTitle}>{game.external}</span>
+                    <span className={styles.dropdownPrice}>From ${game.cheapest}</span>
+                  </div>
+                </Link>
+              ));
+            }
+            return <div className={styles.dropdownItem}>No games found</div>;
+          })()}
         </div>
       )}
     </div>

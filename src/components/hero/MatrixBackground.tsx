@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { type Deal, getHighResImage } from '../../services/api';
 import styles from '../HeroSection.module.css';
 
-export function MatrixBackground({ deals }: { deals: Deal[] }) {
+export function MatrixBackground({ deals }: Readonly<{ deals: Deal[] }>) {
   return (
     <>
       <div className={styles.matrixBackground}>

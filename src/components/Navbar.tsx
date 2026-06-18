@@ -1,7 +1,7 @@
 'use client';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuthSubscription } from '@/hooks/useAuthSubscription';
 import { useAuth } from '@/store/authStore';
 import AuthModal from './AuthModal';
@@ -12,21 +12,29 @@ import { SearchBox } from './navbar/SearchBox';
 import { UserMenu } from './navbar/UserMenu';
 import WishlistIndicator from './WishlistIndicator';
 
-// fallow-ignore-next-line complexity
-export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseUser | null }) {
-  const { user, isLoggedIn, setUser } = useAuth();
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-
-  useAuthSubscription();
+function useServerUserSync(
+  serverUser: SupabaseUser | null | undefined,
+  closeAuthModal: () => void
+) {
+  const { setUser } = useAuth();
 
   useEffect(() => {
     if (serverUser) {
       setUser(serverUser);
-      setIsAuthModalOpen(false);
+      closeAuthModal();
     } else {
       setUser(null);
     }
-  }, [setUser, serverUser]);
+  }, [setUser, serverUser, closeAuthModal]);
+}
+
+export default function Navbar({ serverUser }: { readonly serverUser?: SupabaseUser | null }) {
+  const { user, isLoggedIn } = useAuth();
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  useAuthSubscription();
+  const closeAuthModal = useCallback(() => setIsAuthModalOpen(false), []);
+  useServerUserSync(serverUser, closeAuthModal);
 
   return (
     <nav className={styles.navbar}>

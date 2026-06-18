@@ -36,7 +36,7 @@ export function estimatePlaytime(gameTitle: string): HLTBResult {
   const mainExtra = Math.round(mainStory * extraMultiplier);
 
   // Completionist is 2x-4x main story
-  const completionistMultiplier = 2.0 + (hash % 200) / 100;
+  const completionistMultiplier = 2 + (hash % 200) / 100;
   const completionist = Math.round(mainStory * completionistMultiplier);
 
   return {
