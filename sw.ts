@@ -2,7 +2,9 @@
 
 import { CacheFirst, ExpirationPlugin, NetworkFirst, Serwist, StaleWhileRevalidate } from 'serwist';
 
-declare const self: ServiceWorkerGlobalScope & { readonly __SW_MANIFEST: readonly { url: string; revision: string }[] };
+declare const self: ServiceWorkerGlobalScope & {
+  readonly __SW_MANIFEST: readonly { url: string; revision: string }[];
+};
 
 const serwist = new Serwist({
   cacheId: 'gamedeals',

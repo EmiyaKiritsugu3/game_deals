@@ -5,13 +5,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAuthSubscription } from '@/hooks/useAuthSubscription';
 import { useAuth } from '@/store/authStore';
 import AuthModal from './AuthModal';
+import InstallPWAButton from './InstallPWAButton';
 import styles from './Navbar.module.css';
 import NotificationBell from './NotificationBell';
-import ThemeToggle from './ThemeToggle';
 import { AuthSection } from './navbar/AuthSection';
 import { SearchBox } from './navbar/SearchBox';
 import { UserMenu } from './navbar/UserMenu';
-import InstallPWAButton from './InstallPWAButton';
+import ThemeToggle from './ThemeToggle';
 import WishlistIndicator from './WishlistIndicator';
 
 function useServerUserSync(

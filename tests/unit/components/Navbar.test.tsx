@@ -54,7 +54,8 @@ vi.mock('@/components/navbar/SearchBox', () => ({
 }));
 
 vi.mock('@/components/ThemeToggle', () => ({
-  default: () => React.createElement('button', { 'data-testid': 'theme-toggle' }, '🌙'),
+  default: () =>
+    React.createElement('button', { type: 'button', 'data-testid': 'theme-toggle' }, '🌙'),
 }));
 vi.mock('@/components/InstallPWAButton', () => ({
   default: () => React.createElement('div', { 'data-testid': 'install-pwa' }),

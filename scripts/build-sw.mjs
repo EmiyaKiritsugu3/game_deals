@@ -1,6 +1,6 @@
-import * as esbuild from 'esbuild';
 import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import * as esbuild from 'esbuild';
 
 const OUT_FILE = resolve(import.meta.dirname, '..', 'public', 'sw.js');
 

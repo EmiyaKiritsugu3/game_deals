@@ -124,28 +124,28 @@ export default async function RootLayout({
         <main id="main-content">
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <NuqsAdapter>
-            <ReactQueryProvider>
-              <Suspense
-                fallback={
-                  <nav
-                    style={{
-                      height: 60,
-                      borderBottom: '1px solid hsl(var(--border))',
-                      background: 'hsl(var(--background))',
-                    }}
-                  />
-                }
-              >
-                <Navbar serverUser={null} />
-              </Suspense>
-              <SyncManager />
-              {children}
-              {modal}
-              <Analytics />
-              <SpeedInsights />
-              <CookieBanner />
-            </ReactQueryProvider>
-          </NuqsAdapter>
+              <ReactQueryProvider>
+                <Suspense
+                  fallback={
+                    <nav
+                      style={{
+                        height: 60,
+                        borderBottom: '1px solid hsl(var(--border))',
+                        background: 'hsl(var(--background))',
+                      }}
+                    />
+                  }
+                >
+                  <Navbar serverUser={null} />
+                </Suspense>
+                <SyncManager />
+                {children}
+                {modal}
+                <Analytics />
+                <SpeedInsights />
+                <CookieBanner />
+              </ReactQueryProvider>
+            </NuqsAdapter>
           </ThemeProvider>
         </main>
       </body>

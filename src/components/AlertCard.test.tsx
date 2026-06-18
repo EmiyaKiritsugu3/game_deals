@@ -23,35 +23,27 @@ const baseAlert: PriceAlertWithGame = {
 
 describe('AlertCard', () => {
   it('renders game title and target price', () => {
-    render(
-      <AlertCard alert={baseAlert} onDelete={vi.fn()} isDeleting={false} />,
-    );
+    render(<AlertCard alert={baseAlert} onDelete={vi.fn()} isDeleting={false} />);
 
     expect(screen.getByText('Test Game')).toBeInTheDocument();
     expect(screen.getByText('$9.99')).toBeInTheDocument();
   });
 
   it('shows formatted current price', () => {
-    render(
-      <AlertCard alert={baseAlert} onDelete={vi.fn()} isDeleting={false} />,
-    );
+    render(<AlertCard alert={baseAlert} onDelete={vi.fn()} isDeleting={false} />);
 
     expect(screen.getByText('$7.50')).toBeInTheDocument();
   });
 
   it('shows store name when storeId is present', () => {
-    render(
-      <AlertCard alert={baseAlert} onDelete={vi.fn()} isDeleting={false} />,
-    );
+    render(<AlertCard alert={baseAlert} onDelete={vi.fn()} isDeleting={false} />);
 
     expect(screen.getByText(/Store: steam/)).toBeInTheDocument();
   });
 
   it('renders remove button and calls onDelete when clicked', () => {
     const onDelete = vi.fn();
-    render(
-      <AlertCard alert={baseAlert} onDelete={onDelete} isDeleting={false} />,
-    );
+    render(<AlertCard alert={baseAlert} onDelete={onDelete} isDeleting={false} />);
 
     const removeBtn = screen.getByRole('button', { name: /Delete alert for/ });
     fireEvent.click(removeBtn);
@@ -60,9 +52,7 @@ describe('AlertCard', () => {
   });
 
   it('shows "Removing…" when isDeleting is true and disables button', () => {
-    render(
-      <AlertCard alert={baseAlert} onDelete={vi.fn()} isDeleting={true} />,
-    );
+    render(<AlertCard alert={baseAlert} onDelete={vi.fn()} isDeleting={true} />);
 
     const removeBtn = screen.getByRole('button', { name: /Delete alert for/ });
     expect(removeBtn).toBeDisabled();
@@ -70,9 +60,7 @@ describe('AlertCard', () => {
   });
 
   it('renders View Game link when cheapshark_id exists', () => {
-    render(
-      <AlertCard alert={baseAlert} onDelete={vi.fn()} isDeleting={false} />,
-    );
+    render(<AlertCard alert={baseAlert} onDelete={vi.fn()} isDeleting={false} />);
 
     const link = screen.getByRole('link', { name: 'View Game' });
     expect(link).toHaveAttribute('href', '/game/cs-1');
@@ -83,17 +71,13 @@ describe('AlertCard', () => {
       ...baseAlert,
       cheapshark_id: '',
     };
-    render(
-      <AlertCard alert={alertNoCs} onDelete={vi.fn()} isDeleting={false} />,
-    );
+    render(<AlertCard alert={alertNoCs} onDelete={vi.fn()} isDeleting={false} />);
 
     expect(screen.getByText('Unavailable')).toBeInTheDocument();
   });
 
   it('shows "Monitoring" status', () => {
-    render(
-      <AlertCard alert={baseAlert} onDelete={vi.fn()} isDeleting={false} />,
-    );
+    render(<AlertCard alert={baseAlert} onDelete={vi.fn()} isDeleting={false} />);
 
     expect(screen.getByText('Monitoring')).toBeInTheDocument();
   });
@@ -103,9 +87,7 @@ describe('AlertCard', () => {
       ...baseAlert,
       currentPrice: null,
     };
-    render(
-      <AlertCard alert={alertNoPrice} onDelete={vi.fn()} isDeleting={false} />,
-    );
+    render(<AlertCard alert={alertNoPrice} onDelete={vi.fn()} isDeleting={false} />);
 
     expect(screen.getByText('N/A')).toBeInTheDocument();
   });

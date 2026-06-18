@@ -11,8 +11,8 @@ export default function OfflinePage() {
       <div className="text-6xl">📡</div>
       <h1 className="text-3xl font-bold">You&apos;re offline</h1>
       <p className="max-w-md text-neutral-400">
-        It looks like you&apos;ve lost your connection. Don&apos;t worry — we&apos;ll
-        be back as soon as you reconnect.
+        It looks like you&apos;ve lost your connection. Don&apos;t worry — we&apos;ll be back as
+        soon as you reconnect.
       </p>
       <Link
         href="/"
