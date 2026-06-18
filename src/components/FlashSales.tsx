@@ -50,7 +50,7 @@ export default function FlashSales({ deals }: FlashSalesProps) {
     <section className={styles.flashSalesSection}>
       <div className={styles.header}>
         <div className={styles.titleArea}>
-          <h2>⚡ Ofertas Relâmpago</h2>
+          <h2>⚡ Flash Deals</h2>
           <div className={styles.timer}>
             <span>{String(timeLeft.hours).padStart(2, '0')}</span>
             <span className={styles.colon}>:</span>
@@ -60,7 +60,7 @@ export default function FlashSales({ deals }: FlashSalesProps) {
           </div>
         </div>
         <Link href="/search" className={styles.viewAll}>
-          Ver Tudo &gt;
+          View All &gt;
         </Link>
       </div>
 

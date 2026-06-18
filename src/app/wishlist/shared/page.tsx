@@ -10,10 +10,10 @@ import styles from '../page.module.css';
 function EmptySharedState() {
   return (
     <div className={styles.emptyState}>
-      <h2>Wishlist não encontrada</h2>
-      <p>O link pode estar expirado ou inválido.</p>
+      <h2>Wishlist not found</h2>
+      <p>The link may be expired or invalid.</p>
       <Link href="/" className={styles.browseButton}>
-        Ir para a Home
+        Go to Home
       </Link>
     </div>
   );
@@ -43,7 +43,7 @@ function SharedGameCard({ game, stores }: { game: GameEntry; stores: Record<stri
         <div className={styles.meta}>
           <span className={styles.storeBadge}>{stores[game.storeID] || 'Store'}</span>
           <Link href={`/game/${game.gameID}`} className={styles.viewDetailsBtn}>
-            🎁 Comprar como Presente
+            🎁 Buy as Gift
           </Link>
         </div>
       </div>
@@ -66,7 +66,7 @@ function SharedWishlistContent() {
     return (
       <div className={styles.emptyState}>
         <div className={styles.spinner}></div>
-        <p>Carregando a Wishlist compartilhada...</p>
+        <p>Loading shared wishlist...</p>
       </div>
     );
 
@@ -83,10 +83,10 @@ function SharedWishlistContent() {
         )}
         <div className={styles.heroOverlay} />
         <div className={styles.heroContent}>
-          <h1 className={styles.title}>🎁 Wishlist Compartilhada</h1>
+          <h1 className={styles.title}>🎁 Shared Wishlist</h1>
           <p className={styles.subtitle}>
-            {games.length} {games.length === 1 ? 'jogo' : 'jogos'} nesta lista · Presenteie usando
-            os links abaixo!
+            {games.length} {games.length === 1 ? 'game' : 'games'} in this list · Gift using
+            the links below!
           </p>
         </div>
       </div>
@@ -104,7 +104,7 @@ export default function SharedWishlistPage() {
     <main className={styles.main}>
       <div className={`container ${styles.container}`}>
         <Suspense
-          fallback={<div style={{ padding: '5rem', textAlign: 'center' }}>Carregando...</div>}
+          fallback={<div style={{ padding: '5rem', textAlign: 'center' }}>Loading...</div>}
         >
           <SharedWishlistContent />
         </Suspense>

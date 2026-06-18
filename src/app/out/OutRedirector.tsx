@@ -79,13 +79,13 @@ export default function OutRedirector() {
   return (
     <div className={styles.redirectContainer}>
       <div className={styles.spinner}></div>
-      <h2>Aplicando Desconto...</h2>
+      <h2>Applying Discount...</h2>
       {store ? (
         <p>
-          Transferindo você para a loja parceira <strong>{store}</strong>.
+          Transferring you to the partner store <strong>{store}</strong>.
         </p>
       ) : (
-        <p>Preparando conexão segura com a loja parceira.</p>
+        <p>Preparing secure connection to the partner store.</p>
       )}
     </div>
   );

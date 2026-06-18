@@ -32,7 +32,7 @@ export default function WishlistTabs({
         onClick={() => onTabChange('alerts')}
       >
         <Bell size={20} />
-        Meus Alertas ({alertsCount})
+        My Alerts ({alertsCount})
       </button>
     </div>
   );

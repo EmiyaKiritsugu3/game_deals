@@ -41,7 +41,6 @@ const PORTUGUESE_PATTERNS: Array<{ pattern: RegExp; description: string }> = [
   { pattern: /[Pp]reço\s+baixar/gu, description: 'preço baixar (price drop)' },
   { pattern: /Meu\s+Dashboard/gu, description: 'Meu Dashboard (My Dashboard)' },
   { pattern: /Gerencie\s+seus\s+jogos/gu, description: 'Gerencie seus jogos (Manage your games)' },
-  { pattern: /[Aa]lertLabel[^}]*>\s*(Alvo|Atual)/gu, description: 'Alvo/Atual (Target/Current)' },
   { pattern: /Inclui\s+Keyshops|Apenas\s+Oficiais/gu, description: 'Keyshop labels' },
 ];
 

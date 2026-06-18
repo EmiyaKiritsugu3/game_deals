@@ -19,7 +19,7 @@ function LoadingState() {
   return (
     <div className={styles.emptyState}>
       <div className={styles.spinner} />
-      <p>Carregando seus jogos...</p>
+      <p>Loading your games...</p>
     </div>
   );
 }
@@ -33,13 +33,12 @@ function EmptyState() {
       transition={{ duration: 0.4, type: 'spring', bounce: 0.5 }}
     >
       <HeartCrack size={64} className={styles.emptyIcon} />
-      <h2>Sua lista está vazia :(</h2>
+      <h2>Your wishlist is empty :(</h2>
       <p>
-        Volte para a página principal e clique no coração nos jogos que você deseja rastrear e
-        acompanhar o preço!
+        Go back to the main page and click the heart on games you want to track and follow prices!
       </p>
       <Link href="/" className={styles.browseButton}>
-        Descobrir Ofertas Épicas
+        Discover Epic Deals
       </Link>
     </motion.div>
   );
@@ -108,7 +107,7 @@ export default function WishlistGrid({ games, stores, isLoading = false }: Wishl
                 {stores[game.storeID] || `Store ${game.storeID}`}
               </span>
               <Link href={`/game/${game.gameID}`} className={styles.viewDetailsBtn}>
-                Ver Detalhes
+                View Details
               </Link>
             </div>
           </div>
