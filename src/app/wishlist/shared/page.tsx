@@ -85,8 +85,8 @@ function SharedWishlistContent() {
         <div className={styles.heroContent}>
           <h1 className={styles.title}>🎁 Shared Wishlist</h1>
           <p className={styles.subtitle}>
-            {games.length} {games.length === 1 ? 'game' : 'games'} in this list · Gift using
-            the links below!
+            {games.length} {games.length === 1 ? 'game' : 'games'} in this list · Gift using the
+            links below!
           </p>
         </div>
       </div>
@@ -103,9 +103,7 @@ export default function SharedWishlistPage() {
   return (
     <main className={styles.main}>
       <div className={`container ${styles.container}`}>
-        <Suspense
-          fallback={<div style={{ padding: '5rem', textAlign: 'center' }}>Loading...</div>}
-        >
+        <Suspense fallback={<div style={{ padding: '5rem', textAlign: 'center' }}>Loading...</div>}>
           <SharedWishlistContent />
         </Suspense>
       </div>

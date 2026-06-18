@@ -25,7 +25,7 @@ export default function WishlistStats({
     <div className={styles.dashboardPanel}>
       <div className={styles.statsPanel}>
         <div className={styles.statItem}>
-            <span className={styles.statLabel}>Portfolio Value</span>
+          <span className={styles.statLabel}>Portfolio Value</span>
           <span className={styles.statValue}>${totalValue}</span>
         </div>
         {bestDiscountGame && (
