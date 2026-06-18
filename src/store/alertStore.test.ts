@@ -126,8 +126,8 @@ describe('alertStore', () => {
     addAlert(mockAlert);
     const alert = getAlert('game-1');
     expect(alert).toBeDefined();
-    expect(alert!.gameID).toBe('game-1');
-    expect(alert!.targetPrice).toBe(9.99);
+    expect(alert?.gameID).toBe('game-1');
+    expect(alert?.targetPrice).toBe(9.99);
   });
 
   it('getAlert returns undefined for a game without an alert', () => {
@@ -140,7 +140,7 @@ describe('alertStore', () => {
     addAlert(mockAlert);
     setAlertId('game-1', 'alert-uuid-123');
     const alert = getAlert('game-1');
-    expect(alert!.alertId).toBe('alert-uuid-123');
+    expect(alert?.alertId).toBe('alert-uuid-123');
   });
 
   it('setAlertId does nothing for a non-existent gameID', () => {
