@@ -36,11 +36,11 @@ interface WishlistState {
   removeFromWishlist: (gameID: string) => void;
   toggleWishlist: (gameID: string) => void;
   isInWishlist: (gameID: string) => boolean;
-  setWishlist: (ids: string[]) => void;
+  setWishlist: (ids: string[]) => void;  // Full replacement — used by SyncManager after cloud→local merge
 }
 ```
 
-- Operations are **local** (no fetch). Sync with Supabase happens later via `setWishlist()`.
+- Operations are **local** (no fetch). Sync with Supabase happens later — cloud→local merge in SyncManager replaces the full list via `setWishlist(ids[])`.
 - `addToWishlist` prevents duplicates with `includes()` before adding.
 - `removeFromWishlist` filters by ID.
 - `toggleWishlist` combines add/remove in a single method for use in toggle buttons.
