@@ -75,11 +75,11 @@ describe('createPlaylistAction', () => {
   });
 
   it('handles slug conflict by appending random suffix', async () => {
-    vi.spyOn(Math, 'random').mockReturnValue(0.123456789);
+    vi.spyOn(crypto, 'randomUUID').mockReturnValue('4f3a1c85-1234-4234-9234-123456789abc');
     authGetUser.mockResolvedValueOnce({ data: { user: { id: 'user-1' } } });
     execute
       .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([{ ...fakePlaylist, slug: 'my-playlist-4f3a1c' }]);
+      .mockResolvedValueOnce([{ ...fakePlaylist, slug: 'my-playlist-4f3a1c85' }]);
 
     const result = await createPlaylistAction('user-1', 'My Playlist');
     expect(result.slug).not.toBe('my-playlist');

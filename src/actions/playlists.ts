@@ -50,7 +50,8 @@ export async function createPlaylistAction(
   const authedUserId = await getAuthenticatedUserId();
   if (authedUserId !== userId) throw new Error('Unauthorized');
 
-  let slug = generateSlug(title);
+  const baseSlug = generateSlug(title);
+  let slug = baseSlug;
 
   for (let attempt = 0; attempt < 2; attempt++) {
     const result = (await db.execute(
@@ -62,8 +63,8 @@ export async function createPlaylistAction(
 
     if (result.length > 0) return result[0];
 
-    const suffix = Math.random().toString(36).substring(2, 8);
-    slug = `${generateSlug(title)}-${suffix}`;
+    const suffix = crypto.randomUUID().substring(0, 8);
+    slug = `${baseSlug}-${suffix}`;
   }
 
   throw new Error('Failed to create playlist due to slug conflict');
