@@ -38,6 +38,9 @@ importers:
       next:
         specifier: 16.1.6
         version: 16.1.6(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@playwright/test@1.60.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      next-themes:
+        specifier: ^0.4.6
+        version: 0.4.6(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       nuqs:
         specifier: ^2.8.9
         version: 2.8.9(next@16.1.6(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@playwright/test@1.60.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3)
@@ -53,6 +56,9 @@ importers:
       recharts:
         specifier: ^3.7.0
         version: 3.8.0(@types/react@19.2.14)(react-dom@19.2.3(react@19.2.3))(react-is@17.0.2)(react@19.2.3)(redux@5.0.1)
+      serwist:
+        specifier: ^9.5.11
+        version: 9.5.11(browserslist@4.28.2)(typescript@5.9.3)
       simple-icons:
         specifier: ^16.23.0
         version: 16.23.0
@@ -1755,6 +1761,14 @@ packages:
     peerDependencies:
       webpack: '>=5.0.0'
 
+  '@serwist/utils@9.5.11':
+    resolution: {integrity: sha512-zqxmwuHqWA3OwN82Wo8gFZ9QBemygJP3cap5JWAOG4UyJZgUZfmBXAXj+IMaD4eKZ/6pqrxHHDZ9uSWZmJ1mXA==}
+    peerDependencies:
+      browserslist: '>=4'
+    peerDependenciesMeta:
+      browserslist:
+        optional: true
+
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
 
@@ -2645,6 +2659,9 @@ packages:
     resolution: {integrity: sha512-1dhVQZXhcHje7798IVM+xoo/1ZdVfzOMIc8/rgVSijRK38EDqOJoGula9N/8ZI5RD8QTxNQtK/Gozpr+qUqRRA==}
     engines: {node: '>=20.0.0'}
 
+  idb@8.0.3:
+    resolution: {integrity: sha512-LtwtVyVYO5BqRvcsKuB2iUMnHwPVByPCXFXOpuU96IZPPoPN6xjOGxZQ74pgSVVLQWtUOYgyeL4GE98BY5D3wg==}
+
   immer@10.2.0:
     resolution: {integrity: sha512-d/+XTN3zfODyjr89gM3mPq1WNX2B8pYsu7eORitdwyA2sBubnTl3laYlBk4sXY5FUa5qTZGBDPJICVbvqzjlbw==}
 
@@ -2897,6 +2914,12 @@ packages:
 
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
+
+  next-themes@0.4.6:
+    resolution: {integrity: sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA==}
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
 
   next@16.1.6:
     resolution: {integrity: sha512-hkyRkcu5x/41KoqnROkfTm2pZVbKxvbZRuNvKXLRXxs3VfyO0WhY50TQS40EuKO9SW3rBj/sF3WbVwDACeMZyw==}
@@ -3155,6 +3178,14 @@ packages:
     resolution: {integrity: sha512-vFKC2IEtQnVhpT78h1Yp8wzwrf8CM+MzKMHGJZfBtzhZNycRFnXsHk6E5TxIkkMsgNS7mdX3AGB7x2QM2di4lA==}
     engines: {node: '>=10'}
     hasBin: true
+
+  serwist@9.5.11:
+    resolution: {integrity: sha512-Bq6uwJFd4ET60BWI77v3VbazKHv6k7lECOiiCFwKyBu/slaCn0GHJ5L5RfsuJUKrnbD9lYUCDo6sqaKRM5M2vA==}
+    peerDependencies:
+      typescript: '>=5.0.0'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   sharp@0.34.5:
     resolution: {integrity: sha512-Ou9I5Ft9WNcCbXrU9cMgPBcCK8LiwLqcbywW3t4oDV37n1pzpuNLsYiAV8eODnjbtQlSDwZ2cUEeQz4E54Hltg==}
@@ -4711,6 +4742,10 @@ snapshots:
       - encoding
       - supports-color
 
+  '@serwist/utils@9.5.11(browserslist@4.28.2)':
+    optionalDependencies:
+      browserslist: 4.28.2
+
   '@standard-schema/spec@1.0.0': {}
 
   '@standard-schema/spec@1.1.0': {}
@@ -5501,6 +5536,8 @@ snapshots:
 
   iceberg-js@0.8.1: {}
 
+  idb@8.0.3: {}
+
   immer@10.2.0: {}
 
   immer@11.1.4: {}
@@ -5736,6 +5773,11 @@ snapshots:
   nanoid@3.3.12: {}
 
   neo-async@2.6.2: {}
+
+  next-themes@0.4.6(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
+    dependencies:
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
 
   next@16.1.6(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@playwright/test@1.60.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:
@@ -6054,6 +6096,15 @@ snapshots:
   semver@6.3.1: {}
 
   semver@7.7.4: {}
+
+  serwist@9.5.11(browserslist@4.28.2)(typescript@5.9.3):
+    dependencies:
+      '@serwist/utils': 9.5.11(browserslist@4.28.2)
+      idb: 8.0.3
+    optionalDependencies:
+      typescript: 5.9.3
+    transitivePeerDependencies:
+      - browserslist
 
   sharp@0.34.5:
     dependencies:
