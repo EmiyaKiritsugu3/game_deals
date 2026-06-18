@@ -100,3 +100,29 @@ describe('wishlistStore', () => {
     expect(isInWishlist('123')).toBe(false);
   });
 });
+
+describe('setWishlist', () => {
+  it('replaces current wishlist with new ids', () => {
+    const { addToWishlist } = useWishlist.getState();
+    addToWishlist('123');
+    addToWishlist('456');
+    const { setWishlist } = useWishlist.getState();
+    setWishlist(['cloud-item-1', 'cloud-item-2']);
+    expect(useWishlist.getState().wishlist).toEqual(['cloud-item-1', 'cloud-item-2']);
+  });
+
+  it('clears wishlist when given empty array', () => {
+    const { addToWishlist, setWishlist } = useWishlist.getState();
+    addToWishlist('123');
+    setWishlist([]);
+    expect(useWishlist.getState().wishlist).toEqual([]);
+  });
+
+  it('does not mutate the input array', () => {
+    const input = ['a', 'b'];
+    const { setWishlist } = useWishlist.getState();
+    setWishlist(input);
+    input.push('c');
+    expect(useWishlist.getState().wishlist).toEqual(['a', 'b']);
+  });
+});
