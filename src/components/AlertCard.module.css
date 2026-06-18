@@ -166,8 +166,8 @@
   padding: 0.6rem 1rem;
   border-radius: var(--radius);
   border: 1px solid hsl(0 65% 50% / 0.3);
-  background: hsl(0 65% 50% / 0.08);
-  color: hsl(0 65% 38%);
+  background: hsl(0 65% 50% / 0.15);
+  color: hsl(0 65% 35%);
   font-weight: 700;
   font-size: 0.85rem;
   cursor: pointer;
