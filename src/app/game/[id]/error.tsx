@@ -5,9 +5,6 @@ import PageError from '@/components/PageError';
 export default function ErrorPage({
   error,
   reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
+}: Readonly<{ error: Error & { digest?: string }; reset: () => void }>) {
   return <PageError error={error} reset={reset} pageName="game" />;
 }

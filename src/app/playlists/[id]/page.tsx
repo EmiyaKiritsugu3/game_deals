@@ -45,14 +45,14 @@ function EmptyGamesState() {
 
 function GameCard({
   game,
-}: {
+}: Readonly<{
   game: {
     gameId: string;
     cheapsharkId: string | null;
     title: string | null;
     thumbUrl: string | null;
   };
-}) {
+}>) {
   const href = game.cheapsharkId ? `/game/${game.cheapsharkId}` : '#';
   return (
     <Link href={href} className={styles.gameCard}>
@@ -77,7 +77,7 @@ function GameCard({
   );
 }
 
-export default function PlaylistDetailPage({ params }: PlaylistDetailPageProps) {
+export default function PlaylistDetailPage({ params }: Readonly<PlaylistDetailPageProps>) {
   const { isLoggedIn, user } = useAuth();
   const { data: playlist, isLoading } = usePlaylistDetail(params.id);
   const { deletePlaylistMutation } = usePlaylistMutations('');

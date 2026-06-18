@@ -9,7 +9,7 @@ interface PageErrorProps {
   pageName: string;
 }
 
-export default function PageError({ error, reset, pageName }: PageErrorProps) {
+export default function PageError({ error, reset, pageName }: Readonly<PageErrorProps>) {
   useEffect(() => {
     Sentry.captureException(error);
   }, [error]);

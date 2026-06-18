@@ -11,7 +11,10 @@ import {
 import { useAuth } from '@/store/authStore';
 import styles from './NotificationBell.module.css';
 
-function NotificationBellButton({ unread, onClick }: { unread: number; onClick: () => void }) {
+function NotificationBellButton({
+  unread,
+  onClick,
+}: Readonly<{ unread: number; onClick: () => void }>) {
   return (
     <button
       type="button"
@@ -34,7 +37,7 @@ function NotificationBellButton({ unread, onClick }: { unread: number; onClick: 
 function NotificationItem({
   notification,
   onRead,
-}: {
+}: Readonly<{
   notification: {
     id: string;
     title: string;
@@ -43,7 +46,7 @@ function NotificationItem({
     readAt: Date | null;
   };
   onRead: (id: string) => void;
-}) {
+}>) {
   const Item = notification.readAt ? 'div' : 'button';
   const itemProps = notification.readAt
     ? {}

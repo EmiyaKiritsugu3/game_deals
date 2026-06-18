@@ -1,7 +1,7 @@
 'use client';
 
 import * as Sentry from '@sentry/nextjs';
-import { useEffect, useRef } from 'react';
+import { type RefObject, useEffect, useRef } from 'react';
 import { resolveGameUuidsAction } from '@/actions/deals';
 import { getUserWishlistAction } from '@/actions/wishlist';
 import { getBrowserClient } from '@/lib/supabase-browser';
@@ -35,7 +35,7 @@ export function useCloudToLocalSync() {
   }, [isLoggedIn, user, wishlist, setWishlist]);
 }
 
-export function useWishlistSync(hasMounted: React.MutableRefObject<boolean>) {
+export function useWishlistSync(hasMounted: RefObject<boolean>) {
   const { user, isLoggedIn } = useAuth();
   const { wishlist } = useWishlist();
 
@@ -61,7 +61,7 @@ export function useWishlistSync(hasMounted: React.MutableRefObject<boolean>) {
   }, [isLoggedIn, user, wishlist, hasMounted]);
 }
 
-export function useAlertsSync(hasMounted: React.MutableRefObject<boolean>) {
+export function useAlertsSync(hasMounted: RefObject<boolean>) {
   const { user, isLoggedIn } = useAuth();
   const { alerts } = useAlerts();
 

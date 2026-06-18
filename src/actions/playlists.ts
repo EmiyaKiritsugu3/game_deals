@@ -168,8 +168,9 @@ export async function updatePlaylistAction(
 
   sets.push(sql`"updatedAt" = now()`);
 
+  const separator = sql`, `;
   const result = (await db.execute(
-    sql`UPDATE playlists SET ${sql.join(sets, sql`, `)}
+    sql`UPDATE playlists SET ${sql.join(sets, separator)}
         WHERE "id" = ${id}::uuid AND "userId" = ${userId}::uuid
         RETURNING *`
   )) as unknown as PlaylistRow[];
