@@ -2,5 +2,5 @@ projectKey=EmiyaKiritsugu3_game_deals
 serverUrl=http://localhost:9000
 serverVersion=26.6.0.123539
 dashboardUrl=http://localhost:9000/dashboard?id=EmiyaKiritsugu3_game_deals
-ceTaskId=2ab8cbd8-38c5-4f75-8e77-cfbc6ce7bcb9
-ceTaskUrl=http://localhost:9000/api/ce/task?id=2ab8cbd8-38c5-4f75-8e77-cfbc6ce7bcb9
+ceTaskId=6d6b7128-39c0-46c9-9ab0-345c53ebc233
+ceTaskUrl=http://localhost:9000/api/ce/task?id=6d6b7128-39c0-46c9-9ab0-345c53ebc233
