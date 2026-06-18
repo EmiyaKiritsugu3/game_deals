@@ -198,8 +198,8 @@ describe('ingestPricesAction', () => {
       .onConflictDoUpdate({
         target: [dealsTable.gameId, dealsTable.storeId],
         set: {
-          price: 'ignored',
-        },
+        price: 0,
+      },
       });
 
     expect(mockInsert).toHaveBeenCalledWith(dealsTable);

@@ -1,13 +1,8 @@
 /// <reference lib="webworker" />
 
-import {
-  CacheFirst,
-  NetworkFirst,
-  Serwist,
-  StaleWhileRevalidate,
-} from 'serwist';
+import { CacheFirst, ExpirationPlugin, NetworkFirst, Serwist, StaleWhileRevalidate } from 'serwist';
 
-declare const self: ServiceWorkerGlobalScope;
+declare const self: ServiceWorkerGlobalScope & { readonly __SW_MANIFEST: readonly { url: string; revision: string }[] };
 
 const serwist = new Serwist({
   cacheId: 'gamedeals',
@@ -15,17 +10,17 @@ const serwist = new Serwist({
   clientsClaim: true,
   navigationPreload: true,
   disableDevLogs: process.env.NODE_ENV === 'production',
-  precacheEntries: self.__SW_MANIFEST ?? [],
+  precacheEntries: self.__SW_MANIFEST ? [...self.__SW_MANIFEST] : [],
   runtimeCaching: [
     {
       matcher: /\.(?:png|jpg|jpeg|gif|svg|ico|webp)$/,
       handler: new CacheFirst({
         cacheName: 'static-images',
-        expiration: { maxEntries: 100, maxAgeSeconds: 30 * 24 * 60 * 60 },
+        plugins: [new ExpirationPlugin({ maxEntries: 100, maxAgeSeconds: 30 * 24 * 60 * 60 })],
       }),
     },
     {
-      matcher: /\.(?:css|scss)$/,
+      matcher: /\.(?:css)$/,
       handler: new StaleWhileRevalidate({
         cacheName: 'static-styles',
       }),
@@ -40,7 +35,7 @@ const serwist = new Serwist({
       matcher: /\.(?:woff2?|ttf|otf|eot)$/,
       handler: new CacheFirst({
         cacheName: 'static-fonts',
-        expiration: { maxEntries: 50, maxAgeSeconds: 365 * 24 * 60 * 60 },
+        plugins: [new ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 365 * 24 * 60 * 60 })],
       }),
     },
     {
@@ -48,21 +43,19 @@ const serwist = new Serwist({
       handler: new NetworkFirst({
         cacheName: 'pages',
         networkTimeoutSeconds: 5,
-        expiration: { maxEntries: 50, maxAgeSeconds: 24 * 60 * 60 },
+        plugins: [new ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 24 * 60 * 60 })],
       }),
     },
     {
       matcher: /\/api\//,
       handler: new NetworkFirst({
         cacheName: 'api-cache',
-        expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 },
+        plugins: [new ExpirationPlugin({ maxEntries: 100, maxAgeSeconds: 60 * 60 })],
       }),
     },
   ],
   fallbacks: {
-    entries: [
-      { url: '/offline', matcher: ({ request }) => request.mode === 'navigate' },
-    ],
+    entries: [{ url: '/offline', matcher: ({ request }) => request.mode === 'navigate' }],
   },
 });
 

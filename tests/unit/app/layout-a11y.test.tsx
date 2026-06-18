@@ -12,6 +12,9 @@ vi.mock('next/font/google', () => ({
 vi.mock('nuqs/adapters/next/app', () => ({
   NuqsAdapter: ({ children }: { children: React.ReactNode }) => children,
 }));
+vi.mock('next-themes', () => ({
+  ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
 vi.mock('@/components/CookieBanner', () => ({ default: () => null }));
 vi.mock('@/components/Navbar', () => ({ default: () => null }));
 vi.mock('@/components/SyncManager', () => ({ default: () => null }));
