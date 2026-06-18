@@ -226,10 +226,10 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 1rem;
-  background: hsl(0 65% 50% / 0.1);
-  border: 1px solid hsl(0 65% 50% / 0.3);
+  background: hsl(0 55% 25%);
+  border: 1px solid hsl(0 65% 40%);
   border-radius: 8px;
-  color: hsl(0 80% 60%);
+  color: hsl(0 60% 80%);
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 1rem;

@@ -93,11 +93,11 @@ export default function PriceAlertModal({
     }
   };
 
-  const buttonLabel = isSaving
-    ? 'Saving\u2026'
-    : hasAlert(gameID)
-      ? 'Update Alert'
-      : 'Create Alert';
+  const buttonLabel = (() => {
+    if (isSaving) return 'Saving\u2026';
+    if (hasAlert(gameID)) return 'Update Alert';
+    return 'Create Alert';
+  })();
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} ariaLabel="Set price alert">
