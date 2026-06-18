@@ -19,7 +19,7 @@ describe('PWA Manifest', () => {
   it('should have valid JSON with required PWA fields', () => {
     const manifestPath = join(publicDir, 'manifest.json');
     const content = readFileSync(manifestPath, 'utf-8');
-    const manifest = JSON.parse(content);
+    const manifest = JSON.parse(content) as Record<string, unknown>;
 
     expect(manifest).toHaveProperty('name');
     expect(manifest).toHaveProperty('short_name');
