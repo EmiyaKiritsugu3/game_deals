@@ -111,7 +111,11 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <head>{jsonLdScript}</head>
+      <head>
+        {jsonLdScript}
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      </head>
       <body className={`${inter.variable} antialiased`}>
         <a href="#main-content" className="skip-to-content">
           Skip to main content
