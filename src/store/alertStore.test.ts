@@ -147,4 +147,18 @@ describe('alertStore', () => {
     const { setAlertId } = useAlerts.getState();
     expect(() => setAlertId('non-existent', 'some-id')).not.toThrow();
   });
+
+  it('addAlert accepts optional alertId directly (server-first pattern)', () => {
+    const { addAlert, getAlert } = useAlerts.getState();
+    addAlert({ ...mockAlert, alertId: 'server-uuid-abc' });
+    const alert = getAlert('game-1');
+    expect(alert?.alertId).toBe('server-uuid-abc');
+    // Verify createdAt is still set
+    expect(alert?.createdAt).toBeGreaterThan(0);
+    // Verify update preserves alertId
+    addAlert({ ...mockAlert, targetPrice: 5.99, alertId: 'server-uuid-abc' });
+    const updated = getAlert('game-1');
+    expect(updated?.targetPrice).toBe(5.99);
+    expect(updated?.alertId).toBe('server-uuid-abc');
+  });
 });
