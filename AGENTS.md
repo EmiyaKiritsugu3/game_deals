@@ -4,7 +4,7 @@ This file provides guidance to OpenCode agent when working with code in this rep
 
 ## Repository Overview
 
-GameDeals is a game deal aggregator built with Next.js 16 App Router (React 19), Supabase SSR auth, Drizzle ORM, and TanStack Query. Data source is CheapShark API with Typesense search acceleration. Tests: 227 (Vitest) + Playwright visual regression + E2E.
+GameDeals is a game deal aggregator built with Next.js 16 App Router (React 19), Supabase SSR auth, Drizzle ORM, and TanStack Query. Data source is CheapShark API with Typesense search acceleration. Tests: 423 (Vitest) + Playwright visual regression + E2E.
 
 ## Commands
 
@@ -595,3 +595,38 @@ When changing from `Math.random()` to `crypto.randomUUID()`, update BOTH the imp
 - **Atlas (Plan Executer)**: Reads a Prometheus plan via `/start-work`, breaks every checkbox into granular todo items, tracks state in `boulder.json`, uses git worktrees for isolation, and delegates systematically to subagents. NEVER execute a plan manually — always use `/start-work`.
 - **Rule**: Prometheus for planning, Atlas for execution. Never mix — orchestrator should not manually decompose plans when Atlas exists.
 - **Trigger**: When user says "execute o plano", "start the plan", "run the sprint", or similar, Sisyphus invokes Atlas via `/start-work` automatically. User does NOT need to type the slash command.
+
+---
+
+## Session Learnings (PR #23 — Sprint 3 Phase C Polish + SonarQube Cleanup — 2026-06-18)
+
+### Middleware: String.raw in matcher Breaks Next.js 16 Build
+Next.js 16 uses SWC to statically extract `export const config` from middleware for route analysis. **NEVER** use tagged template literals (`String.raw\`...\``) in middleware `config.matcher` — SWC throws `UnsupportedValueError`, which triggers "Invalid segment configuration export detected" at build time. Build, CI (quality + e2e), and Vercel deployment were ALL blocked by this 1-line regression.
+
+**Root cause discovery**: Traced through Next.js source: `getStaticInfoIncludingLayouts` → `extractExportedConstValue` → `warnAboutUnsupportedValue` → `errorFromUnsupportedSegmentConfig`. The `warnAboutUnsupportedValue` function calls `extractExportedConstValue(ast, 'config')` which cannot parse runtime expressions like tagged templates. The error message itself is swallowed by Turbopack (compiler name ≠ 'server'), but `hadUnsupportedValue` is still set to `true`.
+
+**Fix**: Plain string: `'/((?!_next/static|_next/image|favicon.ico|api/cron(?:/|$)|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'`. Add `// NOSONAR` to prevent S7780 re-trigger. The `\\\\.` double-escape is required because a plain string needs `\\` to produce a literal `\` in the regex.
+
+### Recharts: Cell Deprecated → Data-Level fill Prop
+Recharts 3.x deprecated `Cell` component (removed in 4.0). Fix: move `fill` from `<Cell fill={...}>` children to data array's `fill` property. Recharts auto-applies per-row `fill` without needing the deprecated wrapper. One file changed (`Charts.tsx`), +3 −10 lines.
+
+**Earlier misdiagnosis**: Initially classified as requiring complex `shape` prop. Wrong — the data-level `fill` approach is simpler.
+
+### SonarQube: S7924 CSS Contrast False Positives
+All 11 S7924 (CSS contrast) issues are false positives caused by CSS custom properties (`hsl(var(--primary))`), transparent backgrounds, and gradient backgrounds. SonarQube's CSS analyzer cannot resolve `var()` or compute effective contrast through transparent layers. **Marked as FALSE-POSITIVE in SonarQube UI** — cleaner than `/* NOSONAR */` across 10 files.
+
+### SonarQube Final Count
+- Initial: 50 issues
+- Sprint 3 fixes: S6759 readonly (33→0), S7780 String.raw (1→0), S4325 type assertion (1→0), S6571 union (1→0), S1874 Cell (2→0)
+- S7924 false positives (11): marked FALSE-POSITIVE in SonarQube UI
+- **Final: 0 open issues** (local re-scan confirmed)
+
+### Build Error Diagnosis Workflow
+When Next.js build fails with "Invalid segment configuration export detected" without specifying which file:
+1. Check `middleware.ts` for `String.raw` in exported `config` objects
+2. Trace `node_modules/next/dist/build/index.js` for `errorFromUnsupportedSegmentConfig`
+3. Clean `.next` between test builds (`rm -rf .next`) — partial builds corrupt cache
+4. The actual file causing the issue is logged by `warnAboutUnsupportedValue` but may not appear in output if Turbopack is the compiler
+
+### Decompose Mechanical Refactoring Into Parallel Subtasks
+SonarQube S6759 (Readonly props, ~33 issues across 28 files) → delegate to single agent. Mistake: should have split into 4 parallel agents (independent file sets). Single agent 15min, parallel would be ~4min. Lesson: bulk mechanical refactoring = parallel agents per file group.

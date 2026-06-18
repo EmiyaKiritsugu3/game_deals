@@ -22,6 +22,9 @@ Game deal aggregator — Next.js 16, Supabase SSR, Drizzle ORM, TanStack Query, 
 | Unit (node) | Vitest |
 | Component (jsdom) | Vitest + React Testing Library |
 | Git Hooks | Husky v9 + lint-staged |
+| PWA | Serwist (service worker + offline page) |
+| Theme | next-themes (dark/light/system) |
+| Analytics | Vercel Web Analytics |
 
 ## Commands
 
@@ -32,7 +35,7 @@ pnpm start                # Production server
 pnpm lint                 # Biome check
 pnpm lint:fix             # Biome check + auto-fix
 pnpm format               # Biome format
-pnpm test                 # Vitest unit (215 tests)
+pnpm test                 # Vitest unit (423 tests)
 pnpm test:watch           # Vitest watch
 pnpm test:coverage        # Vitest with coverage
 pnpm test:e2e             # Playwright E2E
@@ -115,7 +118,8 @@ vitest.config.ts       # Vitest configuration (node + jsdom per-file)
 
 ## Stats
 
-- **Tests**: 215 (95 baseline + 112 + 8 component)
+- **Tests**: 423 (44 files, 42.5% coverage)
+- **SonarQube**: 0 open issues
 - **Fallow CRITICAL**: 0 (was 1)
 - **Knip unused types**: 0 (was 9)
 - **Unused exports**: 0 (was 4)

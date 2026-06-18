@@ -47,13 +47,15 @@ Tracking known technical debt items across the GameDeals codebase. Items priorit
 
 ---
 
-## P4 — ingestPricesAction: No onConflictDoUpdate
+## P4 ✅ — (CLOSED) ingestPricesAction: Added onConflictDoUpdate
 
 **Issue:** The deals insert in `ingestPricesAction` (`src/actions/deals.ts:222`) has no `onConflictDoUpdate` clause. Each cron run inserts duplicate deal rows. Games and price_history use upsert patterns, but deals doesn't.
 
 **Impact:** `deals` table accumulates duplicate rows over time. `SELECT MIN(price)` in alert queries still works (returns correct min), but table bloat increases.
 
 **Fix:** Add `ON CONFLICT (gameId, storeId) DO UPDATE SET price = EXCLUDED.price, ...` on the deals insert. Requires a unique constraint on `(gameId, storeId)`.
+
+**Resolution (PR #23):** Added unique index on (gameId, storeId) + onConflictDoUpdate upsert. Deals no longer duplicate on re-ingestion.
 
 ---
 
@@ -129,7 +131,7 @@ Tracking known technical debt items across the GameDeals codebase. Items priorit
 
 ---
 
-## P10 — Sprint 15: Dual-Storage Architecture for Alerts
+## P10 ✅ — (CLOSED) Sprint 15: Dual-Storage Architecture for Alerts
 
 **Issue:** Price alerts have two sources of truth:
 1. **`useAlerts`** (Zustand + localStorage) — populated by `PriceAlertModal.tsx`, read by game page badge and wishlist AlertsGrid
@@ -143,6 +145,8 @@ Tracking known technical debt items across the GameDeals codebase. Items priorit
 
 **Estimate:** 1-2 days.
 
+**Resolution (PR #23):** Server-first architecture — PriceAlertModal calls createPriceAlertAction/deletePriceAlertAction directly. SyncManager alerts sync removed. Consumers read from DB via TanStack Query.
+
 ---
 
 ## P11 — Sprint 15: deletePriceAlertAction Non-Atomic
@@ -153,11 +157,13 @@ Tracking known technical debt items across the GameDeals codebase. Items priorit
 
 ---
 
-## P12 — Sprint 15: alerts/page.tsx Complexity
+## P12 ✅ — (CLOSED) Sprint 15: alerts/page.tsx Complexity
 
 **Issue:** `AlertsPage` component has 78 lines of JSX, 13 cyclomatic complexity, 49.5 CRAP score. Fallow flags as high-risk.
 
 **Fix:** Extract `AlertCard` sub-component (reduces page from 205 to ~100 lines).
+
+**Resolution (PR #23):** Extracted AlertCard component. Page reduced from 205 to ~139 lines.
 
 ---
 
@@ -197,3 +203,11 @@ Tracking known technical debt items across the GameDeals codebase. Items priorit
 - P2: `WishlistGrid.tsx` — absolute positioned heart button
 - P2: `GameBody.tsx` — redundant `bestCurrentPrice` in viewModel
 - P3: `AlertsGrid.tsx` — opacity compounding (inline + CSS)
+
+---
+
+## P16 ✅ — (CLOSED) Sprint 3: Middleware String.raw Breaks Next.js 16 Build
+
+**Issue:** Commit 7165bea replaced the middleware matcher regex with `String.raw\`...\`` to fix SonarQube S7780. Next.js 16 uses SWC to statically extract `export const config` from middleware — SWC cannot parse tagged template expressions, throws `UnsupportedValueError`, triggering "Invalid segment configuration export detected" error at build time.
+
+**Resolution (PR #23):** Reverted to plain string: `'/((?!_next/static|_next/image|favicon.ico|api/cron(?:/|$)|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'`. Added NOSONAR comment explaining the constraint. Build, CI (quality + e2e), and Vercel deployment all fixed.
