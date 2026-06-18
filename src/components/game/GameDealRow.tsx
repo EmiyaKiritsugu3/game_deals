@@ -88,6 +88,7 @@ export default function GameDealRow({
       target="_blank"
       rel="noopener noreferrer"
       className={`${styles.dealRow} ${isBest ? styles.dealRowBest : ''}`}
+      aria-label={gameTitle}
     >
       <div className={styles.storeInfo}>
         <StoreLogo name={storeName} logo={logo} />

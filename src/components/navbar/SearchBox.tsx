@@ -32,7 +32,8 @@ export function SearchBox() {
 
   return (
     <div className={styles.searchContainer} ref={dropdownRef}>
-      <form action="/search" className={styles.searchForm}>
+      {/* biome-ignore lint/a11y/useSemanticElements: form with role search is correct for search forms */}
+      <form action="/search" className={styles.searchForm} role="search">
         <input
           type="text"
           name="q"
@@ -46,6 +47,7 @@ export function SearchBox() {
           onFocus={() => setIsDropdownOpen(true)}
           autoComplete="off"
           required
+          aria-label="Search games"
         />
         <button type="submit" className={styles.searchButton}>
           <Search size={20} />

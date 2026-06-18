@@ -2,8 +2,8 @@
  * @vitest-environment jsdom
  */
 import { render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const gameDealRowMocks = vi.hoisted(() => ({
   buildDealRowProps: vi.fn(() => ({
@@ -113,9 +113,7 @@ describe('GameDealRow aria-labels', () => {
 describe('FilterSidebar aria-labels', () => {
   it('has aria-label on the filter container', async () => {
     const FilterSidebar = (await import('@/components/FilterSidebar')).default;
-    const { container } = render(
-      <FilterSidebar stores={[{ storeID: '1', storeName: 'Steam' }]} />
-    );
+    const { container } = render(<FilterSidebar stores={[{ storeID: '1', storeName: 'Steam' }]} />);
 
     const aside = container.querySelector('aside');
     expect(aside).toHaveAttribute('aria-label', 'Filters');
