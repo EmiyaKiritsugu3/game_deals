@@ -1,10 +1,11 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Bell, Trash2 } from 'lucide-react';
+import { Bell } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { deletePriceAlertAction, getUserAlertsAction } from '@/actions/alerts';
+import AlertCard from '@/components/AlertCard';
 import { useAlerts } from '@/store/alertStore';
 import { useAuth } from '@/store/authStore';
 import type { PriceAlertWithGame } from '@/types/price-alert';
@@ -116,84 +117,21 @@ export default function AlertsPage() {
         )}
 
         <div className={styles.grid}>
-          {alerts.map((row: PriceAlertWithGame) => {
-            return (
-              <div key={row.id} className={styles.card}>
-                <div className={styles.cardHeader}>
-                  <Bell size={16} className={styles.activeBell} />
-                  <span className={styles.alertStatus}>Monitoring</span>
-                </div>
-
-                <div className={styles.cardBody}>
-                  {row.thumbUrl && (
-                    <div className={styles.thumbWrap}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      {/* biome-ignore lint/performance/noImgElement: game thumbnails from CDN */}
-                      <img src={row.thumbUrl} alt={row.title} className={styles.thumb} />
-                    </div>
-                  )}
-
-                  <h3 className={styles.cardTitle}>{row.title}</h3>
-
-                  <div className={styles.priceGrid}>
-                    <div className={styles.priceBlock}>
-                      <span className={styles.priceLabel}>Target</span>
-                      <span className={styles.targetPrice}>
-                        ${Number(row.targetPrice).toFixed(2)}
-                      </span>
-                    </div>
-                    <div className={styles.priceBlock}>
-                      <span className={styles.priceLabel}>Current</span>
-                      <span
-                        className={
-                          Number(row.currentPrice ?? 0) <= Number(row.targetPrice ?? 0)
-                            ? styles.currentPriceMet
-                            : styles.currentPrice
-                        }
-                      >
-                        {row.currentPrice !== null && row.currentPrice !== undefined
-                          ? `$${Number(row.currentPrice).toFixed(2)}`
-                          : 'N/A'}
-                      </span>
-                    </div>
-                  </div>
-
-                  {row.storeId && <div className={styles.storeInfo}>Store: {row.storeId}</div>}
-                </div>
-
-                <div className={styles.cardFooter}>
-                  <button
-                    type="button"
-                    className={styles.deleteBtn}
-                    onClick={() =>
-                      deleteMutation.mutate({
-                        alertId: row.id,
-                        cheapsharkId: row.cheapshark_id,
-                      })
-                    }
-                    disabled={
-                      deleteMutation.isPending && deleteMutation.variables?.alertId === row.id
-                    }
-                    aria-label={`Delete alert for ${row.title}`}
-                  >
-                    <Trash2 size={16} />
-                    {deleteMutation.isPending && deleteMutation.variables?.alertId === row.id
-                      ? 'Removing\u2026'
-                      : 'Remove'}
-                  </button>
-                  {row.cheapshark_id ? (
-                    <Link href={`/game/${row.cheapshark_id}`} className={styles.viewGameBtn}>
-                      View Game
-                    </Link>
-                  ) : (
-                    <span className={styles.viewGameBtnDisabled} aria-disabled="true">
-                      Unavailable
-                    </span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+          {alerts.map((alert: PriceAlertWithGame) => (
+            <AlertCard
+              key={alert.id}
+              alert={alert}
+              onDelete={() =>
+                deleteMutation.mutate({
+                  alertId: alert.id,
+                  cheapsharkId: alert.cheapshark_id,
+                })
+              }
+              isDeleting={
+                deleteMutation.isPending && deleteMutation.variables?.alertId === alert.id
+              }
+            />
+          ))}
         </div>
       </div>
     </div>
