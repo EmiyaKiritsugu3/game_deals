@@ -102,24 +102,26 @@ describe('deletePriceAlertAction', () => {
     expect(execute).not.toHaveBeenCalled();
   });
 
-  it('throws when alert not found', async () => {
+  it('throws when alert not found or belongs to another user', async () => {
     authGetUser.mockResolvedValueOnce({ data: { user: { id: 'user-1' } } });
     execute.mockResolvedValueOnce([]);
     await expect(deletePriceAlertAction('nonexistent')).rejects.toThrow('Forbidden');
+    expect(execute).toHaveBeenCalledTimes(1);
   });
 
-  it('throws when alert belongs to another user', async () => {
+  it('throws when alert belongs to another user (atomic DELETE)', async () => {
     authGetUser.mockResolvedValueOnce({ data: { user: { id: 'user-1' } } });
-    execute.mockResolvedValueOnce([{ userId: 'user-2' }]);
+    execute.mockResolvedValueOnce([]);
     await expect(deletePriceAlertAction('alert-other')).rejects.toThrow('Forbidden');
+    expect(execute).toHaveBeenCalledTimes(1);
   });
 
-  it('deletes alert when owner matches', async () => {
+  it('deletes alert atomically when owner matches', async () => {
     authGetUser.mockResolvedValueOnce({ data: { user: { id: 'user-1' } } });
-    execute.mockResolvedValueOnce([{ userId: 'user-1' }]).mockResolvedValueOnce(undefined);
+    execute.mockResolvedValueOnce([{ id: 'alert-own' }]);
     const result = await deletePriceAlertAction('alert-own');
     expect(result).toBe(true);
-    expect(execute).toHaveBeenCalledTimes(2);
+    expect(execute).toHaveBeenCalledTimes(1);
   });
 });
 
