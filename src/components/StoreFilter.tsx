@@ -62,7 +62,7 @@ export default function StoreFilter({
         </button>
         <span className={styles.count}>
           {search.trim()
-            ? `Showing ${filteredStores.length} store${filteredStores.length !== 1 ? 's' : ''}`
+            ? `Showing ${filteredStores.length} ${filteredStores.length === 1 ? 'store' : 'stores'}`
             : `${stores.length} stores`}
           {selectedCount > 0 && ` \u00b7 ${selectedCount} of ${stores.length}`}
         </span>

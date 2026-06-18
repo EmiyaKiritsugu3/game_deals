@@ -34,16 +34,16 @@ export default function InstallPWAButton() {
       setDeferredPrompt(null);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
-    window.addEventListener('appinstalled', handleInstalled);
+    globalThis.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    globalThis.addEventListener('appinstalled', handleInstalled);
 
-    if (window.matchMedia('(display-mode: standalone)').matches) {
+    if (globalThis.matchMedia('(display-mode: standalone)').matches) {
       setIsInstalled(true);
     }
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
-      window.removeEventListener('appinstalled', handleInstalled);
+      globalThis.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+      globalThis.removeEventListener('appinstalled', handleInstalled);
     };
   }, []);
 
