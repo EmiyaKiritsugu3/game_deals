@@ -8,14 +8,14 @@
 > - PWA service worker (offline caching, install prompt, Lighthouse PWA ≥80)
 > - Theme toggle (light/dark, system preference, `next-themes`)
 > - Store filter cap removal (searchable combobox, all stores)
-> - Custom analytics events (PostHog: page views, affiliate clicks, alert triggers)
+> - Custom analytics events (Vercel Web Analytics: page views auto, affiliate clicks, alert triggers)
 > - Alerts CRUD E2E test (auth → create → list → delete)
 > - Cron route unit test expansion (coverage gaps → ≥80% on all 3 routes)
 > - TimescaleDB hypertable for `price_history` (ADR-009 implementation) 🔴 **DEFERRED to Sprint 4** — blocked by Supabase Pro
 > - Complexity reductions (10 fallow suppressors → ≤3)
 > - Tech debt: P4 (deals onConflictDoUpdate), P7 (drizzle snapshot stubs), P10 (alerts dual-storage fix), P12 (AlertsPage complexity)
 >
-> **Estimated Effort**: Large (~16-18 dev days, parallelizable to ~5-7 calendar days across 3-4 tracks)
+> **Estimated Effort**: Large (~14-16 dev days, parallelizable to ~5-6 calendar days across 7 tracks)
 > **Parallel Execution**: YES — 3 parallel waves, max 6 tasks in Wave 2
 > **Critical Path**: P7 (snapshot stubs) → Track 6 (cron tests) → Final Verification  
 > **Deferred**: Track 7 (TimescaleDB) — blocked by Supabase Pro requirement
@@ -30,7 +30,7 @@
 
 ### Interview Summary
 **Decisions made** (defaults applied, see `§ Defaults Applied`):
-- **Analytics**: PostHog Cloud (free tier) over Vercel Analytics — better fit for funnel/affiliate tracking
+- **Analytics**: Vercel Web Analytics (zero-cost, included in Hobby plan, auto page views, `va.track()` for custom events)
 - **PWA**: Serwist (next 16-native, Workbox-based) over Workbox direct or hand-rolled
 - **Theme**: `next-themes` library (Next.js standard) over custom provider
 - **TimescaleDB**: Hand-written SQL migration following 0008-0011 pattern
@@ -47,7 +47,7 @@
 ### Metis Review
 **Identified Gaps (addressed)**:
 - ✅ TimescaleDB requires Supabase Pro plan → flagged as blocker for Track 7 (verify before Wave 2)
-- ✅ PostHog needs API key in env → fold into Track 4
+- ✅ Vercel Analytics needs no API key — auto-detects Vercel environment
 - ✅ Test coverage delta must hit Phase 2 targets → explicit per-track coverage requirements
 - ✅ `next-themes` requires `suppressHydrationWarning` on `<html>` → noted in Track 2
 - ✅ Serwist + Next.js 16 App Router requires `instrumentation.ts` registration → noted in Track 1
@@ -66,7 +66,7 @@ Complete Phase C: Polish — all 8 P2 items from PRD §11, plus 4 priority techn
 - [ ] `feat/sprint3-pwa-sw` — PWA service worker + install prompt
 - [ ] `feat/sprint3-theme` — Light/dark theme toggle
 - [ ] `feat/sprint3-store-filter` — Searchable store dropdown (all stores)
-- [ ] `feat/sprint3-analytics` — PostHog event tracking
+- [ ] `feat/sprint3-analytics` — Vercel Web Analytics event tracking
 - [ ] `feat/sprint3-alerts-e2e` — Alerts CRUD Playwright test
 - [ ] `feat/sprint3-cron-tests` — Cron route test coverage expansion
 - [ ] `feat/sprint3-timescale` — TimescaleDB hypertable migration
@@ -98,7 +98,7 @@ Complete Phase C: Polish — all 8 P2 items from PRD §11, plus 4 priority techn
 - Use `./node_modules/.bin/biome` and `./node_modules/.bin/tsc` (not `rtk lint`/`rtk tsc`)
 
 ### Must NOT Have (Guardrails)
-- ❌ Vercel Analytics (decision: PostHog only — avoid dual-tracking)
+- ❌ PostHog (decision: Vercel Analytics only — zero-cost, already included)
 - ❌ next-pwa library (deprecated, use Serwist)
 - ❌ Custom theme provider (use `next-themes`)
 - ❌ Refactor outside technical-debt register (scope creep)
@@ -176,13 +176,13 @@ Wave 1 (Start Immediately — 6 independent foundation tasks):
 ├── T3: P4 — deals onConflictDoUpdate (TDD)
 ├── T4: P12 — AlertsPage complexity extraction (TDD)
 ├── T5: P10 prep — extract alertStore.test.ts test scaffold (TDD)
-└── T6: PostHog + Serwist + next-themes dependencies installed (chore)
+└── T6: Vercel Analytics + Serwist + next-themes dependencies installed (chore)
 
 Wave 2 (After Wave 1 — 8 parallel feature tracks, max 6 parallel):
 ├── Track 1 (2d): PWA Service Worker (Serwist + install prompt)
 ├── Track 2 (2d): Theme Toggle (next-themes)
 ├── Track 3 (1d): Store Filter Cap Removal (searchable combobox)
-├── Track 4 (2d): Custom Analytics Events (PostHog)
+├── Track 4 (1d): Custom Analytics Events (Vercel Web Analytics)
 ├── Track 5 (4h): Alerts CRUD E2E Test
 ├── Track 6 (2d): Cron Route Unit Test Expansion
 ├── Track 7 (3d): TimescaleDB Hypertable (depends T1, blocks T-verify)
@@ -221,7 +221,7 @@ Max Concurrent: 6 (Wave 2 tracks)
 | **Track 1** PWA SW | T6 | T-INT3 | 2d |
 | **Track 2** Theme | T6 | T-INT1 | 2d |
 | **Track 3** Store filter | None | T-INT1 | 1d |
-| **Track 4** Analytics | T6 | T-INT1 | 2d |
+| **Track 4** Analytics | T6 | T-INT1 | 1d |
 | **Track 5** Alerts E2E | T4 | T-INT1 | 4h |
 | **Track 6** Cron tests | T3 | T-INT1 | 2d |
 | **Track 7** TimescaleDB | T1, T2 | T-INT1, T-INT2 | 3d | 🔴 DEFERRED |
@@ -241,7 +241,7 @@ Max Concurrent: 6 (Wave 2 tracks)
   - Track 1 PWA: `visual-engineering` (SW + manifest UI) + `quick` (Serwist config)
   - Track 2 Theme: `visual-engineering` (toggle UI) + `quick` (provider wiring)
   - Track 3 Store filter: `visual-engineering` (combobox) + `quick` (cap removal)
-  - Track 4 Analytics: `unspecified-high` (PostHog init) + `quick` (event hooks)
+  - Track 4 Analytics: `quick` (Vercel Analytics init + event hooks)
   - Track 5 E2E: `quick` (Playwright spec)
   - Track 6 Cron tests: `quick` (Vitest unit tests, 8-10 tests)
   - Track 7 Timescale: `unspecified-high` (migration + Drizzle sync + tests)
@@ -523,13 +523,10 @@ Max Concurrent: 6 (Wave 2 tracks)
 - [ ] 6. **T6: Install dependencies for PWA, Theme, Analytics tracks**
 
   **What to do**:
-  - Run `pnpm add serwist next-themes posthog-js posthog-node`
-  - Run `pnpm add -D @types/node` (if needed for serwist types)
-  - Update `.env.example`:
-    - `NEXT_PUBLIC_POSTHOG_KEY=`
-    - `NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com`
+  - Run `pnpm add serwist next-themes @vercel/analytics`
+  - Vercel Analytics auto-detects Vercel environment — NO API key needed
   - Verify `package.json` shows all 3 new deps
-  - Commit as `chore(deps): add serwist, next-themes, posthog-js`
+  - Commit as `chore(deps): add serwist, next-themes, @vercel/analytics`
 
   **Must NOT do**:
   - ❌ Add any new devDeps not in the 3-package list
@@ -552,9 +549,8 @@ Max Concurrent: 6 (Wave 2 tracks)
   - AGENTS.md lesson on `.env` naming mismatch (P22)
 
   **Acceptance Criteria**:
-  - [ ] `package.json` shows `serwist`, `next-themes`, `posthog-js` in `dependencies`
+  - [ ] `package.json` shows `serwist`, `next-themes`, `@vercel/analytics` in `dependencies`
   - [ ] `pnpm install` exits 0
-  - [ ] `.env.example` has `NEXT_PUBLIC_POSTHOG_KEY` and `NEXT_PUBLIC_POSTHOG_HOST`
   - [ ] `./node_modules/.bin/tsc --noEmit` still passes (no type errors from new deps)
 
   **QA Scenarios**:
@@ -563,13 +559,13 @@ Max Concurrent: 6 (Wave 2 tracks)
     Tool: Bash
     Steps:
       1. pnpm install
-      2. cat package.json | grep -E "(serwist|next-themes|posthog-js)"
+      2. cat package.json | grep -E "(serwist|next-themes|@vercel/analytics)"
       3. ./node_modules/.bin/tsc --noEmit
     Expected Result: 3 packages in deps, no type errors
     Evidence: .sisyphus/evidence/sprint3-foundation/task-6-deps.txt
   ```
 
-  **Commit**: `chore(deps): add serwist, next-themes, posthog-js`
+  **Commit**: `chore(deps): add serwist, next-themes, @vercel/analytics`
   - Files: `package.json`, `pnpm-lock.yaml`, `.env.example`
   - Pre-commit: `pnpm install && ./node_modules/.bin/tsc --noEmit`
 
@@ -1025,126 +1021,68 @@ Max Concurrent: 6 (Wave 2 tracks)
   - Files: `src/components/StoreFilter.tsx`, `src/components/StoreFilter.test.tsx`, `src/components/FilterSidebar.tsx`
   - Pre-commit: `pnpm test --changed`
 
-#### Track 4: Custom Analytics Events (2d) — `feat/sprint3-analytics`
+#### Track 4: Custom Analytics Events (1d) — `feat/sprint3-analytics`
 
-- [ ] 15. **T4.1: PostHog init via Next.js 16 instrumentation**
+> Vercel Web Analytics — zero-cost (Hobby plan), zero API key, auto page views. `va.track()` for custom events.
 
-  **What to do**:
-  - RED: Write test for `posthog-js` provider initializing on page load
-  - GREEN: Create `src/lib/posthog.ts` with `posthog-js` init (client) using `NEXT_PUBLIC_POSTHOG_KEY`
-  - Create `src/app/instrumentation-client.ts` (Next.js 16 native pattern)
-  - Wire PostHog init into `src/app/layout.tsx` via `PostHogProvider` (client wrapper)
-  - Verify `posthog.init()` called on app load
-  - Commit sequence: `test(analytics): add failing test for PostHog provider init` → `feat(analytics): add PostHog client init via instrumentation-client.ts` → `feat(analytics): add PostHogProvider wrapper in root layout`
-
-  **Must NOT do**:
-  - ❌ Use Vercel Analytics (decision: PostHog only)
-  - ❌ Add PostHog server-side (only client)
-  - ❌ Hardcode API key (must be env var)
-
-  **Recommended Agent Profile**:
-  - **Category**: `unspecified-high` (analytics integration is multi-file)
-  - **Skills**: `playwright`
-
-  **Parallelization**:
-  - **Can Run In Parallel**: YES
-  - **Parallel Group**: Wave 2
-  - **Blocks**: T4.2, T4.3, T4.4
-  - **Blocked By**: T6 (deps install)
-
-  **References**:
-  - PostHog Next.js docs: https://posthog.com/docs/libraries/next-js
-  - Next.js 16 `instrumentation-client.ts`: https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation-client
-  - `.env.example` — needs `NEXT_PUBLIC_POSTHOG_KEY`
-
-  **Acceptance Criteria**:
-  - [ ] PostHog initializes on app load (visible in network tab: `posthog.com/decide` or `/capture`)
-  - [ ] Test: PostHog provider wraps children
-  - [ ] No env var warnings in dev console
-  - [ ] Production build still works (PostHog tree-shaken if no key)
-
-  **QA Scenarios**:
-  ```
-  Scenario: PostHog initializes
-    Tool: Playwright
-    Preconditions: NEXT_PUBLIC_POSTHOG_KEY set in .env.local
-    Steps:
-      1. Visit /
-      2. Wait 2s
-      3. page.on('request', req => req.url().includes('posthog') && console.log(req.url()))
-      4. Assert at least 1 PostHog request fired
-    Expected Result: PostHog init request visible
-    Evidence: .sisyphus/evidence/sprint3-analytics/task-15-posthog-init.png
-  ```
-
-  **Commit**: 3 atomic commits (test + 2 feat)
-  - Files: `src/lib/posthog.ts`, `src/app/instrumentation-client.ts`, `src/app/layout.tsx`
-  - Pre-commit: `pnpm test --changed`
-
-- [ ] 16. **T4.2: Page view + custom event helpers**
+- [ ] 15. **T4.1: Add Vercel Analytics to layout + event helpers**
 
   **What to do**:
-  - RED: Write test for `trackEvent` helper calling `posthog.capture()` with correct payload
+  - RED: Write test for `trackEvent` helper calling `va.track()` with correct payload
+  - GREEN: Add `<Analytics />` from `@vercel/analytics/react` to `src/app/layout.tsx` (page views auto-tracked, zero config)
   - GREEN: Create `src/lib/analytics.ts` with:
-    - `trackPageView(url: string)`: client-side, calls `posthog.capture('$pageview', { $current_url: url })` via `posthog-js`
-    - `trackEvent(name: string, props?: Record<string, unknown>)`: client-side, calls `posthog.capture(name, props)` via `posthog-js`
-    - `trackServerEvent(name: string, props: Record<string, unknown>)`: server-side, calls PostHog `/capture/` API via `posthog-node` (for Edge/Node route handlers — NOT posthog-js which is browser-only)
-  - Wire page view tracking into `src/app/layout.tsx` (client component or `useEffect` in a wrapper)
-  - Commit sequence: `test(analytics): add failing test for trackEvent helper` → `feat(analytics): add trackPageView and trackEvent helpers` → `feat(analytics): wire page view tracking in root layout`
+    - `trackEvent(name: string, props?: Record<string, unknown>)`: calls `va.track(name, props)`
+  - Commit sequence: `test(analytics): add failing test for trackEvent helper` → `feat(analytics): add Vercel Analytics + trackEvent helper`
 
   **Must NOT do**:
-  - ❌ Track PII (user email, ID) without hashing
-  - ❌ Track on every render (only on route change)
-  - ❌ Send data to non-PostHog endpoints
+  - ❌ Send PII (user email, ID)
+  - ❌ Add separate providers or init code (VA auto-initializes)
 
   **Recommended Agent Profile**:
   - **Category**: `quick`
-  - **Skills**: `playwright`
+  - **Skills**: none
 
   **Parallelization**:
   - **Can Run In Parallel**: YES
   - **Parallel Group**: Wave 2
-  - **Blocks**: T4.3, T4.4
-  - **Blocked By**: T4.1
+  - **Blocks**: T4.2, T4.3
+  - **Blocked By**: T6 (deps install)
 
   **References**:
-  - PostHog events docs: https://posthog.com/docs/data/events
+  - Vercel Analytics docs: https://vercel.com/docs/analytics
   - `src/app/layout.tsx` — root layout
 
   **Acceptance Criteria**:
-  - [ ] trackEvent test: calls posthog.capture with correct name + props
-  - [ ] trackPageView fires on every route change (test in Playwright)
-  - [ ] No duplicate page view events on same URL
+  - [ ] `<Analytics />` in root layout
+  - [ ] `trackEvent` test: calls `va.track` with correct name + props
+  - [ ] Page views auto-tracked (verify in Vercel Analytics dashboard post-deploy)
 
   **QA Scenarios**:
   ```
-  Scenario: Page view fires on navigation
+  Scenario: Analytics script loads
     Tool: Playwright
     Steps:
-      1. Visit /, wait 1s
-      2. Click nav to /search, wait 1s
-      3. Capture network: page.on('request', req => req.url().includes('/capture') && console.log(req.url()))
-      4. Assert 2 distinct $pageview events
-    Expected Result: One event per route
-    Evidence: .sisyphus/evidence/sprint3-analytics/task-16-page-views.png
+      1. Visit /
+      2. page.on('request', req => req.url().includes('/_vercel/insights') && console.log(req.url()))
+    Expected Result: Vercel insights request visible
+    Evidence: .sisyphus/evidence/sprint3-analytics/task-15-vercel-insights.txt
   ```
 
-  **Commit**: 3 atomic commits (test + 2 feat)
+  **Commit**: 2 atomic commits (test + feat)
   - Files: `src/lib/analytics.ts`, `src/lib/analytics.test.ts`, `src/app/layout.tsx`
   - Pre-commit: `pnpm test --changed`
 
-- [ ] 17. **T4.3: Affiliate click tracking (server-side)**
+- [ ] 16. **T4.2: Affiliate click tracking**
 
   **What to do**:
-  - RED: Write test for affiliate click triggering `affiliate_click` event with `store_id`, `game_slug`
-  - GREEN: Update `src/app/out/[storeId]/[gameSlug]/route.ts` to call `trackServerEvent('affiliate_click', { store_id, game_slug })` BEFORE redirect
-  - Use `posthog-node` (NOT `posthog-js` — browser-only, crashes in Edge/Node.js runtime)
-  - Fire-and-forget via `fetch` to PostHog's capture API (no blocking redirect)
-  - Commit sequence: `test(analytics): add failing test for affiliate click event` → `feat(analytics): track affiliate clicks server-side via posthog-node`
+  - RED: Write test for affiliate click triggering `va.track('affiliate_click', { store_id, game_slug })`
+  - GREEN: Update `src/app/out/[storeId]/[gameSlug]/route.ts` to call `trackEvent(...)` BEFORE redirect
+  - `va.track()` works in Edge Routes via `import { track } from '@vercel/analytics/server'`
+  - Commit: `test(analytics): add failing test for affiliate click event` → `feat(analytics): track affiliate clicks in /out redirect`
 
   **Must NOT do**:
-  - ❌ Use `posthog-js` in route handler (browser-only — no `window` in Edge)
-  - ❌ Block redirect on analytics (best-effort, fire-and-forget)
+  - ❌ Block redirect on analytics (fire-and-forget)
+  - ❌ Use browser-only API in server route
 
   **Recommended Agent Profile**:
   - **Category**: `quick`
@@ -1154,14 +1092,14 @@ Max Concurrent: 6 (Wave 2 tracks)
   - **Can Run In Parallel**: YES
   - **Parallel Group**: Wave 2
   - **Blocks**: None
-  - **Blocked By**: T4.2
+  - **Blocked By**: T4.1
 
   **References**:
   - `src/app/out/[storeId]/[gameSlug]/route.ts` — current redirect route
-  - `src/lib/analytics.ts` — created in T4.2 (add `trackServerEvent` using `posthog-node`)
+  - `src/lib/analytics.ts` — created in T4.1
 
   **Acceptance Criteria**:
-  - [ ] `affiliate_click` event fires on every `/out/*` redirect (server-side)
+  - [ ] `affiliate_click` event fires on every `/out/*` redirect
   - [ ] Event has `store_id` and `game_slug` properties
   - [ ] Redirect still executes (analytics non-blocking)
 
@@ -1171,42 +1109,42 @@ Max Concurrent: 6 (Wave 2 tracks)
     Tool: Playwright
     Steps:
       1. Visit a game page with affiliate link
-      2. Set up network listener for posthog /capture
+      2. Set up network listener for /_vercel/insights
       3. Click affiliate link
-      4. Assert 1 affiliate_click event with correct store_id
+      4. Assert redirect happens, event captured
     Expected Result: Event captured, redirect happens
-    Evidence: .sisyphus/evidence/sprint3-analytics/task-17-affiliate-click.png
+    Evidence: .sisyphus/evidence/sprint3-analytics/task-16-affiliate-click.txt
   ```
 
   **Commit**: 2 atomic commits (test + feat)
   - Files: `src/app/out/[storeId]/[gameSlug]/route.ts`, `src/app/out/[storeId]/[gameSlug]/route.test.ts`
   - Pre-commit: `pnpm test --changed`
 
-- [ ] 18. **T4.4: Alert trigger event tracking**
+- [ ] 17. **T4.3: Alert trigger event tracking**
 
   **What to do**:
-  - RED: Write test for `alert_triggered` event firing from cron route when alerts are triggered
-  - GREEN: Update `src/app/api/cron/check-alerts/route.ts` to call `trackEvent('alert_triggered', { user_id, game_id, target_price, current_price })` for each triggered alert
-  - Add to `src/lib/analytics.ts`: `trackAlertTriggered(payload)` helper
-  - Commit sequence: `test(analytics): add failing test for alert_triggered event` → `feat(analytics): track alert triggers in check-alerts cron route`
+  - RED: Write test for `alert_triggered` event firing from cron route
+  - GREEN: In `src/app/api/cron/check-alerts/route.ts`, call `trackEvent('alert_triggered', { user_id, game_id, target_price, current_price })` for each triggered alert
+  - Import from `@vercel/analytics/server`: `import { track } from '@vercel/analytics/server'`
+  - Commit: `test(analytics): add failing test for alert_triggered event` → `feat(analytics): track alert triggers in check-alerts cron`
 
   **Must NOT do**:
   - ❌ Send alert events from client (privacy)
-  - ❌ Log to console (use Sentry + PostHog)
+  - ❌ Log to console (use Sentry)
 
   **Recommended Agent Profile**:
   - **Category**: `quick`
-  - **Skills**: `playwright`
+  - **Skills**: none
 
   **Parallelization**:
   - **Can Run In Parallel**: YES
   - **Parallel Group**: Wave 2
   - **Blocks**: None
-  - **Blocked By**: T4.2
+  - **Blocked By**: T4.1
 
   **References**:
   - `src/app/api/cron/check-alerts/route.ts` — current route
-  - `src/lib/analytics.ts` — created in T4.2
+  - `src/lib/analytics.ts` — created in T4.1
 
   **Acceptance Criteria**:
   - [ ] `alert_triggered` event fires from check-alerts route for each triggered alert
@@ -1216,13 +1154,13 @@ Max Concurrent: 6 (Wave 2 tracks)
   **QA Scenarios**:
   ```
   Scenario: Alert trigger tracked
-    Tool: Vitest (mock posthog)
+    Tool: Vitest
     Steps:
       1. Mock checkTriggeredAlertsAction to return 1 triggered alert
       2. Call GET /api/cron/check-alerts
       3. Assert trackEvent called with 'alert_triggered' + correct payload
     Expected Result: Event captured
-    Evidence: .sisyphus/evidence/sprint3-analytics/task-18-alert-event.txt
+    Evidence: .sisyphus/evidence/sprint3-analytics/task-17-alert-event.txt
   ```
 
   **Commit**: 2 atomic commits (test + feat)
@@ -2066,7 +2004,7 @@ Every commit message follows `type(scope): description`:
 | `feat` | GREEN | `feat(pwa): register service worker via Serwist` |
 | `refactor` | REFACTOR | `refactor(pwa): extract manifest config to constant` |
 | `fix` | GREEN | `fix(pwa): handle manifest MIME type for Safari` |
-| `chore` | Setup | `chore(deps): install serwist, next-themes, posthog-js` |
+| `chore` | Setup | `chore(deps): install serwist, next-themes, @vercel/analytics` |
 | `docs` | Docs | `docs(adr): add ADR-013 for PWA service worker` |
 
 ### Commit Counts Per Track
@@ -2082,13 +2020,13 @@ Every commit message follows `type(scope): description`:
 | Track 1 PWA | 8-10 (config + 3 cache strategies + install + Lighthouse) |
 | Track 2 Theme | 6-8 (provider + 3 components + tests) |
 | Track 3 Store filter | 5-7 (combobox + search + multi-select + cap removal) |
-| Track 4 Analytics | 7-9 (init + 3 event hooks + page view + click + alert) |
+| Track 4 Analytics | 6 (init + affiliate + alert, test+feat each) |
 | Track 5 Alerts E2E | 3-4 (auth fixture + spec + refactor) |
 | Track 6 Cron tests | 8-10 (expansion tests for 3 routes) |
-| Track 7 TimescaleDB | 4-5 (snapshot + migration + schema sync + tests) |
+| Track 7 TimescaleDB | 🔴 DEFERRED |
 | Track 8 | ✅ REMOVED |
 | P10 alerts dual-storage | 4-5 (refactor + tests + e2e) |
-| **TOTAL** | **~60-70 atomic commits** |
+| **TOTAL** | **~50-55 atomic commits** |
 
 ### Pre-Push Gate (every push)
 ```bash
