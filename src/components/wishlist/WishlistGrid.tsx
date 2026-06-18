@@ -10,9 +10,9 @@ import type { SavedGame } from '@/hooks/useSortedGames';
 import styles from './WishlistGrid.module.css';
 
 interface WishlistGridProps {
-  games: SavedGame[];
-  stores: Record<string, string>;
-  isLoading?: boolean;
+  readonly games: SavedGame[];
+  readonly stores: Record<string, string>;
+  readonly isLoading?: boolean;
 }
 
 function LoadingState() {

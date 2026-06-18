@@ -6,14 +6,14 @@ import { usePlaylists } from '@/hooks/usePlaylists';
 import styles from './AddToListModal.module.css';
 
 interface ListSelectorProps {
-  playlists: Array<{ id: string; title: string }>;
-  error: string | null;
-  addMutation: { isPending: boolean };
-  createMutation: { isPending: boolean };
-  newListName: string;
-  setNewListName: (value: string) => void;
-  handleAdd: (playlistId: string) => void;
-  handleCreate: () => void;
+  readonly playlists: Array<{ id: string; title: string }>;
+  readonly error: string | null;
+  readonly addMutation: { isPending: boolean };
+  readonly createMutation: { isPending: boolean };
+  readonly newListName: string;
+  readonly setNewListName: (value: string) => void;
+  readonly handleAdd: (playlistId: string) => void;
+  readonly handleCreate: () => void;
 }
 function ListSelector({
   playlists,
@@ -69,8 +69,8 @@ function ListSelector({
 }
 
 interface AddToListModalProps {
-  gameId: string;
-  onClose: () => void;
+  readonly gameId: string;
+  readonly onClose: () => void;
 }
 
 export default function AddToListModal({ gameId, onClose }: AddToListModalProps) {

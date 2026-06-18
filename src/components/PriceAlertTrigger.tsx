@@ -9,10 +9,10 @@ import PriceAlertModal from './PriceAlertModal';
 import styles from './PriceAlertTrigger.module.css';
 
 interface PriceAlertTriggerProps {
-  gameID: string;
-  gameTitle: string;
-  currentPrice: number;
-  className?: string;
+  readonly gameID: string;
+  readonly gameTitle: string;
+  readonly currentPrice: number;
+  readonly className?: string;
 }
 
 export default function PriceAlertTrigger({

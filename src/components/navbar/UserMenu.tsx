@@ -9,13 +9,13 @@ import { useAuth } from '@/store/authStore';
 import styles from '../Navbar.module.css';
 
 interface UserMenuProps {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    avatar: string;
+  readonly user: {
+    readonly id: string;
+    readonly name: string;
+    readonly email: string;
+    readonly avatar: string;
   } | null;
-  serverUser: SupabaseUser | null;
+  readonly serverUser: SupabaseUser | null;
 }
 
 function MenuItem({

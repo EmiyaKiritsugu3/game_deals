@@ -2,11 +2,11 @@ import { ArrowRight } from 'lucide-react';
 import styles from './PriceAlertModal.module.css';
 
 export interface AlertFormFieldsProps {
-  currentPrice: number;
-  targetPrice: number;
-  isKeyshopAllowed: boolean;
-  onTargetPriceChange: (price: number) => void;
-  onKeyshopAllowedChange: (allowed: boolean) => void;
+  readonly currentPrice: number;
+  readonly targetPrice: number;
+  readonly isKeyshopAllowed: boolean;
+  readonly onTargetPriceChange: (price: number) => void;
+  readonly onKeyshopAllowedChange: (allowed: boolean) => void;
 }
 
 export default function AlertFormFields({

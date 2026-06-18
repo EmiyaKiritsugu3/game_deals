@@ -8,8 +8,8 @@ import { getBrowserClient } from '@/lib/supabase-browser';
 import styles from './AuthModal.module.css';
 
 interface AuthModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
 }
 
 function AuthFormFields({

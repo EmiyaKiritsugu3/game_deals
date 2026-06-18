@@ -1,13 +1,13 @@
 import styles from './GameStatsRow.module.css';
 
 interface GameStatsRowProps {
-  bestCurrentPrice: number;
-  isFree: boolean;
-  bestRawPrice: string;
-  cheapestEver: number;
-  isCurrentlyAtHL: boolean;
-  costPerHour: string;
-  playtimeMain: number;
+  readonly bestCurrentPrice: number;
+  readonly isFree: boolean;
+  readonly bestRawPrice: string;
+  readonly cheapestEver: number;
+  readonly isCurrentlyAtHL: boolean;
+  readonly costPerHour: string;
+  readonly playtimeMain: number;
 }
 
 export default function GameStatsRow({

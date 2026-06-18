@@ -4,13 +4,13 @@ import type { GameDeal } from '@/types/game';
 import styles from './GameDealRow.module.css';
 
 export interface GameDealRowProps {
-  deal: GameDeal;
-  isBest: boolean;
-  cheapestEver: number;
-  gameTitle: string;
-  stores: Record<string, string>;
-  showRegion?: boolean;
-  showEpicBadge?: boolean;
+  readonly deal: GameDeal;
+  readonly isBest: boolean;
+  readonly cheapestEver: number;
+  readonly gameTitle: string;
+  readonly stores: Record<string, string>;
+  readonly showRegion?: boolean;
+  readonly showEpicBadge?: boolean;
 }
 
 function StoreLogo({ name, logo }: Readonly<{ name: string; logo: string | null }>) {

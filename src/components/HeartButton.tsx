@@ -6,8 +6,8 @@ import { useWishlist } from '@/store/wishlistStore';
 import styles from './HeartButton.module.css';
 
 interface HeartButtonProps {
-  gameID: string;
-  className?: string;
+  readonly gameID: string;
+  readonly className?: string;
 }
 
 export default function HeartButton({ gameID, className = '' }: HeartButtonProps) {

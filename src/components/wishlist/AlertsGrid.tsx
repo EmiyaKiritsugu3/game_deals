@@ -7,7 +7,7 @@ import type { PriceAlert } from '@/types/price-alert';
 import styles from './AlertsGrid.module.css';
 
 interface AlertsGridProps {
-  alerts: PriceAlert[];
+  readonly alerts: PriceAlert[];
 }
 
 function EmptyAlertsState() {

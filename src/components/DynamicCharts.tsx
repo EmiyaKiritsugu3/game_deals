@@ -22,18 +22,18 @@ const StoreCompareChartLazy = dynamic(
 );
 
 interface DynamicPriceHistoryProps {
-  currentPrice: string;
-  lowestPrice: string;
-  lowestDate: number;
-  retailPrice?: string;
-  gameTitle?: string;
-  gameId?: string;
+  readonly currentPrice: string;
+  readonly lowestPrice: string;
+  readonly lowestDate: number;
+  readonly retailPrice?: string;
+  readonly gameTitle?: string;
+  readonly gameId?: string;
 }
 
 interface DynamicStoreCompareProps {
-  data: {
-    storeName: string;
-    price: string;
+  readonly data: {
+    readonly storeName: string;
+    readonly price: string;
   }[];
 }
 

@@ -4,13 +4,13 @@ import GameDealRow from './GameDealRow';
 import styles from './StoreComparison.module.css';
 
 export interface StoreComparisonProps {
-  officialDeals: GameDeal[];
-  keyshopDeals: GameDeal[];
-  cheapestEver: number;
-  gameTitle: string;
-  stores: Record<string, string>;
-  showEpicBadge?: boolean;
-  showRegion?: boolean;
+  readonly officialDeals: GameDeal[];
+  readonly keyshopDeals: GameDeal[];
+  readonly cheapestEver: number;
+  readonly gameTitle: string;
+  readonly stores: Record<string, string>;
+  readonly showEpicBadge?: boolean;
+  readonly showRegion?: boolean;
 }
 
 export default function StoreComparison({

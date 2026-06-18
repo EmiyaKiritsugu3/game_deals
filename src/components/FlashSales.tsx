@@ -7,7 +7,7 @@ import { type Deal, getHighResImage } from '@/services/api';
 import styles from './FlashSales.module.css';
 
 interface FlashSalesProps {
-  deals: Deal[];
+  readonly deals: Deal[];
 }
 
 export default function FlashSales({ deals }: FlashSalesProps) {

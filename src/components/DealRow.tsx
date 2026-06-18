@@ -27,12 +27,12 @@ function DealMeta({
   storeName,
   storeLogo,
   timeAgo,
-}: {
+}: Readonly<{
   deal: Deal;
   storeName: string;
   storeLogo: string | null;
   timeAgo: string;
-}) {
+}>) {
   return (
     <div className={styles.mainInfo}>
       <h3 className={styles.title}>{deal.title}</h3>
@@ -69,13 +69,13 @@ function DealPrice({
   isFree,
   isHistoricalLow,
   isEpicDeal,
-}: {
+}: Readonly<{
   deal: Deal;
   savings: number;
   isFree: boolean;
   isHistoricalLow: boolean;
   isEpicDeal: boolean;
-}) {
+}>) {
   return (
     <div className={styles.priceContainer}>
       {isHistoricalLow && <DealsBadge type="HL" />}
@@ -97,8 +97,8 @@ function DealPrice({
 }
 
 interface DealRowProps {
-  deal: Deal;
-  rank?: number;
+  readonly deal: Deal;
+  readonly rank?: number;
 }
 
 export default async function DealRow({ deal, rank: _rank }: DealRowProps) {

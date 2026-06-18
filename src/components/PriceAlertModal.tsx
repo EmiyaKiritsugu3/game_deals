@@ -9,11 +9,11 @@ import AlertFormFields from './AlertFormFields';
 import styles from './PriceAlertModal.module.css';
 
 interface PriceAlertModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  gameID: string;
-  gameTitle: string;
-  currentPrice: number;
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
+  readonly gameID: string;
+  readonly gameTitle: string;
+  readonly currentPrice: number;
 }
 
 export default function PriceAlertModal({

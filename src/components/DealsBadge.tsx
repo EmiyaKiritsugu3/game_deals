@@ -1,10 +1,10 @@
 import styles from './DealsBadge.module.css';
 
 interface DealsBadgeProps {
-  type: 'HL' | 'EPIC' | 'FREE' | 'RATING';
-  value?: string | number;
-  className?: string;
-  compact?: boolean;
+  readonly type: 'HL' | 'EPIC' | 'FREE' | 'RATING';
+  readonly value?: string | number;
+  readonly className?: string;
+  readonly compact?: boolean;
 }
 
 /**

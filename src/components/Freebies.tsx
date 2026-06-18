@@ -4,7 +4,7 @@ import { type Deal, getHighResImage } from '@/services/api';
 import styles from './Freebies.module.css';
 
 interface FreebiesProps {
-  deals: Deal[];
+  readonly deals: Deal[];
 }
 
 export default function Freebies({ deals }: FreebiesProps) {

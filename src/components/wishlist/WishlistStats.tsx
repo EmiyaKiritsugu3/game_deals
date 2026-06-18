@@ -7,11 +7,11 @@ import styles from './WishlistStats.module.css';
 type SortMode = 'discount' | 'price' | 'name';
 
 interface WishlistStatsProps {
-  totalValue: string;
-  bestDiscountGame: SavedGame | null;
-  sortMode: SortMode;
-  onSortModeChange: (mode: SortMode) => void;
-  wishlist: string[];
+  readonly totalValue: string;
+  readonly bestDiscountGame: SavedGame | null;
+  readonly sortMode: SortMode;
+  readonly onSortModeChange: (mode: SortMode) => void;
+  readonly wishlist: string[];
 }
 
 export default function WishlistStats({

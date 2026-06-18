@@ -4,12 +4,12 @@ import PriceAlertTrigger from '@/components/PriceAlertTrigger';
 import styles from './GameHero.module.css';
 
 interface GameHeroProps {
-  gameId: string;
-  gameTitle: string;
-  thumb: string;
-  bestCurrentPrice: number;
-  priority?: boolean;
-  size?: 'full' | 'compact';
+  readonly gameId: string;
+  readonly gameTitle: string;
+  readonly thumb: string;
+  readonly bestCurrentPrice: number;
+  readonly priority?: boolean;
+  readonly size?: 'full' | 'compact';
 }
 
 export default function GameHero({

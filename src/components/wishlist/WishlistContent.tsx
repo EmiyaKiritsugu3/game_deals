@@ -7,17 +7,17 @@ import WishlistGrid from './WishlistGrid';
 import WishlistStats from './WishlistStats';
 
 interface WishlistContentProps {
-  activeTab: 'wishlist' | 'alerts';
-  isLoading: boolean;
-  savedGames: SavedGame[];
-  displayedGames: SavedGame[];
-  stores: Record<string, string>;
-  alerts: PriceAlert[];
-  bestDiscountGame: SavedGame | null;
-  totalValue: string;
-  sortMode: 'discount' | 'price' | 'name';
-  onSortModeChange: (mode: 'discount' | 'price' | 'name') => void;
-  wishlist: string[];
+  readonly activeTab: 'wishlist' | 'alerts';
+  readonly isLoading: boolean;
+  readonly savedGames: SavedGame[];
+  readonly displayedGames: SavedGame[];
+  readonly stores: Record<string, string>;
+  readonly alerts: PriceAlert[];
+  readonly bestDiscountGame: SavedGame | null;
+  readonly totalValue: string;
+  readonly sortMode: 'discount' | 'price' | 'name';
+  readonly onSortModeChange: (mode: 'discount' | 'price' | 'name') => void;
+  readonly wishlist: string[];
 }
 
 export default function WishlistContent({

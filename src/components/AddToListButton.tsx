@@ -6,8 +6,8 @@ import styles from './AddToListButton.module.css';
 import AddToListModal from './AddToListModal';
 
 interface AddToListButtonProps {
-  gameId: string;
-  variant?: 'icon' | 'full';
+  readonly gameId: string;
+  readonly variant?: 'icon' | 'full';
 }
 
 /**
