@@ -2,7 +2,6 @@
 import {
   Bar,
   BarChart,
-  Cell, // eslint-disable-next-line import/no-deprecated — Recharts Cell is required for per-bar coloring
   Line,
   LineChart,
   ResponsiveContainer,
@@ -24,9 +23,10 @@ interface StorePrice {
   price: string;
 }
 export function StoreCompareChart({ data }: { readonly data: StorePrice[] }) {
-  const chartData = data.map((d) => ({
+  const chartData = data.map((d, index) => ({
     name: d.storeName,
     price: Number.parseFloat(d.price),
+    fill: index === 0 ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground) / 0.5)',
   }));
   return (
     <div className={styles.chartContainer}>
@@ -41,14 +41,7 @@ export function StoreCompareChart({ data }: { readonly data: StorePrice[] }) {
               contentStyle={chartTooltipStyle}
               formatter={storeFormatter}
             />
-            <Bar dataKey="price" radius={[4, 4, 0, 0]}>
-              {chartData.map((_entry, index) => (
-                <Cell
-                  key={_entry.name}
-                  fill={index === 0 ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground) / 0.5)'}
-                />
-              ))}
-            </Bar>
+            <Bar dataKey="price" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
