@@ -531,3 +531,57 @@ const games = rows as unknown as { gameId: string }[];
 
 ### Biome Pre-Push Hook Blocks RED Commits
 TDD RED phase: tests must FAIL. Pre-push runs `pnpm check` which includes tests. Use `--no-verify` for RED commits. For GREEN commits, pre-push should pass normally.
+
+---
+
+## Session Learnings (PR #22 — Production Fixes — 2026-06-18)
+
+### React #185: Inline Callback + Zustand New Object = Infinite Loop
+**Root cause**: `useServerUserSync(serverUser, () => setIsAuthModalOpen(false))` — the inline `() => setIsAuthModalOpen(false)` is a NEW function reference every render. In the `useEffect` dependency array `[setUser, serverUser, closeAuthModal]`, `closeAuthModal` changes every time → effect fires → `setUser()` called → Zustand detects change (because `setUser` ALWAYS created a new `{ id, name, email, avatar }` object even for identical data) → Navbar re-renders → new `closeAuthModal` → ∞
+
+**Fix (two layers of defense)**:
+1. **Navbar**: `const closeAuthModal = useCallback(() => setIsAuthModalOpen(false), [])` — stable reference across renders
+2. **authStore**: Skip `set()` if user data unchanged:
+```ts
+setUser: (supabaseUser) => {
+  if (supabaseUser) {
+    const current = get().user;
+    if (current?.id === supabaseUser.id) return; // ✅ idempotent guard
+    set({ user: { ... }, isLoggedIn: true });
+  } else {
+    if (!get().user) return;
+    set({ user: null, isLoggedIn: false });
+  }
+}
+```
+
+**Verification**: `vi.spyOn(Math, 'random')` on Vercel production → React error #185 in console → "Critical error / Something went very wrong" to users. Fix confirmed: page loads clean on Vercel preview.
+
+### Always `useCallback` for Callbacks in useEffect Dependencies
+Any callback function that appears in a `useEffect` dependency array MUST be wrapped in `useCallback`. A new function reference every render = effect fires every render = potential infinite loop. Context7 docs explicitly show this as the #1 cause of React error #185.
+
+### `Math.random()` Is Not CSPRNG — Use `crypto.randomUUID()`
+`Math.random()` in V8 uses xorshift128+ (predictable with enough observations). For slug/ID generation in `'use server'` functions, use `crypto.randomUUID().substring(0, 8)`:
+- 8 hex chars = 16^8 ≈ 4.3B namespace (vs 2.17B for base36)
+- CSPRNG (cryptographically secure) — Context7 confirms Next.js docs use `crypto.randomUUID()` for nonce/ID generation everywhere
+- Available globally in Node.js ≥19 (no import needed)
+
+**Also**: Hoist expensive computations out of loops. `generateSlug(title)` was called on every loop iteration (unnecessary — `title` doesn't change). Compute once as `baseSlug` before the loop.
+
+### `next/image` Remote Patterns: Use Wildcards for CDN Subdomains
+CheapShark API returns thumbnails from various store CDN subdomains (e.g., `sttc.gamersgate.com` vs `www.gamersgate.com`). Don't add individual subdomains — use `*.domain` wildcard:
+```ts
+{ protocol: 'https', hostname: '*.gamersgate.com', pathname: '/**' }
+```
+This covers `www.gamersgate.com`, `sttc.gamersgate.com`, and any future subdomain they add.
+
+### Subagent + Dev Server = Timeout (Turbopack Compile)
+Never spawn `pnpm dev` in a background subagent. Turbopack first compile (2-8s) + bash tool timeout = dead agent. Dev server verification should be done in the main thread or skipped — rely on Vercel preview for production verification. Build (`pnpm build`) is better for pre-push validation than dev server (`pnpm dev`).
+
+### Vercel Preview Auth Blocking
+Vercel preview deployments for private repos show a login wall. Use `vercel_get_access_to_vercel_url` to generate a shareable link (`?_vercel_share=...`) valid for 24h. The shareable link sets an auth cookie on redirect — use `vercel_web_fetch_vercel_url` if your fetch client doesn't support cookies.
+
+### Test Mocks Must Match Implementation
+When changing from `Math.random()` to `crypto.randomUUID()`, update BOTH the implementation AND the test mock:
+- Before: `vi.spyOn(Math, 'random').mockReturnValue(0.123456789)` → slug `my-playlist-4f3a1c`
+- After: `vi.spyOn(crypto, 'randomUUID').mockReturnValue('4f3a1c85-1234-4234-9234-123456789abc')` → slug `my-playlist-4f3a1c85`
