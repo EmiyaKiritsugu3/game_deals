@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockFetchGameFromCheapShark = vi.hoisted(() => vi.fn());
 const mockEnrichWithGreyMarketDeals = vi.hoisted(() => vi.fn());
