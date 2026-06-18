@@ -20,22 +20,18 @@ afterEach(() => {
 describe('PageError', () => {
   it('renders heading with pageName', async () => {
     const PageError = (await import('@/components/PageError')).default;
-    render(
-      <PageError error={new Error('test error')} reset={vi.fn()} pageName="search" />,
-    );
+    render(<PageError error={new Error('test error')} reset={vi.fn()} pageName="search" />);
 
     await waitFor(() => {
       expect(
-        screen.getByRole('heading', { name: /Something went wrong loading search/i }),
+        screen.getByRole('heading', { name: /Something went wrong loading search/i })
       ).toBeInTheDocument();
     });
   });
 
   it('renders Try again button', async () => {
     const PageError = (await import('@/components/PageError')).default;
-    render(
-      <PageError error={new Error('test error')} reset={vi.fn()} pageName="search" />,
-    );
+    render(<PageError error={new Error('test error')} reset={vi.fn()} pageName="search" />);
 
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /Try again/i })).toBeInTheDocument();
@@ -46,9 +42,7 @@ describe('PageError', () => {
     const reset = vi.fn();
 
     const PageError = (await import('@/components/PageError')).default;
-    render(
-      <PageError error={new Error('test error')} reset={reset} pageName="search" />,
-    );
+    render(<PageError error={new Error('test error')} reset={reset} pageName="search" />);
 
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /Try again/i })).toBeInTheDocument();
@@ -62,9 +56,7 @@ describe('PageError', () => {
     const error = new Error('test error');
 
     const PageError = (await import('@/components/PageError')).default;
-    render(
-      <PageError error={error} reset={vi.fn()} pageName="search" />,
-    );
+    render(<PageError error={error} reset={vi.fn()} pageName="search" />);
 
     await waitFor(() => {
       expect(mocks.captureException).toHaveBeenCalledWith(error);
