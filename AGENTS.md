@@ -594,3 +594,4 @@ When changing from `Math.random()` to `crypto.randomUUID()`, update BOTH the imp
 - **Prometheus (Plan Builder)**: Creates structured work plans in `.sisyphus/plans/`. ALWAYS use for multi-step planning. Outputs a `.md` file with checkbox tasks, parallel tracks, effort estimates, and verification gates.
 - **Atlas (Plan Executer)**: Reads a Prometheus plan via `/start-work`, breaks every checkbox into granular todo items, tracks state in `boulder.json`, uses git worktrees for isolation, and delegates systematically to subagents. NEVER execute a plan manually — always use `/start-work`.
 - **Rule**: Prometheus for planning, Atlas for execution. Never mix — orchestrator should not manually decompose plans when Atlas exists.
+- **Trigger**: When user says "execute o plano", "start the plan", "run the sprint", or similar, Sisyphus invokes Atlas via `/start-work` automatically. User does NOT need to type the slash command.
