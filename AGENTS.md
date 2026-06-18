@@ -585,3 +585,12 @@ Vercel preview deployments for private repos show a login wall. Use `vercel_get_
 When changing from `Math.random()` to `crypto.randomUUID()`, update BOTH the implementation AND the test mock:
 - Before: `vi.spyOn(Math, 'random').mockReturnValue(0.123456789)` → slug `my-playlist-4f3a1c`
 - After: `vi.spyOn(crypto, 'randomUUID').mockReturnValue('4f3a1c85-1234-4234-9234-123456789abc')` → slug `my-playlist-4f3a1c85`
+
+---
+
+## Session Learnings (PR #22 — Sprint 2 Wrap — 2026-06-18)
+
+### Plan Creation vs Plan Execution: Use the Right Agent
+- **Prometheus (Plan Builder)**: Creates structured work plans in `.sisyphus/plans/`. ALWAYS use for multi-step planning. Outputs a `.md` file with checkbox tasks, parallel tracks, effort estimates, and verification gates.
+- **Atlas (Plan Executer)**: Reads a Prometheus plan via `/start-work`, breaks every checkbox into granular todo items, tracks state in `boulder.json`, uses git worktrees for isolation, and delegates systematically to subagents. NEVER execute a plan manually — always use `/start-work`.
+- **Rule**: Prometheus for planning, Atlas for execution. Never mix — orchestrator should not manually decompose plans when Atlas exists.
