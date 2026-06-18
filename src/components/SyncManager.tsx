@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useAlertsSync, useCloudToLocalSync, useWishlistSync } from '@/hooks/useSyncHooks';
+import { useCloudToLocalSync, useWishlistSync } from '@/hooks/useSyncHooks';
 import { useAuth } from '@/store/authStore';
 
 export default function SyncManager() {
@@ -15,7 +15,6 @@ export default function SyncManager() {
 
   useCloudToLocalSync();
   useWishlistSync(hasMounted);
-  useAlertsSync(hasMounted);
 
   return null;
 }

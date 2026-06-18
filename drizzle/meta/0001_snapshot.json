@@ -1,10 +1,633 @@
 {
-  "id": "0001_gamification_tables",
-  "prevId": "0000_exotic_next_avengers",
+  "id": "00000001-0000-0000-0000-000000000001",
+  "prevId": "6d6f3a6d-9cc8-46e2-8aaa-64d54c7b2aa7",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "badges": {
+    "public.affiliate_clicks": {
+      "name": "affiliate_clicks",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "storeId": {
+          "name": "storeId",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gameSlug": {
+          "name": "gameSlug",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ip": {
+          "name": "ip",
+          "type": "varchar(45)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "name": "timestamp",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.affiliate_links": {
+      "name": "affiliate_links",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "storeId": {
+          "name": "storeId",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gameSlug": {
+          "name": "gameSlug",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "network": {
+          "name": "network",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar(2000)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trackingTemplate": {
+          "name": "trackingTemplate",
+          "type": "varchar(2000)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.deals": {
+      "name": "deals",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "gameId": {
+          "name": "gameId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "storeId": {
+          "name": "storeId",
+          "type": "store",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "price": {
+          "name": "price",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "retailPrice": {
+          "name": "retailPrice",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "savings": {
+          "name": "savings",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dealRating": {
+          "name": "dealRating",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar(2000)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "deals_gameId_games_id_fk": {
+          "name": "deals_gameId_games_id_fk",
+          "tableFrom": "deals",
+          "tableTo": "games",
+          "columnsFrom": [
+            "gameId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.games": {
+      "name": "games",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "cheapsharkId": {
+          "name": "cheapsharkId",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "alternativeTitles": {
+          "name": "alternativeTitles",
+          "type": "varchar(255)[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "developer": {
+          "name": "developer",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "publisher": {
+          "name": "publisher",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "platform": {
+          "name": "platform",
+          "type": "varchar(50)[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "genre": {
+          "name": "genre",
+          "type": "varchar(50)[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "metacriticScore": {
+          "name": "metacriticScore",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "steamRating": {
+          "name": "steamRating",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "thumbUrl": {
+          "name": "thumbUrl",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "games_cheapsharkId_unique": {
+          "name": "games_cheapsharkId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "cheapsharkId"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "avatarUrl": {
+          "name": "avatarUrl",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "user_role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'user'"
+        },
+        "xp": {
+          "name": "xp",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.price_alerts": {
+      "name": "price_alerts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "userId": {
+          "name": "userId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gameId": {
+          "name": "gameId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "targetPrice": {
+          "name": "targetPrice",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "storeId": {
+          "name": "storeId",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isActive": {
+          "name": "isActive",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "price_alerts_gameId_games_id_fk": {
+          "name": "price_alerts_gameId_games_id_fk",
+          "tableFrom": "price_alerts",
+          "tableTo": "games",
+          "columnsFrom": [
+            "gameId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.price_history": {
+      "name": "price_history",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "gameId": {
+          "name": "gameId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "storeId": {
+          "name": "storeId",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "price": {
+          "name": "price",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "retailPrice": {
+          "name": "retailPrice",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recordedAt": {
+          "name": "recordedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "price_history_gameId_games_id_fk": {
+          "name": "price_history_gameId_games_id_fk",
+          "tableFrom": "price_history",
+          "tableTo": "games",
+          "columnsFrom": [
+            "gameId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.playlist_games": {
+      "name": "playlist_games",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "playlistId": {
+          "name": "playlistId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gameId": {
+          "name": "gameId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "notes": {
+          "name": "notes",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "addedAt": {
+          "name": "addedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "playlist_games_playlistId_playlists_id_fk": {
+          "name": "playlist_games_playlistId_playlists_id_fk",
+          "tableFrom": "playlist_games",
+          "tableTo": "playlists",
+          "columnsFrom": [
+            "playlistId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.playlists": {
+      "name": "playlists",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "userId": {
+          "name": "userId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isPublic": {
+          "name": "isPublic",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.badges": {
       "name": "badges",
       "schema": "",
       "columns": {
@@ -15,14 +638,24 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "name": { "name": "name", "type": "varchar(100)", "primaryKey": false, "notNull": true },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
         "description": {
           "name": "description",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "iconSvg": { "name": "iconSvg", "type": "text", "primaryKey": false, "notNull": true },
+        "iconSvg": {
+          "name": "iconSvg",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "rarity": {
           "name": "rarity",
           "type": "varchar(20)",
@@ -30,7 +663,12 @@
           "notNull": false,
           "default": "'Common'"
         },
-        "criteria": { "name": "criteria", "type": "jsonb", "primaryKey": false, "notNull": true }
+        "criteria": {
+          "name": "criteria",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
       },
       "indexes": {},
       "foreignKeys": {},
@@ -39,11 +677,16 @@
         "badges_name_unique": {
           "name": "badges_name_unique",
           "nullsNotDistinct": false,
-          "columns": ["name"]
+          "columns": [
+            "name"
+          ]
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "user_badges": {
+    "public.user_badges": {
       "name": "user_badges",
       "schema": "",
       "columns": {
@@ -54,8 +697,18 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "userId": { "name": "userId", "type": "uuid", "primaryKey": false, "notNull": true },
-        "badgeId": { "name": "badgeId", "type": "uuid", "primaryKey": false, "notNull": true },
+        "userId": {
+          "name": "userId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "badgeId": {
+          "name": "badgeId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
         "awardedAt": {
           "name": "awardedAt",
           "type": "timestamp",
@@ -67,7 +720,13 @@
       "indexes": {
         "user_badges_userId_idx": {
           "name": "user_badges_userId_idx",
-          "columns": ["userId"],
+          "columns": [
+            {
+              "expression": "userId",
+              "isExpression": false,
+              "asc": true
+            }
+          ],
           "isUnique": false
         }
       },
@@ -75,10 +734,15 @@
         "user_badges_badgeId_badges_id_fk": {
           "name": "user_badges_badgeId_badges_id_fk",
           "tableFrom": "user_badges",
-          "columnsFrom": ["badgeId"],
+          "columnsFrom": [
+            "badgeId"
+          ],
           "tableTo": "badges",
-          "columnsTo": ["id"],
-          "onDelete": "cascade"
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -86,11 +750,17 @@
         "user_badges_user_badge_unique": {
           "name": "user_badges_user_badge_unique",
           "nullsNotDistinct": false,
-          "columns": ["userId", "badgeId"]
+          "columns": [
+            "userId",
+            "badgeId"
+          ]
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "activities": {
+    "public.activities": {
       "name": "activities",
       "schema": "",
       "columns": {
@@ -101,14 +771,24 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "userId": { "name": "userId", "type": "uuid", "primaryKey": false, "notNull": true },
+        "userId": {
+          "name": "userId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
         "actionType": {
           "name": "actionType",
           "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
         },
-        "details": { "name": "details", "type": "jsonb", "primaryKey": false, "notNull": false },
+        "details": {
+          "name": "details",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
         "createdAt": {
           "name": "createdAt",
           "type": "timestamp",
@@ -120,15 +800,24 @@
       "indexes": {
         "activities_userId_idx": {
           "name": "activities_userId_idx",
-          "columns": ["userId"],
+          "columns": [
+            {
+              "expression": "userId",
+              "isExpression": false,
+              "asc": true
+            }
+          ],
           "isUnique": false
         }
       },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "wishlists": {
+    "public.wishlists": {
       "name": "wishlists",
       "schema": "",
       "columns": {
@@ -139,8 +828,18 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "userId": { "name": "userId", "type": "uuid", "primaryKey": false, "notNull": true },
-        "gameId": { "name": "gameId", "type": "uuid", "primaryKey": false, "notNull": true },
+        "userId": {
+          "name": "userId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gameId": {
+          "name": "gameId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
         "addedAt": {
           "name": "addedAt",
           "type": "timestamp",
@@ -152,12 +851,24 @@
       "indexes": {
         "wishlists_userId_idx": {
           "name": "wishlists_userId_idx",
-          "columns": ["userId"],
+          "columns": [
+            {
+              "expression": "userId",
+              "isExpression": false,
+              "asc": true
+            }
+          ],
           "isUnique": false
         },
         "wishlists_gameId_idx": {
           "name": "wishlists_gameId_idx",
-          "columns": ["gameId"],
+          "columns": [
+            {
+              "expression": "gameId",
+              "isExpression": false,
+              "asc": true
+            }
+          ],
           "isUnique": false
         }
       },
@@ -167,12 +878,49 @@
         "wishlists_user_game_unique": {
           "name": "wishlists_user_game_unique",
           "nullsNotDistinct": false,
-          "columns": ["userId", "gameId"]
+          "columns": [
+            "userId",
+            "gameId"
+          ]
         }
-      }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.store": {
+      "name": "store",
+      "schema": "public",
+      "values": [
+        "steam",
+        "epic",
+        "gog",
+        "humble",
+        "fanatical",
+        "greenmangaming",
+        "nuuvem"
+      ]
+    },
+    "public.user_role": {
+      "name": "user_role",
+      "schema": "public",
+      "values": [
+        "user",
+        "mod",
+        "admin"
+      ]
+    }
+  },
   "schemas": {},
-  "_meta": { "schemas": {}, "tables": {}, "columns": {} }
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
 }

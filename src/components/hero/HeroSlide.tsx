@@ -10,11 +10,11 @@ export function HeroSlide({
   deal,
   isActive,
   index,
-}: {
+}: Readonly<{
   deal: Deal;
   isActive: boolean;
   index: number;
-}) {
+}>) {
   const dealSavings = Math.round(Number.parseFloat(deal.savings));
   const dealThumb = getHighResImage(deal.thumb);
 

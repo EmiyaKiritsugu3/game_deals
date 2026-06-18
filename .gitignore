@@ -56,3 +56,5 @@ graphify-out/
 # Husky internal
 .husky/_
 .playwright-mcp/
+public/sw.js
+scripts/build-sw.mjs

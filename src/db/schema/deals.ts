@@ -1,4 +1,4 @@
-import { index, pgTable, real, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { index, pgTable, real, timestamp, uniqueIndex, uuid, varchar } from 'drizzle-orm/pg-core';
 import { games } from './games';
 
 export const deals = pgTable(
@@ -21,5 +21,6 @@ export const deals = pgTable(
     index('deals_store_game_idx').on(table.storeId, table.gameId),
     index('deals_rating_idx').on(table.dealRating),
     index('deals_game_store_price_idx').on(table.gameId, table.storeId, table.price),
+    uniqueIndex('deals_game_store_unique').on(table.gameId, table.storeId),
   ]
 );

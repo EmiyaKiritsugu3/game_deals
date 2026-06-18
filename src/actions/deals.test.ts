@@ -1,11 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { execute, authGetUser } = vi.hoisted(() => ({
-  execute: vi.fn(),
-  authGetUser: vi.fn(),
-}));
+const { execute, authGetUser, mockInsert, mockOnConflictDoUpdate } = vi.hoisted(() => {
+  const ret = vi.fn();
+  const ocdu = vi.fn(() => ({ returning: ret }));
+  const vals = vi.fn(() => ({ onConflictDoUpdate: ocdu }));
+  const ins = vi.fn(() => ({ values: vals }));
+  return {
+    execute: vi.fn(),
+    authGetUser: vi.fn(),
+    mockInsert: ins,
+    mockOnConflictDoUpdate: ocdu,
+  };
+});
 
-vi.mock('@/db', () => ({ db: { execute } }));
+vi.mock('@/db', () => ({ db: { execute, insert: mockInsert } }));
 
 vi.mock('@/services/ingest');
 
@@ -13,6 +21,8 @@ vi.mock('@/utils/supabase/server', () => ({
   createClient: () => Promise.resolve({ auth: { getUser: () => authGetUser() } }),
 }));
 
+import { db } from '@/db';
+import { deals as dealsTable } from '@/db/schema';
 import { fetchCheapSharkDeals, upsertGames } from '@/services/ingest';
 import {
   getDailyPriceHistoryAction,
@@ -166,6 +176,39 @@ describe('ingestPricesAction', () => {
     const result = await ingestPricesAction();
     expect(result.success).toBe(false);
     expect(result.error).toMatch(/CheapShark API/);
+  });
+
+  it('calls onConflictDoUpdate with (gameId, storeId) target on deals insert', async () => {
+    const dealsValues = [
+      {
+        gameId: 'uuid-1',
+        storeId: '1',
+        price: 9.99,
+        retailPrice: 19.99,
+        savings: 50,
+        dealRating: 8.0,
+        url: 'https://www.cheapshark.com/redirect?dealID=deal1',
+        createdAt: new Date(),
+      },
+    ];
+
+    await db
+      .insert(dealsTable)
+      .values(dealsValues)
+      .onConflictDoUpdate({
+        target: [dealsTable.gameId, dealsTable.storeId],
+        set: {
+          price: 0,
+        },
+      });
+
+    expect(mockInsert).toHaveBeenCalledWith(dealsTable);
+    expect(mockOnConflictDoUpdate).toHaveBeenCalledTimes(1);
+    expect(mockOnConflictDoUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        target: [dealsTable.gameId, dealsTable.storeId],
+      })
+    );
   });
 });
 

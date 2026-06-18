@@ -4,7 +4,7 @@ import type { SavedGame } from '@/hooks/useSortedGames';
 import styles from './WishlistHero.module.css';
 
 interface WishlistHeroProps {
-  bestDiscountGame: SavedGame | null;
+  readonly bestDiscountGame: SavedGame | null;
 }
 
 export default function WishlistHero({ bestDiscountGame }: WishlistHeroProps) {

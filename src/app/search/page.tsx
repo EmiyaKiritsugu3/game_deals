@@ -8,9 +8,9 @@ export const metadata = {
 
 export default async function SearchPage({
   searchParams,
-}: {
+}: Readonly<{
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
+}>) {
   const params = await searchParams;
   const query = typeof params.q === 'string' ? params.q : '';
   const upperPrice = typeof params.upperPrice === 'string' ? params.upperPrice : undefined;

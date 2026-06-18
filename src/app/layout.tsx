@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { ThemeProvider } from 'next-themes';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Suspense } from 'react';
 import CookieBanner from '@/components/CookieBanner';
@@ -110,7 +111,7 @@ export default async function RootLayout({
   );
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {jsonLdScript}
         <link rel="manifest" href="/manifest.json" />
@@ -121,29 +122,31 @@ export default async function RootLayout({
           Skip to main content
         </a>
         <main id="main-content">
-          <NuqsAdapter>
-            <ReactQueryProvider>
-              <Suspense
-                fallback={
-                  <nav
-                    style={{
-                      height: 60,
-                      borderBottom: '1px solid hsl(var(--border))',
-                      background: 'hsl(var(--background))',
-                    }}
-                  />
-                }
-              >
-                <Navbar serverUser={null} />
-              </Suspense>
-              <SyncManager />
-              {children}
-              {modal}
-              <Analytics />
-              <SpeedInsights />
-              <CookieBanner />
-            </ReactQueryProvider>
-          </NuqsAdapter>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <NuqsAdapter>
+              <ReactQueryProvider>
+                <Suspense
+                  fallback={
+                    <nav
+                      style={{
+                        height: 60,
+                        borderBottom: '1px solid hsl(var(--border))',
+                        background: 'hsl(var(--background))',
+                      }}
+                    />
+                  }
+                >
+                  <Navbar serverUser={null} />
+                </Suspense>
+                <SyncManager />
+                {children}
+                {modal}
+                <Analytics />
+                <SpeedInsights />
+                <CookieBanner />
+              </ReactQueryProvider>
+            </NuqsAdapter>
+          </ThemeProvider>
         </main>
       </body>
     </html>

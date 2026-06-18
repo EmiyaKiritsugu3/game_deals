@@ -1,3 +1,4 @@
+import { track } from '@vercel/analytics/server';
 import { sql } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 import { db } from '@/db';
@@ -72,6 +73,9 @@ export async function GET(
   if (targetUrl) {
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
     logClick(storeId, gameSlug, ip);
+
+    track('affiliate_click', { store_id: storeId, game_slug: gameSlug }).catch(() => {});
+
     return NextResponse.redirect(targetUrl, 302);
   }
 

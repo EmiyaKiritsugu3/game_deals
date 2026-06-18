@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import styles from './FilterSidebar.module.css';
+import StoreFilter from './StoreFilter';
 
 interface StoreInfo {
   storeID: string;
@@ -32,6 +33,14 @@ export default function FilterSidebar({ stores }: Readonly<{ stores: StoreInfo[]
     }
     setSelectedStores(newStores);
   };
+
+  const handleSelectAll = useCallback(() => {
+    setSelectedStores(new Set(stores.map((s) => s.storeID)));
+  }, [stores]);
+
+  const handleClearAll = useCallback(() => {
+    setSelectedStores(new Set());
+  }, []);
 
   const applyFilters = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString());
@@ -88,22 +97,13 @@ export default function FilterSidebar({ stores }: Readonly<{ stores: StoreInfo[]
 
       <div className={styles.filterGroup}>
         <h4 className={styles.groupTitle}>Stores</h4>
-        <div className={styles.storeList}>
-          {stores
-            .filter((s) => Number.parseInt(s.storeID, 10) <= 25) // Keep list manageable for MVP
-            .map((store) => (
-              <label key={store.storeID} className={styles.storeLabel}>
-                <input
-                  type="checkbox"
-                  checked={selectedStores.has(store.storeID)}
-                  onChange={() => handleStoreToggle(store.storeID)}
-                  className={styles.checkbox}
-                  aria-label={store.storeName}
-                />
-                <span className={styles.storeName}>{store.storeName}</span>
-              </label>
-            ))}
-        </div>
+        <StoreFilter
+          stores={stores}
+          selectedStores={selectedStores}
+          onToggle={handleStoreToggle}
+          onSelectAll={handleSelectAll}
+          onClearAll={handleClearAll}
+        />
       </div>
 
       <button onClick={applyFilters} className={styles.applyBtn} type="button">

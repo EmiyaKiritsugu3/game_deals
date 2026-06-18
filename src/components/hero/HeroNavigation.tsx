@@ -6,11 +6,11 @@ export function HeroNavigation({
   deals,
   currentIndex,
   goTo,
-}: {
+}: Readonly<{
   deals: Deal[];
   currentIndex: number;
   goTo: (index: number) => void;
-}) {
+}>) {
   return (
     <div className={styles.navigation}>
       {deals.map((deal, index) => (

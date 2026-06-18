@@ -6,8 +6,8 @@ import { useAlerts } from '@/store/alertStore';
 import styles from './PriceAlertBadge.module.css';
 
 interface PriceAlertBadgeProps {
-  gameID: string;
-  className?: string;
+  readonly gameID: string;
+  readonly className?: string;
 }
 
 export default function PriceAlertBadge({ gameID, className = '' }: PriceAlertBadgeProps) {

@@ -9,11 +9,11 @@ import AlertFormFields from './AlertFormFields';
 import styles from './PriceAlertModal.module.css';
 
 interface PriceAlertModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  gameID: string;
-  gameTitle: string;
-  currentPrice: number;
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
+  readonly gameID: string;
+  readonly gameTitle: string;
+  readonly currentPrice: number;
 }
 
 export default function PriceAlertModal({
@@ -23,7 +23,7 @@ export default function PriceAlertModal({
   gameTitle,
   currentPrice,
 }: PriceAlertModalProps) {
-  const { addAlert, removeAlert, getAlert, hasAlert, setAlertId } = useAlerts();
+  const { addAlert, removeAlert, getAlert, hasAlert } = useAlerts();
   const existingAlert = getAlert(gameID);
 
   const [targetPrice, setTargetPrice] = useState(currentPrice);
@@ -44,24 +44,24 @@ export default function PriceAlertModal({
     setIsSaving(true);
     setSaveError(null);
 
-    // 1. Write to localStorage immediately (no data loss if tab closes)
-    addAlert({ gameID, gameTitle, targetPrice, currentPrice, isKeyshopAllowed });
-
     try {
-      // 2. Persist to PostgreSQL via server action
+      // 1. Persist to PostgreSQL via server action FIRST
       const result = await createPriceAlertAction(gameID, targetPrice);
 
-      // 3. Store the server-returned alert ID for future deletes
-      if (result && typeof result.id === 'string') {
-        setAlertId(gameID, result.id);
-      }
+      // 2. Update local state ONLY on server success
+      addAlert({
+        gameID,
+        gameTitle,
+        targetPrice,
+        currentPrice,
+        isKeyshopAllowed,
+        alertId: typeof result?.id === 'string' ? result.id : undefined,
+      });
 
       onClose();
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to save alert';
-      setSaveError(
-        `Saved locally but could not sync: ${message}. The alert will be saved automatically later.`
-      );
+      setSaveError(message);
     } finally {
       setIsSaving(false);
     }

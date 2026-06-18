@@ -6,11 +6,11 @@ import { type ReactNode, useCallback, useEffect, useRef } from 'react';
 import styles from './BaseModal.module.css';
 
 interface BaseModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children: ReactNode;
-  title?: string;
-  ariaLabel?: string;
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
+  readonly children: ReactNode;
+  readonly title?: string;
+  readonly ariaLabel?: string;
 }
 
 export default function BaseModal({ isOpen, onClose, children, title, ariaLabel }: BaseModalProps) {

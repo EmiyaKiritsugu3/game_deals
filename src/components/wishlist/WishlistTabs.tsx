@@ -4,10 +4,10 @@ import { Bell, List } from 'lucide-react';
 import styles from './WishlistTabs.module.css';
 
 interface WishlistTabsProps {
-  activeTab: 'wishlist' | 'alerts';
-  onTabChange: (tab: 'wishlist' | 'alerts') => void;
-  wishlistCount: number;
-  alertsCount: number;
+  readonly activeTab: 'wishlist' | 'alerts';
+  readonly onTabChange: (tab: 'wishlist' | 'alerts') => void;
+  readonly wishlistCount: number;
+  readonly alertsCount: number;
 }
 
 export default function WishlistTabs({
