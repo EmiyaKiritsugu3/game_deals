@@ -3,7 +3,12 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 type Chain = Record<string, ReturnType<typeof vi.fn>>;
 
 function makeChain(): Chain {
-  const chain: Chain = {};
+  const resolveRef = { value: { error: null } as unknown };
+  // biome-ignore lint/suspicious/noThenProperty: thenable required for Supabase mock chain
+  const chain: Chain = {
+    then: (onFulfilled: (v: unknown) => void) => onFulfilled(resolveRef.value),
+    _resolveRef: resolveRef,
+  } as unknown as Chain;
   chain.single = vi.fn().mockResolvedValue({});
   chain.order = vi.fn().mockResolvedValue({});
   chain.from = vi.fn(() => chain);
@@ -87,5 +92,12 @@ describe('addGameToPlaylist', () => {
     mockClient.chain.single.mockResolvedValueOnce({ data: { games_ids: null }, error: null });
     await addGameToPlaylist('pl1', 'g1');
     expect(mockClient.chain.update).toHaveBeenCalledWith({ games_ids: ['g1'] });
+  });
+
+  it('throws on update error', async () => {
+    mockClient.chain.single.mockResolvedValueOnce({ data: { games_ids: ['g1'] }, error: null });
+    const chainWithRef = mockClient.chain as Chain & { _resolveRef: { value: unknown } };
+    chainWithRef._resolveRef.value = { error: new Error('Update failed') };
+    await expect(addGameToPlaylist('pl1', 'g2')).rejects.toThrow('Update failed');
   });
 });

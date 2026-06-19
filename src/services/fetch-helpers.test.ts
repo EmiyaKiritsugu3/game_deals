@@ -160,4 +160,16 @@ describe('fetchGameDetails', () => {
 
     expect(result).toEqual(sampleDetails);
   });
+
+  it('returns null when response is not ok', async () => {
+    mockFetch.mockResolvedValueOnce({ ok: false, json: () => Promise.resolve({}) });
+    const result = await fetchGameDetails('123');
+    expect(result).toBeNull();
+  });
+
+  it('returns null when fetch throws', async () => {
+    mockFetch.mockRejectedValueOnce(new Error('Network error'));
+    const result = await fetchGameDetails('123');
+    expect(result).toBeNull();
+  });
 });

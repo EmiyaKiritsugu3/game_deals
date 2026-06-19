@@ -85,8 +85,15 @@ describe('updateSession', () => {
   });
 
   it('calls setAll with cookies from the supabase client', async () => {
-    setupSupabaseMock({ id: 'u1' });
-    await updateSession(makeRequest('/some-page'));
+    const supabase = mockSupabase({ id: 'u1' });
+    const request = makeRequest('/some-page');
+    mockCreateServerClient.mockImplementation((_url, _key, { cookies }) => {
+      cookies.setAll([{ name: 'sb-test', value: 'test-value' }]);
+      return supabase;
+    });
+    const response = await updateSession(request);
     expect(mockCreateServerClient).toHaveBeenCalled();
+    expect(response.cookies.get('sb-test')?.value).toBe('test-value');
+    expect(request.cookies.get('sb-test')?.value).toBe('test-value');
   });
 });
