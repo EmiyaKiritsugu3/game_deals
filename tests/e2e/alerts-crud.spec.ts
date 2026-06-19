@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { signInAsTestUser } from './fixtures/auth';
+import { hasAuthCredentials, signInAsTestUser } from './fixtures/auth';
 
 async function blockProblematicRequests(page: Page) {
   await page.route('**/*', async (route) => {
@@ -34,6 +34,8 @@ test.describe('Alerts CRUD', () => {
   });
 
   test('1. Authenticated user can create, view, and delete a price alert', async ({ page }) => {
+    test.skip(!hasAuthCredentials(), 'No E2E auth credentials configured');
+
     // Step 1: Sign in as test user
     await signInAsTestUser(page);
 
