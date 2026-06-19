@@ -107,7 +107,7 @@ Métrica: ~3K tokens de contexto de tarefa por agente. Batch por complexidade, n
 | Tarefa | Arquitetura | Por que |
 |--------|-------------|--------|
 | 1-2 arquivos, escopo claro | Single agent | Overhead de coordenação > benefício |
-| 5+ arquivos, domínios diferentes | Multi-agent (3-6 paralelos) | Contexto isolado, sem poluição |
+| 8+ arquivos, domínios diferentes | Multi-agent (3-6 paralelos) | Contexto isolado, sem poluição |
 | Feature nova complexa | SPEC → BUILD → REVIEW (3 fases) | Separação de responsabilidades |
 
 ### 2.3. Tipos de agentes e domínios
@@ -193,6 +193,7 @@ SPEC_GAP   SPEC perdeu edge case que o código manifestamente
 ```
 ENTRADA:  Branch com todos os commits do BUILD
 SAÍDA:    PASS (todos checks verdes) ou FAIL (lista de falhas)
+TIMEOUT:  5 minutos total. Se não completar → FAIL.
 MÁXIMO:   3 iterações. 4ª falha → escalar para humano.
 
 CHECKS (ordem fixa, mais barato primeiro):
@@ -215,7 +216,9 @@ REGRA:     Se check N falhar, checks N+1 em diante NÃO executam.
 
 ### 4.1. Gate Local (pré-push)
 
-Executado antes de qualquer push. Barato e rápido.
+Executado antes de qualquer push. Barato e rápido (~60s). Previne push de código quebrado antes de consumir recursos de CI.
+
+**Nota:** Gate local e CI PR executam os mesmos checks. É intencionalmente redundante: o gate local usa cache local (rápido, ~60s); o CI PR faz fresh install sem cache (garante reprodutibilidade). Se o gate local passar mas o CI falhar, há uma diferença de ambiente que precisa ser investigada.
 
 ```
 ┌──────────┐   ┌──────────┐   ┌───────────┐   ┌──────────┐
@@ -249,7 +252,21 @@ Jobs pesados que não cabem no fluxo de PR. Informativos, não bloqueiam merge.
 | `e2e-full` | Playwright + DB migrations reais | 20min | Ativo |
 | `coverage-trend` | Coverage report (30-day retention) | 10min | Ativo |
 
-### 4.4. Baseline SonarQube
+### 4.5. Regra de subida de thresholds
+
+```
+Thresholds de coverage (vitest.config.ts) só podem ser aumentados
+quando o coverage ATUAL já está ≥ ao novo threshold proposto.
+
+Exemplo: coverage atual = 48.3% lines. Só pode subir threshold
+para 50% se coverage ≥ 50% neste momento.
+
+O commit de aumento de threshold usa --no-verify (o próprio aumento
+faria o gate falhar por um instante). Imediatamente após, o gate
+deve passar com o novo threshold.
+```
+
+### 4.6. Baseline SonarQube
 
 | Regra | Arquivo | Severidade | Status |
 |-------|---------|-----------|--------|
@@ -272,11 +289,14 @@ Jobs pesados que não cabem no fluxo de PR. Informativos, não bloqueiam merge.
    └── Agente 3: test patterns existentes
 
 2. PLAN (síncrono)
-   └── Prometheus: decompõe em tasks, define contratos, ondas
+   └── Prometheus: decompõe em tasks, define ondas, dependências,
+       escopo (quais arquivos cada agente cobre), ordem de execução.
+       NÃO define edge cases — isso é responsabilidade dos SPEC agents.
 
 3. EXECUTE (paralelo dentro de cada onda)
    ├── WAVE 1: SPEC agents (leitura, 3-6 paralelos)
-   │   └── Output: contratos com edge cases + alvos
+   │   └── Output: contratos detalhados com edge cases + alvos
+   │       + mocks + partes não-testáveis sinalizadas
    │
    ├── WAVE 2: BUILD agents (escrita, 3-6 paralelos)
    │   └── Output: commits atômicos, 1 por arquivo
@@ -303,7 +323,10 @@ Jobs pesados que não cabem no fluxo de PR. Informativos, não bloqueiam merge.
 3. REFACTOR:
    └── Agente limpa sem mudar comportamento → STILL PASSES
 
-4. GATE:
+4. REVIEW:
+   └── Sessão isolada, vê só diff + contrato → APPROVED/REJECTED
+
+5. GATE:
    └── biome → tsc → test → push
 ```
 
@@ -360,6 +383,7 @@ Jobs pesados que não cabem no fluxo de PR. Informativos, não bloqueiam merge.
 - Spec-Driven Development in the Age of AI. arXiv:2602.00180, 2026.
 - Microsoft Research. "How Do AI Agents Spend Your Money?" 2026.
 - SPOQ Framework. arXiv:2606.03115, 2026.
+- Zenn.dev. "Agent-Separated TDD: 227 vs 20 Tests." 03/2026.
 
 ### Fontes de produção
 - Anthropic. Claude Code Best Practices. 2026.
@@ -373,4 +397,5 @@ Jobs pesados que não cabem no fluxo de PR. Informativos, não bloqueiam merge.
 
 | Versão | Data | Mudanças |
 |--------|------|----------|
+| 1.1 | 2026-06-19 | Correções pós-auditoria: threshold multi-agent 5→8, fluxo SPEC explícito, REVIEW no bugfix, ref Zenn.dev, justificativa gate duplo, timeout total 5min, regra subida thresholds. |
 | 1.0 | 2026-06-19 | Versão inicial. 6 princípios, arquitetura, contratos, gates, fluxo, token economy. Baseada em 60+ fontes. |
