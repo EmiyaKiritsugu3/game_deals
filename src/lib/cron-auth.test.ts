@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { verifyCronAuth } from './cron-auth';
 
 beforeEach(() => {
@@ -24,7 +24,7 @@ describe('verifyCronAuth', () => {
     });
     const response = verifyCronAuth(request);
     expect(response).not.toBeNull();
-    expect(response!.status).toBe(401);
+    expect(response?.status).toBe(401);
   });
 
   it('returns 401 for wrong token', () => {
@@ -33,13 +33,13 @@ describe('verifyCronAuth', () => {
     });
     const response = verifyCronAuth(request);
     expect(response).not.toBeNull();
-    expect(response!.status).toBe(401);
+    expect(response?.status).toBe(401);
   });
 
   it('returns 401 when Authorization header is missing', () => {
     const request = new Request('http://localhost');
     const response = verifyCronAuth(request);
     expect(response).not.toBeNull();
-    expect(response!.status).toBe(401);
+    expect(response?.status).toBe(401);
   });
 });
