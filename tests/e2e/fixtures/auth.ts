@@ -1,4 +1,4 @@
-import { type Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 export function hasAuthCredentials(): boolean {
   return !!(process.env.TEST_SUPABASE_USER_EMAIL && process.env.TEST_SUPABASE_USER_PASSWORD);
