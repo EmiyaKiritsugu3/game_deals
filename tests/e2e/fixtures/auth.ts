@@ -1,13 +1,12 @@
-import type { Page } from '@playwright/test';
+import { type Page, test } from '@playwright/test';
 
 export async function signInAsTestUser(page: Page): Promise<void> {
   const email = process.env.TEST_SUPABASE_USER_EMAIL;
   const password = process.env.TEST_SUPABASE_USER_PASSWORD;
 
   if (!email || !password) {
-    throw new Error(
-      'Missing E2E auth credentials. Set TEST_SUPABASE_USER_EMAIL and TEST_SUPABASE_USER_PASSWORD env vars.'
-    );
+    test.skip(true, 'Skipping: no E2E auth credentials configured');
+    return;
   }
 
   await page.goto('/', { waitUntil: 'domcontentloaded' });
