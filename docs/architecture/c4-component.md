@@ -173,7 +173,7 @@ Three Zustand stores manage client-side state:
 | Store | Persistence | Purpose |
 |---|---|---|
 | `authStore` | None (SSR sync) | Lazy-init Supabase browser client. Stores user profile, provides `setUser()` and `logout()`. |
-| `wishlistStore` | `localStorage` (`gameDeals_wishlist`) | Array of game IDs. `toggleWishlist()` adds/removes. `setWishlist()` for remote sync hydration. |
+| `wishlistStore` | `localStorage` (`gameDeals_wishlist`) | Array of game IDs. `toggleWishlist()` adds/removes. `setWishlist(ids[])` replaces the entire list (e.g., after cloud→local merge in SyncManager). |
 | `alertStore` | `localStorage` (`gamedeals-alerts-storage`) | Array of `PriceAlert` objects with target price, current price, keyshop preference. |
 
 The `SyncManager` component handles two-way sync between localStorage and remote Supabase tables, triggered by auth state changes.

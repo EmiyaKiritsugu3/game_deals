@@ -40,7 +40,7 @@ function isValidStoreId(input?: string): boolean {
 
 function sanitizeTitle(input?: string): string | undefined {
   if (!input || input.length > 200) return undefined;
-  return encodeURIComponent(input);
+  return input;
 }
 
 function buildDealsUrl(params: {

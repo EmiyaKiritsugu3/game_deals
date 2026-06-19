@@ -101,60 +101,68 @@ export default function PriceAlertModal({
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} ariaLabel="Set price alert">
-      <div className={styles.header}>
-        <h2>
-          <Bell size={24} className={styles.bellIcon} /> Set Price Alert
-        </h2>
-        <p>
-          We will notify you when <span className={styles.gameTitle}>{gameTitle}</span> hits your
-          target price.
-        </p>
-      </div>
-
-      <AlertFormFields
-        currentPrice={currentPrice}
-        targetPrice={targetPrice}
-        isKeyshopAllowed={isKeyshopAllowed}
-        onTargetPriceChange={setTargetPrice}
-        onKeyshopAllowedChange={setIsKeyshopAllowed}
-      />
-
-      {saveError && (
-        <div className={styles.error}>
-          <span>{saveError}</span>
-          <button type="button" className={styles.dismissError} onClick={() => setSaveError(null)}>
-            Dismiss
-          </button>
+      <div data-testid="alert-modal">
+        <div className={styles.header}>
+          <h2>
+            <Bell size={24} className={styles.bellIcon} /> Set Price Alert
+          </h2>
+          <p>
+            We will notify you when <span className={styles.gameTitle}>{gameTitle}</span> hits your
+            target price.
+          </p>
         </div>
-      )}
 
-      <div className={styles.actionButtons}>
-        <button
-          type="button"
-          className={`${styles.button} ${styles.cancelButton}`}
-          onClick={onClose}
-          disabled={isSaving}
-        >
-          Cancel
-        </button>
-        <button
-          type="button"
-          className={`${styles.button} ${styles.saveButton}`}
-          onClick={handleSave}
-          disabled={isSaving}
-        >
-          {buttonLabel}
-        </button>
-        {hasAlert(gameID) && (
+        <AlertFormFields
+          currentPrice={currentPrice}
+          targetPrice={targetPrice}
+          isKeyshopAllowed={isKeyshopAllowed}
+          onTargetPriceChange={setTargetPrice}
+          onKeyshopAllowedChange={setIsKeyshopAllowed}
+        />
+
+        {saveError && (
+          <div className={styles.error}>
+            <span>{saveError}</span>
+            <button
+              type="button"
+              className={styles.dismissError}
+              onClick={() => setSaveError(null)}
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
+
+        <div className={styles.actionButtons}>
           <button
             type="button"
-            className={styles.removeButton}
-            onClick={handleRemove}
+            className={`${styles.button} ${styles.cancelButton}`}
+            onClick={onClose}
             disabled={isSaving}
           >
-            <Trash2 size={14} /> Stop tracking this game
+            Cancel
           </button>
-        )}
+          <button
+            type="button"
+            className={`${styles.button} ${styles.saveButton}`}
+            onClick={handleSave}
+            disabled={isSaving}
+            data-testid="create-alert-button"
+          >
+            {buttonLabel}
+          </button>
+          {hasAlert(gameID) && (
+            <button
+              type="button"
+              className={styles.removeButton}
+              onClick={handleRemove}
+              disabled={isSaving}
+              data-testid="remove-alert-button"
+            >
+              <Trash2 size={14} /> Stop tracking this game
+            </button>
+          )}
+        </div>
       </div>
     </BaseModal>
   );
