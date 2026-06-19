@@ -38,6 +38,9 @@ describe('fetchDealsWithFallback', () => {
     const result = await fetchDealsWithFallback('https://www.cheapshark.com/api/1.0/deals');
     expect(result).toHaveLength(1);
     expect(result[0]).toMatchObject({ internalName: 'TESTGAME', title: 'Test Game', dealID: 'deal_001', salePrice: '9.99' });
+    expect(result[0].metacriticScore).toBe('80');
+    expect(result[0].steamRatingPercent).toBe('90');
+    expect(result[0].thumb).toBe('https://example.com/thumb.jpg');
   });
 
   it('returns fallbackDeals when response data is empty array', async () => {
