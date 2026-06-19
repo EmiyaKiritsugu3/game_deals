@@ -34,7 +34,7 @@ test.describe('Alerts CRUD', () => {
   });
 
   test('1. Authenticated user can create, view, and delete a price alert', async ({ page }) => {
-    test.skip(!hasAuthCredentials(), 'No E2E auth credentials configured');
+    test.skip(!hasAuthCredentials(), 'No E2E auth credentials configured'); // NOSONAR S1607: legitimate env-based skip for E2E
 
     // Step 1: Sign in as test user
     await signInAsTestUser(page);
