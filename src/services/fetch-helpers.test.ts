@@ -24,9 +24,7 @@ describe('fetchDealsWithFallback', () => {
       json: () => Promise.resolve([]),
     });
 
-    const result = await fetchDealsWithFallback(
-      'https://www.cheapshark.com/api/1.0/deals'
-    );
+    const result = await fetchDealsWithFallback('https://www.cheapshark.com/api/1.0/deals');
 
     expect(result).toEqual(fallbackDeals);
   });
@@ -35,15 +33,10 @@ describe('fetchDealsWithFallback', () => {
     const networkError = new Error('Network failure');
     mockFetch.mockRejectedValueOnce(networkError);
 
-    const result = await fetchDealsWithFallback(
-      'https://www.cheapshark.com/api/1.0/deals'
-    );
+    const result = await fetchDealsWithFallback('https://www.cheapshark.com/api/1.0/deals');
 
     expect(result).toEqual(fallbackDeals);
-    expect(mockConsoleError).toHaveBeenCalledWith(
-      'fetchDeals error:',
-      networkError
-    );
+    expect(mockConsoleError).toHaveBeenCalledWith('fetchDeals error:', networkError);
   });
 
   it('returns parsed data when response is ok with data', async () => {
@@ -75,9 +68,7 @@ describe('fetchDealsWithFallback', () => {
       json: () => Promise.resolve(sampleDeals),
     });
 
-    const result = await fetchDealsWithFallback(
-      'https://www.cheapshark.com/api/1.0/deals'
-    );
+    const result = await fetchDealsWithFallback('https://www.cheapshark.com/api/1.0/deals');
 
     expect(result).toHaveLength(1);
     expect(result[0]).toMatchObject({
@@ -97,9 +88,7 @@ describe('fetchDealsWithFallback', () => {
       json: () => Promise.resolve([]),
     });
 
-    const result = await fetchDealsWithFallback(
-      'https://www.cheapshark.com/api/1.0/deals'
-    );
+    const result = await fetchDealsWithFallback('https://www.cheapshark.com/api/1.0/deals');
 
     expect(result).toEqual(fallbackDeals);
   });
@@ -111,15 +100,10 @@ describe('fetchDealsWithFallback', () => {
       json: () => Promise.reject(parseError),
     });
 
-    const result = await fetchDealsWithFallback(
-      'https://www.cheapshark.com/api/1.0/deals'
-    );
+    const result = await fetchDealsWithFallback('https://www.cheapshark.com/api/1.0/deals');
 
     expect(result).toEqual(fallbackDeals);
-    expect(mockConsoleError).toHaveBeenCalledWith(
-      'fetchDeals error:',
-      parseError
-    );
+    expect(mockConsoleError).toHaveBeenCalledWith('fetchDeals error:', parseError);
   });
 
   it('uses custom errorContext in console.error on failure', async () => {
@@ -132,10 +116,7 @@ describe('fetchDealsWithFallback', () => {
     );
 
     expect(result).toEqual(fallbackDeals);
-    expect(mockConsoleError).toHaveBeenCalledWith(
-      'customContext error:',
-      customError
-    );
+    expect(mockConsoleError).toHaveBeenCalledWith('customContext error:', customError);
   });
 });
 
