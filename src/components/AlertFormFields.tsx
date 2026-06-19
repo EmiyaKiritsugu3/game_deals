@@ -54,6 +54,7 @@ export default function AlertFormFields({
             onChange={(e) => onTargetPriceChange(Number.parseFloat(e.target.value))}
             className={styles.numberInput}
             step={0.01}
+            data-testid="target-price-input"
           />
         </div>
       </div>
