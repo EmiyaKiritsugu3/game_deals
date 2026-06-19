@@ -1,6 +1,0 @@
-noArrayIndexKey: 0
-noDangerouslySetInnerHtml: 2 (src/app/layout.tsx:108, src/app/game/[id]/page.tsx:170)
-useSemanticElements: 0
-noNonNullAssertion: 1 (drizzle.config.ts:12)
-
-METHOD: ./node_modules/.bin/biome check . — CAUTION: rtk lint is NOT biome check, it's a custom wrapper. Always use biome binary directly for accurate counts.
