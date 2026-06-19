@@ -74,10 +74,7 @@ describe('addGameToPlaylist', () => {
   });
 
   it('no-ops when game already in list', async () => {
-    mockClient.chain.single.mockResolvedValueOnce({
-      data: { games_ids: ['g1', 'g2'] },
-      error: null,
-    });
+    mockClient.chain.single.mockResolvedValueOnce({ data: { games_ids: ['g1', 'g2'] }, error: null });
     await addGameToPlaylist('pl1', 'g2');
     expect(mockClient.chain.update).not.toHaveBeenCalled();
   });
