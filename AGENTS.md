@@ -29,6 +29,67 @@ pnpm test:e2e:visual      # Playwright visual regression
 
 Biome is the sole linter/formatter. No ESLint or Prettier. Single quotes, trailing commas ES5, 100 char line width. Strict TypeScript.
 
+## Development Methodology
+
+Non-negotiable rules from [.sisyphus/methodology.md](./.sisyphus/methodology.md) v1.1.
+Violating any of these = incomplete work.
+
+### Agent Architecture
+
+| Rule | Detail |
+|------|--------|
+| **Planejar ≠ Executar** | Orquestrador decompõe tarefas, NUNCA escreve código. Exceção: single-file tasks. |
+| **Batch por complexidade** | ~3K tokens de contexto por agente. 3-5 arquivos (alta complexidade), 5-8 (média), 8-12 (baixa). NUNCA 1 agente por arquivo. |
+| **Worktree isolado** | Todo agente de escrita opera em worktree próprio. Nunca shared filesystem. |
+| **Máx 2 níveis** | Orquestrador → agente. Agente NÃO spawna subagentes. |
+| **Erro estrutural = escala** | Missing dep, type error → escala imediatamente. NUNCA retry. |
+
+### Code Quality
+
+| Rule | Detail |
+|------|--------|
+| **Edge Case Enumeration** (código existente) | Agente lê fonte → enumera 3+ edge cases → escreve testes. NADA de RED falso. |
+| **TDD estrito** (código novo/bugfix) | RED (falha genuinamente) → GREEN (mínimo pra passar) → REFACTOR. |
+| **Quem escreve NÃO revisa** | REVIEW agent: sessão isolada, vê SÓ diff + contrato. NUNCA o raciocínio do BUILD. |
+| **1 commit por arquivo** | Subject ≤50 chars: `test(scope): N tests (X% branch)`. Edge cases no corpo. |
+| **NUNCA test.skip()/test.todo()** | Cobertura real, não decorativa. |
+
+### Verification Gates
+
+```
+Gate local (pré-push, ~60s):
+  biome check .          → 0 errors
+  tsc --noEmit           → 0 errors
+  pnpm test -- --run     → ALL pass
+  pnpm test:coverage     → thresholds met
+  SonarQube local        → 0 new issues vs baseline
+
+Gate CI (GitHub Actions, bloqueia merge):
+  quality job: biome → tsc → test → coverage → build → knip → fallow → SonarCloud
+  e2e job: build → Playwright
+
+Gate noturno (3am UTC, main apenas):
+  mutation → audit → e2e-full → coverage-trend
+```
+
+| Rule | Detail |
+|------|--------|
+| **Nada sai sem gate** | Nenhum agente declara "pronto" — só output de ferramenta vale. |
+| **Branch ≥85% por arquivo** | Piso mínimo. Coverage de linha é necessário mas insuficiente. |
+| **0 new SonarQube issues** | Baseline: 13 issues. Sprint N não introduz issues novas. |
+| **Threshold só sobe se coverage ≥ novo valor** | Commit separado com `--no-verify`. |
+| **Máx 3 iterações no gate** | 4ª falha → escalar para humano. |
+| **Timeout 5min** | Gate que não completa em 5min = FAIL. |
+
+### Token Economy
+
+| Rule | Detail |
+|------|--------|
+| **Exploração = background** | Pesquisa de codebase NUNCA no chat principal. Use explore agents. |
+| **Compressão de contexto** | Após 50% da janela, compactar. |
+| **Sessão nova = tarefa nova** | Sessões longas degradam performance. |
+| **Output de comando filtrado** | `grep`/`tail`/`--json` — nunca output bruto de 3000 linhas. |
+
 ## Architecture
 
 ### Path alias
