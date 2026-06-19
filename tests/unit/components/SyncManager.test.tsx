@@ -36,10 +36,9 @@ vi.mock('@/store/authStore', () => ({
 }));
 
 vi.mock('@/store/wishlistStore', () => ({
-  useWishlist: Object.assign(
-    () => mockWishlist as unknown as WishlistState,
-    { getState: () => mockWishlist as unknown as WishlistState }
-  ),
+  useWishlist: Object.assign(() => mockWishlist as unknown as WishlistState, {
+    getState: () => mockWishlist as unknown as WishlistState,
+  }),
 }));
 
 vi.mock('@/actions/wishlist', () => ({

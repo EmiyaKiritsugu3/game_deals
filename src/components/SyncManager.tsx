@@ -8,7 +8,7 @@ import { useWishlist } from '@/store/wishlistStore';
 
 export default function SyncManager() {
   const { user, isLoggedIn } = useAuth();
-  const { wishlist, setWishlist } = useWishlist();
+  const { setWishlist } = useWishlist();
   const hasMounted = useRef(false);
   const hasLoadedWishlist = useRef(false);
 
@@ -40,7 +40,7 @@ export default function SyncManager() {
       }
     };
     loadCloudWishlist();
-  }, [isLoggedIn, user, wishlist, setWishlist]);
+  }, [isLoggedIn, user, setWishlist]);
 
   useWishlistSync(hasMounted);
 
