@@ -30,12 +30,25 @@ describe('GAME_SCHEMA', () => {
     expect(gameIdField?.type).toBe('string');
   });
 
+  it('has token_separators and symbols_to_index', () => {
+    expect(GAME_SCHEMA.token_separators).toEqual(['-', '_', '/']);
+    expect(GAME_SCHEMA.symbols_to_index).toEqual(['-', '_', '/']);
+  });
+
   it('has default_sorting_field set to cheapestPrice', () => {
     expect(GAME_SCHEMA.default_sorting_field).toBe('cheapestPrice');
   });
 });
 
 describe('searchGames', () => {
+  it('returns empty array for empty query string', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
+      new Response(JSON.stringify({ hits: [] }), { status: 200 })
+    );
+    const result = await searchGames('');
+    expect(result).toEqual([]);
+  });
+
   it('returns empty array when response is not ok', async () => {
     vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(new Response(null, { status: 500 }));
     const result = await searchGames('test');
@@ -98,6 +111,18 @@ describe('indexGamesBatch', () => {
       { gameID: '1', title: 'Game', thumb: '', cheapest: '9.99' },
     ]);
     expect(result).toBe(false);
+  });
+
+  it('uses empty admin key header when TYPESENSE_ADMIN_KEY is missing', async () => {
+    vi.stubEnv('TYPESENSE_ADMIN_KEY', '');
+    let headers: HeadersInit | undefined;
+    vi.spyOn(globalThis, 'fetch').mockImplementation(async (_, init) => {
+      headers = (init as RequestInit).headers;
+      return new Response(null, { status: 200 });
+    });
+    await indexGamesBatch([{ gameID: '1', title: 'Game', thumb: '', cheapest: '9.99' }]);
+    const hdrs = new Headers(headers);
+    expect(hdrs.get('X-TYPESENSE-API-KEY')).toBe('');
   });
 
   it('handles empty games array', async () => {

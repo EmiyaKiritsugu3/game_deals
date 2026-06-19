@@ -56,8 +56,14 @@ describe('buildOG', () => {
     expect(result.url).toBe('https://gamedeals.com.br/game/123');
     const ogImages = result.images as Array<{ url: string; width: number; height: number }>;
     expect(ogImages).toHaveLength(1);
+    expect(ogImages[0].url).toBe('https://images.example.com/thumb.jpg');
     expect(ogImages[0].width).toBe(600);
     expect(ogImages[0].height).toBe(300);
+  });
+
+  it('constructs URL with empty id', () => {
+    const result = buildOG('Game', 'desc', 'thumb.jpg', '');
+    expect(result.url).toBe('https://gamedeals.com.br/game/');
   });
 
   it('handles empty thumb string', () => {

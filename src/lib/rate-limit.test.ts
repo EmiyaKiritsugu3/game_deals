@@ -52,6 +52,16 @@ describe('rateLimit', () => {
     await expect(rateLimit('key')).resolves.toBe(true);
   });
 
+  it('simulates window expired by returning count 1 after reset', async () => {
+    mockTx.execute.mockResolvedValue([{ count: 1 }]);
+    await expect(rateLimit('window-reset-key')).resolves.toBe(true);
+  });
+
+  it('computes minimum window of 1 second when windowMs is 0', async () => {
+    mockTx.execute.mockResolvedValue([{ count: 1 }]);
+    await expect(rateLimit('key', 10, 0)).resolves.toBe(true);
+  });
+
   it('calls execute twice (advisory lock + upsert SQL)', async () => {
     await rateLimit('lock-test');
     expect(mockTx.execute).toHaveBeenCalledTimes(2);

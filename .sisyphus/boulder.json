@@ -1,7 +1,26 @@
 {
-  "active_plan": "/home/emiyakiritsugu/Projetos_Antigravity/game-deals/.sisyphus/plans/sprint3-phase-c-polish.md",
-  "started_at": "2026-06-18T05:00:00.000Z",
-  "session_ids": ["$SESSION_ID"],
-  "plan_name": "sprint3-phase-c-polish",
-  "agent": "atlas"
+  "active_plan": "/home/emiyakiritsugu/Projetos_Antigravity/game-deals/.sisyphus/plans/sprint-5-plan.md",
+  "started_at": "2026-06-19T04:10:00.000Z",
+  "session_ids": [
+    "ses_1316cb164ffeJ6Zu5NkedDp7f7",
+    "ses_121ee2aa0ffewEsgLCxTDOrd4H",
+    "ses_121ede223ffe5FEswAkV1bS7er",
+    "ses_121ed8c30ffeHZuGuMV05rjIQk",
+    "ses_121ed7e75ffeMeYaQPzeBu7Kj0",
+    "ses_121ee1533ffeJdVV1slA6rX0dX",
+    "ses_121edfd77ffeiF5dodU49rLTUc",
+    "ses_121ed70b3ffePDVshpagRXGjDu",
+    "ses_121ed6713ffeRDPturb3rzdSGh",
+    "ses_121ebb4abffeRQRYbjLkwHQIHX",
+    "ses_121eb8fe7ffejna6GY8gmH2n6t",
+    "ses_121eb7610ffevXhatX1mkATH8t",
+    "ses_121ebcb98ffe0n6mDTNChXXuRP",
+    "ses_121e6c0f9ffeGM9aWPUmUXxWiG",
+    "ses_121e6b54cffeg2C8LREHxmJ2ag",
+    "ses_121e6ab79ffemHJZro7IzN1GzH",
+    "ses_121e6a15affecwD3LG2lxxXoUO"
+  ],
+  "plan_name": "sprint-5-plan",
+  "agent": "atlas",
+  "task_sessions": {}
 }
