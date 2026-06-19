@@ -31,7 +31,8 @@ export default function SyncManager() {
       try {
         const cloudIds = await getUserWishlistAction();
         if (cloudIds && cloudIds.length > 0) {
-          const merged = [...new Set([...wishlist, ...cloudIds])];
+          const currentWishlist = useWishlist.getState().wishlist;
+          const merged = [...new Set([...currentWishlist, ...cloudIds])];
           setWishlist(merged);
         }
       } catch {

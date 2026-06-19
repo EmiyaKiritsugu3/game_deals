@@ -17,9 +17,13 @@ vi.mock('@/store/authStore', () => ({
   useAuth: () => mockAuthState,
 }));
 
-vi.mock('@/store/wishlistStore', () => ({
-  useWishlist: () => mockWishlistState,
-}));
+vi.mock('@/store/wishlistStore', () => {
+  const useWishlistMock = Object.assign(
+    vi.fn(() => mockWishlistState),
+    { getState: vi.fn(() => mockWishlistState) }
+  );
+  return { useWishlist: useWishlistMock };
+});
 
 vi.mock('@/hooks/useSyncHooks', () => ({
   useWishlistSync: vi.fn(),

@@ -72,9 +72,10 @@ test.describe('Alerts CRUD', () => {
     await page.goto('/alerts', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(2_000);
 
-    // Step 7: Verify /alerts page renders without crashing
+    // Step 7: Verify alert was actually created (check target price appears)
+    await expect(page.locator('body')).toContainText('$9.99');
     const alertsBodyText = await page.locator('body').innerText();
-    expect(alertsBodyText.length).toBeGreaterThan(50);
+    expect(alertsBodyText).not.toContain('No price alerts yet');
     expect(alertsBodyText).not.toContain('Something went wrong');
   });
 });
