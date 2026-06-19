@@ -1,0 +1,160 @@
+name: Nightly CI
+
+on:
+  schedule:
+    # 3am UTC = meia-noite Fortaleza (UTC-3)
+    - cron: '0 3 * * *'
+  # Permite disparo manual pelo GitHub UI
+  workflow_dispatch:
+
+concurrency:
+  group: nightly-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Mutation Testing (padrão-ouro de qualidade) ──
+  mutation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: gamedeals_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gamedeals_test
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'placeholder-publishable-key' }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      - uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa
+        with:
+          version: 11.5.3
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+
+      # TODO: Install & run Stryker when configured
+      # - run: pnpm add -D @stryker-mutator/core @stryker-mutator/typescript-checker
+      # - run: pnpm exec stryker run
+      # Placeholder: mutation testing infra — tracks coverage quality, not just quantity.
+      # 100% line coverage with 4% mutation score = decorative test suite.
+      # Target: ≥60% mutation score. Scheduled nightly because 10-100× slower than coverage.
+      - name: Mutation Testing (placeholder)
+        run: |
+          echo "⚠️  Stryker mutation testing not yet configured."
+          echo "    Install: pnpm add -D @stryker-mutator/core @stryker-mutator/typescript-checker"
+          echo "    Target: ≥60% mutation score"
+          echo "    Why: 100% line coverage can mean 4% mutation score (MutGen, arXiv 2025)"
+
+  # ── Full Audit (Fallow + Knip) ──
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      - uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa
+        with:
+          version: 11.5.3
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - name: Dead code (strict)
+        run: pnpm knip
+        continue-on-error: true
+      - name: Complexity audit
+        run: pnpm fallow:audit
+        continue-on-error: true
+
+  # ── Full E2E (sem skip, com DB real) ──
+  e2e-full:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: gamedeals_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gamedeals_test
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'placeholder-publishable-key' }}
+      CRON_SECRET: ${{ secrets.CRON_SECRET || 'placeholder-cron-secret' }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      - uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa
+        with:
+          version: 11.5.3
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Setup env
+        run: cp .env.example .env.local
+      - name: Build
+        run: pnpm build
+      - name: Run DB migrations
+        run: pnpm db:migrate
+        continue-on-error: true
+      - name: Full E2E suite
+        run: pnpm test:e2e
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: playwright-report-nightly
+          path: playwright-report/
+          retention-days: 7
+
+  # ── Coverage Trend Report ──
+  coverage-trend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      - uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa
+        with:
+          version: 11.5.3
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - name: Coverage report
+        run: |
+          pnpm test:coverage 2>&1 | tee coverage-nightly.txt
+          echo "--- COVERAGE SUMMARY ---"
+          grep -E "All files| Branches | Lines |Functions|Statements" coverage-nightly.txt || true
+      - name: Upload coverage data
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: coverage-nightly
+          path: |
+            coverage-nightly.txt
+            coverage/
+          retention-days: 30
