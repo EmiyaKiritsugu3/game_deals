@@ -143,4 +143,56 @@ describe('authStore', () => {
       expect(isLoggedIn).toBe(true);
     });
   });
+
+  describe('setUser fallback branches', () => {
+    it('falls back to "User" when both full_name and email are empty', () => {
+      const { setUser } = useAuth.getState();
+      const supabaseUser = createMockSupabaseUser({ fullName: '', email: '' });
+      setUser(supabaseUser as unknown as SupabaseUser);
+      expect(useAuth.getState().user?.name).toBe('User');
+    });
+
+    it('falls back to "User" when full_name missing and email is undefined', () => {
+      const { setUser } = useAuth.getState();
+      const supabaseUser = createMockSupabaseUser({ fullName: '' });
+      delete (supabaseUser as Record<string, unknown>).email;
+      setUser(supabaseUser as unknown as SupabaseUser);
+      expect(useAuth.getState().user?.name).toBe('User');
+    });
+
+    it('sets email to empty string when email is undefined', () => {
+      const { setUser } = useAuth.getState();
+      const supabaseUser = createMockSupabaseUser();
+      delete (supabaseUser as Record<string, unknown>).email;
+      setUser(supabaseUser as unknown as SupabaseUser);
+      expect(useAuth.getState().user?.email).toBe('');
+    });
+
+    it('uses dicebear URL when avatar_url is missing', () => {
+      const { setUser } = useAuth.getState();
+      const supabaseUser = createMockSupabaseUser({ avatarUrl: '' });
+      setUser(supabaseUser as unknown as SupabaseUser);
+      expect(useAuth.getState().user?.avatar).toBe(
+        'https://api.dicebear.com/7.x/avataaars/svg?seed=test-user-1'
+      );
+    });
+
+    it('uses dicebear URL when user_metadata has no avatar_url key', () => {
+      const { setUser } = useAuth.getState();
+      const supabaseUser = {
+        id: 'u2',
+        email: 'u2@test.com',
+        user_metadata: {},
+        app_metadata: {},
+        aud: 'authenticated',
+        created_at: '2024-01-01',
+        role: '',
+        updated_at: '2024-01-01',
+      };
+      setUser(supabaseUser as unknown as SupabaseUser);
+      expect(useAuth.getState().user?.avatar).toBe(
+        'https://api.dicebear.com/7.x/avataaars/svg?seed=u2'
+      );
+    });
+  });
 });

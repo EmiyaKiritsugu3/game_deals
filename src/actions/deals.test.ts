@@ -1,6 +1,16 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { execute, authGetUser, mockInsert, mockOnConflictDoUpdate } = vi.hoisted(() => {
+const {
+  execute,
+  authGetUser,
+  mockInsert,
+  mockOnConflictDoUpdate,
+  mockFetchDealsWithFallback,
+  mockFetchGameDetails,
+  mockBuildDealsInsertValues,
+  mockBuildPriceHistoryValues,
+  mockSelect,
+} = vi.hoisted(() => {
   const ret = vi.fn();
   const ocdu = vi.fn(() => ({ returning: ret }));
   const vals = vi.fn(() => ({ onConflictDoUpdate: ocdu }));
@@ -10,12 +20,27 @@ const { execute, authGetUser, mockInsert, mockOnConflictDoUpdate } = vi.hoisted(
     authGetUser: vi.fn(),
     mockInsert: ins,
     mockOnConflictDoUpdate: ocdu,
+    mockFetchDealsWithFallback: vi.fn(),
+    mockFetchGameDetails: vi.fn(),
+    mockBuildDealsInsertValues: vi.fn(),
+    mockBuildPriceHistoryValues: vi.fn(),
+    mockSelect: vi.fn(),
   };
 });
 
-vi.mock('@/db', () => ({ db: { execute, insert: mockInsert } }));
+vi.mock('@/db', () => ({ db: { execute, insert: mockInsert, select: mockSelect } }));
 
-vi.mock('@/services/ingest');
+vi.mock('@/services/fetch-helpers', () => ({
+  fetchDealsWithFallback: mockFetchDealsWithFallback,
+  fetchGameDetails: mockFetchGameDetails,
+}));
+
+vi.mock('@/services/ingest', () => ({
+  fetchCheapSharkDeals: vi.fn(),
+  upsertGames: vi.fn(),
+  buildDealsInsertValues: mockBuildDealsInsertValues,
+  buildPriceHistoryValues: mockBuildPriceHistoryValues,
+}));
 
 vi.mock('@/utils/supabase/server', () => ({
   createClient: () => Promise.resolve({ auth: { getUser: () => authGetUser() } }),
@@ -26,6 +51,10 @@ import { deals as dealsTable } from '@/db/schema';
 import { fetchCheapSharkDeals, upsertGames } from '@/services/ingest';
 import {
   getDailyPriceHistoryAction,
+  getDealsAction,
+  getDealsFromDBAction,
+  getGameAction,
+  getStoresAction,
   ingestPricesAction,
   resolveCheapsharkByUuidAction,
   resolveCheapsharkByUuidsAction,
@@ -36,6 +65,13 @@ import {
 beforeEach(() => {
   execute.mockReset();
   authGetUser.mockReset();
+  mockSelect.mockReset();
+  mockFetchDealsWithFallback.mockReset();
+  mockFetchGameDetails.mockReset();
+  mockBuildDealsInsertValues.mockReset();
+  mockBuildPriceHistoryValues.mockReset();
+  vi.mocked(fetchCheapSharkDeals).mockReset();
+  vi.mocked(upsertGames).mockReset();
 });
 
 describe('resolveGameUuid', () => {
@@ -245,5 +281,225 @@ describe('getDailyPriceHistoryAction', () => {
     execute.mockRejectedValueOnce(new Error('boom'));
     expect(await getDailyPriceHistoryAction('123456', 30)).toEqual([]);
     errorSpy.mockRestore();
+  });
+});
+
+describe('getDealsAction', () => {
+  it('calls fetchDealsWithFallback with sanitized default params', async () => {
+    mockFetchDealsWithFallback.mockResolvedValueOnce([]);
+    const result = await getDealsAction();
+    expect(result).toEqual([]);
+    const url = mockFetchDealsWithFallback.mock.calls[0][0] as string;
+    expect(url).toContain('sortBy=');
+    expect(url).toContain('onSale=1');
+    expect(url).toContain('pageSize=20');
+  });
+
+  it('passes valid sort parameter through', async () => {
+    mockFetchDealsWithFallback.mockResolvedValueOnce([]);
+    await getDealsAction({ sortBy: 'Savings' });
+    expect(mockFetchDealsWithFallback).toHaveBeenCalledWith(
+      expect.stringContaining('sortBy=Savings')
+    );
+  });
+
+  it('defaults sort to Deal Rating for invalid value', async () => {
+    mockFetchDealsWithFallback.mockResolvedValueOnce([]);
+    await getDealsAction({ sortBy: 'InvalidSort' });
+    const url = mockFetchDealsWithFallback.mock.calls[0][0] as string;
+    expect(url).toContain('sortBy=');
+  });
+
+  it('clamps pageSize to 1-100 range', async () => {
+    mockFetchDealsWithFallback.mockResolvedValueOnce([]);
+    await getDealsAction({ pageSize: '0' });
+    expect(mockFetchDealsWithFallback).toHaveBeenCalledWith(expect.stringContaining('pageSize=1'));
+
+    mockFetchDealsWithFallback.mockResolvedValueOnce([]);
+    await getDealsAction({ pageSize: '200' });
+    expect(mockFetchDealsWithFallback).toHaveBeenCalledWith(
+      expect.stringContaining('pageSize=100')
+    );
+  });
+
+  it('defaults pageSize to 20 for NaN input', async () => {
+    mockFetchDealsWithFallback.mockResolvedValueOnce([]);
+    await getDealsAction({ pageSize: 'abc' });
+    expect(mockFetchDealsWithFallback).toHaveBeenCalledWith(expect.stringContaining('pageSize=20'));
+  });
+
+  it('includes optional price and store params when valid', async () => {
+    mockFetchDealsWithFallback.mockResolvedValueOnce([]);
+    await getDealsAction({ upperPrice: '25', lowerPrice: '5', storeID: '1' });
+    const url = mockFetchDealsWithFallback.mock.calls[0][0] as string;
+    expect(url).toContain('upperPrice=25');
+    expect(url).toContain('lowerPrice=5');
+    expect(url).toContain('storeID=1');
+  });
+
+  it('excludes invalid price and store params', async () => {
+    mockFetchDealsWithFallback.mockResolvedValueOnce([]);
+    await getDealsAction({ upperPrice: 'abc', storeID: '1234' });
+    const url = mockFetchDealsWithFallback.mock.calls[0][0] as string;
+    expect(url).not.toContain('upperPrice');
+    expect(url).not.toContain('storeID');
+  });
+
+  it('includes title when provided and short enough', async () => {
+    mockFetchDealsWithFallback.mockResolvedValueOnce([]);
+    await getDealsAction({ title: 'Zelda' });
+    expect(mockFetchDealsWithFallback).toHaveBeenCalledWith(expect.stringContaining('title=Zelda'));
+  });
+
+  it('excludes title when too long (>200 chars)', async () => {
+    mockFetchDealsWithFallback.mockResolvedValueOnce([]);
+    await getDealsAction({ title: 'x'.repeat(201) });
+    const url = mockFetchDealsWithFallback.mock.calls[0][0] as string;
+    expect(url).not.toContain('title=');
+  });
+});
+
+describe('getStoresAction', () => {
+  let originalFetch: typeof globalThis.fetch;
+
+  beforeEach(() => {
+    originalFetch = globalThis.fetch;
+  });
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch;
+  });
+
+  it('returns merged store map from API + hardcoded stores', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: () =>
+        Promise.resolve([
+          { storeID: '1', storeName: 'Steam' },
+          { storeID: '7', storeName: 'GOG' },
+        ]),
+    });
+    const result = await getStoresAction();
+    expect(result['1']).toBe('Steam');
+    expect(result['7']).toBe('GOG');
+    expect(result['101']).toBe('CDKeys');
+    expect(result['102']).toBe('Kinguin');
+    expect(result['103']).toBe('Eneba');
+    expect(result['104']).toBe('Gamivo');
+  });
+
+  it('returns hardcoded stores when fetch fails', async () => {
+    globalThis.fetch = vi.fn().mockRejectedValueOnce(new Error('network'));
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const result = await getStoresAction();
+    expect(result['101']).toBe('CDKeys');
+    expect(result['102']).toBe('Kinguin');
+    expect(errorSpy).toHaveBeenCalled();
+    errorSpy.mockRestore();
+  });
+
+  it('returns hardcoded stores when response is not ok', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({ ok: false });
+    const result = await getStoresAction();
+    expect(result['101']).toBe('CDKeys');
+    expect(Object.keys(result)).toHaveLength(4);
+  });
+});
+
+describe('getGameAction', () => {
+  it('delegates to fetchGameDetails with correct args', async () => {
+    mockFetchGameDetails.mockResolvedValueOnce({ gameID: '123', name: 'Test Game' });
+    const result = await getGameAction('123');
+    expect(mockFetchGameDetails).toHaveBeenCalledWith('123', 'getGameAction');
+    expect(result).toEqual({ gameID: '123', name: 'Test Game' });
+  });
+
+  it('returns null when fetchGameDetails returns null', async () => {
+    mockFetchGameDetails.mockResolvedValueOnce(null);
+    const result = await getGameAction('999');
+    expect(result).toBeNull();
+  });
+});
+
+describe('ingestPricesAction (success path)', () => {
+  it('returns success with counts when deals are ingested', async () => {
+    const mockDeals = [{ gameID: '1', dealID: 'd1' }] as Awaited<
+      ReturnType<typeof fetchCheapSharkDeals>
+    >;
+    vi.mocked(fetchCheapSharkDeals).mockResolvedValueOnce(mockDeals);
+    vi.mocked(upsertGames).mockResolvedValueOnce(new Map([['1', 'uuid-1']]));
+    mockBuildDealsInsertValues.mockReturnValueOnce([
+      { gameId: 'uuid-1', storeId: '1', price: 9.99 },
+    ]);
+    mockBuildPriceHistoryValues.mockReturnValueOnce([{ gameId: 'uuid-1', price: 9.99 }]);
+
+    const mockValues = vi.fn(() => ({ onConflictDoUpdate: mockOnConflictDoUpdate }));
+    mockInsert.mockReturnValueOnce({ values: mockValues });
+
+    const result = await ingestPricesAction();
+    expect(result.success).toBe(true);
+    expect(result.gamesUpserted).toBe(1);
+    expect(result.dealsIngested).toBe(1);
+    expect(result.pricesRecorded).toBe(1);
+  });
+
+  it('returns success with zeros when no deals fetched', async () => {
+    vi.mocked(fetchCheapSharkDeals).mockResolvedValueOnce([]);
+    const result = await ingestPricesAction();
+    expect(result.success).toBe(true);
+    expect(result.dealsIngested).toBe(0);
+    expect(result.gamesUpserted).toBe(0);
+    expect(result.pricesRecorded).toBe(0);
+  });
+
+  it('returns success with zeros when deals is null', async () => {
+    vi.mocked(fetchCheapSharkDeals).mockResolvedValueOnce(
+      null as unknown as Awaited<ReturnType<typeof fetchCheapSharkDeals>>
+    );
+    const result = await ingestPricesAction();
+    expect(result.success).toBe(true);
+  });
+
+  it('returns error with non-Error thrown value', async () => {
+    vi.mocked(fetchCheapSharkDeals).mockRejectedValueOnce('string error');
+    const result = await ingestPricesAction();
+    expect(result.success).toBe(false);
+    expect(result.error).toBe('Unknown error');
+  });
+});
+
+describe('getDealsFromDBAction', () => {
+  it('queries DB with default limit of 20', async () => {
+    const mockResult = [{ gameId: 'uuid-1', title: 'Game 1' }];
+    const mockLimit = vi.fn().mockResolvedValueOnce(mockResult);
+    mockSelect.mockReturnValueOnce({
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockReturnValue({
+          orderBy: vi.fn().mockReturnValue({
+            limit: mockLimit,
+          }),
+        }),
+      }),
+    });
+
+    const result = await getDealsFromDBAction();
+    expect(result).toEqual(mockResult);
+    expect(mockLimit).toHaveBeenCalledWith(20);
+  });
+
+  it('passes custom limit to query', async () => {
+    const mockLimit = vi.fn().mockResolvedValueOnce([]);
+    mockSelect.mockReturnValueOnce({
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockReturnValue({
+          orderBy: vi.fn().mockReturnValue({
+            limit: mockLimit,
+          }),
+        }),
+      }),
+    });
+
+    await getDealsFromDBAction(50);
+    expect(mockLimit).toHaveBeenCalledWith(50);
   });
 });

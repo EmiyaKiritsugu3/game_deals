@@ -43,6 +43,13 @@ describe('estimatePlaytime', () => {
     const res = estimatePlaytime('🔥 EPIC DEAL');
     expect(res.found).toBe(true);
   });
+
+  it('handles null character (codePointAt returns 0)', () => {
+    const res = estimatePlaytime('\0Game');
+    expect(res.found).toBe(true);
+    expect(res.mainStory).toBeGreaterThanOrEqual(6);
+    expect(res.mainStory).toBeLessThanOrEqual(80);
+  });
 });
 
 describe('calculateCostPerHour', () => {

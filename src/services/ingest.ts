@@ -40,6 +40,7 @@ export async function upsertGames(deals: CheapSharkDeal[]): Promise<Map<string, 
   const idMap = new Map<string, string>();
   for (const gameId of uniqueGameIds) {
     const deal = deals.find((d) => d.gameID === gameId);
+    // istanbul ignore next -- unreachable: gameIds derived from deals array
     if (!deal) continue;
     const inserted = await db
       .insert(games)
