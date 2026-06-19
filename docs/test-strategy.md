@@ -1,10 +1,10 @@
 # Test Strategy — GameDeals
 
 | Metadata | |
-|---|---|
+|---|---|---|
 | Document owner | Engineering Team |
-| Version | 1.1 |
-| Last updated | 2026-06-15 |
+| Version | 1.2 |
+| Last updated | 2026-06-19 |
 | Status | Active |
 
 ---
@@ -43,25 +43,41 @@
 
 ## 3. Test Approach
 
-### Current State Assessment (Sprint 15 — updated 2026-06-15)
+### Current State Assessment (Sprint 6 — updated 2026-06-19)
 
-The project has **substantial test coverage (215 tests across 13 files)**:
+The project has **578 tests across 25+ files**:
 
 | Aspect | Current Status |
 |---|---|
-| **Unit test files** | 11 (actions, services, utils, stores, type guards) |
-| **Total test count** | **215** (207 action/service + 8 component in jsdom) |
-| **Component test files** | 1 (`alerts-page.test.tsx` — 8 tests) |
-| **E2E test files** | 2 (`alerts.spec.ts` — 6 tests, `visual.spec.ts` — 6 snapshots) |
-| **Coverage thresholds** | 0% (all, no enforced minimum yet) |
+| **Unit test files** | ~24 (actions, services, utils, stores, hooks, type guards) |
+| **Total test count** | **578** (506 prior + 72 new in Sprint 6) |
+| **Coverage** | **59.29% lines**, **49.5% branches** (+8.58pp / +7.42pp from Sprint 3) |
 | **Coverage provider** | Istanbul (via `@vitest/coverage-istanbul`) |
 | **Test runner** | Vitest v4 (node default + jsdom per-file for components) |
-| **Component test deps** | jsdom, @testing-library/react, @testing-library/jest-dom |
+| **Component test deps** | jsdom, @testing-library/react, @testing-library/jest-dom, @testing-library/user-event |
 | **E2E framework** | Playwright v1.60 (configured with webserver, CDP screenshots) |
-| **E2E config** | `playwright.config.ts` exists (production build, sequential) |
+| **E2E config** | `playwright.config.ts` exists |
 | **Test directory** | `src/**/*.test.{ts,tsx}`, `tests/**/*.test.{ts,tsx}` |
-| **CI test step** | `pnpm test:coverage` runs as step 3 of 6 in `check.sh` |
-| **Pre-push gate** | Tests block push on failure (step 3 in `check.sh`) |
+| **CI test step** | `pnpm test:coverage` runs in CI workflow |
+| **Pre-push gate** | Tests block push on failure (`pnpm check`) |
+
+### New test files (Sprint 6)
+
+- `src/services/fetch-helpers.test.ts` — 9 tests, fetch mocking, fallback behavior
+- `src/services/game-enrichment.test.ts` — 6 tests, Date.now() + pricing mock
+- `src/services/social.test.ts` — 9 tests, Supabase chain mock
+- `src/lib/cron-auth.test.ts` — 4 tests, CRON_SECRET header validation
+- `src/lib/supabase-browser.test.ts` — 3 tests, singleton browser client
+- `src/utils/supabase/client.test.ts` — 3 tests, env var branch coverage
+- `src/utils/supabase/middleware.test.ts` — 8 tests, createServerClient mock
+- `src/hooks/useUserAlerts.test.tsx` — 3 tests, TanStack Query wrapper mock
+- `src/hooks/useAuthSubscription.test.ts` — 4 tests, onAuthStateChange
+- `src/hooks/useClickOutside.test.ts` — 5 tests, DOM event mocking
+- `src/hooks/useCarousel.test.ts` — 9 tests, fake timers + setInterval
+- `src/hooks/useShareWishlist.test.ts` — 4 tests, clipboard + timers
+- `src/hooks/useWishlistSavedGames.test.ts` — 5 tests, useMemo memoization
+
+All 13 files achieved **100% branch coverage**.
 
 ### Test Levels
 
@@ -186,7 +202,7 @@ vi.mock('@tanstack/react-query', () => ({
 }));
 ```
 
-**Test count:** 215 total (207 action/service + 8 component). 13 test files.
+**Test count:** 578 total. ~24 test files.
 
 ### Playwright Gap
 
@@ -267,8 +283,8 @@ GitHub Actions CI
 
 | Phase | Target | Estimated Timeline |
 |---|---|---|
-| **Phase 1** | Raise thresholds: lines 10%, functions 10%, branches 5%, statements 10% | Next sprint |
-| **Phase 2** | Add integration tests for Server Actions and DB queries | Within 2 sprints |
-| **Phase 3** | Create `playwright.config.ts` and first E2E test (home page smoke) | Within 2 sprints |
-| **Phase 4** | Add E2E tests for critical journeys: search → wishlist → affiliate out | Within 3 sprints |
-| **Phase 5** | Raise thresholds: lines 40%, functions 30%, branches 25%, statements 40% | Quarter target |
+| **Phase 1** | Raise thresholds: lines 60%, functions 50%, branches 50%, statements 60% | In progress (Sprint 6: 59.29% / 49.5%) |
+| **Phase 2** | Add integration tests for Server Actions and DB queries | Next sprints |
+| **Phase 3** | E2E tests for critical journeys: search → wishlist → affiliate out | Next sprints |
+| **Phase 4** | Mutation testing (Stryker) — planned | Future |
+| **Phase 5** | Raise thresholds: lines 80%, functions 70%, branches 70%, statements 80% | Quarter target |

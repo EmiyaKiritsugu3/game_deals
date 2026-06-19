@@ -1,7 +1,7 @@
 # 📊 Relatório de Estado do Projeto: GameDeals
 
-**Data:** 15 de Junho de 2026  
-**Status Global:** 🟢 ESTÁVEL | PÓS-AUDITORIA | 207 TESTES
+**Data:** 19 de Junho de 2026  
+**Status Global:** 🟢 ESTÁVEL | SPRINT 6 CONCLUÍDA | 578 TESTES | 59.29% COBERTURA
 
 ---
 
@@ -42,33 +42,44 @@ O projeto foi consolidado seguindo as melhores práticas de Next.js 14+ e modula
 
 ---
 
-## 📈 3.5 Métricas Pós-Auditoria (PR #14)
+## 📈 3.5 Métricas — Sprint 6 (PR #32 — Jun 19)
 
-| Métrica | Antes | Depois | Δ |
-|---------|-------|--------|---|
-| Testes unitários | 95 | **207** | +112 (+118%) |
-| Fallow CRITICAL | 1 | **0** | -100% |
-| Knip unused types | 9 | **0** | -100% |
-| Unused exports | 4 | **0** | -100% |
-| CSS orphans | 1 | **0** | -100% |
-| Biome non-null warnings | 2 | **0** | -100% |
-| Maintainability | 91.1 | **91.2** | +0.1 |
+| Métrica | Sprint 3 | Sprint 6 | Δ |
+|---------|----------|----------|---|
+| Testes | 423 | **578** | +155 |
+| Cobertura (lines) | 42.5% | **59.29%** | +16.79pp |
+| Cobertura (branches) | 35% | **49.5%** | +14.5pp |
+| Fallow CRITICAL | 0 | **0** | — |
+| Knip unused types | 0 | **0** | — |
+| SonarQube issues | 0 | **0** | — |
+| Maintainability | 91.2 | **91.2** | — |
 
-**Principais entregas:**
-- Dead code removal: gamificação, playlists, exports, CSS, tipos não usados
-- Extração de `buildGameEntry` — último CRITICAL de complexidade eliminado
-- 112 novos testes (wishlist-data, pricing, api-client, wishlistStore, alerts)
-- Configuração de Playwright para regressão visual (pendente de setup de CI)
-- 6 fixes de revisão cubic.dev (2 P1 bugs runtime + 4 P2 melhoramentos)
+**Principais entregas Sprint 6:**
+- 13 novos arquivos de teste (services, lib, utils, hooks) — 72 testes adicionados
+- 100% branch coverage em cada um dos 13 novos arquivos
+- Cobertura geral: linhas 50.71%→59.29%, branches 42.08%→49.5%
+- Metodologia experimental SPEC→BUILD→REVIEW arquivada (excesso de overhead)
+- Workflow simplificado adotado: explorar → implementar → gate → PR
+- CI Nightly mantido como único artefato do experimento
 
-**Relatório completo:** `.sisyphus/evidence/final-qa/audit-gap-closure-report.md`
+## 📈 3.6 Histórico de Métricas
+
+| Data | Marco | Testes | Cobertura (lines) | Branches |
+|------|-------|--------|-------------------|----------|
+| Jun 14 | Sprint 1 (baseline) | 95 | ~15% | ~10% |
+| Jun 15 | PR #14 (audit gap) | 207 | ~26% | ~20% |
+| Jun 17 | Sprint 2 (#22) | 423 | 42.5% | 35% |
+| Jun 18 | Sprint 3 (#23)
+ | 423 | 42.5% | 35% |
+| Jun 19 | **Sprint 6 (#32)** | **578** | **59.29%** | **49.5%** |
 
 ---
 
-## 🚀 4. Próximos Passos (Sugestões para o Jules)
-1. **Engajamento:** Implementar o `ActivityFeed` baseado nas tabelas do Supabase.
-2. **Review System:** Ativar a seção de comentários/reviews nas páginas de games.
-3. **SEO:** Refinar meta-tags dinâmicas para cada jogo específico.
+## 🚀 4. Próximos Passos
+1. **Cobertura 60%+** — Continuar push de coverage (próximo marco: 60% linhas)
+2. **Alerts Dashboard** — UI de gerenciamento de alertas de preço (feature real)
+3. **Search UX** — Melhorias na busca (debounce, resultados, filtros)
+4. **Integração tests** — Testes de banco e Server Actions com DB real
 
 ---
 
