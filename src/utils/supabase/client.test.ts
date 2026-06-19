@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 
 describe('createClient', () => {
   const OLD_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;

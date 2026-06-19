@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { mockCreateServerClient } = vi.hoisted(() => ({
   mockCreateServerClient: vi.fn(),
