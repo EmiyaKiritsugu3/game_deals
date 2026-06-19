@@ -5,7 +5,7 @@ type Chain = Record<string, ReturnType<typeof vi.fn>>;
 function makeChain(): Chain {
   const resolveRef = { value: { error: null } as unknown };
   const chain: Chain = {
-    // biome-ignore lint/suspicious/noThenProperty: thenable required for Supabase mock
+    // biome-ignore lint/suspicious/noThenProperty: thenable required for Supabase mock chain
     then: (onFulfilled: (v: unknown) => void) => onFulfilled(resolveRef.value),
     _resolveRef: resolveRef,
   } as unknown as Chain;
