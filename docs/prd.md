@@ -24,12 +24,12 @@ GameDeals helps gamers find the best prices on digital games across 17+ storefro
 | 3 cron endpoints | Live | Manual trigger only, no schedule |
 | Sitemap | Live | Static pages only — no game detail URLs |
 | Price history chart | Live | Weekly/daily aggregation |
-| Playlists | Partial | Create/add actions exist; no listing page, no public view |
+| Playlists | Live | Create/add actions, listing page at `/playlists`, individual view at `/playlists/[id]` |
 | Profile page | Not built | Route exists in middleware's PROTECTED_PATHS, but `/profile` directory does not exist (returns 404) |
 | Gamification | Not built | Schemas exist (badges, XP, activities); zero code |
-| PWA / offline | Not built | No manifest, no service worker |
-| i18n | Not built | Mixed Portuguese/English strings in UI |
-| Theme toggle | Not built | Dark-only hardcoded |
+| PWA / offline | Partial | ThemeToggle exists; manifest and service worker still missing |
+| i18n | Partial | English strings test covers ~35 patterns; Portuguese strings in Freebies/FlashSales still present |
+| Theme toggle | Live | ThemeToggle component with next-themes support |
 | Notification system (Bell + DB + actions) | Live | NotificationBell component, notifications table, 3 Server Actions, TanStack Query polling |
 | Freebies carousel (100% off) | Live | Shown on home page |
 | FlashSales countdown timer | Live | Shown on home page with countdown clock |
@@ -53,18 +53,18 @@ GameDeals helps gamers find the best prices on digital games across 17+ storefro
 
 | Metric | Value |
 |--------|-------|
-| Tests (Vitest) | 291 passing across 25 files |
-| E2E tests (Playwright) | 12 passing (6 alerts E2E + 6 visual regression) |
-| Coverage — lines | 30% target |
-| Coverage — functions | 25% target |
-| Coverage — branches | 23% target |
-| Coverage — statements | 30% target |
+| Tests (Vitest) | 896 passing across 100 files |
+| E2E tests (Playwright) | 3 spec files (alerts-crud, alerts, visual regression) |
+| Coverage — lines | 82.42% (threshold: 80%) |
+| Coverage — functions | 76.85% (threshold: 75%) |
+| Coverage — branches | 79.15% (threshold: 76%) |
+| Coverage — statements | 82.27% (threshold: 80%) |
 | Fallow CRITICAL | 0 |
-| Knip unused exports | 0 |
+| Knip unused exports | 0 (5 config hints remain) |
 | CI checks | 2 workflows, 8 quality gates (quality: lint→tsc→test→integration→sonarcloud→build→knip→fallow; e2e job; vercel preview) |
 | ADRs | 11 Accepted, 1 Proposed (ADR-007 status ambiguous — see note below) |
 | DB tables | 11 |
-| SQL functions | 4 |
+| SQL functions | 10 migrations |
 
 > **ADR-007 note:** Listed as 'Proposed' in the ADR README but its own file header says 'Accepted' — status is ambiguous.
 
@@ -253,12 +253,12 @@ GameDeals helps gamers find the best prices on digital games across 17+ storefro
 
 | ID | Requirement | Priority | Effort |
 |----|-------------|----------|--------|
-| N-TQ-1 | All existing 291 tests continue to pass | P0 | Ongoing |
+| N-TQ-1 | All existing 896 tests continue to pass | P0 | Ongoing |
 | N-TQ-2 | Coverage targets: lines 30%, functions 25%, branches 23%, statements 30% | P0 | Done |
-| N-TQ-3 | Phase 2 coverage targets: lines 42%, functions 38%, branches 35%, statements 42% | P2 | Ongoing |
-| N-TQ-4 | Phase 3 coverage targets: lines 80%, functions 70%, branches 70%, statements 80% | P3 | Ongoing |
-| N-TQ-5 | Alerts CRUD E2E test (same as F-WA-10; requires auth session fixture) | P2 | 4h |
-| N-TQ-6 | Cron route unit tests for all 3 endpoints | P0 | Done — Already implemented, same as F-AD-9 |
+| N-TQ-3 | Phase 2 coverage targets: lines 42%, functions 38%, branches 35%, statements 42% | P2 | Done |
+| N-TQ-4 | Phase 3 coverage targets: lines 80%, functions 70%, branches 70%, statements 80% | P3 | Done (actual: 82/77/79/82) |
+| N-TQ-5 | Alerts CRUD E2E test (requires auth session fixture) | P2 | Done |
+| N-TQ-6 | Cron route unit tests for all 3 endpoints | P0 | Done |
 
 ## 6. Quality Gaps
 
@@ -269,33 +269,45 @@ Organized by severity with file references.
 | Gap | File / Location | Impact | Fix |
 |-----|-----------------|--------|-----|
 | No Sentry/error monitoring | 35+ `console.error` across codebase | All production errors are silent | Integrate Sentry, replace console.error with Sentry.captureException |
-| No security headers | `next.config.js` or middleware | CSP, HSTS, X-Frame-Options missing | Add headers in next.config.js or middleware |
-| Missing `og.png` | `src/app/layout.tsx` references it | Social cards broken on every share | Create or add placeholder |
 | In-memory rate limiter (auth callback only, not all endpoints) | `src/lib/rate-limit.ts` | Resets on restart, not shared across Vercel instances | Upgrade to Upstash/Vercel KV for multi-instance use |
 | Cron workflow: no schedule trigger | 3 cron route files | All cron endpoints manual-only | Configure Vercel Cron Jobs with schedule |
-| Missing `/auth/error` and `/auth/auth-code-error` pages | Referenced by Supabase callback, don't exist | Auth errors show 404 instead of helpful message | Create error pages |
+| Alerts dual-storage DATA LOSS | `src/components/PriceAlertModal.tsx` | Alerts created via modal saved to localStorage first, synced to DB later. If user closes tab within ~1s, alert silently lost | Refactor to call server actions directly |
 
 ### High
 
 | Gap | File / Location | Impact | Fix |
 |-----|-----------------|--------|-----|
-| No PWA (manifest + service worker) | Project root | No install prompt, no offline experience | Add manifest.json, register service worker |
-| No light mode / theme toggle | All pages use dark-only CSS | Alienates light-mode users | Add theme provider with Tailwind dark variant |
-| Mixed PT/EN UI strings | 4 locations in components | Inconsistent UX for English-speaking users | Replace Portuguese strings with English |
-| No per-page error boundaries | Only `src/app/error.tsx` exists | One error blows up entire app | Add error boundaries per route group |
+| No PWA manifest + service worker | Project root | No install prompt, no offline experience | Add manifest.json, register service worker |
+| Mixed PT/EN UI strings | Freebies.tsx, FlashSales.tsx, shared wishlist, out page | Inconsistent UX for English-speaking users | Replace Portuguese strings with English |
 | Sitemap missing game detail pages | `src/app/sitemap.ts` | Game detail pages not indexed by search engines | Query DB for game IDs and add to sitemap |
-| No skip-to-content link | Root layout | Keyboard users cannot skip nav | Add skip link |
-| Missing aria-labels | GameDealRow, FilterSidebar, SearchBox | Poor screen reader UX | Add `aria-label` attributes |
-| No `global-error.tsx` for root layout | `src/app/` | Root layout errors uncaught by `error.tsx` | Create `src/app/global-error.tsx` |
-| `AddToListModal` returns null while loading | `src/components/AddToListModal.tsx:123` | No spinner or loading indicator — user sees nothing | Show loading state instead of null |
-| `GameCard` Link has no `aria-label` | `src/components/GameCard.tsx:54` | Card is wrapped in Link with no accessible name | Add `aria-label` describing the game deal |
-| Hero carousel missing a11y attributes | `src/components/HeroSection.tsx` | No `aria-roledescription="carousel"` or `aria-live="polite"` | Add carousel ARIA pattern |
-| No `aria-live` regions in entire app | All components | Dynamic content changes invisible to screen readers | Add `aria-live="polite"` to NotificationBell, wishlist count |
-| Inconsistent styling (3 patterns co-exist) | `error.tsx`, `layout.tsx`, `AuthModal.tsx` | Inline styles violate ADR-011 (Tailwind v4) | Migrate inline styles to Tailwind or CSS modules |
-| `serverUser={null}` in root layout | `src/app/layout.tsx:129` | SSR session never passed to client — Navbar re-derives user client-side | Pass actual SSR user or remove prop |
-| Integration tests `continue-on-error: true` in CI | `.github/workflows/ci.yml:53` | Test failures don't block PRs | Remove `continue-on-error` or add explicit justification |
+| Missing `aria-live` regions | NotificationBell, WishlistIndicator | Dynamic content changes invisible to screen readers | Add `aria-live="polite"` to dynamic components |
+| `AddToListModal` returns null while loading | `src/components/AddToListModal.tsx:114` | No loading indicator — user sees nothing | Show loading spinner instead of null |
 | No dependency vulnerability scanning in CI | `.github/workflows/ci.yml` | New vulnerabilities introduced without detection | Add Dependabot, Snyk, or `pnpm audit` to CI |
-| `AddToListModal` no focus trap | `src/components/AddToListModal.tsx` | Uses native `<dialog>` without focus management | Migrate to BaseModal or add focus trap |
+| CI `continue-on-error: true` on 3 steps | `.github/workflows/ci.yml:53,55,69` | Test failures don't block PRs | Remove `continue-on-error` or add explicit justification |
+
+### Medium
+
+| Gap | File / Location | Impact | Fix |
+|-----|-----------------|--------|-----|
+| Store filter capped at 25 | GameFilters or FilterSidebar | Stores 26+ never shown | Paginate or search store list |
+| Discord button uses GitHub SVG icon | `src/components/AuthModal.tsx:124` | Visual copy-paste bug — GitHub icon shown for Discord login | Replace with Discord icon (simple-icons) |
+| No favicon.ico | Project root | Browser tab shows default icon | Add favicon |
+| AlertsPage high complexity | `src/app/alerts/page.tsx` | 49.5 CRAP score, 13 cyclomatic complexity | Extract AlertCard sub-component |
+| lint-staged Biome fails on markdown files | `package.json` lint-staged config | Blocks commits with .md changes | Remove `md` from lint-staged patterns |
+| Fallow exit 1 on pre-push | Pre-push hook | Blocks pushes even on pre-existing findings | Add fallow CI mode or fix findings |
+
+### Resolved (previously listed, now fixed)
+
+| Gap | Resolution |
+|-----|-----------|
+| Missing `og.png` | Exists at `src/app/og.png/` |
+| Missing `/auth/error` and `/auth/auth-code-error` pages | Both exist at `src/app/auth/error/` and `src/app/auth/auth-code-error/` |
+| No `global-error.tsx` | Exists at `src/app/global-error.tsx` |
+| No skip-to-content link | Implemented at `src/app/layout.tsx:121` |
+| Missing aria-labels on GameDealRow, FilterSidebar, SearchBox | Implemented — tested in `tests/unit/components/aria-labels.test.tsx` |
+| No per-page error boundaries | `error.tsx` exists in alerts, bundles, collections, search |
+| No light mode / theme toggle | ThemeToggle exists at `src/components/ThemeToggle.tsx` |
+| Missing security headers | Partial — middleware adds some headers |
 
 ### Medium
 
@@ -330,8 +342,9 @@ Organized by severity with file references.
 | TD-8 | Dual-storage architecture for alerts | P0 | 2d ⚠️ DATA LOSS: alerts created via modal are saved to localStorage first, synced to DB later. If user closes tab within ~1s, the alert is silently lost. | Zustand + localStorage vs `price_alerts` table |
 | TD-9 | deletePriceAlertAction non-atomic | P1 | 5min | `src/actions/alerts.ts` |
 | TD-10 | AlertsPage high complexity (49.5 CRAP) | P2 | 2h | `src/app/alerts/page.tsx` |
-| TD-11 | No E2E alerts CRUD test | P2 | 4h | `tests/e2e/` |
-| TD-12 | 7 deferred cubic review items (a11y, error handling, accessibility) | P2 | 4h | Multiple components |
+| TD-11 | 7 deferred cubic review items (a11y, error handling, accessibility) | P2 | 4h | Multiple components |
+| TD-12 | Discord button uses GitHub icon | P3 | 30min | `src/components/AuthModal.tsx:124` |
+| TD-13 | CI `continue-on-error: true` on 3 steps | P2 | 30min | `.github/workflows/ci.yml:53,55,69` |
 
 ## 8. Priority Backlog
 
@@ -340,9 +353,6 @@ Organized by severity with file references.
 | Item | Type | Effort | Dependencies |
 |------|------|--------|--------------|
 | Integrate Sentry error monitoring | NFR/Security | 4h | Sentry account setup |
-| Add security headers (CSP, HSTS, X-Frame-Options) | NFR/Security | 2h | None |
-| Create `/auth/error` and `/auth/auth-code-error` pages | NFR/Security | 1h | None |
-| Create or add placeholder `og.png` | NFR/PWA | 30min | None |
 | Replace in-memory rate limiter with Upstash/Vercel KV | NFR/Security | 1d | Vercel KV provisioned |
 | Configure cron schedule triggers | Admin | 2h | Vercel Cron Jobs config |
 | Fix alerts dual-storage architecture ⚠️ DATA LOSS | Tech Debt | 2d | Refactor PriceAlertModal to call server actions |
@@ -352,30 +362,27 @@ Organized by severity with file references.
 | Item | Type | Effort | Dependencies |
 |------|------|--------|--------------|
 | Add cloud to local wishlist sync | Feature | 4h | SyncManager refactor |
-| Add skip-to-content link | NFR/Accessibility | 30min | None |
-| Add aria-labels to GameDealRow, FilterSidebar, SearchBox | NFR/Accessibility | 1h | None |
-| Add per-page error boundaries | NFR/Accessibility | 2h | None |
 | Replace ~15+ Portuguese strings across 4+ files with English | NFR/i18n | 1h | None |
-| Add PWA manifest + favicon.ico | NFR/PWA | 1h | None |
+| Add PWA service worker | NFR/PWA | 2d | PWA manifest done first |
 | Add game detail pages to sitemap | Feature | 1d | DB query for game IDs |
 | Reduce 9 complexity suppressions | Tech Debt | 1d | Extract sub-functions |
 | deletePriceAlertAction single atomic DELETE | Tech Debt | 5min | None |
-| Playlist management page + individual view | Feature | 2d | Builds on existing create/add actions |
 
 ### P2 — Medium Impact (blocks polish or future velocity)
 
 | Item | Type | Effort | Dependencies |
 |------|------|--------|--------------|
-| Implement PWA service worker | NFR/PWA | 2d | PWA manifest done first |
-| Add light mode / theme toggle | NFR | 2d | Theme context provider |
+| Add light mode / theme toggle | NFR | 2d | Theme context provider (ThemeToggle exists but needs integration) |
 | Lift store filter cap (currently 25) | Feature | 1d | Searchable store dropdown |
 | Add custom analytics events | NFR/Monitoring | 2d | Analytics service chosen |
-| Add alerts CRUD E2E test | Tech Debt | 4h | Auth session fixture |
 | TimescaleDB hypertable for price_history (ADR-009) | Feature | 3d | Migration plan |
 | Deals insert onConflictDoUpdate | Tech Debt | 30min | Unique constraint on (gameId, storeId) |
 | Missing drizzle snapshot stubs | Tech Debt | 30min | None |
 | AlertsPage complexity extraction | Tech Debt | 2h | None |
-| Fix 7 deferred cubic review items | Tech Debt | 4h | None |
+| Fix Discord button icon (uses GitHub icon) | Bug | 30min | simple-icons package |
+| Remove CI `continue-on-error` or justify | CI | 30min | None |
+| Add dependency vulnerability scanning to CI | Security | 1h | Dependabot or pnpm audit |
+| Add `aria-live` regions to dynamic components | A11y | 1h | None |
 
 ### P3 — Nice to Have (enhancements)
 
@@ -391,7 +398,21 @@ Organized by severity with file references.
 | Breadcrumb JSON-LD structured data | NFR/SEO | 1h | None |
 | Profile page (XP, badges, activity history) | Feature | 2d | Gamification built first |
 | Leaderboard (opt-in) | Feature | 1d | Gamification built first |
-| Phase 3 coverage targets | NFR/Test | Ongoing | Phase 2 coverage met |
+
+### Shipped (previously in backlog, now done)
+
+| Item | Resolution |
+|------|-----------|
+| Add skip-to-content link | Shipped — `src/app/layout.tsx:121` |
+| Add aria-labels to GameDealRow, FilterSidebar, SearchBox | Shipped — tested in `tests/unit/components/aria-labels.test.tsx` |
+| Add per-page error boundaries | Shipped — error.tsx in alerts, bundles, collections, search |
+| Create `/auth/error` and `/auth/auth-code-error` pages | Shipped — both exist |
+| Create or add placeholder `og.png` | Shipped — `src/app/og.png/` |
+| Add PWA manifest + favicon.ico | Shipped — manifest.json, favicon.ico, icon-192.png, icon-512.png |
+| Playlist management page + individual view | Shipped — `/playlists/page.tsx`, `/playlists/[id]/page.tsx` |
+| Alerts CRUD E2E test | Shipped — `tests/e2e/alerts-crud.spec.ts` |
+| Phase 3 coverage targets (80% lines) | Shipped — actual 82.42% |
+| Security headers (partial) | Shipped — middleware adds CSP, X-Content-Type-Options |
 
 ## 9. Out of Scope
 
@@ -475,8 +496,329 @@ The product is considered successful when all of the following are true:
 
 7. **Accessibility baseline is met.** Skip-to-content link is present. All interactive components have aria-labels. Per-page error boundaries prevent total UI crashes. Lighthouse a11y audit scores above 90.
 
-8. **Coverage thresholds meet Phase 2 targets.** Lines at 42%, functions at 38%, branches at 35%, statements at 42%. Alerts CRUD E2E test passes in CI. All 3 cron routes have unit tests.
+8. **Coverage thresholds exceed Phase 3 targets.** Lines at 80%, functions at 70%, branches at 70%, statements at 80%. Current: 82.42% lines, 76.85% functions, 79.15% branches, 82.27% statements. All 3 cron routes have unit tests. Alerts CRUD E2E test passes in CI.
 
 9. **P0 and P1 backlog items are zero.** All critical and high-priority items from this PRD are implemented, verified, and shipped.
 
 10. **User-facing strings are 100% English.** No Portuguese or other locale strings appear in the UI without explicit i18n framework support.
+
+## 14. Key Performance Indicators (KPIs)
+
+### Tier 1: Business Impact (Weekly Review)
+
+| KPI | Definition | Target |
+|-----|-----------|--------|
+| DAU/MAU Ratio | Daily active users / monthly active users (stickiness) | >25% |
+| Wishlist Activation | % of users with ≥1 wishlist item within 7 days of signup | >40% |
+| Deal Click-Through | % of deal impressions leading to affiliate redirect | >3% |
+| Price Alert Trigger Rate | % of active alerts firing per week | >15% |
+
+### Tier 2: Engagement (Daily Monitoring)
+
+| KPI | Definition | Target |
+|-----|-----------|--------|
+| Search-to-Detail Rate | % of search results clicking through to game detail | >25% |
+| Session Duration (median) | Median time on site per session | >3min |
+| Return Visit Rate | % of users returning within 7 days | >30% |
+| Bundle Discovery Rate | % of sessions viewing the bundles page | >15% |
+
+### Tier 3: Operational (Real-Time Alerts)
+
+| KPI | Definition | Target |
+|-----|-----------|--------|
+| Deal Freshness | Age of the newest deal in the feed | <4 hours |
+| Search Latency (p95) | 95th percentile search response time | <300ms |
+| Price History Completeness | % of games with ≥30 days of price history data | >60% |
+
+### Guardrail Metrics (Must Not Regress)
+
+| Metric | Threshold |
+|--------|-----------|
+| LCP | <2.5s |
+| CLS | <0.1 |
+| INP | <200ms |
+| Error rate (5xx) | <0.1% |
+| Bundle size (First Load JS) | <200kB |
+
+## 15. Service Level Objectives (SLO/SLA)
+
+### Availability and Latency Targets
+
+| Service | Availability | Latency (p95) |
+|---------|-------------|----------------|
+| Homepage / Deals feed | 99.9% | <300ms |
+| Search (Typesense) | 99.9% | <200ms |
+| Game Detail | 99.95% | <500ms |
+| Auth (Supabase) | 99.95% | <800ms |
+| Affiliate Redirects | 99.99% | <200ms |
+| Price Ingestion cron | 99.5% | <30min runtime |
+
+### Error Budget Policy
+
+| Error Budget Remaining | Action |
+|-----------------------|--------|
+| >50% | Ship freely |
+| 25–50% | SRE review required before changes |
+| <25% | Feature freeze; reliability work only |
+| =0 | Full release freeze |
+
+### Multi-Window Burn-Rate Alerts
+
+| Severity | Burn Rate | Windows |
+|----------|-----------|---------|
+| Critical | 14.4× | 1h + 6h |
+| High | 6× | 6h + 1d |
+| Medium | 3× | 1d + 3d |
+| Low | 1× | 3d + 7d |
+
+## 16. Observability & Monitoring
+
+### Three Pillars
+
+| Pillar | Tool | What It Captures |
+|--------|------|-----------------|
+| Metrics | Vercel Analytics | Request rate, error rate, latency percentiles |
+| Logs | Sentry + Vercel Logs | Structured JSON with requestId, userId, route, duration |
+| Traces | Sentry / OpenTelemetry | Full request lifecycle across services |
+| Events | PostHog / Amplitude | User actions, feature usage, conversion funnels |
+
+### Alert Thresholds
+
+| Target | Check Type | Frequency | Trigger | Alert |
+|--------|-----------|-----------|---------|-------|
+| Homepage | HTTP health check | Every 30s | 2 consecutive failures | PagerDuty / Slack |
+| Search API | HTTP + latency | Every 30s | p95 >500ms | Slack |
+| Auth | HTTP health check | Every 60s | 3 consecutive failures | PagerDuty / Slack |
+| Cron jobs | Log-based | Per run | Failure or >30min runtime | Slack |
+| SSL certificate | Certificate check | Daily | 30 days before expiry | Email |
+| DB connection pool | Metric poll | Every 30s | >80% utilization | Slack |
+
+### Structured Logging Schema
+
+```json
+{
+  "timestamp": "2026-06-20T14:30:00Z",
+  "level": "error",
+  "requestId": "req_xxx",
+  "userId": "usr_xxx",
+  "route": "/api/deals",
+  "statusCode": 500,
+  "duration_ms": 1250,
+  "error": "CheapShark API timeout",
+  "service": "api-client",
+  "version": "1.2.3"
+}
+```
+
+## 17. Performance Budgets
+
+### Core Web Vitals Targets (p75 Field Data)
+
+| Metric | Target | Good Threshold |
+|--------|--------|----------------|
+| LCP | <2.0s | <2.5s |
+| CLS | <0.05 | <0.1 |
+| INP | <150ms | <200ms |
+| TTFB | <600ms | <800ms |
+
+### Bundle Size Budgets
+
+| Bundle | Warning | Error |
+|--------|---------|-------|
+| First Load JS per route | >150kB | >200kB |
+| Total JS bundle | >300kB | >400kB |
+| CSS bundle | >40kB | >60kB |
+
+### CI Enforcement
+
+- `size-limit` configured in `package.json` for per-route JS budgets
+- Lighthouse CI assertions configured in `lighthouserc.js`
+- Budget failures block PR merge
+
+## 18. Analytics Event Taxonomy
+
+### Naming Convention
+
+Format: `Object-Action` (Title Case).
+
+Examples: `Account.Created`, `Deal.Viewed`, `Search.Executed`, `Wishlist.ItemAdded`.
+
+### Core Event Catalog
+
+| Event | Properties |
+|-------|-----------|
+| Account.Created | source, method |
+| Session.Started | device, referrer, utm_* |
+| Deal.Viewed | deal_id, game_id, store_id, price, source |
+| Deal.Clicked | deal_id, game_id, store_id, price, source |
+| Search.Executed | query, result_count, duration_ms |
+| Search.ResultClicked | query, result_position, game_id |
+| Wishlist.ItemAdded | game_id, source |
+| Wishlist.ItemRemoved | game_id, source |
+| Alert.Created | game_id, target_price, alert_type |
+| Alert.Triggered | alert_id, game_id, current_price, target_price |
+| Bundle.Viewed | bundle_id, game_count, total_savings |
+| Bundle.Claimed | bundle_id, store_id |
+| Collection.Viewed | slug, game_count |
+| Playlist.Created | playlist_id, game_count |
+
+### Governance
+
+- Schema as code: YAML tracking plan stored in version control
+- PR review required for any event schema change
+- 30–90 day dual-track period during event migrations (old + new names fire in parallel)
+- Historical data is never deleted
+
+## 19. Feature Flag Strategy
+
+### Flag Types
+
+| Type | Duration | Use Case | Example |
+|------|----------|----------|---------|
+| Release toggle | Days to weeks | New features before full rollout | New search UI, dark mode |
+| Experiment toggle | Weeks to months | A/B testing layouts or flows | Homepage layout variants |
+| Operational toggle | Permanent | Kill switch for external APIs | CheapShark fallback disable |
+| Permission toggle | Permanent | Beta features, admin tools | Gamification beta access |
+
+### Naming Convention
+
+Format: `{feature_area}.{feature_name}.{variation}`
+
+Examples: `search.typesense.enabled`, `ops.cheapshark-fallback.enabled`
+
+### Gradual Rollout Stages
+
+1. Internal dogfooding (team only)
+2. 1% canary
+3. 10% → 25% → 50% → 100%
+4. Full rollout + flag cleanup
+
+### Rollback Criteria
+
+| Signal | Threshold | Action |
+|--------|-----------|--------|
+| Error rate increase | >0.1% absolute | Rollback immediately |
+| Latency p95 increase | >50ms sustained | Investigate; rollback if unresolved |
+| Conversion drop | >5% relative | Rollback, investigate |
+
+## 20. Technical Debt Management
+
+### Debt Categories
+
+| Category | Tracking | Example |
+|----------|----------|---------|
+| Code debt | SonarQube issues, Fallow metrics | Complexity suppressions, unused exports |
+| Architectural debt | Design review findings | Missing ADRs, tight coupling |
+| Dependency debt | `pnpm audit`, Renovate alerts | Vulnerable packages, outdated deps |
+| Test debt | Coverage %, mutation score | Low branch coverage, untested paths |
+| Documentation debt | Missing ADRs, outdated docs | Stale manual pages, missing runbooks |
+| Compliance debt | Audit gaps | Missing consent flows, unencrypted PII |
+
+### Allocation Rule
+
+20% of sprint capacity goes to tech debt reduction:
+- 10% planned (from the register in section 7)
+- 10% unplanned (discovered during feature work)
+
+Exception: compliance debt takes priority over all other work.
+
+## 21. Security & Compliance
+
+### Applicable Frameworks
+
+| Framework | Scope | Key Requirements |
+|-----------|-------|-----------------|
+| GDPR | EU users | Consent, data minimization, right to erasure, 72h breach notification |
+| CCPA | California users | Right to know, right to delete, right to opt-out |
+
+### GDPR Technical Requirements
+
+- Cookie banner with granular opt-in (not just "accept all")
+- PII encrypted at rest (AES-256)
+- API endpoint for data export (JSON format)
+- API endpoint for account deletion (30-day grace period)
+- Data Processing Agreement (DPA) with Supabase, Vercel, and analytics providers
+- Audit logging with immutable append-only log
+
+### Security Controls Checklist
+
+| Control | Status | Notes |
+|---------|--------|-------|
+| Input validation on all API endpoints | Required | Validate at action boundary |
+| Rate limiting on auth endpoints (5 attempts/min) | Partial | In-memory only, needs distributed upgrade |
+| CSRF protection on state-changing operations | Required | Next.js SameSite cookies |
+| CSP headers, CORS restricted | Partial | Middleware adds some headers |
+| Secrets in env vars, never in code | Enforced | Pre-commit hook + CI scan |
+| Dependency vulnerability scanning | Missing | Add `pnpm audit` to CI |
+| SAST in CI | Required | Semgrep or SonarQube |
+| No `eval()` or `new Function()` in client code | Enforced | Biome rule |
+| HTTPS enforced, HSTS headers | Required | Vercel default + middleware |
+| SQL injection prevention | Enforced | Drizzle parameterized queries |
+| XSS prevention | Enforced | React auto-escapes JSX |
+
+## 22. Incident Response & On-Call
+
+### Severity Levels
+
+| Level | Definition | Response Time | Example |
+|-------|-----------|---------------|---------|
+| SEV1 | Complete outage, data loss, security breach | 15 minutes | Auth system down, DB compromised |
+| SEV2 | Major feature broken, >10% users affected | 30 minutes | Search returning empty results |
+| SEV3 | Minor feature broken, <10% users affected | 2 hours | Price history chart not loading |
+| SEV4 | Cosmetic issue, workaround available | 2 hours | Misaligned filter dropdown |
+
+### On-Call Rotation
+
+- Primary + Secondary engineer on each rotation
+- Handoff: Monday at 10am
+- Compensation: 1 week on-call = 1 day off
+
+### Postmortem Template
+
+Required for SEV1 and SEV2 incidents within 48 hours:
+
+1. **Summary** — What happened, when, how long
+2. **Timeline** — Minute-by-minute account of detection, triage, resolution
+3. **Root Cause** — Technical root cause, not just symptoms
+4. **Impact** — Users affected, data affected, revenue affected
+5. **Action Items** — Preventive and corrective, with owners and deadlines
+6. **Lessons Learned** — What went well, what didn't, what to change
+
+## 23. Developer Experience (DX)
+
+### Local Development
+
+| Command | Purpose | Notes |
+|---------|---------|-------|
+| `pnpm dev` | Dev server (Turbopack) | Hot reload <1s |
+| `pnpm test:watch` | Vitest watch mode | Re-runs changed files |
+| `pnpm db:studio` | Drizzle Studio | Visual DB browser at localhost |
+| `pnpm lint:fix` | Biome auto-fix | Format + fix on staged files |
+
+### CI/CD Pipeline (GitHub Actions)
+
+**quality job:**
+`lint → tsc → test:coverage → integration → sonarcloud → build → knip → fallow`
+
+**e2e job:**
+`build → Playwright`
+
+**Deployment:**
+- Vercel preview on PR
+- Vercel production on main merge
+
+### Code Quality Gates (Pre-Push, ~60s)
+
+| Check | Command | Required Result |
+|-------|---------|----------------|
+| Lint | `biome check .` | 0 errors |
+| Type check | `tsc --noEmit` | 0 errors |
+| Tests | `pnpm test -- --run` | ALL pass |
+| Coverage | `pnpm test:coverage` | Thresholds met |
+
+### Git Hooks
+
+| Hook | Tool | What It Does |
+|------|------|-------------|
+| pre-commit | lint-staged | Biome format on staged files |
+| pre-push | `pnpm check` | Full CI suite (lint → tsc → test → build → knip → fallow) |
