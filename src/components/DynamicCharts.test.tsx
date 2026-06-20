@@ -92,7 +92,7 @@ describe('DynamicPriceHistory', () => {
       />
     );
     const chartDiv = screen.getByTestId('dynamic-chart');
-    const props = JSON.parse(chartDiv.textContent || '{}');
+    const props = JSON.parse(chartDiv.textContent || '{}') as Record<string, unknown>;
     expect(props.realData).toEqual(realData);
     expect(props.currentPrice).toBe('29.99');
     expect(props.gameId).toBe('123');
@@ -109,7 +109,7 @@ describe('DynamicPriceHistory', () => {
       />
     );
     const chartDiv = screen.getByTestId('dynamic-chart');
-    const props = JSON.parse(chartDiv.textContent || '{}');
+    const props = JSON.parse(chartDiv.textContent || '{}') as Record<string, unknown>;
     expect(props.realData).toBeUndefined();
   });
 
@@ -124,7 +124,7 @@ describe('DynamicPriceHistory', () => {
       />
     );
     const chartDiv = screen.getByTestId('dynamic-chart');
-    const props = JSON.parse(chartDiv.textContent || '{}');
+    const props = JSON.parse(chartDiv.textContent || '{}') as Record<string, unknown>;
     expect(props.realData).toBeUndefined();
   });
 
@@ -147,7 +147,7 @@ describe('DynamicStoreCompare', () => {
       />
     );
     const chartDiv = screen.getByTestId('dynamic-chart');
-    const props = JSON.parse(chartDiv.textContent || '{}');
+    const props = JSON.parse(chartDiv.textContent || '{}') as { data: { storeName: string; price: string }[] };
     expect(props.data).toHaveLength(2);
     expect(props.data[0].storeName).toBe('Steam');
   });
@@ -155,7 +155,7 @@ describe('DynamicStoreCompare', () => {
   it('passes empty data to chart', () => {
     renderWithQuery(<DynamicStoreCompare data={[]} />);
     const chartDiv = screen.getByTestId('dynamic-chart');
-    const props = JSON.parse(chartDiv.textContent || '{}');
+    const props = JSON.parse(chartDiv.textContent || '{}') as Record<string, unknown>;
     expect(props.data).toHaveLength(0);
   });
 });
