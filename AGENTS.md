@@ -691,3 +691,35 @@ When Next.js build fails with "Invalid segment configuration export detected" wi
 
 ### Decompose Mechanical Refactoring Into Parallel Subtasks
 SonarQube S6759 (Readonly props, ~33 issues across 28 files) → delegate to single agent. Mistake: should have split into 4 parallel agents (independent file sets). Single agent 15min, parallel would be ~4min. Lesson: bulk mechanical refactoring = parallel agents per file group.
+
+---
+
+## Session Learnings (Sprint 9 — Coverage Push + PRD Evolution — 2026-06-20)
+
+### Parallel Subagents Hit 429 Rate Limits
+Launching 4+ subagents simultaneously on primary model triggers 429 rate limits. Fallback model (minimax-m3-free) often gets stuck. **Rule**: Max 2-3 parallel subagents. If agents stall >3min, cancel and do the work directly.
+
+### next/dynamic Mock Is Fundamentally Broken in jsdom
+`next/dynamic` lazy-loading cannot be properly mocked in vitest/jsdom because:
+1. The factory returns a Promise that resolves asynchronously
+2. React's microtask model in jsdom doesn't flush before test assertions
+3. Even `act()` wrapping doesn't help — the Promise resolution timing is unpredictable
+
+**Solution**: Mock `next/dynamic` to return a synchronous passthrough component that renders props as JSON. Test the props flow, not the rendered chart content.
+
+### JSON.parse Returns unknown in TypeScript 5.9
+TypeScript 5.9 changed `JSON.parse()` return type from `any` to `unknown`. Tests using `JSON.parse(text)` then accessing `.property` fail with `TS18046: 'props' is of type 'unknown'`.
+
+**Fix**: Add type assertion: `JSON.parse(text) as Record<string, unknown>` or typed interface.
+
+### Vitest Threshold Enforcement
+Coverage thresholds in `vitest.config.ts` are enforced on every `pnpm test:coverage` run. Set them to realistic values just below actual coverage to catch regressions without blocking CI. Example: actual 82% → threshold 80%.
+
+### PRD Drift Is Real
+PRD metrics and status can drift significantly from actual codebase state within weeks. Key discrepancies found:
+- Tests: PRD said 291, actual was 896
+- Coverage: PRD said 30% target, actual was 82%
+- Features: 5 items marked "Not Built" actually existed
+- 8 items marked "Missing" were already fixed
+
+**Rule**: Audit PRD against codebase quarterly. Never trust PRD metrics without verification.

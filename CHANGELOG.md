@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.5.0] — 2026-06-20
+
+### Sprint 9 — Coverage Push & PRD Evolution (#35, #36)
+
+- **Coverage**: 74.6%→82.42% lines (+7.82pp), 65.4%→79.15% branches (+13.75pp)
+- **Tests**: 787→896 (+109). 16 new test files (Charts, DealRow, GameCard, HeroSlide, NotificationBell, DynamicCharts, AddToListModal, GameHero, GameStatsRow, EndingSoon, Freebies, WishlistIndicator, PriceAlertBadge, SearchResults, BundlesPage, CollectionDetailPage)
+- **Thresholds**: vitest.config.ts bumped to lines:80, functions:75, branches:76, statements:80
+- **PRD Audit**: Fixed 20+ discrepancies (tests 291→896, coverage 30%→82%, 5 items "Not Built" corrected)
+- **PRD Evolution**: 10 new production-grade sections (KPIs, SLO/SLA, Observability, Performance Budgets, Analytics, Feature Flags, Tech Debt, Security/Compliance, Incident Response, DX) — 503→824 lines
+- **PR #35**: All CI checks green, 896/896 tests pass
+- **PR #36**: PRD audit + evolution merged
+
 ## [v0.4.0] — 2026-06-19
 
 ### Sprint 6 — Coverage Push & Methodology Archival (#32)

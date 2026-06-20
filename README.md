@@ -118,12 +118,12 @@ vitest.config.ts       # Vitest configuration (node + jsdom per-file)
 
 ## Stats
 
-- **Tests**: 681 (59.29%→70.45% lines / 49.5%→59.96% branches)
+- **Tests**: 896 across 100 files (82.42% lines / 79.15% branches / 76.85% functions)
 - **SonarQube**: 0 open issues
-- **Fallow CRITICAL**: 0 (was 1)
-- **Knip unused types**: 0 (was 9)
-- **Unused exports**: 0 (was 4)
-- **Maintainability**: 91.2
+- **Fallow CRITICAL**: 0
+- **Knip unused types**: 0
+- **Unused exports**: 0
+- **Coverage thresholds**: lines 80%, functions 75%, branches 76%, statements 80%
 
 ## Documentation
 

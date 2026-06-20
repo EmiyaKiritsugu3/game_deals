@@ -111,6 +111,8 @@ Full listing: [ADR Index](adr/README.md) | Template: [New ADR](adr/_template.md)
 | [PR #10 — Quality Fix](reports/pr10-session-report.md) | Biome quality pipeline fix, removed 4 global `"off"` rules, 35 inline suppressions |
 | [PR #12 — P0 Notifications Pipeline](reports/pr12-session-report.md) | UUID FK fix, storeId varchar, in-app notifications, audit fixes |
 | [PR #15 — Price Alerts E2E](reports/pr15-session-report.md) | /alerts page, GitHub Actions cron, SonarCloud, component tests, 215 tests |
+| [PR #35 — Sprint 9 Coverage Push](reports/sprint9-coverage-report.md) | Coverage 74.6%→82.4%, +109 tests, 16 new test files |
+| [PR #36 — PRD Audit & Evolution](reports/prd-evolution-report.md) | PRD audit (20+ fixes), 10 new production sections (KPIs, SLOs, observability, etc.) |
 
 ---
 
