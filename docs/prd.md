@@ -501,3 +501,324 @@ The product is considered successful when all of the following are true:
 9. **P0 and P1 backlog items are zero.** All critical and high-priority items from this PRD are implemented, verified, and shipped.
 
 10. **User-facing strings are 100% English.** No Portuguese or other locale strings appear in the UI without explicit i18n framework support.
+
+## 14. Key Performance Indicators (KPIs)
+
+### Tier 1: Business Impact (Weekly Review)
+
+| KPI | Definition | Target |
+|-----|-----------|--------|
+| DAU/MAU Ratio | Daily active users / monthly active users (stickiness) | >25% |
+| Wishlist Activation | % of users with ≥1 wishlist item within 7 days of signup | >40% |
+| Deal Click-Through | % of deal impressions leading to affiliate redirect | >3% |
+| Price Alert Trigger Rate | % of active alerts firing per week | >15% |
+
+### Tier 2: Engagement (Daily Monitoring)
+
+| KPI | Definition | Target |
+|-----|-----------|--------|
+| Search-to-Detail Rate | % of search results clicking through to game detail | >25% |
+| Session Duration (median) | Median time on site per session | >3min |
+| Return Visit Rate | % of users returning within 7 days | >30% |
+| Bundle Discovery Rate | % of sessions viewing the bundles page | >15% |
+
+### Tier 3: Operational (Real-Time Alerts)
+
+| KPI | Definition | Target |
+|-----|-----------|--------|
+| Deal Freshness | Age of the newest deal in the feed | <4 hours |
+| Search Latency (p95) | 95th percentile search response time | <300ms |
+| Price History Completeness | % of games with ≥30 days of price history data | >60% |
+
+### Guardrail Metrics (Must Not Regress)
+
+| Metric | Threshold |
+|--------|-----------|
+| LCP | <2.5s |
+| CLS | <0.1 |
+| INP | <200ms |
+| Error rate (5xx) | <0.1% |
+| Bundle size (First Load JS) | <200kB |
+
+## 15. Service Level Objectives (SLO/SLA)
+
+### Availability and Latency Targets
+
+| Service | Availability | Latency (p95) |
+|---------|-------------|----------------|
+| Homepage / Deals feed | 99.9% | <300ms |
+| Search (Typesense) | 99.9% | <200ms |
+| Game Detail | 99.95% | <500ms |
+| Auth (Supabase) | 99.95% | <800ms |
+| Affiliate Redirects | 99.99% | <200ms |
+| Price Ingestion cron | 99.5% | <30min runtime |
+
+### Error Budget Policy
+
+| Error Budget Remaining | Action |
+|-----------------------|--------|
+| >50% | Ship freely |
+| 25–50% | SRE review required before changes |
+| <25% | Feature freeze; reliability work only |
+| =0 | Full release freeze |
+
+### Multi-Window Burn-Rate Alerts
+
+| Severity | Burn Rate | Windows |
+|----------|-----------|---------|
+| Critical | 14.4× | 1h + 6h |
+| High | 6× | 6h + 1d |
+| Medium | 3× | 1d + 3d |
+| Low | 1× | 3d + 7d |
+
+## 16. Observability & Monitoring
+
+### Three Pillars
+
+| Pillar | Tool | What It Captures |
+|--------|------|-----------------|
+| Metrics | Vercel Analytics | Request rate, error rate, latency percentiles |
+| Logs | Sentry + Vercel Logs | Structured JSON with requestId, userId, route, duration |
+| Traces | Sentry / OpenTelemetry | Full request lifecycle across services |
+| Events | PostHog / Amplitude | User actions, feature usage, conversion funnels |
+
+### Alert Thresholds
+
+| Target | Check Type | Frequency | Trigger | Alert |
+|--------|-----------|-----------|---------|-------|
+| Homepage | HTTP health check | Every 30s | 2 consecutive failures | PagerDuty / Slack |
+| Search API | HTTP + latency | Every 30s | p95 >500ms | Slack |
+| Auth | HTTP health check | Every 60s | 3 consecutive failures | PagerDuty / Slack |
+| Cron jobs | Log-based | Per run | Failure or >30min runtime | Slack |
+| SSL certificate | Certificate check | Daily | 30 days before expiry | Email |
+| DB connection pool | Metric poll | Every 30s | >80% utilization | Slack |
+
+### Structured Logging Schema
+
+```json
+{
+  "timestamp": "2026-06-20T14:30:00Z",
+  "level": "error",
+  "requestId": "req_xxx",
+  "userId": "usr_xxx",
+  "route": "/api/deals",
+  "statusCode": 500,
+  "duration_ms": 1250,
+  "error": "CheapShark API timeout",
+  "service": "api-client",
+  "version": "1.2.3"
+}
+```
+
+## 17. Performance Budgets
+
+### Core Web Vitals Targets (p75 Field Data)
+
+| Metric | Target | Good Threshold |
+|--------|--------|----------------|
+| LCP | <2.0s | <2.5s |
+| CLS | <0.05 | <0.1 |
+| INP | <150ms | <200ms |
+| TTFB | <600ms | <800ms |
+
+### Bundle Size Budgets
+
+| Bundle | Warning | Error |
+|--------|---------|-------|
+| First Load JS per route | >150kB | >200kB |
+| Total JS bundle | >300kB | >400kB |
+| CSS bundle | >40kB | >60kB |
+
+### CI Enforcement
+
+- `size-limit` configured in `package.json` for per-route JS budgets
+- Lighthouse CI assertions configured in `lighthouserc.js`
+- Budget failures block PR merge
+
+## 18. Analytics Event Taxonomy
+
+### Naming Convention
+
+Format: `Object-Action` (Title Case).
+
+Examples: `Account.Created`, `Deal.Viewed`, `Search.Executed`, `Wishlist.ItemAdded`.
+
+### Core Event Catalog
+
+| Event | Properties |
+|-------|-----------|
+| Account.Created | source, method |
+| Session.Started | device, referrer, utm_* |
+| Deal.Viewed | deal_id, game_id, store_id, price, source |
+| Deal.Clicked | deal_id, game_id, store_id, price, source |
+| Search.Executed | query, result_count, duration_ms |
+| Search.ResultClicked | query, result_position, game_id |
+| Wishlist.ItemAdded | game_id, source |
+| Wishlist.ItemRemoved | game_id, source |
+| Alert.Created | game_id, target_price, alert_type |
+| Alert.Triggered | alert_id, game_id, current_price, target_price |
+| Bundle.Viewed | bundle_id, game_count, total_savings |
+| Bundle.Claimed | bundle_id, store_id |
+| Collection.Viewed | slug, game_count |
+| Playlist.Created | playlist_id, game_count |
+
+### Governance
+
+- Schema as code: YAML tracking plan stored in version control
+- PR review required for any event schema change
+- 30–90 day dual-track period during event migrations (old + new names fire in parallel)
+- Historical data is never deleted
+
+## 19. Feature Flag Strategy
+
+### Flag Types
+
+| Type | Duration | Use Case | Example |
+|------|----------|----------|---------|
+| Release toggle | Days to weeks | New features before full rollout | New search UI, dark mode |
+| Experiment toggle | Weeks to months | A/B testing layouts or flows | Homepage layout variants |
+| Operational toggle | Permanent | Kill switch for external APIs | CheapShark fallback disable |
+| Permission toggle | Permanent | Beta features, admin tools | Gamification beta access |
+
+### Naming Convention
+
+Format: `{feature_area}.{feature_name}.{variation}`
+
+Examples: `search.typesense.enabled`, `ops.cheapshark-fallback.enabled`
+
+### Gradual Rollout Stages
+
+1. Internal dogfooding (team only)
+2. 1% canary
+3. 10% → 25% → 50% → 100%
+4. Full rollout + flag cleanup
+
+### Rollback Criteria
+
+| Signal | Threshold | Action |
+|--------|-----------|--------|
+| Error rate increase | >0.1% absolute | Rollback immediately |
+| Latency p95 increase | >50ms sustained | Investigate; rollback if unresolved |
+| Conversion drop | >5% relative | Rollback, investigate |
+
+## 20. Technical Debt Management
+
+### Debt Categories
+
+| Category | Tracking | Example |
+|----------|----------|---------|
+| Code debt | SonarQube issues, Fallow metrics | Complexity suppressions, unused exports |
+| Architectural debt | Design review findings | Missing ADRs, tight coupling |
+| Dependency debt | `pnpm audit`, Renovate alerts | Vulnerable packages, outdated deps |
+| Test debt | Coverage %, mutation score | Low branch coverage, untested paths |
+| Documentation debt | Missing ADRs, outdated docs | Stale manual pages, missing runbooks |
+| Compliance debt | Audit gaps | Missing consent flows, unencrypted PII |
+
+### Allocation Rule
+
+20% of sprint capacity goes to tech debt reduction:
+- 10% planned (from the register in section 7)
+- 10% unplanned (discovered during feature work)
+
+Exception: compliance debt takes priority over all other work.
+
+## 21. Security & Compliance
+
+### Applicable Frameworks
+
+| Framework | Scope | Key Requirements |
+|-----------|-------|-----------------|
+| GDPR | EU users | Consent, data minimization, right to erasure, 72h breach notification |
+| CCPA | California users | Right to know, right to delete, right to opt-out |
+
+### GDPR Technical Requirements
+
+- Cookie banner with granular opt-in (not just "accept all")
+- PII encrypted at rest (AES-256)
+- API endpoint for data export (JSON format)
+- API endpoint for account deletion (30-day grace period)
+- Data Processing Agreement (DPA) with Supabase, Vercel, and analytics providers
+- Audit logging with immutable append-only log
+
+### Security Controls Checklist
+
+| Control | Status | Notes |
+|---------|--------|-------|
+| Input validation on all API endpoints | Required | Validate at action boundary |
+| Rate limiting on auth endpoints (5 attempts/min) | Partial | In-memory only, needs distributed upgrade |
+| CSRF protection on state-changing operations | Required | Next.js SameSite cookies |
+| CSP headers, CORS restricted | Partial | Middleware adds some headers |
+| Secrets in env vars, never in code | Enforced | Pre-commit hook + CI scan |
+| Dependency vulnerability scanning | Missing | Add `pnpm audit` to CI |
+| SAST in CI | Required | Semgrep or SonarQube |
+| No `eval()` or `new Function()` in client code | Enforced | Biome rule |
+| HTTPS enforced, HSTS headers | Required | Vercel default + middleware |
+| SQL injection prevention | Enforced | Drizzle parameterized queries |
+| XSS prevention | Enforced | React auto-escapes JSX |
+
+## 22. Incident Response & On-Call
+
+### Severity Levels
+
+| Level | Definition | Response Time | Example |
+|-------|-----------|---------------|---------|
+| SEV1 | Complete outage, data loss, security breach | 15 minutes | Auth system down, DB compromised |
+| SEV2 | Major feature broken, >10% users affected | 30 minutes | Search returning empty results |
+| SEV3 | Minor feature broken, <10% users affected | 2 hours | Price history chart not loading |
+| SEV4 | Cosmetic issue, workaround available | 2 hours | Misaligned filter dropdown |
+
+### On-Call Rotation
+
+- Primary + Secondary engineer on each rotation
+- Handoff: Monday at 10am
+- Compensation: 1 week on-call = 1 day off
+
+### Postmortem Template
+
+Required for SEV1 and SEV2 incidents within 48 hours:
+
+1. **Summary** — What happened, when, how long
+2. **Timeline** — Minute-by-minute account of detection, triage, resolution
+3. **Root Cause** — Technical root cause, not just symptoms
+4. **Impact** — Users affected, data affected, revenue affected
+5. **Action Items** — Preventive and corrective, with owners and deadlines
+6. **Lessons Learned** — What went well, what didn't, what to change
+
+## 23. Developer Experience (DX)
+
+### Local Development
+
+| Command | Purpose | Notes |
+|---------|---------|-------|
+| `pnpm dev` | Dev server (Turbopack) | Hot reload <1s |
+| `pnpm test:watch` | Vitest watch mode | Re-runs changed files |
+| `pnpm db:studio` | Drizzle Studio | Visual DB browser at localhost |
+| `pnpm lint:fix` | Biome auto-fix | Format + fix on staged files |
+
+### CI/CD Pipeline (GitHub Actions)
+
+**quality job:**
+`lint → tsc → test:coverage → integration → sonarcloud → build → knip → fallow`
+
+**e2e job:**
+`build → Playwright`
+
+**Deployment:**
+- Vercel preview on PR
+- Vercel production on main merge
+
+### Code Quality Gates (Pre-Push, ~60s)
+
+| Check | Command | Required Result |
+|-------|---------|----------------|
+| Lint | `biome check .` | 0 errors |
+| Type check | `tsc --noEmit` | 0 errors |
+| Tests | `pnpm test -- --run` | ALL pass |
+| Coverage | `pnpm test:coverage` | Thresholds met |
+
+### Git Hooks
+
+| Hook | Tool | What It Does |
+|------|------|-------------|
+| pre-commit | lint-staged | Biome format on staged files |
+| pre-push | `pnpm check` | Full CI suite (lint → tsc → test → build → knip → fallow) |
