@@ -5,7 +5,7 @@ import { verifyCronAuth } from '@/lib/cron-auth';
 import { CronError, handleCronError } from '../_lib/errors';
 
 /**
- * Vercel Cron Job — runs every 4h
+ * Vercel Cron Job — runs hourly
  * GET /api/cron/ingest-prices
  * Auth: Bearer token via CRON_SECRET
  */

@@ -74,10 +74,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Dead code (strict)
         run: pnpm knip
-        continue-on-error: true
+        continue-on-error: true  # Nightly informational — may flag in-progress work or planned removals
       - name: Complexity audit
         run: pnpm fallow:audit
-        continue-on-error: true
+        continue-on-error: true  # Nightly informational — inherits pre-existing findings
 
   # ── Full E2E (sem skip, com DB real) ──
   e2e-full:
@@ -120,7 +120,6 @@ jobs:
         run: pnpm build
       - name: Run DB migrations
         run: pnpm db:migrate
-        continue-on-error: true
       - name: Full E2E suite
         run: pnpm test:e2e
       - name: Upload Playwright report
