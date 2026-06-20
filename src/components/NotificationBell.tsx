@@ -92,7 +92,7 @@ export default function NotificationBell() {
   const unread = data?.unread ?? 0;
 
   return (
-    <div className={styles.wrapper} ref={ref}>
+    <div className={styles.wrapper} ref={ref} aria-live="polite">
       <NotificationBellButton unread={unread} onClick={() => setOpen((v) => !v)} />
 
       {open && (

@@ -241,8 +241,13 @@
   box-shadow: 0 4px 15px hsl(var(--primary) / 0.3);
 }
 
-.userMenu {
+.userMenuWrapper {
   position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.userMenu {
   display: flex;
   align-items: center;
   gap: 0.75rem;

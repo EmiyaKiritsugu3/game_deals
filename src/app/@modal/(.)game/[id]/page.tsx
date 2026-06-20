@@ -34,7 +34,6 @@ async function GameModalContent({ id }: Readonly<{ id: string }>) {
   const viewModel = {
     gameTitle: game.info.title,
     highResThumb,
-    bestCurrentPrice,
     bestRawPrice: sortedDeals[0]?.price ?? '0',
     stats,
     official,

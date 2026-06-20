@@ -158,9 +158,8 @@
 }
 
 .emptyIcon {
-  color: hsl(var(--muted-foreground));
+  color: hsl(var(--muted-foreground) / 0.3);
   margin-bottom: 0.5rem;
-  opacity: 0.5;
 }
 
 @media (max-width: 600px) {

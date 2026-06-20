@@ -66,7 +66,6 @@ export default async function GamePage({ params }: Readonly<{ params: Promise<{ 
   const viewModel = {
     gameTitle: game.info.title,
     highResThumb,
-    bestCurrentPrice,
     bestRawPrice: sortedDeals[0]?.price ?? '0',
     stats: { ...stats, costPerHour, playtimeMain: playtime.mainStory },
     official,
