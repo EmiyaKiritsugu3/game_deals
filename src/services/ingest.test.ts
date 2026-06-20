@@ -124,6 +124,17 @@ describe('upsertGames', () => {
     expect(result.size).toBe(0);
     expect(mockInsert).not.toHaveBeenCalled();
   });
+
+  it('skips games where returning has no id', async () => {
+    mockReturning.mockResolvedValueOnce([{ id: null }]);
+
+    const singleDeal = [sampleDeals[0]];
+    if (!singleDeal[0]) throw new Error('sampleDeals[0] should be defined');
+    const result = await upsertGames(singleDeal);
+
+    expect(result.size).toBe(0);
+    expect(result.has('187203')).toBe(false);
+  });
 });
 
 describe('buildDealsInsertValues', () => {

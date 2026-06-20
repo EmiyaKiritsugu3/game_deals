@@ -1,5 +1,16 @@
 # Changelog
 
+## [v0.4.0] — 2026-06-19
+
+### Sprint 6 — Coverage Push & Methodology Archival (#32)
+
+- **Coverage**: 50.71%→59.29% lines (+8.58pp), 42.08%→49.5% branches (+7.42pp)
+- **Tests**: 506→578 (+72). 13 new test files (fetch-helpers, game-enrichment, social, cron-auth, middleware, client, supabase-browser, useUserAlerts, useAuthSubscription, useClickOutside, useCarousel, useShareWishlist, useWishlistSavedGames)
+- **Methodology**: Failed 3-phase SPEC→BUILD→REVIEW experiment archived. Kept CI Nightly + test patterns.
+- **Simple workflow**: Adopted — explore → implement → gate → PR
+- **PR #32**: All CI checks green, all 13 target files at 100% branch coverage
+- **Subagents**: 4 succeeded (deep category), 4 failed (written manually)
+
 ## [v0.3.0] — 2026-06-18
 
 ### Sprint 3 — Phase C: Polish (#23)

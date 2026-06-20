@@ -35,7 +35,7 @@ pnpm start                # Production server
 pnpm lint                 # Biome check
 pnpm lint:fix             # Biome check + auto-fix
 pnpm format               # Biome format
-pnpm test                 # Vitest unit (423 tests)
+pnpm test                 # Vitest unit (578 tests)
 pnpm test:watch           # Vitest watch
 pnpm test:coverage        # Vitest with coverage
 pnpm test:e2e             # Playwright E2E
@@ -118,7 +118,7 @@ vitest.config.ts       # Vitest configuration (node + jsdom per-file)
 
 ## Stats
 
-- **Tests**: 423 (44 files, 42.5% coverage)
+- **Tests**: 578 (13 service/hook test files + 44 existing, 59.29% lines / 49.5% branches)
 - **SonarQube**: 0 open issues
 - **Fallow CRITICAL**: 0 (was 1)
 - **Knip unused types**: 0 (was 9)
@@ -143,3 +143,4 @@ vitest.config.ts       # Vitest configuration (node + jsdom per-file)
 | [Session — PR #12](docs/reports/pr12-session-report.md) | P0 notifications pipeline + audit fixes |
 | [Session — PR #14](docs/reports/pr14-session-report.md) | Audit gap-closure + 207 tests + 0 CRITICAL |
 | [Session — PR #15](docs/reports/pr15-session-report.md) | Price alerts end-to-end: /alerts page, cron infra, type safety, component tests |
+| [Sprint 6 — Coverage](docs/reports/sprint6-coverage-report.md) | Coverage push 50.7%→59.29%, 13 new test files, methodology archiving |

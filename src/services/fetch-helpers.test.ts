@@ -19,22 +19,15 @@ describe('fetchDealsWithFallback', () => {
   });
 
   it('returns fallbackDeals when response is not ok', async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: false,
-      json: () => Promise.resolve([]),
-    });
-
+    mockFetch.mockResolvedValueOnce({ ok: false, json: () => Promise.resolve([]) });
     const result = await fetchDealsWithFallback('https://www.cheapshark.com/api/1.0/deals');
-
     expect(result).toEqual(fallbackDeals);
   });
 
   it('returns fallbackDeals and logs error when fetch throws', async () => {
     const networkError = new Error('Network failure');
     mockFetch.mockRejectedValueOnce(networkError);
-
     const result = await fetchDealsWithFallback('https://www.cheapshark.com/api/1.0/deals');
-
     expect(result).toEqual(fallbackDeals);
     expect(mockConsoleError).toHaveBeenCalledWith('fetchDeals error:', networkError);
   });
@@ -63,13 +56,8 @@ describe('fetchDealsWithFallback', () => {
         thumb: 'https://example.com/thumb.jpg',
       },
     ];
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve(sampleDeals),
-    });
-
+    mockFetch.mockResolvedValueOnce({ ok: true, json: () => Promise.resolve(sampleDeals) });
     const result = await fetchDealsWithFallback('https://www.cheapshark.com/api/1.0/deals');
-
     expect(result).toHaveLength(1);
     expect(result[0]).toMatchObject({
       internalName: 'TESTGAME',
@@ -83,25 +71,15 @@ describe('fetchDealsWithFallback', () => {
   });
 
   it('returns fallbackDeals when response data is empty array', async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve([]),
-    });
-
+    mockFetch.mockResolvedValueOnce({ ok: true, json: () => Promise.resolve([]) });
     const result = await fetchDealsWithFallback('https://www.cheapshark.com/api/1.0/deals');
-
     expect(result).toEqual(fallbackDeals);
   });
 
   it('returns fallbackDeals when JSON parsing fails', async () => {
     const parseError = new Error('Unexpected token');
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.reject(parseError),
-    });
-
+    mockFetch.mockResolvedValueOnce({ ok: true, json: () => Promise.reject(parseError) });
     const result = await fetchDealsWithFallback('https://www.cheapshark.com/api/1.0/deals');
-
     expect(result).toEqual(fallbackDeals);
     expect(mockConsoleError).toHaveBeenCalledWith('fetchDeals error:', parseError);
   });
@@ -109,12 +87,10 @@ describe('fetchDealsWithFallback', () => {
   it('uses custom errorContext in console.error on failure', async () => {
     const customError = new Error('Custom context error');
     mockFetch.mockRejectedValueOnce(customError);
-
     const result = await fetchDealsWithFallback(
       'https://www.cheapshark.com/api/1.0/deals',
       'customContext'
     );
-
     expect(result).toEqual(fallbackDeals);
     expect(mockConsoleError).toHaveBeenCalledWith('customContext error:', customError);
   });
@@ -134,11 +110,7 @@ describe('fetchGameDetails', () => {
 
   it('returns parsed game details when response is ok', async () => {
     const sampleDetails = {
-      info: {
-        title: 'Test Game',
-        steamAppID: '12345',
-        thumb: 'https://example.com/thumb.jpg',
-      },
+      info: { title: 'Test Game', steamAppID: '12345', thumb: 'https://example.com/thumb.jpg' },
       cheapestPriceEver: { price: '9.99', date: 1_600_000_000 },
       deals: [
         {
@@ -151,13 +123,8 @@ describe('fetchGameDetails', () => {
         },
       ],
     };
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve(sampleDetails),
-    });
-
+    mockFetch.mockResolvedValueOnce({ ok: true, json: () => Promise.resolve(sampleDetails) });
     const result = await fetchGameDetails('123');
-
     expect(result).toEqual(sampleDetails);
   });
 

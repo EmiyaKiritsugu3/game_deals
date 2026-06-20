@@ -161,4 +161,56 @@ describe('alertStore', () => {
     expect(updated?.targetPrice).toBe(5.99);
     expect(updated?.alertId).toBe('server-uuid-abc');
   });
+
+  it('addAlert update: map ternary false path exercised (non-matching gameIDs preserved)', () => {
+    const { addAlert } = useAlerts.getState();
+    addAlert(mockAlert);
+    addAlert(mockAlert2);
+    addAlert({ ...mockAlert, targetPrice: 3.99 });
+    const { alerts } = useAlerts.getState();
+    expect(alerts).toHaveLength(2);
+    expect(alerts.find((a) => a.gameID === 'game-1')?.targetPrice).toBe(3.99);
+    expect(alerts.find((a) => a.gameID === 'game-2')?.targetPrice).toBe(14.99);
+  });
+
+  it('hasAlert returns false when alerts exist but none match', () => {
+    const { addAlert, hasAlert } = useAlerts.getState();
+    addAlert(mockAlert);
+    addAlert(mockAlert2);
+    expect(hasAlert('game-unknown')).toBe(false);
+  });
+
+  it('getAlert returns undefined when alerts exist but none match', () => {
+    const { addAlert, getAlert } = useAlerts.getState();
+    addAlert(mockAlert);
+    addAlert(mockAlert2);
+    expect(getAlert('game-unknown')).toBeUndefined();
+  });
+
+  it('setAlertId: ternary false path exercised (non-matching gameIDs unaffected)', () => {
+    const { addAlert, setAlertId, getAlert } = useAlerts.getState();
+    addAlert(mockAlert);
+    addAlert(mockAlert2);
+    setAlertId('game-1', 'alert-id-1');
+    expect(getAlert('game-1')?.alertId).toBe('alert-id-1');
+    expect(getAlert('game-2')?.alertId).toBeUndefined();
+  });
+
+  it('removeAlert: filter false path exercised (non-matching gameID kept)', () => {
+    const { addAlert, removeAlert } = useAlerts.getState();
+    addAlert(mockAlert);
+    addAlert(mockAlert2);
+    addAlert({
+      gameID: 'game-3',
+      gameTitle: 'Game 3',
+      targetPrice: 1,
+      currentPrice: 2,
+      isKeyshopAllowed: false,
+      storeId: 'steam',
+    });
+    removeAlert('game-2');
+    const { alerts } = useAlerts.getState();
+    expect(alerts).toHaveLength(2);
+    expect(alerts.map((a) => a.gameID)).toEqual(['game-1', 'game-3']);
+  });
 });

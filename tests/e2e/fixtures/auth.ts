@@ -1,12 +1,15 @@
-import { type Page, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
+
+export function hasAuthCredentials(): boolean {
+  return !!(process.env.TEST_SUPABASE_USER_EMAIL && process.env.TEST_SUPABASE_USER_PASSWORD);
+}
 
 export async function signInAsTestUser(page: Page): Promise<void> {
   const email = process.env.TEST_SUPABASE_USER_EMAIL;
   const password = process.env.TEST_SUPABASE_USER_PASSWORD;
 
   if (!email || !password) {
-    test.skip(true, 'Skipping: no E2E auth credentials configured');
-    return;
+    throw new Error('E2E auth credentials not configured');
   }
 
   await page.goto('/', { waitUntil: 'domcontentloaded' });

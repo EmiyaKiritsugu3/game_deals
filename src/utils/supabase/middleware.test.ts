@@ -96,4 +96,37 @@ describe('updateSession', () => {
     expect(response.cookies.get('sb-test')?.value).toBe('test-value');
     expect(request.cookies.get('sb-test')?.value).toBe('test-value');
   });
+
+  it('calls getAll to read existing request cookies', async () => {
+    const supabase = mockSupabase({ id: 'u1' });
+    const request = makeRequest('/some-page');
+    request.cookies.set('sb-access-token', 'token-abc');
+    request.cookies.set('sb-refresh-token', 'refresh-xyz');
+
+    mockCreateServerClient.mockImplementation((_url, _key, { cookies }) => {
+      const result = cookies.getAll();
+      expect(result).toEqual([
+        { name: 'sb-access-token', value: 'token-abc' },
+        { name: 'sb-refresh-token', value: 'refresh-xyz' },
+      ]);
+      return supabase;
+    });
+
+    const response = await updateSession(request);
+    expect(response.status).toBe(200);
+  });
+
+  it('handles empty cookies in getAll', async () => {
+    const supabase = mockSupabase(null);
+    const request = makeRequest('/some-page');
+
+    mockCreateServerClient.mockImplementation((_url, _key, { cookies }) => {
+      const result = cookies.getAll();
+      expect(result).toEqual([]);
+      return supabase;
+    });
+
+    const response = await updateSession(request);
+    expect(response.status).toBe(200);
+  });
 });
