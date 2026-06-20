@@ -147,7 +147,9 @@ describe('DynamicStoreCompare', () => {
       />
     );
     const chartDiv = screen.getByTestId('dynamic-chart');
-    const props = JSON.parse(chartDiv.textContent || '{}') as { data: { storeName: string; price: string }[] };
+    const props = JSON.parse(chartDiv.textContent || '{}') as {
+      data: { storeName: string; price: string }[];
+    };
     expect(props.data).toHaveLength(2);
     expect(props.data[0].storeName).toBe('Steam');
   });
