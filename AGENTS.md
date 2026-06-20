@@ -4,7 +4,7 @@ This file provides guidance to OpenCode agent when working with code in this rep
 
 ## Repository Overview
 
-GameDeals is a game deal aggregator built with Next.js 16 App Router (React 19), Supabase SSR auth, Drizzle ORM, and TanStack Query. Data source is CheapShark API with Typesense search acceleration. Tests: 681 (Vitest) + Playwright visual regression + E2E.
+GameDeals is a game deal aggregator built with Next.js 16 App Router (React 19), Supabase SSR auth, Drizzle ORM, and TanStack Query. Data source is CheapShark API with Typesense search acceleration. Tests: 892 (Vitest) + Playwright visual regression + E2E.
 
 ## Commands
 
@@ -723,3 +723,35 @@ PRD metrics and status can drift significantly from actual codebase state within
 - 8 items marked "Missing" were already fixed
 
 **Rule**: Audit PRD against codebase quarterly. Never trust PRD metrics without verification.
+
+---
+
+## Session Learnings (Sprint 10 — Security & Trust — 2026-06-20)
+
+### PRD Stale Audit Revealed 8/11 P0/P1 Items Already Done
+Before planning Sprint 10, a codebase audit found that most PRD P0/P1 items were already implemented:
+- Sentry: `@sentry/nextjs` v10.58 already installed, `withSentryConfig` in next.config.ts, 3 config files
+- Alerts dual-storage: fixed in PR #23 (server-first architecture)
+- deletePriceAlertAction: already atomic (`DELETE WHERE id=$1 AND "userId"=$2`)
+- Portuguese strings: 0 matches found
+- Sitemap game detail: already queries DB
+- PWA manifest + favicon: both exist
+- Wishlist cloud sync: SyncManager has loadCloudWishlist
+- Complexity suppressions: 0 fallow-ignore remaining
+
+**Rule**: Always audit PRD against codebase before planning sprints. The PRD can be months out of date.
+
+### Vercel Hobby Plan Cron Limit
+Vercel Hobby plan limits cron jobs to **once per day**. Expressions like `0 * * * *` (hourly) fail deployment with: *"Hobby accounts are limited to daily cron jobs."* For hourly cron, upgrade to Pro plan. Workaround: use daily schedules (midnight, 3am, 6am).
+
+### Parallel Subagents Hit 429 Rate Limits
+Launching 4+ subagents simultaneously on primary model triggers 429 rate limits. Fallback model (minimax-m3-free) gets stuck. **Rule**: Max 2-3 parallel subagents. If agents stall >3min, cancel and read files directly.
+
+### Explore Agents Stuck After 8min = Cancel and Read Directly
+Background explore agents sometimes hang for 8+ minutes without returning results. After 5min with no output, cancel and use direct tools (Read, Grep, Glob). More efficient than waiting.
+
+### Stale Test Files Pass By Accident
+`src/lib/rate-limit.test.ts` (9 tests) passed without mocking `@upstash/ratelimit` because missing env vars caused fallback to PostgreSQL (which was mocked). Tests were testing the fallback path by accident, not the intended Upstash path. **Rule**: When migrating implementations, always check if existing tests mock the old dependency.
+
+### CI Integration Tests Step Was Not Actually Removed
+The first attempt to remove `continue-on-error` from ci.yml removed the flag but left the "Integration Tests" step in place. Oracle caught this on re-verification. **Rule**: When removing CI steps, verify the step itself is removed, not just the flag.

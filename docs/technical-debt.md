@@ -211,3 +211,34 @@ Tracking known technical debt items across the GameDeals codebase. Items priorit
 **Issue:** Commit 7165bea replaced the middleware matcher regex with `String.raw\`...\`` to fix SonarQube S7780. Next.js 16 uses SWC to statically extract `export const config` from middleware — SWC cannot parse tagged template expressions, throws `UnsupportedValueError`, triggering "Invalid segment configuration export detected" error at build time.
 
 **Resolution (PR #23):** Reverted to plain string: `'/((?!_next/static|_next/image|favicon.ico|api/cron(?:/|$)|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'`. Added NOSONAR comment explaining the constraint. Build, CI (quality + e2e), and Vercel deployment all fixed.
+
+---
+
+## P17 ✅ — (CLOSED) Sprint 10: Rate Limiter — PostgreSQL Advisory Locks
+
+**Issue:** Rate limiter used PostgreSQL advisory locks (`pg_advisory_xact_lock`). Works correctly but not distributed across Vercel serverless instances — each instance has its own DB connection pool, and advisory locks are connection-scoped.
+
+**Resolution (PR #38):** Migrated to Upstash Redis (`@upstash/ratelimit` sliding window) as primary, with PostgreSQL advisory locks as fallback. Same API surface: `rateLimit(key, maxAttempts, windowMs)` → boolean. Fallback triggers on any Upstash error or missing env vars.
+
+---
+
+## P18 ✅ — (CLOSED) Sprint 10: Cron Schedule Triggers Missing
+
+**Issue:** All 3 cron endpoints (`ingest-prices`, `reindex-typesense`, `check-alerts`) required manual trigger. No automated schedule configured.
+
+**Resolution (PR #38):** Added `vercel.json` with cron schedules. Vercel Hobby plan limits cron to 1x/day, so schedules are daily:
+- `ingest-prices`: `0 0 * * *` (midnight)
+- `reindex-typesense`: `0 3 * * *` (3am)
+- `check-alerts`: `0 6 * * *` (6am)
+
+---
+
+## P19 ✅ — (CLOSED) Sprint 10: CI continue-on-error Masking Failures
+
+**Issue:** 6 `continue-on-error: true` across ci.yml and nightly.yml masked critical test/build failures from blocking PRs.
+
+**Resolution (PR #38):** Removed from critical steps (Integration Tests, DB migrations). Kept with justification comments on non-critical external tools (SonarCloud, Fallow, knip, fallow complexity).
+
+---
+
+## P11 ✅ — (CLOSED) Sprint 15: deletePriceAlertAction Non-Atomic

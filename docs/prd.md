@@ -21,7 +21,7 @@ GameDeals helps gamers find the best prices on digital games across 17+ storefro
 | Affiliate redirect `/out/[storeId]/[slug]` | Live | 17 store allowlist, click logging |
 | Auth (Supabase SSR) | Live | Email/password, Google, Discord OAuth |
 | SyncManager | Live | Debounced Zustand-to-Supabase sync |
-| 3 cron endpoints | Live | Manual trigger only, no schedule |
+| 3 cron endpoints | Live | Daily schedule via Vercel Cron Jobs (Hobby plan limit: 1x/day) |
 | Sitemap | Live | Static pages only — no game detail URLs |
 | Price history chart | Live | Weekly/daily aggregation |
 | Playlists | Live | Create/add actions, listing page at `/playlists`, individual view at `/playlists/[id]` |
@@ -53,7 +53,7 @@ GameDeals helps gamers find the best prices on digital games across 17+ storefro
 
 | Metric | Value |
 |--------|-------|
-| Tests (Vitest) | 896 passing across 100 files |
+| Tests (Vitest) | 892 passing across 100 files |
 | E2E tests (Playwright) | 3 spec files (alerts-crud, alerts, visual regression) |
 | Coverage — lines | 82.42% (threshold: 80%) |
 | Coverage — functions | 76.85% (threshold: 75%) |
@@ -61,7 +61,7 @@ GameDeals helps gamers find the best prices on digital games across 17+ storefro
 | Coverage — statements | 82.27% (threshold: 80%) |
 | Fallow CRITICAL | 0 |
 | Knip unused exports | 0 (5 config hints remain) |
-| CI checks | 2 workflows, 8 quality gates (quality: lint→tsc→test→integration→sonarcloud→build→knip→fallow; e2e job; vercel preview) |
+| CI checks | 2 workflows, 8 quality gates (quality: lint→tsc→test→sonarcloud→build→knip→fallow; e2e job; vercel preview) |
 | ADRs | 11 Accepted, 1 Proposed (ADR-007 status ambiguous — see note below) |
 | DB tables | 11 |
 | SQL functions | 10 migrations |
@@ -350,23 +350,23 @@ Organized by severity with file references.
 
 ### P0 — Ship Now (breaks core experience or is missing)
 
-| Item | Type | Effort | Dependencies |
-|------|------|--------|--------------|
-| Integrate Sentry error monitoring | NFR/Security | 4h | Sentry account setup |
-| Replace in-memory rate limiter with Upstash/Vercel KV | NFR/Security | 1d | Vercel KV provisioned |
-| Configure cron schedule triggers | Admin | 2h | Vercel Cron Jobs config |
-| Fix alerts dual-storage architecture ⚠️ DATA LOSS | Tech Debt | 2d | Refactor PriceAlertModal to call server actions |
+| Item | Type | Effort | Status |
+|------|------|--------|--------|
+| Integrate Sentry error monitoring | NFR/Security | 4h | ✅ Done (PR #38 — pre-existing) |
+| Replace in-memory rate limiter with Upstash/Vercel KV | NFR/Security | 1d | ✅ Done (PR #38) |
+| Configure cron schedule triggers | Admin | 2h | ✅ Done (PR #38) |
+| Fix alerts dual-storage architecture ⚠️ DATA LOSS | Tech Debt | 2d | ✅ Done (PR #23) |
 
 ### P1 — High Impact (blocks quality or user trust)
 
-| Item | Type | Effort | Dependencies |
-|------|------|--------|--------------|
-| Add cloud to local wishlist sync | Feature | 4h | SyncManager refactor |
-| Replace ~15+ Portuguese strings across 4+ files with English | NFR/i18n | 1h | None |
-| Add PWA service worker | NFR/PWA | 2d | PWA manifest done first |
-| Add game detail pages to sitemap | Feature | 1d | DB query for game IDs |
-| Reduce 9 complexity suppressions | Tech Debt | 1d | Extract sub-functions |
-| deletePriceAlertAction single atomic DELETE | Tech Debt | 5min | None |
+| Item | Type | Effort | Status |
+|------|------|--------|--------|
+| Add cloud to local wishlist sync | Feature | 4h | ✅ Done (SyncManager) |
+| Replace ~15+ Portuguese strings across 4+ files with English | NFR/i18n | 1h | ✅ Done (0 matches found) |
+| Add PWA service worker | NFR/PWA | 2d | ❌ Not done |
+| Add game detail pages to sitemap | Feature | 1d | ✅ Done (sitemap.ts queries DB) |
+| Reduce 9 complexity suppressions | Tech Debt | 1d | ✅ Done (0 fallow-ignore remaining) |
+| deletePriceAlertAction single atomic DELETE | Tech Debt | 5min | ✅ Done (PR #23) |
 
 ### P2 — Medium Impact (blocks polish or future velocity)
 
