@@ -35,7 +35,7 @@ pnpm start                # Production server
 pnpm lint                 # Biome check
 pnpm lint:fix             # Biome check + auto-fix
 pnpm format               # Biome format
-pnpm test                 # Vitest unit (578 tests)
+pnpm test                 # Vitest unit (681 tests)
 pnpm test:watch           # Vitest watch
 pnpm test:coverage        # Vitest with coverage
 pnpm test:e2e             # Playwright E2E
@@ -118,7 +118,7 @@ vitest.config.ts       # Vitest configuration (node + jsdom per-file)
 
 ## Stats
 
-- **Tests**: 578 (13 service/hook test files + 44 existing, 59.29% lines / 49.5% branches)
+- **Tests**: 681 (59.29%→70.45% lines / 49.5%→59.96% branches)
 - **SonarQube**: 0 open issues
 - **Fallow CRITICAL**: 0 (was 1)
 - **Knip unused types**: 0 (was 9)

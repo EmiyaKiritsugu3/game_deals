@@ -4,7 +4,7 @@ This file provides guidance to OpenCode agent when working with code in this rep
 
 ## Repository Overview
 
-GameDeals is a game deal aggregator built with Next.js 16 App Router (React 19), Supabase SSR auth, Drizzle ORM, and TanStack Query. Data source is CheapShark API with Typesense search acceleration. Tests: 423 (Vitest) + Playwright visual regression + E2E.
+GameDeals is a game deal aggregator built with Next.js 16 App Router (React 19), Supabase SSR auth, Drizzle ORM, and TanStack Query. Data source is CheapShark API with Typesense search acceleration. Tests: 681 (Vitest) + Playwright visual regression + E2E.
 
 ## Commands
 

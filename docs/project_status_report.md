@@ -1,7 +1,7 @@
 # 📊 Relatório de Estado do Projeto: GameDeals
 
 **Data:** 19 de Junho de 2026  
-**Status Global:** 🟢 ESTÁVEL | SPRINT 6 CONCLUÍDA | 578 TESTES | 59.29% COBERTURA
+**Status Global:** 🟢 ESTÁVEL | SPRINT 7 CONCLUÍDA | 681 TESTES | 70.45% COBERTURA
 
 ---
 
@@ -42,25 +42,23 @@ O projeto foi consolidado seguindo as melhores práticas de Next.js 14+ e modula
 
 ---
 
-## 📈 3.5 Métricas — Sprint 6 (PR #32 — Jun 19)
+## 📈 3.5 Métricas — Sprint 7 (PR #33 — Jun 19)
 
-| Métrica | Sprint 3 | Sprint 6 | Δ |
+| Métrica | Sprint 6 | Sprint 7 | Δ |
 |---------|----------|----------|---|
-| Testes | 423 | **578** | +155 |
-| Cobertura (lines) | 42.5% | **59.29%** | +16.79pp |
-| Cobertura (branches) | 35% | **49.5%** | +14.5pp |
+| Testes | 578 | **681** | +103 |
+| Cobertura (lines) | 59.29% | **70.45%** | +11.16pp |
+| Cobertura (branches) | 49.5% | **59.96%** | +10.46pp |
 | Fallow CRITICAL | 0 | **0** | — |
-| Knip unused types | 0 | **0** | — |
-| SonarQube issues | 0 | **0** | — |
-| Maintainability | 91.2 | **91.2** | — |
+| SonarQube issues | 1 (S7780) | **1 (S7780)** | — (false positive) |
 
-**Principais entregas Sprint 6:**
-- 13 novos arquivos de teste (services, lib, utils, hooks) — 72 testes adicionados
-- 100% branch coverage em cada um dos 13 novos arquivos
-- Cobertura geral: linhas 50.71%→59.29%, branches 42.08%→49.5%
-- Metodologia experimental SPEC→BUILD→REVIEW arquivada (excesso de overhead)
-- Workflow simplificado adotado: explorar → implementar → gate → PR
-- CI Nightly mantido como único artefato do experimento
+**Principais entregas Sprint 7:**
+- 7 novos arquivos de teste (componentes + middleware + server)
+- Extensão de testes existentes (deals, search, stores, services)
+- Dead code removido: useAlertsSync, useCloudToLocalSync (useSyncHooks.ts)
+- S1607 corrigido: test.skip movido de helper para caller
+- S7924 CSS contrast: 11 issues marcadas FALSE-POSITIVE no SonarQube
+- Team-based execution com 4 agents paralelos (sprint-7 team)
 
 ## 📈 3.6 Histórico de Métricas
 
@@ -69,14 +67,14 @@ O projeto foi consolidado seguindo as melhores práticas de Next.js 14+ e modula
 | Jun 14 | Sprint 1 (baseline) | 95 | ~15% | ~10% |
 | Jun 15 | PR #14 (audit gap) | 207 | ~26% | ~20% |
 | Jun 17 | Sprint 2 (#22) | 423 | 42.5% | 35% |
-| Jun 18 | Sprint 3 (#23)
- | 423 | 42.5% | 35% |
-| Jun 19 | **Sprint 6 (#32)** | **578** | **59.29%** | **49.5%** |
+| Jun 18 | Sprint 3 (#23) | 423 | 42.5% | 35% |
+| Jun 19 | Sprint 6 (#32) | 578 | 59.29% | 49.5% |
+| Jun 19 | **Sprint 7 (#33)** | **681** | **70.45%** | **59.96%** |
 
 ---
 
 ## 🚀 4. Próximos Passos
-1. **Cobertura 60%+** — Continuar push de coverage (próximo marco: 60% linhas)
+1. **Cobertura 80%+** — Continuar push de coverage (próximo marco: 80% linhas)
 2. **Alerts Dashboard** — UI de gerenciamento de alertas de preço (feature real)
 3. **Search UX** — Melhorias na busca (debounce, resultados, filtros)
 4. **Integração tests** — Testes de banco e Server Actions com DB real
