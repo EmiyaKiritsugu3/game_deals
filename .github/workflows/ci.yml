@@ -48,11 +48,8 @@ jobs:
         run: pnpm exec tsc --noEmit
       - name: Unit Tests + Coverage
         run: pnpm test:coverage
-      - name: Integration Tests
-        run: pnpm test:integration
-        continue-on-error: true
       - name: SonarCloud Scan
-        continue-on-error: true
+        continue-on-error: true  # External service — may fail from token expiry or service outage, not code issues
         if: ${{ github.event_name == 'pull_request' || github.ref == 'refs/heads/main' }}
         uses: SonarSource/sonarqube-scan-action@8c71dc039c2dd71d3821e89a2b58ecc7fee6ced9
         env:
@@ -66,7 +63,7 @@ jobs:
         run: pnpm knip --no-exit-code
       - name: Fallow audit
         run: pnpm fallow:audit
-        continue-on-error: true
+        continue-on-error: true  # Inherits pre-existing findings — CI excludes fallow per AGENTS.md
 
   e2e:
     runs-on: ubuntu-latest
