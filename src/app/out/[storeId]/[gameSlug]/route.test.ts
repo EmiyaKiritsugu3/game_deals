@@ -61,6 +61,23 @@ describe('GET /out/[storeId]/[gameSlug]', () => {
     expect(track).toHaveBeenCalled();
     expect(response.status).toBe(302);
   });
+
+  it('logs error when affiliate click insert fails (L3)', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    execute
+      .mockResolvedValueOnce([{ url: 'https://store.steampowered.com/deal/123', storeId: '1' }])
+      .mockRejectedValueOnce(new Error('DB insert failed'));
+
+    const response = await GET(new Request('http://localhost:3000/out/1/awesome-game'), {
+      params: Promise.resolve({ storeId: '1', gameSlug: 'awesome-game' }),
+    });
+
+    expect(response.status).toBe(302);
+    // Allow async console.error to fire
+    await new Promise((r) => setTimeout(r, 10));
+    expect(spy).toHaveBeenCalledWith('affiliate_click insert failed:', expect.any(Error));
+    spy.mockRestore();
+  });
 });
 
 function extractIpFromExecute(): string | undefined {
