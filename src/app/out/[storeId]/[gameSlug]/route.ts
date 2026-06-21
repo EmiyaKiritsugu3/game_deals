@@ -9,6 +9,14 @@ import {
   isValidStoreId,
 } from '@/lib/affiliate-config';
 
+function getClientIp(request: Request): string {
+  const real = request.headers.get('x-real-ip');
+  if (real) return real;
+  const fwd = request.headers.get('x-forwarded-for');
+  if (fwd) return fwd.split(',')[0]?.trim() ?? 'unknown';
+  return 'unknown';
+}
+
 async function lookupDealUrl(storeId: string): Promise<string> {
   try {
     const [deal] = (await db.execute(sql`
@@ -71,7 +79,7 @@ export async function GET(
   targetUrl = applyAffiliateParams(targetUrl, storeId);
 
   if (targetUrl) {
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
+    const ip = getClientIp(request);
     logClick(storeId, gameSlug, ip);
 
     track('affiliate_click', { store_id: storeId, game_slug: gameSlug }).catch(() => {});
