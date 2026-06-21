@@ -2,7 +2,7 @@
 
 import { Globe, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
-import { siGithub } from 'simple-icons';
+import { siDiscord } from 'simple-icons';
 import BaseModal from '@/components/ui/BaseModal';
 import { getBrowserClient } from '@/lib/supabase-browser';
 import styles from './AuthModal.module.css';
@@ -116,10 +116,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             viewBox="0 0 24 24"
             width="20"
             height="20"
-            fill={`#${siGithub.hex}`}
-            aria-label={siGithub.title}
+            fill={`#${siDiscord.hex}`}
+            aria-label={siDiscord.title}
           >
-            <path d={siGithub.path} />
+            <path d={siDiscord.path} />
           </svg>
           <span>Continue with Discord</span>
         </button>

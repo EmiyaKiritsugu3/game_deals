@@ -13,11 +13,7 @@ interface AlertsGridProps {
 function EmptyAlertsState() {
   return (
     <div className={styles.emptyState}>
-      <Bell
-        size={64}
-        className={styles.emptyIcon}
-        style={{ color: 'hsl(var(--muted-foreground)/0.3)' }}
-      />
+      <Bell size={64} className={styles.emptyIcon} />
       <h2>No alerts configured</h2>
       <p>
         Open any game page and click &ldquo;Alert Me&rdquo; to be notified when the price drops!

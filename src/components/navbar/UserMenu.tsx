@@ -73,19 +73,29 @@ function UserAvatar({ user, serverUser }: UserMenuProps) {
 export function UserMenu({ user, serverUser }: UserMenuProps) {
   const { logout } = useAuth();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const userMenuRef = useClickOutside<HTMLButtonElement>(() => setIsUserMenuOpen(false));
+  const wrapperRef = useClickOutside<HTMLDivElement>(() => setIsUserMenuOpen(false));
 
   return (
-    <button
-      className={styles.userMenu}
-      ref={userMenuRef}
-      onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-      type="button"
-    >
-      <UserAvatar user={user} serverUser={serverUser} />
-      <ChevronDown size={14} />
+    <div className={styles.userMenuWrapper} ref={wrapperRef}>
+      <button
+        className={styles.userMenu}
+        onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setIsUserMenuOpen(!isUserMenuOpen);
+          }
+          if (e.key === 'Escape') setIsUserMenuOpen(false);
+        }}
+        type="button"
+        aria-expanded={isUserMenuOpen}
+        aria-haspopup="true"
+      >
+        <UserAvatar user={user} serverUser={serverUser} />
+        <ChevronDown size={14} />
+      </button>
 
       <UserMenuDropdown isOpen={isUserMenuOpen} onLogout={logout} />
-    </button>
+    </div>
   );
 }

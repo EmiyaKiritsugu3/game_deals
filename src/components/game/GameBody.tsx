@@ -7,7 +7,6 @@ import type { GameDeal } from '@/types/game';
 interface GameBodyViewModel {
   readonly gameTitle: string;
   readonly highResThumb: string;
-  readonly bestCurrentPrice: number;
   readonly bestRawPrice: string;
   readonly stats: {
     bestCurrentPrice: number;
@@ -41,7 +40,6 @@ export default function GameBody({
   const {
     gameTitle,
     highResThumb,
-    bestCurrentPrice,
     bestRawPrice,
     stats,
     official,
@@ -56,7 +54,7 @@ export default function GameBody({
         gameId={id}
         gameTitle={gameTitle}
         thumb={highResThumb}
-        bestCurrentPrice={bestCurrentPrice}
+        bestCurrentPrice={stats.bestCurrentPrice}
         priority={priority}
       />
 
