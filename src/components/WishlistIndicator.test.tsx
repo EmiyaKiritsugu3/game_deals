@@ -50,4 +50,10 @@ describe('WishlistIndicator', () => {
     render(<WishlistIndicator />);
     expect(screen.queryByText('0')).not.toBeInTheDocument();
   });
+
+  it('has aria-live="polite" for screen reader announcements', () => {
+    render(<WishlistIndicator />);
+    const link = screen.getByRole('link');
+    expect(link).toHaveAttribute('aria-live', 'polite');
+  });
 });

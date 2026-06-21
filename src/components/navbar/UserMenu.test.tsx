@@ -172,4 +172,55 @@ describe('UserMenu', () => {
     fireEvent.mouseDown(screen.getByText('Playlists'));
     expect(screen.getByText('Playlists')).toBeInTheDocument();
   });
+
+  it('has aria-haspopup="true" on the button', () => {
+    render(<UserMenu {...defaultProps} />);
+    expect(screen.getByRole('button')).toHaveAttribute('aria-haspopup', 'true');
+  });
+
+  it('aria-expanded reflects dropdown state', () => {
+    render(<UserMenu {...defaultProps} />);
+    const button = screen.getByRole('button');
+    expect(button).toHaveAttribute('aria-expanded', 'false');
+
+    fireEvent.click(button);
+    expect(button).toHaveAttribute('aria-expanded', 'true');
+
+    fireEvent.click(button);
+    expect(button).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('opens dropdown on Enter key', () => {
+    render(<UserMenu {...defaultProps} />);
+    const button = screen.getByRole('button');
+    fireEvent.keyDown(button, { key: 'Enter' });
+    expect(screen.getByText('Playlists')).toBeInTheDocument();
+  });
+
+  it('opens dropdown on Space key', () => {
+    render(<UserMenu {...defaultProps} />);
+    const button = screen.getByRole('button');
+    fireEvent.keyDown(button, { key: ' ' });
+    expect(screen.getByText('Playlists')).toBeInTheDocument();
+  });
+
+  it('closes dropdown on Escape key', () => {
+    render(<UserMenu {...defaultProps} />);
+    const button = screen.getByRole('button');
+    fireEvent.click(button);
+    expect(screen.getByText('Playlists')).toBeInTheDocument();
+
+    fireEvent.keyDown(button, { key: 'Escape' });
+    expect(screen.queryByText('Playlists')).not.toBeInTheDocument();
+  });
+
+  it('toggles dropdown on repeated Enter key', () => {
+    render(<UserMenu {...defaultProps} />);
+    const button = screen.getByRole('button');
+    fireEvent.keyDown(button, { key: 'Enter' });
+    expect(screen.getByText('Playlists')).toBeInTheDocument();
+
+    fireEvent.keyDown(button, { key: 'Enter' });
+    expect(screen.queryByText('Playlists')).not.toBeInTheDocument();
+  });
 });

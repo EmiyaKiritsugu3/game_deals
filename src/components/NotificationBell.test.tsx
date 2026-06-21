@@ -55,6 +55,14 @@ describe('NotificationBell', () => {
     expect(screen.getByTestId('bell-icon')).toBeInTheDocument();
   });
 
+  it('has aria-live="polite" on wrapper for screen reader announcements', () => {
+    mockIsLoggedIn = true;
+    mockGetNotifications.mockResolvedValue({ items: [], unread: 0 });
+    renderWithQuery(<NotificationBell />);
+    const wrapper = screen.getByTestId('bell-icon').closest('[aria-live="polite"]');
+    expect(wrapper).toBeInTheDocument();
+  });
+
   it('shows unread count badge', async () => {
     mockIsLoggedIn = true;
     mockGetNotifications.mockResolvedValue({
