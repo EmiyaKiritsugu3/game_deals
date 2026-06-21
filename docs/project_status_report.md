@@ -1,66 +1,82 @@
 # 📊 Relatório de Estado do Projeto: GameDeals
 
-**Data:** 19 de Junho de 2026  
-**Status Global:** 🟢 ESTÁVEL | SPRINT 7 CONCLUÍDA | 681 TESTES | 70.45% COBERTURA
+**Data:** 21 de Junho de 2026
+**Status Global:** 🟢 ESTÁVEL | SPRINT 11 CONCLUÍDA | 916 TESTES | 82.72% COBERTURA
 
 ---
 
 ## 🏗️ 1. Arquitetura e Engenharia
-O projeto foi consolidado seguindo as melhores práticas de Next.js 14+ e modularização:
 
 ### 🌐 Camada de API (`src/services/api.ts`)
 - **Centralizada:** Toda a lógica de comunicação com o CheapShark e Supabase está unificada.
-- **Robustez (Fallbacks):** Sistema de segurança (`fallbackDeals.ts`) totalmente sincronizado com a API "live". Se a API falhar, o site não quebra e os links permanecem válidos.
+- **Robustez (Fallbacks):** Sistema de segurança com fallback totalmente sincronizado com a API "live". Se a API falhar, o site não quebra e os links permanecem válidos.
 - **Precisão Estrita:** Implementação de verificação secundária para "Historical Lows", garantindo que 100% dos games na seção HL sejam recordes reais de preço.
 
 ### ⚡ Performance e UI
-- **Lazy Loading de Gráficos:** Componentes pesados de gráficos (`Recharts`) agora carregam sob demanda (`ssr: false`), eliminando erros de hidratação e acelerando o LCP (Largest Contentful Paint).
-- **Glassmorphism Design:** Interface premium com efeitos de desfoque, ícones consistentes (Lucide) e tipografia moderna.
-- **Modal Dinâmico:** O sistema de interceptação de rotas (`@modal`) está em paridade total com as páginas standalone.
+- **Lazy Loading de Gráficos:** Componentes pesados de gráficos (Recharts) carregam sob demanda (`ssr: false`), eliminando erros de hidratação e acelerando o LCP.
+- **Glassmorphism Design:** Interface premium com efeitos de desfoque, ícones consistentes (Lucide/simple-icons) e tipografia moderna.
+- **Modal Dinâmico:** Sistema de interceptação de rotas (`@modal`) em paridade total com as páginas standalone.
+- **Tema:** Dark/light/system via `next-themes`, respeitando `prefers-color-scheme`.
+
+### ♿ Acessibilidade
+- **Sprint 11:** Várias melhorias de acessibilidade — regiões `aria-live` no NotificationBell e WishlistIndicator, reestruturação do UserMenu para HTML semântico válido (`aria-expanded`, `aria-haspopup`), foco visível consistente (`focus-visible:ring-2`), remoção de HTML inválido (`<button>` contendo `<a>`).
 
 ---
 
 ## ✅ 2. Últimas Conquistas (Sprints Recentes)
 
-| Item | Descrição | Status |
-| :--- | :--- | :---: |
-| **Strict HL Logic** | Filtragem agnóstica de desconto (valida preço real vs histórico). | 🏁 Concluído |
-| **Fix: Game not found** | Sincronização de IDs órfãos no sistema de fallback. | 🏁 Concluído |
-| **Git Attribution** | Correção da autoria dos commits para `inamarjunior2@gmail.com`. | 🏁 Concluído |
-| **PR Conflict** | Resolução manual de conflitos no arquivo `fallbackDeals.ts`. | 🏁 Concluído |
-| **Modularização** | Extração de tipos e serviços para melhor manutenção. | 🏁 Concluído |
+### Sprint 11 (21 Jun) — Accessibility & Quality Polish
+| Item | Status |
+| :--- | :---: |
+| Discord icon fix (AuthModal) | 🏁 Concluído |
+| NotificationBell + WishlistIndicator: aria-live regions | 🏁 Concluído |
+| UserMenu: restructure for valid HTML + aria semantics | 🏁 Concluído |
+| AlertsGrid: opacity compounding fix | 🏁 Concluído |
+| GameBody: redundant bestCurrentPrice field removed | 🏁 Concluído |
+| CI: pnpm audit step added | 🏁 Concluído |
+| Tests: 901→916, +4 test files, SonarCloud coverage gate passing | 🏁 Concluído |
+| PR #39 merged to main | 🏁 Concluído |
+
+### Sprint 10 (20 Jun) — Security & Trust
+| Item | Status |
+| :--- | :---: |
+| CI workflows: pnpm 11.8.0 bump, quality workflow fix | 🏁 Concluído |
+| PRD audit: 8/11 P0/P1 items already done | 🏁 Concluído |
+| Vercel Hobby cron limit: changed to daily schedules | 🏁 Concluído |
+| Rate limit migration (Upstash → PostgreSQL) | 🏁 Concluído |
+| Session learning doc expanded | 🏁 Concluído |
+
+### Sprint 9 (20 Jun) — Coverage Push + PRD Evolution
+| Item | Status |
+| :--- | :---: |
+| Coverage: 74.6% → 82.4% (+109 tests, 16 new test files) | 🏁 Concluído |
+| PRD audit: 20+ fixes, 10 new production sections | 🏁 Concluído |
+| Vitest thresholds enforced (realistic values) | 🏁 Concluído |
 
 ---
 
 ## 🛠️ 3. Integrações Ativas
 
-- **Supabase:**
-    - Autenticação configurada.
-    - Perfil de usuário básico implementado.
-    - Prontidão para `ActivityFeed` e `Reviews` (Estrutura de tabelas e clientes prontos).
-- **CheapShark API:** Consumo eficiente com revalidação de cache (ISR).
+- **Supabase:** Autenticação SSR configurada, wishlist cloud sync, alertas de preço, gamificação.
+- **CheapShark API:** Consumo eficiente com ISR (revalidate: 3600).
+- **Typesense:** Search acceleration com fallback CheapShark. Reindex diário via cron.
+- **Sentry:** `@sentry/nextjs` v10.58 configurado (3 arquivos de configuração).
+- **Vercel:** Deploy automático via GitHub Actions + Cron jobs (diários, Hobby plan).
 
 ---
 
-## 📈 3.5 Métricas — Sprint 7 (PR #33 — Jun 19)
+## 📈 3.5 Métricas
 
-| Métrica | Sprint 6 | Sprint 7 | Δ |
-|---------|----------|----------|---|
-| Testes | 578 | **681** | +103 |
-| Cobertura (lines) | 59.29% | **70.45%** | +11.16pp |
-| Cobertura (branches) | 49.5% | **59.96%** | +10.46pp |
-| Fallow CRITICAL | 0 | **0** | — |
-| SonarQube issues | 1 (S7780) | **1 (S7780)** | — (false positive) |
+| Métrica | Sprint 7 (19 Jun) | Sprint 9 (20 Jun) | Sprint 11 (21 Jun) | Δ (S7→S11) |
+|---------|-------------------|-------------------|--------------------|------------|
+| Testes | 681 | 892 | **916** | +235 |
+| Cobertura (lines) | 70.45% | 82.3% | **82.72%** | +12.27pp |
+| Cobertura (branches) | 59.96% | 78.8% | **79.40%** | +19.44pp |
+| Cobertura (functions) | ~65% | 76.85% | **77.19%** | +12pp |
+| Fallow CRITICAL | 0 | 0 | **0** | — |
+| SonarQube issues | 1 (FP) | 0 | **0** | — |
 
-**Principais entregas Sprint 7:**
-- 7 novos arquivos de teste (componentes + middleware + server)
-- Extensão de testes existentes (deals, search, stores, services)
-- Dead code removido: useAlertsSync, useCloudToLocalSync (useSyncHooks.ts)
-- S1607 corrigido: test.skip movido de helper para caller
-- S7924 CSS contrast: 11 issues marcadas FALSE-POSITIVE no SonarQube
-- Team-based execution com 4 agents paralelos (sprint-7 team)
-
-## 📈 3.6 Histórico de Métricas
+## 📈 Histórico de Métricas
 
 | Data | Marco | Testes | Cobertura (lines) | Branches |
 |------|-------|--------|-------------------|----------|
@@ -69,16 +85,19 @@ O projeto foi consolidado seguindo as melhores práticas de Next.js 14+ e modula
 | Jun 17 | Sprint 2 (#22) | 423 | 42.5% | 35% |
 | Jun 18 | Sprint 3 (#23) | 423 | 42.5% | 35% |
 | Jun 19 | Sprint 6 (#32) | 578 | 59.29% | 49.5% |
-| Jun 19 | **Sprint 7 (#33)** | **681** | **70.45%** | **59.96%** |
+| Jun 19 | Sprint 7 (#33) | 681 | 70.45% | 59.96% |
+| Jun 20 | Sprint 9 (#35) | 892 | 82.3% | 78.8% |
+| Jun 21 | **Sprint 11 (#39)** | **916** | **82.72%** | **79.40%** |
 
 ---
 
 ## 🚀 4. Próximos Passos
-1. **Cobertura 80%+** — Continuar push de coverage (próximo marco: 80% linhas)
-2. **Alerts Dashboard** — UI de gerenciamento de alertas de preço (feature real)
-3. **Search UX** — Melhorias na busca (debounce, resultados, filtros)
-4. **Integração tests** — Testes de banco e Server Actions com DB real
+
+1. **E2E test expansion** — Critical journeys: browse → search → wishlist → affiliate out
+2. **Integration tests** — Server Actions + DB queries with real PostgreSQL
+3. **Mutation testing** (Stryker) — Planned for Phase 2 coverage push
+4. **Coverage targets** — Lines 85%, Branches 82%, Functions 80% (next milestone)
 
 ---
 
-**Conclusão:** O projeto saiu de um estado de "instabilidade de dados" para uma plataforma robusta e performática. O ambiente está configurado para que novos colaboradores possam iterar sem quebrar funcionalidades críticas.
+**Conclusão:** O projeto evoluiu de 95 testes (14 Jun) para 916 testes (21 Jun) — um aumento de 10x em 7 dias. Cobertura subiu de ~15% para 82.72%. CI pipeline robusto com 6 checks obrigatórios (quality, e2e, SonarCloud, semgrep, GitGuardian, Vercel). Zero issues abertos no SonarQube. Base sólida para iteração contínua.

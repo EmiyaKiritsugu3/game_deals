@@ -1,8 +1,8 @@
 # Accessibility (WCAG)
 
 | Metadata | |
-|---|---|
-| Last updated | 2026-06-18 |
+|---|---|---|
+| Last updated | 2026-06-21 |
 | Target | WCAG 2.1 Level AA |
 | Framework | Next.js 16 + Tailwind CSS v4 |
 
@@ -35,7 +35,7 @@ GameDeals meets most WCAG 2.1 AA requirements automatically through:
 
 | Criterion | Level | Status | Notes |
 |-----------|-------|--------|-------|
-| 2.1.1 Keyboard | A | ✅ | All interactive elements keyboard-accessible |
+| 2.1.1 Keyboard | A | ✅ | All interactive elements keyboard-accessible; UserMenu uses Arrow/Enter/Space/Escape |
 | 2.1.2 No Keyboard Trap | A | ✅ | Modals trap focus, Escape closes |
 | 2.2.1 Timing Adjustable | A | N/A | No time-limited content |
 | 2.2.2 Pause, Stop, Hide | A | N/A | No auto-playing content |
@@ -46,7 +46,7 @@ GameDeals meets most WCAG 2.1 AA requirements automatically through:
 | 2.4.4 Link Purpose | A | ✅ | Descriptive link text ("View Deal →") |
 | 2.4.5 Multiple Ways | AA | ✅ | Navbar + search + footer links |
 | 2.4.6 Headings and Labels | AA | ✅ | Descriptive headings (`<h1>`–`<h3>`) |
-| 2.4.7 Focus Visible | AA | ✅ | Tailwind `focus-visible:ring-2` |
+| 2.4.7 Focus Visible | AA | ✅ | Tailwind `focus-visible:ring-2` + custom focus styles in AlertsGrid, UserMenu |
 | 2.5.3 Label in Name | A | ✅ | Visible labels match accessible names |
 
 ### 3. Understandable
@@ -65,7 +65,7 @@ GameDeals meets most WCAG 2.1 AA requirements automatically through:
 |-----------|-------|--------|-------|
 | 4.1.1 Parsing | A | ✅ | Valid HTML (Next.js server-rendered) |
 | 4.1.2 Name, Role, Value | A | ✅ | ARIA labels on interactive components |
-| 4.1.3 Status Messages | AA | ⚠️  | Sync/wishlist status not announced to screen readers |
+| 4.1.3 Status Messages | AA | ✅ | aria-live regions in NotificationBell + WishlistIndicator announce dynamic updates |
 
 ## Component-Specific Patterns
 
@@ -103,24 +103,49 @@ First focusable element. Hidden until focused.
 - SVG-based — needs `aria-label` on chart container
 - Data available in table form on game detail page (fallback)
 
+### NotificationBell (`NotificationBell.tsx`)
+
+- Wrapper div has `aria-live="polite"` — dynamic count changes announced to screen readers
+- Bell icon uses `aria-label` for context
+
+### WishlistIndicator (`WishlistIndicator.tsx`)
+
+- Link wrapper has `aria-live="polite"` — wishlist count changes announced
+- Badge represents current item count
+
+### UserMenu (`UserMenu.tsx`)
+
+- Proper HTML structure: `<button>` with `aria-haspopup="true"` + `aria-expanded`
+- Dropdown is sibling `<div>`, not nested inside button
+- Keyboard nav: Enter/Space to open, Arrow navigation, Escape to close
+- `useEffect` handles click-outside and Escape key
+
 ## Known Gaps
 
 | Gap | Impact | Fix |
 |-----|--------|-----|
-| Toast/sync notifications not announced | Screen reader users unaware of wishlist sync status | Add `role="status"` + `aria-live="polite"` to SyncManager status |
 | Chart data not screen-reader accessible | Price history invisible to SR users | Add `aria-label` with summary text to chart containers |
 | No skip-to-content link in production | Keyboard users must tab through full navbar | Verify `sr-only` link renders correctly in SSR |
-| P15: `UserMenu.tsx` — button containing links | Nesting violation (a11y) | Replace with `<ul>` + `<li>` pattern |
 | P15: `BaseModal.tsx` — dialog without accessible name | Screen readers can't identify modal | Add `aria-labelledby` referencing modal title |
 
 ## Testing
 
 | Method | Frequency | Command |
 |--------|-----------|---------|
-| Automated | Pre-push | `pnpm test` (aria-label tests in `aria-labels.test.tsx`) |
+| Automated (aria) | Pre-push | `pnpm test` — UserMenu keyboard nav (Enter/Space/Escape), aria-expanded, aria-haspopup |
+| Automated (aria-live) | Pre-push | `pnpm test` — NotificationBell `aria-live="polite"`, WishlistIndicator `aria-live="polite"` |
 | Visual regression | Pre-push | `pnpm test:e2e:visual` |
 | Manual keyboard | Per-release | Tab through all pages, verify focus order |
 | Screen reader | Monthly | VoiceOver (macOS) on critical journeys |
+
+### A11y Test Coverage (added Sprint 11)
+
+| Test File | What It Covers |
+|-----------|---------------|
+| `UserMenu.test.tsx` | Keyboard navigation: Enter opens menu, Space opens menu, Escape closes, Arrow keys; `aria-expanded` toggles; `aria-haspopup` present |
+| `NotificationBell.test.tsx` | `aria-live="polite"` present on wrapper div |
+| `WishlistIndicator.test.tsx` | `aria-live="polite"` present on link wrapper |
+| `GameBody.test.tsx` | Renders all sub-components; verifies `stats.bestCurrentPrice` present |
 
 ## Resources
 

@@ -4,7 +4,7 @@
 |---|---|---|
 | Document owner | Engineering Team |
 | Version | 1.2 |
-| Last updated | 2026-06-19 |
+| Last updated | 2026-06-21 |
 | Status | Active |
 
 ---
@@ -43,15 +43,15 @@
 
 ## 3. Test Approach
 
-### Current State Assessment (Sprint 6 — updated 2026-06-19)
+### Current State Assessment (Sprint 11 — updated 2026-06-21)
 
-The project has **578 tests across 25+ files**:
+The project has **916 tests across 102 test files**:
 
 | Aspect | Current Status |
 |---|---|
-| **Unit test files** | ~24 (actions, services, utils, stores, hooks, type guards) |
-| **Total test count** | **578** (506 prior + 72 new in Sprint 6) |
-| **Coverage** | **59.29% lines**, **49.5% branches** (+8.58pp / +7.42pp from Sprint 3) |
+| **Test files** | 102 (actions, services, utils, stores, hooks, components) |
+| **Total test count** | **916** |
+| **Coverage** | **82.72% lines**, **79.40% branches**, **77.19% functions** |
 | **Coverage provider** | Istanbul (via `@vitest/coverage-istanbul`) |
 | **Test runner** | Vitest v4 (node default + jsdom per-file for components) |
 | **Component test deps** | jsdom, @testing-library/react, @testing-library/jest-dom, @testing-library/user-event |
@@ -60,31 +60,14 @@ The project has **578 tests across 25+ files**:
 | **Test directory** | `src/**/*.test.{ts,tsx}`, `tests/**/*.test.{ts,tsx}` |
 | **CI test step** | `pnpm test:coverage` runs in CI workflow |
 | **Pre-push gate** | Tests block push on failure (`pnpm check`) |
-
-### New test files (Sprint 6)
-
-- `src/services/fetch-helpers.test.ts` — 9 tests, fetch mocking, fallback behavior
-- `src/services/game-enrichment.test.ts` — 6 tests, Date.now() + pricing mock
-- `src/services/social.test.ts` — 9 tests, Supabase chain mock
-- `src/lib/cron-auth.test.ts` — 4 tests, CRON_SECRET header validation
-- `src/lib/supabase-browser.test.ts` — 3 tests, singleton browser client
-- `src/utils/supabase/client.test.ts` — 3 tests, env var branch coverage
-- `src/utils/supabase/middleware.test.ts` — 8 tests, createServerClient mock
-- `src/hooks/useUserAlerts.test.tsx` — 3 tests, TanStack Query wrapper mock
-- `src/hooks/useAuthSubscription.test.ts` — 4 tests, onAuthStateChange
-- `src/hooks/useClickOutside.test.ts` — 5 tests, DOM event mocking
-- `src/hooks/useCarousel.test.ts` — 9 tests, fake timers + setInterval
-- `src/hooks/useShareWishlist.test.ts` — 4 tests, clipboard + timers
-- `src/hooks/useWishlistSavedGames.test.ts` — 5 tests, useMemo memoization
-
-All 13 files achieved **100% branch coverage**.
+| **SonarCloud** | Quality Gate passes (0 issues, coverage on new code ≥ 80%) |
 
 ### Test Levels
 
 | Level | Target Automation | Current Coverage | Owner | Notes |
-|---|---|---|---|---|
-| **Unit (node)** | 100% of type guards, utilities, pure functions | 207 tests in 11 files | Engineering | Action/service/utility tests. Vitest + node environment. |
-| **Component (jsdom)** | Component rendering + user interactions | 8 tests in 1 file | Engineering | Vitest + jsdom + RTL. Mock TanStack Query hooks. |
+|---|---|---|---|---|---|
+| **Unit (node)** | 100% of type guards, utilities, pure functions | ~500 tests across 60+ files | Engineering | Action/service/utility/hook tests. Vitest + node environment. |
+| **Component (jsdom)** | Component rendering + user interactions | ~400 tests across 40+ files | Engineering | Vitest + jsdom + RTL. Mock TanStack Query hooks. Includes a11y tests (aria-live, keyboard nav). |
 | **Integration** | DB queries, API client, Server Actions | 0% | Engineering | Requires DB connection. Use test containers or Supabase local. |
 | **E2E** | Critical user journeys | 12 tests (2 spec files) | Engineering | Playwright with webserver, production build, CDP screenshots. |
 | **Visual** | UI component snapshots | 6 snapshots | Engineering | Playwright screenshot diffing with `maxDiffPixels: 100`. |
@@ -156,10 +139,10 @@ All 13 files achieved **100% branch coverage**.
       exclude: ['src/**/*.test.{ts,tsx}', 'src/**/*.d.ts', 'src/types/**',
                 'src/scripts/**', 'src/data/**', 'src/db/**'],
       thresholds: {
-        lines: 0,       // No enforced minimum — TODO: raise to 40+
-        functions: 0,   // No enforced minimum
-        branches: 0,    // No enforced minimum
-        statements: 0,  // No enforced minimum
+        lines: 80,       // Enforced — Sprint 9: raised from 0
+        functions: 75,   // Enforced — Sprint 9: raised from 0
+        branches: 76,    // Enforced — Sprint 9: raised from 0
+        statements: 80,  // Enforced — Sprint 9: raised from 0
       },
     },
   },
@@ -202,18 +185,7 @@ vi.mock('@tanstack/react-query', () => ({
 }));
 ```
 
-**Test count:** 578 total. ~24 test files.
-
-### Playwright Gap
-
-`@playwright/test@^1.60.0` is installed as a devDependency and `pnpm test:e2e` is defined, but:
-
-- **No `playwright.config.ts`** exists in the project root.
-- **No E2E test files** exist under `tests/` or `e2e/`.
-- Running `pnpm test:e2e` will fail with: `"Cannot find module '@playwright/test'"` or similar config error.
-- CI pipeline does NOT run `pnpm test:e2e`.
-
-**Action required**: Create `playwright.config.ts` with project structure, base URL, and webServer config before writing any E2E tests.
+**Test count:** 916 total. 102 test files.
 
 ---
 
@@ -283,8 +255,8 @@ GitHub Actions CI
 
 | Phase | Target | Estimated Timeline |
 |---|---|---|
-| **Phase 1** | Raise thresholds: lines 60%, functions 50%, branches 50%, statements 60% | In progress (Sprint 6: 59.29% / 49.5%) |
-| **Phase 2** | Add integration tests for Server Actions and DB queries | Next sprints |
-| **Phase 3** | E2E tests for critical journeys: search → wishlist → affiliate out | Next sprints |
+| **Phase 1** ✅ | Raise thresholds to 80/75/76/80 | **Completed** (Sprint 9: 82.3% / 78.8%) |
+| **Phase 2** | Add integration tests for Server Actions and DB queries | Future sprint |
+| **Phase 3** | E2E tests for critical journeys: search → wishlist → affiliate out | Future sprint |
 | **Phase 4** | Mutation testing (Stryker) — planned | Future |
-| **Phase 5** | Raise thresholds: lines 80%, functions 70%, branches 70%, statements 80% | Quarter target |
+| **Phase 5** | Raise thresholds: lines 85%, functions 80%, branches 82%, statements 85% | Quarter target |
