@@ -1,3 +1,18 @@
+---
+title: PR #10 Fix Plan (SUPERSEDED)
+type: plan
+status: superseded
+scope: project
+tags:
+  - pr10
+  - fix-plan
+  - archived
+related:
+  - archive/pr10-session-report
+  - compose/reports/sprint11-accessibility-and-quality
+updated: "2026-06-21"
+---
+
 # PR #10 Fix Plan — Vercel + CI + SonarCloud Failures
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.

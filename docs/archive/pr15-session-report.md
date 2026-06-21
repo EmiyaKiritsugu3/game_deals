@@ -1,3 +1,17 @@
+---
+title: Sprint 15 Price Alerts E2E Report (SUPERSEDED)
+type: session-report
+status: superseded
+scope: project
+tags:
+  - pr15
+  - price-alerts
+  - archived
+related:
+  - compose/reports/sprint11-accessibility-and-quality
+updated: "2026-06-21"
+---
+
 # Sprint 15 — Price Alerts E2E / Cron Migration / SonarCloud
 
 > **Branch:** `feat/sprint15-alerts-full`

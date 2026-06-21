@@ -1,6 +1,22 @@
+---
+title: Release Process
+type: process
+status: active
+scope: project
+tags:
+  - release
+  - deployment
+  - process
+related:
+  - adr/ADR-005-deployment-strategy
+  - vercel_deployment_guide
+  - runbook
+updated: "2026-06-21"
+---
+
 # Release Process — GameDeals
 
-> **Last updated:** 2026-06-13
+> **Last updated:** 2026-06-21
 > **Stack:** Next.js 16 + Supabase SSR + Drizzle ORM + CheapShark API + Typesense
 > **Deployment:** Vercel (auto-deploy on main branch push)
 

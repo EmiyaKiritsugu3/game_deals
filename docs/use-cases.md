@@ -1,3 +1,18 @@
+---
+title: Use Cases — GameDeals
+type: reference
+status: active
+scope: project
+tags:
+  - use-cases
+  - user-journeys
+related:
+  - runbook
+  - api-reference
+  - manual/06-feature-components
+updated: "2026-06-21"
+---
+
 # Use Cases — GameDeals
 
 User journeys covering the 6 core feature flows. See `docs/runbook.md` for admin/operations flows.

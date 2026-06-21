@@ -130,6 +130,8 @@ vitest.config.ts       # Vitest configuration (node + jsdom per-file)
 | Document | Description |
 |----------|-------------|
 | [Index](docs/index.md) | Documentation overview |
+| [AI Navigation Protocol](docs/AI-NAVIGATION.md) | How AI agents should navigate docs before implementing |
+| [Tech Stack](docs/tech-stack.md) | Canonical source of truth for all technology choices |
 | [Architecture](docs/index.md#architecture) | Architectural decisions and C4 diagrams |
 | [Release Process](docs/release-process.md) | Release and rollback checklist |
 | [API Reference](docs/api-reference.md) | Endpoint and Server Action reference |

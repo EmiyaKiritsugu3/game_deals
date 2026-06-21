@@ -1,3 +1,19 @@
+---
+title: Vercel Deployment Guide
+type: guide
+status: active
+scope: project
+tags:
+  - deployment
+  - vercel
+  - cron
+related:
+  - adr/ADR-005-deployment-strategy
+  - runbook
+  - release-process
+updated: "2026-06-21"
+---
+
 # Vercel Deployment Guide — GameDeals
 
 Now that the code is ready and connected to Supabase, follow these final steps to get your site live.

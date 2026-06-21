@@ -1,3 +1,18 @@
+---
+title: Technical Debt Register
+type: reference
+status: active
+scope: project
+tags:
+  - technical-debt
+  - refactor
+related:
+  - runbook
+  - test-strategy
+  - adr/ADR-012-tooling-chain
+updated: "2026-06-21"
+---
+
 # Technical Debt Register
 
 Tracking known technical debt items across the GameDeals codebase. Items prioritized by impact.

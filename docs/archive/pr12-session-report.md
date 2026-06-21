@@ -1,3 +1,17 @@
+---
+title: Session Report PR #12 P0 Notifications (SUPERSEDED)
+type: session-report
+status: superseded
+scope: project
+tags:
+  - pr12
+  - notifications
+  - archived
+related:
+  - compose/reports/sprint11-accessibility-and-quality
+updated: "2026-06-21"
+---
+
 # Session Report: PR #12 — P0 In-App Notifications Pipeline + Audit Fixes
 
 ## Executive Summary

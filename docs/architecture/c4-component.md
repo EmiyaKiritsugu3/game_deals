@@ -1,3 +1,18 @@
+---
+title: C4 Level 3 — Component Diagram
+type: reference
+status: active
+scope: project
+tags:
+  - architecture
+  - c4
+  - diagram
+related:
+  - architecture/c4-container
+  - tech-stack
+updated: "2026-06-21"
+---
+
 # C4 Level 3 — Component Diagram
 
 > **Scope**: Next.js Application container — internal components.

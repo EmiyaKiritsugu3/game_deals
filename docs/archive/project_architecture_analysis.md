@@ -1,3 +1,18 @@
+---
+title: Project Architecture Analysis (SUPERSEDED)
+type: analysis
+status: superseded
+scope: project
+tags:
+  - architecture
+  - analysis
+  - archived
+related:
+  - architecture/data-flow
+  - architecture/c4-system-context
+updated: "2026-06-21"
+---
+
 # 🔋 GameDeals Architecture Analysis
 
 ## 🏗️ Structure Overview

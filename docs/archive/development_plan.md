@@ -1,3 +1,18 @@
+---
+title: Development Plan 2026 (SUPERSEDED)
+type: plan
+status: superseded
+scope: project
+tags:
+  - development-plan
+  - sprint-tracker
+  - archived
+related:
+  - compose/reports/sprint11-accessibility-and-quality
+  - technical-debt
+updated: "2026-06-21"
+---
+
 # GameDeals — Development Plan 2026
 
 ## Legend

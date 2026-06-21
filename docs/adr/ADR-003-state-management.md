@@ -188,7 +188,7 @@ export async function createPlaylistAction(formData: FormData) {
 - [TanStack Query v5 Docs](https://tanstack.com/query/v5/docs/framework/react/overview) — Network Mode, Persisted Client, Optimistic Updates
 - [Next.js 16 Server Actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations) — Stable in Next.js 16
 - [Next.js fetch with revalidate](https://nextjs.org/docs/app/building-your-application/caching) — Programmatic ISR
-- [Tech Stack Dictionary](../tech_stack_dictionary.md#-state-management--data-fetching)
+- [Tech Stack](../tech-stack.md) — Canonical technology reference
 - `src/store/` — Zustand store implementations
 - `src/hooks/` — Custom TanStack Query hooks
 - `src/actions/` — Server Actions for mutations and data fetching

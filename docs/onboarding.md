@@ -1,3 +1,18 @@
+---
+title: Onboarding Guide
+type: guide
+status: active
+scope: project
+tags:
+  - onboarding
+  - setup
+related:
+  - tech-stack
+  - vercel_deployment_guide
+  - supabase_setup_guide
+updated: "2026-06-21"
+---
+
 # Onboarding Guide
 
 | Metadata | |

@@ -1,3 +1,18 @@
+---
+title: GameDeals PRD
+type: reference
+status: active
+scope: project
+tags:
+  - prd
+  - product
+  - requirements
+related:
+  - tech-stack
+  - runbook
+updated: "2026-06-21"
+---
+
 # GameDeals PRD — Product Requirements Document
 
 ## 1. Product Vision

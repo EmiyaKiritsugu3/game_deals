@@ -1,3 +1,17 @@
+---
+title: ActivityFeed Layout Fix (SUPERSEDED)
+type: fix-report
+status: superseded
+scope: project
+tags:
+  - activity-feed
+  - layout-fix
+  - archived
+related:
+  - manual/06-feature-components
+updated: "2026-06-21"
+---
+
 # 🛠️ ActivityFeed Layout Fix (Social Phase)
 
 Este guia resolve o problema de overflow de imagens e a confusão com o Tailwind CSS que o **Jules** está enfrentando. 

@@ -1,3 +1,19 @@
+---
+title: Accessibility (WCAG)
+type: reference
+status: active
+scope: project
+tags:
+  - accessibility
+  - wcag
+  - a11y
+related:
+  - design-system
+  - manual/05-core-components
+  - tech-stack
+updated: "2026-06-21"
+---
+
 # Accessibility (WCAG)
 
 | Metadata | |
@@ -128,3 +144,11 @@ First focusable element. Hidden until focused.
 - [Next.js Accessibility](https://nextjs.org/docs/architecture/accessibility)
 - [Tailwind CSS Accessibility](https://tailwindcss.com/docs/hover-focus-and-other-states#styling-based-on-aria-states)
 - [axe DevTools](https://www.deque.com/axe/) (browser extension for ad-hoc audits)
+
+---
+
+## Relações
+
+- [design-system.md](../design-system.md) — Tokens, typography, component styles
+- [manual/05-core-components.md](../manual/05-core-components.md) — Navbar, AuthModal, SyncManager, WishlistIndicator, CookieBanner
+- [tech-stack.md](../tech-stack.md) — Next.js 16 + Tailwind v4 stack

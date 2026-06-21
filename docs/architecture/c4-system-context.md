@@ -1,3 +1,18 @@
+---
+title: C4 Level 1 — System Context
+type: reference
+status: active
+scope: project
+tags:
+  - architecture
+  - c4
+  - diagram
+related:
+  - architecture/c4-container
+  - architecture/data-flow
+updated: "2026-06-21"
+---
+
 # C4 Level 1 — System Context Diagram
 
 > **Scope**: GameDeals platform — system context.

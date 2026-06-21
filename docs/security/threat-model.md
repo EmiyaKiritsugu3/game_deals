@@ -1,3 +1,19 @@
+---
+title: STRIDE Threat Model
+type: reference
+status: active
+scope: project
+tags:
+  - security
+  - threat-model
+  - stride
+related:
+  - adr/ADR-004-auth-backend
+  - runbook
+  - monitoring
+updated: "2026-06-21"
+---
+
 # GameDeals — STRIDE Threat Model
 
 **Version:** 1.0  

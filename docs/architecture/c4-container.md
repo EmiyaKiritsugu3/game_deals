@@ -1,3 +1,19 @@
+---
+title: C4 Container Diagram
+type: reference
+status: active
+scope: project
+tags:
+  - architecture
+  - c4
+  - diagram
+related:
+  - architecture/c4-system-context
+  - architecture/c4-component
+  - tech-stack
+updated: "2026-06-21"
+---
+
 # C4 Container Diagram — GameDeals
 
 ## Level 2: Container Diagram

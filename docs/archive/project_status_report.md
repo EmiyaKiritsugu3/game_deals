@@ -1,3 +1,18 @@
+---
+title: Project Status Report (SUPERSEDED — see Sprint 11 docs)
+type: status-report
+status: superseded
+scope: project
+tags:
+  - status
+  - sprint-tracker
+  - archived
+related:
+  - compose/reports/sprint11-accessibility-and-quality
+  - project_status_report.md
+updated: "2026-06-21"
+---
+
 # 📊 Relatório de Estado do Projeto: GameDeals
 
 **Data:** 20 de Março de 2026  

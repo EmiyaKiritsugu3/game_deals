@@ -1,3 +1,18 @@
+---
+title: Data Flow Architecture
+type: reference
+status: active
+scope: project
+tags:
+  - architecture
+  - data-flow
+  - request-lifecycle
+related:
+  - adr/ADR-008-routing-pattern
+  - architecture/c4-system-context
+updated: "2026-06-21"
+---
+
 # Data Flow Architecture
 
 This document describes the five primary data flows in the GameDeals system.

@@ -1,3 +1,18 @@
+---
+title: Test Report (SUPERSEDED — see test-strategy.md)
+type: report
+status: superseded
+scope: project
+tags:
+  - test-report
+  - manual-testing
+  - archived
+related:
+  - test-strategy
+  - compose/reports/sprint11-accessibility-and-quality
+updated: "2026-06-21"
+---
+
 # 🧪 Test Report — GameDeals
 
 ## Methodology

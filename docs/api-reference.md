@@ -1,3 +1,19 @@
+---
+title: API Reference
+type: reference
+status: active
+scope: project
+tags:
+  - api
+  - cron
+  - server-actions
+related:
+  - runbook
+  - adr/ADR-002-data-source-strategy
+  - adr/ADR-008-routing-pattern
+updated: "2026-06-21"
+---
+
 # API Reference
 
 > Internal API reference for GameDeals cron endpoints and Server Actions.

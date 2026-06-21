@@ -1,11 +1,26 @@
+---
+title: Database Schema
+type: reference
+status: active
+scope: project
+tags:
+  - database
+  - schema
+  - drizzle
+  - supabase
+related:
+  - adr/ADR-009-price-history-storage
+  - adr/ADR-004-auth-backend
+  - adr/ADR-007-gamification-system
+updated: "2026-06-21"
+---
+
 # Database Schema
 
-| Metadata | |
-|---|---|
-| Last updated | 2026-06-18 |
-| ORM | Drizzle (PostgreSQL via Supabase) |
-| Schema files | `src/db/schema/*.ts` |
-| Migrations | `drizzle/*.sql` |
+**Last updated:** 2026-06-21  
+**Database:** PostgreSQL (Supabase)  
+**ORM:** Drizzle ORM  
+**Migration status:** 10 SQL migrations in `drizzle/`
 
 ## Entity Relationship Diagram
 
@@ -267,3 +282,13 @@ See `drizzle/*.sql` for migration history. Key migrations:
 | 0009 | `0009_schema_optimization.sql` | Index additions (CONCURRENTLY) |
 | 0010 | `0010_optimize_check_alerts.sql` | 64-bit lock conversion |
 | 0012 | (Sprint 3) | deals unique index `(gameId, storeId)` |
+
+---
+
+## Relações
+
+- [ADR-009](../adr/ADR-009-price-history-storage.md) — Decisão original para TimescaleDB + price history storage
+- [ADR-004](../adr/ADR-004-auth-backend.md) — Supabase Auth + Drizzle ORM
+- [ADR-007](../adr/ADR-007-gamification-system.md) — Badges, XP, playlists schema
+- [runbook.md](../runbook.md) — Playbooks para DB pool exhaustion e migrations
+- [supabase_setup_guide.md](../supabase_setup_guide.md) — Setup local + RLS policies

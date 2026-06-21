@@ -1,3 +1,18 @@
+---
+title: Jules Technical FAQ (SUPERSEDED)
+type: agent-faq
+status: superseded
+scope: project
+tags:
+  - jules
+  - faq
+  - archived
+related:
+  - archive/jules_master_onboarding
+  - ADR-004-auth-backend
+updated: "2026-06-21"
+---
+
 # 📋 Handover Técnico: Respostas para o Jules
 
 Olá, Jules! Bom trabalho nas dúvidas. Aqui estão as respostas detalhadas para você decolar:

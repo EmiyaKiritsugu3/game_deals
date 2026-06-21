@@ -1,3 +1,18 @@
+---
+title: Clean Deployment Guide
+type: guide
+status: active
+scope: project
+tags:
+  - deployment
+  - vercel
+  - clean-start
+related:
+  - vercel_deployment_guide
+  - adr/ADR-005-deployment-strategy
+updated: "2026-06-21"
+---
+
 # 🧹 Guide for a Fresh Deploy (Vercel Clean Start)
 
 Since the Vercel **Hobby** plan is very restrictive with bot identities, the best path is for you to do the final push yourself so that your GitHub is recognized as the sole author.

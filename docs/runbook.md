@@ -1,6 +1,23 @@
+---
+title: Runbook — GameDeals Operations
+type: runbook
+status: active
+scope: project
+tags:
+  - runbook
+  - operations
+  - cron
+  - database
+related:
+  - api-reference
+  - database-schema
+  - adr/ADR-012-tooling-chain
+updated: "2026-06-21"
+---
+
 # Runbook — GameDeals Operations
 
-> **Last updated:** 2026-06-13
+> **Last updated:** 2026-06-21
 > **Stack:** Next.js 16 (Turbopack) + Supabase SSR + Drizzle ORM + CheapShark API + Typesense
 > **Deployment:** Vercel (production) + Local dev
 > **Monitoring:** None (manual runbook — no Datadog/PagerDuty)
@@ -1239,3 +1256,11 @@ pnpm fallow:audit
 pkill -f "next-server"
 pkill -f "chromium"
 ```
+
+---
+
+## Relações
+
+- [api-reference.md](api-reference.md) — Cron endpoints + Server Actions
+- [database-schema.md](database-schema.md) — Schema + migrations
+- [adr/ADR-012-tooling-chain.md](adr/ADR-012-tooling-chain.md) — Biome, pnpm, Vitest, Playwright

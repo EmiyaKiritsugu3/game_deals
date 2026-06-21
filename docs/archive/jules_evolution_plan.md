@@ -1,3 +1,17 @@
+---
+title: Jules Evolution Plan (SUPERSEDED)
+type: agent-plan
+status: superseded
+scope: project
+tags:
+  - jules
+  - evolution
+  - archived
+related:
+  - archive/jules_master_onboarding
+updated: "2026-06-21"
+---
+
 # 🌐 GameDeals Evolution: Global Social Discovery Platform
 
 Este documento define a visão de longo prazo e o prompt técnico para a próxima fase do projeto, transformando-o em uma plataforma global de curadoria e rede social para gamers.

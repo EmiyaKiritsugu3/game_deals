@@ -1,8 +1,24 @@
+---
+title: Design System
+type: reference
+status: active
+scope: project
+tags:
+  - design-system
+  - tailwind
+  - tokens
+related:
+  - adr/ADR-011-styling-tailwind-v4
+  - accessibility
+  - manual/05-core-components
+updated: "2026-06-21"
+---
+
 # Design System
 
 | Metadata | |
 |---|---|
-| Last updated | 2026-06-18 |
+| Last updated | 2026-06-21 |
 | Framework | Tailwind CSS v4 |
 | Theme | next-themes (dark/light/system) |
 
@@ -153,3 +169,11 @@ Theme toggle: `ThemeToggle.tsx` with `useTheme()` hook, `aria-label` updates dyn
 - [Tailwind CSS v4 Docs](https://tailwindcss.com/docs)
 - [next-themes](https://github.com/pacocoursey/next-themes)
 - [tailwindcss-animate](https://tailwindcss-animate.com) (animation utilities)
+
+---
+
+## Relações
+
+- [adr/ADR-011-styling-tailwind-v4.md](../adr/ADR-011-styling-tailwind-v4.md) — Styling architecture decision
+- [accessibility.md](../accessibility.md) — WCAG patterns + focus-visible
+- [manual/05-core-components.md](../manual/05-core-components.md) — Navbar, AuthModal, SyncManager, WishlistIndicator, CookieBanner

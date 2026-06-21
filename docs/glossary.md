@@ -1,7 +1,21 @@
+---
+title: Domain Glossary — GameDeals
+type: reference
+status: active
+scope: project
+tags:
+  - glossary
+  - domain
+related:
+  - tech-stack
+  - database-schema
+updated: "2026-06-21"
+---
+
 # Domain Glossary — GameDeals
 
 Ubiquitous Language (Eric Evans, DDD). Covers core domain concepts only.
-See [tech_stack_dictionary.md](./tech_stack_dictionary.md) for technology terms (Next.js, PostgreSQL, etc.).
+See [tech-stack.md](./tech-stack.md) for technology terms (Next.js, PostgreSQL, etc.).
 
 ## Core Domain
 

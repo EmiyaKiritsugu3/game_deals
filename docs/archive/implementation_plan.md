@@ -1,3 +1,17 @@
+---
+title: Implementation Plan 2026 (SUPERSEDED)
+type: plan
+status: superseded
+scope: project
+tags:
+  - implementation-plan
+  - milestones
+  - archived
+related:
+  - compose/reports/sprint11-accessibility-and-quality
+updated: "2026-06-21"
+---
+
 # Implementation Plan — GameDeals (2026)
 
 Implementation plan based on approved ADRs, prioritized by ROI and 2026 market validation.

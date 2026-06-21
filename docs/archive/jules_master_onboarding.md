@@ -1,3 +1,18 @@
+---
+title: Jules Master Onboarding (SUPERSEDED)
+type: agent-onboarding
+status: superseded
+scope: project
+tags:
+  - jules
+  - onboarding
+  - archived
+related:
+  - onboarding
+  - archive/jules_evolution_plan
+updated: "2026-06-21"
+---
+
 # 🤖 Jules Master Onboarding: GameDeals Evolution
 
 Olá, Jules! Você está assumindo o projeto **GameDeals**, um agregador de ofertas de jogos "Premium" focado em UX, performance e fidelidade visual.

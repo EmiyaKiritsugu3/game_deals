@@ -1,11 +1,21 @@
-# Test Strategy — GameDeals
+---
+title: Test Strategy — GameDeals
+type: reference
+status: active
+scope: project
+tags:
+  - testing
+  - vitest
+  - playwright
+  - coverage
+related:
+  - TDD_WORKFLOW
+  - tech-stack
+  - adr/ADR-012-tooling-chain
+updated: "2026-06-21"
+---
 
-| Metadata | |
-|---|---|---|
-| Document owner | Engineering Team |
-| Version | 1.2 |
-| Last updated | 2026-06-19 |
-| Status | Active |
+# Test Strategy — GameDeals
 
 ---
 
@@ -283,8 +293,16 @@ GitHub Actions CI
 
 | Phase | Target | Estimated Timeline |
 |---|---|---|
-| **Phase 1** | Raise thresholds: lines 60%, functions 50%, branches 50%, statements 60% | In progress (Sprint 6: 59.29% / 49.5%) |
-| **Phase 2** | Add integration tests for Server Actions and DB queries | Next sprints |
-| **Phase 3** | E2E tests for critical journeys: search → wishlist → affiliate out | Next sprints |
+| **Phase 1** ✅ | Raise thresholds to 80/75/76/80 | **Completed** (Sprint 9: 82.3% / 78.8%) |
+| **Phase 2** | Add integration tests for Server Actions and DB queries | Future sprint |
+| **Phase 3** | E2E tests for critical journeys: search → wishlist → affiliate out | Future sprint |
 | **Phase 4** | Mutation testing (Stryker) — planned | Future |
-| **Phase 5** | Raise thresholds: lines 80%, functions 70%, branches 70%, statements 80% | Quarter target |
+| **Phase 5** | Raise thresholds: lines 85%, functions 80%, branches 82%, statements 85% | Quarter target |
+
+---
+
+## Relações
+
+- [TDD_WORKFLOW.md](../TDD_WORKFLOW.md) — Strict RED → GREEN → REFACTOR cycle
+- [tech-stack.md](../tech-stack.md) — Vitest, Playwright, Biome, pnpm versions
+- [adr/ADR-012-tooling-chain.md](../adr/ADR-012-tooling-chain.md) — Tooling decisions

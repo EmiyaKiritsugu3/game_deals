@@ -1,3 +1,18 @@
+---
+title: TDD Workflow
+type: process
+status: active
+scope: project
+tags:
+  - tdd
+  - testing
+  - workflow
+related:
+  - test-strategy
+  - adr/ADR-012-tooling-chain
+updated: "2026-06-21"
+---
+
 # TDD Workflow — GameDeals
 
 ## Quick Start

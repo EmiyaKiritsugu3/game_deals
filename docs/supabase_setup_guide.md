@@ -1,3 +1,19 @@
+---
+title: Supabase Setup Guide
+type: guide
+status: active
+scope: project
+tags:
+  - supabase
+  - database
+  - setup
+related:
+  - adr/ADR-004-auth-backend
+  - database-schema
+  - onboarding
+updated: "2026-06-21"
+---
+
 # Supabase Setup Guide — GameDeals
 
 Follow these steps to connect the code we just prepared to your real cloud database.

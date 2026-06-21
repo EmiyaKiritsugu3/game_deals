@@ -1,3 +1,18 @@
+---
+title: Tech Stack Dictionary (SUPERSEDED — see tech-stack.md)
+type: reference
+status: superseded
+scope: project
+tags:
+  - tech-stack
+  - dictionary
+  - archived
+related:
+  - tech-stack
+  - adr/ADR-001-tech-stack
+updated: "2026-06-21"
+---
+
 # Tech Stack Dictionary — GameDeals
 
 Glossary of technologies, tools, and concepts used in the project.

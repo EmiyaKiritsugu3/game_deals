@@ -1,3 +1,17 @@
+---
+title: Walkthrough — GameDeals Delivery (SUPERSEDED)
+type: walkthrough
+status: superseded
+scope: project
+tags:
+  - walkthrough
+  - delivery
+  - archived
+related:
+  - archive/task
+updated: "2026-06-21"
+---
+
 # 🏁 Walkthrough de Entrega: GameDeals
 
 Este documento serve como prova final das modificações realizadas para garantir a precisão dos dados, estabilidade de rotas e performance do site.

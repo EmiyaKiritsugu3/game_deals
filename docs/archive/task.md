@@ -1,3 +1,17 @@
+---
+title: Task — More Stores & Better Hero (SUPERSEDED)
+type: enhancement-task
+status: superseded
+scope: project
+tags:
+  - stores
+  - hero
+  - archived
+related:
+  - architecture/data-flow
+updated: "2026-06-21"
+---
+
 # Game Deals Enhancements: More Stores & Better Hero
 
 - [x] **Phase 1-3:** UI Harmonization (Dark Theme, Grid Alignment, Variables).

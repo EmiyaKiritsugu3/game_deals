@@ -1,8 +1,24 @@
+---
+title: Monitoring & Observability
+type: reference
+status: active
+scope: project
+tags:
+  - monitoring
+  - sentry
+  - observability
+related:
+  - adr/ADR-005-deployment-strategy
+  - runbook
+  - security/threat-model
+updated: "2026-06-21"
+---
+
 # Monitoring & Observability
 
 | Metadata | |
 |---|---|
-| Last updated | 2026-06-18 |
+| Last updated | 2026-06-21 |
 | Status | Active |
 
 ## Stack

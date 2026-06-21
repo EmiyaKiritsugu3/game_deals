@@ -1,3 +1,18 @@
+---
+title: SEO Strategy
+type: reference
+status: active
+scope: project
+tags:
+  - seo
+  - metadata
+  - structured-data
+related:
+  - design-system
+  - tech-stack
+updated: "2026-06-21"
+---
+
 # SEO Strategy
 
 | Metadata | |

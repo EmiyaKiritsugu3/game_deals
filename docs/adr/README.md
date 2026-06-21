@@ -38,5 +38,5 @@ This directory contains the **Architecture Decision Records** for GameDeals. Eac
 ## References
 
 - [ADR-001: Full Stack Overview](ADR-001-tech-stack.md) — Recommended starting point
-- [Implementation Plan](../implementation_plan.md) — Detailed implementation plan
-- [Tech Stack Dictionary](../tech_stack_dictionary.md) — Glossary of technical terms
+- [Tech Stack Reference](../tech-stack.md) — Canonical technology reference
+- [Glossary](../glossary.md) — Domain terminology

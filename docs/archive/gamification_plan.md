@@ -1,3 +1,17 @@
+---
+title: Gamification Implementation Plan (SUPERSEDED)
+type: plan
+status: superseded
+scope: project
+tags:
+  - gamification
+  - plan
+  - archived
+related:
+  - adr/ADR-007-gamification-system
+updated: "2026-06-21"
+---
+
 # Implementation Plan: Phase 19 - Gamification & Social Foundation
 
 Este plano detalha a infraestrutura para transformar o GameDeals em uma plataforma social gamificada, focando em conquistas (badges) e engajamento.

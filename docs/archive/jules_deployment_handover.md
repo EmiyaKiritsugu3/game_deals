@@ -1,3 +1,18 @@
+---
+title: Jules Deployment Handover (SUPERSEDED)
+type: agent-handover
+status: superseded
+scope: project
+tags:
+  - jules
+  - deployment
+  - archived
+related:
+  - vercel_deployment_guide
+  - runbook
+updated: "2026-06-21"
+---
+
 # 🚀 Jules Handover: Resolving Vercel Deployment & Git Sync
 
 Este documento contém todo o contexto técnico necessário para que o **Jules** (Google Cloud/Vercel AI assistant) identifique e resolva a falha no deploy do projeto **GameDeals**.
