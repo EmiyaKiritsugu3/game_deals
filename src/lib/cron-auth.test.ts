@@ -17,14 +17,14 @@ describe('verifyCronAuth', () => {
     expect(verifyCronAuth(request)).toBeNull();
   });
 
-  it('returns 401 when CRON_SECRET is not set', () => {
+  it('returns 500 when CRON_SECRET is not set', () => {
     delete process.env.CRON_SECRET;
     const request = new Request('http://localhost', {
       headers: { authorization: 'Bearer test-secret' },
     });
     const response = verifyCronAuth(request);
     expect(response).not.toBeNull();
-    expect(response?.status).toBe(401);
+    expect(response?.status).toBe(500);
   });
 
   it('returns 401 for wrong token', () => {
@@ -41,5 +41,35 @@ describe('verifyCronAuth', () => {
     const response = verifyCronAuth(request);
     expect(response).not.toBeNull();
     expect(response?.status).toBe(401);
+  });
+
+  it('returns 401 for different-length secrets (timing-safe)', () => {
+    process.env.CRON_SECRET = 'short';
+    const request = new Request('http://localhost', {
+      headers: { authorization: 'Bearer much-longer-token' },
+    });
+    const response = verifyCronAuth(request);
+    expect(response).not.toBeNull();
+    expect(response?.status).toBe(401);
+  });
+
+  it('returns 401 for same-length but different content (timing-safe)', () => {
+    process.env.CRON_SECRET = 'abcdefgh';
+    const request = new Request('http://localhost', {
+      headers: { authorization: 'Bearer xyzwvuts' },
+    });
+    const response = verifyCronAuth(request);
+    expect(response).not.toBeNull();
+    expect(response?.status).toBe(401);
+  });
+
+  it('returns 500 when CRON_SECRET is empty string', () => {
+    process.env.CRON_SECRET = '';
+    const request = new Request('http://localhost', {
+      headers: { authorization: 'Bearer ' },
+    });
+    const response = verifyCronAuth(request);
+    expect(response).not.toBeNull();
+    expect(response?.status).toBe(500);
   });
 });

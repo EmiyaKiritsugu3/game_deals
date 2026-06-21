@@ -9,6 +9,14 @@ import {
   isValidStoreId,
 } from '@/lib/affiliate-config';
 
+function getClientIp(request: Request): string {
+  const real = request.headers.get('x-real-ip');
+  if (real) return real;
+  const fwd = request.headers.get('x-forwarded-for');
+  if (fwd) return fwd.split(',')[0]?.trim() ?? 'unknown';
+  return 'unknown';
+}
+
 async function lookupDealUrl(storeId: string): Promise<string> {
   try {
     const [deal] = (await db.execute(sql`
@@ -43,14 +51,24 @@ function applyAffiliateParams(url: string, storeId: string): string {
     parsedUrl.searchParams.append(key, value);
   });
 
-  return parsedUrl.toString();
+  const finalUrl = parsedUrl.toString();
+  const finalParsed = new URL(finalUrl);
+  if (!isDomainAllowed(finalParsed)) {
+    console.warn(
+      `Blocked redirect to non-allowlisted domain after param append: ${finalParsed.hostname}`
+    );
+    return '';
+  }
+  return finalUrl;
 }
 
 function logClick(storeId: string, gameSlug: string, ip: string): void {
   db.execute(sql`
     INSERT INTO affiliate_clicks ("storeId", "gameSlug", ip, "timestamp")
     VALUES (${storeId}, ${gameSlug}, ${ip}, NOW())
-  `).catch(() => {});
+  `).catch((err) => {
+    console.error('affiliate_click insert failed:', err);
+  });
 }
 
 /**
@@ -71,7 +89,7 @@ export async function GET(
   targetUrl = applyAffiliateParams(targetUrl, storeId);
 
   if (targetUrl) {
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
+    const ip = getClientIp(request);
     logClick(storeId, gameSlug, ip);
 
     track('affiliate_click', { store_id: storeId, game_slug: gameSlug }).catch(() => {});

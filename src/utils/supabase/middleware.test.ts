@@ -130,3 +130,26 @@ describe('updateSession', () => {
     expect(response.status).toBe(200);
   });
 });
+
+describe('isProtectedPath (boundary matching)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co';
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = 'test-key';
+  });
+
+  const cases: Array<{ input: string; expectedProtected: boolean; label: string }> = [
+    { input: '/wishlist', expectedProtected: true, label: 'exact match' },
+    { input: '/wishlist/', expectedProtected: true, label: 'trailing slash' },
+    { input: '/wishlist/games', expectedProtected: true, label: 'subpath' },
+    { input: '/wishlistXYZ', expectedProtected: false, label: 'boundary — no false positive' },
+    { input: '/Wishlist', expectedProtected: true, label: 'case insensitive' },
+    { input: '/admin', expectedProtected: false, label: 'unprotected path' },
+  ];
+
+  it.each(cases)('$label: $input', async ({ input, expectedProtected }) => {
+    setupSupabaseMock(null);
+    const response = await updateSession(makeRequest(input));
+    expect(response.status).toBe(expectedProtected ? 307 : 200);
+  });
+});

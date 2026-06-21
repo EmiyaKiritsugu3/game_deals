@@ -298,22 +298,30 @@ describe('deletePlaylistAction', () => {
     expect(execute).not.toHaveBeenCalled();
   });
 
-  it('deletes playlist and returns true', async () => {
+  it('returns false when playlist not found or not owned', async () => {
     authGetUser.mockResolvedValueOnce({ data: { user: { id: 'user-1' } } });
+    execute.mockResolvedValueOnce([]);
+    const result = await deletePlaylistAction('nonexistent');
+    expect(result).toBe(false);
+    expect(execute).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not delete playlist_games when user does not own the playlist', async () => {
+    authGetUser.mockResolvedValueOnce({ data: { user: { id: 'user-A' } } });
+    execute.mockResolvedValueOnce([]);
+    const result = await deletePlaylistAction('playlist-owned-by-B');
+    expect(result).toBe(false);
+    expect(execute).toHaveBeenCalledTimes(1);
+  });
+
+  it('deletes both playlist_games and playlist when user owns it', async () => {
+    authGetUser.mockResolvedValueOnce({ data: { user: { id: 'user-1' } } });
+    execute.mockResolvedValueOnce([{ id: 'p1' }]);
     execute.mockResolvedValueOnce([]);
     execute.mockResolvedValueOnce([{ id: 'p1' }]);
 
     const result = await deletePlaylistAction('p1');
     expect(result).toBe(true);
-    expect(execute).toHaveBeenCalledTimes(2);
-  });
-
-  it('returns false when playlist not found or not owned', async () => {
-    authGetUser.mockResolvedValueOnce({ data: { user: { id: 'user-1' } } });
-    execute.mockResolvedValueOnce([]);
-    execute.mockResolvedValueOnce([]);
-
-    const result = await deletePlaylistAction('nonexistent');
-    expect(result).toBe(false);
+    expect(execute).toHaveBeenCalledTimes(3);
   });
 });

@@ -1,10 +1,11 @@
 import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 
-const PROTECTED_PATHS = ['/wishlist', '/alerts', '/playlists', '/profile'];
+const PROTECTED_PATHS = ['/wishlist', '/alerts', '/playlists', '/profile'] as const;
 
 function isProtectedPath(pathname: string): boolean {
-  return PROTECTED_PATHS.some((p) => pathname.startsWith(p));
+  const normalized = pathname.toLowerCase();
+  return PROTECTED_PATHS.some((p) => normalized === p || normalized.startsWith(`${p}/`));
 }
 
 function enforceAuthGate(user: { id: string } | null, request: NextRequest): NextResponse | null {
