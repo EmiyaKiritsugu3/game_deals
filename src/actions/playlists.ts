@@ -182,12 +182,15 @@ export async function updatePlaylistAction(
 export async function deletePlaylistAction(id: string): Promise<boolean> {
   const userId = await getAuthenticatedUserId();
 
-  await db.execute(sql`DELETE FROM playlist_games WHERE "playlistId" = ${id}::uuid`);
-
-  const result = (await db.execute(
-    sql`DELETE FROM playlists WHERE "id" = ${id}::uuid AND "userId" = ${userId}::uuid
-        RETURNING id`
+  // Ownership check FIRST — prevents cross-user playlist_games deletion
+  const ownership = (await db.execute(
+    sql`SELECT id FROM playlists WHERE "id" = ${id}::uuid AND "userId" = ${userId}::uuid`
   )) as Array<{ id: string }>;
 
-  return result.length > 0;
+  if (ownership.length === 0) return false;
+
+  await db.execute(sql`DELETE FROM playlist_games WHERE "playlistId" = ${id}::uuid`);
+  await db.execute(sql`DELETE FROM playlists WHERE "id" = ${id}::uuid`);
+
+  return true;
 }

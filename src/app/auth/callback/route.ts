@@ -2,6 +2,14 @@ import { NextResponse } from 'next/server';
 import { rateLimit } from '@/lib/rate-limit';
 import { createClient } from '@/utils/supabase/server';
 
+function safeNext(next: string | null, origin: string): string {
+  if (!next) return `${origin}/`;
+  if (!next.startsWith('/')) return `${origin}/`;
+  if (next.startsWith('//')) return `${origin}/`;
+  if (next.startsWith('/\\')) return `${origin}/`;
+  return `${origin}${next}`;
+}
+
 async function exchangeAuthCode(code: string): Promise<boolean> {
   const supabase = await createClient();
   const { error } = await supabase.auth.exchangeCodeForSession(code);
@@ -16,17 +24,12 @@ export async function GET(request: Request) {
 
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
-  const next = searchParams.get('next') ?? '/';
-
-  // Validate next is a local path
-  if (!next.startsWith('/') || next.startsWith('//') || next.includes('://')) {
-    return NextResponse.redirect(`${origin}/auth/auth-code-error`);
-  }
+  const next = searchParams.get('next');
 
   if (code) {
     const success = await exchangeAuthCode(code);
     if (success) {
-      return NextResponse.redirect(`${origin}${next}`);
+      return NextResponse.redirect(safeNext(next, origin));
     }
   }
 
