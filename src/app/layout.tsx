@@ -6,6 +6,7 @@ import { ThemeProvider } from 'next-themes';
 import { Suspense } from 'react';
 import CookieBanner from '@/components/CookieBanner';
 import Navbar from '@/components/Navbar';
+import RegisterSW from '@/components/RegisterSW';
 import SyncManager from '@/components/SyncManager';
 import ReactQueryProvider from '@/providers/ReactQueryProvider';
 import './globals.css';
@@ -113,7 +114,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         {jsonLdScript}
-        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#dc2626" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </head>
       <body className={`${inter.variable} antialiased`}>
@@ -142,6 +143,7 @@ export default async function RootLayout({
               <Analytics />
               <SpeedInsights />
               <CookieBanner />
+              <RegisterSW />
             </ReactQueryProvider>
           </ThemeProvider>
         </main>

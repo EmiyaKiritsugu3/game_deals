@@ -56,9 +56,6 @@ importers:
       recharts:
         specifier: ^3.7.0
         version: 3.8.0(@types/react@19.2.14)(react-dom@19.2.3(react@19.2.3))(react-is@17.0.2)(react@19.2.3)(redux@5.0.1)
-      serwist:
-        specifier: ^9.5.11
-        version: 9.5.11(browserslist@4.28.2)(typescript@5.9.3)
       zustand:
         specifier: ^5.0.12
         version: 5.0.12(@types/react@19.2.14)(immer@11.1.4)(react@19.2.3)(use-sync-external-store@1.6.0(react@19.2.3))
@@ -1761,14 +1758,6 @@ packages:
     peerDependencies:
       webpack: '>=5.0.0'
 
-  '@serwist/utils@9.5.11':
-    resolution: {integrity: sha512-zqxmwuHqWA3OwN82Wo8gFZ9QBemygJP3cap5JWAOG4UyJZgUZfmBXAXj+IMaD4eKZ/6pqrxHHDZ9uSWZmJ1mXA==}
-    peerDependencies:
-      browserslist: '>=4'
-    peerDependenciesMeta:
-      browserslist:
-        optional: true
-
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
@@ -2654,9 +2643,6 @@ packages:
     resolution: {integrity: sha512-1dhVQZXhcHje7798IVM+xoo/1ZdVfzOMIc8/rgVSijRK38EDqOJoGula9N/8ZI5RD8QTxNQtK/Gozpr+qUqRRA==}
     engines: {node: '>=20.0.0'}
 
-  idb@8.0.3:
-    resolution: {integrity: sha512-LtwtVyVYO5BqRvcsKuB2iUMnHwPVByPCXFXOpuU96IZPPoPN6xjOGxZQ74pgSVVLQWtUOYgyeL4GE98BY5D3wg==}
-
   immer@10.2.0:
     resolution: {integrity: sha512-d/+XTN3zfODyjr89gM3mPq1WNX2B8pYsu7eORitdwyA2sBubnTl3laYlBk4sXY5FUa5qTZGBDPJICVbvqzjlbw==}
 
@@ -3146,14 +3132,6 @@ packages:
     resolution: {integrity: sha512-vFKC2IEtQnVhpT78h1Yp8wzwrf8CM+MzKMHGJZfBtzhZNycRFnXsHk6E5TxIkkMsgNS7mdX3AGB7x2QM2di4lA==}
     engines: {node: '>=10'}
     hasBin: true
-
-  serwist@9.5.11:
-    resolution: {integrity: sha512-Bq6uwJFd4ET60BWI77v3VbazKHv6k7lECOiiCFwKyBu/slaCn0GHJ5L5RfsuJUKrnbD9lYUCDo6sqaKRM5M2vA==}
-    peerDependencies:
-      typescript: '>=5.0.0'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
 
   sharp@0.34.5:
     resolution: {integrity: sha512-Ou9I5Ft9WNcCbXrU9cMgPBcCK8LiwLqcbywW3t4oDV37n1pzpuNLsYiAV8eODnjbtQlSDwZ2cUEeQz4E54Hltg==}
@@ -4709,10 +4687,6 @@ snapshots:
       - encoding
       - supports-color
 
-  '@serwist/utils@9.5.11(browserslist@4.28.2)':
-    optionalDependencies:
-      browserslist: 4.28.2
-
   '@standard-schema/spec@1.1.0': {}
 
   '@standard-schema/utils@0.3.0': {}
@@ -5506,8 +5480,6 @@ snapshots:
 
   iceberg-js@0.8.1: {}
 
-  idb@8.0.3: {}
-
   immer@10.2.0: {}
 
   immer@11.1.4: {}
@@ -6053,15 +6025,6 @@ snapshots:
   semver@6.3.1: {}
 
   semver@7.7.4: {}
-
-  serwist@9.5.11(browserslist@4.28.2)(typescript@5.9.3):
-    dependencies:
-      '@serwist/utils': 9.5.11(browserslist@4.28.2)
-      idb: 8.0.3
-    optionalDependencies:
-      typescript: 5.9.3
-    transitivePeerDependencies:
-      - browserslist
 
   sharp@0.34.5:
     dependencies:
