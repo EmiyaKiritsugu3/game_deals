@@ -1,3 +1,4 @@
+// fallow-ignore-next-line unused-files — registered at runtime via navigator.serviceWorker.register()
 const CACHE_NAME = 'gamedeals-v1';
 const EXCLUDED_PATHS = ['/api/', '/auth/', '/out/', '/_next/'];
 
