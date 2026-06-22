@@ -39,16 +39,12 @@ test.describe('Full anonymous journey', () => {
       'input[type="search"], input[placeholder*="earch"], input[name="search"]'
     );
     await searchInput.first().fill('Witcher');
-    // Wait for search results (debounce + network)
-    await expect(
-      page.locator('[role="listbox"], [data-testid="search-results"]').first()
-    ).toBeVisible({ timeout: 10000 });
+    // SearchBox renders dropdown with Link[href^="/game/"] children
+    const searchResult = page.locator('a[href^="/game/"]').first();
+    await expect(searchResult).toBeVisible({ timeout: 10000 });
 
     // 3. Click first search result -> game detail
-    const firstResult = page
-      .locator('[role="listbox"] a, [data-testid="search-results"] a')
-      .first();
-    await firstResult.click();
+    await searchResult.click();
 
     // 4. Game detail page/modal loads
     await expect(page.locator('h1, h2, [data-testid="game-title"]').first()).toBeVisible({
