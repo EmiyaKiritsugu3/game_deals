@@ -1,7 +1,7 @@
 # 📊 Relatório de Estado do Projeto: GameDeals
 
-**Data:** 21 de Junho de 2026
-**Status Global:** 🟢 ESTÁVEL | SPRINT 11 CONCLUÍDA | 916 TESTES | 82.72% COBERTURA
+**Data:** 22 de Junho de 2026
+**Status Global:** 🟢 ESTÁVEL | SPRINT 13 CONCLUÍDA | 923 TESTES | 83.55% COBERTURA
 
 ---
 
@@ -24,6 +24,14 @@
 ---
 
 ## ✅ 2. Últimas Conquistas (Sprints Recentes)
+
+### Sprint 13 (22 Jun) — Polish & PWA
+| Item | Status |
+| :--- | :---: |
+| Fix search.ts HTTP error logging (cubic deferred) | 🏁 Concluído |
+| Fix WishlistGrid heart button DOM order (a11y) | 🏁 Concluído |
+| PWA manifest + service worker + security exclusions | 🏁 Concluído |
+| E2E: anonymous browse + affiliate redirect specs | 🏁 Concluído |
 
 ### Sprint 11 (21 Jun) — Accessibility & Quality Polish
 | Item | Status |
@@ -67,14 +75,14 @@
 
 ## 📈 3.5 Métricas
 
-| Métrica | Sprint 7 (19 Jun) | Sprint 9 (20 Jun) | Sprint 11 (21 Jun) | Δ (S7→S11) |
-|---------|-------------------|-------------------|--------------------|------------|
-| Testes | 681 | 892 | **916** | +235 |
-| Cobertura (lines) | 70.45% | 82.3% | **82.72%** | +12.27pp |
-| Cobertura (branches) | 59.96% | 78.8% | **79.40%** | +19.44pp |
-| Cobertura (functions) | ~65% | 76.85% | **77.19%** | +12pp |
-| Fallow CRITICAL | 0 | 0 | **0** | — |
-| SonarQube issues | 1 (FP) | 0 | **0** | — |
+| Métrica | Sprint 7 (19 Jun) | Sprint 9 (20 Jun) | Sprint 11 (21 Jun) | Sprint 13 (22 Jun) | Δ (S7→S13) |
+|---------|-------------------|-------------------|--------------------|--------------------|------------|
+| Testes | 681 | 892 | 916 | **923** | +242 |
+| Cobertura (lines) | 70.45% | 82.3% | 82.72% | **83.55%** | +13.1pp |
+| Cobertura (branches) | 59.96% | 78.8% | 79.40% | **80.21%** | +20.25pp |
+| Cobertura (functions) | ~65% | 76.85% | 77.19% | **77.7%** | +12.7pp |
+| Fallow CRITICAL | 0 | 0 | 0 | **0** | — |
+| SonarQube issues | 1 (FP) | 0 | 0 | **0** | — |
 
 ## 📈 Histórico de Métricas
 
@@ -87,7 +95,8 @@
 | Jun 19 | Sprint 6 (#32) | 578 | 59.29% | 49.5% |
 | Jun 19 | Sprint 7 (#33) | 681 | 70.45% | 59.96% |
 | Jun 20 | Sprint 9 (#35) | 892 | 82.3% | 78.8% |
-| Jun 21 | **Sprint 11 (#39)** | **916** | **82.72%** | **79.40%** |
+| Jun 21 | Sprint 11 (#39) | 916 | 82.72% | 79.40% |
+| Jun 22 | **Sprint 13 (#45)** | **923** | **83.55%** | **80.21%** |
 
 ---
 
