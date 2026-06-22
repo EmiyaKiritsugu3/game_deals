@@ -11,40 +11,39 @@ const publicDir = join(projectRoot, 'public');
 const appDir = join(projectRoot, 'src', 'app');
 
 describe('PWA Manifest', () => {
-  it('should have a manifest.json file in public/', () => {
-    const manifestPath = join(publicDir, 'manifest.json');
+  it('should have manifest.ts in src/app/ (Next.js native approach)', () => {
+    const manifestPath = join(appDir, 'manifest.ts');
     expect(existsSync(manifestPath)).toBe(true);
   });
 
-  it('should have valid JSON with required PWA fields', () => {
-    const manifestPath = join(publicDir, 'manifest.json');
+  it('should export a function returning valid manifest fields', () => {
+    const manifestPath = join(appDir, 'manifest.ts');
     const content = readFileSync(manifestPath, 'utf-8');
-    const manifest = JSON.parse(content) as {
-      name: string;
-      short_name: string;
-      start_url: string;
-      display: string;
-      icons: unknown[];
-    };
 
-    expect(manifest).toHaveProperty('name');
-    expect(manifest).toHaveProperty('short_name');
-    expect(manifest).toHaveProperty('start_url');
-    expect(manifest).toHaveProperty('display');
-    expect(manifest).toHaveProperty('icons');
-    expect(Array.isArray(manifest.icons)).toBe(true);
-    expect(manifest.icons.length).toBeGreaterThanOrEqual(2);
+    // Verify it exports a default function (Next.js convention)
+    expect(content).toContain('export default function manifest');
+    // Verify required PWA fields are present in the return object
+    expect(content).toContain('name:');
+    expect(content).toContain('short_name:');
+    expect(content).toContain('start_url:');
+    expect(content).toContain('display:');
+    expect(content).toContain('icons:');
   });
 
-  it('should have manifest link tag in layout.tsx', () => {
+  it('should have RegisterSW component imported in layout.tsx', () => {
     const layoutPath = join(appDir, 'layout.tsx');
     const content = readFileSync(layoutPath, 'utf-8');
-    expect(content).toContain('<link rel="manifest" href="/manifest.json" />');
+    expect(content).toContain('RegisterSW');
   });
 
   it('should have a favicon file in public/', () => {
     const faviconExists =
       existsSync(join(publicDir, 'favicon.ico')) || existsSync(join(publicDir, 'favicon.svg'));
     expect(faviconExists).toBe(true);
+  });
+
+  it('should have service worker in public/', () => {
+    const swPath = join(publicDir, 'sw.js');
+    expect(existsSync(swPath)).toBe(true);
   });
 });

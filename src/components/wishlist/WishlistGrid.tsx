@@ -55,6 +55,7 @@ export default function WishlistGrid({ games, stores, isLoading = false }: Wishl
               className={styles.image}
               unoptimized
             />
+            <HeartButton gameID={game.gameID} className={styles.heartWrapper} />
             <div className={styles.cardActions}>
               <PriceAlertTrigger
                 gameID={game.gameID}
@@ -62,7 +63,6 @@ export default function WishlistGrid({ games, stores, isLoading = false }: Wishl
                 currentPrice={Number.parseFloat(game.salePrice)}
                 className={styles.alertShortcut}
               />
-              <HeartButton gameID={game.gameID} className={styles.heartWrapper} />
             </div>
             {game.savings > 0 && <div className={styles.savingsBadge}>-{game.savings}%</div>}
           </div>
