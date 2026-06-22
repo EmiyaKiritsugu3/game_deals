@@ -32,7 +32,12 @@ export async function searchGamesAction(query: string, limit = 10) {
         { headers: { 'User-Agent': 'GameDeals/1.0' }, signal: controller.signal }
       );
       clearTimeout(timeout);
-      if (!res.ok) return [];
+      if (!res.ok) {
+        const msg = `CheapShark search failed: HTTP ${res.status}`;
+        console.warn(msg);
+        Sentry.captureException(new Error(msg));
+        return [];
+      }
       return (await res.json()) as Array<Record<string, string>>;
     } catch (e) {
       clearTimeout(timeout);
