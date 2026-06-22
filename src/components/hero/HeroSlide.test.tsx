@@ -5,14 +5,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('framer-motion', () => ({
-  motion: {
-    div: ({ children, ...props }: { children: React.ReactNode; [key: string]: unknown }) => (
-      <div {...props}>{children}</div>
-    ),
-  },
-}));
-
 vi.mock('lucide-react', () => ({
   Gamepad2: () => <div data-testid="gamepad-icon" />,
   Monitor: () => <div data-testid="monitor-icon" />,

@@ -60,7 +60,6 @@ describe('PriceHistoryChart', () => {
       <PriceHistoryChart
         currentPrice="29.99"
         lowestPrice="9.99"
-        lowestDate={1000000}
         realData={[
           { bucket: '2024-01', avg_price: 10, min_price: 5, max_price: 15 },
           { bucket: '2024-02', avg_price: 20, min_price: 15, max_price: 25 },
@@ -72,7 +71,7 @@ describe('PriceHistoryChart', () => {
   });
 
   it('renders "Price History (6 Months)" when no realData', () => {
-    render(<PriceHistoryChart currentPrice="29.99" lowestPrice="9.99" lowestDate={1000000} />);
+    render(<PriceHistoryChart currentPrice="29.99" lowestPrice="9.99" />);
     expect(screen.getByText('Price History (6 Months)')).toBeInTheDocument();
   });
 
@@ -81,7 +80,6 @@ describe('PriceHistoryChart', () => {
       <PriceHistoryChart
         currentPrice="29.99"
         lowestPrice="9.99"
-        lowestDate={1000000}
         realData={[
           { bucket: '2024-01', avg_price: 10, min_price: 5, max_price: 15 },
           { bucket: '2024-02', avg_price: 20, min_price: 15, max_price: 25 },
@@ -93,7 +91,7 @@ describe('PriceHistoryChart', () => {
   });
 
   it('renders simulation subtitle when no realData', () => {
-    render(<PriceHistoryChart currentPrice="29.99" lowestPrice="9.99" lowestDate={1000000} />);
+    render(<PriceHistoryChart currentPrice="29.99" lowestPrice="9.99" />);
     expect(screen.getByText(/Algorithmic market simulation/)).toBeInTheDocument();
   });
 });

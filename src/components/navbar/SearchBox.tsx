@@ -2,14 +2,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
 import Link from 'next/link';
-import { useQueryState } from 'nuqs';
 import { useEffect, useState } from 'react';
 import { searchGamesAction } from '@/actions/search';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import styles from '../Navbar.module.css';
 
 export function SearchBox() {
-  const [query, setQuery] = useQueryState('q', { defaultValue: '' });
+  const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 

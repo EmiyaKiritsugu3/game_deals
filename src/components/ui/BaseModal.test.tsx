@@ -3,18 +3,8 @@
  */
 
 import { fireEvent, render, screen } from '@testing-library/react';
-import type { HTMLAttributes, ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import BaseModal from './BaseModal';
-
-vi.mock('framer-motion', () => ({
-  AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
-  motion: {
-    div: ({ children, ...props }: { children?: ReactNode } & HTMLAttributes<HTMLDivElement>) => (
-      <div {...props}>{children}</div>
-    ),
-  },
-}));
 
 describe('BaseModal', () => {
   it('renders nothing when isOpen is false', () => {

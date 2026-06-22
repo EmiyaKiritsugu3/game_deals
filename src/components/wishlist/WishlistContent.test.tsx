@@ -7,20 +7,6 @@ import type { SavedGame } from '@/hooks/useSortedGames';
 import type { PriceAlert } from '@/types/price-alert';
 import WishlistContent from './WishlistContent';
 
-vi.mock('framer-motion', () => ({
-  motion: {
-    div: ({
-      children,
-      ...props
-    }: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-      variants?: unknown;
-      initial?: unknown;
-      animate?: unknown;
-      transition?: unknown;
-    }) => <div {...props}>{children}</div>,
-  },
-}));
-
 vi.mock('next/image', () => ({
   default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
     // eslint-disable-next-line @next/next/no-img-element

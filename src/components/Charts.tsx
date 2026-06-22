@@ -51,10 +51,8 @@ export function StoreCompareChart({ data }: { readonly data: StorePrice[] }) {
 interface PriceHistoryChartProps {
   readonly currentPrice: string;
   readonly lowestPrice: string;
-  readonly lowestDate: number;
   readonly retailPrice?: string;
   readonly gameTitle?: string;
-  readonly gameId?: string;
   readonly realData?: Array<{
     bucket: string;
     avg_price: number;
@@ -65,10 +63,8 @@ interface PriceHistoryChartProps {
 export function PriceHistoryChart({
   currentPrice,
   lowestPrice,
-  lowestDate: _lowestDate,
   retailPrice = '9.99',
   gameTitle = 'Default',
-  gameId: _gameId,
   realData,
 }: PriceHistoryChartProps) {
   const chartData = formatChartData(realData, retailPrice, currentPrice, lowestPrice, gameTitle);

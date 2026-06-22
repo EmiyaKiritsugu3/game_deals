@@ -3,7 +3,7 @@ import GameBody from '@/components/game/GameBody';
 import SidebarModal from '@/components/SidebarModal';
 import { buildGameStats, sortDealsByPrice, splitDealsByGreyMarket } from '@/lib/game-data';
 import { getGame, getHighResImage, getStores, isGreyMarketStore } from '@/services/api';
-import { calculateCostPerHour, estimatePlaytime } from '@/services/hltb';
+
 import styles from './modal.module.css';
 
 async function GameModalContent({ id }: Readonly<{ id: string }>) {
@@ -23,13 +23,7 @@ async function GameModalContent({ id }: Readonly<{ id: string }>) {
   const sortedDeals = sortDealsByPrice(game.deals);
   const bestCurrentPrice = Number.parseFloat(sortedDeals[0]?.price ?? '9999');
   const { official, keyshop } = splitDealsByGreyMarket(sortedDeals, isGreyMarketStore);
-  const playtime = estimatePlaytime(game.info.title);
-  const costPerHour = calculateCostPerHour(bestCurrentPrice, playtime.mainStory);
-  const stats = {
-    ...buildGameStats(game, bestCurrentPrice),
-    costPerHour,
-    playtimeMain: playtime.mainStory,
-  };
+  const stats = buildGameStats(game, bestCurrentPrice);
 
   const viewModel = {
     gameTitle: game.info.title,

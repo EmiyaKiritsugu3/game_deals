@@ -5,11 +5,13 @@ const {
   mockIndexGamesBatch,
   mockCaptureException,
   mockMapDealsToTypesenseGames,
+  mockFetchCheapSharkDeals,
 } = vi.hoisted(() => ({
   mockTypesenseSearch: vi.fn(),
   mockIndexGamesBatch: vi.fn(),
   mockCaptureException: vi.fn(),
   mockMapDealsToTypesenseGames: vi.fn(),
+  mockFetchCheapSharkDeals: vi.fn(),
 }));
 
 let originalFetch: typeof globalThis.fetch;
@@ -23,12 +25,12 @@ vi.mock('@/lib/typesense-map', () => ({
   mapDealsToTypesenseGames: mockMapDealsToTypesenseGames,
 }));
 
-vi.mock('@sentry/nextjs', () => ({
-  captureException: mockCaptureException,
+vi.mock('@/services/ingest', () => ({
+  fetchCheapSharkDeals: mockFetchCheapSharkDeals,
 }));
 
-vi.mock('@/lib/typesense-map', () => ({
-  mapDealsToTypesenseGames: mockMapDealsToTypesenseGames,
+vi.mock('@sentry/nextjs', () => ({
+  captureException: mockCaptureException,
 }));
 
 beforeEach(() => {
@@ -36,6 +38,7 @@ beforeEach(() => {
   mockIndexGamesBatch.mockReset();
   mockCaptureException.mockReset();
   mockMapDealsToTypesenseGames.mockReset();
+  mockFetchCheapSharkDeals.mockReset();
   delete process.env.TYPESENSE_ADMIN_KEY;
   delete process.env.NEXT_PUBLIC_TYPESENSE_SEARCH_KEY;
   originalFetch = globalThis.fetch;
@@ -145,10 +148,7 @@ describe('syncGamesToTypesenseAction', () => {
 
   it('returns "No deals fetched" when fetch returns empty', async () => {
     process.env.TYPESENSE_ADMIN_KEY = 'test-key';
-    globalThis.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve([]),
-    });
+    mockFetchCheapSharkDeals.mockResolvedValueOnce([]);
 
     const { syncGamesToTypesenseAction } = await importModule();
     const result = await syncGamesToTypesenseAction();
@@ -159,39 +159,23 @@ describe('syncGamesToTypesenseAction', () => {
     });
   });
 
-  it('returns "No deals fetched" when fetch returns non-ok', async () => {
+  it('returns "No deals fetched" when fetch throws', async () => {
     process.env.TYPESENSE_ADMIN_KEY = 'test-key';
-    globalThis.fetch = vi.fn().mockResolvedValueOnce({ ok: false });
+    mockFetchCheapSharkDeals.mockRejectedValueOnce(new Error('Network down'));
 
     const { syncGamesToTypesenseAction } = await importModule();
     const result = await syncGamesToTypesenseAction();
     expect(result).toEqual({
       success: false,
       indexed: 0,
-      error: 'No deals fetched',
-    });
-  });
-
-  it('returns "No deals fetched" when fetch throws (fetchDealsForSync swallows)', async () => {
-    process.env.TYPESENSE_ADMIN_KEY = 'test-key';
-    globalThis.fetch = vi.fn().mockRejectedValueOnce(new Error('Network down'));
-
-    const { syncGamesToTypesenseAction } = await importModule();
-    const result = await syncGamesToTypesenseAction();
-    expect(result).toEqual({
-      success: false,
-      indexed: 0,
-      error: 'No deals fetched',
+      error: 'Network down',
     });
   });
 
   it('returns success when deals are fetched, mapped, and indexed', async () => {
     process.env.TYPESENSE_ADMIN_KEY = 'test-key';
     const mockDeals = [{ gameID: '1', title: 'Game 1', salePrice: '9.99' }];
-    globalThis.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve(mockDeals),
-    });
+    mockFetchCheapSharkDeals.mockResolvedValueOnce(mockDeals);
     mockMapDealsToTypesenseGames.mockReturnValueOnce([{ gameID: '1', title: 'Game 1' }]);
     mockIndexGamesBatch.mockResolvedValueOnce(true);
 
@@ -204,10 +188,7 @@ describe('syncGamesToTypesenseAction', () => {
 
   it('returns success:false when indexGamesBatch returns false', async () => {
     process.env.TYPESENSE_ADMIN_KEY = 'test-key';
-    globalThis.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve([{ gameID: '1' }]),
-    });
+    mockFetchCheapSharkDeals.mockResolvedValueOnce([{ gameID: '1' }]);
     mockMapDealsToTypesenseGames.mockReturnValueOnce([{ gameID: '1' }]);
     mockIndexGamesBatch.mockResolvedValueOnce(false);
 
@@ -219,10 +200,7 @@ describe('syncGamesToTypesenseAction', () => {
 
   it('returns error when mapDealsToTypesenseGames throws', async () => {
     process.env.TYPESENSE_ADMIN_KEY = 'test-key';
-    globalThis.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve([{ gameID: '1' }]),
-    });
+    mockFetchCheapSharkDeals.mockResolvedValueOnce([{ gameID: '1' }]);
     mockMapDealsToTypesenseGames.mockImplementationOnce(() => {
       throw new Error('Mapping failed');
     });
@@ -238,10 +216,7 @@ describe('syncGamesToTypesenseAction', () => {
 
   it('returns error when indexGamesBatch throws', async () => {
     process.env.TYPESENSE_ADMIN_KEY = 'test-key';
-    globalThis.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve([{ gameID: '1' }]),
-    });
+    mockFetchCheapSharkDeals.mockResolvedValueOnce([{ gameID: '1' }]);
     mockMapDealsToTypesenseGames.mockReturnValueOnce([{ gameID: '1' }]);
     mockIndexGamesBatch.mockRejectedValueOnce(new Error('Index failed'));
 
@@ -256,10 +231,7 @@ describe('syncGamesToTypesenseAction', () => {
 
   it('returns "Unknown error" for non-Error thrown values from mapDeals', async () => {
     process.env.TYPESENSE_ADMIN_KEY = 'test-key';
-    globalThis.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve([{ gameID: '1' }]),
-    });
+    mockFetchCheapSharkDeals.mockResolvedValueOnce([{ gameID: '1' }]);
     mockMapDealsToTypesenseGames.mockImplementationOnce(() => {
       throw 'string error';
     });

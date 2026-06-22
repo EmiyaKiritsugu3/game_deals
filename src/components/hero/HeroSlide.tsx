@@ -1,5 +1,4 @@
 'use client';
-import { motion } from 'framer-motion';
 import { Gamepad2, Monitor } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -25,16 +24,7 @@ export function HeroSlide({
       </div>
 
       <div className="container">
-        <motion.div
-          className={styles.glassPanel}
-          initial={{ opacity: 0, scale: 0.95, y: 30 }}
-          animate={{
-            opacity: isActive ? 1 : 0,
-            scale: isActive ? 1 : 0.95,
-            y: isActive ? 0 : 30,
-          }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-        >
+        <div className={`${styles.glassPanel} ${isActive ? styles.glassPanelActive : ''}`}>
           <div className={styles.heroContainer}>
             <div className={styles.content}>
               <span className={styles.featuredBadge}>FEATURED DEAL</span>
@@ -91,7 +81,7 @@ export function HeroSlide({
               />
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

@@ -9,25 +9,6 @@ const TYPESENSE_COLLECTION_NAME = process.env.TYPESENSE_COLLECTION_NAME || 'game
 /**
  * Schema da collection Typesense
  */
-export const GAME_SCHEMA = {
-  name: TYPESENSE_COLLECTION_NAME,
-  fields: [
-    { name: 'gameID', type: 'string', facet: false },
-    { name: 'title', type: 'string', facet: false },
-    { name: 'thumb', type: 'string', facet: false },
-    { name: 'cheapest', type: 'string', facet: false },
-    { name: 'cheapestPrice', type: 'float', facet: false },
-    { name: 'metacriticScore', type: 'int32', facet: false, optional: true },
-    { name: 'steamRating', type: 'int32', facet: false, optional: true },
-    { name: 'developer', type: 'string', facet: true, optional: true },
-    { name: 'publisher', type: 'string', facet: true, optional: true },
-    { name: 'genre', type: 'string[]', facet: true, optional: true },
-    { name: 'platform', type: 'string[]', facet: true, optional: true },
-  ],
-  default_sorting_field: 'cheapestPrice',
-  token_separators: ['-', '_', '/'],
-  symbols_to_index: ['-', '_', '/'],
-};
 
 /**
  * Typesense client pra server-side search

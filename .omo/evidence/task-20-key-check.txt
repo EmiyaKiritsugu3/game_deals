@@ -1,0 +1,66 @@
+===============================================================================
+TASK 20: SERVICE_ROLE KEY LEAK INVESTIGATION
+Date: 2026-06-12
+===============================================================================
+
+STATUS: CRITICAL - KEY NOT ROTATED
+
+===============================================================================
+1. LEAK DETAILS
+===============================================================================
+
+Leaked Key:       sb_secret_oJ5NVQZWXUegZmlFFanIcg_nxdv90wD
+Supabase Project: scsbermcpukyxfwcuvls.supabase.co
+Leak Type:        Hardcoded service_role key in source file
+Leak File:        src/scripts/seed_tester.js
+Introduced in:    c710732 (feat(tooling): migrate to validated 2026 stack)
+Removed in:       135e2ed (fix: SonarCloud code smells, GitGuardian secret leak...)
+Exposed in:       2 commits in history (anyone with repo access can retrieve it)
+
+===============================================================================
+2. CURRENT VERIFICATION
+===============================================================================
+
+Source code check:   CLEAN - no hardcoded keys in src/ (all use env vars)
+Git history check:   LEAKED - key still accessible in commit c710732
+Key validity:        ACTIVE - HTTP 200 on Supabase REST API with this key
+Key rotation:        NOT ROTATED - same key in .env.local and still live
+
+===============================================================================
+3. WHAT WAS DONE (commit 135e2ed)
+===============================================================================
+
+The commit:
+- Removed seed_tester.js (the file with the hardcoded key)
+- Moved the key to .env.local environment variable
+- Did NOT rotate the key in Supabase dashboard
+
+The env var approach is correct, but without rotation the original key
+remains compromised and active.
+
+===============================================================================
+4. RISK ASSESSMENT
+===============================================================================
+
+Severity: CRITICAL
+- service_role key provides FULL admin access to Supabase project
+- Bypasses all Row Level Security (RLS)
+- Can read/write all tables, manage auth users, execute SQL
+- Key is still ACTIVE (verified via HTTP 200 response)
+- Key is exposed in git history accessible to all repo collaborators
+
+===============================================================================
+5. RECOMMENDED ACTIONS
+===============================================================================
+
+IMMEDIATE (before any other work):
+1. Rotate the service_role key in Supabase Dashboard:
+   - Go to: https://supabase.com/dashboard/project/scsbermcpukyxfwcuvls/settings/api
+   - Click "Rotate" next to service_role key
+2. Update .env.local with the NEW rotated key
+3. Verify old key returns 401/403 (confirms rotation worked)
+4. Also rotate the anon/publishable key for defense-in-depth
+
+NOTE: The DATABASE_URL in .env.local also contains a password
+(2wzyGOH4JdzEbDyx) - if this was also committed to git, rotate it too.
+

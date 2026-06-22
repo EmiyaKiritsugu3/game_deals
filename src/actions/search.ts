@@ -2,8 +2,8 @@
 
 import * as Sentry from '@sentry/nextjs';
 import { indexGamesBatch, searchGames as typesenseSearch } from '@/lib/typesense';
-import type { CheapSharkDeal } from '@/lib/typesense-map';
 import { mapDealsToTypesenseGames } from '@/lib/typesense-map';
+import { fetchCheapSharkDeals } from '@/services/ingest';
 
 interface TypesenseHit {
   document: {
@@ -56,28 +56,6 @@ export async function searchGamesAction(query: string, limit = 10) {
   }
 }
 
-async function fetchDealsForSync(): Promise<CheapSharkDeal[]> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
-  try {
-    const res = await fetch(
-      'https://www.cheapshark.com/api/1.0/deals?sortBy=Deal%20Rating&onSale=1&pageSize=100',
-      { headers: { 'User-Agent': 'GameDeals/1.0' }, signal: controller.signal }
-    );
-    clearTimeout(timeout);
-    if (!res.ok) return [];
-    return (await res.json()) as CheapSharkDeal[];
-  } catch (e) {
-    clearTimeout(timeout);
-    console.error('fetchDealsForSync error:', e);
-    return [];
-  }
-}
-
-/**
- * Sync jogos do CheapShark pra Typesense
- * Chamado pelo cron job
- */
 export async function syncGamesToTypesenseAction(): Promise<{
   success: boolean;
   indexed: number;
@@ -88,7 +66,7 @@ export async function syncGamesToTypesenseAction(): Promise<{
     return { success: false, indexed: 0, error: 'Typesense not configured' };
   }
   try {
-    const deals = await fetchDealsForSync();
+    const deals = await fetchCheapSharkDeals();
     if (deals.length === 0) {
       return { success: false, indexed: 0, error: 'No deals fetched' };
     }

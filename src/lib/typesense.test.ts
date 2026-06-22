@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { GAME_SCHEMA, indexGamesBatch, searchGames } from './typesense';
+import { indexGamesBatch, searchGames } from './typesense';
 
 beforeEach(() => {
   vi.stubEnv('TYPESENSE_HOST', 'localhost');
@@ -13,31 +13,6 @@ beforeEach(() => {
 afterEach(() => {
   vi.unstubAllEnvs();
   vi.restoreAllMocks();
-});
-
-describe('GAME_SCHEMA', () => {
-  it('has name from collection env var', () => {
-    expect(GAME_SCHEMA.name).toBe('games');
-    vi.stubEnv('TYPESENSE_COLLECTION_NAME', 'custom');
-    // Re-import to test env var — but since import is cached, test the shape
-    expect(GAME_SCHEMA.fields).toBeDefined();
-  });
-
-  it('has 11 fields with all required properties', () => {
-    expect(GAME_SCHEMA.fields).toHaveLength(11);
-    const gameIdField = GAME_SCHEMA.fields.find((f) => f.name === 'gameID');
-    expect(gameIdField).toBeDefined();
-    expect(gameIdField?.type).toBe('string');
-  });
-
-  it('has token_separators and symbols_to_index', () => {
-    expect(GAME_SCHEMA.token_separators).toEqual(['-', '_', '/']);
-    expect(GAME_SCHEMA.symbols_to_index).toEqual(['-', '_', '/']);
-  });
-
-  it('has default_sorting_field set to cheapestPrice', () => {
-    expect(GAME_SCHEMA.default_sorting_field).toBe('cheapestPrice');
-  });
 });
 
 describe('searchGames', () => {
