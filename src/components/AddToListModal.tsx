@@ -51,6 +51,7 @@ function ListSelector({
         <input
           type="text"
           placeholder="New playlist name..."
+          aria-label="New playlist name"
           value={newListName}
           onChange={(e) => setNewListName(e.target.value)}
           className={styles.input}
