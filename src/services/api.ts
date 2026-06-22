@@ -2,6 +2,7 @@ import { fallbackDeals } from '@/data/fallbackDeals';
 
 export * from '@/types/game';
 
+import { cache } from 'react';
 import {
   EPIC_STORES,
   GOG_STORES,
@@ -76,7 +77,10 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
   }
 }
 
-export async function getStores(): Promise<Record<string, string>> {
+// ⚡ Bolt: Cache the store list to prevent redundant fetches and map rebuilds
+// during a single server-side render pass, especially when rendering many GameCards or DealRows.
+// React.cache deduplicates function calls with the same arguments in a single render pass.
+export const getStores = cache(async function getStores(): Promise<Record<string, string>> {
   const map: Record<string, string> = {};
 
   try {
@@ -105,7 +109,7 @@ export async function getStores(): Promise<Record<string, string>> {
   map['104'] = 'Gamivo';
 
   return map;
-}
+});
 
 export async function getGame(id: string): Promise<GameDetails> {
   try {
