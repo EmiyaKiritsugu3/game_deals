@@ -1,0 +1,29 @@
+public/sw.js
+  s_e9eb5b31e8dadc::t_151f93b566452a 3,27-34,41-45,48-52
+  ai_agent 38-40,53,57-67,69,71
+public/icon-512.svg
+  s_e9eb5b31e8dadc::t_812d723adaf782 1-4
+src/app/manifest.ts
+  s_e9eb5b31e8dadc::t_e23a658ff4331b 23
+  s_e9eb5b31e8dadc::t_9f77578697cd9d 14-22,24-26,28
+docs/project_status_report.md
+  s_e9eb5b31e8dadc::t_0569f5dc1d01cf 99
+public/icon-192.svg
+  s_e9eb5b31e8dadc::t_a127b942ca2b2e 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "382a59a1b78489875dc8605a306e71dcfe99aa0e",
+  "prompts": {},
+  "sessions": {
+    "s_e9eb5b31e8dadc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0ce0dbd4-1f4b-4063-8da0-95c68931d501",
+        "model": "mimo-auto"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
