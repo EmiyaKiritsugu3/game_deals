@@ -1,0 +1,19 @@
+tests/e2e/full-journey.spec.ts
+  s_e9eb5b31e8dadc::t_7828613dc0515d 42-44,47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "c97997d9b2bfaecdc093cd082f7ab8889631dfc1",
+  "prompts": {},
+  "sessions": {
+    "s_e9eb5b31e8dadc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0ce0dbd4-1f4b-4063-8da0-95c68931d501",
+        "model": "mimo-auto"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
