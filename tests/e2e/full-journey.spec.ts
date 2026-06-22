@@ -29,9 +29,9 @@ test.describe('Full anonymous journey', () => {
   });
 
   test('browse deals, search, view game detail', async ({ page }) => {
-    // 1. Home page loads with deals
-    await page.goto('/');
-    const dealCard = page.locator('article, [data-testid="deal-card"]').first();
+    // 1. Home page loads with deals (deal cards are links to /game/[id])
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const dealCard = page.locator('a[href^="/game/"]').first();
     await expect(dealCard).toBeVisible({ timeout: 15000 });
 
     // 2. Search for a game
