@@ -14,7 +14,7 @@ interface BaseModalProps {
 
 export default function BaseModal({ isOpen, onClose, children, title, ariaLabel }: BaseModalProps) {
   const previousActiveElement = useRef<Element | null>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDialogElement>(null);
 
   const getFocusableElements = useCallback((): HTMLElement[] => {
     if (!modalRef.current) return [];
@@ -82,13 +82,20 @@ export default function BaseModal({ isOpen, onClose, children, title, ariaLabel 
   if (!isOpen) return null;
 
   return (
-    // biome-ignore lint/a11y/noStaticElementInteractions: overlay backdrop — Escape handled by document listener
-    // biome-ignore lint/a11y/useKeyWithClickEvents: overlay backdrop — Escape handled by document listener
-    <div className={styles.overlay} onClick={onClose}>
-      <div
+    // biome-ignore lint/a11y/useSemanticElements: overlay backdrop, not a button
+    <div
+      className={styles.overlay}
+      onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onClose();
+      }}
+      tabIndex={-1}
+      role="button"
+      aria-label="Close"
+    >
+      <dialog
         ref={modalRef}
-        role="dialog"
-        aria-modal="true"
+        open
         aria-label={dialogLabel}
         className={styles.modal}
         onClick={(e) => e.stopPropagation()}
@@ -110,7 +117,7 @@ export default function BaseModal({ isOpen, onClose, children, title, ariaLabel 
         )}
 
         {children}
-      </div>
+      </dialog>
     </div>
   );
 }

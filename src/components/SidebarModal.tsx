@@ -39,9 +39,16 @@ export default function SidebarModal({ children }: Readonly<{ children: React.Re
   }, [onKeyDown]);
 
   return (
-    // biome-ignore lint/a11y/noStaticElementInteractions: overlay backdrop — Escape handled by document listener
-    // biome-ignore lint/a11y/useKeyWithClickEvents: overlay backdrop — Escape handled by document listener
-    <div ref={overlay} className={styles.overlay} onClick={onClick}>
+    // biome-ignore lint/a11y/noStaticElementInteractions: overlay backdrop — keyboard handled by document listener
+    <div
+      ref={overlay}
+      className={styles.overlay}
+      onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') dismissModal();
+      }}
+      tabIndex={-1}
+    >
       <div className={styles.sidebar}>
         <button
           type="button"
