@@ -1,0 +1,19 @@
+src/data/collections.ts
+  s_e9eb5b31e8dadc::t_22349a0f5d0d82 54-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "ca700a9b471db5b227751fb15347b7e4d13514c9",
+  "prompts": {},
+  "sessions": {
+    "s_e9eb5b31e8dadc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0ce0dbd4-1f4b-4063-8da0-95c68931d501",
+        "model": "mimo-auto"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
