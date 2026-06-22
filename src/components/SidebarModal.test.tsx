@@ -9,19 +9,6 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ back: mockBack }),
 }));
 
-vi.mock('framer-motion', () => ({
-  motion: {
-    // biome-ignore lint/suspicious/noExplicitAny: mock component needs flexible props
-    div: ({ children, onClick, ref }: any) => (
-      // biome-ignore lint/a11y/noStaticElementInteractions: test mock
-      // biome-ignore lint/a11y/useKeyWithClickEvents: test mock
-      <div ref={ref} onClick={onClick}>
-        {children}
-      </div>
-    ),
-  },
-}));
-
 vi.mock('lucide-react', () => ({
   X: (props: Record<string, unknown>) => <svg data-testid="x-icon" {...props} />,
 }));

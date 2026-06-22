@@ -1,6 +1,5 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { type ReactNode, useCallback, useEffect, useRef } from 'react';
 import styles from './BaseModal.module.css';
@@ -15,7 +14,7 @@ interface BaseModalProps {
 
 export default function BaseModal({ isOpen, onClose, children, title, ariaLabel }: BaseModalProps) {
   const previousActiveElement = useRef<Element | null>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDialogElement>(null);
 
   const getFocusableElements = useCallback((): HTMLElement[] => {
     if (!modalRef.current) return [];
@@ -80,46 +79,45 @@ export default function BaseModal({ isOpen, onClose, children, title, ariaLabel 
 
   const dialogLabel = ariaLabel || title;
 
+  if (!isOpen) return null;
+
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          className={styles.overlay}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+    // biome-ignore lint/a11y/useSemanticElements: overlay backdrop, not a button
+    <div
+      className={styles.overlay}
+      onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onClose();
+      }}
+      tabIndex={-1}
+      role="button"
+      aria-label="Close"
+    >
+      <dialog
+        ref={modalRef}
+        open
+        aria-label={dialogLabel}
+        className={styles.modal}
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          className={styles.closeButton}
           onClick={onClose}
+          aria-label="Close modal"
         >
-          <motion.div
-            ref={modalRef}
-            role="dialog"
-            aria-modal="true"
-            aria-label={dialogLabel}
-            className={styles.modal}
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              className={styles.closeButton}
-              onClick={onClose}
-              aria-label="Close modal"
-            >
-              <X size={20} />
-            </button>
+          <X size={20} />
+        </button>
 
-            {title && (
-              <div className={styles.header}>
-                <h2>{title}</h2>
-              </div>
-            )}
+        {title && (
+          <div className={styles.header}>
+            <h2>{title}</h2>
+          </div>
+        )}
 
-            {children}
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        {children}
+      </dialog>
+    </div>
   );
 }

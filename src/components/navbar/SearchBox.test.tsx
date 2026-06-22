@@ -2,21 +2,14 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { mockSearchGamesAction, mockUseQueryState, mockUseQuery, mockUseClickOutside } = vi.hoisted(
-  () => ({
-    mockSearchGamesAction: vi.fn(),
-    mockUseQueryState: vi.fn(),
-    mockUseQuery: vi.fn(),
-    mockUseClickOutside: vi.fn(),
-  })
-);
+const { mockSearchGamesAction, mockUseQuery, mockUseClickOutside } = vi.hoisted(() => ({
+  mockSearchGamesAction: vi.fn(),
+  mockUseQuery: vi.fn(),
+  mockUseClickOutside: vi.fn(),
+}));
 
 vi.mock('@/actions/search', () => ({
   searchGamesAction: (...args: unknown[]) => mockSearchGamesAction(...args),
-}));
-
-vi.mock('nuqs', () => ({
-  useQueryState: (...args: unknown[]) => mockUseQueryState(...args),
 }));
 
 vi.mock('@tanstack/react-query', () => ({
@@ -58,18 +51,11 @@ vi.mock('../Navbar.module.css', () => ({
 import { SearchBox } from './SearchBox';
 
 describe('SearchBox', () => {
-  let queryValue: string;
-  let setQueryMock: ReturnType<typeof vi.fn>;
   const mockRef = { current: document.createElement('div') };
 
   beforeEach(() => {
     vi.useFakeTimers();
     vi.clearAllMocks();
-    queryValue = '';
-    setQueryMock = vi.fn((val: string) => {
-      queryValue = val;
-    });
-    mockUseQueryState.mockReturnValue([queryValue, setQueryMock]);
     mockUseClickOutside.mockReturnValue(mockRef);
     mockUseQuery.mockReturnValue({ data: undefined, isLoading: false });
   });
@@ -87,12 +73,11 @@ describe('SearchBox', () => {
     results: Array<Record<string, string>> | undefined,
     isLoading: boolean
   ) {
-    queryValue = 'search-query';
-    mockUseQueryState.mockReturnValue([queryValue, setQueryMock]);
     mockUseQuery.mockReturnValue({ data: results, isLoading });
     const { container } = renderSearchBox();
     act(() => {
       const input = screen.getByPlaceholderText('Search for games...');
+      fireEvent.change(input, { target: { value: 'search-query' } });
       fireEvent.focus(input);
       vi.advanceTimersByTime(300);
     });
@@ -114,7 +99,7 @@ describe('SearchBox', () => {
     renderSearchBox();
     const input = screen.getByPlaceholderText('Search for games...');
     fireEvent.change(input, { target: { value: 'zelda' } });
-    expect(setQueryMock).toHaveBeenCalledWith('zelda');
+    expect(input).toHaveValue('zelda');
   });
 
   it('opens dropdown on input focus', () => {
@@ -168,13 +153,13 @@ describe('SearchBox', () => {
   });
 
   it('enables search when debounced query has 3+ chars', () => {
-    queryValue = 'abc';
-    mockUseQueryState.mockReturnValue([queryValue, setQueryMock]);
     mockUseQuery.mockReturnValue({ data: undefined, isLoading: false });
 
     renderSearchBox();
+    const input = screen.getByPlaceholderText('Search for games...');
 
     act(() => {
+      fireEvent.change(input, { target: { value: 'abc' } });
       vi.advanceTimersByTime(300);
     });
 
@@ -182,13 +167,13 @@ describe('SearchBox', () => {
   });
 
   it('does not enable search when query is less than 3 chars', () => {
-    queryValue = 'ab';
-    mockUseQueryState.mockReturnValue([queryValue, setQueryMock]);
     mockUseQuery.mockReturnValue({ data: undefined, isLoading: false });
 
     renderSearchBox();
+    const input = screen.getByPlaceholderText('Search for games...');
 
     act(() => {
+      fireEvent.change(input, { target: { value: 'ab' } });
       vi.advanceTimersByTime(300);
     });
 
@@ -196,12 +181,9 @@ describe('SearchBox', () => {
   });
 
   it('hides dropdown when query is less than 3 chars', () => {
-    queryValue = 'ab';
-    mockUseQueryState.mockReturnValue([queryValue, setQueryMock]);
     mockUseQuery.mockReturnValue({ data: undefined, isLoading: false });
 
     renderSearchBox();
-
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
     expect(screen.queryByText('No games found')).not.toBeInTheDocument();
   });
@@ -226,42 +208,9 @@ describe('SearchBox', () => {
     expect(input).toHaveAttribute('autocomplete', 'off');
   });
 
-  it('closes dropdown and clears query when result link is clicked', () => {
-    openDropdownWithResults(
-      [{ gameID: '100', external: 'Super Mario', thumb: 'm.jpg', cheapest: '39.99' }],
-      false
-    );
-    const link = screen.getByRole('link', { name: /super mario/i });
-    fireEvent.click(link);
-    expect(setQueryMock).toHaveBeenCalledWith('');
-  });
-
   it('search input has aria-label', () => {
     renderSearchBox();
     expect(screen.getByLabelText('Search games')).toBeInTheDocument();
-  });
-
-  it('sets isDropdownOpen to true on input onChange', () => {
-    renderSearchBox();
-    const input = screen.getByPlaceholderText('Search for games...');
-    fireEvent.change(input, { target: { value: 'test' } });
-    expect(setQueryMock).toHaveBeenCalledWith('test');
-  });
-
-  it('hides dropdown when no results and not loading and not empty', () => {
-    queryValue = 'xyz';
-    mockUseQueryState.mockReturnValue([queryValue, setQueryMock]);
-    mockUseQuery.mockReturnValue({ data: undefined, isLoading: false });
-
-    renderSearchBox();
-    const input = screen.getByPlaceholderText('Search for games...');
-    fireEvent.focus(input);
-
-    act(() => {
-      vi.advanceTimersByTime(300);
-    });
-
-    expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
   });
 
   it('search icon is rendered', () => {
@@ -277,15 +226,14 @@ describe('SearchBox', () => {
   });
 
   it('does not show dropdown before debounce completes', () => {
-    queryValue = 'abc';
-    mockUseQueryState.mockReturnValue([queryValue, setQueryMock]);
     mockUseQuery.mockReturnValue({ data: [], isLoading: false });
 
     renderSearchBox();
     const input = screen.getByPlaceholderText('Search for games...');
-    fireEvent.focus(input);
 
     act(() => {
+      fireEvent.change(input, { target: { value: 'abc' } });
+      fireEvent.focus(input);
       vi.advanceTimersByTime(200);
     });
 

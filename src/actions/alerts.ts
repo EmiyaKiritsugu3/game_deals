@@ -15,7 +15,6 @@ async function requireAuth() {
   return user;
 }
 
-// fallow-ignore-next-line unused-export
 export async function createPriceAlertAction(
   gameId: string,
   targetPrice: number,
@@ -37,7 +36,6 @@ export async function createPriceAlertAction(
   return inserted[0];
 }
 
-// fallow-ignore-next-line unused-export
 export async function getUserAlertsAction() {
   const supabase = await createClient();
   const {
@@ -55,7 +53,6 @@ export async function getUserAlertsAction() {
   return result;
 }
 
-// fallow-ignore-next-line unused-export
 export async function deletePriceAlertAction(alertId: string) {
   const supabase = await createClient();
   const {

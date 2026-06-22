@@ -9,7 +9,6 @@ import {
   SITE_URL,
 } from '@/lib/metadata-helpers';
 import { getGame, getHighResImage, getStores, isGreyMarketStore } from '@/services/api';
-import { calculateCostPerHour, estimatePlaytime } from '@/services/hltb';
 
 export async function generateMetadata({
   params,
@@ -60,14 +59,12 @@ export default async function GamePage({ params }: Readonly<{ params: Promise<{ 
   const bestCurrentPrice = Number.parseFloat(sortedDeals[0]?.price ?? '9999');
   const { official, keyshop } = splitDealsByGreyMarket(sortedDeals, isGreyMarketStore);
   const stats = buildGameStats(game, bestCurrentPrice);
-  const playtime = estimatePlaytime(game.info.title);
-  const costPerHour = calculateCostPerHour(bestCurrentPrice, playtime.mainStory);
 
   const viewModel = {
     gameTitle: game.info.title,
     highResThumb,
     bestRawPrice: sortedDeals[0]?.price ?? '0',
-    stats: { ...stats, costPerHour, playtimeMain: playtime.mainStory },
+    stats,
     official,
     keyshop,
     cheapestEverDate: game.cheapestPriceEver.date,

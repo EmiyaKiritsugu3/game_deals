@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { HeartCrack } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -26,12 +25,7 @@ function LoadingState() {
 
 function EmptyState() {
   return (
-    <motion.div
-      className={styles.emptyState}
-      initial={{ opacity: 0, scale: 0.95, y: 20 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ duration: 0.4, type: 'spring', bounce: 0.5 }}
-    >
+    <div className={styles.emptyState}>
       <HeartCrack size={64} className={styles.emptyIcon} />
       <h2>Your wishlist is empty :(</h2>
       <p>
@@ -40,7 +34,7 @@ function EmptyState() {
       <Link href="/" className={styles.browseButton}>
         Discover Epic Deals
       </Link>
-    </motion.div>
+    </div>
   );
 }
 
@@ -49,31 +43,9 @@ export default function WishlistGrid({ games, stores, isLoading = false }: Wishl
   if (games.length === 0) return <EmptyState />;
 
   return (
-    <motion.div
-      className={styles.grid}
-      initial="hidden"
-      animate="show"
-      variants={{
-        hidden: { opacity: 0 },
-        show: {
-          opacity: 1,
-          transition: { staggerChildren: 0.05 },
-        },
-      }}
-    >
+    <div className={styles.grid}>
       {games.map((game) => (
-        <motion.div
-          key={game.gameID}
-          className={styles.wishlistCard}
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            show: {
-              opacity: 1,
-              y: 0,
-              transition: { type: 'spring', stiffness: 300, damping: 24 },
-            },
-          }}
-        >
+        <div key={game.gameID} className={styles.wishlistCard}>
           <div className={styles.imageContainer}>
             <Image
               src={game.thumb}
@@ -111,8 +83,8 @@ export default function WishlistGrid({ games, stores, isLoading = false }: Wishl
               </Link>
             </div>
           </div>
-        </motion.div>
+        </div>
       ))}
-    </motion.div>
+    </div>
   );
 }

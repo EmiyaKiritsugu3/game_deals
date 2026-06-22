@@ -3,7 +3,6 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
-import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Suspense } from 'react';
 import CookieBanner from '@/components/CookieBanner';
 import Navbar from '@/components/Navbar';
@@ -123,29 +122,27 @@ export default async function RootLayout({
         </a>
         <main id="main-content">
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <NuqsAdapter>
-              <ReactQueryProvider>
-                <Suspense
-                  fallback={
-                    <nav
-                      style={{
-                        height: 60,
-                        borderBottom: '1px solid hsl(var(--border))',
-                        background: 'hsl(var(--background))',
-                      }}
-                    />
-                  }
-                >
-                  <Navbar serverUser={null} />
-                </Suspense>
-                <SyncManager />
-                {children}
-                {modal}
-                <Analytics />
-                <SpeedInsights />
-                <CookieBanner />
-              </ReactQueryProvider>
-            </NuqsAdapter>
+            <ReactQueryProvider>
+              <Suspense
+                fallback={
+                  <nav
+                    style={{
+                      height: 60,
+                      borderBottom: '1px solid hsl(var(--border))',
+                      background: 'hsl(var(--background))',
+                    }}
+                  />
+                }
+              >
+                <Navbar serverUser={null} />
+              </Suspense>
+              <SyncManager />
+              {children}
+              {modal}
+              <Analytics />
+              <SpeedInsights />
+              <CookieBanner />
+            </ReactQueryProvider>
           </ThemeProvider>
         </main>
       </body>

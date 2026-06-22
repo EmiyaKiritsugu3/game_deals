@@ -1,0 +1,29 @@
+{
+  "schema_version": 3,
+  "active_work_id": null,
+  "works": {
+    "sprint12-security": {
+      "work_id": "sprint12-security",
+      "active_plan": ".omo/plans/sprint12-security.md",
+      "plan_name": "sprint12-security",
+      "session_ids": ["opencode:ses_11a6d7fa5ffeuDGwhtiasABcsn"],
+      "status": "completed",
+      "worktree_path": "",
+      "agent": "atlas",
+      "started_at": "2026-06-21T11:07:00Z",
+      "ended_at": "2026-06-21T11:30:00Z",
+      "result": {
+        "todos_total": 16,
+        "todos_completed": 15,
+        "todos_blocked": 1,
+        "todos_blocked_ids": ["F1.3"],
+        "todos_blocked_reason": "H2 service role key rotation requires Supabase dashboard access — out of CLI scope",
+        "commits": ["92964c6", "71cd798", "fb2c788", "5654ae8"],
+        "tests": "948/948 pass",
+        "coverage_lines": 83.97,
+        "coverage_branches": 80.68
+      }
+    }
+  },
+  "agent": "atlas"
+}

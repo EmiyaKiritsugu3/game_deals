@@ -3,38 +3,24 @@ import { Redis } from '@upstash/redis';
 import { sql } from 'drizzle-orm';
 import { db } from '@/db';
 
-// --- Upstash client (lazy singleton, instances cached by config) ---
+// --- Upstash client (lazy singleton) ---
 
-let redisClient: Redis | null = null;
+let ratelimitInstance: Ratelimit | null = null;
 
-function getRedis(): Redis | null {
-  if (redisClient) return redisClient;
+function getRatelimit(): Ratelimit | null {
+  if (ratelimitInstance) return ratelimitInstance;
   const url = process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
   if (!url || !token) return null;
-  redisClient = new Redis({ url, token });
-  return redisClient;
-}
 
-const ratelimitInstances = new Map<string, Ratelimit>();
-
-function getRatelimit(maxAttempts: number, windowMs: number): Ratelimit | null {
-  const redis = getRedis();
-  if (!redis) return null;
-
-  const cacheKey = `${maxAttempts}:${windowMs}`;
-  let instance = ratelimitInstances.get(cacheKey);
-  if (instance) return instance;
-
-  const windowSec = Math.max(1, Math.floor(windowMs / 1000));
-  instance = new Ratelimit({
+  const redis = new Redis({ url, token });
+  ratelimitInstance = new Ratelimit({
     redis,
-    limiter: Ratelimit.slidingWindow(maxAttempts, `${windowSec} s`),
+    limiter: Ratelimit.slidingWindow(10, '60 s'),
     analytics: false,
     prefix: 'gamedeals:rl',
   });
-  ratelimitInstances.set(cacheKey, instance);
-  return instance;
+  return ratelimitInstance;
 }
 
 // --- PostgreSQL fallback (original implementation) ---
@@ -93,7 +79,7 @@ async function rateLimitPostgres(
 // --- Public API ---
 
 export async function rateLimit(key: string, maxAttempts = 10, windowMs = 60000): Promise<boolean> {
-  const rl = getRatelimit(maxAttempts, windowMs);
+  const rl = getRatelimit();
   if (rl) {
     try {
       const result = await rl.limit(key);

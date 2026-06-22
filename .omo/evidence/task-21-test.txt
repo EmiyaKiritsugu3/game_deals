@@ -1,0 +1,2 @@
+TEST: biome-config.test.ts
+PASS (2) FAIL (0)

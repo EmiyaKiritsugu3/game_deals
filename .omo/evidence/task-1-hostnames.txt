@@ -1,0 +1,62 @@
+# Image URLs found in source
+cdn.cloudflare.steamstatic.com
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/105600/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/1092790/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/1139900/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/1145360/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/261570/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/264710/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/268910/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/294100/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/367520/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/391540/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/413150/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/460950/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/504230/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/588650/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/632360/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/632470/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/646570/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/753640/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/782330/header.jpg
+  - https://cdn.cloudflare.steamstatic.com/steam/apps/870780/header.jpg
+
+shared.fastly.steamstatic.com
+  - https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/capsule_231x87.jpg
+  - https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145360/capsule_231x87.jpg
+  - https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1174180/capsule_231x87.jpg
+  - https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1245620/capsule_231x87.jpg
+  - https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/292030/capsule_231x87.jpg
+  - https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/620/capsule_231x87.jpg
+
+# Unique image-serving hostnames
+cdn.cloudflare.steamstatic.com
+shared.fastly.steamstatic.com
+
+# Other hostnames referenced in source (affiliate stores, etc.)
+gamedeals.com.br
+games.indiegala.com
+microsoft.com
+store.epicgames.com
+store.steampowered.com
+www.amazon.com
+www.cdkeys.com
+www.cheapshark.com
+www.dlgamer.com
+www.eneba.com
+www.epic.com
+www.fanatical.com
+www.gamebillet.com
+www.gamersgate.com
+www.gamesplanet.com
+www.gamivo.com
+www.gog.com
+www.greenmangaming.com
+www.humblebundle.com
+www.indiegamestand.com
+www.kinguin.net
+www.nuuvem.com
+www.origin.com
+www.steampowered.com
+www.voidu.com
+www.wingamestore.com

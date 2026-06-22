@@ -13,8 +13,6 @@ const defaultProps = {
   bestRawPrice: '29.99',
   cheapestEver: 9.99,
   isCurrentlyAtHL: false,
-  costPerHour: '$0.50',
-  playtimeMain: 20,
 };
 
 describe('GameStatsRow', () => {
@@ -46,15 +44,5 @@ describe('GameStatsRow', () => {
   it('does not show "LIVE HL" when isCurrentlyAtHL=false', () => {
     render(<GameStatsRow {...defaultProps} isCurrentlyAtHL={false} />);
     expect(screen.queryByText('LIVE HL')).not.toBeInTheDocument();
-  });
-
-  it('renders cost per hour', () => {
-    render(<GameStatsRow {...defaultProps} />);
-    expect(screen.getByText('$0.50')).toBeInTheDocument();
-  });
-
-  it('renders playtime', () => {
-    render(<GameStatsRow {...defaultProps} />);
-    expect(screen.getByText(/20h campaign/)).toBeInTheDocument();
   });
 });

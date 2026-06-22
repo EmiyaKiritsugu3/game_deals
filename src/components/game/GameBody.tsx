@@ -13,12 +13,9 @@ interface GameBodyViewModel {
     isFree: boolean;
     cheapestEver: number;
     isCurrentlyAtHL: boolean;
-    costPerHour: string;
-    playtimeMain: number;
   };
   readonly official: GameDeal[];
   readonly keyshop: GameDeal[];
-  readonly cheapestEverDate: number;
   readonly stores: Record<string, string>;
 }
 
@@ -37,16 +34,7 @@ export default function GameBody({
   showRegion,
   priority,
 }: GameBodyProps) {
-  const {
-    gameTitle,
-    highResThumb,
-    bestRawPrice,
-    stats,
-    official,
-    keyshop,
-    cheapestEverDate,
-    stores,
-  } = viewModel;
+  const { gameTitle, highResThumb, bestRawPrice, stats, official, keyshop, stores } = viewModel;
 
   return (
     <>
@@ -64,8 +52,6 @@ export default function GameBody({
         bestRawPrice={bestRawPrice}
         cheapestEver={stats.cheapestEver}
         isCurrentlyAtHL={stats.isCurrentlyAtHL}
-        costPerHour={stats.costPerHour}
-        playtimeMain={stats.playtimeMain}
       />
 
       <StoreComparison
@@ -81,7 +67,6 @@ export default function GameBody({
       <DynamicPriceHistory
         currentPrice={bestRawPrice || stats.cheapestEver.toString()}
         lowestPrice={stats.cheapestEver.toFixed(2)}
-        lowestDate={cheapestEverDate}
         retailPrice={bestRawPrice}
         gameTitle={gameTitle}
         gameId={id}

@@ -88,7 +88,6 @@ function sanitizeDealParams(params?: {
 /**
  * Busca deals da CheapShark (com fallback)
  */
-// fallow-ignore-next-line unused-export
 export async function getDealsAction(params?: {
   sortBy?: string;
   onSale?: string;
@@ -103,7 +102,6 @@ export async function getDealsAction(params?: {
   return fetchDealsWithFallback(url.toString());
 }
 
-// fallow-ignore-next-line unused-export
 export async function getStoresAction(): Promise<Record<string, string>> {
   const map: Record<string, string> = {};
 
@@ -130,7 +128,6 @@ export async function getStoresAction(): Promise<Record<string, string>> {
 /**
  * Busca detalhes de um jogo
  */
-// fallow-ignore-next-line unused-export
 export async function getGameAction(id: string): Promise<GameDetails | null> {
   return (await fetchGameDetails(id, 'getGameAction')) as GameDetails | null;
 }
@@ -309,7 +306,6 @@ export async function getDailyPriceHistoryAction(cheapsharkId: string, days = 90
 /**
  * Busca deals do banco
  */
-// fallow-ignore-next-line unused-export
 export async function getDealsFromDBAction(limit = 20) {
   const result = await db
     .select({

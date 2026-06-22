@@ -3,7 +3,6 @@
  */
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import type { HTMLAttributes, ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { PriceAlert } from '@/types/price-alert';
 
@@ -14,15 +13,6 @@ vi.mock('@/store/alertStore', () => ({
 vi.mock('@/actions/alerts', () => ({
   createPriceAlertAction: vi.fn(),
   deletePriceAlertAction: vi.fn(),
-}));
-
-vi.mock('framer-motion', () => ({
-  AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
-  motion: {
-    div: ({ children, ...props }: { children?: ReactNode } & HTMLAttributes<HTMLDivElement>) => (
-      <div {...props}>{children}</div>
-    ),
-  },
 }));
 
 import { createPriceAlertAction, deletePriceAlertAction } from '@/actions/alerts';

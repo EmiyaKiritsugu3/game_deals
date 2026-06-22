@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef } from 'react';
@@ -40,22 +39,17 @@ export default function SidebarModal({ children }: Readonly<{ children: React.Re
   }, [onKeyDown]);
 
   return (
-    <motion.div
+    // biome-ignore lint/a11y/noStaticElementInteractions: overlay backdrop — keyboard handled by document listener
+    <div
       ref={overlay}
       className={styles.overlay}
       onClick={onClick}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') dismissModal();
+      }}
+      tabIndex={-1}
     >
-      <motion.div
-        className={styles.sidebar}
-        initial={{ x: '100%' }}
-        animate={{ x: 0 }}
-        exit={{ x: '100%' }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      >
+      <div className={styles.sidebar}>
         <button
           type="button"
           onClick={dismissModal}
@@ -65,7 +59,7 @@ export default function SidebarModal({ children }: Readonly<{ children: React.Re
           <X size={24} />
         </button>
         <div className={styles.content}>{children}</div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }

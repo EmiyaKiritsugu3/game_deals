@@ -65,14 +65,7 @@ describe('DynamicPriceHistory', () => {
   });
 
   it('calls useDailyPriceHistory with gameId', () => {
-    renderWithQuery(
-      <DynamicPriceHistory
-        currentPrice="29.99"
-        lowestPrice="9.99"
-        lowestDate={1000000}
-        gameId="123"
-      />
-    );
+    renderWithQuery(<DynamicPriceHistory currentPrice="29.99" lowestPrice="9.99" gameId="123" />);
     expect(mockUseDailyPriceHistory).toHaveBeenCalledWith('123');
   });
 
@@ -83,14 +76,7 @@ describe('DynamicPriceHistory', () => {
       { bucket: '2024-03', avg_price: 30, min_price: 25, max_price: 35 },
     ];
     mockUseDailyPriceHistory.mockReturnValue({ data: realData });
-    renderWithQuery(
-      <DynamicPriceHistory
-        currentPrice="29.99"
-        lowestPrice="9.99"
-        lowestDate={1000000}
-        gameId="123"
-      />
-    );
+    renderWithQuery(<DynamicPriceHistory currentPrice="29.99" lowestPrice="9.99" gameId="123" />);
     const chartDiv = screen.getByTestId('dynamic-chart');
     const props = JSON.parse(chartDiv.textContent || '{}') as Record<string, unknown>;
     expect(props.realData).toEqual(realData);
@@ -100,14 +86,7 @@ describe('DynamicPriceHistory', () => {
 
   it('passes undefined realData when hook returns null', async () => {
     mockUseDailyPriceHistory.mockReturnValue({ data: null });
-    renderWithQuery(
-      <DynamicPriceHistory
-        currentPrice="29.99"
-        lowestPrice="9.99"
-        lowestDate={1000000}
-        gameId="123"
-      />
-    );
+    renderWithQuery(<DynamicPriceHistory currentPrice="29.99" lowestPrice="9.99" gameId="123" />);
     const chartDiv = screen.getByTestId('dynamic-chart');
     const props = JSON.parse(chartDiv.textContent || '{}') as Record<string, unknown>;
     expect(props.realData).toBeUndefined();
@@ -115,23 +94,14 @@ describe('DynamicPriceHistory', () => {
 
   it('passes undefined realData when hook returns empty array', async () => {
     mockUseDailyPriceHistory.mockReturnValue({ data: [] });
-    renderWithQuery(
-      <DynamicPriceHistory
-        currentPrice="29.99"
-        lowestPrice="9.99"
-        lowestDate={1000000}
-        gameId="123"
-      />
-    );
+    renderWithQuery(<DynamicPriceHistory currentPrice="29.99" lowestPrice="9.99" gameId="123" />);
     const chartDiv = screen.getByTestId('dynamic-chart');
     const props = JSON.parse(chartDiv.textContent || '{}') as Record<string, unknown>;
     expect(props.realData).toBeUndefined();
   });
 
   it('disables query when gameId is null', () => {
-    renderWithQuery(
-      <DynamicPriceHistory currentPrice="29.99" lowestPrice="9.99" lowestDate={1000000} />
-    );
+    renderWithQuery(<DynamicPriceHistory currentPrice="29.99" lowestPrice="9.99" />);
     expect(mockUseDailyPriceHistory).toHaveBeenCalledWith(null);
   });
 });
