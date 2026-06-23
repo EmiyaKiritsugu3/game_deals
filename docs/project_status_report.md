@@ -1,6 +1,6 @@
 # 📊 Relatório de Estado do Projeto: GameDeals
 
-**Data:** 22 de Junho de 2026
+**Data:** 23 de Junho de 2026
 **Status Global:** 🟢 ESTÁVEL | SPRINT 13 CONCLUÍDA | 923 TESTES | 83.55% COBERTURA
 
 ---
@@ -109,4 +109,30 @@
 
 ---
 
-**Conclusão:** O projeto evoluiu de 95 testes (14 Jun) para 916 testes (21 Jun) — um aumento de 10x em 7 dias. Cobertura subiu de ~15% para 82.72%. CI pipeline robusto com 6 checks obrigatórios (quality, e2e, SonarCloud, semgrep, GitGuardian, Vercel). Zero issues abertos no SonarQube. Base sólida para iteração contínua.
+**Conclusão:** O projeto evoluiu de 95 testes (14 Jun) para 923 testes (23 Jun) — um aumento de 10x em 9 dias. Cobertura subiu de ~15% para 83.55%. CI pipeline robusto com 6 checks obrigatórios (quality, e2e, SonarCloud, semgrep, GitGuardian, Vercel). Zero issues abertos no SonarQube.
+
+## 🎯 5. Próximo Sprint (Sprint 14)
+
+| Prioridade | Tarefa | Esforço |
+|-----------|--------|---------|
+| 🔴 | Patch Dependabot vulns (49 open — next, undici, ws) | Médio |
+| 🟡 | Revisar/mergear PR #48 (Next Fest collections) | Baixo |
+| 🟡 | Fechar stale PRs #6, #7, #18 | Baixo |
+| 🟢 | Remover deprecated `skipMiddlewareUrlNormalize` → `skipProxyUrlNormalize` | Baixo |
+| 🟢 | Expandir cobertura E2E (wishlist, affiliate out, alerts) | Médio |
+| 🟢 | Remover `esbuild` devDep (knip) | Baixo |
+
+### 📚 Pipeline de Pesquisa
+
+Repositório externo: `EmiyaKiritsugu3/game-deals-research` (privado)
+Pipeline local para criação de conteúdo: `last30days + Steam API + Jinja2 → collections/blog/social`.
+Makefile com `make discover TOPIC="..."` → `make enrich` → `make render` → `make deploy`.
+Subagentes haiku para execução, sonnet/opus para planejamento (~86% economia de tokens).
+
+### 📈 Novos Marcos
+
+| Data | Marco | Detalhes |
+|------|-------|----------|
+| 22 Jun | Sprint 13 (PR #44) | PWA, SW, manifest, E2E fix, 923 testes |
+| 22 Jun | PR #48 | Next Fest collections (data-only) |
+| 22 Jun | game-deals-research repo | Pipeline de pesquisa externo criado |
