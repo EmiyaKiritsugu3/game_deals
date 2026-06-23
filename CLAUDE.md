@@ -53,3 +53,4 @@ src/
 - **Service role key** leaked in past commits — verify rotation after GitGuardian alerts.
 - **`.env.example`** must match what code reads — past mismatch caused silent CI failure.
 - **PWA service worker excludes `/api/`, `/auth/`, `/out/`** — never cache sensitive paths.
+- **game-deals-research** repo privado em `~/dev/game-deals-research/` — pipeline de conteúdo externo, não integrado.

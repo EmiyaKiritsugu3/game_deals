@@ -51,4 +51,28 @@ export const COLLECTIONS: Collection[] = [
     emoji: '🎮',
     gameIDs: ['612', '21048', '128', '169872', '162886'],
   },
+  {
+    slug: 'next-fest-metroidvania',
+    title: 'Next Fest Picks: Metroidvanias',
+    description:
+      'Steam Next Fest June 2026 highlighted Dusk Veiled as one of the best-reviewed demos. These available metroidvanias scratch the same itch while you wait for release.',
+    emoji: '🦇',
+    gameIDs: ['165363', '204448', '168685', '152117', '177485'],
+  },
+  {
+    slug: 'next-fest-boomer-shooters',
+    title: 'Next Fest Picks: Boomer Shooters',
+    description:
+      'Warhammer 40k Bolt Gun 2 was a standout FPS demo. These fast-paced, retro-styled shooters deliver the same carnage right now.',
+    emoji: '🔫',
+    gameIDs: ['220083', '202267', '259458', '172548', '168685'],
+  },
+  {
+    slug: 'next-fest-tactical-strategy',
+    title: 'Next Fest Picks: Tactical Strategy',
+    description:
+      'Dustfront RTS was the most anticipated strategy demo. These tactical and strategy picks keep your brain busy until release.',
+    emoji: '♟️',
+    gameIDs: ['172155', '175271', '251420', '268340', '168685'],
+  },
 ];
