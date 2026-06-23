@@ -9,9 +9,9 @@ vi.mock('@/utils/supabase/middleware', () => ({
   updateSession: mockUpdateSession,
 }));
 
-import { config, middleware } from './middleware';
+import { config, proxy } from './proxy';
 
-describe('middleware', () => {
+describe('proxy', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockUpdateSession.mockResolvedValue({ status: 200 });
@@ -19,7 +19,7 @@ describe('middleware', () => {
 
   it('delegates to updateSession with the request', async () => {
     const request = new NextRequest(new URL('http://localhost/test'));
-    const response = await middleware(request);
+    const response = await proxy(request);
     expect(mockUpdateSession).toHaveBeenCalledWith(request);
     expect(response).toEqual({ status: 200 });
   });
@@ -28,14 +28,14 @@ describe('middleware', () => {
     const redirect = { status: 307, headers: new Headers({ Location: '/' }) };
     mockUpdateSession.mockResolvedValue(redirect);
     const request = new NextRequest(new URL('http://localhost/wishlist'));
-    const response = await middleware(request);
+    const response = await proxy(request);
     expect(response).toBe(redirect);
   });
 
   it('propagates errors from updateSession', async () => {
     mockUpdateSession.mockRejectedValue(new Error('env missing'));
     const request = new NextRequest(new URL('http://localhost/'));
-    await expect(middleware(request)).rejects.toThrow('env missing');
+    await expect(proxy(request)).rejects.toThrow('env missing');
   });
 });
 
