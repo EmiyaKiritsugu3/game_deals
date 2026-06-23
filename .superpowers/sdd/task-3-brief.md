@@ -1,0 +1,154 @@
+### Task 3: HistoricalLows — async data flow & empty/null state
+
+**Files:**
+- Create: `src/components/HistoricalLows.test.tsx`
+
+**Interfaces:**
+- Consumes: `getDeals` and `getGame` from `@/services/api` (both mocked)
+- Produces: test for dedup logic, verification pass/fail, empty state, render
+
+- [ ] **Step 1: Write test file**
+
+```tsx
+/**
+ * @vitest-environment jsdom
+ */
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import HistoricalLows from './HistoricalLows';
+
+// Mock DealRow to avoid full rendering
+vi.mock('./DealRow', () => ({
+  default: ({ deal }: { deal: { dealID: string; title: string } }) => (
+    <div data-testid={`deal-${deal.dealID}`}>{deal.title}</div>
+  ),
+}));
+
+// Mock DealsBadge to avoid full rendering
+vi.mock('./DealsBadge', () => ({
+  default: ({ type }: { type: string }) => <span data-testid={`badge-${type}`}>{type}</span>,
+}));
+
+const getDealsMock = vi.fn();
+const getGameMock = vi.fn();
+vi.mock('@/services/api', () => ({
+  getDeals: (...args: unknown[]) => getDealsMock(...args),
+  getGame: (...args: unknown[]) => getGameMock(...args),
+}));
+
+function makeDeal(id: string, salePrice = '14.99', savings = '50') {
+  return {
+    gameID: id,
+    dealID: `${id}-deal`,
+    title: `Game ${id}`,
+    salePrice,
+    normalPrice: '29.99',
+    savings,
+    metacriticScore: '80',
+    steamRatingText: 'Very Positive',
+    thumb: 'https://example.com/thumb.jpg',
+    storeID: '1',
+    steamRatingPercent: '90',
+    steamRatingCount: '500',
+  };
+}
+
+describe('HistoricalLows', () => {
+  it('renders verified HL deals when API returns valid data', async () => {
+    getDealsMock
+      .mockResolvedValueOnce([makeDeal('1', '9.99'), makeDeal('2', '14.99')])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
+
+    getGameMock.mockImplementation((id: string) =>
+      Promise.resolve({
+        cheapestPriceEver: {
+          price: id === '1' ? '9.99' : '12.00', // id=1 passes (within 1%), id=2 fails
+          date: '2024-01-01',
+        },
+      })
+    );
+
+    const { container } = render(await HistoricalLows());
+
+    expect(screen.getByText('Game 1')).toBeInTheDocument();
+    expect(screen.queryByText('Game 2')).not.toBeInTheDocument();
+    expect(container.querySelector('h2')?.textContent).toMatch(/Historical Lows/i);
+  });
+
+  it('deduplicates by gameID across the 3 API pools', async () => {
+    getDealsMock
+      .mockResolvedValueOnce([makeDeal('1', '9.99'), makeDeal('2', '9.99')]) // broadPool
+      .mockResolvedValueOnce([makeDeal('1', '8.99')]) // bestDeals (dup gameID=1)
+      .mockResolvedValueOnce([makeDeal('3', '10.00')]); // popular
+
+    getGameMock.mockResolvedValue({
+      cheapestPriceEver: { price: '9.99', date: '2024-01-01' },
+    });
+
+    const { container } = render(await HistoricalLows());
+
+    // only 3 unique deals rendered despite 4 total API results
+    const deals = container.querySelectorAll('[data-testid^="deal-"]');
+    expect(deals.length).toBe(3);
+  });
+
+  it('returns null when no deals pass HL verification', async () => {
+    getDealsMock
+      .mockResolvedValueOnce([makeDeal('1', '20.00'), makeDeal('2', '25.00')])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
+
+    getGameMock.mockResolvedValue({
+      cheapestPriceEver: { price: '5.00', date: '2024-01-01' }, // current > 1% of HL
+    });
+
+    const result = await HistoricalLows();
+    expect(result).toBeNull();
+  });
+
+  it('handles gameInfo with no cheapestPriceEver gracefully', async () => {
+    getDealsMock
+      .mockResolvedValueOnce([makeDeal('1', '9.99')])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
+
+    getGameMock.mockResolvedValue(null);
+
+    const result = await HistoricalLows();
+    expect(result).toBeNull();
+  });
+
+  it('handles rejected promises from getGame (API failure)', async () => {
+    getDealsMock
+      .mockResolvedValueOnce([makeDeal('1', '9.99'), makeDeal('2', '9.99')])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
+
+    getGameMock.mockRejectedValueOnce(new Error('API error')).mockResolvedValueOnce({
+      cheapestPriceEver: { price: '9.99', date: '2024-01-01' },
+    });
+
+    const { container } = render(await HistoricalLows());
+
+    // Only the fulfilled promise that passes verification renders
+    const deals = container.querySelectorAll('[data-testid^="deal-"]');
+    expect(deals.length).toBe(1);
+  });
+});
+```
+
+- [ ] **Step 2: Run test**
+
+Run: `pnpm vitest run src/components/HistoricalLows.test.tsx`
+Expected: 6 passed, 0 failed
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add src/components/HistoricalLows.test.tsx
+git commit -m "test(components): HistoricalLows async verification pipeline"
+```
+
+---
+
