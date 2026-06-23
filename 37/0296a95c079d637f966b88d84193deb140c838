@@ -1,0 +1,19 @@
+src/components/HistoricalLows.test.tsx
+  s_c864e07be5ba8a::t_30b91cc960790d 1-131
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.10",
+  "base_commit_sha": "370296a95c079d637f966b88d84193deb140c838",
+  "prompts": {},
+  "sessions": {
+    "s_c864e07be5ba8a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "af6266a5-576f-43b2-bdb9-dd56f45e8a21",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
