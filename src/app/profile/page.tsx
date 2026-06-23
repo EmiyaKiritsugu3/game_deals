@@ -25,7 +25,7 @@ export default async function ProfilePage() {
       <div className="space-y-4">
         <div>
           <span className="text-sm text-muted-foreground">Email</span>
-          <p className="text-base">{user.email}</p>
+          <p className="text-base">{user.email ?? '—'}</p>
         </div>
         <div>
           <span className="text-sm text-muted-foreground">Provider</span>

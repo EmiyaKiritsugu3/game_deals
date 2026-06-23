@@ -9,6 +9,10 @@ beforeAll(() => {
   process.env.TZ = 'UTC';
 });
 
+afterAll(() => {
+  process.env.TZ = 'America/Sao_Paulo';
+});
+
 const redirectMock = vi.fn();
 vi.mock('next/navigation', () => ({
   redirect: (url: string) => {
