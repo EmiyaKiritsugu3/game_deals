@@ -1,0 +1,89 @@
+package.json
+  s_797c8fb708aac8::t_63d06f28b4133e 50
+.claude/skills/ui-ux-pro-max/data/icons.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-101
+.claude/skills/ui-ux-pro-max/data/stacks/html-tailwind.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-56
+.claude/skills/ui-ux-pro-max/data/products.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-97
+.claude/skills/ui-ux-pro-max/scripts/core.py
+  s_797c8fb708aac8::t_6980daa20c3c39 1-253
+.claude/skills/ui-ux-pro-max/data/stacks/react.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-54
+tests/e2e/visual.spec.ts
+  s_e9eb5b31e8dadc::t_6ae4068a015d12 120-125
+.claude/skills/ui-ux-pro-max/data/stacks/shadcn.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-61
+.claude/skills/ui-ux-pro-max/data/stacks/nextjs.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-53
+.claude/skills/ui-ux-pro-max/data/stacks/astro.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-54
+.claude/skills/ui-ux-pro-max/data/stacks/vue.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-50
+.claude/skills/ui-ux-pro-max/scripts/design_system.py
+  s_797c8fb708aac8::t_6980daa20c3c39 1-1067
+.claude/skills/ui-ux-pro-max/data/stacks/nuxtjs.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-59
+.claude/skills/ui-ux-pro-max/data/typography.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-58
+docs/superpowers/plans/2026-06-23-fix-pr48.md
+  s_e9eb5b31e8dadc::t_458f6816dae18d 1-205
+.claude/skills/ui-ux-pro-max/data/styles.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-68
+.claude/skills/ui-ux-pro-max/data/stacks/flutter.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-53
+.claude/skills/ui-ux-pro-max/data/react-performance.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-45
+.claude/skills/ui-ux-pro-max/data/colors.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-97
+.claude/skills/ui-ux-pro-max/SKILL.md
+  s_797c8fb708aac8::t_6980daa20c3c39 1-377
+.claude/skills/ui-ux-pro-max/data/stacks/nuxt-ui.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-51
+sonar-project.properties
+  s_e9eb5b31e8dadc::t_8dfe5ae0c130ff 9-10
+.claude/skills/ui-ux-pro-max/data/landing.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-31
+.claude/skills/ui-ux-pro-max/scripts/search.py
+  s_797c8fb708aac8::t_6980daa20c3c39 1-114
+.claude/skills/ui-ux-pro-max/data/web-interface.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-31
+.claude/skills/ui-ux-pro-max/data/stacks/jetpack-compose.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-53
+.claude/skills/ui-ux-pro-max/data/ui-reasoning.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-101
+.claude/skills/ui-ux-pro-max/data/ux-guidelines.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-100
+.claude/skills/ui-ux-pro-max/data/stacks/react-native.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-52
+.claude/skills/ui-ux-pro-max/data/charts.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-26
+.claude/skills/ui-ux-pro-max/data/stacks/swiftui.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-51
+.claude/skills/ui-ux-pro-max/data/stacks/svelte.csv
+  s_797c8fb708aac8::t_6980daa20c3c39 1-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "b614d731dd8847c0548d77a024627bced1a1d894",
+  "prompts": {},
+  "sessions": {
+    "s_797c8fb708aac8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "79bd9c9a-7f3a-400f-84e4-0ecfe8519af7",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    },
+    "s_e9eb5b31e8dadc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0ce0dbd4-1f4b-4063-8da0-95c68931d501",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
