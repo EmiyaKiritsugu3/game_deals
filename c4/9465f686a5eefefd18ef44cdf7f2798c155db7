@@ -1,0 +1,27 @@
+src/components/game/StoreComparison.test.tsx
+  s_c864e07be5ba8a::t_7bb2c7fae1b096 46
+  s_c864e07be5ba8a::t_989dbf0a45b0d0 1-9,11-15,17-20,28-32,36,38-45,47-101,104-132
+  s_c864e07be5ba8a::t_18b7f22709a7f4 34
+  s_c864e07be5ba8a::t_09bfb3b1e9355d 16
+  s_c864e07be5ba8a::t_e435f9c30f7e02 21
+  s_c864e07be5ba8a::t_4f8718c8763010 33,35,37
+  s_c864e07be5ba8a::t_0a702243442208 102-103
+  s_c864e07be5ba8a::t_f84a7cb0f580f4 10
+  s_c864e07be5ba8a::t_3a92bd67c5d8dd 22-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.10",
+  "base_commit_sha": "c49465f686a5eefefd18ef44cdf7f2798c155db7",
+  "prompts": {},
+  "sessions": {
+    "s_c864e07be5ba8a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "af6266a5-576f-43b2-bdb9-dd56f45e8a21",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
