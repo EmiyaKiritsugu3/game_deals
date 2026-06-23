@@ -64,6 +64,11 @@ export default function OutRedirector() {
     }
     try {
       const targetUrl = new URL(url);
+      if (targetUrl.protocol !== 'http:' && targetUrl.protocol !== 'https:') {
+        console.warn(`Blocked redirect to non-HTTP protocol: ${targetUrl.protocol}`);
+        globalThis.location.replace('/');
+        return;
+      }
       if (!isHostnameAllowed(targetUrl.hostname)) {
         console.warn(`Blocked redirect to non-allowlisted domain: ${targetUrl.hostname}`);
         globalThis.location.replace('/');

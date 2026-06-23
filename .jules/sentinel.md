@@ -1,0 +1,4 @@
+## 2024-06-23 - DOM XSS in OutRedirector via new URL() Protocol Preservation
+**Vulnerability:** The `OutRedirector` component checked `targetUrl.hostname` against an allowlist, but did not check `targetUrl.protocol`.
+**Learning:** `new URL()` successfully parses payloads like `javascript://store.steampowered.com/%0aalert(1)`. The hostname is correctly identified as `store.steampowered.com` (passing the allowlist check), but the protocol remains `javascript:`. Passing this directly to `location.replace` executes the script. This reveals a gap in how `new URL` handles protocols vs hostnames in security validations.
+**Prevention:** Always explicitly check `url.protocol === 'http:' || url.protocol === 'https:'` before using the URL in `location.replace`, `href`, or similar sinks, even if the hostname has been validated.
