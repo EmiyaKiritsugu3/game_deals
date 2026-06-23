@@ -1,0 +1,24 @@
+package.json
+  s_c864e07be5ba8a::t_3d1cc1dcf8b2c3 67
+biome.json
+  s_c864e07be5ba8a::t_54d7a398ee3ed9 14
+  s_c864e07be5ba8a::t_699c7e0c00b736 2
+pnpm-workspace.yaml
+  s_c864e07be5ba8a::t_854fe7e5f2cb5b 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.10",
+  "base_commit_sha": "d3f531fe8e70f16c9677df3af55b60062ea45b3d",
+  "prompts": {},
+  "sessions": {
+    "s_c864e07be5ba8a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "af6266a5-576f-43b2-bdb9-dd56f45e8a21",
+        "model": "unknown"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
