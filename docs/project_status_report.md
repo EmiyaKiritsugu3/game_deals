@@ -134,5 +134,5 @@ Subagentes haiku para execução, sonnet/opus para planejamento (~86% economia d
 | Data | Marco | Detalhes |
 |------|-------|----------|
 | 22 Jun | Sprint 13 (PR #44) | PWA, SW, manifest, E2E fix, 923 testes |
-| 22 Jun | PR #48 | Next Fest collections (data-only) |
 | 22 Jun | game-deals-research repo | Pipeline de pesquisa externo criado |
+| 23 Jun | PR #48 merged (#55) | Next Fest collections + sonar fix + E2E resiliente |

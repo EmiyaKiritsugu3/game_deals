@@ -53,4 +53,5 @@ src/
 - **Service role key** leaked in past commits — verify rotation after GitGuardian alerts.
 - **`.env.example`** must match what code reads — past mismatch caused silent CI failure.
 - **PWA service worker excludes `/api/`, `/auth/`, `/out/`** — never cache sensitive paths.
+- **E2E flaky tests** — CheapShark 429 rate limits cause game data failures. Use `test.skip()` with game title visibility check before tests that depend on game/alert buttons.
 - **game-deals-research** repo privado em `~/dev/game-deals-research/` — pipeline de conteúdo externo, não integrado.
