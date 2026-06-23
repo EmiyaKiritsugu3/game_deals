@@ -1,0 +1,19 @@
+biome.json
+  s_c864e07be5ba8a::t_4da1042b731bbe 62-71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.10",
+  "base_commit_sha": "1633b7144e01cdfca83673923b4a34c95a525c7c",
+  "prompts": {},
+  "sessions": {
+    "s_c864e07be5ba8a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "af6266a5-576f-43b2-bdb9-dd56f45e8a21",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
