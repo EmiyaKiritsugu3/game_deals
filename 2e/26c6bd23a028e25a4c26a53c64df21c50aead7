@@ -1,0 +1,19 @@
+tests/e2e/visual.spec.ts
+  s_e9eb5b31e8dadc::t_f6d409104e672f 131-136
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "2e26c6bd23a028e25a4c26a53c64df21c50aead7",
+  "prompts": {},
+  "sessions": {
+    "s_e9eb5b31e8dadc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0ce0dbd4-1f4b-4063-8da0-95c68931d501",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
