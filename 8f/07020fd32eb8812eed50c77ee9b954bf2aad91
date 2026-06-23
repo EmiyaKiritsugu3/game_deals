@@ -1,0 +1,21 @@
+docs/superpowers/specs/2026-06-23-sprint-15-p2-gamification-design.md
+  s_0585a218858f80::t_94e4a7594da76f 165
+  s_0585a218858f80::t_20c1bb688f53a4 1-164,166-183,187-327
+  s_0585a218858f80::t_cb448e1d025c3c 184-186
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.10",
+  "base_commit_sha": "8f07020fd32eb8812eed50c77ee9b954bf2aad91",
+  "prompts": {},
+  "sessions": {
+    "s_0585a218858f80": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "17d4ab18-5fd2-497c-ad23-0655ff52d270",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
