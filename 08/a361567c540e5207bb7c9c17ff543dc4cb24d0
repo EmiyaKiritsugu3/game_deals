@@ -1,0 +1,21 @@
+vercel.json
+  s_cbfea3bdc0eb3a::t_0cc20c84be64b8 3-4
+.superpowers/sdd/task-fix2-report.md
+  s_cbfea3bdc0eb3a::t_6c0325e69d6f1e 1-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "08a361567c540e5207bb7c9c17ff543dc4cb24d0",
+  "prompts": {},
+  "sessions": {
+    "s_cbfea3bdc0eb3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55867e69-4794-46b2-8a20-3fda09ede1a3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
