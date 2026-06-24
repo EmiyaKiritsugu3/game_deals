@@ -1,0 +1,19 @@
+docs/superpowers/reports/2026-06-24-sprint-15-execution-report.md
+  s_cbfea3bdc0eb3a::t_c6e2cfe83ab01e 1-120
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "a6b8228e5cc0411ac7730bfa815e5c20db443483",
+  "prompts": {},
+  "sessions": {
+    "s_cbfea3bdc0eb3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55867e69-4794-46b2-8a20-3fda09ede1a3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
