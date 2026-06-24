@@ -1,0 +1,23 @@
+CHANGELOG.md
+  s_cbfea3bdc0eb3a::t_8477f059c02025 3-15
+docs/prd.md
+  s_cbfea3bdc0eb3a::t_799e10866b64ef 256
+.github/PULL_REQUEST_TEMPLATE.md
+  s_cbfea3bdc0eb3a::t_c234bdb91e343b 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "2b0d6d2677df7b5353373ae07edc29f02e5e4f42",
+  "prompts": {},
+  "sessions": {
+    "s_cbfea3bdc0eb3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55867e69-4794-46b2-8a20-3fda09ede1a3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
