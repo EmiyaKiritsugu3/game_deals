@@ -1,0 +1,31 @@
+src/services/__tests__/gamification.test.ts
+  s_0585a218858f80::t_dbefb54870017f 231-235
+  s_0585a218858f80::t_4d215b9d26acb0 173-174,176
+  s_0585a218858f80::t_11c531e583e6f6 74-80,144,215-224
+  s_0585a218858f80::t_b3bcd4fd619e62 288-291
+  s_0585a218858f80::t_dbca98fa3b2c83 141-143
+  s_0585a218858f80::t_f24e80abcf3db7 245-249
+  s_0585a218858f80::t_ebd61e01adb2cc 3-8
+  s_0585a218858f80::t_f09b821320c731 124-129
+  s_0585a218858f80::t_ca531c92dca318 40-49
+  s_0585a218858f80::t_15acd472877842 1-2,9-39,50-73,81-123,130-140,145-172,175,177-214,225-230,236-244,250-287,292-305
+src/services/gamification.ts
+  s_0585a218858f80::t_d3531e65249212 2,4-112,114-144,146-157,159-267
+  s_0585a218858f80::t_11c531e583e6f6 1,3,113,145,158
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.10",
+  "base_commit_sha": "8f020842b5d8e6bd55bfc2204f5f2a1f8d2f53cd",
+  "prompts": {},
+  "sessions": {
+    "s_0585a218858f80": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "17d4ab18-5fd2-497c-ad23-0655ff52d270",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
