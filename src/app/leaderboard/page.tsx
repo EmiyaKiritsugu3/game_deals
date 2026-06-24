@@ -1,6 +1,8 @@
 import { Trophy } from 'lucide-react';
 import { getLeaderboard } from '@/services/gamification';
 
+export const dynamic = 'force-dynamic';
+
 export default async function LeaderboardPage() {
   const entries = await getLeaderboard(50);
 
