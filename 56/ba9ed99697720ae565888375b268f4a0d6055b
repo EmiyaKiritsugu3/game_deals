@@ -1,0 +1,38 @@
+src/services/gamification.ts
+  s_cbfea3bdc0eb3a::t_77e4750332a954 30-51,53-55
+  s_cbfea3bdc0eb3a::t_aa03e2d410f0df 81-87
+  s_cbfea3bdc0eb3a::t_b4578acd9b6e22 92-97,109
+  s_cbfea3bdc0eb3a::t_7224392e6511fb 108
+  s_cbfea3bdc0eb3a::t_ac114a0dc28390 156-165
+src/app/leaderboard/page.tsx
+  s_cbfea3bdc0eb3a::t_aafecfc22e8eb4 35,39
+  s_cbfea3bdc0eb3a::t_c19f69c09ea561 36,38
+  s_cbfea3bdc0eb3a::t_e1cc0df822a5bc 37
+src/actions/gamification.ts
+  s_cbfea3bdc0eb3a::t_a0d93223d864c9 22-26
+src/app/profile/__tests__/page.test.tsx
+  s_cbfea3bdc0eb3a::t_07fc7729d2ca8e 27
+docs/superpowers/plans/2026-06-24-pr52-optimization-plan.md
+  s_cbfea3bdc0eb3a::t_e494e20af2e143 1-157
+src/app/profile/OptInToggle.tsx
+  s_cbfea3bdc0eb3a::t_29a505a30d9569 3-4,11,14
+  s_cbfea3bdc0eb3a::t_4013c65aef2168 15-25
+src/app/profile/page.tsx
+  s_cbfea3bdc0eb3a::t_b2bd5fcb3e5591 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "56ba9ed99697720ae565888375b268f4a0d6055b",
+  "prompts": {},
+  "sessions": {
+    "s_cbfea3bdc0eb3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55867e69-4794-46b2-8a20-3fda09ede1a3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
