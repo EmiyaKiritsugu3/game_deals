@@ -7,6 +7,8 @@ import ProfilePage from '../page';
 
 beforeAll(() => {
   process.env.TZ = 'UTC';
+  process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://placeholder.supabase.co';
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = 'placeholder-key';
 });
 
 afterAll(() => {
@@ -21,11 +23,24 @@ vi.mock('next/navigation', () => ({
   },
 }));
 
-const getUserMock = vi.fn();
-vi.mock('@/actions/gamification', () => ({
-  updateLeaderboardOptIn: () => Promise.resolve(),
-  updateLeaderboardOptInAction: () => Promise.resolve({ success: true }),
+vi.mock('next/headers', () => ({
+  cookies: () => ({
+    getAll: () => [{ name: 'sb-token', value: 'token' }],
+    set: () => {},
+  }),
 }));
+
+const getUserMock = vi.fn().mockResolvedValue({
+  data: { user: null },
+  error: { message: 'Not authenticated' },
+});
+
+vi.mock('@/utils/supabase/server', () => ({
+  createClient: () => ({
+    auth: { getUser: getUserMock },
+  }),
+}));
+
 vi.mock('@/services/gamification', () => ({
   getUserProfile: () =>
     Promise.resolve({
@@ -34,12 +49,16 @@ vi.mock('@/services/gamification', () => ({
       recentActivity: [],
     }),
 }));
-vi.mock('@/utils/supabase/server', () => ({
-  createClient: () => ({
-    auth: {
-      getUser: getUserMock,
-    },
-  }),
+
+vi.mock('@/actions/gamification', () => ({
+  updateLeaderboardOptIn: () => Promise.resolve(),
+  updateLeaderboardOptInAction: () => Promise.resolve({ success: true }),
+}));
+
+vi.mock('@/db', () => ({
+  db: {
+    insert: () => ({ values: () => ({ onConflictDoUpdate: () => Promise.resolve({}) }) }),
+  },
 }));
 
 describe('ProfilePage', () => {
