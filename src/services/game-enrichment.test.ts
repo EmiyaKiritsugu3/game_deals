@@ -10,6 +10,7 @@ vi.mock('@/utils/pricing', () => ({
 import {
   enrichWithGreyMarketDeals,
   fetchGameFromCheapShark,
+  fetchGamesBatchFromCheapShark,
   updateHistoricalLow,
 } from './game-enrichment';
 
@@ -38,6 +39,64 @@ const MOCK_GREY_DEALS = [
     dealRating: '0.0',
   },
 ];
+
+describe('fetchGamesBatchFromCheapShark', () => {
+  const mockFetch = vi.fn();
+
+  beforeEach(() => {
+    vi.stubGlobal('fetch', mockFetch);
+    mockFetch.mockReset();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('returns null when ids array is empty', async () => {
+    const result = await fetchGamesBatchFromCheapShark([]);
+    expect(result).toBeNull();
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it('returns null when response is not ok', async () => {
+    mockFetch.mockResolvedValueOnce({ ok: false });
+
+    const result = await fetchGamesBatchFromCheapShark(['123', '456']);
+
+    expect(result).toBeNull();
+  });
+
+  it('returns parsed Record<string, GameDetails> on success', async () => {
+    const gameData1 = createGame({ deals: [] });
+    const gameData2 = createGame({ deals: [] });
+    const responseData = { '123': gameData1, '456': gameData2 };
+
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(responseData),
+    });
+
+    const result = await fetchGamesBatchFromCheapShark(['123', '456']);
+
+    expect(result).toEqual(responseData);
+    expect(mockFetch).toHaveBeenCalledWith(
+      expect.stringContaining('ids=123%2C456'),
+      expect.any(Object)
+    );
+  });
+
+  it('returns null when fetch throws', async () => {
+    vi.useFakeTimers();
+    mockFetch.mockRejectedValueOnce(new Error('Network failure'));
+
+    const promise = fetchGamesBatchFromCheapShark(['789']);
+    vi.advanceTimersByTime(8_000);
+    const result = await promise;
+
+    expect(result).toBeNull();
+    vi.useRealTimers();
+  });
+});
 
 describe('fetchGameFromCheapShark', () => {
   const mockFetch = vi.fn();
