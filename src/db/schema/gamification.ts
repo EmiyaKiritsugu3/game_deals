@@ -1,4 +1,14 @@
-import { jsonb, pgTable, text, timestamp, uniqueIndex, uuid, varchar } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  integer,
+  jsonb,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+  varchar,
+} from 'drizzle-orm/pg-core';
 
 export const badges = pgTable('badges', {
   id: uuid().defaultRandom().primaryKey(),
@@ -26,6 +36,12 @@ export const activities = pgTable('activities', {
   actionType: varchar({ length: 50 }).notNull(),
   details: jsonb(),
   createdAt: timestamp().defaultNow().notNull(),
+});
+
+export const userStats = pgTable('user_stats', {
+  userId: uuid().notNull().primaryKey(),
+  xp: integer().notNull().default(0),
+  optInLeaderboard: boolean().notNull().default(false),
 });
 
 export const wishlists = pgTable(

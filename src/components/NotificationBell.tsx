@@ -29,7 +29,11 @@ function NotificationBellButton({
       aria-label="Notifications"
     >
       <Bell size={20} />
-      {unread > 0 && <span className={styles.badge}>{unread > 99 ? '99+' : unread}</span>}
+      {unread > 0 && (
+        <span className={styles.badge} aria-live="polite">
+          {unread > 99 ? '99+' : unread}
+        </span>
+      )}
     </button>
   );
 }

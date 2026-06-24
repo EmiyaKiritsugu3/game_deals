@@ -92,6 +92,13 @@
       "when": 1781137838886,
       "tag": "0012_deals_unique_constraint",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1782259915019,
+      "tag": "0013_user_stats",
+      "breakpoints": true
     }
   ]
 }
