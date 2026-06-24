@@ -1,0 +1,23 @@
+src/components/navbar/SearchBox.tsx
+  s_0585a218858f80::t_42f46facdd77c3 57
+src/components/NotificationBell.tsx
+  s_0585a218858f80::t_91ce646851bd7b 32
+src/app/page.tsx
+  s_0585a218858f80::t_39cb1701e62d33 64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.10",
+  "base_commit_sha": "a20eb97a224d15339c5d1a88141fcb05686f915d",
+  "prompts": {},
+  "sessions": {
+    "s_0585a218858f80": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "17d4ab18-5fd2-497c-ad23-0655ff52d270",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
