@@ -46,7 +46,6 @@ jobs:
         run: pnpm lint
       - name: Dependency audit
         run: pnpm audit --audit-level=high
-        continue-on-error: true
       - name: Type check
         run: pnpm exec tsc --noEmit
       - name: Unit Tests + Coverage
