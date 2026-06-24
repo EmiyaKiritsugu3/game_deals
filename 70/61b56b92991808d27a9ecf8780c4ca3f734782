@@ -1,0 +1,22 @@
+package.json
+  s_cbfea3bdc0eb3a::t_cabb35cb215dfd 40,42,55,68-69,74-77,81,84-85
+  s_cbfea3bdc0eb3a::t_477d2466b77c99 41
+  s_cbfea3bdc0eb3a::t_b6a321e3b5c454 43,49,56,87
+  s_cbfea3bdc0eb3a::t_25c0cc54e8f2d3 53-54,67,86,88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "7061b56b92991808d27a9ecf8780c4ca3f734782",
+  "prompts": {},
+  "sessions": {
+    "s_cbfea3bdc0eb3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55867e69-4794-46b2-8a20-3fda09ede1a3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
