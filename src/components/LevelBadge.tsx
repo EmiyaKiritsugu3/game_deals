@@ -7,7 +7,7 @@ interface LevelBadgeProps {
 export default function LevelBadge({ level, xp, xpToNext }: LevelBadgeProps) {
   const xpForCurrentLevel = level * level * 10;
   const xpIntoLevel = xp - xpForCurrentLevel;
-  const percent = xpToNext > 0 ? (xpIntoLevel / xpToNext) * 100 : 100;
+  const percent = xpToNext > 0 ? Math.max(0, (xpIntoLevel / xpToNext) * 100) : 100;
 
   return (
     <div className="flex items-center gap-4 p-4 rounded-lg bg-muted">
