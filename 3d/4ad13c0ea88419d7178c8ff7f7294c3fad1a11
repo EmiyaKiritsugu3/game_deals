@@ -1,0 +1,55 @@
+.superpowers/sdd/task-C2-brief.md
+  s_0585a218858f80::t_34d2f608181ce8 1-109
+src/components/LevelBadge.tsx
+  s_cbfea3bdc0eb3a::t_876124371e40a9 16
+  s_cbfea3bdc0eb3a::t_eecc3b3d353272 1-15,17-35
+.superpowers/sdd/task-D3-brief.md
+  s_0585a218858f80::t_5607932c2fdbd3 1-26
+.superpowers/sdd/task-D2-brief.md
+  s_0585a218858f80::t_416e073ae8ea04 1-38
+src/app/profile/page.tsx
+  s_cbfea3bdc0eb3a::t_b5ad0ba58ea0dd 5-20,40-41,45-46,60-127
+src/components/navbar/UserMenu.tsx
+  s_cbfea3bdc0eb3a::t_88bd22326c83b8 47
+  s_cbfea3bdc0eb3a::t_ee29649b800c7e 3
+src/app/profile/__tests__/page.test.tsx
+  s_cbfea3bdc0eb3a::t_c26fb8a58cfe29 28-35
+  s_cbfea3bdc0eb3a::t_244319c93a7b71 25-27
+.superpowers/sdd/task-C3-brief.md
+  s_0585a218858f80::t_1b236c55da2c6f 1-74
+src/app/leaderboard/page.tsx
+  s_cbfea3bdc0eb3a::t_afbbdb67cb2ed2 1-51
+src/app/profile/OptInToggle.tsx
+  s_cbfea3bdc0eb3a::t_08a5d0650f5d6d 1-39
+.superpowers/sdd/task-C2-report.md
+  s_0585a218858f80::t_b19c5892093945 1-61
+.superpowers/sdd/task-D1-brief.md
+  s_0585a218858f80::t_3cd450849bb0d8 1-92
+src/actions/gamification.ts
+  s_cbfea3bdc0eb3a::t_f9d1b3bde81f29 8
+  s_cbfea3bdc0eb3a::t_098bd8847d28ba 1-7,9-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.10",
+  "base_commit_sha": "3d4ad13c0ea88419d7178c8ff7f7294c3fad1a11",
+  "prompts": {},
+  "sessions": {
+    "s_0585a218858f80": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "17d4ab18-5fd2-497c-ad23-0655ff52d270",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    },
+    "s_cbfea3bdc0eb3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55867e69-4794-46b2-8a20-3fda09ede1a3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
