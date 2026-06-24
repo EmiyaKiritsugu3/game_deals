@@ -54,7 +54,7 @@ export function SearchBox() {
       </form>
 
       {isDropdownOpen && debouncedQuery.length >= 3 && (
-        <div className={styles.searchDropdown}>
+        <div className={styles.searchDropdown} aria-live="polite">
           {(() => {
             if (isLoading) {
               return <div className={`${styles.dropdownItem} ${styles.loading}`}>Loading...</div>;

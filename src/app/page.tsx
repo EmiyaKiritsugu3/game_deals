@@ -61,7 +61,7 @@ export default async function Home() {
                 </a>
               </div>
             </div>
-            <div className={styles.listCol}>
+            <div className={styles.listCol} aria-live="polite">
               {recentDeals.map((deal) => (
                 <DealRow key={deal.dealID} deal={deal} />
               ))}
