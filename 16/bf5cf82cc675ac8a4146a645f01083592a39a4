@@ -1,0 +1,29 @@
+src/actions/playlists.ts
+  s_0585a218858f80::t_d9df3403339588 135-141
+  s_0585a218858f80::t_c60bfd71315da2 6
+  s_0585a218858f80::t_ca406722a3b768 65-70
+.superpowers/sdd/task-C3-report.md
+  s_0585a218858f80::t_e7e0c4a8688443 1-36
+.superpowers/sdd/progress.md
+  s_0585a218858f80::t_d0fcea18ba4eec 8-18,20-22
+  s_0585a218858f80::t_b05eb9de5371b9 19
+src/actions/alerts.ts
+  s_0585a218858f80::t_bdc95ded31b804 6
+  s_0585a218858f80::t_5a769690ce88fe 37-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.10",
+  "base_commit_sha": "16bf5cf82cc675ac8a4146a645f01083592a39a4",
+  "prompts": {},
+  "sessions": {
+    "s_0585a218858f80": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "17d4ab18-5fd2-497c-ad23-0655ff52d270",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
