@@ -1,0 +1,19 @@
+package.json
+  s_cbfea3bdc0eb3a::t_fd2061f3812f96 87
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "a39cb70636e7311b5beb9b0cdb0eb8f35413f68e",
+  "prompts": {},
+  "sessions": {
+    "s_cbfea3bdc0eb3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55867e69-4794-46b2-8a20-3fda09ede1a3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
