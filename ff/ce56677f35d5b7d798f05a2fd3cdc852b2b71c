@@ -1,0 +1,21 @@
+src/app/layout.tsx
+  s_0585a218858f80::t_db1386f973d6c4 45
+public/manifest.json
+  s_0585a218858f80::t_154ba0e6c992b7 1-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.10",
+  "base_commit_sha": "ffce56677f35d5b7d798f05a2fd3cdc852b2b71c",
+  "prompts": {},
+  "sessions": {
+    "s_0585a218858f80": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "17d4ab18-5fd2-497c-ad23-0655ff52d270",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
