@@ -42,6 +42,7 @@ export const metadata: Metadata = {
   authors: [{ name: SITE_NAME }],
   creator: SITE_NAME,
   publisher: SITE_NAME,
+  manifest: '/manifest.json',
   formatDetection: {
     telephone: false,
   },
