@@ -4,6 +4,9 @@
   "project": ["src/**/*.{ts,tsx}", "!src/**/*.test.{ts,tsx}"],
   "ignoreDependencies": ["@playwright/test", "tailwindcss", "@tailwindcss/postcss"],
   "ignore": ["test-hl.ts"],
+  "ignoreExportsUsedInFile": {
+    "match": "src/services/gamification.ts"
+  },
   "ignoreBinaries": [],
   "rules": {
     "exports": "warn",
