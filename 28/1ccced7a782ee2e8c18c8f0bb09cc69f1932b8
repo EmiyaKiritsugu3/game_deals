@@ -1,0 +1,19 @@
+knip.json
+  s_cbfea3bdc0eb3a::t_f951f565df0fe9 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "281ccced7a782ee2e8c18c8f0bb09cc69f1932b8",
+  "prompts": {},
+  "sessions": {
+    "s_cbfea3bdc0eb3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55867e69-4794-46b2-8a20-3fda09ede1a3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
