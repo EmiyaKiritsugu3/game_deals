@@ -235,7 +235,7 @@ export async function getLeaderboard(limit = 50): Promise<LeaderboardEntry[] | n
         xp: userStats.xp,
         badgeCount: sql<number>`(
           SELECT count(*)::int FROM ${userBadges}
-          WHERE ${userBadges.userId} = ${userStats.userId}
+          WHERE ${userBadges.userId} = "user_stats"."userId"
         )`,
       })
       .from(userStats)
