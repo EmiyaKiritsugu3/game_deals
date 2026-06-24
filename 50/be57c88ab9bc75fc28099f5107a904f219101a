@@ -1,0 +1,22 @@
+src/actions/__tests__/gamification.test.ts
+  s_cbfea3bdc0eb3a::t_119b1efe5274fa 1-51
+src/components/__tests__/LevelBadge.test.tsx
+  s_cbfea3bdc0eb3a::t_2c49424e1a27cd 1-8,10,12-14,18-19,21-22,24-25
+  s_cbfea3bdc0eb3a::t_5e9ae0767a6a99 9,11,15-17,20,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "50be57c88ab9bc75fc28099f5107a904f219101a",
+  "prompts": {},
+  "sessions": {
+    "s_cbfea3bdc0eb3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55867e69-4794-46b2-8a20-3fda09ede1a3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
