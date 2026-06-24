@@ -3,6 +3,7 @@
 import { sql } from 'drizzle-orm';
 import { resolveGameUuid } from '@/actions/deals';
 import { db } from '@/db';
+import { processAction } from '@/services/gamification';
 import type { PriceAlertWithGame } from '@/types/price-alert';
 import { createClient } from '@/utils/supabase/server';
 
@@ -33,6 +34,11 @@ export async function createPriceAlertAction(
       "isActive" = 1
     RETURNING *
   `);
+
+  processAction(user.id, 'alert_create', { gameId, targetPrice }).catch((e) =>
+    console.error('Gamification failed (non-blocking):', e)
+  );
+
   return inserted[0];
 }
 

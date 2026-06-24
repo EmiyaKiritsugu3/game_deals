@@ -3,6 +3,7 @@
 import { type SQL, sql } from 'drizzle-orm';
 import { resolveGameUuid } from '@/actions/deals';
 import { db } from '@/db';
+import { processAction } from '@/services/gamification';
 import { createClient } from '@/utils/supabase/server';
 
 function generateSlug(title: string): string {
@@ -61,7 +62,12 @@ export async function createPlaylistAction(
           RETURNING *`
     )) as unknown as PlaylistRow[];
 
-    if (result.length > 0) return result[0];
+    if (result.length > 0) {
+      processAction(userId, 'playlist_create', { playlistId: result[0].id }).catch((e) =>
+        console.error('Gamification failed (non-blocking):', e)
+      );
+      return result[0];
+    }
 
     const suffix = crypto.randomUUID().substring(0, 8);
     slug = `${baseSlug}-${suffix}`;
@@ -126,7 +132,13 @@ export async function addGameToPlaylistAction(
         RETURNING id`
   )) as Array<{ id: string }>;
 
-  return result.length > 0;
+  const added = result.length > 0;
+  if (added) {
+    processAction(userId, 'playlist_add', { gameId: cheapsharkId, playlistId }).catch((e) =>
+      console.error('Gamification failed (non-blocking):', e)
+    );
+  }
+  return added;
 }
 
 export async function removeGameFromPlaylistAction(
