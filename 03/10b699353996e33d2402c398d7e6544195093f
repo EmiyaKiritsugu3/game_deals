@@ -1,0 +1,23 @@
+.superpowers/sdd/task-fix2-brief.md
+  s_cbfea3bdc0eb3a::t_c6e6ab88eefacf 1-26
+.superpowers/sdd/task-fix1-brief.md
+  s_cbfea3bdc0eb3a::t_30dc0648635230 1-24
+docs/superpowers/plans/2026-06-24-pr52-fix-and-optimize-plan.md
+  s_cbfea3bdc0eb3a::t_d94d9dfd4d8008 1-270
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "0310b699353996e33d2402c398d7e6544195093f",
+  "prompts": {},
+  "sessions": {
+    "s_cbfea3bdc0eb3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55867e69-4794-46b2-8a20-3fda09ede1a3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
