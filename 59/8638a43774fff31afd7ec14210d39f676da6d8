@@ -1,0 +1,21 @@
+src/services/gamification.ts
+  s_cbfea3bdc0eb3a::t_0c15afcac5fa74 66
+knip.json
+  s_cbfea3bdc0eb3a::t_2335be1172e21e 7-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "598638a43774fff31afd7ec14210d39f676da6d8",
+  "prompts": {},
+  "sessions": {
+    "s_cbfea3bdc0eb3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55867e69-4794-46b2-8a20-3fda09ede1a3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
