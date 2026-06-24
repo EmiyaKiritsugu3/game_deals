@@ -16,6 +16,7 @@ import {
   getDeals,
   getDrmType,
   getGame,
+  getGamesBatch,
   getHighResImage,
   getRegionTag,
   getStoreLogo,
@@ -319,8 +320,23 @@ describe('getStores', () => {
 });
 
 // ---------------------------------------------------------------------------
-// getGame — delegates to game-enrichment
+// getGame / getGamesBatch — delegates to game-enrichment
 // ---------------------------------------------------------------------------
+
+const { mockFetchGamesBatchFromCheapShark } = vi.hoisted(() => {
+  return { mockFetchGamesBatchFromCheapShark: vi.fn() };
+});
+
+vi.mock('@/services/game-enrichment', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/services/game-enrichment')>();
+  return {
+    ...actual,
+    fetchGameFromCheapShark: mockFetchGameFromCheapShark,
+    fetchGamesBatchFromCheapShark: mockFetchGamesBatchFromCheapShark,
+    enrichWithGreyMarketDeals: mockEnrichWithGreyMarketDeals,
+    updateHistoricalLow: mockUpdateHistoricalLow,
+  };
+});
 
 describe('getGame', () => {
   beforeEach(() => {
@@ -385,5 +401,68 @@ describe('getGame', () => {
     expect(mockEnrichWithGreyMarketDeals).not.toHaveBeenCalled();
     expect(mockUpdateHistoricalLow).not.toHaveBeenCalled();
     expect(result).toBeNull();
+  });
+});
+
+describe('getGamesBatch', () => {
+  beforeEach(() => {
+    mockFetchGamesBatchFromCheapShark.mockReset();
+    mockEnrichWithGreyMarketDeals.mockReset();
+    mockUpdateHistoricalLow.mockReset();
+  });
+
+  const sampleGameDetails1 = {
+    info: { title: 'Test Game 1', steamAppID: '1', thumb: 't1' },
+    cheapestPriceEver: { price: '9.99', date: 1600000000 },
+    deals: [],
+  };
+
+  const sampleGameDetails2 = {
+    info: { title: 'Test Game 2', steamAppID: '2', thumb: 't2' },
+    cheapestPriceEver: { price: '19.99', date: 1600000000 },
+    deals: [],
+  };
+
+  it('returns empty object when no ids provided', async () => {
+    const result = await getGamesBatch([]);
+    expect(result).toEqual({});
+    expect(mockFetchGamesBatchFromCheapShark).not.toHaveBeenCalled();
+  });
+
+  it('chunks requests to CheapShark when more than 25 IDs', async () => {
+    const ids = Array.from({ length: 30 }, (_, i) => String(i + 1));
+    mockFetchGamesBatchFromCheapShark.mockResolvedValueOnce({ '1': sampleGameDetails1 });
+    mockFetchGamesBatchFromCheapShark.mockResolvedValueOnce({ '26': sampleGameDetails2 });
+
+    const result = await getGamesBatch(ids);
+
+    expect(mockFetchGamesBatchFromCheapShark).toHaveBeenCalledTimes(2);
+    expect(mockFetchGamesBatchFromCheapShark).toHaveBeenNthCalledWith(1, ids.slice(0, 25));
+    expect(mockFetchGamesBatchFromCheapShark).toHaveBeenNthCalledWith(2, ids.slice(25, 30));
+
+    expect(result).toEqual({
+      '1': sampleGameDetails1,
+      '26': sampleGameDetails2,
+    });
+  });
+
+  it('enriches games fetched in batch', async () => {
+    mockFetchGamesBatchFromCheapShark.mockResolvedValueOnce({ '1': sampleGameDetails1 });
+    await getGamesBatch(['1']);
+
+    expect(mockEnrichWithGreyMarketDeals).toHaveBeenCalledWith(sampleGameDetails1, '1');
+    expect(mockUpdateHistoricalLow).toHaveBeenCalledWith(sampleGameDetails1);
+  });
+
+  it('handles null chunk responses gracefully', async () => {
+    mockFetchGamesBatchFromCheapShark.mockResolvedValueOnce(null);
+    const result = await getGamesBatch(['1']);
+    expect(result).toEqual({});
+  });
+
+  it('handles thrown errors gracefully', async () => {
+    mockFetchGamesBatchFromCheapShark.mockRejectedValueOnce(new Error('API error'));
+    const result = await getGamesBatch(['1']);
+    expect(result).toEqual({});
   });
 });

@@ -14,6 +14,7 @@ import {
 import {
   enrichWithGreyMarketDeals,
   fetchGameFromCheapShark,
+  fetchGamesBatchFromCheapShark,
   updateHistoricalLow,
 } from '@/services/game-enrichment';
 import type { Deal, GameDetails, Store } from '@/types/game';
@@ -121,5 +122,38 @@ export async function getGame(id: string): Promise<GameDetails> {
   } catch (error) {
     console.error('getGame error:', error);
     return null as unknown as never;
+  }
+}
+
+export async function getGamesBatch(ids: string[]): Promise<Record<string, GameDetails>> {
+  const result: Record<string, GameDetails> = {};
+  if (!ids || ids.length === 0) return result;
+
+  try {
+    // API limit is 25 IDs per batch request
+    const chunkSize = 25;
+    const chunks: string[][] = [];
+    for (let i = 0; i < ids.length; i += chunkSize) {
+      chunks.push(ids.slice(i, i + chunkSize));
+    }
+
+    const responses = await Promise.all(
+      chunks.map((chunk) => fetchGamesBatchFromCheapShark(chunk))
+    );
+
+    for (const res of responses) {
+      if (!res) continue;
+      for (const [id, game] of Object.entries(res)) {
+        if (!game) continue;
+        enrichWithGreyMarketDeals(game, id);
+        updateHistoricalLow(game);
+        result[id] = game;
+      }
+    }
+
+    return result;
+  } catch (error) {
+    console.error('getGamesBatch error:', error);
+    return result;
   }
 }
