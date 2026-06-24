@@ -1,39 +1,27 @@
 'use client';
 
-import { useState } from 'react';
-import { updateLeaderboardOptIn } from '@/actions/gamification';
+import { useActionState } from 'react';
+import { updateLeaderboardOptInAction } from '@/actions/gamification';
 
 interface OptInToggleProps {
   initialValue: boolean;
 }
 
 export default function OptInToggle({ initialValue }: OptInToggleProps) {
-  const [optIn, setOptIn] = useState(initialValue);
-  const [saving, setSaving] = useState(false);
-
-  const handleToggle = async () => {
-    setSaving(true);
-    const newValue = !optIn;
-    setOptIn(newValue);
-    try {
-      await updateLeaderboardOptIn(newValue);
-    } catch {
-      setOptIn(optIn);
-    } finally {
-      setSaving(false);
-    }
-  };
+  const [, formAction] = useActionState(updateLeaderboardOptInAction, null);
 
   return (
-    <label className="flex items-center gap-3 cursor-pointer">
-      <input
-        type="checkbox"
-        checked={optIn}
-        onChange={handleToggle}
-        disabled={saving}
-        className="h-4 w-4 rounded border-muted-foreground"
-      />
-      <span className="text-sm">{saving ? 'Saving...' : 'Show me on the leaderboard'}</span>
-    </label>
+    <form action={formAction}>
+      <label className="flex items-center gap-3 cursor-pointer">
+        <input
+          type="checkbox"
+          name="optIn"
+          defaultChecked={initialValue}
+          onChange={(e) => e.target.form?.requestSubmit()}
+          className="h-4 w-4 rounded border-muted-foreground"
+        />
+        <span className="text-sm">Show me on the leaderboard</span>
+      </label>
+    </form>
   );
 }

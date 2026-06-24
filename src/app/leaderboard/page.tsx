@@ -32,22 +32,19 @@ export default async function LeaderboardPage() {
               {entries.map((entry, i) => (
                 <tr key={entry.userId} className="border-b last:border-0">
                   <td className="py-3">
-                    {i === 0 && (
-                      <span className="text-lg" role="img" aria-label="gold medal">
-                        🥇
-                      </span>
-                    )}
-                    {i === 1 && (
-                      <span className="text-lg" role="img" aria-label="silver medal">
-                        🥈
-                      </span>
-                    )}
-                    {i === 2 && (
-                      <span className="text-lg" role="img" aria-label="bronze medal">
-                        🥉
-                      </span>
-                    )}
-                    {i >= 3 && <span className="text-muted-foreground ml-1">{i + 1}</span>}
+                    <span className="text-lg">
+                      {i < 3 ? (
+                        <span
+                          className="text-lg"
+                          role="img"
+                          aria-label={`${['gold', 'silver', 'bronze'][i]} medal`}
+                        >
+                          {['🥇', '🥈', '🥉'][i]}
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground ml-1">{i + 1}</span>
+                      )}
+                    </span>
                   </td>
                   <td className="py-3 font-medium">Player {entry.userId.slice(0, 8)}</td>
                   <td className="py-3 text-right text-muted-foreground">{entry.badgeCount}</td>

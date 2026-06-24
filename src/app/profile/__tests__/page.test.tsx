@@ -24,6 +24,7 @@ vi.mock('next/navigation', () => ({
 const getUserMock = vi.fn();
 vi.mock('@/actions/gamification', () => ({
   updateLeaderboardOptIn: () => Promise.resolve(),
+  updateLeaderboardOptInAction: () => Promise.resolve({ success: true }),
 }));
 vi.mock('@/services/gamification', () => ({
   getUserProfile: () =>

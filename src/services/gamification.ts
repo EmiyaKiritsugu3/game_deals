@@ -27,26 +27,32 @@ export interface ProcessActionResult {
   newLevel: number;
 }
 
+export interface UserStats {
+  xp: number;
+  level: number;
+  optInLeaderboard: boolean;
+}
+
+export interface BadgeWithDate {
+  id: string;
+  name: string;
+  description: string | null;
+  iconSvg: string;
+  rarity: string | null;
+  awardedAt: Date;
+}
+
+export interface Activity {
+  id: string;
+  actionType: string;
+  details: unknown;
+  createdAt: Date;
+}
+
 export interface UserProfile {
-  stats: {
-    xp: number;
-    level: number;
-    optInLeaderboard: boolean;
-  };
-  badges: Array<{
-    id: string;
-    name: string;
-    description: string | null;
-    iconSvg: string;
-    rarity: string | null;
-    awardedAt: Date;
-  }>;
-  recentActivity: Array<{
-    id: string;
-    actionType: string;
-    details: unknown;
-    createdAt: Date;
-  }>;
+  stats: UserStats;
+  badges: BadgeWithDate[];
+  recentActivity: Activity[];
 }
 
 export interface LeaderboardEntry {
@@ -72,35 +78,37 @@ export const BADGE_DEFS: BadgeDef[] = [
 
 // --- Helpers ---
 
+export const RARITY_COLORS: Record<string, string> = {
+  Common: '#9ca3af',
+  Uncommon: '#22c55e',
+  Rare: '#3b82f6',
+  Epic: '#a855f7',
+};
+
 export function calcLevel(xp: number): number {
   return Math.floor(Math.sqrt(xp / 10));
 }
 
-function getBadgeIconSvg(rarity: string, _name: string): string {
-  const colors: Record<string, string> = {
-    Common: '#9ca3af',
-    Uncommon: '#22c55e',
-    Rare: '#3b82f6',
-    Epic: '#a855f7',
-  };
-  const color = colors[rarity] ?? '#9ca3af';
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${color}"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
-}
+const SVG_BY_RARITY: Record<string, string> = {
+  Common:
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#9ca3af"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+  Uncommon:
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#22c55e"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+  Rare: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#3b82f6"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+  Epic: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#a855f7"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+};
 
 async function getBadgeCategories(userId: string): Promise<Set<string>> {
-  const earned = await db
-    .select({ name: badges.name })
+  const rows = await db
+    .select({ criteria: badges.criteria })
     .from(userBadges)
     .innerJoin(badges, eq(userBadges.badgeId, badges.id))
     .where(eq(userBadges.userId, userId));
-
   const categories = new Set<string>();
-  for (const row of earned) {
-    const def = BADGE_DEFS.find((d) => d.name === row.name);
-    if (def && def.actionType !== '__meta__') {
-      const category = def.actionType.split('_')[0];
-      categories.add(category);
-    }
+  for (const row of rows) {
+    const criteria = row.criteria as { actionType?: string } | null;
+    const type = criteria?.actionType;
+    if (type && type !== '__meta__') categories.add(type.split('_')[0]);
   }
   return categories;
 }
@@ -145,19 +153,25 @@ export async function processAction(
       (b) => b.actionType === actionType || b.actionType === '__meta__'
     );
 
+    // Single query for standard badge counts
+    const [countResult] = relevantDefs.some((b) => b.actionType !== '__meta__')
+      ? await db
+          .select({ count: sql<number>`count(*)` })
+          .from(activities)
+          .where(and(eq(activities.userId, userId), eq(activities.actionType, actionType)))
+      : [{ count: 0 }];
+
+    // Single query for meta badge categories
+    const metaRow = relevantDefs.find((b) => b.actionType === '__meta__');
+    const categories = metaRow ? await getBadgeCategories(userId) : new Set<string>();
+
     for (const badgeDef of relevantDefs) {
       let earned = false;
 
       if (badgeDef.actionType === '__meta__') {
-        const categories = await getBadgeCategories(userId);
         earned = categories.size >= badgeDef.count;
       } else {
-        const [result] = await db
-          .select({ count: sql<number>`count(*)` })
-          .from(activities)
-          .where(and(eq(activities.userId, userId), eq(activities.actionType, actionType)));
-
-        earned = result.count >= badgeDef.count;
+        earned = countResult.count >= badgeDef.count;
       }
 
       if (earned) {
@@ -256,7 +270,7 @@ export async function seedBadges(): Promise<void> {
         def.actionType === '__meta__'
           ? 'Earned by collecting badges across all categories'
           : `Earned by performing ${def.actionType.replace('_', ' ')} ${def.count} time(s)`,
-      iconSvg: getBadgeIconSvg(def.rarity, def.name),
+      iconSvg: SVG_BY_RARITY[def.rarity] ?? SVG_BY_RARITY.Common,
       rarity: def.rarity,
       criteria: { actionType: def.actionType, count: def.count, xp: def.xp },
     }));

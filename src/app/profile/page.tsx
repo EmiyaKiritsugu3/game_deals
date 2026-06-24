@@ -1,15 +1,8 @@
 import { redirect } from 'next/navigation';
 import LevelBadge from '@/components/LevelBadge';
-import { getUserProfile } from '@/services/gamification';
+import { getUserProfile, RARITY_COLORS } from '@/services/gamification';
 import { createClient } from '@/utils/supabase/server';
 import OptInToggle from './OptInToggle';
-
-const RARITY_COLORS: Record<string, string> = {
-  Common: '#9ca3af',
-  Uncommon: '#22c55e',
-  Rare: '#3b82f6',
-  Epic: '#a855f7',
-};
 
 function calcXpToNext(level: number): number {
   return (level + 1) * (level + 1) * 10 - level * level * 10;

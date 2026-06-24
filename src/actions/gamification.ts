@@ -19,3 +19,8 @@ export async function updateLeaderboardOptIn(optIn: boolean) {
       set: { optInLeaderboard: optIn },
     });
 }
+
+export async function updateLeaderboardOptInAction(_prev: unknown, formData: FormData) {
+  await updateLeaderboardOptIn(formData.get('optIn') === 'on');
+  return { success: true };
+}
