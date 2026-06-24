@@ -1,12 +1,14 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "entry": ["src/app/layout.tsx", "src/app/page.tsx", "src/actions/*.ts"],
+  "entry": [
+    "src/app/layout.tsx",
+    "src/app/page.tsx",
+    "src/actions/*.ts",
+    "src/services/gamification.ts"
+  ],
   "project": ["src/**/*.{ts,tsx}", "!src/**/*.test.{ts,tsx}"],
   "ignoreDependencies": ["@playwright/test", "tailwindcss", "@tailwindcss/postcss"],
   "ignore": ["test-hl.ts"],
-  "ignoreExportsUsedInFile": {
-    "match": "src/services/gamification.ts"
-  },
   "ignoreBinaries": [],
   "rules": {
     "exports": "warn",
