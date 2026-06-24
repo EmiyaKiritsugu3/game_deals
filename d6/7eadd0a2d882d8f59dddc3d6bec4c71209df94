@@ -1,0 +1,22 @@
+src/app/profile/__tests__/page.test.tsx
+  s_cbfea3bdc0eb3a::t_5b7a777fd68215 26-27,29-32,56
+  s_cbfea3bdc0eb3a::t_91b4c8e53a1700 28,33-40,43,58-61
+  s_cbfea3bdc0eb3a::t_980a46d58a6132 10-11
+  s_cbfea3bdc0eb3a::t_87926d895e48b8 41,57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "d67eadd0a2d882d8f59dddc3d6bec4c71209df94",
+  "prompts": {},
+  "sessions": {
+    "s_cbfea3bdc0eb3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55867e69-4794-46b2-8a20-3fda09ede1a3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
