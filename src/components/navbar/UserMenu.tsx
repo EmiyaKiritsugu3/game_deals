@@ -1,6 +1,6 @@
 'use client';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
-import { Bell, ChevronDown, List, LogOut } from 'lucide-react';
+import { Bell, ChevronDown, List, LogOut, Trophy } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -44,6 +44,7 @@ function UserMenuDropdown({
     <div className={styles.userDropdown}>
       <MenuItem href="/playlists" icon={<List size={16} />} label="Playlists" />
       <MenuItem href="/wishlist" icon={<Bell size={16} />} label="Price Alerts" />
+      <MenuItem href="/leaderboard" icon={<Trophy size={16} />} label="Leaderboard" />
       <MenuDivider />
       <button type="button" className={`${styles.menuItem} ${styles.logout}`} onClick={onLogout}>
         <LogOut size={16} />

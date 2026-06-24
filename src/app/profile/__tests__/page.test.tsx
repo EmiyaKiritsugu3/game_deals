@@ -22,6 +22,17 @@ vi.mock('next/navigation', () => ({
 }));
 
 const getUserMock = vi.fn();
+vi.mock('@/actions/gamification', () => ({
+  updateLeaderboardOptIn: () => Promise.resolve(),
+}));
+vi.mock('@/services/gamification', () => ({
+  getUserProfile: () =>
+    Promise.resolve({
+      stats: { xp: 0, level: 0, optInLeaderboard: false },
+      badges: [],
+      recentActivity: [],
+    }),
+}));
 vi.mock('@/utils/supabase/server', () => ({
   createClient: () => ({
     auth: {
