@@ -1,0 +1,19 @@
+.superpowers/sdd/task-fix1-report.md
+  s_cbfea3bdc0eb3a::t_3bd95739f4b581 1-31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "4651a26c48cd33ba38ad24487a232141b0593d33",
+  "prompts": {},
+  "sessions": {
+    "s_cbfea3bdc0eb3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55867e69-4794-46b2-8a20-3fda09ede1a3",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
