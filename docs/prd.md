@@ -253,7 +253,7 @@ GameDeals helps gamers find the best prices on digital games across 17+ storefro
 
 | ID | Requirement | Priority | Effort |
 |----|-------------|----------|--------|
-| N-TQ-1 | All existing 896 tests continue to pass | P0 | Ongoing |
+| N-TQ-1 | All existing 980 tests continue to pass | P0 | Ongoing |
 | N-TQ-2 | Coverage targets: lines 30%, functions 25%, branches 23%, statements 30% | P0 | Done |
 | N-TQ-3 | Phase 2 coverage targets: lines 42%, functions 38%, branches 35%, statements 42% | P2 | Done |
 | N-TQ-4 | Phase 3 coverage targets: lines 80%, functions 70%, branches 70%, statements 80% | P3 | Done (actual: 82/77/79/82) |

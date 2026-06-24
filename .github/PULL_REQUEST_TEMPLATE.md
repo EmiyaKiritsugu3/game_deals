@@ -14,7 +14,7 @@
 
 - [ ] `pnpm check` passes (lint → tsc → test → build → knip)
 - [ ] No TypeScript errors (`./node_modules/.bin/tsc --noEmit`)
-- [ ] All tests pass (`pnpm test` — 423 tests)
+- [ ] All tests pass (`pnpm test` — 980 tests)
 - [ ] SonarQube: 0 new issues
 - [ ] Visual changes tested via `pnpm test:e2e:visual`
 

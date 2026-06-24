@@ -1,5 +1,18 @@
 # Changelog
 
+## [v0.6.0] — 2026-06-24
+
+### Sprint 15 — Gamification, PWA, P2 Wins (#52)
+
+- **Gamification**: Full system — 10 badges across wishlist/playlist/alert categories, XP service layer (`processAction`, `getUserProfile`, `getLeaderboard`, `seedBadges`), action hooks in playlist/alert actions. Profile page expanded with XP bar/level, badge grid, activity timeline, leaderboard opt-in toggle. `/leaderboard` page. `user_stats` migration 0013 + `award_badge()` function.
+- **PWA**: `manifest.json`, layout metadata.
+- **Quick Wins**: CI `pnpm audit` blocks on HIGH vulns (no more `continue-on-error`). `aria-live` regions on search/notifications/deals.
+- **Accessibility**: aria-live regions, LevelBadge component with aria-label.
+- **Tests**: 896→980 (+84). 114 test files. Coverage: new code ≥80%.
+- **Tech upgrades**: React 19.2.3→19.2.7, TS 5→6.0.3, lucide-react 0.577→1.21, @supabase/ssr 0.9→0.12, biome 2.5.0→2.5.1, vitest 4.1.8→4.1.9, tailwindcss 4.3.0→4.3.1.
+- **SonarCloud**: Clean scan. 8/8 CI checks.
+- **Cleanup**: 9 open PRs resolved (5 merged, 4 closed). Zero PRs open.
+
 ## [v0.5.0] — 2026-06-20
 
 ### Sprint 9 — Coverage Push & PRD Evolution (#35, #36)
