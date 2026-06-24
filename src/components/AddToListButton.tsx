@@ -28,6 +28,7 @@ export default function AddToListButton({ gameId, variant = 'icon' }: AddToListB
           setIsOpen(true);
         }}
         title="Add to Playlist"
+        aria-label="Add to Playlist"
       >
         <Plus size={variant === 'icon' ? 18 : 20} strokeWidth={2.5} />
         {variant === 'full' && <span>Add to List</span>}
