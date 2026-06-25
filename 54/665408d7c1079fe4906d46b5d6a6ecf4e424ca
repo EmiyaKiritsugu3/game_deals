@@ -1,0 +1,21 @@
+src/components/CookieBanner.tsx
+  s_4b44681418a8bd::t_d322acb670892a 47-48
+src/utils/supabase/middleware.ts
+  s_4b44681418a8bd::t_d322acb670892a 65-69,76
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "54665408d7c1079fe4906d46b5d6a6ecf4e424ca",
+  "prompts": {},
+  "sessions": {
+    "s_4b44681418a8bd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3a7501a8-2773-4de4-bb54-b54826dc7721",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
