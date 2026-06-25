@@ -1,0 +1,19 @@
+docs/superpowers/specs/2026-06-24-sprint-16-polish-gap-closure-design.md
+  s_4b44681418a8bd::t_f59a7788c1bb56 32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "43d2a6c0e38d7840bf566db56968b5da1b10052a",
+  "prompts": {},
+  "sessions": {
+    "s_4b44681418a8bd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3a7501a8-2773-4de4-bb54-b54826dc7721",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
