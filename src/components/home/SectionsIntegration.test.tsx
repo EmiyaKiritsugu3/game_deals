@@ -43,10 +43,7 @@ vi.mock('@/components/GameCard', () => ({
 }));
 
 const { mockCollections } = vi.hoisted(() => ({
-  mockCollections: vi.fn<
-    [],
-    Array<{ slug: string; title: string; description: string; emoji: string; gameIDs: string[] }>
-  >(),
+  mockCollections: vi.fn<() => Array<{ slug: string; title: string; description: string; emoji: string; gameIDs: string[] }>>(),
 }));
 
 vi.mock('@/data/collections', () => ({
