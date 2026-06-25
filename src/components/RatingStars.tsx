@@ -119,15 +119,14 @@ export default function RatingStars({
   });
 
   const content = (
-    // biome-ignore lint/a11y/useAriaPropsSupportedByRole: div role=img supports aria-label per WAI-ARIA spec — Biome FP
-    <div
+    <span
       className={cn(styles.wrapper, sizeMap[size])}
       role={interactive ? 'radiogroup' : 'img'}
       aria-label={interactive ? undefined : label}
     >
       {stars}
       {showValue && <span className={styles.value}>{value.toFixed(1)}</span>}
-    </div>
+    </span>
   );
 
   if (interactive) return content;

@@ -79,6 +79,16 @@
           }
         }
       }
+    },
+    {
+      "includes": ["src/components/RatingStars.tsx"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useAriaPropsSupportedByRole": "off"
+          }
+        }
+      }
     }
   ],
   "css": {
