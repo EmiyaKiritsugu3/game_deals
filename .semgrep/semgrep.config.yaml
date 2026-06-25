@@ -1,0 +1,54 @@
+# Semgrep config for game-deals
+# Usage: semgrep --config .semgrep/semgrep.config.yaml --metrics=off
+
+rulesets:
+  - p/typescript
+  - p/react
+  - p/nextjs
+
+rules:
+  # ── Project-specific overrides ──
+
+  # Known exception: Recharts formatters use any
+  - id: no-explicit-any-recharts
+    pattern-either:
+      - pattern: |
+          function (value: any, name: any, ...args: any[]) {
+            ...
+          }
+    paths:
+      include:
+        - "**/*chart*"
+        - "**/Chart*"
+        - "**/chart*"
+    severity: false_positive
+
+  # ── Custom rules ──
+
+  - id: no-hardcoded-credentials
+    pattern-either:
+      - pattern: |
+          $VAR = "sk-..."
+      - pattern: |
+          $VAR = "ghp_..."
+      - pattern: |
+          $VAR = "gho_..."
+    severity: error
+    message: Hardcoded credential pattern detected. Use env vars.
+
+  - id: no-console-log-prod
+    patterns:
+      - pattern: console.log(...)
+      - pattern-not: console.error(...)
+      - pattern-not: console.warn(...)
+    severity: warning
+    message: console.log in production code. Use logger or remove.
+
+  - id: no-direct-supabase-admin
+    patterns:
+      - pattern: |
+          supabaseAdmin = createClient(...)
+      - pattern-not-inside: |
+          import { createClient } from "..."
+    severity: error
+    message: Direct supabaseAdmin client usage. Use server actions instead.
