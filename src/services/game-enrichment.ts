@@ -1,6 +1,28 @@
 import type { GameDetails } from '@/types/game';
 import { generateGreyMarketDeals } from '@/utils/pricing';
 
+export async function fetchGamesBatchFromCheapShark(
+  ids: string[]
+): Promise<Record<string, GameDetails> | null> {
+  if (ids.length === 0) return null;
+  const url = new URL('https://www.cheapshark.com/api/1.0/games');
+  url.searchParams.append('ids', ids.join(','));
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(url.toString(), {
+      headers: { 'User-Agent': 'GameDeals/1.0 (https://gamedeals.com.br)' },
+      signal: controller.signal,
+      next: { revalidate: 3600 },
+    });
+    clearTimeout(timeout);
+    if (!res.ok) return null;
+    return (await res.json()) as Record<string, GameDetails>;
+  } catch {
+    return null;
+  }
+}
+
 export async function fetchGameFromCheapShark(id: string): Promise<GameDetails | null> {
   const url = new URL('https://www.cheapshark.com/api/1.0/games');
   url.searchParams.append('id', id);

@@ -1,4 +1,4 @@
-import { getDeals, getGame } from '@/services/api';
+import { getDeals, getGamesBatch } from '@/services/api';
 import DealRow from './DealRow';
 import DealsBadge from './DealsBadge';
 import styles from './HistoricalLows.module.css';
@@ -20,25 +20,20 @@ export default async function HistoricalLows() {
   const hlCandidates = Array.from(uniqueCandidatesMap.values()).slice(0, 50);
 
   // 3. Strict verification against actual 'cheapestPriceEver'
-  const results = await Promise.allSettled(
-    hlCandidates.map(async (deal) => {
-      const gameInfo = await getGame(deal.gameID);
-      if (!gameInfo?.cheapestPriceEver) return null;
+  // ⚡ Bolt: Batch fetch to avoid N+1 problem. Previously fired up to 50 individual requests.
+  const candidateIds = hlCandidates.map((c) => c.gameID);
+  const batchedGames = await getGamesBatch(candidateIds);
 
-      const currentPrice = Number.parseFloat(deal.salePrice);
-      const historicalLow = Number.parseFloat(gameInfo.cheapestPriceEver.price);
+  const verifiedHLs = hlCandidates.map((deal) => {
+    const gameInfo = batchedGames[deal.gameID];
+    if (!gameInfo?.cheapestPriceEver) return null;
 
-      // Strict HL check: current price must be within 1% of the historical low
-      return currentPrice <= historicalLow * 1.01 ? deal : null;
-    })
-  );
-  const verifiedHLs = results
-    .filter(
-      (r): r is PromiseFulfilledResult<(typeof hlCandidates)[number] | null> =>
-        r.status === 'fulfilled'
-    )
-    .map((r) => r.value)
-    .filter((d): d is (typeof hlCandidates)[number] => d !== null);
+    const currentPrice = Number.parseFloat(deal.salePrice);
+    const historicalLow = Number.parseFloat(gameInfo.cheapestPriceEver.price);
+
+    // Strict HL check: current price must be within 1% of the historical low
+    return currentPrice <= historicalLow * 1.01 ? deal : null;
+  });
 
   const hlDeals = verifiedHLs
     .filter((d): d is (typeof hlCandidates)[number] => d !== null)
