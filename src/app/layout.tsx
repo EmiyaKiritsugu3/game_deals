@@ -1,7 +1,7 @@
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Geist } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { Suspense } from 'react';
 import CookieBanner from '@/components/CookieBanner';
@@ -10,6 +10,9 @@ import RegisterSW from '@/components/RegisterSW';
 import SyncManager from '@/components/SyncManager';
 import ReactQueryProvider from '@/providers/ReactQueryProvider';
 import './globals.css';
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const inter = Inter({
   variable: '--font-inter',
@@ -112,7 +115,7 @@ export default async function RootLayout({
   );
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
       <head>
         {jsonLdScript}
         <meta name="theme-color" content="#dc2626" />
