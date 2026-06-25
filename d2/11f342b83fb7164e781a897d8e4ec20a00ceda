@@ -1,0 +1,23 @@
+src/components/RatingStars.tsx
+  s_48ec12a2a19cbc::t_7bcc4a583ed9ab 122,129
+.scannerwork/report-task.txt
+  s_48ec12a2a19cbc::t_94d50c93838eea 5-6
+biome.json
+  s_48ec12a2a19cbc::t_3068ef06894202 82-91
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "d211f342b83fb7164e781a897d8e4ec20a00ceda",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
