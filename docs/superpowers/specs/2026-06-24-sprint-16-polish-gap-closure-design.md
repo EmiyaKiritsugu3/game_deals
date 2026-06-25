@@ -29,7 +29,7 @@ Real scope: ~3h total. Ratchet not feature — each item closes a tracked gap wi
 | Item | Prio | Esforço | Detalhe |
 |------|------|---------|---------|
 | **B1.** Security headers | P0 | 1.5h | Middleware (`src/utils/supabase/middleware.ts`) define **zero** security headers. PRD N-SC-5. Adicionar: CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy. |
-| **B2.** Drizzle snapshot 0012 | P2 | 5min | `_journal.json` idx 12 (`0012_deals_unique_constraint`) — snapshot file **ausente** no disco. `pnpm db:generate` deve preencher. |
+| ~~B2. Drizzle snapshot 0012~~ | — | — | **Falso positivo.** `.gitignore` exclui `*_snapshot.json`. Snapshots são gerados no `db:generate`, não commitados. Nada a fazer. |
 | **B3.** GitHub OAuth button | P3 | 15min | `handleSocialLogin` aceita `'github'` mas JSX em `AuthModal.tsx` só mostra Google + Discord. Adicionar botão. |
 | **B4.** i18n — PT→EN CookieBanner | P1 | 10min | `src/components/CookieBanner.tsx`: "Aceitar" e "Rejeitar" em português. Traduzir. |
 | **B5.** PRD sync | P1 | 30min | PRD ainda marca 6 features como "Not Built" / "Partial" que já estão prontas. Atualizar status. |
