@@ -44,10 +44,10 @@ export default function CookieBanner() {
       }}
     >
       <p style={{ margin: 0, fontSize: '0.875rem', color: '#ccc', flex: 1 }}>
-        🍪 Usamos cookies pra melhorar sua experiência e rastrear cliques em links de afiliados. Ao
-        continuar navegando, você concisa com nossa{' '}
+        🍪 We use cookies to improve your experience and track affiliate link clicks. By continuing,
+        you agree to our{' '}
         <a href="/privacy" style={{ color: '#4ade80' }}>
-          Política de Privacidade.
+          Privacy Policy.
         </a>
       </p>
       <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -64,7 +64,7 @@ export default function CookieBanner() {
             fontSize: '0.875rem',
           }}
         >
-          Rejeitar
+          Reject
         </button>
         <button
           type="button"
@@ -80,7 +80,7 @@ export default function CookieBanner() {
             fontSize: '0.875rem',
           }}
         >
-          Aceitar
+          Accept
         </button>
       </div>
     </div>

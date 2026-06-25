@@ -22,12 +22,12 @@ GameDeals helps gamers find the best prices on digital games across 17+ storefro
 | Auth (Supabase SSR) | Live | Email/password, Google, Discord OAuth |
 | SyncManager | Live | Debounced Zustand-to-Supabase sync |
 | 3 cron endpoints | Live | Daily schedule via Vercel Cron Jobs (Hobby plan limit: 1x/day) |
-| Sitemap | Live | Static pages only — no game detail URLs |
+| Sitemap | Live | Static + game detail URLs (50k games from DB) |
 | Price history chart | Live | Weekly/daily aggregation |
 | Playlists | Live | Create/add actions, listing page at `/playlists`, individual view at `/playlists/[id]` |
-| Profile page | Not built | Route exists in middleware's PROTECTED_PATHS, but `/profile` directory does not exist (returns 404) |
-| Gamification | Not built | Schemas exist (badges, XP, activities); zero code |
-| PWA / offline | Partial | ThemeToggle exists; manifest and service worker still missing |
+| Profile page | Live | XP/level, badge grid, activity timeline, leaderboard opt-in |
+| Gamification | Live | 10 badges, XP service, leaderboard, action hooks on playlists/alerts |
+| PWA / offline | Live | manifest.json, service worker, offline page |
 | i18n | Partial | English strings test covers ~35 patterns; Portuguese strings in Freebies/FlashSales still present |
 | Theme toggle | Live | ThemeToggle component with next-themes support |
 | Notification system (Bell + DB + actions) | Live | NotificationBell component, notifications table, 3 Server Actions, TanStack Query polling |
@@ -43,8 +43,8 @@ GameDeals helps gamers find the best prices on digital games across 17+ storefro
 | Shared wishlist page | Live | `/wishlist/shared?ids=<base64>` |
 | EndingSoon deals section | Live | Shown on home page |
 | Lazy-loaded charts (DynamicCharts) | Live | Recharts loaded via next/dynamic, SSR disabled |
-| GitHub OAuth provider | Wired (no UI) | Coded in handleSocialLogin, no button rendered |
-| Rate limiter on auth callback | Live | In-memory Map, 10 req/min/IP — needs distributed upgrade |
+| GitHub OAuth provider | Live | Button rendered in AuthModal |
+| Rate limiter on auth callback | Live | Upstash Redis + PostgreSQL fallback, 10 req/min/IP |
 | Cron timeout guards (Promise.race) | Live | CronError pattern on all 3 routes |
 | Cron route unit tests | Live | route.test.ts for all 3 cron endpoints |
 | Search results page (`/search`) | Live | Server component with filter sidebar |

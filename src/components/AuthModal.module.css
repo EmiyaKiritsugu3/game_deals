@@ -123,6 +123,10 @@
   border-color: #5865f2;
 }
 
+.github {
+  border-color: #333;
+}
+
 .divider {
   display: flex;
   align-items: center;
