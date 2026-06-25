@@ -1,0 +1,34 @@
+tests/setup.ts
+  s_48ec12a2a19cbc::t_950f31a16c02a4 4,8
+  s_48ec12a2a19cbc::t_9cae9f78c52173 2-3,5-7,9-19
+src/hooks/useGameRating.ts
+  s_48ec12a2a19cbc::t_579c9cde9450bc 31,33,36-37
+src/components/RatingStars.tsx
+  s_48ec12a2a19cbc::t_ab7d9462fe2509 122
+  s_48ec12a2a19cbc::t_f8f1687aa7b11e 100
+  s_48ec12a2a19cbc::t_bb5a02dd0f9a76 3-4,91
+src/hooks/useGameRating.test.tsx
+  s_48ec12a2a19cbc::t_aa782d64f05163 168-169
+  s_48ec12a2a19cbc::t_a63ad063c53d6a 176,181-182
+  s_48ec12a2a19cbc::t_dd7352df359cb7 136-137
+src/components/home/HotDealsSection.tsx
+  s_48ec12a2a19cbc::t_329b6d5d75a61d 17
+  s_48ec12a2a19cbc::t_2ca0f6a04d518a 14-15
+  s_48ec12a2a19cbc::t_2a89526bcd456f 4-7,28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "a74696454198214fd7c14a7c997772ca01d61d5b",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
