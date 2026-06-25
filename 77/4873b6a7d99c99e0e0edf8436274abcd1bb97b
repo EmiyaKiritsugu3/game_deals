@@ -1,0 +1,30 @@
+src/components/AuthModal.tsx
+  s_4b44681418a8bd::t_92d91e9ce72dc2 97-107
+src/components/AuthModal.module.css
+  s_4b44681418a8bd::t_9245463fcaed91 126-129
+src/components/CookieBanner.tsx
+  s_4b44681418a8bd::t_619db0449a5ca3 47-48,50
+  s_4b44681418a8bd::t_fda19da8800412 67
+  s_4b44681418a8bd::t_bd3f8a94e07f8a 83
+src/components/CookieBanner.test.tsx
+  s_4b44681418a8bd::t_14dc7c91e45908 37
+  s_4b44681418a8bd::t_b8a7a678978c4f 60
+  s_4b44681418a8bd::t_5a64cd0230adbd 54
+  s_4b44681418a8bd::t_e76e279fad872f 48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "774873b6a7d99c99e0e0edf8436274abcd1bb97b",
+  "prompts": {},
+  "sessions": {
+    "s_4b44681418a8bd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3a7501a8-2773-4de4-bb54-b54826dc7721",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
