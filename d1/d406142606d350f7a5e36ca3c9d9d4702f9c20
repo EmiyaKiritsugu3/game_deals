@@ -1,0 +1,64 @@
+src/components/ui/separator.tsx
+  s_4b44681418a8bd::t_dd649732ae7ce1 1-25
+src/lib/utils.ts
+  s_4b44681418a8bd::t_bfa7d16813e227 1-6
+src/components/ui/badge.tsx
+  s_4b44681418a8bd::t_dd649732ae7ce1 1-52
+src/components/ui/input.tsx
+  s_4b44681418a8bd::t_dd649732ae7ce1 1-20
+src/components/ui/select.tsx
+  s_4b44681418a8bd::t_dd649732ae7ce1 1-201
+src/components/ui/textarea.tsx
+  s_4b44681418a8bd::t_0facdea663710b 1-18
+package.json
+  s_4b44681418a8bd::t_092d175605e151 62
+  s_4b44681418a8bd::t_35af55d69605a3 53
+  s_4b44681418a8bd::t_16eff6f9181160 55
+  s_4b44681418a8bd::t_bfa7d16813e227 40,49-50,63-64
+  s_4b44681418a8bd::t_0facdea663710b 51
+src/components/ui/tooltip.tsx
+  s_4b44681418a8bd::t_0facdea663710b 1-66
+components.json
+  s_4b44681418a8bd::t_bfa7d16813e227 1-25
+src/components/ui/dropdown-menu.tsx
+  s_4b44681418a8bd::t_0facdea663710b 1-268
+src/components/ui/button.tsx
+  s_4b44681418a8bd::t_bfa7d16813e227 1-58
+docs/superpowers/specs/2026-06-25-sprint-17-ui-refresh-design.md
+  s_4b44681418a8bd::t_d1ab8b985db9ee 1-67,69-108
+  s_4b44681418a8bd::t_029b3c4ef9d0bd 68
+src/components/ui/command.tsx
+  s_4b44681418a8bd::t_0facdea663710b 1-196
+src/app/globals.css
+  s_4b44681418a8bd::t_bfa7d16813e227 3-4,11-15,19-21,23-46,51-57,61-62,65-86,199-253
+src/components/ui/card.tsx
+  s_4b44681418a8bd::t_dd649732ae7ce1 1-103
+src/components/ui/avatar.tsx
+  s_4b44681418a8bd::t_0facdea663710b 1-109
+src/components/ui/input-group.tsx
+  s_4b44681418a8bd::t_0facdea663710b 1-158
+src/components/ui/dialog.tsx
+  s_4b44681418a8bd::t_dd649732ae7ce1 1-160
+src/components/ui/popover.tsx
+  s_4b44681418a8bd::t_0facdea663710b 1-90
+src/components/ui/sheet.tsx
+  s_4b44681418a8bd::t_dd649732ae7ce1 1-138
+src/app/layout.tsx
+  s_4b44681418a8bd::t_bfa7d16813e227 4,13-15,118
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "d1d406142606d350f7a5e36ca3c9d9d4702f9c20",
+  "prompts": {},
+  "sessions": {
+    "s_4b44681418a8bd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3a7501a8-2773-4de4-bb54-b54826dc7721",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
