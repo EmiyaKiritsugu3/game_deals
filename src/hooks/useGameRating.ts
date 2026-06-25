@@ -28,13 +28,13 @@ export function useRateGame(gameId: string) {
     mutationFn: (rating: number) => rateGame(gameId, rating),
     onMutate: async (rating) => {
       await queryClient.cancelQueries({ queryKey: ['game-rating', gameId] });
-      const previous = queryClient.getQueryData(['game-rating', gameId]);
+      const prev = queryClient.getQueryData(['game-rating', gameId]);
       queryClient.setQueryData(['game-rating', gameId], { rating });
-      return { previous };
+      return { prev, exists: prev !== undefined };
     },
     onError: (_err, _rating, context) => {
-      if (context?.previous) {
-        queryClient.setQueryData(['game-rating', gameId], context.previous);
+      if (context?.exists && context.prev) {
+        queryClient.setQueryData(['game-rating', gameId], context.prev);
       }
     },
     onSettled: () => {

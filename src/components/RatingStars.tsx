@@ -1,13 +1,8 @@
 'use client';
 
-import { useId, useState, type KeyboardEvent } from 'react';
+import { type KeyboardEvent, useId, useState } from 'react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import styles from './RatingStars.module.css';
 
 const STAR_PATH =
@@ -93,12 +88,7 @@ export default function RatingStars({
     const clipId = `${uid}-${i}`;
 
     const icon = (
-      <StarIcon
-        filled={filled}
-        partial={partial}
-        partialPct={partialPct}
-        clipId={clipId}
-      />
+      <StarIcon filled={filled} partial={partial} partialPct={partialPct} clipId={clipId} />
     );
 
     if (interactive) {
@@ -107,7 +97,7 @@ export default function RatingStars({
         <span
           key={sv}
           role="radio"
-          aria-checked={filled || (i < (hoveredIndex !== null ? hoveredIndex + 1 : 0))}
+          aria-checked={sv === Math.round(displayValue)}
           aria-label={`${sv} star${sv > 1 ? 's' : ''}`}
           tabIndex={0}
           className={cn(styles.star, styles.filled, styles.interactive)}
@@ -128,8 +118,8 @@ export default function RatingStars({
     );
   });
 
-  /* biome-ignore lint/a11y/useAriaPropsSupportedByRole: div role=img supports aria-label per WAI-ARIA spec — Biome FP */
   const content = (
+    // biome-ignore lint/a11y/useAriaPropsSupportedByRole: div role=img supports aria-label per WAI-ARIA spec — Biome FP
     <div
       className={cn(styles.wrapper, sizeMap[size])}
       role={interactive ? 'radiogroup' : 'img'}

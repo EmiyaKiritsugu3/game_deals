@@ -1,21 +1,20 @@
 import Link from 'next/link';
-import { type Deal } from '@/services/api';
+import GameCard from '@/components/GameCard';
+import { AnimatedGameCardWrapper } from '@/components/motion/AnimatedGameCardWrapper';
+import { RevealSection } from '@/components/motion/RevealSection';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import GameCard from '@/components/GameCard';
-import { RevealSection } from '@/components/motion/RevealSection';
-import { AnimatedGameCardWrapper } from '@/components/motion/AnimatedGameCardWrapper';
+import type { Deal } from '@/services/api';
 
 interface HotDealsSectionProps {
   readonly deals: Deal[];
   readonly limit?: number;
 }
 
-export default async function HotDealsSection({
-  deals,
-  limit = 12,
-}: HotDealsSectionProps) {
+export default async function HotDealsSection({ deals, limit = 12 }: HotDealsSectionProps) {
+  // ponytail: filter NaN before sort — CheapShark can return non-numeric dealRating
   const sorted = [...deals]
+    .filter((d) => d.dealRating && !Number.isNaN(Number.parseFloat(d.dealRating)))
     .sort((a, b) => Number.parseFloat(b.dealRating) - Number.parseFloat(a.dealRating))
     .slice(0, limit);
 
@@ -26,9 +25,7 @@ export default async function HotDealsSection({
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Hottest Deals</h2>
-          <p className="text-sm text-muted-foreground">
-            Top-rated deals sorted by deal rating
-          </p>
+          <p className="text-sm text-muted-foreground">Top-rated deals sorted by deal rating</p>
         </div>
         <Link
           href="/search?sort=dealRating"

@@ -133,7 +133,8 @@ describe('useRateGame', () => {
         deferred = resolve;
       })
     );
-    const { queryClient, Wrapper } = createCtx();
+    // ponytail: gcTime=0 (default) causes cancelQueries to drop cache — need non-zero for optimistic check
+    const { queryClient, Wrapper } = createCtx(999_999);
 
     queryClient.setQueryData(['game-rating', 'g1'], { rating: 2 });
 
@@ -164,20 +165,23 @@ describe('useRateGame', () => {
         deferred = reject;
       })
     );
-    const { queryClient, Wrapper } = createCtx();
+    // ponytail: gcTime=0 (default) causes cancelQueries to drop cache — use Infinity here
+    const { queryClient, Wrapper } = createCtx(999_999);
 
     queryClient.setQueryData(['game-rating', 'g1'], { rating: 2 });
 
     const { result } = renderHook(() => useRateGame('g1'), { wrapper: Wrapper });
 
     result.current.mutate(5);
+    // flush TanStack Query microtasks
     await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
       await Promise.resolve();
       await Promise.resolve();
       await Promise.resolve();
     });
 
-    // should see optimistic value
     expect(queryClient.getQueryData(['game-rating', 'g1'])).toEqual({ rating: 5 });
 
     // now reject
