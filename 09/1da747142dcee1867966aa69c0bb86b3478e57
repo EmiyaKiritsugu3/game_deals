@@ -1,0 +1,20 @@
+docs/prd.md
+  s_4b44681418a8bd::t_a402fb83b3096d 25,28-30
+  s_4b44681418a8bd::t_641461cfe262c0 46-47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "091da747142dcee1867966aa69c0bb86b3478e57",
+  "prompts": {},
+  "sessions": {
+    "s_4b44681418a8bd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3a7501a8-2773-4de4-bb54-b54826dc7721",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
