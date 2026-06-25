@@ -1,0 +1,79 @@
+src/app/layout.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 4,13,15,118
+.claude/workflows/auto-drip.js
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1-134
+src/components/home/SectionsIntegration.test.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 11-12,18-26,118
+src/components/motion/RevealSection.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 4
+src/components/ui/dialog.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1,3-7,10,14,18,22,25,30,35,44,52,61,63,69,72,74-75,83-84,90,97,100,107,110,113,118,123,137
+src/components/ui/button.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1-2,4,11,13,15,17,19-20,24,27-29,31-33,37-38,41,45-46,55,58
+src/components/RatingStars.module.css
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 12-14
+src/app/globals.css
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 253
+src/components/RatingStars.test.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 5
+src/components/ui/dropdown-menu.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1,3-6,9,13,17,21,23,28,40-43,48,52,60,67,72,78,81-82,95,99,108,123,127,129,137-140,147,157,175,180,184,193,210,215,218,222,225,228,233,238,243,247-248,255-257
+src/components/ui/popover.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1,3-4,6,9,13,18,20,24,37,44,47,51,54,61,64,67,71,74,77
+src/components/ui/sheet.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1,3-7,10,14,18,22,30,35,41,45-46,55,64,66,72,75,79,82,85,89,92,99,102,105,109,112,119,121,123-124
+src/db/schema/ratings.ts
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1
+src/components/home/HomeHero.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 3,11,29-32,88
+src/components/home/DiscoveryGrid.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 2-3,5-6
+src/components/motion/AnimatedGameCardWrapper.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 4
+src/components/ui/command.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1,3-5,12-14,16,21,26,30-31,36-41,50,56,69,79,82,87,92,102,105,116,121,131,134,154,157,162,167,175,177,179-180
+src/components/ui/select.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1,3-6,8,14,17,24,27,32,36,50,53,59,61,68,83-86,95,98,102,105,108,129,132,136,139,155,157,173,175,189
+biome.json
+  s_48ec12a2a19cbc::t_301d9aebf3ffbe 92-102
+src/components/home/CommunityListings.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 3-4,6,34
+src/components/ui/input.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1-2,4,6,12,17,20
+src/components/ui/card.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1,3,7,9,15,20,23,28,33,36,41,46,49,53,56,59,63,66,69,71-72,75,80,85,88
+src/components/motion/AnimatedDiv.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 4,29,31
+src/lib/utils.ts
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1-2,5
+src/components/ui/textarea.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1,3,5,10,15,18
+src/components/ui/input-group.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1,3-8,10,16,21,29-34,38,41,45,47,55-56,58,62,65-71,73-77,81-83,85,87,97,100,109,112,117,122,125,130,135,143,145
+src/components/home/HomeHero.test.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 11-19,103
+src/components/ui/badge.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1-3,5,8,12-13,15-18,22,25,29,32,34-35,43,46,49
+src/components/ui/separator.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1,3,5,7,13,18,21
+src/components/ui/avatar.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1,3-4,6,10,13,20,25,32,35,38,43,48,51,56-59,64,67,72,77,80,85,90,93
+src/components/ui/tooltip.tsx
+  s_48ec12a2a19cbc::t_96cc39f5fe1018 1,3,5,7-8,12,16,21,23,28,41,51,54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "b6d0fab55dcd6c724edd0969b086b2a612b0a667",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
