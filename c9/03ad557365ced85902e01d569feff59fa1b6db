@@ -1,0 +1,21 @@
+src/actions/ratings.ts
+  s_48ec12a2a19cbc::t_a60c8629ecabdf 65
+src/components/RatingStars.tsx
+  s_48ec12a2a19cbc::t_652a46bbdcde08 103
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "c903ad557365ced85902e01d569feff59fa1b6db",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
