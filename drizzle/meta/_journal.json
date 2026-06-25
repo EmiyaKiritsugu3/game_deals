@@ -99,6 +99,13 @@
       "when": 1782259915019,
       "tag": "0013_user_stats",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1782385625646,
+      "tag": "0014_ratings_table",
+      "breakpoints": true
     }
   ]
 }
