@@ -1,0 +1,32 @@
+src/db/schema/index.ts
+  s_48ec12a2a19cbc::t_129977e36f6bc2 12
+drizzle/0015_game_avg_ratings_view.sql
+  s_48ec12a2a19cbc::t_c5dae12dfd1f09 1-30
+src/actions/ratings.test.ts
+  s_48ec12a2a19cbc::t_ccf1923c66262c 115-116,118,121-124,126,129-132,134
+src/db/schema/ratings.ts
+  s_48ec12a2a19cbc::t_1214170c2109c8 1-7
+  s_48ec12a2a19cbc::t_746e48ec2262aa 23
+src/actions/ratings.ts
+  s_48ec12a2a19cbc::t_e2dd59c908aabd 64-66,68-70,73-75,77-81
+  s_48ec12a2a19cbc::t_2b91210677bffa 3,5
+  s_48ec12a2a19cbc::t_e3456967bb9006 71
+src/db/schema/views.ts
+  s_48ec12a2a19cbc::t_26accc5052409b 1-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "09893daa4f466aadf74cdbe53b027bd0a931977d",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
