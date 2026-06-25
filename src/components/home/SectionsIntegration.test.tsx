@@ -8,14 +8,22 @@
 
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import CommunityListings from './CommunityListings';
+import DiscoveryGrid from './DiscoveryGrid';
 import HomeHero from './HomeHero';
 import HotDealsSection from './HotDealsSection';
-import DiscoveryGrid from './DiscoveryGrid';
-import CommunityListings from './CommunityListings';
 
 vi.mock('next/image', () => ({
   default: (props: Record<string, unknown>) => {
-    const { src, alt, fill: _fill, sizes: _sizes, priority: _priority, className: _className, ...rest } = props;
+    const {
+      src,
+      alt,
+      fill: _fill,
+      sizes: _sizes,
+      priority: _priority,
+      className: _className,
+      ...rest
+    } = props;
     return <div data-src={String(src)} data-alt={String(alt)} {...rest} />;
   },
 }));
@@ -107,7 +115,7 @@ describe('HomeSections integration', () => {
         {await HotDealsSection({ deals: [mockDeal] })}
         <DiscoveryGrid />
         {await CommunityListings()}
-      </div>,
+      </div>
     );
 
     expect(screen.getByText('FEATURED DEAL')).toBeInTheDocument();

@@ -1,16 +1,10 @@
 import Link from 'next/link';
-import { COLLECTIONS } from '@/data/collections';
-import { buttonVariants } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { RevealSection } from '@/components/motion/RevealSection';
 import { AnimatedDiv } from '@/components/motion/AnimatedDiv';
+import { RevealSection } from '@/components/motion/RevealSection';
+import { buttonVariants } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { COLLECTIONS } from '@/data/collections';
+import { cn } from '@/lib/utils';
 
 export default function DiscoveryGrid() {
   if (COLLECTIONS.length === 0) return null;

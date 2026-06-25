@@ -9,7 +9,9 @@
   align-items: center;
   justify-content: center;
   cursor: default;
-  transition: transform 0.15s, color 0.15s;
+  transition:
+    transform 0.15s,
+    color 0.15s;
   line-height: 1;
   color: var(--color-muted-foreground);
 }

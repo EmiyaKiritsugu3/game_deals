@@ -8,7 +8,15 @@ import HomeHero from './HomeHero';
 
 vi.mock('next/image', () => ({
   default: (props: Record<string, unknown>) => {
-    const { src, alt, fill: _fill, sizes: _sizes, priority: _priority, className: _className, ...rest } = props;
+    const {
+      src,
+      alt,
+      fill: _fill,
+      sizes: _sizes,
+      priority: _priority,
+      className: _className,
+      ...rest
+    } = props;
     return <div data-src={String(src)} data-alt={String(alt)} {...rest} />;
   },
 }));
@@ -92,10 +100,7 @@ describe('HomeHero', () => {
   it('renders Buy Now link to CheapShark', () => {
     render(<HomeHero deal={mockDeal} />);
     const link = screen.getByText('Buy Now');
-    expect(link).toHaveAttribute(
-      'href',
-      'https://www.cheapshark.com/redirect?dealID=deal_001',
-    );
+    expect(link).toHaveAttribute('href', 'https://www.cheapshark.com/redirect?dealID=deal_001');
     expect(link).toHaveAttribute('target', '_blank');
   });
 });

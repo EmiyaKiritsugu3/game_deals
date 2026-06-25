@@ -1,16 +1,10 @@
 import Link from 'next/link';
 import { getUserPlaylistsAction } from '@/actions/playlists';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { RevealSection } from '@/components/motion/RevealSection';
 import { AnimatedDiv } from '@/components/motion/AnimatedDiv';
+import { RevealSection } from '@/components/motion/RevealSection';
+import { buttonVariants } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 export default async function CommunityListings() {
   const playlists = await getUserPlaylistsAction();
@@ -37,10 +31,7 @@ export default async function CommunityListings() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {playlists.map((playlist) => (
           <AnimatedDiv key={playlist.id} hover>
-            <Link
-              href={`/playlists/${playlist.slug}`}
-              className="block no-underline"
-            >
+            <Link href={`/playlists/${playlist.slug}`} className="block no-underline">
               <Card className="h-full transition-colors duration-200 hover:border-primary">
                 <CardHeader>
                   <CardTitle className="truncate">{playlist.title}</CardTitle>

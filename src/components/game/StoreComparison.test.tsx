@@ -19,7 +19,6 @@ vi.mock('./GameDealRow', () => ({
   ),
 }));
 
-// biome-ignore lint/style/useNamingConvention: CSS module mock
 const stylesMock = vi.hoisted(() => ({
   storeComparison: 'sc',
   sectionTitle: 'st',

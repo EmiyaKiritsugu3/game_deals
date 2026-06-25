@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
@@ -26,15 +26,9 @@ export function AnimatedDiv({
       initial={noEntrance ? undefined : { opacity: 0, y: 24 }}
       whileInView={noEntrance ? undefined : { opacity: 1, y: 0 }}
       viewport={noEntrance ? undefined : { once: true, margin: '-40px' }}
-      transition={
-        noEntrance
-          ? undefined
-          : { duration: 0.45, delay, ease: [0.25, 0.1, 0.25, 1] }
-      }
+      transition={noEntrance ? undefined : { duration: 0.45, delay, ease: [0.25, 0.1, 0.25, 1] }}
       whileHover={
-        hover
-          ? { y: -6, transition: { type: 'spring', stiffness: 300, damping: 18 } }
-          : undefined
+        hover ? { y: -6, transition: { type: 'spring', stiffness: 300, damping: 18 } } : undefined
       }
     >
       {children}

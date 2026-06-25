@@ -1,14 +1,14 @@
 'use client';
 
+import { motion, useScroll, useTransform } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, useScroll, useTransform } from 'motion/react';
 import { useRef } from 'react';
-import { type Deal, getHighResImage } from '@/services/api';
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { type Deal, getHighResImage } from '@/services/api';
 
 interface HomeHeroProps {
   readonly deal: Deal;
@@ -26,7 +26,10 @@ export default function HomeHero({ deal }: HomeHeroProps) {
   const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
 
   return (
-    <section ref={ref} className="relative mb-12 flex min-h-[500px] items-center overflow-hidden rounded-xl">
+    <section
+      ref={ref}
+      className="relative mb-12 flex min-h-[500px] items-center overflow-hidden rounded-xl"
+    >
       {/* Parallax background */}
       <motion.div className="absolute inset-0 -z-10" style={{ y: bgY }}>
         <Image
@@ -82,9 +85,7 @@ export default function HomeHero({ deal }: HomeHeroProps) {
               )}
 
               <div className="flex items-center gap-3">
-                <span className="text-3xl font-extrabold text-primary">
-                  ${deal.salePrice}
-                </span>
+                <span className="text-3xl font-extrabold text-primary">${deal.salePrice}</span>
                 {savings > 0 && (
                   <span className="text-lg text-muted-foreground line-through">
                     ${deal.normalPrice}
