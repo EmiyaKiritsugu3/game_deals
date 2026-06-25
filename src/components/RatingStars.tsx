@@ -100,7 +100,7 @@ export default function RatingStars({
           aria-checked={sv === Math.round(displayValue)}
           aria-label={`${sv} star${sv > 1 ? 's' : ''}`}
           tabIndex={0}
-          className={cn(styles.star, styles.filled, styles.interactive)}
+          className={cn(styles.star, filled && styles.filled, styles.interactive)}
           onClick={() => onChange?.(sv)}
           onKeyDown={(e) => handleKeyDown(e, sv)}
           onMouseEnter={() => setHoveredIndex(i)}

@@ -62,7 +62,7 @@ export async function getGameRating(gameId: string): Promise<{ rating: number } 
 
 /**
  * Get average rating, total count, and Bayesian average for a game.
- * Queries the game_avg_ratings MATERIALIZED VIEW.
+ * Queries the game_avg_ratings VIEW.
  * Always returns, even when no ratings exist (average = 0, count = 0, bayesianAvg = 0).
  */
 export async function getAvgRating(
