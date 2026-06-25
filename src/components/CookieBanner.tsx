@@ -44,8 +44,8 @@ export default function CookieBanner() {
       }}
     >
       <p style={{ margin: 0, fontSize: '0.875rem', color: '#ccc', flex: 1 }}>
-        🍪 We use cookies to improve your experience and track affiliate link clicks. By
-        continuing, you agree to our{' '}
+        🍪 We use cookies to improve your experience and track affiliate link clicks. By continuing,
+        you agree to our{' '}
         <a href="/privacy" style={{ color: '#4ade80' }}>
           Privacy Policy.
         </a>
