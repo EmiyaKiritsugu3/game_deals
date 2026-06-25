@@ -1,0 +1,23 @@
+CHANGELOG.md
+  s_4b44681418a8bd::t_1aed79f9197d48 3-14
+README.md
+  s_4b44681418a8bd::t_efb278898f0c93 121,127-128
+docs/index.md
+  s_4b44681418a8bd::t_05e8fe49dc364c 29-30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "620d8e121c36dd1def48d47213cf2d4be396afea",
+  "prompts": {},
+  "sessions": {
+    "s_4b44681418a8bd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3a7501a8-2773-4de4-bb54-b54826dc7721",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
