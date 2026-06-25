@@ -34,7 +34,7 @@ describe('CookieBanner', () => {
 
   it('shows banner when no consent stored', () => {
     render(<CookieBanner />);
-    expect(screen.getByText(/Usamos cookies/)).toBeInTheDocument();
+    expect(screen.getByText(/We use cookies/)).toBeInTheDocument();
   });
 
   it('hides banner when consent already stored', () => {
@@ -45,19 +45,19 @@ describe('CookieBanner', () => {
 
   it('accept stores accepted and hides banner', () => {
     render(<CookieBanner />);
-    fireEvent.click(screen.getByText('Aceitar'));
+    fireEvent.click(screen.getByText('Accept'));
     expect(window.localStorage.setItem).toHaveBeenCalledWith('gd_cookie_consent', 'accepted');
   });
 
   it('reject stores rejected and hides banner', () => {
     render(<CookieBanner />);
-    fireEvent.click(screen.getByText('Rejeitar'));
+    fireEvent.click(screen.getByText('Reject'));
     expect(window.localStorage.setItem).toHaveBeenCalledWith('gd_cookie_consent', 'rejected');
   });
 
   it('links to privacy policy', () => {
     render(<CookieBanner />);
-    const link = screen.getByText('Política de Privacidade.');
+    const link = screen.getByText('Privacy Policy.');
     expect(link).toHaveAttribute('href', '/privacy');
   });
 });
