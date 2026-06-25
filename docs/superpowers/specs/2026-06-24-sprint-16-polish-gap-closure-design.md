@@ -6,59 +6,61 @@
 
 ## Motivation
 
-Sprint 15 shipped gamification, PWA, profile/leaderboard — 980 tests, v0.6.0. PRD audit reveals 10+ gaps (security headers, i18n, rate limiter, sitemap, complexity debt). This sprint closes all outstanding gaps to reach a clean, production-ready posture before any new features.
+Sprint 15 shipped gamification, PWA, profile/leaderboard (v0.6.0, 980 tests). Original spec scoped 11 items based on PRD gaps. Audit revealed 6 items already resolved by recent PRs — rate limiter (Upstash+PG), sitemap (game URLs), SyncManager (cloud→local), complexity suppressions (zero), lint-staged, i18n (except CookieBanner). This spec reflects verified remaining gaps only.
+
+Real scope: ~3h total. Ratchet not feature — each item closes a tracked gap with zero regression risk.
 
 ## Scope
 
-### Phase A — Housekeeping (~2h)
+### Phase A — Já Feito (removido do plano)
 
-| Item | File(s) | Detail |
-|------|---------|--------|
-| **A1.** Merge PR #53 | `src/lib/cron-auth.ts` | Sentinel timing fix — safeEqual hash then compare. CI passes. |
-| **A2.** Merge PR #54 | `src/services/api.ts`, `HistoricalLows.tsx` + tests | Bolt batched fetching via `?ids=` endpoint. CI passes. |
-| **A3.** lint-staged .md fix | `package.json` lint-staged config | Remove `md` pattern — Biome doesn't process markdown. Blocks commits. |
-| **A4.** Drizzle snapshot stubs | `drizzle/meta/` | Snapshots for 0002-0007 missing generate. Stubs to fix `db:push`. |
-| **A5.** GitHub OAuth button | `AuthModal.tsx` | Google/Discord buttons exist; GitHub wired but no button. Add it. |
+| Item | Status | Nota |
+|------|--------|------|
+| PR #53 merge | ✅ Mergado | Sentinel timing fix |
+| PR #54 merge | ✅ Mergado | Bolt batched fetching |
+| lint-staged .md | ✅ Já limpo | Sem pattern md |
+| Rate limiter | ✅ Já distribuído | Upstash Redis + PG fallback |
+| Sitemap game URLs | ✅ Já implementado | Busca DB 50k games |
+| SyncManager cloud→local | ✅ Já readicionado | useEffect monta wishlist |
+| Complexity suppressions | ✅ Zero restam | Todos resolvidos |
 
-### Phase B — Infra/Security (~4h)
+### Fase B — Pendentes Verificados (~3h)
 
-| Item | Detail |
-|------|--------|
-| **B1.** Security headers audit | Check middleware.ts for: CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy. Add any missing. PRD N-SC-5. |
-| **B2.** Rate limiter — DB backend | Replace in-memory Map with Supabase table `rate_limits` (ip, endpoint, window_start, count). Cleanup via TTL or cron. Zero deps. |
-| **B3.** Sitemap — game detail URLs | Query DB for game IDs, add to sitemap. Currently only static pages. |
+| Item | Prio | Esforço | Detalhe |
+|------|------|---------|---------|
+| **B1.** Security headers | P0 | 1.5h | Middleware (`src/utils/supabase/middleware.ts`) define **zero** security headers. PRD N-SC-5. Adicionar: CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy. |
+| **B2.** Drizzle snapshot 0012 | P2 | 5min | `_journal.json` idx 12 (`0012_deals_unique_constraint`) — snapshot file **ausente** no disco. `pnpm db:generate` deve preencher. |
+| **B3.** GitHub OAuth button | P3 | 15min | `handleSocialLogin` aceita `'github'` mas JSX em `AuthModal.tsx` só mostra Google + Discord. Adicionar botão. |
+| **B4.** i18n — PT→EN CookieBanner | P1 | 10min | `src/components/CookieBanner.tsx`: "Aceitar" e "Rejeitar" em português. Traduzir. |
+| **B5.** PRD sync | P1 | 30min | PRD ainda marca 6 features como "Not Built" / "Partial" que já estão prontas. Atualizar status. |
 
-### Phase C — UX Polish (~2h)
+### Fase C — Stretch (opt-in)
 
-| Item | Detail |
-|------|--------|
-| **C1.** i18n — PT→EN strings | ~15 strings across Freebies, FlashSales, shared wishlist, `/out` page. Translate from Portuguese. |
-| **C2.** SyncManager — cloud→local | Re-add `loadFromCloud` on mount. Needed so new-device login populates local wishlist. |
-
-### Phase D — Code Quality (~2h)
-
-| Item | Detail |
-|------|--------|
-| **D1.** Complexity suppressions (10) | Remaining `// fallow-ignore-next-line` across 5 files. Extract helpers from larger functions. |
-
-### Phase E — Stretch (~2d)
-
-| Item | Detail |
-|------|--------|
-| **E1.** Custom analytics events | Vercel Web Analytics custom events for affiliate clicks, alert triggers, search. |
-| **E2.** RSS/Atom feed | `/api/rss` returning deal entries. Static generation, revalidate hourly. |
+| Item | Prio | Esforço | Detalhe |
+|------|------|---------|---------|
+| **C1.** i18n varredura completa | P3 | 1h | Busca sistemática por strings hardcoded em PT em todos `.tsx` + `.ts`. |
+| **C2.** Custom analytics events | P2 | 2d | Vercel Web Analytics eventos custom: clicks afiliados, alertas, busca. |
+| **C3.** RSS/Atom feed | P3 | 1d | `/api/rss` com deals. ISR, revalidate 1h. |
 
 ## Test Strategy
 
-- Each phase gates on existing test suite (980 tests min).
-- Genuine fixes (B1/B2/C1) may add new tests for the specific gap.
-- Phase D has no new tests — suppression removal is code motion, preserves existing behavior.
-- Phase E adds testable routes.
+- Existing suite (980+ tests) gates all changes
+- B1 (headers) — testável via `app/api/...` ou middleware test
+- B2 — sem test novo (regeneração de snapshot)
+- B3 — idealmente test visual/component (mas sem E2E pra AuthModal existente, aceito sem)
+- B4 — troca de string, test puramente visual
+
+## Risco
+
+| Risco | Impacto | Mitigação |
+|-------|---------|-----------|
+| B1 CSP quebra inline styles/libs | Médio | Testar em preview Vercel antes prod |
+| B3 button sem Supabase config | Baixo | Código já lida com `provider not configured` |
+| B5 PRD atualização perde contexto | Baixo | Git trackeia diff, fácil reverter |
 
 ## Definition of Done
 
-- [ ] All phases A-E complete or documented as deferred
-- [ ] No regressions — existing test suite passes
-- [ ] No open PRs on repo
-- [ ] All 10 fallow complexity suppressions resolved
-- [ ] All PRD gaps either closed or tracked in technical-debt.md
+- [ ] B1-B5 completos
+- [ ] 0 regressões — `pnpm test` passa
+- [ ] 0 PRs abertos no repo
+- [ ] PRD atualizado com status real de cada gap
