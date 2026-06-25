@@ -112,21 +112,25 @@ describe('getGameRating', () => {
 });
 
 describe('getAvgRating', () => {
-  it('returns zero average and count when no ratings', async () => {
-    select.mockResolvedValueOnce([{ average: 0, count: 0 }]);
+  it('returns zeros when no ratings in view', async () => {
+    select.mockResolvedValueOnce([]);
     const result = await getAvgRating('game-1');
-    expect(result).toEqual({ average: 0, count: 0 });
+    expect(result).toEqual({ average: 0, count: 0, bayesianAvg: 0 });
   });
 
-  it('computes average correctly', async () => {
-    select.mockResolvedValueOnce([{ average: 4.2, count: 10 }]);
+  it('returns average, count, and bayesian average from view', async () => {
+    select.mockResolvedValueOnce([
+      { gameId: 'game-1', averageRating: '4.20', ratingCount: 10, bayesianAvg: '4.17' },
+    ]);
     const result = await getAvgRating('game-1');
-    expect(result).toEqual({ average: 4.2, count: 10 });
+    expect(result).toEqual({ average: 4.2, count: 10, bayesianAvg: 4.17 });
   });
 
-  it('returns integer count', async () => {
-    select.mockResolvedValueOnce([{ average: 3, count: 1 }]);
+  it('handles single rating with bayesian avg', async () => {
+    select.mockResolvedValueOnce([
+      { gameId: 'game-1', averageRating: '3.00', ratingCount: 1, bayesianAvg: '3.00' },
+    ]);
     const result = await getAvgRating('game-1');
-    expect(result).toEqual({ average: 3, count: 1 });
+    expect(result).toEqual({ average: 3, count: 1, bayesianAvg: 3 });
   });
 });

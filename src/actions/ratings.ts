@@ -1,8 +1,8 @@
 'use server';
 
-import { and, eq, sql } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { db } from '@/db';
-import { gameRatings } from '@/db/schema';
+import { gameAvgRatings, gameRatings } from '@/db/schema';
 import { createClient } from '@/utils/supabase/server';
 
 async function requireAuth() {
@@ -61,17 +61,22 @@ export async function getGameRating(gameId: string): Promise<{ rating: number } 
 }
 
 /**
- * Get average rating and total count for a game.
- * Always returns, even when no ratings exist (average = 0, count = 0).
+ * Get average rating, total count, and Bayesian average for a game.
+ * Queries the game_avg_ratings MATERIALIZED VIEW.
+ * Always returns, even when no ratings exist (average = 0, count = 0, bayesianAvg = 0).
  */
-export async function getAvgRating(gameId: string): Promise<{ average: number; count: number }> {
-  const [row] = await db
-    .select({
-      average: sql<number>`COALESCE(AVG(${gameRatings.rating}), 0)`,
-      count: sql<number>`COUNT(*)::int`,
-    })
-    .from(gameRatings)
-    .where(eq(gameRatings.gameId, gameId));
+export async function getAvgRating(
+  gameId: string
+): Promise<{ average: number; count: number; bayesianAvg: number }> {
+  const [row] = await db.select().from(gameAvgRatings).where(eq(gameAvgRatings.gameId, gameId));
 
-  return { average: Number(row.average), count: Number(row.count) };
+  if (!row) {
+    return { average: 0, count: 0, bayesianAvg: 0 };
+  }
+
+  return {
+    average: Number(row.averageRating),
+    count: Number(row.ratingCount),
+    bayesianAvg: Number(row.bayesianAvg),
+  };
 }

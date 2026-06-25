@@ -1,4 +1,10 @@
-import { integer, pgTable, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import {
+  integer,
+  pgTable,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from 'drizzle-orm/pg-core';
 import { games } from './games';
 
 export const gameRatings = pgTable(
@@ -14,3 +20,4 @@ export const gameRatings = pgTable(
   },
   (table) => [uniqueIndex('gr_game_user_unique').on(table.gameId, table.userId)]
 );
+
