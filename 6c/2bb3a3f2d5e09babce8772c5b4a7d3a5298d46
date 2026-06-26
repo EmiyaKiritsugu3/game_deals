@@ -1,0 +1,21 @@
+src/components/ui/badge.tsx
+  s_6875ff47d264d3::t_f81652f9296db2 49
+pnpm-lock.yaml
+  s_6875ff47d264d3::t_ff6b87527bbf81 3533-3535,3537
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "6c2bb3a3f2d5e09babce8772c5b4a7d3a5298d46",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
