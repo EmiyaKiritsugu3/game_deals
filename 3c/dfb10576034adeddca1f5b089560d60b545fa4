@@ -1,0 +1,43 @@
+src/components/DealsBadge.module.css
+  s_48ec12a2a19cbc::t_e8f9ac6bb340b1 21
+src/components/AddToListButton.module.css
+  s_48ec12a2a19cbc::t_e69d9a4e9523d4 6-8
+src/utils/pricing.ts
+  s_48ec12a2a19cbc::t_a96f3fc1ea7859 4-23
+src/components/WishlistIndicator.module.css
+  s_48ec12a2a19cbc::t_82908df08b8340 36-37
+  s_48ec12a2a19cbc::t_91d14354a5b67d 20
+  s_48ec12a2a19cbc::t_40de4b22355501 5
+src/components/PriceAlertBadge.module.css
+  s_48ec12a2a19cbc::t_ca79ac31cafa6a 6
+src/components/Navbar.module.css
+  s_48ec12a2a19cbc::t_80b9742b4ae651 223
+docs/superpowers/plans/2026-06-26-ui-overhaul-fixes.md
+  s_48ec12a2a19cbc::t_b823b07fc4009c 1-154
+src/components/AddToListModal.module.css
+  s_48ec12a2a19cbc::t_f89385702643d0 17-18,23,35,51-52,54,64,76,86,105,108,131,139
+src/components/DealRow.tsx
+  s_48ec12a2a19cbc::t_4dde35b8559329 107
+  s_48ec12a2a19cbc::t_ab7852e0ed9246 4-9
+  s_48ec12a2a19cbc::t_25b51b2e6d39a9 104
+src/components/NotificationBell.module.css
+  s_48ec12a2a19cbc::t_560c9260bd8301 29
+src/components/GameCard.tsx
+  s_48ec12a2a19cbc::t_4b45b22db74d3f 3-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "3cdfb10576034adeddca1f5b089560d60b545fa4",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
