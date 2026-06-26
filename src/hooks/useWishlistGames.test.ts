@@ -41,12 +41,12 @@ describe('useWishlistGames', () => {
     expect(result.current.data).toBeUndefined();
     expect(result.current.isFetching).toBe(false);
     expect(mockGetStores).not.toHaveBeenCalled();
-    expect(mockGetGame).not.toHaveBeenCalled();
+    expect(mockGetGamesBatch).not.toHaveBeenCalled();
   });
 
   it('fetches stores and games when gameIds provided', async () => {
     mockGetStores.mockResolvedValue({ 1: 'Steam' });
-    mockGetGame.mockResolvedValue({ title: 'Game1' });
+    mockGetGamesBatch.mockResolvedValue({ g1: { title: 'Game1' }, g2: { title: 'Game2' } });
 
     const { result } = renderHook(() => useWishlistGames(['g1', 'g2']), {
       wrapper: createWrapper(),
@@ -58,19 +58,16 @@ describe('useWishlistGames', () => {
 
     expect(result.current.data).toEqual({
       stores: { 1: 'Steam' },
-      games: [{ title: 'Game1' }, { title: 'Game1' }],
+      games: [{ title: 'Game1' }, { title: 'Game2' }],
     });
     expect(mockGetStores).toHaveBeenCalledTimes(1);
-    expect(mockGetGame).toHaveBeenCalledTimes(2);
-    expect(mockGetGame).toHaveBeenCalledWith('g1');
-    expect(mockGetGame).toHaveBeenCalledWith('g2');
+    expect(mockGetGamesBatch).toHaveBeenCalledTimes(1);
+    expect(mockGetGamesBatch).toHaveBeenCalledWith(['g1', 'g2']);
   });
 
   it('handles individual game fetch failures', async () => {
     mockGetStores.mockResolvedValue({ 1: 'Steam' });
-    mockGetGame
-      .mockResolvedValueOnce({ title: 'Good Game' })
-      .mockRejectedValueOnce(new Error('fetch failed'));
+    mockGetGamesBatch.mockResolvedValue({ good: { title: 'Good Game' } });
 
     const { result } = renderHook(() => useWishlistGames(['good', 'bad']), {
       wrapper: createWrapper(),
@@ -85,7 +82,7 @@ describe('useWishlistGames', () => {
       games: [{ title: 'Good Game' }, null],
     });
     expect(mockGetStores).toHaveBeenCalledTimes(1);
-    expect(mockGetGame).toHaveBeenCalledTimes(2);
+    expect(mockGetGamesBatch).toHaveBeenCalledTimes(1);
   });
 
   it('is disabled when array is empty', () => {
@@ -99,7 +96,7 @@ describe('useWishlistGames', () => {
 
   it('staleTime is set to 5 minutes', async () => {
     mockGetStores.mockResolvedValue({ 1: 'Steam' });
-    mockGetGame.mockResolvedValue({ title: 'Game1' });
+    mockGetGamesBatch.mockResolvedValue({ g1: { title: 'Game1' } });
 
     const queryClient = new QueryClient({
       defaultOptions: {
