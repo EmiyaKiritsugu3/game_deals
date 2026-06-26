@@ -3,7 +3,13 @@
 import { Bell, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { createPriceAlertAction, deletePriceAlertAction } from '@/actions/alerts';
-import BaseModal from '@/components/ui/BaseModal';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { useAlerts } from '@/store/alertStore';
 import AlertFormFields from './AlertFormFields';
 import styles from './PriceAlertModal.module.css';
@@ -100,17 +106,17 @@ export default function PriceAlertModal({
   })();
 
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose} ariaLabel="Set price alert">
-      <div data-testid="alert-modal">
-        <div className={styles.header}>
-          <h2>
-            <Bell size={24} className={styles.bellIcon} /> Set Price Alert
-          </h2>
-          <p>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-lg" data-testid="alert-modal">
+        <DialogHeader>
+          <DialogTitle>
+            <Bell size={24} /> Set Price Alert
+          </DialogTitle>
+          <DialogDescription>
             We will notify you when <span className={styles.gameTitle}>{gameTitle}</span> hits your
             target price.
-          </p>
-        </div>
+          </DialogDescription>
+        </DialogHeader>
 
         <AlertFormFields
           currentPrice={currentPrice}
@@ -163,7 +169,7 @@ export default function PriceAlertModal({
             </button>
           )}
         </div>
-      </div>
-    </BaseModal>
+      </DialogContent>
+    </Dialog>
   );
 }
