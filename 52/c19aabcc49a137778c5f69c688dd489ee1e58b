@@ -1,0 +1,31 @@
+.superpowers/sdd/progress.md
+  s_48ec12a2a19cbc::t_70cfa638802c65 1
+docs/superpowers/plans/2026-06-26-sprint-17-pr-fixes.md
+  s_48ec12a2a19cbc::t_183959afe17008 1-381
+src/components/home/CommunityListings.tsx
+  s_48ec12a2a19cbc::t_343d91ca4c2183 14
+  s_48ec12a2a19cbc::t_38a7b4ef59d0d9 53
+src/components/home/DiscoveryGrid.tsx
+  s_48ec12a2a19cbc::t_a7c8a869a11f98 12
+  s_48ec12a2a19cbc::t_e226130fc9d68a 50
+src/components/motion/AnimatedDiv.tsx
+  s_48ec12a2a19cbc::t_b2a231170517c0 14-17,26-27,34
+src/components/home/HotDealsSection.tsx
+  s_48ec12a2a19cbc::t_6e2cec43ee45b8 3,23,39,43,46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "52c19aabcc49a137778c5f69c688dd489ee1e58b",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
