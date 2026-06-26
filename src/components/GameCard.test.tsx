@@ -122,6 +122,18 @@ describe('GameCard', () => {
     expect(screen.queryByText(/★/)).not.toBeInTheDocument();
   });
 
+  it('renders rating stars when steamRatingPercent is provided', async () => {
+    const deal = { ...mockDeal, steamRatingPercent: '80' };
+    const { container } = render(await GameCard({ deal }));
+    expect(container.textContent).toContain('★ 80%');
+  });
+
+  it('does not render rating when steamRatingPercent is 0', async () => {
+    const deal = { ...mockDeal, steamRatingPercent: '0' };
+    const { container } = render(await GameCard({ deal }));
+    expect(container.textContent).toContain(deal.salePrice);
+  });
+
   it('links to /game/{gameID}', async () => {
     render(await GameCard({ deal: mockDeal }));
     const links = screen.getAllByRole('link');
