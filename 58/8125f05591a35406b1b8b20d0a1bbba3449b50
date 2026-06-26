@@ -1,0 +1,21 @@
+src/app/auth/auth-code-error/page.tsx
+  s_6875ff47d264d3::t_b2b45fc52ed239 5-8,11-14
+src/app/auth/error/page.tsx
+  s_6875ff47d264d3::t_dfeecd6404d5a4 19-26,38-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "588125f05591a35406b1b8b20d0a1bbba3449b50",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
