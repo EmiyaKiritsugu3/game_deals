@@ -17,9 +17,9 @@
 }
 
 .indicator:hover {
-  background: hsl(var(--muted));
+  background: hsl(var(--accent));
   transform: translateY(-2px);
-  border-color: #ef4444;
+  border-color: hsl(var(--destructive));
 }
 
 .icon {
