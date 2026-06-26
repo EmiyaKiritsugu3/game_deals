@@ -29,7 +29,7 @@
 }
 
 .indicator:hover .icon {
-  color: #ef4444;
+  color: hsl(var(--destructive));
 }
 
 .badge {
