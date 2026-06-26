@@ -9,8 +9,8 @@ import {
 import { type Deal, getHighResImage, getStoreLogo, getStores } from '../services/api';
 import AddToListButton from './AddToListButton';
 import DealsBadge from './DealsBadge';
-import StoreIcon from './game/StoreIcon';
 import styles from './GameCard.module.css';
+import StoreIcon from './game/StoreIcon';
 import HeartButton from './HeartButton';
 import PriceAlertBadge from './PriceAlertBadge';
 
@@ -74,9 +74,7 @@ export default async function GameCard({ deal }: Readonly<{ deal: Deal }>) {
 
           <div className={styles.meta}>
             <span className={styles.storeBadge}>
-              {store && storeLogo && (
-                <StoreIcon src={storeLogo} alt={store} />
-              )}
+              {store && storeLogo && <StoreIcon src={storeLogo} alt={store} />}
               {store || 'Store'}
             </span>
             {deal.steamRatingPercent && deal.steamRatingPercent !== '0' && (
