@@ -22,7 +22,11 @@ vi.mock('next/link', () => ({
 
 vi.mock('../services/api', () => ({
   getHighResImage: vi.fn((thumb: string) => thumb.replace('capsule', 'header')),
-  getStores: vi.fn().mockResolvedValue({ '1': 'Steam', '2': 'GOG' }),
+  getStoreLogo: vi.fn((id: string) => `https://store-${id}.example.com/favicon.ico`),
+  getStores: vi.fn().mockResolvedValue({
+    '1': { storeID: '1', storeName: 'Steam', isActive: 1 },
+    '2': { storeID: '2', storeName: 'GOG', isActive: 1 },
+  }),
 }));
 
 vi.mock('./HeartButton', () => ({

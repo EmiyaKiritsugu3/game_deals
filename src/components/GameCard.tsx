@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { type Deal, getHighResImage, getStores } from '../services/api';
+import { type Deal, getHighResImage, getStoreLogo, getStores } from '../services/api';
 import AddToListButton from './AddToListButton';
 import DealsBadge from './DealsBadge';
 import styles from './GameCard.module.css';
@@ -81,7 +81,20 @@ export default async function GameCard({ deal }: Readonly<{ deal: Deal }>) {
           <PriceBlock savings={savings} normalPrice={deal.normalPrice} salePrice={deal.salePrice} />
 
           <div className={styles.meta}>
-            <span className={styles.storeBadge}>{store || 'Store'}</span>
+            <span className={styles.storeBadge}>
+              {store?.storeName && (
+                <img
+                  src={getStoreLogo(store.storeID) ?? ''}
+                  alt={store.storeName}
+                  width={16}
+                  height={16}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              )}
+              {store?.storeName || 'Store'}
+            </span>
             {deal.steamRatingPercent && deal.steamRatingPercent !== '0' && (
               <span className={styles.ratingBadge}>★ {deal.steamRatingPercent}%</span>
             )}
