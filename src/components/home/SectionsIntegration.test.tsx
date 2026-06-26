@@ -109,6 +109,11 @@ const mockPlaylists = [
 ];
 
 describe('HomeSections integration', () => {
+  it('renders nothing when HotDealsSection receives empty deals array', async () => {
+    const { container } = render(await HotDealsSection({ deals: [], limit: 12 }));
+    expect(container.textContent).toBe('');
+  });
+
   it('renders all 4 sections together without conflict', async () => {
     mockCollections.mockReturnValue([
       { slug: 'test', title: 'Test Col', description: 'desc', emoji: '🎮', gameIDs: ['1'] },
