@@ -2,24 +2,24 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: hsl(var(--muted));
+  background: var(--muted);
   padding: 0.5rem 1rem;
   border-radius: var(--radius);
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   text-decoration: none;
   font-weight: 600;
   font-size: 0.9rem;
   transition:
     background 0.2s,
     transform 0.2s;
-  border: 1px solid hsl(var(--border) / 0.5);
+  border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
   margin-left: 1rem;
 }
 
 .indicator:hover {
-  background: hsl(var(--accent));
+  background: var(--accent);
   transform: translateY(-2px);
-  border-color: hsl(var(--destructive));
+  border-color: var(--destructive);
 }
 
 .icon {
@@ -29,12 +29,12 @@
 }
 
 .indicator:hover .icon {
-  color: hsl(var(--destructive));
+  color: var(--destructive);
 }
 
 .badge {
-  background: hsl(var(--destructive));
-  color: hsl(var(--foreground));
+  background: var(--destructive);
+  color: var(--foreground);
   font-size: 0.75rem;
   font-weight: 800;
   padding: 0.1rem 0.4rem;

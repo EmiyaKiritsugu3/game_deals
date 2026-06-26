@@ -5,17 +5,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: hsl(var(--background) / 0.7);
+  background: color-mix(in srgb, var(--background) 70%, transparent);
   backdrop-filter: blur(4px);
   animation: fadeIn 0.2s ease-out;
 }
 
 .modal {
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--border);
   padding: 1.5rem;
   margin: 0;
   position: relative;
-  background: hsl(var(--card));
+  background: var(--card);
   width: 90%;
   max-width: 440px;
   max-height: 85vh;
@@ -50,7 +50,7 @@
   right: 0.75rem;
   background: transparent;
   border: none;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   cursor: pointer;
   padding: 0.25rem;
   border-radius: 4px;
@@ -58,7 +58,7 @@
 }
 
 .closeButton:hover {
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 
 .header {

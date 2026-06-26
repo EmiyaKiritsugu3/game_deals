@@ -1,7 +1,7 @@
 .card {
-  background: hsl(var(--card));
+  background: var(--card);
   border-radius: var(--radius);
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--border);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -13,26 +13,26 @@
 .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.5);
-  border-color: hsl(var(--primary) / 0.3);
+  border-color: color-mix(in srgb, var(--primary) 30%, transparent);
 }
 
 .cardHeader {
   padding: 0.75rem 1.25rem;
-  background: hsl(var(--primary) / 0.05);
-  border-bottom: 1px solid hsl(var(--primary) / 0.1);
+  background: color-mix(in srgb, var(--primary) 5%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--primary) 10%, transparent);
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .activeBell {
-  color: hsl(var(--primary));
+  color: var(--primary);
 }
 
 .alertStatus {
   font-size: 0.75rem;
   font-weight: 800;
-  color: hsl(var(--primary));
+  color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -50,7 +50,7 @@
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: calc(var(--radius) - 2px);
-  background: hsl(var(--muted));
+  background: var(--muted);
 }
 
 .thumb {
@@ -63,7 +63,7 @@
   font-size: 1.1rem;
   font-weight: 700;
   margin: 0;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -74,7 +74,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   padding: 1rem;
-  background: hsl(var(--muted) / 0.3);
+  background: color-mix(in srgb, var(--muted) 30%, transparent);
   border-radius: 12px;
 }
 
@@ -87,20 +87,20 @@
 .priceLabel {
   font-size: 0.7rem;
   font-weight: 600;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   text-transform: uppercase;
 }
 
 .targetPrice {
   font-size: 1.25rem;
   font-weight: 800;
-  color: hsl(var(--primary));
+  color: var(--primary);
 }
 
 .currentPrice {
   font-size: 1.25rem;
   font-weight: 800;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 
 .currentPriceMet {
@@ -111,12 +111,12 @@
 
 .storeInfo {
   font-size: 0.85rem;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
 }
 
 .cardFooter {
   padding: 0.75rem 1.25rem;
-  border-top: 1px solid hsl(var(--border) / 0.5);
+  border-top: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
   display: flex;
   gap: 0.75rem;
 }
@@ -128,8 +128,8 @@
   flex: 1;
   padding: 0.6rem 1rem;
   border-radius: var(--radius);
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background: var(--primary);
+  color: var(--primary-foreground);
   font-weight: 700;
   font-size: 0.85rem;
   text-decoration: none;
@@ -140,7 +140,7 @@
 
 .viewGameBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px hsl(var(--primary) / 0.3);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 30%, transparent);
 }
 
 .viewGameBtnDisabled {
@@ -150,8 +150,8 @@
   flex: 1;
   padding: 0.6rem 1rem;
   border-radius: var(--radius);
-  background: hsl(var(--muted));
-  color: hsl(var(--muted-foreground));
+  background: var(--muted);
+  color: var(--muted-foreground);
   font-weight: 700;
   font-size: 0.85rem;
   opacity: 0.5;

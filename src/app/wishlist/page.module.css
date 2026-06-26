@@ -19,8 +19,8 @@
   justify-content: flex-end;
   min-height: 200px;
   margin-bottom: 0.5rem;
-  border: 1px solid hsl(var(--border));
-  background: hsl(var(--card)); /* Fallback default card color */
+  border: 1px solid var(--border);
+  background: var(--card); /* Fallback default card color */
 }
 
 .heroBackground {
@@ -37,8 +37,8 @@
   inset: 0;
   background: linear-gradient(
     to top,
-    hsl(var(--background) / 1) 0%,
-    hsl(var(--background) / 0.2) 100%
+    color-mix(in srgb, var(--background) 100%, transparent) 0%,
+    color-mix(in srgb, var(--background) 20%, transparent) 100%
   );
   z-index: 1;
 }
@@ -55,10 +55,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: hsl(var(--card));
+  background: var(--card);
   padding: 1rem 1.5rem;
   border-radius: var(--radius);
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--border);
   margin-bottom: 0.5rem;
   flex-wrap: wrap;
   gap: 1rem;
@@ -77,7 +77,7 @@
 
 .statLabel {
   font-size: 0.8rem;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-weight: 600;
@@ -86,7 +86,7 @@
 .statValue {
   font-size: 1.25rem;
   font-weight: 800;
-  color: hsl(var(--primary));
+  color: var(--primary);
 }
 
 .sortControls {
@@ -98,13 +98,13 @@
 .sortLabel {
   font-size: 0.9rem;
   font-weight: 600;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
 }
 
 .sortSelect {
-  background: hsl(var(--background));
-  border: 1px solid hsl(var(--border));
-  color: hsl(var(--foreground));
+  background: var(--background);
+  border: 1px solid var(--border);
+  color: var(--foreground);
   padding: 0.5rem 1rem;
   border-radius: var(--radius);
   font-size: 0.9rem;
@@ -115,7 +115,7 @@
 }
 
 .sortSelect:focus {
-  border-color: hsl(var(--primary));
+  border-color: var(--primary);
 }
 
 .shareButton {
@@ -150,12 +150,12 @@
 .title {
   font-size: 2.5rem;
   font-weight: 800;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   margin: 0;
 }
 
 .subtitle {
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   font-size: 1.1rem;
 }
 
@@ -166,10 +166,10 @@
 }
 
 .wishlistCard {
-  background: hsl(var(--card));
+  background: var(--card);
   border-radius: var(--radius);
   overflow: hidden;
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--border);
   transition:
     transform 0.2s,
     box-shadow 0.2s;
@@ -180,7 +180,7 @@
 .wishlistCard:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.5);
-  border-color: hsl(var(--primary));
+  border-color: var(--primary);
 }
 
 .imageContainer {
@@ -203,8 +203,8 @@
   position: absolute;
   bottom: 0.5rem;
   right: 0.5rem;
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background: var(--primary);
+  color: var(--primary-foreground);
   font-weight: 800;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
@@ -223,7 +223,7 @@
   font-size: 1.1rem;
   font-weight: 700;
   margin: 0;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -237,14 +237,14 @@
 
 .normalPrice {
   text-decoration: line-through;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   font-size: 0.9rem;
 }
 
 .salePrice {
   font-size: 1.25rem;
   font-weight: 800;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 
 .meta {
@@ -253,14 +253,14 @@
   align-items: center;
   margin-top: auto;
   padding-top: 0.75rem;
-  border-top: 1px solid hsl(var(--border) / 0.5);
+  border-top: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
 }
 
 .storeBadge {
   font-size: 0.75rem;
   font-weight: 600;
-  color: hsl(var(--foreground));
-  background: hsl(var(--muted));
+  color: var(--foreground);
+  background: var(--muted);
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
 }
@@ -268,17 +268,17 @@
 .viewDetailsBtn {
   font-size: 0.8rem;
   font-weight: 700;
-  color: hsl(var(--primary));
+  color: var(--primary);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .viewDetailsBtn:hover {
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 
 .emptyIcon {
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   margin-bottom: 0.5rem;
   opacity: 0.5;
 }
@@ -290,10 +290,10 @@
   justify-content: center;
   text-align: center;
   padding: 8rem 2rem;
-  background: hsl(var(--card) / 0.4);
+  background: color-mix(in srgb, var(--card) 40%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px dashed hsl(var(--border) / 0.6);
+  border: 1px dashed color-mix(in srgb, var(--border) 60%, transparent);
   border-radius: var(--radius);
   gap: 1rem;
   box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.2);
@@ -301,18 +301,18 @@
 
 .emptyState h2 {
   font-size: 1.75rem;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 
 .emptyState p {
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   max-width: 400px;
   margin-bottom: 1rem;
 }
 
 .browseButton {
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background: var(--primary);
+  color: var(--primary-foreground);
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius);
   font-weight: 700;
@@ -330,8 +330,8 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid hsl(var(--muted));
-  border-top-color: hsl(var(--primary));
+  border: 4px solid var(--muted);
+  border-top-color: var(--primary);
   border-radius: 50%;
   animation: spin 1s infinite linear;
 }
@@ -346,7 +346,7 @@
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
-  border-bottom: 1px solid hsl(var(--border) / 0.5);
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
   padding-bottom: 0.5rem;
 }
 
@@ -357,7 +357,7 @@
   padding: 0.75rem 1.5rem;
   border: none;
   background: none;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   font-weight: 700;
   font-size: 0.95rem;
   cursor: pointer;
@@ -366,11 +366,11 @@
 }
 
 .tab:hover {
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 
 .activeTab {
-  color: hsl(var(--primary));
+  color: var(--primary);
 }
 
 .activeTab::after {
@@ -380,9 +380,9 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: hsl(var(--primary));
+  background: var(--primary);
   border-radius: 3px 3px 0 0;
-  box-shadow: 0 -2px 10px hsl(var(--primary) / 0.3);
+  box-shadow: 0 -2px 10px color-mix(in srgb, var(--primary) 30%, transparent);
 }
 
 .cardActions {
@@ -396,7 +396,7 @@
 }
 
 .alertShortcut {
-  background: hsl(var(--card) / 0.9);
+  background: color-mix(in srgb, var(--card) 90%, transparent);
   backdrop-filter: blur(4px);
   width: 36px;
   height: 36px;
@@ -411,21 +411,21 @@
 
 .alertHeader {
   padding: 0.75rem 1.25rem;
-  background: hsl(var(--primary) / 0.05);
-  border-bottom: 1px solid hsl(var(--primary) / 0.1);
+  background: color-mix(in srgb, var(--primary) 5%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--primary) 10%, transparent);
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .activeBell {
-  color: hsl(var(--primary));
+  color: var(--primary);
 }
 
 .alertStatus {
   font-size: 0.75rem;
   font-weight: 800;
-  color: hsl(var(--primary));
+  color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -436,7 +436,7 @@
   gap: 1rem;
   margin: 1.25rem 0;
   padding: 1rem;
-  background: hsl(var(--muted) / 0.3);
+  background: color-mix(in srgb, var(--muted) 30%, transparent);
   border-radius: 12px;
 }
 
@@ -449,14 +449,14 @@
 .alertLabel {
   font-size: 0.7rem;
   font-weight: 600;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   text-transform: uppercase;
 }
 
 .targetValue {
   font-size: 1.25rem;
   font-weight: 800;
-  color: hsl(var(--primary));
+  color: var(--primary);
 }
 
 .currentValue {
@@ -471,7 +471,7 @@
 .keyshopLabel {
   font-size: 0.8rem;
   font-weight: 600;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
 }
 
 .alertFooter {

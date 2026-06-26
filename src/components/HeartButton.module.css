@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   transition: all 0.2s ease;
   backdrop-filter: blur(4px);
   z-index: 10;
@@ -22,7 +22,7 @@
 
 .heartButton:hover {
   background: rgba(0, 0, 0, 0.6);
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   transform: scale(1.05);
 }
 

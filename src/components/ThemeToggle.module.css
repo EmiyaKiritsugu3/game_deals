@@ -5,9 +5,9 @@
   width: 36px;
   height: 36px;
   border-radius: var(--radius);
-  border: 1px solid hsl(var(--border) / 0.5);
-  background: hsl(var(--muted) / 0.3);
-  color: hsl(var(--muted-foreground));
+  border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+  background: color-mix(in srgb, var(--muted) 30%, transparent);
+  color: var(--muted-foreground);
   cursor: pointer;
   transition:
     color 0.2s,
@@ -18,14 +18,14 @@
 }
 
 .toggle:hover {
-  color: hsl(var(--primary));
-  background: hsl(var(--muted) / 0.6);
-  border-color: hsl(var(--primary));
+  color: var(--primary);
+  background: color-mix(in srgb, var(--muted) 60%, transparent);
+  border-color: var(--primary);
   transform: translateY(-2px);
 }
 
 .toggle:focus-visible {
-  outline: 2px solid hsl(var(--primary));
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 

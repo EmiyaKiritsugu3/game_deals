@@ -2,11 +2,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: hsl(var(--primary));
-  color: hsl(var(--foreground));
+  background: var(--primary);
+  color: var(--foreground);
   padding: 0.2rem;
   border-radius: 4px;
-  box-shadow: 0 0 10px hsl(var(--primary) / 0.5);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--primary) 50%, transparent);
   animation: pulseIcon 2s infinite;
 }
 

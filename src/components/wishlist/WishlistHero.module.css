@@ -8,8 +8,8 @@
   justify-content: flex-end;
   min-height: 200px;
   margin-bottom: 0.5rem;
-  border: 1px solid hsl(var(--border));
-  background: hsl(var(--card));
+  border: 1px solid var(--border);
+  background: var(--card);
 }
 
 .heroBackground {
@@ -26,8 +26,8 @@
   inset: 0;
   background: linear-gradient(
     to top,
-    hsl(var(--background) / 1) 0%,
-    hsl(var(--background) / 0.2) 100%
+    color-mix(in srgb, var(--background) 100%, transparent) 0%,
+    color-mix(in srgb, var(--background) 20%, transparent) 100%
   );
   z-index: 1;
 }
@@ -43,11 +43,11 @@
 .title {
   font-size: 2.5rem;
   font-weight: 800;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   margin: 0;
 }
 
 .subtitle {
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   font-size: 1.1rem;
 }

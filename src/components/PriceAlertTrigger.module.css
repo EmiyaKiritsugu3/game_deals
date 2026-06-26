@@ -4,9 +4,9 @@
   gap: 0.5rem;
   padding: 0.6rem 1.25rem;
   border-radius: 8px;
-  background: hsl(var(--muted) / 0.5);
-  border: 1px solid hsl(var(--border) / 0.5);
-  color: hsl(var(--foreground));
+  background: color-mix(in srgb, var(--muted) 50%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+  color: var(--foreground);
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
@@ -14,20 +14,20 @@
 }
 
 .trigger:hover {
-  background: hsl(var(--muted));
-  border-color: hsl(var(--border));
+  background: var(--muted);
+  border-color: var(--border);
   transform: translateY(-1px);
 }
 
 .trigger.active {
-  background: hsl(var(--primary) / 0.1);
-  border-color: hsl(var(--primary) / 0.5);
-  color: hsl(var(--primary));
-  box-shadow: 0 0 15px hsl(var(--primary) / 0.15);
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 50%, transparent);
+  color: var(--primary);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--primary) 15%, transparent);
 }
 
 .trigger.active:hover {
-  background: hsl(var(--primary) / 0.2);
+  background: color-mix(in srgb, var(--primary) 20%, transparent);
 }
 
 @media (max-width: 600px) {

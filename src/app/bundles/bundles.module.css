@@ -13,7 +13,7 @@
 }
 
 .bundlesHeader p {
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
 }
 
 .bundlesGrid {
@@ -23,8 +23,8 @@
 
 /* Bundle Card */
 .bundleCard {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
   transition:
@@ -42,7 +42,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid hsl(var(--border));
+  border-bottom: 1px solid var(--border);
 }
 
 .bundleStoreInfo {
@@ -57,7 +57,7 @@
 
 .bundleStoreName {
   font-size: 0.8rem;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
 }
 
 .bundleTier {
@@ -65,8 +65,8 @@
   font-weight: 700;
   padding: 0.2rem 0.6rem;
   border-radius: 20px;
-  background: hsl(var(--primary) / 0.15);
-  color: hsl(var(--primary));
+  background: color-mix(in srgb, var(--primary) 15%, transparent);
+  color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -99,7 +99,7 @@
   height: 56px;
   object-fit: cover;
   border-radius: 6px;
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--border);
 }
 
 .bundleFooter {
@@ -107,8 +107,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.25rem;
-  border-top: 1px solid hsl(var(--border));
-  background: hsl(var(--muted) / 0.3);
+  border-top: 1px solid var(--border);
+  background: color-mix(in srgb, var(--muted) 30%, transparent);
 }
 
 .bundlePricing {
@@ -120,16 +120,16 @@
 .bundlePrice {
   font-size: 1.5rem;
   font-weight: 900;
-  color: hsl(var(--primary));
+  color: var(--primary);
 }
 
 .bundleValue {
   font-size: 0.75rem;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
 }
 
 .bundleValue strong {
-  color: hsl(var(--primary));
+  color: var(--primary);
 }
 
 .bundleSavings {
@@ -137,8 +137,8 @@
   font-weight: 800;
   padding: 0.3rem 0.75rem;
   border-radius: 6px;
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 
 .bundleCta {
@@ -146,8 +146,8 @@
   align-items: center;
   gap: 0.4rem;
   padding: 0.6rem 1.25rem;
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background: var(--primary);
+  color: var(--primary-foreground);
   border-radius: 8px;
   font-weight: 700;
   font-size: 0.9rem;
@@ -161,7 +161,7 @@
 
 .bundleExpiry {
   font-size: 0.75rem;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   margin-top: 0.5rem;
   text-align: right;
 }

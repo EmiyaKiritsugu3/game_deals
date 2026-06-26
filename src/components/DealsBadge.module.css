@@ -12,25 +12,25 @@
 }
 
 .hl {
-  background: hsl(var(--accent-hl));
-  color: hsl(var(--accent-hl-foreground));
+  background: var(--accent-hl);
+  color: var(--accent-hl-foreground);
 }
 
 .epic {
   background: linear-gradient(135deg, #ff4b2b, #ff416c);
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   box-shadow: 0 0 10px rgba(255, 75, 43, 0.3);
 }
 
 .free {
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 
 .rating {
   background: rgba(var(--foreground), 0.05);
-  color: hsl(var(--foreground));
-  border: 1px solid hsl(var(--border));
+  color: var(--foreground);
+  border: 1px solid var(--border);
 }
 
 .fresh {
