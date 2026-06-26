@@ -5,7 +5,7 @@
   align-items: center;
   overflow: hidden;
   margin-bottom: 3rem;
-  background: var(--background);
+  background: hsl(--background);
 }
 
 .slide {
@@ -44,7 +44,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, var(--background) 5%, transparent 70%);
+  background: linear-gradient(to top, hsl(--background) 5%, transparent 70%);
   z-index: 5;
   pointer-events: none;
 }
@@ -73,10 +73,10 @@
 .matrixImgWrapper {
   flex: 1 1 200px;
   height: 130px;
-  border-radius: var(--radius);
+  border-radius: hsl(--radius);
   overflow: hidden;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  background: var(--background);
+  background: hsl(--background);
 }
 
 .matrixImg {
@@ -98,7 +98,7 @@
 .matrixOverlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, transparent 30%, var(--background / 0.9) 100%);
+  background: radial-gradient(circle at center, transparent 30%, hsl(var(--background) / 0.9) 100%);
   z-index: 1;
   pointer-events: none;
 }
@@ -110,11 +110,11 @@
   align-items: center;
   position: relative;
   z-index: 20;
-  background: var(--card / 0.35);
+  background: hsl(var(--card) / 0.35);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid var(--border / 0.4);
-  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border) / 0.4);
+  border-radius: hsl(--radius);
   padding: 3rem 4rem;
   box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.5),
@@ -169,12 +169,12 @@
   font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.1em;
-  color: var(--primary);
+  color: hsl(--primary);
   text-transform: uppercase;
-  background: var(--primary / 0.1);
+  background: hsl(var(--primary) / 0.1);
   padding: 0.3rem 0.75rem;
   border-radius: 999px;
-  border: 1px solid var(--primary / 0.2);
+  border: 1px solid hsl(var(--primary) / 0.2);
 }
 
 @media (max-width: 900px) {
@@ -188,7 +188,7 @@
   font-weight: 900;
   line-height: 1.1;
   letter-spacing: -0.03em;
-  color: var(--foreground);
+  color: hsl(--foreground);
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   margin: 0;
 }
@@ -212,11 +212,11 @@
   gap: 0.5rem;
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--muted-foreground);
-  background: var(--card / 0.7);
+  color: hsl(--muted-foreground);
+  background: hsl(var(--card) / 0.7);
   padding: 0.2rem 0.6rem;
-  border-radius: var(--radius);
-  border: 1px solid var(--border / 0.5);
+  border-radius: hsl(--radius);
+  border: 1px solid hsl(var(--border) / 0.5);
 }
 
 .storeBadge img {
@@ -233,7 +233,7 @@
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
 }
 
 .platforms svg {
@@ -258,11 +258,11 @@
 }
 
 .badge {
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: hsl(--primary);
+  color: hsl(--primary-foreground);
   font-weight: 800;
   padding: 0.5rem 1rem;
-  border-radius: var(--radius);
+  border-radius: hsl(--radius);
   font-size: 1.25rem;
 }
 
@@ -274,7 +274,7 @@
 
 .normal {
   text-decoration: line-through;
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
   font-size: 1rem;
   font-weight: 600;
   line-height: 1;
@@ -282,7 +282,7 @@
 }
 
 .sale {
-  color: var(--foreground);
+  color: hsl(--foreground);
   font-size: 1.75rem;
   font-weight: 800;
   line-height: 1;
@@ -292,11 +292,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--foreground);
-  color: var(--background);
+  background: hsl(--foreground);
+  color: hsl(--background);
   font-weight: 700;
   padding: 1rem 2.5rem;
-  border-radius: var(--radius);
+  border-radius: hsl(--radius);
   font-size: 1.05rem;
   transition: all 0.2s;
   width: fit-content;
@@ -313,19 +313,19 @@
 .ctaButton:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.15);
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: hsl(--primary);
+  color: hsl(--primary-foreground);
 }
 
 .imageWrapper {
   position: relative;
   aspect-ratio: 460 / 215;
-  border-radius: var(--radius);
+  border-radius: hsl(--radius);
   overflow: hidden;
   box-shadow:
     0 25px 50px -12px rgb(0 0 0 / 0.5),
     0 0 30px rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--border / 0.6);
+  border: 1px solid hsl(var(--border) / 0.6);
   transform: perspective(1000px) rotateY(-8deg) rotateX(4deg);
   transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -336,7 +336,7 @@
 
 .heroImage {
   object-fit: cover;
-  background-color: var(--card);
+  background-color: hsl(--card);
 }
 
 .navigation {
@@ -353,15 +353,15 @@
   width: 32px;
   height: 4px;
   border-radius: 2px;
-  background: var(--muted-foreground / 0.3);
+  background: hsl(var(--muted-foreground) / 0.3);
   transition: all 0.3s ease;
 }
 
 .dot:hover {
-  background: var(--muted-foreground / 0.7);
+  background: hsl(var(--muted-foreground) / 0.7);
 }
 
 .dot.activeDot {
-  background: var(--primary);
+  background: hsl(--primary);
   width: 48px;
 }

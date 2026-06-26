@@ -5,10 +5,10 @@
 }
 
 .wishlistCard {
-  background: var(--card);
-  border-radius: var(--radius);
+  background: hsl(--card);
+  border-radius: hsl(--radius);
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 1px solid hsl(--border);
   transition:
     transform 0.2s,
     box-shadow 0.2s;
@@ -19,26 +19,26 @@
 .wishlistCard:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.5);
-  border-color: var(--primary);
+  border-color: hsl(--primary);
 }
 
 .alertHeader {
   padding: 0.75rem 1.25rem;
-  background: var(--primary / 0.05);
-  border-bottom: 1px solid var(--primary / 0.1);
+  background: hsl(var(--primary) / 0.05);
+  border-bottom: 1px solid hsl(var(--primary) / 0.1);
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .activeBell {
-  color: var(--primary);
+  color: hsl(--primary);
 }
 
 .alertStatus {
   font-size: 0.75rem;
   font-weight: 800;
-  color: var(--primary);
+  color: hsl(--primary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -55,7 +55,7 @@
   font-size: 1.1rem;
   font-weight: 700;
   margin: 0;
-  color: var(--foreground);
+  color: hsl(--foreground);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -67,7 +67,7 @@
   gap: 1rem;
   margin: 1.25rem 0;
   padding: 1rem;
-  background: var(--muted / 0.3);
+  background: hsl(var(--muted) / 0.3);
   border-radius: 12px;
 }
 
@@ -80,14 +80,14 @@
 .alertLabel {
   font-size: 0.7rem;
   font-weight: 600;
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
   text-transform: uppercase;
 }
 
 .targetValue {
   font-size: 1.25rem;
   font-weight: 800;
-  color: var(--primary);
+  color: hsl(--primary);
 }
 
 .currentValue {
@@ -102,7 +102,7 @@
 .keyshopLabel {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
 }
 
 .alertFooter {
@@ -118,7 +118,7 @@
 .viewDetailsBtn {
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--primary);
+  color: hsl(--primary);
   text-decoration: none;
   transition: color 0.2s;
   display: inline-flex;
@@ -127,7 +127,7 @@
 }
 
 .viewDetailsBtn:hover {
-  color: var(--foreground);
+  color: hsl(--foreground);
 }
 
 .emptyState {
@@ -137,28 +137,28 @@
   justify-content: center;
   text-align: center;
   padding: 8rem 2rem;
-  background: var(--card / 0.4);
+  background: hsl(var(--card) / 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px dashed var(--border / 0.6);
-  border-radius: var(--radius);
+  border: 1px dashed hsl(var(--border) / 0.6);
+  border-radius: hsl(--radius);
   gap: 1rem;
   box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.2);
 }
 
 .emptyState h2 {
   font-size: 1.75rem;
-  color: var(--foreground);
+  color: hsl(--foreground);
 }
 
 .emptyState p {
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
   max-width: 400px;
   margin-bottom: 1rem;
 }
 
 .emptyIcon {
-  color: var(--muted-foreground / 0.3);
+  color: hsl(var(--muted-foreground) / 0.3);
   margin-bottom: 0.5rem;
 }
 

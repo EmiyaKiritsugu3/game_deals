@@ -1,6 +1,6 @@
 .heroHeader {
   position: relative;
-  border-radius: var(--radius);
+  border-radius: hsl(--radius);
   overflow: hidden;
   padding: 3rem 2rem;
   display: flex;
@@ -8,8 +8,8 @@
   justify-content: flex-end;
   min-height: 200px;
   margin-bottom: 0.5rem;
-  border: 1px solid var(--border);
-  background: var(--card);
+  border: 1px solid hsl(--border);
+  background: hsl(--card);
 }
 
 .heroBackground {
@@ -26,8 +26,8 @@
   inset: 0;
   background: linear-gradient(
     to top,
-    var(--background / 1) 0%,
-    var(--background / 0.2) 100%
+    hsl(var(--background) / 1) 0%,
+    hsl(var(--background) / 0.2) 100%
   );
   z-index: 1;
 }
@@ -43,11 +43,11 @@
 .title {
   font-size: 2.5rem;
   font-weight: 800;
-  color: var(--foreground);
+  color: hsl(--foreground);
   margin: 0;
 }
 
 .subtitle {
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
   font-size: 1.1rem;
 }

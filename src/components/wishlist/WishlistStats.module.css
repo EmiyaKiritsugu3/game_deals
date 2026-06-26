@@ -2,10 +2,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--card);
+  background: hsl(--card);
   padding: 1rem 1.5rem;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
+  border-radius: hsl(--radius);
+  border: 1px solid hsl(--border);
   margin-bottom: 0.5rem;
   flex-wrap: wrap;
   gap: 1rem;
@@ -24,7 +24,7 @@
 
 .statLabel {
   font-size: 0.8rem;
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-weight: 600;
@@ -33,7 +33,7 @@
 .statValue {
   font-size: 1.25rem;
   font-weight: 800;
-  color: var(--primary);
+  color: hsl(--primary);
 }
 
 .sortControls {
@@ -45,15 +45,15 @@
 .sortLabel {
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
 }
 
 .sortSelect {
-  background: var(--background);
-  border: 1px solid var(--border);
-  color: var(--foreground);
+  background: hsl(--background);
+  border: 1px solid hsl(--border);
+  color: hsl(--foreground);
   padding: 0.5rem 1rem;
-  border-radius: var(--radius);
+  border-radius: hsl(--radius);
   font-size: 0.9rem;
   font-family: inherit;
   cursor: pointer;
@@ -62,7 +62,7 @@
 }
 
 .sortSelect:focus {
-  border-color: var(--primary);
+  border-color: hsl(--primary);
 }
 
 .shareButton {

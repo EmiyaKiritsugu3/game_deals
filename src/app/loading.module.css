@@ -15,8 +15,8 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid var(--border);
-  border-top-color: var(--primary);
+  border: 3px solid hsl(--border);
+  border-top-color: hsl(--primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -28,7 +28,7 @@
 }
 
 .loader p {
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
   font-size: 0.9rem;
   letter-spacing: 0.05em;
   font-weight: 500;

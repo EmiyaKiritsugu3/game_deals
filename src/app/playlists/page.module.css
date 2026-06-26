@@ -18,7 +18,7 @@
 .title {
   font-size: 2rem;
   font-weight: 800;
-  color: var(--foreground);
+  color: hsl(--foreground);
   margin: 0;
 }
 
@@ -28,8 +28,8 @@
   gap: 0.4rem;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: hsl(--primary);
+  color: hsl(--primary-foreground);
   font-weight: 700;
   font-size: 0.85rem;
   text-decoration: none;
@@ -42,7 +42,7 @@
 
 .createButton:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px var(--primary / 0.3);
+  box-shadow: 0 4px 15px hsl(var(--primary) / 0.3);
 }
 
 .grid {
@@ -52,9 +52,9 @@
 }
 
 .card {
-  background: var(--card);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
+  background: hsl(--card);
+  border-radius: hsl(--radius);
+  border: 1px solid hsl(--border);
   padding: 1.5rem;
   text-decoration: none;
   transition:
@@ -68,7 +68,7 @@
 .card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px -8px rgb(0 0 0 / 0.4);
-  border-color: var(--primary);
+  border-color: hsl(--primary);
 }
 
 .cardBody {
@@ -80,13 +80,13 @@
 .cardTitle {
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--foreground);
+  color: hsl(--foreground);
   margin: 0;
 }
 
 .cardDescription {
   font-size: 0.85rem;
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
   margin: 0;
   line-height: 1.4;
 }
@@ -97,8 +97,8 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--primary);
-  background: var(--primary / 0.1);
+  color: hsl(--primary);
+  background: hsl(var(--primary) / 0.1);
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
   align-self: flex-start;
@@ -111,36 +111,36 @@
   justify-content: center;
   text-align: center;
   padding: 8rem 2rem;
-  background: var(--card / 0.4);
+  background: hsl(var(--card) / 0.4);
   backdrop-filter: blur(12px);
-  border: 1px dashed var(--border / 0.6);
-  border-radius: var(--radius);
+  border: 1px dashed hsl(var(--border) / 0.6);
+  border-radius: hsl(--radius);
   gap: 1rem;
   min-height: calc(100vh - 200px);
 }
 
 .emptyIcon {
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
   opacity: 0.5;
 }
 
 .emptyTitle {
   font-size: 1.75rem;
-  color: var(--foreground);
+  color: hsl(--foreground);
   margin: 0;
 }
 
 .emptyText {
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
   max-width: 400px;
   margin: 0;
 }
 
 .browseButton {
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: hsl(--primary);
+  color: hsl(--primary-foreground);
   padding: 0.75rem 1.5rem;
-  border-radius: var(--radius);
+  border-radius: hsl(--radius);
   font-weight: 700;
   text-decoration: none;
   transition:
@@ -150,7 +150,7 @@
 
 .browseButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px var(--primary / 0.4);
+  box-shadow: 0 4px 15px hsl(var(--primary) / 0.4);
 }
 
 .centerState {
@@ -166,8 +166,8 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid var(--muted);
-  border-top-color: var(--primary);
+  border: 4px solid hsl(--muted);
+  border-top-color: hsl(--primary);
   border-radius: 50%;
   animation: spin 1s infinite linear;
 }

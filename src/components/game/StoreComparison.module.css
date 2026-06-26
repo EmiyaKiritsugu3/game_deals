@@ -6,13 +6,13 @@
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: var(--foreground);
+  color: hsl(--foreground);
 }
 
 .keyshopTitle {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px dashed var(--border);
+  border-top: 1px dashed hsl(--border);
   position: relative;
 }
 
@@ -24,8 +24,8 @@
   font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.1em;
-  color: var(--muted-foreground);
-  background: var(--muted);
+  color: hsl(--muted-foreground);
+  background: hsl(--muted);
   padding: 0.2rem 0.5rem;
   border-radius: 3px;
 }

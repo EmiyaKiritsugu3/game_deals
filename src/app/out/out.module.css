@@ -10,23 +10,23 @@
 
 .redirectContainer h2 {
   font-size: 2rem;
-  color: var(--foreground);
+  color: hsl(--foreground);
 }
 
 .redirectContainer p {
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
   font-size: 1.1rem;
 }
 
 .redirectContainer strong {
-  color: var(--primary);
+  color: hsl(--primary);
 }
 
 .spinner {
   width: 60px;
   height: 60px;
-  border: 5px solid var(--muted);
-  border-top-color: var(--primary);
+  border: 5px solid hsl(--muted);
+  border-top-color: hsl(--primary);
   border-radius: 50%;
   animation: spin 1s infinite cubic-bezier(0.55, 0.15, 0.45, 0.85);
 }

@@ -16,11 +16,11 @@
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
-  color: var(--foreground);
+  color: hsl(--foreground);
 }
 
 .message {
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
   margin-bottom: 1.5rem;
   line-height: 1.6;
   font-size: 0.9rem;
@@ -29,8 +29,8 @@
 .homeLink {
   display: inline-block;
   padding: 0.625rem 1.5rem;
-  background-color: var(--accent-hl);
-  color: var(--accent-hl-foreground);
+  background-color: hsl(--accent-hl);
+  color: hsl(--accent-hl-foreground);
   border: none;
   border-radius: var(--radius, 4px);
   font-size: 0.9rem;

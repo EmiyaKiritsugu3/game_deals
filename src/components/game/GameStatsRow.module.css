@@ -2,9 +2,9 @@
   display: flex;
   align-items: stretch;
   gap: 0;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: hsl(--card);
+  border: 1px solid hsl(--border);
+  border-radius: hsl(--radius);
   overflow: hidden;
   width: fit-content;
 }
@@ -20,14 +20,14 @@
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
   font-weight: 600;
 }
 
 .statValue {
   font-size: 1.75rem;
   font-weight: 800;
-  color: var(--foreground);
+  color: hsl(--foreground);
   line-height: 1;
   display: flex;
   align-items: center;
@@ -36,27 +36,27 @@
 
 .statSub {
   font-size: 0.72rem;
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
 }
 
 .statDivider {
   width: 1px;
-  background: var(--border);
+  background: hsl(--border);
   flex-shrink: 0;
 }
 
 .freeTag {
-  color: var(--primary);
+  color: hsl(--primary);
   font-size: 1.5rem;
 }
 
 .hlValue {
-  color: var(--primary);
+  color: hsl(--primary);
 }
 
 .hlActiveBadge {
-  background: var(--accent-hl);
-  color: var(--accent-hl-foreground);
+  background: hsl(--accent-hl);
+  color: hsl(--accent-hl-foreground);
   font-size: 0.55rem;
   font-weight: 800;
   padding: 0.15rem 0.4rem;

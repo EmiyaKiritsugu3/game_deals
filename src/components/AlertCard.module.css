@@ -1,7 +1,7 @@
 .card {
-  background: var(--card);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
+  background: hsl(--card);
+  border-radius: hsl(--radius);
+  border: 1px solid hsl(--border);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -13,26 +13,26 @@
 .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.5);
-  border-color: var(--primary / 0.3);
+  border-color: hsl(var(--primary) / 0.3);
 }
 
 .cardHeader {
   padding: 0.75rem 1.25rem;
-  background: var(--primary / 0.05);
-  border-bottom: 1px solid var(--primary / 0.1);
+  background: hsl(var(--primary) / 0.05);
+  border-bottom: 1px solid hsl(var(--primary) / 0.1);
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .activeBell {
-  color: var(--primary);
+  color: hsl(--primary);
 }
 
 .alertStatus {
   font-size: 0.75rem;
   font-weight: 800;
-  color: var(--primary);
+  color: hsl(--primary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -49,8 +49,8 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border-radius: calc(var(--radius) - 2px);
-  background: var(--muted);
+  border-radius: calc(hsl(--radius) - 2px);
+  background: hsl(--muted);
 }
 
 .thumb {
@@ -63,7 +63,7 @@
   font-size: 1.1rem;
   font-weight: 700;
   margin: 0;
-  color: var(--foreground);
+  color: hsl(--foreground);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -74,7 +74,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   padding: 1rem;
-  background: var(--muted / 0.3);
+  background: hsl(var(--muted) / 0.3);
   border-radius: 12px;
 }
 
@@ -87,20 +87,20 @@
 .priceLabel {
   font-size: 0.7rem;
   font-weight: 600;
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
   text-transform: uppercase;
 }
 
 .targetPrice {
   font-size: 1.25rem;
   font-weight: 800;
-  color: var(--primary);
+  color: hsl(--primary);
 }
 
 .currentPrice {
   font-size: 1.25rem;
   font-weight: 800;
-  color: var(--foreground);
+  color: hsl(--foreground);
 }
 
 .currentPriceMet {
@@ -111,12 +111,12 @@
 
 .storeInfo {
   font-size: 0.85rem;
-  color: var(--muted-foreground);
+  color: hsl(--muted-foreground);
 }
 
 .cardFooter {
   padding: 0.75rem 1.25rem;
-  border-top: 1px solid var(--border / 0.5);
+  border-top: 1px solid hsl(var(--border) / 0.5);
   display: flex;
   gap: 0.75rem;
 }
@@ -127,9 +127,9 @@
   justify-content: center;
   flex: 1;
   padding: 0.6rem 1rem;
-  border-radius: var(--radius);
-  background: var(--primary);
-  color: var(--primary-foreground);
+  border-radius: hsl(--radius);
+  background: hsl(--primary);
+  color: hsl(--primary-foreground);
   font-weight: 700;
   font-size: 0.85rem;
   text-decoration: none;
@@ -140,7 +140,7 @@
 
 .viewGameBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--primary / 0.3);
+  box-shadow: 0 4px 12px hsl(var(--primary) / 0.3);
 }
 
 .viewGameBtnDisabled {
@@ -149,9 +149,9 @@
   justify-content: center;
   flex: 1;
   padding: 0.6rem 1rem;
-  border-radius: var(--radius);
-  background: var(--muted);
-  color: var(--muted-foreground);
+  border-radius: hsl(--radius);
+  background: hsl(--muted);
+  color: hsl(--muted-foreground);
   font-weight: 700;
   font-size: 0.85rem;
   opacity: 0.5;
@@ -164,7 +164,7 @@
   justify-content: center;
   gap: 0.4rem;
   padding: 0.6rem 1rem;
-  border-radius: var(--radius);
+  border-radius: hsl(--radius);
   border: 1px solid hsl(0 65% 50% / 0.3);
   background: hsl(0 65% 50% / 0.15);
   color: hsl(0 65% 28%);
