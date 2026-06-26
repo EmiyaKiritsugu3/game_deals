@@ -4,10 +4,15 @@ import { createClient } from '@/utils/supabase/server';
 
 function safeNext(next: string | null, origin: string): string {
   if (!next) return `${origin}/`;
-  if (!next.startsWith('/')) return `${origin}/`;
-  if (next.startsWith('//')) return `${origin}/`;
-  if (next.startsWith('/\\')) return `${origin}/`;
-  return `${origin}${next}`;
+  try {
+    const url = new URL(next, origin);
+    if (url.origin === origin) {
+      return url.toString();
+    }
+  } catch {
+    // Ignore invalid URLs
+  }
+  return `${origin}/`;
 }
 
 async function exchangeAuthCode(code: string): Promise<boolean> {
