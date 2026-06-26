@@ -1,0 +1,26 @@
+src/components/AuthModal.tsx
+  s_6875ff47d264d3::t_0fc803e895c0f8 134-138
+  s_6875ff47d264d3::t_52277ee590ae23 6-8
+  s_6875ff47d264d3::t_eeb6dd493521bd 125-127,129
+  s_6875ff47d264d3::t_844267e221d94e 148
+  s_6875ff47d264d3::t_b523abaff2156d 140-141,143-144
+  s_6875ff47d264d3::t_9c6df8ac652fbb 84-89,91
+  s_6875ff47d264d3::t_eb11f45380dc52 9-17
+  s_6875ff47d264d3::t_5ad70bfda871ac 23,38,92,95,104,115,130,132,139,145-147,152-153
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "c1d402c974705742c8b2bc4b4984d7861804a759",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
