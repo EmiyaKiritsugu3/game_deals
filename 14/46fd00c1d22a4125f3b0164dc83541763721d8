@@ -1,0 +1,20 @@
+src/app/globals.css
+  s_6875ff47d264d3::t_fcd76c9eaabf4a 241-253,256,261,266,271,277,282,287,292,297,302,314
+  s_6875ff47d264d3::t_c1db0fa16099eb 254-255,257-260,262-265,267-270,272-276,278-281,283-286,288-291,293-296,298-301,303-313,315-354,367
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "1446fd00c1d22a4125f3b0164dc83541763721d8",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
