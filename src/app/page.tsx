@@ -4,8 +4,11 @@ import EndingSoon from '@/components/EndingSoon';
 import FlashSales from '@/components/FlashSales';
 import Freebies from '@/components/Freebies';
 import GameCard from '@/components/GameCard';
-import HeroSection from '@/components/HeroSection';
 import HistoricalLows from '@/components/HistoricalLows';
+import CommunityListings from '@/components/home/CommunityListings';
+import DiscoveryGrid from '@/components/home/DiscoveryGrid';
+import HomeHero from '@/components/home/HomeHero';
+import HotDealsSection from '@/components/home/HotDealsSection';
 import { getDeals } from '@/services/api';
 import styles from './page.module.css';
 
@@ -13,44 +16,30 @@ import styles from './page.module.css';
 export const revalidate = 3600;
 
 export default async function Home() {
-  // Fetch primary static categories in parallel
   const [popular, bestDeals, recentDeals, flashDeals, freebies] = await Promise.all([
-    getDeals({ pageSize: '5' }), // Deal Rating (default)
-    getDeals({ sortBy: 'Savings', pageSize: '10' }), // Highest discount %
-    getDeals({ sortBy: 'Recent', pageSize: '10' }), // Newest deals
-    getDeals({ sortBy: 'Price', pageSize: '8', onSale: '1' }), // Flash deals
-    getDeals({ upperPrice: '0', pageSize: '6' }), // 100% OFF Freebies
+    getDeals({ pageSize: '5' }),
+    getDeals({ sortBy: 'Savings', pageSize: '10' }),
+    getDeals({ sortBy: 'Recent', pageSize: '10' }),
+    getDeals({ sortBy: 'Price', pageSize: '8', onSale: '1' }),
+    getDeals({ upperPrice: '0', pageSize: '6' }),
   ]);
 
-  const carouselDeals = popular.slice(0, 5);
-  const gridDeals = popular.length > 5 ? popular.slice(5) : [];
+  const heroDeal = popular[0];
 
   return (
     <div className={styles.main}>
-      {carouselDeals.length > 0 && <HeroSection deals={carouselDeals} />}
-
       <div className="container">
+        {/* Hero Section — featured deal with game art */}
+        {heroDeal && <HomeHero deal={heroDeal} />}
+
+        {/* Freebies + Flash Sales */}
         {freebies.length > 0 && <Freebies deals={freebies} />}
         <FlashSales deals={flashDeals} />
 
-        {gridDeals.length > 0 && (
-          <>
-            {/* Most Popular Games */}
-            <div className={styles.sectionHeader}>
-              <div className={styles.sectionHeaderRow}>
-                <div>
-                  <h2>Most Popular Games</h2>
-                  <p>The best and most sought-after discounts right now.</p>
-                </div>
-              </div>
-            </div>
-            <div className={styles.grid}>
-              {gridDeals.map((deal) => (
-                <GameCard key={deal.dealID} deal={deal} />
-              ))}
-            </div>
-          </>
-        )}
+        {/* Hot Deals — horizontal scroll de top-rated */}
+        <Suspense fallback={<div className={styles.skeleton}>Loading deals...</div>}>
+          <HotDealsSection deals={popular} limit={10} />
+        </Suspense>
 
         {/* New Deals + Best Deals */}
         <div className={styles.splitLayout}>
@@ -93,7 +82,17 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* Historical Lows + Ending Soon (Now modular) */}
+        {/* Discovery Grid — collections */}
+        <Suspense fallback={<div className={styles.skeleton}>Loading collections...</div>}>
+          <DiscoveryGrid />
+        </Suspense>
+
+        {/* Community Lists — public playlists */}
+        <Suspense fallback={<div className={styles.skeleton}>Loading lists...</div>}>
+          <CommunityListings />
+        </Suspense>
+
+        {/* Historical Lows + Ending Soon */}
         <div className={styles.splitLayout}>
           <Suspense fallback={<div className={styles.skeleton}>Loading...</div>}>
             <HistoricalLows />
@@ -102,6 +101,25 @@ export default async function Home() {
             <EndingSoon />
           </Suspense>
         </div>
+
+        {/* Most Popular Games grid */}
+        {popular.length > 1 && (
+          <div>
+            <div className={styles.sectionHeader}>
+              <div className={styles.sectionHeaderRow}>
+                <div>
+                  <h2>Most Popular Games</h2>
+                  <p>The best and most sought-after discounts right now.</p>
+                </div>
+              </div>
+            </div>
+            <div className={styles.grid}>
+              {popular.slice(1).map((deal) => (
+                <GameCard key={deal.dealID} deal={deal} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <footer className={styles.footer}>

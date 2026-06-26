@@ -9,6 +9,7 @@ import {
 import { type Deal, getHighResImage, getStoreLogo, getStores } from '../services/api';
 import AddToListButton from './AddToListButton';
 import DealsBadge from './DealsBadge';
+import StoreIcon from './game/StoreIcon';
 import styles from './GameCard.module.css';
 import HeartButton from './HeartButton';
 import PriceAlertBadge from './PriceAlertBadge';
@@ -73,16 +74,8 @@ export default async function GameCard({ deal }: Readonly<{ deal: Deal }>) {
 
           <div className={styles.meta}>
             <span className={styles.storeBadge}>
-              {store && (
-                <img
-                  src={storeLogo ?? ''}
-                  alt={store}
-                  width={16}
-                  height={16}
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
+              {store && storeLogo && (
+                <StoreIcon src={storeLogo} alt={store} />
               )}
               {store || 'Store'}
             </span>
