@@ -12,7 +12,7 @@ Eliminate CSS modules, remove dead/unnecessary dependencies, and consolidate all
 
 | Layer | Current | Target | Rationale |
 |-------|---------|--------|-----------|
-| Styling | 46 CSS modules (2931 lines) + Tailwind v4 | Tailwind v4 only + CSS custom properties | Modules duplicate what Tailwind utilities already do |
+| Styling | 46 CSS modules (5,877 lines) + Tailwind v4 | Tailwind v4 only + CSS custom properties | Modules duplicate what Tailwind utilities already do |
 | Animations (JS) | `motion/react` 12.41, `gsap` 3.15 | None | CSS `@starting-style`, `@keyframes`, transitions cover all current use cases |
 | Animation (CSS) | `tw-animate-css` 1.4 | `@keyframes` in `@theme` block | Tailwind v4 native `--animate-*` theme tokens eliminate need for separate plugin |
 | Components | shadcn/ui + custom `BaseModal` | shadcn/ui pure | `BaseModal` duplicates shadcn `Dialog` functionality with manual focus trap |
@@ -30,9 +30,26 @@ Eliminate CSS modules, remove dead/unnecessary dependencies, and consolidate all
 
 ### Bundle Impact
 
-- JS animation runtime: ~12KB → 0KB
+- JS animation runtime: ~318KB minified (~90KB gzipped) → 0KB
 - CSS file count: 48 → 1 (`globals.css`)
-- CSS total lines: ~3000 → ~800-1200
+- CSS total lines: ~5,877 → ~1,200-1,800
+
+### Dead Code Removal (Bonus)
+
+Audit found 6 unused shadcn/ui components under `src/components/ui/` with zero external imports:
+
+| File | Size | Reason |
+|------|------|--------|
+| `avatar.tsx` | 2.9KB | 0 imports |
+| `command.tsx` | 4.9KB | 0 imports (was used, removed) |
+| `dialog.tsx` | 3.8KB | 0 imports (was used, removed) |
+| `dropdown-menu.tsx` | 8.6KB | 0 imports (ThemeToggle uses it but is commented out) |
+| `popover.tsx` | 2.5KB | 0 imports |
+| `select.tsx` | 6.5KB | 0 imports |
+| `separator.tsx` | 544B | 0 imports |
+| `sheet.tsx` | 4.2KB | 0 imports |
+
+These can all be deleted. `dialog.tsx` deletion requires Phase 2 consumers to use shadcn Dialog imports directly (they currently don't import any Dialog components — will add fresh).
 
 ## 3. Migration Phases
 
@@ -167,23 +184,32 @@ Replace `<BaseModal isOpen onClose ariaLabel>` with `<Dialog open onOpenChange>`
 
 #### 3c. HomeHero Parallax → CSS
 
-**Current:** `useScroll` + `useTransform` drives `y: bgY` (0% → 30% parallax) on background image.
+**Current:** `useScroll` + `useTransform` drives `y: bgY` (0% → 30% movement) on a `<motion.div>` wrapping Next.js `<Image fill>`. The background image scrolls at 30% speed relative to viewport — subtle parallax.
 
-**Replacement:** `background-attachment: fixed` on the background image container. This is native CSS, universally supported, and produces near-identical parallax effect.
+**⚠️ CRITICAL:** Current code uses Next.js `<Image fill>` inside `<motion.div>` — NOT `background-image`. The `y` transform moves the entire `<Image>` container. Replacement strategy:
 
-```css
-/* Before: motion.div with animated y transform */
-/* After: */
-.hero-background {
-  background-attachment: fixed;
-  background-position: center;
-  background-size: cover;
-}
+**Option A (recommended):** Replace `<Image fill>` with CSS `background-image` + `background-attachment: fixed`:
+
+```tsx
+// Before: motion.div wrapping Image
+<motion.div style={{ y: bgY }} className="absolute inset-0">
+  <Image src={heroImage} fill className="object-cover" alt="" />
+</motion.div>
+
+// After: CSS background on container
+<div 
+  className="absolute inset-0 bg-cover bg-center bg-fixed"
+  style={{ backgroundImage: `url(${heroImage})` }}
+/>
 ```
 
-**Current:** `motion.div` with `initial/opacity+y → animate` for content card and game image.
+**Trade-off:** `background-attachment: fixed` makes background 100% still (0% scroll movement). Current motion effect is 30% sub-scroll — more subtle. Visual difference is slight and acceptable.
 
-**Replacement:** `animate-fade-slide-in` + staggered delays:
+**Mobile Safari note:** `background-attachment: fixed` is disabled on iOS Safari — falls back to `scroll`. This matches current behavior where parallax on mobile is already imperceptible due to smaller viewport.
+
+**Option B (fallback, if fixed is rejected):** Keep a minimal `motion/react` import just for HomeHero parallax. All other animations use CSS.
+
+**Content animations** — `motion.div` with `initial/opacity+y → animate` for content card and game image:
 
 ```tsx
 // Content card
@@ -193,29 +219,29 @@ Replace `<BaseModal isOpen onClose ariaLabel>` with `<Dialog open onOpenChange>`
 ```
 
 **Verification:**
-- HomeHero renders without motion dependency
-- Parallax effect works on scroll (Chrome, Firefox, Safari)
+- HomeHero renders without motion dependency (or with Option B fallback)
+- Parallax effect works on desktop (Chrome, Firefox, Safari)
+- Mobile gets static background (acceptable, current also subtle on mobile)
 - Entrance animations play on page load
 - No visual regression vs current
 
 ### Phase 4: CSS Modules → Tailwind
 
-**⚠️ CRITICAL PREREQUISITE:** 18 unique `@keyframes` exist across `.module.css` files. Only `spin` maps to `animate-spin` built-in. All others need registration in `globals.css` `@theme` block BEFORE converting their consumer files:
+**⚠️ CRITICAL PREREQUISITE:** 11 unique `@keyframes` exist across `.module.css` files (19 total declarations counting 7x `spin` duplicates). Only `spin` maps to `animate-spin` built-in. All others need registration in `globals.css` `@theme` block BEFORE converting their consumer files:
 
-| @keyframes | File(s) | Registration needed |
-|------------|---------|-------------------|
-| `spin` | 7 files | `animate-spin` (built-in) — OK |
-| `pulse` | `Freebies.module.css`, `GameStatsRow.module.css` | `--animate-pulse` (built-in) — verify opacity match |
-| `pulseIcon` | `PriceAlertBadge.module.css` | Scale+opacity pulse → register as `--animate-badge-pulse` |
-| `heart-burst` | `HeartButton.module.css` | Scale burst with cubic-bezier → register as `--animate-heart-burst` |
-| `pulse-flame` | `globals.css` | Box-shadow pulse for epic badge → `--animate-pulse-flame` |
-| `blink` | `FlashSales.module.css` | Colon blink → register as `--animate-blink` |
-| `pop` | `WishlistIndicator.module.css` | Scale-in pop → register as `--animate-pop` |
-| `matrixDrift` | `HeroSection.module.css` | 60s continuous translate → register as `--animate-matrix-drift` |
-| `fadeIn` | `BaseModal.module.css`, `SidebarModal.module.css` | → register as `--animate-fade-in` |
-| `scaleIn` | `BaseModal.module.css` | → register as `--animate-scale-in` |
-| `slideInRight` | `SidebarModal.module.css` | → register as `--animate-slide-in-right` |
-| Others | Various | Audit during conversion of each file |
+| @keyframes | File(s) | Full definition | Registration |
+|------------|---------|----------------|--------------|
+| `spin` (7x) | loading, wishlist/page, out, alerts/page, playlists/page, playlists/[id], WishlistGrid | `100% { transform: rotate(360deg) }` | `animate-spin` (built-in) |
+| `fadeIn` | `BaseModal.module.css`, `SidebarModal.module.css` | `from { opacity: 0 }` -> `to { opacity: 1 }` | `--animate-fade-in` |
+| `scaleIn` | `BaseModal.module.css` | `from { transform: scale(0.9) translateY(20px); opacity: 0 }` | `--animate-scale-in` |
+| `slideInRight` | `SidebarModal.module.css` | `from { transform: translateX(100%) }` | `--animate-slide-in-right` |
+| `heart-burst` | `HeartButton.module.css` | `0% { scale(1) } 50% { scale(1.3) } 100% { scale(1) }` — 0.4s cubic-bezier(.175,.885,.32,1.275) | `--animate-heart-burst` |
+| `pulse` | `Freebies.module.css`, `GameStatsRow.module.css` | `0%,100% { opacity: 1 } 50% { opacity: 0.6 }` — 2s ease-in-out infinite | `--animate-pulse-custom` (differs from built-in `animate-pulse` which uses opacity 0.5) |
+| `pulseIcon` | `PriceAlertBadge.module.css` | `0%,100% { scale(1); opacity: 1 } 50% { scale(1.1); opacity: 0.8 }` — 2s infinite | `--animate-badge-pulse` |
+| `pulse-flame` | `globals.css` | Box-shadow pulse on epic badge | `--animate-pulse-flame` |
+| `blink` | `FlashSales.module.css` | `0%,100% { opacity: 1 } 50% { opacity: 0 }` | `--animate-blink` |
+| `pop` | `WishlistIndicator.module.css` | Scale-in pop | `--animate-pop` |
+| `matrixDrift` | `HeroSection.module.css` | `from { translate(0,0) }` — 60s continuous | `--animate-matrix-drift` |
 
 **⚠️ Tests with CSS module mocks:** 14 test files have `vi.mock('./*.module.css', ...)`. After module removal, these mocks will throw (can't mock nonexistent file). Must remove mock lines alongside module deletion — one commit per file pair (module + its test mock).
 
@@ -223,18 +249,23 @@ Replace `<BaseModal isOpen onClose ariaLabel>` with `<Dialog open onOpenChange>`
 
 | Shared Module | Consumers | Lot |
 |---------------|-----------|-----|
-| `src/app/page.module.css` | `page.tsx`, `search/page.tsx`, `search/SearchResults.tsx`, `wishlist/shared/page.tsx` | Lot 3 |
-| `src/app/auth/error/page.module.css` | `auth/error/page.tsx`, `auth/auth-code-error/page.tsx` | Lot 2 |
-| `src/app/collections/collections.module.css` | `collections/page.tsx`, `collections/[slug]/page.tsx` | Lot 3 |
-| `src/app/playlists/page.module.css` | `playlists/page.tsx` only (verify) | Lot 3 |
-| `src/app/bundles/bundles.module.css` | `bundles/page.tsx` only (verify) | Lot 3 |
-| `src/components/SidebarModal.module.css` | `SidebarModal.tsx` only (verify) | Lot 2 |
+| `src/app/page.module.css` | `page.tsx`, `search/page.tsx`, `search/SearchResults.tsx`, `wishlist/shared/page.tsx` (4) | Lot 3 |
+| `src/app/auth/error/page.module.css` | `auth/error/page.tsx`, `auth/auth-code-error/page.tsx` (2) | Lot 2 |
+| `src/app/collections/collections.module.css` | `collections/page.tsx`, `collections/[slug]/page.tsx` (2) | Lot 3 |
+| `src/app/playlists/page.module.css` | `playlists/page.tsx` only (1) — has own `page.module.css`; `playlists/[id]/page.tsx` uses separate module | Lot 3 |
+| `src/app/bundles/bundles.module.css` | `bundles/page.tsx` only (1) | Lot 3 |
+| `src/components/SidebarModal.module.css` | `SidebarModal.tsx` only (1) | Lot 2 |
 
 **⚠️ Dynamic classNames:** 2 files use bracket notation `styles[variant]`:
 - `AddToListButton.tsx`: `styles[ variant]` where variant = `'icon' | 'full'`
 - `AuthModal.tsx`: `styles[message.type]` where type is dynamic string
 
 Both must be converted with explicit Tailwind class maps instead of dynamic CSS module access.
+
+**⚠️ Conditional `cn()` with CSS modules:** 1 file uses `cn()` with `&&` operators mixing CSS module classes:
+- `RatingStars.tsx`: `cn(styles.star, filled && styles.filled)` — boolean logic must be preserved exactly when converting to Tailwind classes.
+
+**⚠️ Template literal conditionals:** 12 files use `` `${styles.x} ${condition ? styles.y : ''}` `` patterns (e.g. `HeartButton.tsx`, `FlashSales.tsx`, `AlertCard.tsx`, `NotificationBell.tsx`, `GameDealRow.tsx`, `WishlistTabs.tsx`, `HeroNavigation.tsx`, `HeroSlide.tsx`). All straightforward string replacement but structure must be kept.
 
 **⚠️ Mixed Tailwind + CSS Module on same element:** `search/page.tsx` uses `container` (Tailwind) + `styles.searchLayout` on same div. Both must be pure Tailwind after migration.
 
@@ -299,6 +330,13 @@ Strategy: Hybrid approach. Layout → Tailwind. Complex animations/gradients →
 
 ### Phase 5: Quality Verification
 
+**Pre-existing QA infrastructure:**
+- Visual regression testing: `tests/e2e/visual.spec.ts` with CDP screenshot capture (5 test cases). Snapshots in `visual.spec.ts-snapshots/`. Commands: `test:e2e:visual` and `test:e2e:visual:update`.
+- E2E test suite: Playwright (`alerts-crud.spec.ts`, `alerts.spec.ts`, `full-journey.spec.ts`, `visual.spec.ts`)
+- Unit tests: 123 test files, 1,076 tests, all passing (7.22s). Clean baseline.
+- **Good news:** Zero tests assert on specific CSS module class names. All `className` assertions test custom `className` prop — unaffected by migration.
+- **Test mock removal:** 14 test files have `vi.mock('./*.module.css', ...)`. Remove mock lines in same commit as module file deletion. No test logic changes needed — mocks were always stubs returning fake class names, tests don't validate them.
+
 - Screenshot comparison per page: Home, /game/[id], /wishlist, /alerts, /playlists, /collections
 - WCAG contrast check on all converted components
 - Responsive breakpoint audit (mobile → desktop)
@@ -317,7 +355,16 @@ Strategy: Hybrid approach. Layout → Tailwind. Complex animations/gradients →
 - **`next-themes`:** Stays (handles system detection + localStorage persistence that `light-dark()` alone cannot)
 - **`recharts`:** Stays (React 19 compatible, used for price history charts)
 
-## 5. Risk Assessment
+## 5. Verification Steps
+
+1. `pnpm test` after each lot — 123 test files, 1,076 tests must stay green
+2. Remove `vi.mock('./*.module.css')` lines from 14 test files in same commit as module deletion
+3. Visual regression: `pnpm test:e2e:visual:update` to rebaseline after each phase
+4. E2E full journey: `pnpm test:e2e` — full-journey.spec.ts, alerts-crud.spec.ts, alerts.spec.ts
+5. `pnpm build` — verify zero CSS module references remain in build output
+6. Manual smoke test: Home, /game/[id], /wishlist, /alerts, /playlists, /collections, /leaderboard, /bundles, /profile
+
+## 6. Risk Assessment
 
 | Risk | Probability | Impact | Mitigation |
 |------|-----------|--------|------------|
