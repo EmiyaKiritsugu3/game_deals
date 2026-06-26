@@ -43,6 +43,7 @@ function PriceBlock({
 export default async function GameCard({ deal }: Readonly<{ deal: Deal }>) {
   const stores = await getStores();
   const store = stores[deal.storeID];
+  const storeLogo = getStoreLogo(deal.storeID);
   const highResThumb = getHighResImage(deal.thumb);
   const savings = computeSavings(deal.savings);
   const isFree = isPriceFree(deal.salePrice);
@@ -82,10 +83,10 @@ export default async function GameCard({ deal }: Readonly<{ deal: Deal }>) {
 
           <div className={styles.meta}>
             <span className={styles.storeBadge}>
-              {store?.storeName && (
+              {store && (
                 <img
-                  src={getStoreLogo(store.storeID) ?? ''}
-                  alt={store.storeName}
+                  src={storeLogo ?? ''}
+                  alt={store}
                   width={16}
                   height={16}
                   onError={(e) => {
@@ -93,7 +94,7 @@ export default async function GameCard({ deal }: Readonly<{ deal: Deal }>) {
                   }}
                 />
               )}
-              {store?.storeName || 'Store'}
+              {store || 'Store'}
             </span>
             {deal.steamRatingPercent && deal.steamRatingPercent !== '0' && (
               <span className={styles.ratingBadge}>★ {deal.steamRatingPercent}%</span>

@@ -52,7 +52,7 @@
   top: 10px;
   left: 10px;
   background: #ff4d4d;
-  color: white;
+  color: hsl(var(--foreground));
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   font-size: 0.85rem;
@@ -143,4 +143,9 @@
   font-size: 0.75rem;
   color: #fbbf24;
   font-weight: 600;
+}
+
+.timeAgo {
+  color: hsl(var(--foreground) / 0.6);
+  font-size: 0.75rem;
 }
