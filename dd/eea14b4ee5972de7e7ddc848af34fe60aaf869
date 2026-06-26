@@ -1,0 +1,23 @@
+src/components/FlashSales.module.css
+  s_48ec12a2a19cbc::t_371c962f7f59c7 43-50,61-68
+  s_48ec12a2a19cbc::t_45f608a910ed3e 220,223
+  s_48ec12a2a19cbc::t_2f1420b21706b9 69
+src/components/FlashSales.tsx
+  s_48ec12a2a19cbc::t_97f1b90d052519 59-62,64-67,69-72
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "ddeea14b4ee5972de7e7ddc848af34fe60aaf869",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
