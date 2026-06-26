@@ -1,6 +1,6 @@
 'use client';
 
-import { type KeyboardEvent, useId, useState } from 'react';
+import { type KeyboardEvent, useId, useRef, useState } from 'react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import styles from './RatingStars.module.css';
@@ -66,6 +66,11 @@ export default function RatingStars({
 }: RatingStarsProps) {
   const uid = useId();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [focusIndex, setFocusIndex] = useState(() =>
+    Math.max(0, Math.min(maxStars - 1, Math.round(value) - 1))
+  );
+  const starRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  starRefs.current = starRefs.current.slice(0, maxStars);
 
   const displayValue = hoveredIndex !== null ? hoveredIndex + 1 : value;
   const displayWhole = Math.floor(displayValue);
@@ -73,10 +78,23 @@ export default function RatingStars({
 
   const label = `${value.toFixed(1)} / ${maxStars}`;
 
+  const moveFocus = (nextIndex: number) => {
+    setFocusIndex(nextIndex);
+    starRefs.current[nextIndex]?.focus();
+  };
+
   const handleKeyDown = (e: KeyboardEvent, starValue: number) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       onChange?.(starValue);
+    }
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      moveFocus(Math.min(focusIndex + 1, maxStars - 1));
+    }
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      moveFocus(Math.max(focusIndex - 1, 0));
     }
   };
 
@@ -99,10 +117,14 @@ export default function RatingStars({
           role="radio"
           aria-checked={sv === Math.round(displayValue)}
           aria-label={`${sv} star${sv > 1 ? 's' : ''}`}
-          tabIndex={0}
+          ref={(el) => {
+            starRefs.current[i] = el;
+          }}
+          tabIndex={i === (hoveredIndex !== null ? hoveredIndex : focusIndex) ? 0 : -1}
           className={cn(styles.star, filled && styles.filled, styles.interactive)}
           onClick={() => onChange?.(sv)}
           onKeyDown={(e) => handleKeyDown(e, sv)}
+          onFocus={() => setFocusIndex(i)}
           onMouseEnter={() => setHoveredIndex(i)}
           onMouseLeave={() => setHoveredIndex(null)}
         >

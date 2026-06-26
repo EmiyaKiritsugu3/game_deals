@@ -119,4 +119,62 @@ describe('RatingStars — interactive mode', () => {
 
     expect(onChange).toHaveBeenCalledWith(3);
   });
+
+  describe('roving tabindex keyboard navigation', () => {
+    it('only first star (rounded value) has tabIndex 0 initially', () => {
+      render(<RatingStars value={3} interactive />);
+      const stars = screen.getAllByRole('radio');
+      expect(stars[2]).toHaveAttribute('tabindex', '0');
+      expect(stars[0]).toHaveAttribute('tabindex', '-1');
+      expect(stars[4]).toHaveAttribute('tabindex', '-1');
+    });
+
+    it('ArrowRight moves focus and tabindex to next star', () => {
+      render(<RatingStars value={3} interactive />);
+      const stars = screen.getAllByRole('radio');
+
+      fireEvent.keyDown(stars[2], { key: 'ArrowRight' });
+
+      expect(stars[3]).toHaveAttribute('tabindex', '0');
+      expect(stars[2]).toHaveAttribute('tabindex', '-1');
+    });
+
+    it('ArrowRight at last star stays on last', () => {
+      render(<RatingStars value={5} interactive />);
+      const stars = screen.getAllByRole('radio');
+
+      fireEvent.keyDown(stars[4], { key: 'ArrowRight' });
+
+      expect(stars[4]).toHaveAttribute('tabindex', '0');
+    });
+
+    it('ArrowLeft moves focus and tabindex to previous star', () => {
+      render(<RatingStars value={3} interactive />);
+      const stars = screen.getAllByRole('radio');
+
+      fireEvent.keyDown(stars[2], { key: 'ArrowLeft' });
+
+      expect(stars[1]).toHaveAttribute('tabindex', '0');
+      expect(stars[2]).toHaveAttribute('tabindex', '-1');
+    });
+
+    it('ArrowLeft at first star stays on first', () => {
+      render(<RatingStars value={1} interactive />);
+      const stars = screen.getAllByRole('radio');
+
+      fireEvent.keyDown(stars[0], { key: 'ArrowLeft' });
+
+      expect(stars[0]).toHaveAttribute('tabindex', '0');
+    });
+
+    it('onFocus updates focusIndex', () => {
+      render(<RatingStars value={3} interactive />);
+      const stars = screen.getAllByRole('radio');
+
+      fireEvent.focus(stars[4]);
+
+      expect(stars[4]).toHaveAttribute('tabindex', '0');
+      expect(stars[2]).toHaveAttribute('tabindex', '-1');
+    });
+  });
 });

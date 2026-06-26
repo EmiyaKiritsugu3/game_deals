@@ -17,9 +17,9 @@
 }
 
 .epic {
-  background: linear-gradient(135deg, #ff4d4d, #f9cb28);
+  background: linear-gradient(135deg, #ff4b2b, #ff416c);
   color: hsl(var(--foreground));
-  box-shadow: 0 0 10px rgba(255, 77, 77, 0.3);
+  box-shadow: 0 0 10px rgba(255, 75, 43, 0.3);
 }
 
 .free {
@@ -34,7 +34,7 @@
 }
 
 .fresh {
-  background: linear-gradient(135deg, #00c9a7, #00e676);
-  color: #003d33;
-  box-shadow: 0 0 8px rgba(0, 201, 167, 0.3);
+  background: linear-gradient(135deg, hsl(142 88% 27%), hsl(142 100% 42%));
+  color: hsl(142 100% 10%);
+  box-shadow: 0 0 8px hsl(142 88% 27% / 0.3);
 }

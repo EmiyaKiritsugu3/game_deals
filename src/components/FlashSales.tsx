@@ -55,7 +55,7 @@ export default function FlashSales({ deals }: FlashSalesProps) {
       <div className={styles.header}>
         <div className={styles.titleArea}>
           <h2>⚡ Flash Deals</h2>
-          <div className={styles.timer}>
+          <div className={styles.timer} aria-live="polite" aria-atomic="true">
             <span>{String(timeLeft.hours).padStart(2, '0')}</span>
             <span className={styles.colon}>:</span>
             <span>{String(timeLeft.minutes).padStart(2, '0')}</span>

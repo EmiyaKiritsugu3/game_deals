@@ -65,7 +65,7 @@
 }
 
 .plusIcon {
-  color: #00ff88;
+  color: hsl(142 100% 50%);
   font-weight: 700;
 }
 
@@ -110,7 +110,7 @@
 }
 
 .createButton {
-  background: #00ff88;
+  background: hsl(142 100% 50%);
   color: black;
   border: none;
   border-radius: 8px;

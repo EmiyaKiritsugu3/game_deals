@@ -12,9 +12,9 @@
 }
 
 .button:hover {
-  background: #00ff88;
+  background: hsl(142 100% 50%);
   color: black;
-  border-color: #00ff88;
+  border-color: hsl(142 100% 50%);
   transform: scale(1.05);
 }
 
