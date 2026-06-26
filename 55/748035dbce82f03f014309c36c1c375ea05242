@@ -1,0 +1,63 @@
+src/components/HeartButton.tsx
+  s_6875ff47d264d3::t_28fc43bcf438b9 23,31,38
+src/components/ThemeToggle.tsx
+  s_6875ff47d264d3::t_0015c5b0f69013 43,51
+src/components/EndingSoon.tsx
+  s_6875ff47d264d3::t_cf7aaa5b76cbf3 10-12,14-17,19-22
+  s_6875ff47d264d3::t_d990ed64774226 23,27
+src/components/game/GameStatsRow.tsx
+  s_6875ff47d264d3::t_08b38cba336f61 17-22,24,30-35,37
+  s_6875ff47d264d3::t_f4715c09b0a2c1 38-41
+src/components/NotificationBell.tsx
+  s_6875ff47d264d3::t_cfd1c13f9fc216 101-102
+  s_6875ff47d264d3::t_11098688bb2e91 20,32-35,62-63,66-71,73-79,92
+  s_6875ff47d264d3::t_86d467b8442b5a 97-100,103,112,116-117,122,140-142,144
+tests/unit/components/HeartButton.test.tsx
+  s_6875ff47d264d3::t_cf7c8cbc226b63 97
+src/components/wishlist/WishlistTabs.tsx
+  s_6875ff47d264d3::t_1ac3a021830d97 18-22
+  s_6875ff47d264d3::t_9fd92046e88cae 23,25,28,36
+src/components/wishlist/WishlistTabs.test.tsx
+  s_6875ff47d264d3::t_2c64a7d3a9eb0c 52-53
+  s_6875ff47d264d3::t_483e1e79554eac 43-44
+src/components/RatingStars.tsx
+  s_6875ff47d264d3::t_162d1c2d076f7e 19,76-79,81,85,92,117-122,135-141,149,154-158,162-173
+  s_6875ff47d264d3::t_603141b1963cf9 68
+  s_6875ff47d264d3::t_171a4866f4aa85 88-90
+  s_6875ff47d264d3::t_ce1eb15c04465b 174-175,177
+src/components/WishlistIndicator.tsx
+  s_6875ff47d264d3::t_12b57a8a4181ec 19-24,27,31-36
+src/components/PriceAlertTrigger.tsx
+  s_6875ff47d264d3::t_0da63cd686e4c1 47
+src/components/SidebarModal.tsx
+  s_6875ff47d264d3::t_948d254972cb94 44,51,55,60
+src/components/AddToListModal.tsx
+  s_6875ff47d264d3::t_602c1718211226 29-30,36,41,45-47,50-51
+  s_6875ff47d264d3::t_88aac0c9da02af 52-53,60,64,121-134,147-151
+src/app/out/OutRedirector.tsx
+  s_6875ff47d264d3::t_497f022ebd5261 58-64,67-75,78-85,87-93,96-101
+src/components/HistoricalLows.tsx
+  s_6875ff47d264d3::t_8c38be0ef7d18e 44-46,48-50,52-54,56-57
+  s_6875ff47d264d3::t_1c69550f0c4291 58-59,64
+src/components/DealsBadge.tsx
+  s_6875ff47d264d3::t_60ea0dd4a6d8b3 8-19,35,45-46,53,61,69
+  s_6875ff47d264d3::t_3936cf2738822c 70
+.superpowers/sdd/progress.md
+  s_6875ff47d264d3::t_256f23933b5c7e 22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "55748035dbce82f03f014309c36c1c375ea05242",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
