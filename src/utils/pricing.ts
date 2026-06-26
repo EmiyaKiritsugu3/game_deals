@@ -1,6 +1,26 @@
 import { GREY_MARKET_SHOPS } from '@/constants/stores';
 import type { GameDeal, PriceHistoryPoint } from '@/types/game';
 
+/** Round savings percentage to integer */
+export function computeSavings(savings: string): number {
+  return Math.round(Number.parseFloat(savings));
+}
+
+/** Check if a price string represents a free item */
+export function isPriceFree(price: string): boolean {
+  return Number.parseFloat(price) === 0;
+}
+
+/** Check if deal meets epic threshold (>= 80% off or free) */
+export function isEpicDealCheck(savings: number, isFree: boolean): boolean {
+  return savings >= 80 || isFree;
+}
+
+/** Check if deal meets historical-low proxy threshold (> 87% off) */
+export function isHistoricalLowCheck(savings: number): boolean {
+  return savings > 87;
+}
+
 /** Heuristic to grab high-res Steam capsule images */
 export function getHighResImage(url: string) {
   if (url.includes('capsule_sm_120')) {

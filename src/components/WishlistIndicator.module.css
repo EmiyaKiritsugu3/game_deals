@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: hsl(var(--muted));
   padding: 0.5rem 1rem;
   border-radius: var(--radius);
   color: hsl(var(--foreground));
@@ -17,7 +17,7 @@
 }
 
 .indicator:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: hsl(var(--muted));
   transform: translateY(-2px);
   border-color: #ef4444;
 }
@@ -33,8 +33,8 @@
 }
 
 .badge {
-  background: #ef4444;
-  color: white;
+  background: hsl(var(--destructive));
+  color: hsl(var(--foreground));
   font-size: 0.75rem;
   font-weight: 800;
   padding: 0.1rem 0.4rem;

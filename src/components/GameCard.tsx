@@ -1,27 +1,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import {
+  computeSavings,
+  isEpicDealCheck,
+  isHistoricalLowCheck,
+  isPriceFree,
+} from '@/utils/pricing';
 import { type Deal, getHighResImage, getStoreLogo, getStores } from '../services/api';
 import AddToListButton from './AddToListButton';
 import DealsBadge from './DealsBadge';
 import styles from './GameCard.module.css';
 import HeartButton from './HeartButton';
 import PriceAlertBadge from './PriceAlertBadge';
-
-function computeSavings(savings: string): number {
-  return Math.round(Number.parseFloat(savings));
-}
-
-function isPriceFree(price: string): boolean {
-  return Number.parseFloat(price) === 0;
-}
-
-function isEpicDealCheck(savings: number, isFree: boolean): boolean {
-  return savings >= 85 || isFree;
-}
-
-function isHistoricalLowCheck(savings: number): boolean {
-  return savings >= 90;
-}
 
 function PriceBlock({
   savings,

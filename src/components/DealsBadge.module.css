@@ -18,7 +18,7 @@
 
 .epic {
   background: linear-gradient(135deg, #ff4d4d, #f9cb28);
-  color: white;
+  color: hsl(var(--foreground));
   box-shadow: 0 0 10px rgba(255, 77, 77, 0.3);
 }
 

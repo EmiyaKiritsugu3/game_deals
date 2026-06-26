@@ -1,26 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { type Deal, formatTimeAgo, getHighResImage, getStoreLogo, getStores } from '@/services/api';
+import {
+  computeSavings,
+  isEpicDealCheck,
+  isHistoricalLowCheck,
+  isPriceFree,
+} from '@/utils/pricing';
 import styles from './DealRow.module.css';
 import DealsBadge from './DealsBadge';
 import HeartButton from './HeartButton';
 import PriceAlertBadge from './PriceAlertBadge';
-
-function computeSavings(savings: string): number {
-  return Math.round(Number.parseFloat(savings));
-}
-
-function isHistoricalLowDeal(savings: number): boolean {
-  return savings > 85;
-}
-
-function isFreePrice(price: string): boolean {
-  return Number.parseFloat(price) === 0;
-}
-
-function isEpicDealCheck(savings: number, isFree: boolean): boolean {
-  return savings >= 75 || isFree;
-}
 
 function DealMeta({
   deal,
@@ -111,10 +101,10 @@ export default async function DealRow({ deal, rank: _rank }: DealRowProps) {
   const storeLogo = getStoreLogo(deal.storeID);
 
   // HL badge: savings > 85% is a strong proxy. Real HL needs per-game endpoint.
-  const isHistoricalLow = isHistoricalLowDeal(savings);
+  const isHistoricalLow = isHistoricalLowCheck(savings);
 
   const timeAgo = formatTimeAgo(deal.lastChange);
-  const isFree = isFreePrice(deal.salePrice);
+  const isFree = isPriceFree(deal.salePrice);
   const isEpicDeal = isEpicDealCheck(savings, isFree);
 
   return (
