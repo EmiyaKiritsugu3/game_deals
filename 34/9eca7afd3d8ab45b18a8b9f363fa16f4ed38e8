@@ -1,0 +1,25 @@
+src/components/GameCard.test.tsx
+  s_48ec12a2a19cbc::t_b273615da63580 27-28
+src/components/GameCard.module.css
+  s_48ec12a2a19cbc::t_3a9a565f8961b5 55
+  s_48ec12a2a19cbc::t_b80644abd180f5 147-151
+src/components/GameCard.tsx
+  s_48ec12a2a19cbc::t_e8e7e58c865338 86,88-89,97
+  s_48ec12a2a19cbc::t_ba6fb4d8ca3da7 46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "349eca7afd3d8ab45b18a8b9f363fa16f4ed38e8",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
