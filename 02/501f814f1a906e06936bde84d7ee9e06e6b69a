@@ -1,0 +1,22 @@
+src/components/PriceAlertTrigger.test.tsx
+  s_48ec12a2a19cbc::t_92e8794a37f508 1-13,16-18,21-131
+  s_48ec12a2a19cbc::t_c4ea0039a4155b 14-15,19-20
+.superpowers/sdd/progress.md
+  s_48ec12a2a19cbc::t_b30d0252b7fbb2 3-10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "02501f814f1a906e06936bde84d7ee9e06e6b69a",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
