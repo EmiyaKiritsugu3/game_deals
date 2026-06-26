@@ -2,14 +2,17 @@
 
 import dynamic from 'next/dynamic';
 import { useDailyPriceHistory } from '@/hooks/usePriceHistory';
-import styles from './Charts.module.css';
 
 // Lazy load Recharts components
 const PriceHistoryChartLazy = dynamic(
   () => import('./Charts').then((mod) => mod.PriceHistoryChart),
   {
     ssr: false,
-    loading: () => <div className={styles.chartPlaceholder}>Loading History...</div>,
+    loading: () => (
+      <div className="flex h-72 items-center justify-center text-muted-foreground">
+        Loading History...
+      </div>
+    ),
   }
 );
 
@@ -17,7 +20,11 @@ const StoreCompareChartLazy = dynamic(
   () => import('./Charts').then((mod) => mod.StoreCompareChart),
   {
     ssr: false,
-    loading: () => <div className={styles.chartPlaceholder}>Loading Prices...</div>,
+    loading: () => (
+      <div className="flex h-72 items-center justify-center text-muted-foreground">
+        Loading Prices...
+      </div>
+    ),
   }
 );
 

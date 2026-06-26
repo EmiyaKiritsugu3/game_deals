@@ -4,15 +4,13 @@ import SidebarModal from '@/components/SidebarModal';
 import { buildGameStats, sortDealsByPrice, splitDealsByGreyMarket } from '@/lib/game-data';
 import { getGame, getHighResImage, getStores, isGreyMarketStore } from '@/services/api';
 
-import styles from './modal.module.css';
-
 async function GameModalContent({ id }: Readonly<{ id: string }>) {
   const [game, stores] = await Promise.all([getGame(id), getStores()]);
 
   if (!game?.info) {
     return (
       <SidebarModal>
-        <div className={styles.errorContainer}>
+        <div className="p-12 text-center">
           <h2>Game not found</h2>
         </div>
       </SidebarModal>

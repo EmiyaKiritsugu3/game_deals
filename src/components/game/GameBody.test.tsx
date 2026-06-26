@@ -58,9 +58,6 @@ vi.mock('@/components/game/GameStatsRow.module.css', () => ({
 vi.mock('@/components/game/StoreComparison.module.css', () => ({
   default: new Proxy({}, { get: () => 'mock-css' }),
 }));
-vi.mock('@/components/Charts.module.css', () => ({
-  default: new Proxy({}, { get: () => 'mock-css' }),
-}));
 
 import GameBody from './GameBody';
 
