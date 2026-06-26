@@ -2,7 +2,7 @@
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
-  border-bottom: 1px solid hsl(var(--border) / 0.5);
+  border-bottom: 1px solid var(--border / 0.5);
   padding-bottom: 0.5rem;
 }
 
@@ -13,7 +13,7 @@
   padding: 0.75rem 1.5rem;
   border: none;
   background: none;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   font-weight: 700;
   font-size: 0.95rem;
   cursor: pointer;
@@ -22,11 +22,11 @@
 }
 
 .tab:hover {
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 
 .activeTab {
-  color: hsl(var(--primary));
+  color: var(--primary);
 }
 
 .activeTab::after {
@@ -36,7 +36,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: hsl(var(--primary));
+  background: var(--primary);
   border-radius: 3px 3px 0 0;
-  box-shadow: 0 -2px 10px hsl(var(--primary) / 0.3);
+  box-shadow: 0 -2px 10px var(--primary / 0.3);
 }

@@ -1,6 +1,6 @@
 .sidebar {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border) / 0.5);
+  background: var(--card);
+  border: 1px solid var(--border / 0.5);
   border-radius: var(--radius);
   padding: 1.5rem;
   position: sticky;
@@ -18,26 +18,26 @@
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid hsl(var(--border));
+  border-bottom: 1px solid var(--border);
 }
 
 .title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 
 .clearBtn {
   background: none;
   border: none;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   font-size: 0.85rem;
   cursor: pointer;
   transition: color 0.2s;
 }
 
 .clearBtn:hover {
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 
 .filterGroup {
@@ -47,7 +47,7 @@
 .groupTitle {
   font-size: 0.95rem;
   font-weight: 600;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   margin-bottom: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -62,17 +62,17 @@
 .currencySymbol {
   position: absolute;
   left: 1rem;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   pointer-events: none;
 }
 
 .priceInput {
   width: 100%;
   padding: 0.75rem 1rem 0.75rem 2rem;
-  background: hsl(var(--muted) / 0.5);
-  border: 1px solid hsl(var(--border));
+  background: var(--muted / 0.5);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   font-size: 1rem;
   font-family: inherit;
   transition: border-color 0.2s;
@@ -80,7 +80,7 @@
 
 .priceInput:focus {
   outline: none;
-  border-color: hsl(var(--primary));
+  border-color: var(--primary);
 }
 
 .storeList {
@@ -99,26 +99,26 @@
 .checkbox {
   width: 1.1rem;
   height: 1.1rem;
-  accent-color: hsl(var(--primary));
+  accent-color: var(--primary);
   cursor: pointer;
 }
 
 .storeName {
   font-size: 0.95rem;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   transition: color 0.2s;
   user-select: none;
 }
 
 .storeLabel:hover .storeName,
 .checkbox:checked + .storeName {
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 
 .applyBtn {
   width: 100%;
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background: var(--primary);
+  color: var(--primary-foreground);
   border: none;
   padding: 0.75rem;
   border-radius: var(--radius);
@@ -131,7 +131,7 @@
 .applyBtn:hover {
   filter: brightness(1.1);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px hsl(var(--primary) / 0.3);
+  box-shadow: 0 4px 12px var(--primary / 0.3);
 }
 
 /* Custom Scrollbar for sidebar */
@@ -144,10 +144,10 @@
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.3);
+  background: var(--muted-foreground / 0.3);
   border-radius: 10px;
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.6);
+  background: var(--muted-foreground / 0.6);
 }

@@ -18,20 +18,20 @@
 .sectionHeader h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   letter-spacing: -0.02em;
   margin-bottom: 0.25rem;
 }
 
 .sectionHeader p {
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   font-size: 0.85rem;
 }
 
 .seeAll {
   font-size: 0.75rem;
   font-weight: 600;
-  color: hsl(var(--primary));
+  color: var(--primary);
   text-decoration: none;
   white-space: nowrap;
   letter-spacing: 0.04em;
@@ -74,15 +74,15 @@
 .footer {
   margin-top: 3rem;
   padding: 2rem 0;
-  border-top: 1px solid hsl(var(--border));
+  border-top: 1px solid var(--border);
   text-align: center;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   font-size: 0.85rem;
 }
 
 .footerMuted {
   font-size: 0.75rem;
-  color: hsl(var(--muted-foreground) / 0.6);
+  color: var(--muted-foreground / 0.6);
   margin-top: 0.25rem;
 }
 

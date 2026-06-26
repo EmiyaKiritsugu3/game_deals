@@ -12,8 +12,8 @@
 }
 
 .hl {
-  background: hsl(var(--accent-hl));
-  color: hsl(var(--accent-hl-foreground));
+  background: var(--accent-hl);
+  color: var(--accent-hl-foreground);
 }
 
 .epic {
@@ -23,12 +23,12 @@
 }
 
 .free {
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 
 .rating {
   background: rgba(var(--foreground), 0.05);
-  color: hsl(var(--foreground));
-  border: 1px solid hsl(var(--border));
+  color: var(--foreground);
+  border: 1px solid var(--border);
 }

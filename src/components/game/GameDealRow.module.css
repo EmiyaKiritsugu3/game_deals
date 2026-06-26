@@ -2,8 +2,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border) / 0.5);
+  background: var(--card);
+  border: 1px solid var(--border / 0.5);
   padding: 0.75rem 1.25rem;
   border-radius: var(--radius);
   transition: all 0.18s ease;
@@ -11,14 +11,14 @@
 }
 
 .dealRow:hover {
-  border-color: hsl(var(--primary) / 0.4);
+  border-color: var(--primary / 0.4);
   transform: translateX(3px);
-  background: hsl(var(--muted) / 0.4);
+  background: var(--muted / 0.4);
 }
 
 .dealRowBest {
-  border-color: hsl(var(--primary) / 0.4);
-  background: hsl(var(--primary) / 0.05);
+  border-color: var(--primary / 0.4);
+  background: var(--primary / 0.05);
 }
 
 .storeInfo {
@@ -38,19 +38,19 @@
 .storeLogoPlaceholder {
   width: 18px;
   height: 18px;
-  background: hsl(var(--muted));
+  background: var(--muted);
   border-radius: 2px;
 }
 
 .storeName {
   font-weight: 600;
   font-size: 0.95rem;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 
 .bestTag {
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background: var(--primary);
+  color: var(--primary-foreground);
   font-size: 0.6rem;
   font-weight: 800;
   padding: 0.1rem 0.35rem;
@@ -65,8 +65,8 @@
 }
 
 .hlBadge {
-  background: hsl(var(--accent-hl));
-  color: hsl(var(--accent-hl-foreground));
+  background: var(--accent-hl);
+  color: var(--accent-hl-foreground);
   font-size: 0.65rem;
   font-weight: 800;
   padding: 0.15rem 0.4rem;
@@ -75,9 +75,9 @@
 }
 
 .savingsBadge {
-  background: hsl(var(--primary) / 0.15);
-  border: 1px solid hsl(var(--primary) / 0.4);
-  color: hsl(var(--primary));
+  background: var(--primary / 0.15);
+  border: 1px solid var(--primary / 0.4);
+  color: var(--primary);
   font-weight: 700;
   padding: 0.15rem 0.45rem;
   border-radius: 3px;
@@ -94,7 +94,7 @@
 .retail {
   font-size: 0.75rem;
   text-decoration: line-through;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   line-height: 1;
   margin-bottom: 0.1rem;
 }
@@ -102,13 +102,13 @@
 .price {
   font-weight: 800;
   font-size: 1.1rem;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   line-height: 1;
 }
 
 .freePrice {
   font-weight: 800;
   font-size: 1.1rem;
-  color: hsl(var(--primary));
+  color: var(--primary);
   line-height: 1;
 }

@@ -1,7 +1,7 @@
 .freebiesSection {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  border-left: 3px solid hsl(var(--primary));
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
   border-radius: var(--radius);
   padding: 1.25rem 1.5rem;
   margin-bottom: 2rem;
@@ -24,15 +24,15 @@
 .titleArea h2 {
   font-size: 1rem;
   font-weight: 700;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin: 0;
 }
 
 .pulseBadge {
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background: var(--primary);
+  color: var(--primary-foreground);
   font-size: 0.65rem;
   font-weight: 800;
   padding: 0.15rem 0.45rem;
@@ -58,7 +58,7 @@
   overflow-x: auto;
   padding-bottom: 0.5rem;
   scrollbar-width: thin;
-  scrollbar-color: hsl(var(--border)) transparent;
+  scrollbar-color: var(--border) transparent;
 }
 
 .carousel::-webkit-scrollbar {
@@ -70,17 +70,17 @@
 }
 
 .carousel::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--border));
+  background-color: var(--border);
   border-radius: 10px;
 }
 
 .freebieCard {
   flex: 0 0 200px;
-  background: hsl(var(--muted) / 0.4);
+  background: var(--muted / 0.4);
   border-radius: var(--radius);
   overflow: hidden;
   text-decoration: none;
-  border: 1px solid hsl(var(--border) / 0.6);
+  border: 1px solid var(--border / 0.6);
   transition:
     transform 0.18s ease,
     border-color 0.18s ease;
@@ -90,14 +90,14 @@
 
 .freebieCard:hover {
   transform: translateY(-3px);
-  border-color: hsl(var(--primary) / 0.5);
+  border-color: var(--primary / 0.5);
 }
 
 .imageWrapper {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: hsl(var(--muted));
+  background: var(--muted);
 }
 
 .image {
@@ -108,8 +108,8 @@
   position: absolute;
   top: 5px;
   right: 5px;
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background: var(--primary);
+  color: var(--primary-foreground);
   font-weight: 800;
   font-size: 0.65rem;
   padding: 0.15rem 0.4rem;
@@ -128,7 +128,7 @@
 .title {
   font-size: 0.875rem;
   font-weight: 600;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   margin: 0;
   line-height: 1.3;
   display: -webkit-box;
@@ -145,8 +145,8 @@
 .voucher {
   display: flex;
   align-items: center;
-  background: hsl(var(--muted));
-  border: 1px solid hsl(var(--border));
+  background: var(--muted);
+  border: 1px solid var(--border);
   border-radius: 3px;
   overflow: hidden;
   font-size: 0.75rem;
@@ -154,8 +154,8 @@
 }
 
 .voucherLeft {
-  background: hsl(var(--muted-foreground) / 0.2);
-  color: hsl(var(--muted-foreground));
+  background: var(--muted-foreground / 0.2);
+  color: var(--muted-foreground);
   padding: 0.3rem 0.5rem;
   white-space: nowrap;
   font-size: 0.65rem;
@@ -165,13 +165,13 @@
 
 .voucherSeparator {
   width: 1px;
-  background: hsl(var(--border));
+  background: var(--border);
   align-self: stretch;
 }
 
 .voucherRight {
   flex-grow: 1;
-  color: hsl(var(--primary));
+  color: var(--primary);
   font-weight: 800;
   font-size: 0.8rem;
   padding: 0.3rem 0.5rem;

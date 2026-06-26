@@ -5,14 +5,14 @@
   background: rgba(255, 255, 255, 0.05);
   padding: 0.5rem 1rem;
   border-radius: var(--radius);
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   text-decoration: none;
   font-weight: 600;
   font-size: 0.9rem;
   transition:
     background 0.2s,
     transform 0.2s;
-  border: 1px solid hsl(var(--border) / 0.5);
+  border: 1px solid var(--border / 0.5);
   margin-left: 1rem;
 }
 

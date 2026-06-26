@@ -14,18 +14,18 @@
 }
 
 .gameTitle {
-  color: hsl(var(--primary));
+  color: var(--primary);
 }
 
 .priceDisplay {
-  background: hsl(var(--muted) / 0.5);
+  background: var(--muted / 0.5);
   padding: 1.5rem;
   border-radius: 12px;
   display: flex;
   justify-content: space-around;
   align-items: center;
   margin-bottom: 2rem;
-  border: 1px solid hsl(var(--border) / 0.5);
+  border: 1px solid var(--border / 0.5);
 }
 
 .priceItem {
@@ -38,7 +38,7 @@
 .priceLabel {
   font-size: 0.75rem;
   font-weight: 600;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   text-transform: uppercase;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .arrow {
-  color: hsl(var(--muted-foreground) / 0.5);
+  color: var(--muted-foreground / 0.5);
 }
 
 .inputSection {
@@ -65,7 +65,7 @@
 .rangeInput {
   width: 100%;
   height: 6px;
-  background: hsl(var(--muted));
+  background: var(--muted);
   border-radius: 3px;
   appearance: none;
   outline: none;
@@ -76,11 +76,11 @@
   appearance: none;
   width: 20px;
   height: 20px;
-  background: hsl(var(--primary));
+  background: var(--primary);
   border-radius: 50%;
   cursor: pointer;
-  border: 3px solid hsl(var(--card));
-  box-shadow: 0 0 10px hsl(var(--primary) / 0.4);
+  border: 3px solid var(--card);
+  box-shadow: 0 0 10px var(--primary / 0.4);
   transition: transform 0.1s;
 }
 
@@ -91,14 +91,14 @@
 .numberInputGroup {
   display: flex;
   align-items: center;
-  background: hsl(var(--background));
-  border: 1px solid hsl(var(--border));
+  background: var(--background);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0.5rem 1rem;
 }
 
 .currencySymbol {
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   font-weight: 600;
   margin-right: 0.5rem;
 }
@@ -106,7 +106,7 @@
 .numberInput {
   background: none;
   border: none;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   font-size: 1.5rem;
   font-weight: 800;
   width: 100%;
@@ -143,7 +143,7 @@
   width: 18px;
   height: 18px;
   border-radius: 4px;
-  border: 2px solid hsl(var(--border));
+  border: 2px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -151,8 +151,8 @@
 }
 
 .checkbox.checked {
-  background: hsl(var(--primary));
-  border-color: hsl(var(--primary));
+  background: var(--primary);
+  border-color: var(--primary);
 }
 
 .checkboxLabel {
@@ -163,7 +163,7 @@
 .checkboxSublabel {
   display: block;
   font-size: 0.75rem;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
 }
 
 .actionButtons {
@@ -186,24 +186,24 @@
 }
 
 .cancelButton {
-  background: hsl(var(--muted) / 0.5);
-  color: hsl(var(--foreground));
-  border: 1px solid hsl(var(--border) / 0.5);
+  background: var(--muted / 0.5);
+  color: var(--foreground);
+  border: 1px solid var(--border / 0.5);
 }
 
 .cancelButton:hover {
-  background: hsl(var(--muted));
+  background: var(--muted);
 }
 
 .saveButton {
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background: var(--primary);
+  color: var(--primary-foreground);
   border: none;
 }
 
 .saveButton:hover {
   opacity: 0.9;
-  box-shadow: 0 4px 15px hsl(var(--primary) / 0.3);
+  box-shadow: 0 4px 15px var(--primary / 0.3);
 }
 
 .removeButton {
