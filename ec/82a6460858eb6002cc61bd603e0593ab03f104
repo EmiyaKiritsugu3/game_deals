@@ -1,0 +1,21 @@
+src/components/AddToListButton.tsx
+  s_6875ff47d264d3::t_0c3bc05d304b31 23
+  s_6875ff47d264d3::t_d1dda3d5953c06 5,8-12,16
+  s_6875ff47d264d3::t_cf052866d63651 24-27,34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "ec82a6460858eb6002cc61bd603e0593ab03f104",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
