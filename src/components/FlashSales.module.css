@@ -89,6 +89,8 @@
   scrollbar-width: thin;
   scrollbar-color: hsl(var(--border)) transparent;
   scroll-snap-type: x mandatory;
+  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 98%);
+  mask-image: linear-gradient(to right, black 85%, transparent 98%);
 }
 
 .carousel::-webkit-scrollbar {
