@@ -41,6 +41,13 @@ describe('RatingStars — display mode', () => {
     const svgs = container.querySelectorAll('svg');
     expect(svgs[2].querySelector('clipPath')).toBeTruthy();
   });
+
+  it('renders partial fill for non-integer values', () => {
+    const { container } = render(<RatingStars value={3.5} />);
+    const stars = container.querySelectorAll('svg');
+    expect(stars).toHaveLength(5);
+    expect(container.querySelector('clipPath')).toBeInTheDocument();
+  });
 });
 
 describe('RatingStars — interactive mode', () => {
@@ -90,6 +97,15 @@ describe('RatingStars — interactive mode', () => {
   it('renders with radiogroup role in interactive mode', () => {
     render(<RatingStars value={2} interactive />);
     expect(screen.getByRole('radiogroup')).toBeInTheDocument();
+  });
+
+  it('calls onChange with correct value on click', () => {
+    const onChange = vi.fn();
+    const { container } = render(<RatingStars value={0} interactive onChange={onChange} />);
+    const thirdStar = container.querySelectorAll('[role="radio"]')[2];
+    expect(thirdStar).toBeInTheDocument();
+    fireEvent.click(thirdStar);
+    expect(onChange).toHaveBeenCalledWith(3);
   });
 
   it('fires onChange on mouse hover then click', () => {
