@@ -32,3 +32,9 @@
   color: hsl(var(--foreground));
   border: 1px solid hsl(var(--border));
 }
+
+.fresh {
+  background: linear-gradient(135deg, #00c9a7, #00e676);
+  color: #003d33;
+  box-shadow: 0 0 8px rgba(0, 201, 167, 0.3);
+}

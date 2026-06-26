@@ -47,4 +47,9 @@ describe('DealsBadge', () => {
     const { container } = render(<DealsBadge type={'UNKNOWN' as 'HL'} />);
     expect(container.firstChild).toBeNull();
   });
+
+  it('renders FRESH badge with NEW label', () => {
+    const { container } = render(<DealsBadge type="FRESH" />);
+    expect(container.textContent).toContain('NEW');
+  });
 });

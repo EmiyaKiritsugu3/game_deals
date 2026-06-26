@@ -1,7 +1,7 @@
 import styles from './DealsBadge.module.css';
 
 interface DealsBadgeProps {
-  readonly type: 'HL' | 'EPIC' | 'FREE' | 'RATING';
+  readonly type: 'HL' | 'EPIC' | 'FREE' | 'RATING' | 'FRESH';
   readonly value?: string | number;
   readonly className?: string;
   readonly compact?: boolean;
@@ -40,6 +40,10 @@ export default function DealsBadge({
 
   if (type === 'FREE') {
     return <span className={`${styles.badge} ${styles.free} ${className}`}>FREE</span>;
+  }
+
+  if (type === 'FRESH') {
+    return <span className={`${styles.badge} ${styles.fresh} ${className}`}>NEW</span>;
   }
 
   if (type === 'RATING' && value) {
