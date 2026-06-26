@@ -1,0 +1,20 @@
+src/components/ui/input-group.tsx
+  s_48ec12a2a19cbc::t_502a8877023587 50-51,61-64
+  s_48ec12a2a19cbc::t_0bc25ac3d72a22 65
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "d82bb1a4aca2f7632d61ed27d3f3a921af5a36c2",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
