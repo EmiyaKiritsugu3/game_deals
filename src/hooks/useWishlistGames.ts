@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getGame, getStores } from '@/services/api';
+import { getGamesBatch, getStores } from '@/services/api';
 import type { GameDetails } from '@/types/game';
 
 interface WishlistData {
@@ -13,7 +13,8 @@ export function useWishlistGames(gameIds: string[]) {
     queryFn: async (): Promise<WishlistData> => {
       if (gameIds.length === 0) return { stores: {}, games: [] };
       const stores = await getStores();
-      const games = await Promise.all(gameIds.map((id) => getGame(id).catch(() => null)));
+      const gamesMap = await getGamesBatch(gameIds);
+      const games = gameIds.map((id) => gamesMap[id] ?? null);
       return { stores, games };
     },
     enabled: gameIds.length > 0,

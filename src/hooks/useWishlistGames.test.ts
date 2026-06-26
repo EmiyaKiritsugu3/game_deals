@@ -4,11 +4,11 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { createElement, type ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const mockGetGame = vi.hoisted(() => vi.fn());
+const mockGetGamesBatch = vi.hoisted(() => vi.fn());
 const mockGetStores = vi.hoisted(() => vi.fn());
 
 vi.mock('@/services/api', () => ({
-  getGame: mockGetGame,
+  getGamesBatch: mockGetGamesBatch,
   getStores: mockGetStores,
 }));
 
