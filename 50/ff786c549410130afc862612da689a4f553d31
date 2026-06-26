@@ -1,0 +1,37 @@
+src/components/DealsBadge.module.css
+  s_48ec12a2a19cbc::t_7ca96cf0a8501e 37-39
+  s_48ec12a2a19cbc::t_0e1d9daa659752 20,22
+src/components/RatingStars.tsx
+  s_48ec12a2a19cbc::t_8e41a4b05875ae 69-73
+  s_48ec12a2a19cbc::t_870ceaf8b1c214 91-92,94-96,98
+  s_48ec12a2a19cbc::t_3a23d012b1f6e2 3
+  s_48ec12a2a19cbc::t_74aabc360f43b2 81-85,93,97
+  s_48ec12a2a19cbc::t_3ffbb05461b521 120-123,127
+src/components/AddToListButton.module.css
+  s_48ec12a2a19cbc::t_7648caefcaf049 15,17
+src/components/RatingStars.test.tsx
+  s_48ec12a2a19cbc::t_b166dd644b4930 122-179
+src/components/AddToListModal.module.css
+  s_48ec12a2a19cbc::t_e87cc626f254e9 68
+  s_48ec12a2a19cbc::t_bf878cfd5683ad 113
+src/components/FlashSales.tsx
+  s_48ec12a2a19cbc::t_7f8b98411bc67a 58
+src/app/error.tsx
+  s_48ec12a2a19cbc::t_1fccdcdefbdf7d 40-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "50ff786c549410130afc862612da689a4f553d31",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
