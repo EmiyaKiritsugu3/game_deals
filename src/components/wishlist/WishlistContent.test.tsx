@@ -72,7 +72,6 @@ vi.mock('./WishlistStats.module.css', () => ({ default: cssProxy }));
 vi.mock('./AlertsGrid.module.css', () => ({ default: cssProxy }));
 vi.mock('@/components/HeartButton.module.css', () => ({ default: cssProxy }));
 vi.mock('@/components/PriceAlertTrigger.module.css', () => ({ default: cssProxy }));
-vi.mock('@/components/AuthModal.module.css', () => ({ default: cssProxy }));
 vi.mock('@/components/PriceAlertModal.module.css', () => ({ default: cssProxy }));
 
 const savedGames: SavedGame[] = [
