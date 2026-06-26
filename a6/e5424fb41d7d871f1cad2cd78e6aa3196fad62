@@ -1,0 +1,26 @@
+src/components/__tests__/PriceAlertModal.test.tsx
+  s_6875ff47d264d3::t_92e1c0cbc8e292 5-8,14-23,25-28
+  s_6875ff47d264d3::t_a3c1adc55d860a 1-4
+  s_6875ff47d264d3::t_144f24be120a6a 9-13,24
+  s_6875ff47d264d3::t_0d2db501b070b1 29-36
+src/components/PriceAlertModal.tsx
+  s_6875ff47d264d3::t_85bc8481237add 109-115
+  s_6875ff47d264d3::t_f10daf5cbeda7d 6-11
+  s_6875ff47d264d3::t_d1d0dbec8b96ae 12,118-119,172-173
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "a6e5424fb41d7d871f1cad2cd78e6aa3196fad62",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
