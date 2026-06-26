@@ -1,0 +1,33 @@
+src/components/PriceAlertBadge.tsx
+  s_6875ff47d264d3::t_7c52a363a8a126 26-32
+  s_6875ff47d264d3::t_905b0659caf0ac 5
+src/app/loading.tsx
+  s_6875ff47d264d3::t_84296e8776b8d9 3,5-9
+src/components/DynamicCharts.tsx
+  s_6875ff47d264d3::t_43d6441e575a6c 11
+  s_6875ff47d264d3::t_95f92cc4df1ffd 12-15,23-27
+src/app/@modal/(.)game/[id]/page.tsx
+  s_6875ff47d264d3::t_70e09988d6bb39 13
+src/components/Charts.tsx
+  s_6875ff47d264d3::t_22f23446c8fd82 32-34
+  s_6875ff47d264d3::t_df5d3dbf32c6bf 2
+  s_6875ff47d264d3::t_19153fc67e380d 72-73,76,81
+.superpowers/sdd/progress.md
+  s_6875ff47d264d3::t_e162b20d6b0d98 18-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "c90e8aff0ebf90cee260ce57cb936ee7efd03d25",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
