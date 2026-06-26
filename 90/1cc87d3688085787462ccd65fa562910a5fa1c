@@ -1,0 +1,28 @@
+docs/superpowers/specs/2026-06-26-ui-stack-modernization-design.md
+  s_6875ff47d264d3::t_440f39ae08e6a0 15
+  s_6875ff47d264d3::t_6bc1c91a3c65d4 37-52
+  s_6875ff47d264d3::t_6de772e933b00b 358-367
+  s_6875ff47d264d3::t_edd7b6a8413113 187,189,191-203,206,208-212,222-224
+  s_6875ff47d264d3::t_a4be0f148a95c2 333-339
+  s_6875ff47d264d3::t_8ee647fd7e50d3 265-269
+  s_6875ff47d264d3::t_dba5fce783d8ea 33,35
+  s_6875ff47d264d3::t_af6fc41bfe5256 252-257
+  s_6875ff47d264d3::t_dfc8485cec3c91 230-244
+  s_6875ff47d264d3::t_36e58195be3b99 36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "901cc87d3688085787462ccd65fa562910a5fa1c",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
