@@ -1,0 +1,26 @@
+src/hooks/useWishlistGames.ts
+  s_48ec12a2a19cbc::t_d1ebac97f7624a 16-17
+  s_48ec12a2a19cbc::t_30b7081bbc83a5 2
+src/app/page.tsx
+  s_48ec12a2a19cbc::t_40a960d136e9f3 1
+  s_48ec12a2a19cbc::t_438c79def9ec9e 101-103
+  s_48ec12a2a19cbc::t_c73e215373476f 98-100
+src/hooks/useWishlistGames.test.ts
+  s_48ec12a2a19cbc::t_8a0ad4173965bd 7,11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "b13e9e54fa6f8afb840afef57d9ee248db795f51",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
