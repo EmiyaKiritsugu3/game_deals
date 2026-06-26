@@ -25,13 +25,21 @@ export function formatTimeAgo(unixTimestamp: number): string {
 export function generateGreyMarketDeals(officialDeals: GameDeal[], dealIDRef: string): GameDeal[] {
   if (!officialDeals || officialDeals.length === 0) return [];
 
+  // ⚡ Bolt Performance: Replace O(N log N) sort with O(N) iteration
   // Base it off the current cheapest official deal
-  const sortedOfficial = [...officialDeals].sort(
-    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
-  );
-  const bestOfficial = sortedOfficial[0];
+  let bestOfficial = officialDeals[0];
+  let minPrice = Number.parseFloat(bestOfficial.price);
+
+  for (let i = 1; i < officialDeals.length; i++) {
+    const p = Number.parseFloat(officialDeals[i].price);
+    if (p < minPrice) {
+      minPrice = p;
+      bestOfficial = officialDeals[i];
+    }
+  }
+
   const retailPrice = Number.parseFloat(bestOfficial.retailPrice);
-  const bestPrice = Number.parseFloat(bestOfficial.price);
+  const bestPrice = minPrice;
 
   // If it's free or under $1, keyshops rarely sell it
   if (bestPrice < 1) return [];

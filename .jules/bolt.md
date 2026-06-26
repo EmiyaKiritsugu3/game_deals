@@ -5,3 +5,7 @@
 ## 2026-06-24 - Batched API Requests Resolve N+1 Problem
 **Learning:** Using Promise.all with individual API endpoint calls inside a server component causes N+1 queries. CheapShark supports `?ids=`.
 **Action:** Replaced 50 individual getGame requests with 2 getGamesBatch chunks, heavily reducing page load time and rate limits.
+
+## 2026-06-26 - O(N log N) Sorting for Minimum Value Anti-pattern
+**Learning:** Using `[...arr].sort()[0]` to find the minimum value in an array is a common anti-pattern that introduces O(N log N) time complexity and O(N) memory allocations for a problem that can be solved in O(N) time with O(1) space via simple iteration. In high-frequency background jobs or batch data processing loops (e.g., enriching deals or calculating historical lows for many games at once), this overhead accumulates quickly.
+**Action:** Replace `sort()[0]` with a single `for` loop that iterates over the array to find the minimum value (or object containing the minimum value), significantly reducing CPU time and Garbage Collector pressure during batch operations.

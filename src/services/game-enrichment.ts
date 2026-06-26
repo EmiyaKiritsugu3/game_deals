@@ -52,11 +52,21 @@ export function enrichWithGreyMarketDeals(game: GameDetails, id: string): void {
 /** NOTE: mutates game.cheapestPriceEver in place if current lowest price is lower. */
 export function updateHistoricalLow(game: GameDetails): void {
   if (!game?.deals || game.deals.length === 0) return;
-  const currentLowest = [...game.deals].sort(
-    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
-  )[0];
+
+  // ⚡ Bolt Performance: Replace O(N log N) sort and array allocation with O(N) iteration
+  let currentLowest = game.deals[0];
+  let minPrice = Number.parseFloat(currentLowest.price);
+
+  for (let i = 1; i < game.deals.length; i++) {
+    const p = Number.parseFloat(game.deals[i].price);
+    if (p < minPrice) {
+      minPrice = p;
+      currentLowest = game.deals[i];
+    }
+  }
+
   if (currentLowest && game.cheapestPriceEver) {
-    if (Number.parseFloat(currentLowest.price) < Number.parseFloat(game.cheapestPriceEver.price)) {
+    if (minPrice < Number.parseFloat(game.cheapestPriceEver.price)) {
       game.cheapestPriceEver.price = currentLowest.price;
       game.cheapestPriceEver.date = Math.floor(Date.now() / 1000);
     }
