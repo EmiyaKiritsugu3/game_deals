@@ -1,0 +1,104 @@
+src/components/PriceAlertTrigger.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 7-9,17-18,23-26,30
+src/components/GameCard.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 4-6,16,18-19,26,32,77,83,97,115,122,131,136-137
+src/components/ui/BaseModal.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 8,14,18,53,61
+src/components/wishlist/WishlistStats.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 5,7-8,27,36,48,52-54,56,65
+src/components/HeartButton.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 11,25
+src/app/loading.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 18-19,31
+src/app/playlists/page.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 21,31-32,45,55-57,71,83,89,100-101,114,116-117,123,129,134,140-141,143,153,169-170
+src/components/SidebarModal.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 17-18,48-50,63-65
+src/components/StoreFilter.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 10-13,22,26,38-39,42,49-50,60,83,90,96,100,105
+src/components/ThemeToggle.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 7-10,21-23,28
+src/app/playlists/[id]/page.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 22,27,39-40,65-67,71-72,91-93,105,121,131,161-163,167,173,178,184-185,187,197,203-204
+src/components/EndingSoon.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 15,21,28
+src/components/PriceAlertModal.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 17,21,28,41,51,68,79,82-83,94-95,101,109,146,154-155,166,189-191,195,199-200,206
+src/app/alerts/page.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 21,26,38-40,52,57-58,65,71,88-89,102,113,126,133,139,150,155,166-168,179,189,192-193,201,208,213,219-220,222,232,242,248-249,266-268,281,312,323
+src/app/globals.css
+  s_48ec12a2a19cbc::t_e05d8584dd9425 12-16,20-21,24-34
+  s_48ec12a2a19cbc::t_b8ce6b667f6213 52-58,62-63,66-87
+src/components/NotificationBell.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 7,14,21,28,48-49,60,67,74,87,107,118,124
+src/app/wishlist/page.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 14,22-23,40-41,58,60-61,80,89,101,105-107,109,118,153,158,169-170,172,183,206-207,226,240,247,256,262-263,271,277,281,293,296-297,304,308,314-315,317,333-334,349,360,369,373,383,385,399,414-415,422,428,439,452,459,474
+src/components/game/StoreComparison.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 9,15,27-28
+src/components/Navbar.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 2-3,30,37,50,53,61-62,80-83,89,95-97,103,112,120-122,136-137,146,150,179,189-190,198,205-206,222,241,257-258,263,270,276,284,286,300,312-313,326
+src/app/out/out.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 13,17,22,28-29
+src/app/auth/error/page.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 19,23,32-33
+src/components/wishlist/WishlistGrid.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 8-9,11,22,52,69-70,89,103,110,119,125-126,134,140,150,153-154,161,165,171,177-178,180,196-197
+src/components/DealsBadge.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 15-16,26-27,31-33
+src/components/HistoricalLows.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 15,21,28
+src/components/wishlist/WishlistHero.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 3,11-12,29-30,46,51
+src/components/Charts.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 2-4,13,19
+src/components/PriceAlertBadge.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 5,9
+src/components/HeroSection.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 8,47,76,79,101,113,116-117,172,174,177,191,215-216,218-219,236,261-262,265,277,285,295-296,299,316-317,323,328,339,356,361,365
+src/components/FlashSales.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 2-5,26,37,40,45,55,71,90,103,110-111,114,123,130,141-142,146,161,179,192,202
+src/components/wishlist/WishlistTabs.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 5,16,25,29,39,41
+src/components/AuthModal.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 13,32,36-37,40,49-50,54-55,95-97,106,134,145,175,178,180
+src/components/wishlist/AlertsGrid.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 8-9,11,22,27-28,35,41,58,70,83,90,105,121,130,140,143-144,151,155,161
+src/components/FilterSidebar.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 2-4,21,27,33,40,50,65,72-75,83,102,108,115,120-121,124,134,147,152
+src/components/DealRow.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 4-6,16-17,26,29,75,100,105,110,123-124,136-138,156,164,171
+src/components/WishlistIndicator.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 7-8,15
+src/components/Freebies.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 2-5,27,34-35,61,73,79-80,83,93,100,111-112,131,148-149,157-158,168,174
+src/components/game/GameDealRow.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 5-6,8,14,16,20-21,41,48,52-53,68-69,78-80,97,105,112
+src/components/game/GameStatsRow.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 5-7,23,30,39,44,49,54,58-59
+src/app/page.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 21,27,34,77,79,85
+src/components/game/GameHero.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 5,16,38
+src/components/AlertCard.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 2-4,16,21-22,29,35,52-53,66,77,90,97,103,114,119,130-132,143,152-154,167
+src/app/bundles/bundles.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 16,26-27,45,60,68-69,102,110-111,123,128,132,140-141,149-150,164
+src/app/collections/collections.module.css
+  s_48ec12a2a19cbc::t_476aaac6ffee58 16,28-29,43,59,73,78,98,107,113,125-126,133,156,165-166
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "822703bbdbf7a2f3ef1ece7b6369fd8ec35438b5",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
