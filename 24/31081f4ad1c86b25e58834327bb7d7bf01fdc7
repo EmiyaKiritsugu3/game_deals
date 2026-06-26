@@ -1,0 +1,24 @@
+src/components/DealsBadge.tsx
+  s_48ec12a2a19cbc::t_48d29a27e0b1a2 45-48
+  s_48ec12a2a19cbc::t_0860dad8f7299c 4
+src/components/DealsBadge.module.css
+  s_48ec12a2a19cbc::t_9abf78a4e7cb03 35-40
+src/components/DealsBadge.test.tsx
+  s_48ec12a2a19cbc::t_452be079626e75 50-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "2431081f4ad1c86b25e58834327bb7d7bf01fdc7",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
