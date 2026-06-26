@@ -68,11 +68,14 @@ Remove `@import "tw-animate-css"` from `globals.css`.
 
 1. **`src/components/AuthModal.tsx`** (lines 71-126)
    - Wraps social login + magic link form
-   - Uses `BaseModal` + already imports `Dialog*` components
+   - Imports `BaseModal` only — does NOT import `Dialog*` components. Needs `Dialog*` imports added.
+   - Also uses dynamic CSS module class: `styles[message.type]` — needs conversion in same step.
 
 2. **`src/components/PriceAlertModal.tsx`** (lines 103-167)
    - Wraps price alert form
-   - Uses `BaseModal` + already imports `Dialog*` components
+   - Imports `BaseModal` only — does NOT import `Dialog*` components. Needs `Dialog*` imports added.
+
+**Correction:** Previous spec version claimed both already import `Dialog*` — audit confirmed this is false. Both files need `Dialog, DialogContent` imports added during conversion.
 
 #### Conversion
 
@@ -92,7 +95,20 @@ Replace `<BaseModal isOpen onClose ariaLabel>` with `<Dialog open onOpenChange>`
 </Dialog>
 ```
 
-BaseModal overlay uses `color-mix(in srgb, var(--background) 70%, transparent)` with `backdrop-filter: blur(4px)`. shadcn `DialogOverlay` defaults to `bg-black/80`. May need to customize overlay style via className to match.
+**DialogContent backdrop customization:** BaseModal overlay uses `color-mix(in srgb, var(--background) 70%, transparent)` with `backdrop-filter: blur(4px)`. shadcn `DialogOverlay` defaults to `bg-black/80 data-[open]:animate-in data-[closed]:animate-out data-[closed]:fade-out-0 data-[open]:fade-in-0`. Customize via className on `DialogContent` if needed.
+
+**⚠️ Edge cases BaseModal handled that shadcn Dialog also handles:**
+- Escape key to close → `Dialog` built-in via `@base-ui/react`
+- Click overlay to close → `Dialog` built-in via `DialogOverlay`
+- Body scroll lock → `Dialog` built-in via portal
+- Focus trap → `Dialog` built-in via `@base-ui/react/dialog`
+- Return focus on close → `Dialog` built-in
+
+**Removal affects 7 existing tests** in `BaseModal.test.tsx`. Replace with equivalent tests on the two consumer modals (AuthModal, PriceAlertModal) after conversion.
+
+#### SidebarModal (separate component — do NOT touch)
+
+`src/components/SidebarModal.tsx` is a **separate component** from BaseModal. It uses its own `SidebarModal.module.css` with `@keyframes fadeIn`/`slideInRight`. Used in intercepting route modal (`@modal/(.)game/[id]`). This component stays — only the CSS module gets migrated in Phase 4.
 
 **Verification:**
 - Modals open/close identically
@@ -184,7 +200,45 @@ BaseModal overlay uses `color-mix(in srgb, var(--background) 70%, transparent)` 
 
 ### Phase 4: CSS Modules → Tailwind
 
-Ordered by risk/complexity. Each lot is independently committable and verifiable.
+**⚠️ CRITICAL PREREQUISITE:** 18 unique `@keyframes` exist across `.module.css` files. Only `spin` maps to `animate-spin` built-in. All others need registration in `globals.css` `@theme` block BEFORE converting their consumer files:
+
+| @keyframes | File(s) | Registration needed |
+|------------|---------|-------------------|
+| `spin` | 7 files | `animate-spin` (built-in) — OK |
+| `pulse` | `Freebies.module.css`, `GameStatsRow.module.css` | `--animate-pulse` (built-in) — verify opacity match |
+| `pulseIcon` | `PriceAlertBadge.module.css` | Scale+opacity pulse → register as `--animate-badge-pulse` |
+| `heart-burst` | `HeartButton.module.css` | Scale burst with cubic-bezier → register as `--animate-heart-burst` |
+| `pulse-flame` | `globals.css` | Box-shadow pulse for epic badge → `--animate-pulse-flame` |
+| `blink` | `FlashSales.module.css` | Colon blink → register as `--animate-blink` |
+| `pop` | `WishlistIndicator.module.css` | Scale-in pop → register as `--animate-pop` |
+| `matrixDrift` | `HeroSection.module.css` | 60s continuous translate → register as `--animate-matrix-drift` |
+| `fadeIn` | `BaseModal.module.css`, `SidebarModal.module.css` | → register as `--animate-fade-in` |
+| `scaleIn` | `BaseModal.module.css` | → register as `--animate-scale-in` |
+| `slideInRight` | `SidebarModal.module.css` | → register as `--animate-slide-in-right` |
+| Others | Various | Audit during conversion of each file |
+
+**⚠️ Tests with CSS module mocks:** 14 test files have `vi.mock('./*.module.css', ...)`. After module removal, these mocks will throw (can't mock nonexistent file). Must remove mock lines alongside module deletion — one commit per file pair (module + its test mock).
+
+**⚠️ Shared CSS modules:** 6 `.module.css` files imported by multiple TSX files. Migration must handle ALL consumers simultaneously:
+
+| Shared Module | Consumers | Lot |
+|---------------|-----------|-----|
+| `src/app/page.module.css` | `page.tsx`, `search/page.tsx`, `search/SearchResults.tsx`, `wishlist/shared/page.tsx` | Lot 3 |
+| `src/app/auth/error/page.module.css` | `auth/error/page.tsx`, `auth/auth-code-error/page.tsx` | Lot 2 |
+| `src/app/collections/collections.module.css` | `collections/page.tsx`, `collections/[slug]/page.tsx` | Lot 3 |
+| `src/app/playlists/page.module.css` | `playlists/page.tsx` only (verify) | Lot 3 |
+| `src/app/bundles/bundles.module.css` | `bundles/page.tsx` only (verify) | Lot 3 |
+| `src/components/SidebarModal.module.css` | `SidebarModal.tsx` only (verify) | Lot 2 |
+
+**⚠️ Dynamic classNames:** 2 files use bracket notation `styles[variant]`:
+- `AddToListButton.tsx`: `styles[ variant]` where variant = `'icon' | 'full'`
+- `AuthModal.tsx`: `styles[message.type]` where type is dynamic string
+
+Both must be converted with explicit Tailwind class maps instead of dynamic CSS module access.
+
+**⚠️ Mixed Tailwind + CSS Module on same element:** `search/page.tsx` uses `container` (Tailwind) + `styles.searchLayout` on same div. Both must be pure Tailwind after migration.
+
+**⚠️ className prop drilling:** `DealsBadge`, `PriceAlertTrigger`, `GameCard` pass `className` between components. After migration, ensure passed classNames are Tailwind-compatible.
 
 #### Lot 1: TRIVIAL (5 files, ~110 lines, near-zero risk)
 
@@ -267,14 +321,34 @@ Strategy: Hybrid approach. Layout → Tailwind. Complex animations/gradients →
 
 | Risk | Probability | Impact | Mitigation |
 |------|-----------|--------|------------|
+| AuthModal/PriceAlertModal do NOT import Dialog* — needs new imports | Confirmed | Medium | Add `Dialog, DialogContent` imports during conversion |
+| BaseModal removal deletes 7 tests for focus trap/scroll lock/escape/overlay | Confirmed | Medium | Add equivalent tests on AuthModal and PriceAlertModal post-conversion |
+| SidebarModal conflated with BaseModal | Clarified | Low | SidebarModal is separate — only CSS module migrates, component stays |
 | `color-mix` pattern loss | Medium | Visual | Tailwind opacity modifiers (`/20`) cover most cases; remaining use inline `style` |
 | Scroll animation regression | Low | Visual | No scroll-driven CSS animations used; all animations play on mount |
-| Modal focus trap break | Low | A11y | shadcn `Dialog` handles focus trap via `@base-ui/react` |
+| Modal focus trap break after BaseModal removal | Low | A11y | shadcn `Dialog` handles focus trap via `@base-ui/react` |
 | Responsive break in HeroSection | Medium | Visual | Tailwind responsive breakpoints are proven; test across viewports |
 | CSS specificity conflict | Low | Visual | CSS modules isolate; Tailwind utilities are flat — existing shadcn components already use Tailwind without issues |
 | Animation jank on HomeHero parallax | Low | Visual | `background-attachment: fixed` is GPU-composited; fallback to static if issues |
+| 14 test files mock `.module.css` imports — will fail when module deleted | Confirmed | Medium | Remove mock lines in same commit as module deletion |
+| 6 shared modules imported by multiple TSX files — broken if migrated per-file | Confirmed | Medium | Convert all consumers of shared module in same commit |
+| Dynamic `styles[variant]` in AddToListButton + AuthModal — broken if CSS module removed before refactor | Confirmed | High | Refactor to explicit Tailwind classMap objects BEFORE module removal |
+| 18 unique `@keyframes` need `@theme` registration — missing animations | Confirmed | High | Register ALL keyframes in `globals.css` BEFORE converting consumer files |
+| Mixed Tailwind + CSS Module classes on same element — half-migration makes element broken | Confirmed | Medium | Audit all mixed-className elements per file before converting |
+| className prop drilling across components (DealsBadge, PriceAlertTrigger, GameCard) | Medium | Low | Tailwind classes pass through — parent sets Tailwind, child receives Tailwind. Works. |
 
-## 6. Success Criteria
+## 6. Pre-Implementation Checklist
+
+Before Phase 1 starts, verify these prerequisites:
+
+- [ ] All 18 `@keyframes` registrations written to `globals.css` `@theme` block
+- [ ] Dynamic `styles[variant]` in `AddToListButton.tsx` refactored to Tailwind classMap
+- [ ] Dynamic `styles[message.type]` in `AuthModal.tsx` refactored to Tailwind classMap
+- [ ] Shared module consumer groups mapped (6 shared modules → batch commits)
+- [ ] 14 test mock files identified for paired deletion
+- [ ] Mixed className elements audited per file
+
+## 7. Success Criteria
 
 - [ ] `gsap`, `motion`, `tw-animate-css` removed from `package.json`
 - [ ] Zero `.module.css` files remain in `src/`
