@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import GameCard from '@/components/GameCard';
-import { AnimatedGameCardWrapper } from '@/components/motion/AnimatedGameCardWrapper';
-import { RevealSection } from '@/components/motion/RevealSection';
+import { AnimatedDiv } from '@/components/motion/AnimatedDiv';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { Deal } from '@/services/api';
@@ -21,7 +20,7 @@ export default async function HotDealsSection({ deals, limit = 12 }: HotDealsSec
   if (sorted.length === 0) return null;
 
   return (
-    <RevealSection className="mb-12">
+    <AnimatedDiv className="mb-12">
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Hottest Deals</h2>
@@ -37,13 +36,13 @@ export default async function HotDealsSection({ deals, limit = 12 }: HotDealsSec
 
       <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin">
         {sorted.map((deal, i) => (
-          <AnimatedGameCardWrapper key={deal.dealID} delay={i * 0.05}>
+          <AnimatedDiv key={deal.dealID} delay={i * 0.05} hover>
             <div className="w-[280px] shrink-0">
               <GameCard deal={deal} />
             </div>
-          </AnimatedGameCardWrapper>
+          </AnimatedDiv>
         ))}
       </div>
-    </RevealSection>
+    </AnimatedDiv>
   );
 }

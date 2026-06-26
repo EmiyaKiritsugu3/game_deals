@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { AnimatedDiv } from '@/components/motion/AnimatedDiv';
-import { RevealSection } from '@/components/motion/RevealSection';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { COLLECTIONS } from '@/data/collections';
@@ -10,7 +9,7 @@ export default function DiscoveryGrid() {
   if (COLLECTIONS.length === 0) return null;
 
   return (
-    <RevealSection className="mb-12">
+    <AnimatedDiv className="mb-12">
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Discover Games</h2>
@@ -48,6 +47,6 @@ export default function DiscoveryGrid() {
           </AnimatedDiv>
         ))}
       </div>
-    </RevealSection>
+    </AnimatedDiv>
   );
 }

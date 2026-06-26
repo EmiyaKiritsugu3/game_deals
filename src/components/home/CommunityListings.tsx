@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { getUserPlaylistsAction } from '@/actions/playlists';
 import { AnimatedDiv } from '@/components/motion/AnimatedDiv';
-import { RevealSection } from '@/components/motion/RevealSection';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -12,7 +11,7 @@ export default async function CommunityListings() {
   if (playlists.length === 0) return null;
 
   return (
-    <RevealSection className="mb-12">
+    <AnimatedDiv className="mb-12">
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Community Lists</h2>
@@ -51,6 +50,6 @@ export default async function CommunityListings() {
           </AnimatedDiv>
         ))}
       </div>
-    </RevealSection>
+    </AnimatedDiv>
   );
 }
