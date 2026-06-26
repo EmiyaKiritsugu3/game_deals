@@ -1,9 +1,5 @@
-'use client';
-
-import { motion, useScroll, useTransform } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -21,42 +17,28 @@ function computeSavings(savings: string): number {
 export default function HomeHero({ deal }: HomeHeroProps) {
   const highResThumb = getHighResImage(deal.thumb);
   const savings = computeSavings(deal.savings);
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
 
   return (
-    <section
-      ref={ref}
-      className="relative mb-12 flex min-h-[500px] items-center overflow-hidden rounded-xl"
-    >
+    <section className="relative mb-12 flex min-h-[500px] items-center overflow-hidden rounded-xl">
       {/* Parallax background */}
-      <motion.div className="absolute inset-0 -z-10" style={{ y: bgY }}>
-        <Image
-          src={highResThumb}
-          alt=""
-          fill
-          className="object-cover blur-xl saturate-150"
-          sizes="100vw"
-          unoptimized
+      <div className="absolute inset-0 -z-10" aria-hidden="true">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-fixed blur-xl saturate-150"
+          style={{ backgroundImage: `url(${highResThumb})` }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-background/20 to-transparent" />
-      </motion.div>
+      </div>
 
       {/* Entrance-animated content */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-        className="relative z-10 mx-auto w-full max-w-4xl"
+      <div
+        className="relative z-10 mx-auto w-full max-w-4xl animate-fade-slide-in"
+        style={{ animationDuration: '0.6s' }}
       >
         <Card className="border-0 bg-transparent pt-0 shadow-none">
           <CardContent className="flex flex-col items-center gap-6 text-center md:flex-row md:items-start md:text-left">
-            <motion.div
-              className="relative aspect-[460/215] w-full max-w-sm shrink-0 overflow-hidden rounded-lg"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+            <div
+              className="relative aspect-[460/215] w-full max-w-sm shrink-0 overflow-hidden rounded-lg animate-fade-slide-in"
+              style={{ animationDuration: '0.5s', animationDelay: '0.15s' }}
             >
               <Image
                 src={highResThumb}
@@ -67,7 +49,7 @@ export default function HomeHero({ deal }: HomeHeroProps) {
                 priority
                 unoptimized
               />
-            </motion.div>
+            </div>
 
             <div className="flex flex-col gap-4">
               <Badge variant="secondary" className="w-fit">
@@ -112,7 +94,7 @@ export default function HomeHero({ deal }: HomeHeroProps) {
             </div>
           </CardContent>
         </Card>
-      </motion.div>
+      </div>
     </section>
   );
 }
