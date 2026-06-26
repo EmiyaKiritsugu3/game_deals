@@ -1,0 +1,21 @@
+src/components/home/HomeHero.tsx
+  s_6875ff47d264d3::t_b93d196b863123 22,24-27,30,33-35,39-41,52,97
+src/components/motion/AnimatedDiv.tsx
+  s_6875ff47d264d3::t_7bb601b3acbbb1 1-2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "99cf5ba8f9cbaf2213e74bd2336f9864ffaf2383",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
