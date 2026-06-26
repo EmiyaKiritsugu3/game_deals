@@ -1,0 +1,19 @@
+src/app/globals.css
+  s_48ec12a2a19cbc::t_65ef999c0110f1 11-16,19-20,23-46,51-59,61-62,65-86,253
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "d9aec887c15d5355cf490b5fd5a034275276a5bd",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
