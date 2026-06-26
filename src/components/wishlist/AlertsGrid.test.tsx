@@ -48,7 +48,6 @@ const cssProxy = vi.hoisted(
 );
 
 vi.mock('./AlertsGrid.module.css', () => ({ default: cssProxy }));
-vi.mock('@/components/PriceAlertTrigger.module.css', () => ({ default: cssProxy }));
 vi.mock('@/components/PriceAlertModal.module.css', () => ({ default: cssProxy }));
 
 const makeAlert = (overrides: Partial<PriceAlert> = {}): PriceAlert => ({

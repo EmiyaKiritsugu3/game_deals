@@ -3,7 +3,6 @@
 import { Heart } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useWishlist } from '@/store/wishlistStore';
-import styles from './HeartButton.module.css';
 
 interface HeartButtonProps {
   readonly gameID: string;
@@ -21,7 +20,7 @@ export default function HeartButton({ gameID, className = '' }: HeartButtonProps
   const isSaved = mounted ? isInWishlist(gameID) : false;
 
   const handleToggle = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent navigating if this is inside a Link
+    e.preventDefault();
     e.stopPropagation();
     toggleWishlist(gameID);
   };
@@ -29,14 +28,14 @@ export default function HeartButton({ gameID, className = '' }: HeartButtonProps
   return (
     <button
       type="button"
-      className={`${styles.heartButton} ${isSaved ? styles.saved : ''} ${className}`}
+      className={`bg-black/40 border border-white/10 rounded-full w-9 h-9 flex items-center justify-center cursor-pointer text-muted-foreground transition-all duration-200 backdrop-blur-sm z-10 hover:bg-black/60 hover:text-foreground hover:scale-105 ${isSaved ? 'text-red-500 border-red-500/30' : ''} ${className}`}
       onClick={handleToggle}
       aria-label={isSaved ? 'Remove from Wishlist' : 'Add to Wishlist'}
       title={isSaved ? 'Remove from Wishlist' : 'Add to Wishlist'}
     >
       <Heart
         size={20}
-        className={styles.icon}
+        className={`w-5 h-5 transition-transform duration-200 ${isSaved ? 'animate-heart-burst' : ''}`}
         fill={isSaved ? 'currentColor' : 'none'}
         color="currentColor"
       />

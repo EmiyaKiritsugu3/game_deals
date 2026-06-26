@@ -17,17 +17,6 @@ vi.mock('./DealsBadge', () => ({
   default: ({ type }: { type: string }) => <span data-testid={`badge-${type}`}>{type}</span>,
 }));
 
-// Mock CSS module
-vi.mock('./HistoricalLows.module.css', () => ({
-  default: {
-    listSection: 'ls',
-    sectionHeader: 'sh',
-    sectionHeaderRow: 'shr',
-    headerHL: 'hhl',
-    listCol: 'lc',
-  },
-}));
-
 const getDealsMock = vi.fn();
 const getGamesBatchMock = vi.fn();
 vi.mock('@/services/api', () => ({

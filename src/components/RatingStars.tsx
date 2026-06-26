@@ -3,7 +3,6 @@
 import { type KeyboardEvent, useId, useRef, useState } from 'react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
-import styles from './RatingStars.module.css';
 
 const STAR_PATH =
   'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z';
@@ -17,7 +16,7 @@ interface RatingStarsProps {
   showValue?: boolean;
 }
 
-const sizeMap = { sm: styles.sizeSm, md: styles.sizeMd, lg: styles.sizeLg } as const;
+const sizeMap = { sm: 'text-sm', md: 'text-lg', lg: 'text-2xl' } as const;
 
 function StarIcon({
   filled,
@@ -66,37 +65,31 @@ export default function RatingStars({
 }: RatingStarsProps) {
   const uid = useId();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [focusIndex, setFocusIndex] = useState(() =>
-    Math.max(0, Math.min(maxStars - 1, Math.round(value) - 1))
-  );
+  const [focusIndex, setFocusIndex] = useState(Math.round(value) - 1);
   const starRefs = useRef<(HTMLSpanElement | null)[]>([]);
-  starRefs.current = starRefs.current.slice(0, maxStars);
 
   const displayValue = hoveredIndex !== null ? hoveredIndex + 1 : value;
   const displayWhole = Math.floor(displayValue);
   const displayFraction = displayValue - displayWhole;
-
   const label = `${value.toFixed(1)} / ${maxStars}`;
 
-  const moveFocus = (nextIndex: number) => {
-    setFocusIndex(nextIndex);
-    starRefs.current[nextIndex]?.focus();
-  };
+  function moveFocus(newIndex: number) {
+    setFocusIndex(newIndex);
+    starRefs.current[newIndex]?.focus();
+  }
 
-  const handleKeyDown = (e: KeyboardEvent, starValue: number) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      onChange?.(starValue);
-    }
+  function handleKeyDown(e: KeyboardEvent, starValue: number) {
     if (e.key === 'ArrowRight') {
       e.preventDefault();
       moveFocus(Math.min(focusIndex + 1, maxStars - 1));
-    }
-    if (e.key === 'ArrowLeft') {
+    } else if (e.key === 'ArrowLeft') {
       e.preventDefault();
       moveFocus(Math.max(focusIndex - 1, 0));
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onChange?.(starValue);
     }
-  };
+  }
 
   const stars = Array.from({ length: maxStars }, (_, i) => {
     const sv = i + 1;
@@ -121,7 +114,12 @@ export default function RatingStars({
             starRefs.current[i] = el;
           }}
           tabIndex={i === (hoveredIndex !== null ? hoveredIndex : focusIndex) ? 0 : -1}
-          className={cn(styles.star, filled && styles.filled, styles.interactive)}
+          className={cn(
+            'inline-flex items-center justify-center transition-[transform,color] duration-150 leading-none text-muted-foreground cursor-pointer',
+            filled && 'text-amber-400',
+            hoveredIndex !== null && i <= hoveredIndex && 'text-amber-400',
+            'hover:scale-[1.2] focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 focus-visible:rounded-sm'
+          )}
           onClick={() => onChange?.(sv)}
           onKeyDown={(e) => handleKeyDown(e, sv)}
           onFocus={() => setFocusIndex(i)}
@@ -134,7 +132,13 @@ export default function RatingStars({
     }
 
     return (
-      <span key={sv} className={cn(styles.star, filled && styles.filled)}>
+      <span
+        key={sv}
+        className={cn(
+          'inline-flex items-center justify-center transition-[transform,color] duration-150 leading-none text-muted-foreground',
+          filled && 'text-amber-400'
+        )}
+      >
         {icon}
       </span>
     );
@@ -142,23 +146,33 @@ export default function RatingStars({
 
   const content = (
     <span
-      className={cn(styles.wrapper, sizeMap[size])}
+      className={cn('inline-flex items-center gap-0.5', sizeMap[size])}
       role={interactive ? 'radiogroup' : 'img'}
       aria-label={interactive ? undefined : label}
     >
       {stars}
-      {showValue && <span className={styles.value}>{value.toFixed(1)}</span>}
+      {showValue && (
+        <span className="ml-1.5 text-sm font-semibold text-muted-foreground">
+          {value.toFixed(1)}
+        </span>
+      )}
     </span>
   );
 
-  if (interactive) return content;
+  if (interactive) {
+    return (
+      <TooltipProvider delayDuration={100}>
+        <Tooltip>
+          <TooltipTrigger asChild tabIndex={-1}>
+            {content}
+          </TooltipTrigger>
+          <TooltipContent side="top" className="text-xs">
+            {value.toFixed(1)} / {maxStars}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
 
-  return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger>{content}</TooltipTrigger>
-        <TooltipContent>{label}</TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  );
+  return content;
 }

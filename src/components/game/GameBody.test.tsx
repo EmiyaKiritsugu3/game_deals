@@ -52,9 +52,6 @@ vi.mock('@/components/DynamicCharts', () => ({
 vi.mock('@/components/game/GameHero.module.css', () => ({
   default: new Proxy({}, { get: () => 'mock-css' }),
 }));
-vi.mock('@/components/game/GameStatsRow.module.css', () => ({
-  default: new Proxy({}, { get: () => 'mock-css' }),
-}));
 vi.mock('@/components/game/StoreComparison.module.css', () => ({
   default: new Proxy({}, { get: () => 'mock-css' }),
 }));

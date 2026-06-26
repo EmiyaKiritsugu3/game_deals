@@ -13,10 +13,6 @@ vi.mock('lucide-react', () => ({
   X: (props: Record<string, unknown>) => <svg data-testid="x-icon" {...props} />,
 }));
 
-vi.mock('./SidebarModal.module.css', () => ({
-  default: { overlay: 'overlay', sidebar: 'sidebar', closeBtn: 'closeBtn', content: 'content' },
-}));
-
 import SidebarModal from './SidebarModal';
 
 beforeEach(() => {

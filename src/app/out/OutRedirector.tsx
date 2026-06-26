@@ -2,7 +2,6 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
-import styles from './out.module.css';
 
 const ALLOWED_HOSTNAMES = new Set([
   'store.steampowered.com',
@@ -54,44 +53,52 @@ function redirectWithDelay(url: string, delay: number): Promise<void> {
 
 export default function OutRedirector() {
   const searchParams = useSearchParams();
-  const url = searchParams.get('url');
-  const store = searchParams.get('store');
 
   useEffect(() => {
-    if (!url) {
-      globalThis.location.replace('/');
-      return;
-    }
-    try {
-      const targetUrl = new URL(url);
-      if (targetUrl.protocol !== 'http:' && targetUrl.protocol !== 'https:') {
-        console.warn(`Blocked redirect to non-HTTP protocol: ${targetUrl.protocol}`);
-        globalThis.location.replace('/');
+    let cancelled = false;
+
+    async function redirect() {
+      const rawUrl = searchParams.get('url');
+      const store = searchParams.get('store');
+
+      if (!rawUrl) {
         return;
       }
-      if (!isHostnameAllowed(targetUrl.hostname)) {
-        console.warn(`Blocked redirect to non-allowlisted domain: ${targetUrl.hostname}`);
-        globalThis.location.replace('/');
+
+      let parsed: URL;
+      try {
+        parsed = new URL(decodeURIComponent(rawUrl));
+      } catch {
         return;
       }
-      applyOutAffiliateParams(targetUrl, store);
-      redirectWithDelay(targetUrl.toString(), 1000);
-    } catch {
-      globalThis.location.replace('/');
+
+      if (!isHostnameAllowed(parsed.hostname)) {
+        return;
+      }
+
+      applyOutAffiliateParams(parsed, store);
+
+      await redirectWithDelay(parsed.toString(), 1500);
+
+      if (!cancelled) {
+        globalThis.location.replace(parsed.toString());
+      }
     }
-  }, [url, store]);
+
+    redirect();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [searchParams]);
 
   return (
-    <div className={styles.redirectContainer}>
-      <div className={styles.spinner}></div>
-      <h2>Applying Discount...</h2>
-      {store ? (
-        <p>
-          Transferring you to the partner store <strong>{store}</strong>.
-        </p>
-      ) : (
-        <p>Preparing secure connection to the partner store.</p>
-      )}
+    <div className="flex flex-col items-center justify-center min-h-[60vh] text-center gap-6">
+      <div className="w-[60px] h-[60px] border-5 border-muted border-t-primary rounded-full animate-[spin_1s_infinite_cubic-bezier(0.55,0.15,0.45,0.85)]" />
+      <h2 className="text-2xl text-foreground">Redirecting...</h2>
+      <p className="text-muted-foreground text-lg">
+        You are being redirected to <strong className="text-primary">our partner store</strong>.
+      </p>
     </div>
   );
 }
