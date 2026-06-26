@@ -1,0 +1,25 @@
+src/components/GameCard.tsx
+  s_48ec12a2a19cbc::t_ee653d64cbb2e4 12
+  s_48ec12a2a19cbc::t_bec61bceefd55d 77-78
+src/app/page.tsx
+  s_48ec12a2a19cbc::t_20de6606548ddf 8-9
+  s_48ec12a2a19cbc::t_136639a015b5fc 10-11,20-24,27,32-35,39-42,85-95,104-122
+src/components/game/StoreIcon.tsx
+  s_48ec12a2a19cbc::t_dcc50bc321fdfb 1-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.1",
+  "base_commit_sha": "c21f2a666ee0ee75095531341f711b09fe6dc0b1",
+  "prompts": {},
+  "sessions": {
+    "s_48ec12a2a19cbc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "797a47c9-98d3-4238-80ed-abc8e3ff7a5a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
