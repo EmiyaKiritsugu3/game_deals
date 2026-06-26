@@ -36,11 +36,11 @@ export default function HomeHero({ deal }: HomeHeroProps) {
           src={highResThumb}
           alt=""
           fill
-          className="object-cover blur-3xl brightness-50 saturate-150"
+          className="object-cover blur-xl saturate-150"
           sizes="100vw"
           unoptimized
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-background/10" />
       </motion.div>
 
       {/* Entrance-animated content */}
