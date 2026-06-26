@@ -32,22 +32,34 @@ export default function DealsBadge({
 
   if (type === 'EPIC') {
     return (
-      <span className={`${styles.badge} ${styles.epic} ${className}`}>
+      <span className={`${styles.badge} ${styles.epic} ${className}`} title="Epic Deal">
         {compact ? '🔥' : '🔥 EPIC'}
       </span>
     );
   }
 
   if (type === 'FREE') {
-    return <span className={`${styles.badge} ${styles.free} ${className}`}>FREE</span>;
+    return (
+      <span className={`${styles.badge} ${styles.free} ${className}`} title="Free Game">
+        FREE
+      </span>
+    );
   }
 
   if (type === 'FRESH') {
-    return <span className={`${styles.badge} ${styles.fresh} ${className}`}>NEW</span>;
+    return (
+      <span className={`${styles.badge} ${styles.fresh} ${className}`} title="Recently Added">
+        NEW
+      </span>
+    );
   }
 
   if (type === 'RATING' && value) {
-    return <span className={`${styles.badge} ${styles.rating} ${className}`}>★ {value}%</span>;
+    return (
+      <span className={`${styles.badge} ${styles.rating} ${className}`} title="Rating">
+        ★ {value}%
+      </span>
+    );
   }
 
   return null;

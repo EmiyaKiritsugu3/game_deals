@@ -69,10 +69,8 @@ export default function CookieBanner() {
         <button
           type="button"
           onClick={accept}
+          className="bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground"
           style={{
-            background: '#4ade80',
-            border: 'none',
-            color: '#000',
             padding: '0.5rem 1rem',
             borderRadius: '6px',
             cursor: 'pointer',

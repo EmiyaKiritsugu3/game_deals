@@ -88,7 +88,7 @@ export default function FlashSales({ deals }: FlashSalesProps) {
 
               <div className={styles.cardInfo}>
                 <div className={styles.priceRow}>
-                  <span className={styles.currency}>R$</span>
+                  <span className={styles.currency}>$</span>
                   <span className={styles.salePrice}>{deal.salePrice}</span>
                 </div>
 

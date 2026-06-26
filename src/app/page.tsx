@@ -32,20 +32,24 @@ export default async function Home() {
         {freebies.length > 0 && <Freebies deals={freebies} />}
         <FlashSales deals={flashDeals} />
 
-        {/* Most Popular Games */}
-        <div className={styles.sectionHeader}>
-          <div className={styles.sectionHeaderRow}>
-            <div>
-              <h2>Most Popular Games</h2>
-              <p>The best and most sought-after discounts right now.</p>
+        {gridDeals.length > 0 && (
+          <>
+            {/* Most Popular Games */}
+            <div className={styles.sectionHeader}>
+              <div className={styles.sectionHeaderRow}>
+                <div>
+                  <h2>Most Popular Games</h2>
+                  <p>The best and most sought-after discounts right now.</p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className={styles.grid}>
-          {gridDeals.map((deal) => (
-            <GameCard key={deal.dealID} deal={deal} />
-          ))}
-        </div>
+            <div className={styles.grid}>
+              {gridDeals.map((deal) => (
+                <GameCard key={deal.dealID} deal={deal} />
+              ))}
+            </div>
+          </>
+        )}
 
         {/* New Deals + Best Deals */}
         <div className={styles.splitLayout}>
