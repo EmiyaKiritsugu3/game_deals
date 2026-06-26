@@ -40,7 +40,7 @@ export default function HomeHero({ deal }: HomeHeroProps) {
           sizes="100vw"
           unoptimized
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-background/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-background/20 to-transparent" />
       </motion.div>
 
       {/* Entrance-animated content */}
