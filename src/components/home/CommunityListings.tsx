@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { getUserPlaylistsAction } from '@/actions/playlists';
-import { AnimatedDiv } from '@/components/motion/AnimatedDiv';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -11,7 +10,7 @@ export default async function CommunityListings() {
   if (playlists.length === 0) return null;
 
   return (
-    <AnimatedDiv className="mb-12">
+    <div className="mb-12 animate-fade-slide-in">
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Community Lists</h2>
@@ -29,7 +28,10 @@ export default async function CommunityListings() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {playlists.map((playlist) => (
-          <AnimatedDiv key={playlist.id} hover>
+          <div
+            key={playlist.id}
+            className="animate-fade-slide-in hover:-translate-y-1.5 transition-transform duration-200 ease-out"
+          >
             <Link href={`/playlists/${playlist.slug}`} className="block no-underline">
               <Card className="h-full transition-colors duration-200 hover:border-primary">
                 <CardHeader>
@@ -47,9 +49,9 @@ export default async function CommunityListings() {
                 </CardContent>
               </Card>
             </Link>
-          </AnimatedDiv>
+          </div>
         ))}
       </div>
-    </AnimatedDiv>
+    </div>
   );
 }

@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { AnimatedDiv } from '@/components/motion/AnimatedDiv';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { COLLECTIONS } from '@/data/collections';
@@ -9,7 +8,7 @@ export default function DiscoveryGrid() {
   if (COLLECTIONS.length === 0) return null;
 
   return (
-    <AnimatedDiv className="mb-12">
+    <div className="mb-12 animate-fade-slide-in">
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Discover Games</h2>
@@ -27,7 +26,11 @@ export default function DiscoveryGrid() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {COLLECTIONS.map((col, i) => (
-          <AnimatedDiv key={col.slug} delay={i * 0.08} hover>
+          <div
+            key={col.slug}
+            className="animate-fade-slide-in hover:-translate-y-1.5 transition-transform duration-200 ease-out"
+            style={{ animationDelay: `${i * 80}ms` }}
+          >
             <Link href={`/collections/${col.slug}`} className="block no-underline">
               <Card className="h-full transition-colors duration-200 hover:border-primary">
                 <CardHeader>
@@ -44,9 +47,9 @@ export default function DiscoveryGrid() {
                 </CardContent>
               </Card>
             </Link>
-          </AnimatedDiv>
+          </div>
         ))}
       </div>
-    </AnimatedDiv>
+    </div>
   );
 }
