@@ -39,8 +39,8 @@ This document merges the Tech Stack Dictionary with the Architecture Analysis. I
         }
         ```
     4. **Performance:** Tailwind v4 is pure CSS at build-time — zero runtime, automatic tree-shaking, 3.78x faster than v3. For a project with heavy dark theme and animations, this eliminates unused CSS in production.
-- **Gradual Migration:** CSS Modules still coexist in legacy components (like `page.module.css` on the home page). The migration is component by component, without rush. The important thing is that *new* components follow Tailwind v4.
-- **Animations:** Framer Motion for declarative animations (modal entrance, page transitions, staggered animations in lists). Complex `@keyframes` remain in `globals.css` below `@import`.
+- **Migration Complete:** All CSS Modules eliminated. 100% Tailwind v4 utilities + `@theme` design tokens.
+- **Animations:** CSS `@keyframes` only (no JS runtime). All animation keyframes defined in `globals.css` within the `@theme` block. shadcn Dialog for modals, CSS transitions for entrance/exit.
 
 **References:** [ADR-011: Styling Architecture — Tailwind CSS v4](docs/adr/ADR-011-styling-tailwind-v4.md)
 
