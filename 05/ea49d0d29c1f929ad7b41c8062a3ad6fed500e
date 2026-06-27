@@ -1,0 +1,24 @@
+docs/manual/05-core-components.md
+  s_6875ff47d264d3::t_6c3abdbfceab18 84
+  s_6875ff47d264d3::t_d9740863c5c729 170
+  s_6875ff47d264d3::t_303ba215f5d8e0 32
+  s_6875ff47d264d3::t_d173b79f1cbd50 71
+  s_6875ff47d264d3::t_c9659b88c6fbfb 147
+  s_6875ff47d264d3::t_3122e0b78a52f7 158
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "05ea49d0d29c1f929ad7b41c8062a3ad6fed500e",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
