@@ -13,12 +13,6 @@ vi.mock('@/hooks/useShareWishlist', () => ({
   })),
 }));
 
-const cssProxy = vi.hoisted(
-  () => new Proxy({}, { get: (_: unknown, k: string) => (typeof k === 'string' ? k : '') })
-);
-
-vi.mock('./WishlistStats.module.css', () => ({ default: cssProxy }));
-
 const defaultProps = {
   totalValue: '42.50',
   bestDiscountGame: null,

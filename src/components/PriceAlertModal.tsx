@@ -3,10 +3,15 @@
 import { Bell, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { createPriceAlertAction, deletePriceAlertAction } from '@/actions/alerts';
-import BaseModal from '@/components/ui/BaseModal';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { useAlerts } from '@/store/alertStore';
 import AlertFormFields from './AlertFormFields';
-import styles from './PriceAlertModal.module.css';
 
 interface PriceAlertModalProps {
   readonly isOpen: boolean;
@@ -100,17 +105,17 @@ export default function PriceAlertModal({
   })();
 
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose} ariaLabel="Set price alert">
-      <div data-testid="alert-modal">
-        <div className={styles.header}>
-          <h2>
-            <Bell size={24} className={styles.bellIcon} /> Set Price Alert
-          </h2>
-          <p>
-            We will notify you when <span className={styles.gameTitle}>{gameTitle}</span> hits your
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-lg" data-testid="alert-modal">
+        <DialogHeader>
+          <DialogTitle>
+            <Bell size={24} /> Set Price Alert
+          </DialogTitle>
+          <DialogDescription>
+            We will notify you when <span className="text-primary">{gameTitle}</span> hits your
             target price.
-          </p>
-        </div>
+          </DialogDescription>
+        </DialogHeader>
 
         <AlertFormFields
           currentPrice={currentPrice}
@@ -121,11 +126,11 @@ export default function PriceAlertModal({
         />
 
         {saveError && (
-          <div className={styles.error}>
+          <div className="flex items-center justify-between p-3 px-4 bg-[hsl(0,55%,25%)] border border-[hsl(0,65%,40%)] rounded-lg text-[hsl(0,60%,80%)] text-sm font-semibold mb-4">
             <span>{saveError}</span>
             <button
               type="button"
-              className={styles.dismissError}
+              className="bg-transparent border border-[hsl(0,65%,50%,0.3)] text-[hsl(0,65%,50%)] px-3 py-1 rounded-md cursor-pointer font-bold text-xs shrink-0 ml-2"
               onClick={() => setSaveError(null)}
             >
               Dismiss
@@ -133,10 +138,10 @@ export default function PriceAlertModal({
           </div>
         )}
 
-        <div className={styles.actionButtons}>
+        <div className="grid grid-cols-2 gap-4">
           <button
             type="button"
-            className={`${styles.button} ${styles.cancelButton}`}
+            className="px-4 py-3.5 rounded-lg font-bold text-base cursor-pointer transition-all flex items-center justify-center gap-2 bg-muted/50 text-foreground border border-border/50 hover:bg-muted"
             onClick={onClose}
             disabled={isSaving}
           >
@@ -144,7 +149,7 @@ export default function PriceAlertModal({
           </button>
           <button
             type="button"
-            className={`${styles.button} ${styles.saveButton}`}
+            className="px-4 py-3.5 rounded-lg font-bold text-base cursor-pointer transition-all flex items-center justify-center gap-2 bg-primary text-primary-foreground border-none hover:opacity-90 hover:shadow-[0_4px_15px_color-mix(in_srgb,var(--primary)_30%,transparent)]"
             onClick={handleSave}
             disabled={isSaving}
             data-testid="create-alert-button"
@@ -154,7 +159,7 @@ export default function PriceAlertModal({
           {hasAlert(gameID) && (
             <button
               type="button"
-              className={styles.removeButton}
+              className="col-span-2 bg-transparent border-none text-[hsl(0,60%,70%)] text-sm font-semibold mt-2 cursor-pointer hover:underline"
               onClick={handleRemove}
               disabled={isSaving}
               data-testid="remove-alert-button"
@@ -163,7 +168,7 @@ export default function PriceAlertModal({
             </button>
           )}
         </div>
-      </div>
-    </BaseModal>
+      </DialogContent>
+    </Dialog>
   );
 }

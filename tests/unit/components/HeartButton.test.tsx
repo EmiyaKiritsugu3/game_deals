@@ -20,10 +20,6 @@ vi.mock('@/store/wishlistStore', () => ({
   }),
 }));
 
-vi.mock('@/components/HeartButton.module.css', () => ({
-  default: new Proxy({}, { get: (_, prop) => String(prop) }),
-}));
-
 afterEach(() => {
   vi.restoreAllMocks();
 });
@@ -98,7 +94,7 @@ describe('HeartButton', () => {
 
     await waitFor(() => {
       const button = screen.getByRole('button', { name: /Remove from Wishlist/i });
-      expect(button.className).toContain('saved');
+      expect(button.className).toContain('text-red-500');
     });
   });
 

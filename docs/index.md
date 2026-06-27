@@ -26,6 +26,8 @@ Start here if you're onboarding or unfamiliar with the codebase.
 | [Manual — Chapter 5: Core Components](manual/05-core-components.md) | Navbar, AuthModal, SyncManager, WishlistIndicator, CookieBanner |
 | [Manual — Chapter 6: Feature Components](manual/06-feature-components.md) | GameCard, DealTable, PriceChart, search, filters |
 | [Manual — README](manual/README.md) | Manual overview and navigation |
+| [Sprint 16 Spec](superpowers/specs/2026-06-24-sprint-16-polish-gap-closure-design.md) | Polish & gap closure design doc |
+| [Sprint 17 Spec](superpowers/specs/2026-06-25-sprint-17-ui-refresh-design.md) | UI refresh — game discovery & community |
 | [Glossary](glossary.md) | Domain terminology and abbreviations |
 | [Tech Stack Dictionary](tech_stack_dictionary.md) | Technology definitions and rationale |
 | [Use Cases](use-cases.md) | User journeys: browse, search, wishlist, alerts, playlists, affiliate, collections |

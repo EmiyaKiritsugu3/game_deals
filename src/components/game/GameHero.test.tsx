@@ -101,8 +101,8 @@ describe('GameHero', () => {
         size="compact"
       />
     );
-    const heroContainer = container.querySelector('[class*="heroContainer"]');
-    expect(heroContainer?.className).toContain('compact');
+    const heroContainer = container.querySelector('[class*="h-[250px]"]');
+    expect(heroContainer).toBeInTheDocument();
   });
 
   it('uses full class when size=full (default)', () => {
@@ -114,8 +114,8 @@ describe('GameHero', () => {
         bestCurrentPrice={29.99}
       />
     );
-    const heroContainer = container.querySelector('[class*="heroContainer"]');
-    expect(heroContainer?.className).toContain('full');
+    const heroContainer = container.querySelector('[class*="h-[350px]"]');
+    expect(heroContainer).toBeInTheDocument();
   });
 
   it('sets priority on image when priority=true', () => {

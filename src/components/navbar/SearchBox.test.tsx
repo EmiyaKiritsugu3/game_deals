@@ -32,22 +32,6 @@ vi.mock('lucide-react', () => ({
   Search: () => <svg data-testid="search-icon" />,
 }));
 
-vi.mock('../Navbar.module.css', () => ({
-  default: {
-    searchContainer: 'searchContainer',
-    searchForm: 'searchForm',
-    searchInput: 'searchInput',
-    searchButton: 'searchButton',
-    searchDropdown: 'searchDropdown',
-    dropdownItem: 'dropdownItem',
-    dropdownThumb: 'dropdownThumb',
-    dropdownInfo: 'dropdownInfo',
-    dropdownTitle: 'dropdownTitle',
-    dropdownPrice: 'dropdownPrice',
-    loading: 'loading',
-  },
-}));
-
 import { SearchBox } from './SearchBox';
 
 describe('SearchBox', () => {

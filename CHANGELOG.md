@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.7.0] — 2026-06-25
+
+### Sprint 16 — Polimento & Gap Closure (#55)
+
+- **Security headers**: CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy added to Supabase middleware.
+- **GitHub OAuth**: Button added to AuthModal.
+- **i18n**: CookieBanner translated PT→EN (Aceitar/Rejeitar → Accept/Reject).
+- **PRD sync**: Profile, gamification, PWA, sitemap, GitHub OAuth, rate limiter marked as Live.
+- **PR merges**: #53 (Sentinel timing fix), #54 (Bolt batched fetching).
+- **Spec audit**: 6/11 spec items were already resolved (rate limiter, sitemap, SyncManager, complexity, lint-staged, i18n). Real scope was ~3h.
+- **Tools**: shadcn CLI + MCP + skill (17 components), motion 12.41, gsap 3.15, UI UX Pro Max, 5 Vercel skills, 10 workflow skills installed.
+
 ## [v0.6.0] — 2026-06-24
 
 ### Sprint 15 — Gamification, PWA, P2 Wins (#52)

@@ -2,7 +2,6 @@
 
 import { useShareWishlist } from '@/hooks/useShareWishlist';
 import type { SavedGame } from '@/hooks/useSortedGames';
-import styles from './WishlistStats.module.css';
 
 type SortMode = 'discount' | 'price' | 'name';
 
@@ -24,16 +23,22 @@ export default function WishlistStats({
   const { copied, share } = useShareWishlist(wishlist);
 
   return (
-    <div className={styles.dashboardPanel}>
-      <div className={styles.statsPanel}>
-        <div className={styles.statItem}>
-          <span className={styles.statLabel}>Portfolio Value</span>
-          <span className={styles.statValue}>${totalValue}</span>
+    <div className="flex items-center justify-between bg-card px-6 py-4 rounded-lg border border-border mb-2 flex-wrap gap-4 max-md:flex-col max-md:items-stretch">
+      <div className="flex gap-8 max-md:justify-between">
+        <div className="flex flex-col gap-0.5">
+          <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+            Portfolio Value
+          </span>
+          <span className="text-xl font-extrabold text-primary">${totalValue}</span>
         </div>
         {bestDiscountGame && (
-          <div className={styles.statItem}>
-            <span className={styles.statLabel}>Best Discount</span>
-            <span className={styles.statValue}>-{bestDiscountGame.savings}%</span>
+          <div className="flex flex-col gap-0.5">
+            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+              Best Discount
+            </span>
+            <span className="text-xl font-extrabold text-primary">
+              -{bestDiscountGame.savings}%
+            </span>
           </div>
         )}
       </div>
@@ -46,12 +51,12 @@ export default function WishlistStats({
           flexWrap: 'wrap',
         }}
       >
-        <div className={styles.sortControls}>
-          <span className={styles.sortLabel}>Sort by:</span>
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-semibold text-muted-foreground">Sort by:</span>
           <select
             value={sortMode}
             onChange={(e) => onSortModeChange(e.target.value as SortMode)}
-            className={styles.sortSelect}
+            className="bg-background border border-border text-foreground px-4 py-2 rounded-lg text-sm font-inherit cursor-pointer outline-none focus:border-primary"
           >
             <option value="discount">Best Discount</option>
             <option value="price">Lowest Price</option>
@@ -59,7 +64,11 @@ export default function WishlistStats({
           </select>
         </div>
 
-        <button type="button" className={styles.shareButton} onClick={share}>
+        <button
+          type="button"
+          className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-gradient-to-br from-[hsl(220,80%,55%)] to-[hsl(260,70%,60%)] text-white font-bold text-xs border-none cursor-pointer whitespace-nowrap font-inherit hover:-translate-y-0.5 hover:shadow-[0_4px_18px_rgba(100,100,255,0.35)] active:scale-95 transition-all"
+          onClick={share}
+        >
           {copied ? '✅ Link copied!' : '🔗 Share Wishlist'}
         </button>
       </div>

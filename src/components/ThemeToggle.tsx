@@ -3,7 +3,6 @@
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-import styles from './ThemeToggle.module.css';
 
 const THEME_CYCLE: Array<'light' | 'dark' | 'system'> = ['light', 'dark', 'system'];
 
@@ -41,7 +40,7 @@ export default function ThemeToggle() {
   return (
     <button
       type="button"
-      className={styles.toggle}
+      className="flex items-center justify-center w-9 h-9 rounded-[var(--radius)] border border-border/50 bg-muted/30 text-muted-foreground cursor-pointer transition-[color,background,border-color,transform] duration-200 shrink-0 hover:text-primary hover:bg-muted/60 hover:border-primary hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
       onClick={handleClick}
       aria-label={label}
       title={label}
@@ -49,7 +48,7 @@ export default function ThemeToggle() {
       {mounted ? (
         <Icon size={18} aria-hidden="true" />
       ) : (
-        <span className={styles.placeholder} aria-hidden="true" />
+        <span className="block w-[18px] h-[18px]" aria-hidden="true" />
       )}
     </button>
   );

@@ -63,18 +63,6 @@ vi.mock('@/hooks/useShareWishlist', () => ({
   useShareWishlist: () => ({ copied: false, share: vi.fn() }),
 }));
 
-const cssProxy = vi.hoisted(
-  () => new Proxy({}, { get: (_: unknown, k: string) => (typeof k === 'string' ? k : '') })
-);
-
-vi.mock('./WishlistGrid.module.css', () => ({ default: cssProxy }));
-vi.mock('./WishlistStats.module.css', () => ({ default: cssProxy }));
-vi.mock('./AlertsGrid.module.css', () => ({ default: cssProxy }));
-vi.mock('@/components/HeartButton.module.css', () => ({ default: cssProxy }));
-vi.mock('@/components/PriceAlertTrigger.module.css', () => ({ default: cssProxy }));
-vi.mock('@/components/AuthModal.module.css', () => ({ default: cssProxy }));
-vi.mock('@/components/PriceAlertModal.module.css', () => ({ default: cssProxy }));
-
 const savedGames: SavedGame[] = [
   {
     gameID: 'g1',

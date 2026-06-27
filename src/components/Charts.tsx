@@ -1,4 +1,5 @@
 'use client';
+
 import {
   Bar,
   BarChart,
@@ -16,7 +17,6 @@ import {
   priceFormatter,
   storeFormatter,
 } from '@/lib/chart-data';
-import styles from './Charts.module.css';
 
 interface StorePrice {
   storeName: string;
@@ -29,9 +29,9 @@ export function StoreCompareChart({ data }: { readonly data: StorePrice[] }) {
     fill: index === 0 ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground) / 0.5)',
   }));
   return (
-    <div className={styles.chartContainer}>
-      <h3 className={styles.chartTitle}>Current Prices by Store</h3>
-      <div className={styles.chartWrapper}>
+    <div className="rounded-lg border border-border/50 bg-card p-6 pb-0 shadow-md mt-8">
+      <h3 className="mb-1 text-xl font-bold text-foreground">Current Prices by Store</h3>
+      <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 20 }}>
             <XAxis dataKey="name" {...axisProps} angle={-45} textAnchor="end" />
@@ -69,16 +69,16 @@ export function PriceHistoryChart({
 }: PriceHistoryChartProps) {
   const chartData = formatChartData(realData, retailPrice, currentPrice, lowestPrice, gameTitle);
   return (
-    <div className={styles.chartContainer}>
-      <h3 className={styles.chartTitle}>
+    <div className="rounded-lg border border-border/50 bg-card p-6 pb-0 shadow-md mt-8">
+      <h3 className="mb-1 text-xl font-bold text-foreground">
         {realData && realData.length > 2 ? 'Price History (Real Data)' : 'Price History (6 Months)'}
       </h3>
-      <p className={styles.chartSubtitle}>
+      <p className="mb-6 text-sm text-muted-foreground">
         {realData && realData.length > 2
           ? `Based on ${realData.length} data points from price tracking`
           : 'Algorithmic market simulation based on official data drops'}
       </p>
-      <div className={styles.chartWrapper}>
+      <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
             <XAxis dataKey="name" {...axisProps} />

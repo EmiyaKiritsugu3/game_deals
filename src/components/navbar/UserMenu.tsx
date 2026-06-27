@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useAuth } from '@/store/authStore';
-import styles from '../Navbar.module.css';
 
 interface UserMenuProps {
   readonly user: {
@@ -24,7 +23,10 @@ function MenuItem({
   label,
 }: Readonly<{ href: string; icon: React.ReactNode; label: string }>) {
   return (
-    <Link href={href} className={styles.menuItem}>
+    <Link
+      href={href}
+      className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-muted-foreground no-underline rounded-lg hover:bg-muted/80 hover:text-foreground transition-all bg-transparent border-none w-full text-left cursor-pointer"
+    >
       {icon}
       <span>{label}</span>
     </Link>
@@ -32,7 +34,7 @@ function MenuItem({
 }
 
 function MenuDivider() {
-  return <div className={styles.menuDivider} />;
+  return <div className="h-px bg-border my-1.5" />;
 }
 
 function UserMenuDropdown({
@@ -41,12 +43,16 @@ function UserMenuDropdown({
 }: Readonly<{ isOpen: boolean; onLogout: () => void }>) {
   if (!isOpen) return null;
   return (
-    <div className={styles.userDropdown}>
+    <div className="absolute top-[calc(100%+0.5rem)] right-0 w-[200px] bg-card/95 backdrop-blur-xl border border-border rounded-xl shadow-[0_10px_25px_rgba(0,0,0,0.4)] p-2 z-[100]">
       <MenuItem href="/playlists" icon={<List size={16} />} label="Playlists" />
       <MenuItem href="/wishlist" icon={<Bell size={16} />} label="Price Alerts" />
       <MenuItem href="/leaderboard" icon={<Trophy size={16} />} label="Leaderboard" />
       <MenuDivider />
-      <button type="button" className={`${styles.menuItem} ${styles.logout}`} onClick={onLogout}>
+      <button
+        type="button"
+        className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-[hsl(0,80%,60%)] no-underline rounded-lg hover:bg-[hsl(0,80%,60%,0.08)] hover:text-[hsl(0,80%,60%)] transition-all bg-transparent border-none w-full text-left cursor-pointer"
+        onClick={onLogout}
+      >
         <LogOut size={16} />
         <span>Logout</span>
       </button>
@@ -65,8 +71,15 @@ function UserAvatar({ user, serverUser }: UserMenuProps) {
   const { avatar, name } = getUserDisplay(user, serverUser);
   return (
     <>
-      <Image src={avatar} alt={name} width={28} height={28} unoptimized className={styles.avatar} />
-      <span className={styles.username}>{name}</span>
+      <Image
+        src={avatar}
+        alt={name}
+        width={28}
+        height={28}
+        unoptimized
+        className="w-7 h-7 rounded-full bg-muted"
+      />
+      <span className="text-sm font-semibold text-foreground max-lg:hidden">{name}</span>
     </>
   );
 }
@@ -77,9 +90,9 @@ export function UserMenu({ user, serverUser }: UserMenuProps) {
   const wrapperRef = useClickOutside<HTMLDivElement>(() => setIsUserMenuOpen(false));
 
   return (
-    <div className={styles.userMenuWrapper} ref={wrapperRef}>
+    <div className="relative flex items-center" ref={wrapperRef}>
       <button
-        className={styles.userMenu}
+        className="flex items-center gap-3 cursor-pointer px-2.5 py-1.5 rounded-full bg-muted/30 border border-border/50 hover:bg-muted/60 transition-colors"
         onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {

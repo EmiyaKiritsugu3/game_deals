@@ -22,7 +22,11 @@ vi.mock('next/link', () => ({
 
 vi.mock('../services/api', () => ({
   getHighResImage: vi.fn((thumb: string) => thumb.replace('capsule', 'header')),
-  getStores: vi.fn().mockResolvedValue({ '1': 'Steam', '2': 'GOG' }),
+  getStoreLogo: vi.fn((id: string) => `https://store-${id}.example.com/favicon.ico`),
+  getStores: vi.fn().mockResolvedValue({
+    '1': 'Steam',
+    '2': 'GOG',
+  }),
 }));
 
 vi.mock('./HeartButton', () => ({
@@ -120,6 +124,18 @@ describe('GameCard', () => {
   it('does not show rating when steamRatingPercent is "0"', async () => {
     render(await GameCard({ deal: { ...mockDeal, steamRatingPercent: '0', savings: '0' } }));
     expect(screen.queryByText(/★/)).not.toBeInTheDocument();
+  });
+
+  it('renders rating stars when steamRatingPercent is provided', async () => {
+    const deal = { ...mockDeal, steamRatingPercent: '80' };
+    const { container } = render(await GameCard({ deal }));
+    expect(container.textContent).toContain('★ 80%');
+  });
+
+  it('does not render rating when steamRatingPercent is 0', async () => {
+    const deal = { ...mockDeal, steamRatingPercent: '0' };
+    const { container } = render(await GameCard({ deal }));
+    expect(container.textContent).toContain(deal.salePrice);
   });
 
   it('links to /game/{gameID}', async () => {

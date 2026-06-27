@@ -118,12 +118,14 @@ vitest.config.ts       # Vitest configuration (node + jsdom per-file)
 
 ## Stats
 
-- **Tests**: 916 across 102 files (82.72% lines / 79.40% branches / 77.19% functions)
+- **Tests**: 989 across 114 files (82.72% lines / 79.40% branches / 77.19% functions)
 - **SonarQube**: 0 open issues
 - **Fallow CRITICAL**: 0
 - **Knip unused types**: 0
 - **Unused exports**: 0
 - **Coverage thresholds**: lines 80%, functions 75%, branches 76%, statements 80%
+- **Security headers**: CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy
+- **Design tools**: shadcn (17 components), motion, gsap, UI UX Pro Max
 
 ## Documentation
 

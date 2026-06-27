@@ -1,5 +1,4 @@
 import FilterSidebar from '@/components/FilterSidebar';
-import styles from '../page.module.css';
 import { getActiveStores, getDealsWithParams, SearchResults } from './SearchResults';
 
 export const metadata = {
@@ -22,18 +21,18 @@ export default async function SearchPage({
   ]);
 
   return (
-    <main className={styles.main}>
-      <div className={`container ${styles.searchLayout}`} style={{ marginTop: '3rem' }}>
+    <main className="min-h-screen flex flex-col">
+      <div className="container grid grid-cols-[250px_1fr] gap-8" style={{ marginTop: '3rem' }}>
         <FilterSidebar stores={activeStores} />
         <SearchResults deals={deals} query={query} />
       </div>
 
-      <footer className={styles.footer} style={{ marginTop: 'auto' }}>
+      <footer className="mt-auto py-8 border-t border-border text-center text-sm text-muted-foreground">
         <div className="container">
           <p>
-            {'\u00a9'} {new Date().getFullYear()} GameDeals
+            {'©'} {new Date().getFullYear()} GameDeals
           </p>
-          <p className={styles.footerMuted}>Powered by CheapShark API</p>
+          <p className="text-xs">Powered by CheapShark API</p>
         </div>
       </footer>
     </main>

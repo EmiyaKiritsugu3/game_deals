@@ -9,10 +9,10 @@
   --color-border: hsl(226 14% 28%);
 
   /* Accent */
-  --color-primary: hsl(150 100% 42%);
-  --color-primary-foreground: hsl(150 100% 10%);
-  --color-accent-hl: hsl(150 88% 27%);
-  --color-accent-hl-foreground: hsl(150 100% 85%);
+  --color-primary: hsl(142 100% 42%);
+  --color-primary-foreground: hsl(142 100% 10%);
+  --color-accent-hl: hsl(142 88% 27%);
+  --color-accent-hl-foreground: hsl(142 100% 85%);
   --color-accent-fire: hsl(22 100% 59%);
 
   /* Typography */

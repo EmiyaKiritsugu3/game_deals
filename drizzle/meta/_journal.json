@@ -99,6 +99,20 @@
       "when": 1782259915019,
       "tag": "0013_user_stats",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1782385625646,
+      "tag": "0014_ratings_table",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1782390643000,
+      "tag": "0015_game_avg_ratings_view",
+      "breakpoints": true
     }
   ]
 }

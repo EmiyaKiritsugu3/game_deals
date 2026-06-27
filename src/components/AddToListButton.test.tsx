@@ -16,10 +16,6 @@ vi.mock('./AddToListModal', () => ({
   ),
 }));
 
-vi.mock('./AddToListButton.module.css', () => ({
-  default: { button: 'button', icon: 'icon', full: 'full' },
-}));
-
 vi.mock('lucide-react', () => ({
   Plus: (props: { size?: number; strokeWidth?: number }) => (
     <svg data-testid="plus-icon" data-size={props.size} data-strokewidth={props.strokeWidth} />

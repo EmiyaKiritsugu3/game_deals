@@ -5,12 +5,6 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import WishlistTabs from './WishlistTabs';
 
-const cssProxy = vi.hoisted(
-  () => new Proxy({}, { get: (_: unknown, k: string) => (typeof k === 'string' ? k : '') })
-);
-
-vi.mock('./WishlistTabs.module.css', () => ({ default: cssProxy }));
-
 const defaultProps = {
   activeTab: 'wishlist' as const,
   onTabChange: vi.fn(),
@@ -46,8 +40,8 @@ describe('WishlistTabs', () => {
     const wishlistBtn = screen.getByText('Wishlist (5)').closest('button');
     const alertsBtn = screen.getByText('My Alerts (3)').closest('button');
 
-    expect(wishlistBtn?.className).toContain('activeTab');
-    expect(alertsBtn?.className).not.toContain('activeTab');
+    expect(wishlistBtn?.className).toContain('text-primary');
+    expect(alertsBtn?.className).not.toContain('text-primary');
   });
 
   it('applies activeTab class to alerts when activeTab is alerts', () => {
@@ -55,8 +49,8 @@ describe('WishlistTabs', () => {
     const alertsBtn = screen.getByText('My Alerts (3)').closest('button');
     const wishlistBtn = screen.getByText('Wishlist (5)').closest('button');
 
-    expect(alertsBtn?.className).toContain('activeTab');
-    expect(wishlistBtn?.className).not.toContain('activeTab');
+    expect(alertsBtn?.className).toContain('text-primary');
+    expect(wishlistBtn?.className).not.toContain('text-primary');
   });
 
   it('shows zero counts correctly', () => {

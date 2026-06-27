@@ -2,7 +2,6 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
-import styles from './FilterSidebar.module.css';
 import StoreFilter from './StoreFilter';
 
 interface StoreInfo {
@@ -70,18 +69,27 @@ export default function FilterSidebar({ stores }: Readonly<{ stores: StoreInfo[]
   };
 
   return (
-    <aside className={styles.sidebar} aria-label="Filters">
-      <div className={styles.header}>
-        <h3 className={styles.title}>Filters</h3>
-        <button onClick={clearFilters} className={styles.clearBtn} type="button">
+    <aside
+      className="bg-card border border-border/50 rounded-lg p-6 sticky top-20 h-fit max-h-[calc(100vh-6rem)] overflow-y-auto shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-muted-foreground/30 [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb:hover]:bg-muted-foreground/60"
+      aria-label="Filters"
+    >
+      <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
+        <h3 className="text-xl font-bold text-foreground">Filters</h3>
+        <button
+          onClick={clearFilters}
+          className="bg-transparent border-none text-muted-foreground text-sm cursor-pointer hover:text-foreground"
+          type="button"
+        >
           Clear
         </button>
       </div>
 
-      <div className={styles.filterGroup}>
-        <h4 className={styles.groupTitle}>Max Price</h4>
-        <div className={styles.priceInputWrapper}>
-          <span className={styles.currencySymbol}>$</span>
+      <div className="mb-8">
+        <h4 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wider">
+          Max Price
+        </h4>
+        <div className="relative flex items-center">
+          <span className="absolute left-4 text-muted-foreground pointer-events-none">$</span>
           <input
             type="number"
             min="0"
@@ -89,14 +97,16 @@ export default function FilterSidebar({ stores }: Readonly<{ stores: StoreInfo[]
             value={maxPrice}
             onChange={(e) => setMaxPrice(e.target.value)}
             placeholder="Any"
-            className={styles.priceInput}
+            className="w-full py-3 pr-4 pl-8 bg-muted/50 border border-border rounded-lg text-foreground outline-none focus:border-primary"
             aria-label="Maximum price"
           />
         </div>
       </div>
 
-      <div className={styles.filterGroup}>
-        <h4 className={styles.groupTitle}>Stores</h4>
+      <div className="mb-8">
+        <h4 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wider">
+          Stores
+        </h4>
         <StoreFilter
           stores={stores}
           selectedStores={selectedStores}
@@ -106,7 +116,11 @@ export default function FilterSidebar({ stores }: Readonly<{ stores: StoreInfo[]
         />
       </div>
 
-      <button onClick={applyFilters} className={styles.applyBtn} type="button">
+      <button
+        onClick={applyFilters}
+        className="w-full bg-primary text-primary-foreground border-none p-3 rounded-lg font-bold text-base cursor-pointer hover:brightness-110 hover:-translate-y-0.5 hover:shadow-[0_4px_12px_color-mix(in_srgb,var(--primary)_30%,transparent)] transition-all"
+        type="button"
+      >
         Apply Filters
       </button>
     </aside>

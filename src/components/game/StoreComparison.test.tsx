@@ -19,15 +19,6 @@ vi.mock('./GameDealRow', () => ({
   ),
 }));
 
-// biome-ignore lint/style/useNamingConvention: CSS module mock
-const stylesMock = vi.hoisted(() => ({
-  storeComparison: 'sc',
-  sectionTitle: 'st',
-  dealsList: 'dl',
-  keyshopTitle: 'kt',
-}));
-vi.mock('./StoreComparison.module.css', () => ({ default: stylesMock }));
-
 function makeDeal(overrides: Partial<GameDeal> = {}): GameDeal {
   return {
     storeID: '1',

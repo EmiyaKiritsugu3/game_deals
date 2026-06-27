@@ -8,6 +8,7 @@ vi.mock('@vercel/analytics/react', () => ({ Analytics: () => null }));
 vi.mock('@vercel/speed-insights/next', () => ({ SpeedInsights: () => null }));
 vi.mock('next/font/google', () => ({
   Inter: () => ({ variable: '--font-inter' }),
+  Geist: () => ({ className: 'geist-font' }),
 }));
 vi.mock('nuqs/adapters/next/app', () => ({
   NuqsAdapter: ({ children }: { children: React.ReactNode }) => children,

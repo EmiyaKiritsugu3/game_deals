@@ -6,7 +6,6 @@ import { useAlerts } from '@/store/alertStore';
 import { useAuth } from '@/store/authStore';
 import AuthModal from './AuthModal';
 import PriceAlertModal from './PriceAlertModal';
-import styles from './PriceAlertTrigger.module.css';
 
 interface PriceAlertTriggerProps {
   readonly gameID: string;
@@ -45,7 +44,7 @@ export default function PriceAlertTrigger({
     <>
       <button
         type="button"
-        className={`${styles.trigger} ${activeAlert ? styles.active : ''} ${className}`}
+        className={`flex items-center gap-2 px-5 py-[0.6rem] rounded-lg bg-muted/50 border border-border/50 text-foreground font-semibold text-[0.9rem] cursor-pointer transition-all duration-200 hover:bg-muted hover:border-border hover:-translate-y-0.5 max-[600px]:px-[0.6rem] max-[600px]:[&>span]:hidden ${activeAlert ? 'bg-primary/10 border-primary/50 text-primary shadow-[0_0_15px_rgb(from_var(--primary)_r_g_b_/0.15)] hover:bg-primary/20' : ''} ${className}`}
         onClick={handleClick}
         title={activeAlert ? 'Edit Price Alert' : 'Set Price Alert'}
         data-testid="price-alert-trigger"

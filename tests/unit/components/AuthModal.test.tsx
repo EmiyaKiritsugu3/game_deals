@@ -3,7 +3,6 @@
  */
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({
@@ -20,29 +19,8 @@ vi.mock('@/lib/supabase-browser', () => ({
   }),
 }));
 
-vi.mock('@/components/AuthModal.module.css', () => ({
-  default: new Proxy({}, { get: () => 'mock-css-class' }),
-}));
-
-vi.mock('@/components/ui/BaseModal', () => ({
-  default: ({
-    children,
-    isOpen,
-    ariaLabel,
-  }: {
-    children: React.ReactNode;
-    isOpen: boolean;
-    onClose: () => void;
-    ariaLabel?: string;
-  }) =>
-    isOpen
-      ? React.createElement(
-          'div',
-          { 'data-testid': 'base-modal', 'aria-label': ariaLabel },
-          children
-        )
-      : null,
-}));
+// ponytail: dialog uses base-ui Dialog which renders an overlay portal
+// when open, content is rendered; when closed, it is not in the DOM
 
 afterEach(() => {
   vi.clearAllMocks();
@@ -51,18 +29,19 @@ afterEach(() => {
 describe('AuthModal', () => {
   it('renders nothing when isOpen is false', async () => {
     const AuthModal = (await import('@/components/AuthModal')).default;
-    render(<AuthModal isOpen={false} onClose={vi.fn()} />);
+    const { container } = render(<AuthModal isOpen={false} onClose={vi.fn()} />);
 
-    expect(screen.queryByTestId('base-modal')).not.toBeInTheDocument();
     expect(screen.queryByText(/Welcome to GameDeals/)).not.toBeInTheDocument();
+    // base-ui Dialog does not render content in the DOM when closed
+    expect(container.querySelector('[data-slot="dialog-content"]')).toBeNull();
   });
 
   it('renders modal with title when isOpen is true', async () => {
     const AuthModal = (await import('@/components/AuthModal')).default;
     render(<AuthModal isOpen={true} onClose={vi.fn()} />);
 
-    expect(screen.getByTestId('base-modal')).toBeInTheDocument();
     expect(screen.getByText(/Welcome to GameDeals/)).toBeInTheDocument();
+    expect(screen.getByText(/Sign in to track/)).toBeInTheDocument();
   });
 
   it('calls signInWithOAuth with google provider on Google button click', async () => {

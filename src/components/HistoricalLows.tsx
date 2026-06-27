@@ -1,7 +1,6 @@
 import { getDeals, getGamesBatch } from '@/services/api';
 import DealRow from './DealRow';
 import DealsBadge from './DealsBadge';
-import styles from './HistoricalLows.module.css';
 
 export default async function HistoricalLows() {
   // 1. Fetch diverse candidates
@@ -42,21 +41,27 @@ export default async function HistoricalLows() {
   if (hlDeals.length === 0) return null;
 
   return (
-    <div className={styles.listSection}>
-      <div className={styles.sectionHeader}>
-        <div className={styles.sectionHeaderRow}>
+    <div>
+      <div className="mb-4">
+        <div className="flex items-center justify-between mb-4">
           <div>
-            <h2>
-              <DealsBadge type="HL" className={styles.headerHL} /> Historical Lows
+            <h2 className="text-2xl font-bold text-foreground tracking-tight mb-1">
+              <DealsBadge type="HL" className="text-[0.8rem] py-[0.15rem] px-2 mr-2 align-middle" />{' '}
+              Historical Lows
             </h2>
-            <p>Prices at or near their all-time lowest.</p>
+            <p className="text-muted-foreground text-sm">
+              Prices at or near their all-time lowest.
+            </p>
           </div>
-          <a href="/search?sortBy=Savings" className={styles.seeAll}>
+          <a
+            href="/search?sortBy=Savings"
+            className="text-[0.75rem] font-semibold text-primary no-underline whitespace-nowrap tracking-wider shrink-0 hover:opacity-75 transition-opacity duration-150"
+          >
             SEE ALL ▶
           </a>
         </div>
       </div>
-      <div className={styles.listCol}>
+      <div className="flex flex-col gap-2">
         {hlDeals.map((deal) => (
           <DealRow key={deal.dealID} deal={deal} />
         ))}

@@ -1,11 +1,21 @@
-import styles from './DealsBadge.module.css';
-
 interface DealsBadgeProps {
-  readonly type: 'HL' | 'EPIC' | 'FREE' | 'RATING';
+  readonly type: 'HL' | 'EPIC' | 'FREE' | 'RATING' | 'FRESH';
   readonly value?: string | number;
   readonly className?: string;
   readonly compact?: boolean;
 }
+
+const baseClass =
+  'inline-flex items-center justify-center px-[0.4rem] py-[0.15rem] rounded text-[0.65rem] font-extrabold tracking-wider uppercase whitespace-nowrap';
+
+const typeClasses: Record<string, string> = {
+  HL: 'bg-[var(--accent-hl)] text-[var(--accent-hl-foreground)]',
+  EPIC: 'bg-gradient-to-r from-[#ff4b2b] to-[#ff416c] text-foreground shadow-[0_0_10px_rgba(255,75,43,0.3)]',
+  FREE: 'bg-primary text-primary-foreground',
+  RATING: 'bg-foreground/5 text-foreground border border-border',
+  FRESH:
+    'bg-gradient-to-r from-[hsl(142,88%,27%)] to-[hsl(142,100%,42%)] text-[hsl(142,100%,10%)] shadow-[0_0_8px_hsl(142,88%,27%/0.3)]',
+};
 
 /**
  * Unified Badge component for consistent deal tagging across the site.
@@ -22,7 +32,7 @@ export default function DealsBadge({
   if (type === 'HL') {
     return (
       <span
-        className={`${styles.badge} ${styles.hl} ${className}`}
+        className={`${baseClass} ${typeClasses[type]} ${className}`}
         title="Historical Low Price (Within 5% of all-time low)"
       >
         HL
@@ -32,18 +42,34 @@ export default function DealsBadge({
 
   if (type === 'EPIC') {
     return (
-      <span className={`${styles.badge} ${styles.epic} ${className}`}>
-        {compact ? '🔥' : '🔥 EPIC'}
+      <span className={`${baseClass} ${typeClasses[type]} ${className}`} title="Epic Deal">
+        {compact ? '\u{1F525}' : '\u{1F525} EPIC'}
       </span>
     );
   }
 
   if (type === 'FREE') {
-    return <span className={`${styles.badge} ${styles.free} ${className}`}>FREE</span>;
+    return (
+      <span className={`${baseClass} ${typeClasses[type]} ${className}`} title="Free Game">
+        FREE
+      </span>
+    );
+  }
+
+  if (type === 'FRESH') {
+    return (
+      <span className={`${baseClass} ${typeClasses[type]} ${className}`} title="Recently Added">
+        NEW
+      </span>
+    );
   }
 
   if (type === 'RATING' && value) {
-    return <span className={`${styles.badge} ${styles.rating} ${className}`}>★ {value}%</span>;
+    return (
+      <span className={`${baseClass} ${typeClasses[type]} ${className}`} title="Rating">
+        {'★'} {value}%
+      </span>
+    );
   }
 
   return null;
