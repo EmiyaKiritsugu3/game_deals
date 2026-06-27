@@ -1,16 +1,27 @@
 # Changelog
 
+## [v0.8.0] — 2026-06-27
+
+### Sprint 17 — UI Refresh & CSS Modernization (#56)
+
+- **CSS Modules eliminated**: All 46 `.module.css` files removed. 100% Tailwind v4 utilities + `@theme` design tokens.
+- **JS animation runtimes removed**: `motion/react` (12.x), `gsap` (3.x), `framer-motion` all deleted. All animations now CSS `@keyframes`.
+- **BaseModal deleted**: Replaced by shadcn `<Dialog>`. Auth modal, deal modal, list modals all use shadcn Dialog primitives.
+- **AnimatedDiv deleted**: All animated containers migrated to CSS animations.
+- **`tw-animate-css` removed**: Keyframes centralized in `globals.css` `@theme` block.
+- **Doc refresh**: 6 docs updated (design-system, accessibility, core-components, architecture, README, CHANGELOG) to reflect current UI stack.
+
 ## [v0.7.0] — 2026-06-25
 
 ### Sprint 16 — Polimento & Gap Closure (#55)
 
 - **Security headers**: CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy added to Supabase middleware.
-- **GitHub OAuth**: Button added to AuthModal.
+- **GitHub OAuth**: Button added to auth dialog.
 - **i18n**: CookieBanner translated PT→EN (Aceitar/Rejeitar → Accept/Reject).
 - **PRD sync**: Profile, gamification, PWA, sitemap, GitHub OAuth, rate limiter marked as Live.
 - **PR merges**: #53 (Sentinel timing fix), #54 (Bolt batched fetching).
 - **Spec audit**: 6/11 spec items were already resolved (rate limiter, sitemap, SyncManager, complexity, lint-staged, i18n). Real scope was ~3h.
-- **Tools**: shadcn CLI + MCP + skill (17 components), motion 12.41, gsap 3.15, UI UX Pro Max, 5 Vercel skills, 10 workflow skills installed.
+- **Tools**: shadcn CLI + MCP + skill (17 components), UI UX Pro Max, 5 Vercel skills, 10 workflow skills installed.
 
 ## [v0.6.0] — 2026-06-24
 
