@@ -11,7 +11,8 @@ export function MatrixBackground({ deals }: Readonly<{ deals: Deal[] }>) {
             Array.from({ length: 15 }, (_, i) => {
               return (
                 <div
-                  key={i}
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static placeholder grid, never reordered
+                  key={`matrix-item-${i}`}
                   className="flex-[1_1_200px] h-[130px] rounded-lg overflow-hidden shadow-[0_0_10px_rgba(0,0,0,0.5)] bg-background"
                 >
                   <Image
