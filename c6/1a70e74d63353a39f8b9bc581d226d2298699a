@@ -1,0 +1,142 @@
+src/app/wishlist/page.tsx
+  s_6875ff47d264d3::t_8f260b72d00758 27-28
+src/app/page.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 49-51,54-57,73-78,80-83,122-127
+  s_6875ff47d264d3::t_228325b237d4b4 29,39,44,46-47,52,62,70-71,88,97,102,107-108,111,119-120,131,140,142-143
+src/components/hero/HeroNavigation.tsx
+  s_6875ff47d264d3::t_06d5311a038ef1 14,19-21
+src/app/playlists/[id]/page.tsx
+  s_6875ff47d264d3::t_7f860a2e3a2926 16-21,28-29,37-39,62-66,70,73,91-92,100-102,104-105,109-114,117,127,140
+  s_6875ff47d264d3::t_ab08b31a02b4fa 40-43,68,74-76,106-108,118-121
+src/components/navbar/AuthSection.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 6-10
+src/components/PriceAlertModal.tsx
+  s_6875ff47d264d3::t_0893c1c1c1afa2 141,144,152,162
+  s_6875ff47d264d3::t_04cbb5ef1987d4 115
+  s_6875ff47d264d3::t_d88859d833e16c 129,133
+src/components/FilterSidebar.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 78-82,88-90,107-109,119-123
+  s_6875ff47d264d3::t_87ca6853bceadb 72-77,87,91-92,100,106
+src/app/search/page.tsx
+  s_6875ff47d264d3::t_3bc26aada17070 24-25,30,33,35
+src/app/collections/[slug]/page.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 66-69,83-86,112-115
+  s_6875ff47d264d3::t_fba66d9e81eac3 92,94-96
+  s_6875ff47d264d3::t_78f59e2546c7b0 65,73-74,77,80
+src/components/navbar/SearchBox.tsx
+  s_6875ff47d264d3::t_61f9f3df061348 76,90,94
+  s_6875ff47d264d3::t_5a8ebe69a09e3a 32,34,39
+  s_6875ff47d264d3::t_ab08b31a02b4fa 50-53,59-62,65-69,84-88,91-93,99-103
+src/app/wishlist/shared/page.tsx
+  s_6875ff47d264d3::t_616a48da62823d 11,29-30,38-39,42,46,48,77-78,87,90,94-97,103,114-115
+  s_6875ff47d264d3::t_ab08b31a02b4fa 14-17,31-36,43-45,49-55,98-99
+src/components/wishlist/WishlistGrid.tsx
+  s_6875ff47d264d3::t_cc994dec21f0a8 18-19,27-28,46,52,60-61,66,75-76,79,85,87-88
+  s_6875ff47d264d3::t_ab08b31a02b4fa 30-34,48-51,69-73,80-84,91-94
+src/components/wishlist/WishlistHero.tsx
+  s_6875ff47d264d3::t_00c45f78fc815f 11,14,18-21
+src/components/hero/MatrixBackground.tsx
+  s_6875ff47d264d3::t_53385a0b7806bb 8-9,24,32
+  s_6875ff47d264d3::t_ab08b31a02b4fa 13-16
+src/components/game/GameDealRow.tsx
+  s_6875ff47d264d3::t_fee0b8f0f44f1c 26
+  s_6875ff47d264d3::t_9f31c8ec0b6a9b 111
+  s_6875ff47d264d3::t_e31da5c918accf 63,74,81,83
+  s_6875ff47d264d3::t_ab08b31a02b4fa 18-24,41-45,64-73,75-79
+  s_6875ff47d264d3::t_a0f5ec81794ea2 114,116
+src/components/navbar/UserMenu.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 26-29,51-55,74-81
+  s_6875ff47d264d3::t_692566d674c5d5 93
+  s_6875ff47d264d3::t_b7007b8a47006f 95
+  s_6875ff47d264d3::t_717469b5875f6e 82
+  s_6875ff47d264d3::t_773b2145739a18 37
+  s_6875ff47d264d3::t_2e7cd8a8b45fd1 46
+src/app/collections/page.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 30-32
+  s_6875ff47d264d3::t_d3bb368490ad5c 29,33-35
+  s_6875ff47d264d3::t_5c1991dc15c80f 13-15
+  s_6875ff47d264d3::t_b78604abe55f5d 21,26,28
+  s_6875ff47d264d3::t_b56fcbf9f306b9 16
+src/components/FlashSales.tsx
+  s_6875ff47d264d3::t_e63b5569b636ec 20,49-51,60,68-69,77-78,96,105,110,113,118-121,124
+  s_6875ff47d264d3::t_ab08b31a02b4fa 52-59,61-66,70-75,79-84,88-91,100-104,125-131
+src/components/wishlist/WishlistStats.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 29-31,36-41,67-71
+  s_6875ff47d264d3::t_79fd10e1650f77 26-28,32,35,54-55,59
+src/app/search/SearchResults.tsx
+  s_6875ff47d264d3::t_6be554cc26b857 30-37,41
+src/components/wishlist/AlertsGrid.tsx
+  s_6875ff47d264d3::t_1a38bda3c620b7 14-15,26,32-33,38-41,49,53,56-57,61,66
+  s_6875ff47d264d3::t_ab08b31a02b4fa 17,28-31,34-36,42-47,50-52,68-71
+src/components/wishlist/WishlistHero.test.tsx
+  s_6875ff47d264d3::t_e893d1ab81d5aa 5
+  s_6875ff47d264d3::t_ab08b31a02b4fa 73
+  s_6875ff47d264d3::t_b3247ba7f51149 66
+src/components/hero/HeroSlide.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 83-85
+  s_6875ff47d264d3::t_4636d9d15bbd82 20-31,35-47,49,53,61,65,71-82,91,98,104
+src/components/DealRow.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 27-29,76-80,83-87,89-91,93-95,124-127
+  s_6875ff47d264d3::t_7da84cef925d00 139
+  s_6875ff47d264d3::t_8da86033076931 26,30,37,42,44-45,48,71,82,128,133,137,143
+src/components/game/StoreComparison.tsx
+  s_6875ff47d264d3::t_ca835ef13df303 32,35-36,55-56,60-61
+  s_6875ff47d264d3::t_ab08b31a02b4fa 57-59
+src/components/game/GameHero.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 37-39
+  s_6875ff47d264d3::t_69448daebda0c5 22,25,30,35-36,40
+src/components/Navbar.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 43-46,50-53,56-59
+  s_6875ff47d264d3::t_739f57611455ad 41-42,47,49,63,69
+src/components/StoreFilter.tsx
+  s_6875ff47d264d3::t_b1c82b9b91108e 36,42,45,49,57,62,73,75,80,83,87
+tests/unit/components/PlaylistPages.test.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 102
+  s_6875ff47d264d3::t_7301d2a43c30f3 130
+  s_6875ff47d264d3::t_db0713996ff9c6 186
+src/components/GameCard.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 27-29,60-63,78-81,85-89,97-99
+  s_6875ff47d264d3::t_e1d3e515068a2d 26,30,46-59,64-74,77,82-83,91-96,100-101
+src/app/alerts/page.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 22-25
+  s_6875ff47d264d3::t_158ad135a252fa 15-18,34-35,43-46,55-57,99-103,109,113,121
+src/components/game/GameHero.test.tsx
+  s_6875ff47d264d3::t_b3247ba7f51149 105,118
+  s_6875ff47d264d3::t_ab08b31a02b4fa 104,117
+src/components/AlertFormFields.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 69-71
+  s_6875ff47d264d3::t_948ebfe41e945f 20-23,25-28,34-35,46,48-49,54,61-62,65,89-90
+src/app/bundles/page.tsx
+  s_6875ff47d264d3::t_ab08b31a02b4fa 15-17
+  s_6875ff47d264d3::t_f421564c7b00b5 6,12-14,20,31-36,44,47,49-53,56-58,68,75-80,82,86,91,95
+src/components/Freebies.tsx
+  s_6875ff47d264d3::t_3f61e76037d838 13-15,25,33,38,47,51-52,56
+  s_6875ff47d264d3::t_ab08b31a02b4fa 16-21,28-32,42-44,48-50,53-55,57-59
+src/app/playlists/page.tsx
+  s_6875ff47d264d3::t_e4783c93fba6bc 10-14,22-23,31-33,53-58,62-66,81-88,90-91,93-96
+  s_6875ff47d264d3::t_ab08b31a02b4fa 34-40,59-61
+src/components/AlertCard.tsx
+  s_6875ff47d264d3::t_3d82c162f16fc6 20-22,28,30,33,37,39-41,46-47,65,68,74
+  s_6875ff47d264d3::t_ab08b31a02b4fa 23-25,42-44,48-54,60-62,77-80,84-87
+src/components/HeroSection.tsx
+  s_6875ff47d264d3::t_b75d7dccbd7095 13
+  s_6875ff47d264d3::t_ab08b31a02b4fa 15-18
+.superpowers/sdd/progress.md
+  s_6875ff47d264d3::t_ee71b23e248430 23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "c61a70e74d63353a39f8b9bc581d226d2298699a",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
