@@ -1,0 +1,20 @@
+docs/manual/01-architecture-and-decisions.md
+  s_6875ff47d264d3::t_8da2afe5d0c61b 42
+  s_6875ff47d264d3::t_efb1326f952a89 43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "9b822b1b1f0e54064d2bc0d8b604882852e86a0f",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
