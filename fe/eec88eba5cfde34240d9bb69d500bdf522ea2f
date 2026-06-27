@@ -1,0 +1,21 @@
+CHANGELOG.md
+  s_6875ff47d264d3::t_678d010a94eb7a 19
+  s_6875ff47d264d3::t_de4312ed8bbe58 24
+  s_6875ff47d264d3::t_3da28b0f8ad87b 3-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "feeec88eba5cfde34240d9bb69d500bdf522ea2f",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
