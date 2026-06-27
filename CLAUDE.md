@@ -29,6 +29,8 @@ pnpm db:studio            # Drizzle Kit Studio (visual DB browser)
 - English strings. DB columns **snake_case** (PostgreSQL convention).
 - No `any` without comment. Recharts formatters are the known exception.
 - Validate inputs at trust boundaries — actions are server-side, never trust raw client strings.
+- **Tailwind v4 only for styling. Zero CSS modules.** `@theme` block in `globals.css` for design tokens and `@keyframes`. No `.module.css` files.
+- CSS `@keyframes` defined in `globals.css` `@theme` block as `--animate-*` tokens. Use Tailwind classes like `animate-fade-slide-in`, `animate-heart-burst`, etc. No JS animation libraries.
 
 ## Architecture
 
@@ -38,10 +40,18 @@ src/
   actions/      # Server Actions — deals, search, alerts, playlists, gamification
   hooks/        # TanStack Query wrappers (useDeals, useWishlistGames, usePriceHistory)
   store/        # Zustand (auth, wishlist, alerts) — localStorage ↔ Supabase sync
-  components/   # UI — modals use CSS @keyframes, Discord icon is inline SVG
+  components/   # UI — shadcn Dialog, Button, Card, Badge, Tooltip. Discord icon is inline SVG.
   lib/          # Typesense client, affiliate config, chart data, rate limit
   db/           # Drizzle singleton + schema files (barrel export via index.ts)
 ```
+
+## Dependencies
+
+- Removed: gsap, motion (motion/react), tw-animate-css, cmdk, esbuild, shadcn (CLI tool)
+- shadcn/tailwind.css custom variants inlined directly in `globals.css` as `@custom-variant` blocks
+- Components/ui/ — badge, button, card, dialog, tooltip. 10 dead shadcn/ui files removed.
+- Motion-enabled components from `components/motion/` removed (was AnimatedDiv).
+- BaseModal.tsx removed (replaced by shadcn Dialog).
 
 ## Watch Out
 
@@ -55,3 +65,6 @@ src/
 - **PWA service worker excludes `/api/`, `/auth/`, `/out/`** — never cache sensitive paths.
 - **E2E flaky tests** — CheapShark 429 rate limits cause game data failures. Use `test.skip()` with game title visibility check before tests that depend on game/alert buttons.
 - **game-deals-research** repo privado em `~/dev/game-deals-research/` — pipeline de conteúdo externo, não integrado.
+- **`pnpm lint` may fail in pre-push hook** — hook runs `pnpm lint` (`biome check .`) but husky may also try eslint (not installed). Run `./node_modules/.bin/biome check .` directly if `pnpm lint` fails.
+- **SonarCloud false positives on globals.css** — `sonar-project.properties` excludes `src/app/globals.css`. Tailwind v4 `@custom-variant` blocks trigger 16 false "missing scoping root" bugs.
+- **Do NOT add `.module.css` files** — all styling is Tailwind utilities + CSS custom properties in `globals.css`.
