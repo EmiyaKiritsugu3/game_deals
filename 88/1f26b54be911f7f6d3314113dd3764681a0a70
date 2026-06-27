@@ -1,0 +1,21 @@
+docs/design-system.md
+  s_6875ff47d264d3::t_d0c0040681ac18 143-144
+  s_6875ff47d264d3::t_5e8649c90f2b36 94,96-98
+  s_6875ff47d264d3::t_a43ad8dc493d47 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "881f26b54be911f7f6d3314113dd3764681a0a70",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
