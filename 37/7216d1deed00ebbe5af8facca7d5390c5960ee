@@ -1,0 +1,22 @@
+src/components/hero/MatrixBackground.tsx
+  s_6875ff47d264d3::t_053c75cfb9ad70 15
+  s_6875ff47d264d3::t_ffefc6f50bc56b 14
+src/components/game/StoreIcon.tsx
+  s_6875ff47d264d3::t_4c370e4f250436 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "377216d1deed00ebbe5af8facca7d5390c5960ee",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
