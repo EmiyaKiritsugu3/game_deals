@@ -79,13 +79,14 @@ First focusable element. Hidden until focused.
 </a>
 ```
 
-### Modals (`BaseModal`, `AuthModal`)
+### Modals (shadcn Dialog)
 
-- Trap focus inside modal when open
+- Trap focus inside dialog when open
 - Close on Escape key
-- `aria-modal="true"`, `role="dialog"`
+- `aria-modal="true"`, `role="dialog"` via shadcn `<DialogContent>`
+- `<DialogTitle>` for accessible naming, `<DialogDescription>` for additional context
 - Restore focus to trigger element on close
-- Prevent background scroll (`overflow: hidden` on `<body>`)
+- Prevent background scroll (`overflow: hidden` on `<body>`, handled by shadcn)
 
 ### Search (`SearchBox`)
 
@@ -126,7 +127,7 @@ First focusable element. Hidden until focused.
 |-----|--------|-----|
 | Chart data not screen-reader accessible | Price history invisible to SR users | Add `aria-label` with summary text to chart containers |
 | No skip-to-content link in production | Keyboard users must tab through full navbar | Verify `sr-only` link renders correctly in SSR |
-| P15: `BaseModal.tsx` — dialog without accessible name | Screen readers can't identify modal | Add `aria-labelledby` referencing modal title |
+| P15: shadcn `<Dialog>` missing `<DialogTitle>` | Screen readers can't identify dialog | Add `<DialogTitle>` referencing modal title |
 
 ## Testing
 
