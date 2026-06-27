@@ -125,7 +125,7 @@ vitest.config.ts       # Vitest configuration (node + jsdom per-file)
 - **Unused exports**: 0
 - **Coverage thresholds**: lines 80%, functions 75%, branches 76%, statements 80%
 - **Security headers**: CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy
-- **Design tools**: shadcn (17 components), motion, gsap, UI UX Pro Max
+- **Design tools**: shadcn (17 components), CSS `@keyframes` animations, UI UX Pro Max
 
 ## Documentation
 
