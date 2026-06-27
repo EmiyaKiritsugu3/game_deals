@@ -1,0 +1,21 @@
+docs/accessibility.md
+  s_6875ff47d264d3::t_e4c23fa47f15c3 84,86-87,89
+  s_6875ff47d264d3::t_3f3242888a5dc7 130
+  s_6875ff47d264d3::t_1bd6fecf7c3224 82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "b1b9434b4ee79b8bd55331d11bb04345fb45007d",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
