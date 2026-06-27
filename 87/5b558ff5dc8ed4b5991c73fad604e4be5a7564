@@ -1,0 +1,28 @@
+.superpowers/sdd/progress.md
+  s_6875ff47d264d3::t_4ce067828439b1 6
+  s_6875ff47d264d3::t_6755828ba722f3 25
+src/components/NotificationBell.tsx
+  s_6875ff47d264d3::t_b3604a0988a5c0 92
+src/components/RatingStars.tsx
+  s_6875ff47d264d3::t_eb2157f7b0b2fa 164
+  s_6875ff47d264d3::t_16abf78063bd36 166
+  s_6875ff47d264d3::t_08e5ea0e7b2fc7 4
+src/app/globals.css
+  s_6875ff47d264d3::t_5af91ece9875be 7-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "875b558ff5dc8ed4b5991c73fad604e4be5a7564",
+  "prompts": {},
+  "sessions": {
+    "s_6875ff47d264d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "06dc08e4-16cc-40d2-8bcd-73267448a2c3",
+        "model": "deepseek-v4-pro"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
