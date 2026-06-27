@@ -46,10 +46,6 @@ vi.mock('next/link', () => ({
   ),
 }));
 
-vi.mock('../Navbar.module.css', () => ({
-  default: new Proxy({}, { get: () => 'mock-css-class' }),
-}));
-
 const defaultProps = {
   user: { id: 'u1', name: 'TestUser', email: 'test@example.com', avatar: '/avatar.png' },
   serverUser: null,

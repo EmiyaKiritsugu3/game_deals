@@ -10,7 +10,6 @@ import { useWishlistSavedGames } from '@/hooks/useWishlistSavedGames';
 import { useWishlistStats } from '@/hooks/useWishlistStats';
 import { useAlerts } from '@/store/alertStore';
 import { useWishlist } from '@/store/wishlistStore';
-import styles from './page.module.css';
 
 export default function WishlistPage() {
   const { wishlist } = useWishlist();
@@ -25,8 +24,8 @@ export default function WishlistPage() {
   const displayedGames = useSortedGames(savedGames, sortMode);
 
   return (
-    <main className={styles.main}>
-      <div className={`container ${styles.container}`}>
+    <main className="py-12 min-h-[calc(100vh-120px)]">
+      <div className="container flex flex-col gap-8">
         <WishlistHero bestDiscountGame={bestDiscountGame} />
         <WishlistTabs
           activeTab={activeTab}

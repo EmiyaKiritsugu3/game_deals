@@ -43,13 +43,6 @@ vi.mock('@/components/AuthModal', () => ({
   default: () => null,
 }));
 
-const cssProxy = vi.hoisted(
-  () => new Proxy({}, { get: (_: unknown, k: string) => (typeof k === 'string' ? k : '') })
-);
-
-vi.mock('./AlertsGrid.module.css', () => ({ default: cssProxy }));
-vi.mock('@/components/PriceAlertModal.module.css', () => ({ default: cssProxy }));
-
 const makeAlert = (overrides: Partial<PriceAlert> = {}): PriceAlert => ({
   gameID: 'g1',
   gameTitle: 'Test Game',

@@ -2,15 +2,9 @@
  * @vitest-environment jsdom
  */
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import type { SavedGame } from '@/hooks/useSortedGames';
 import WishlistHero from './WishlistHero';
-
-const cssProxy = vi.hoisted(
-  () => new Proxy({}, { get: (_: unknown, k: string) => (typeof k === 'string' ? k : '') })
-);
-
-vi.mock('./WishlistHero.module.css', () => ({ default: cssProxy }));
 
 const defaultProps = {
   bestDiscountGame: null,
@@ -69,14 +63,14 @@ describe('WishlistHero', () => {
   it('renders hero overlay element', () => {
     const { container } = render(<WishlistHero {...defaultProps} />);
     const divs = container.querySelectorAll('div');
-    const overlayDiv = Array.from(divs).find((d) => d.className.includes('heroOverlay'));
+    const overlayDiv = Array.from(divs).find((d) => d.className.includes('bg-gradient'));
     expect(overlayDiv).toBeInTheDocument();
   });
 
   it('renders hero content container', () => {
     const { container } = render(<WishlistHero {...defaultProps} />);
     const divs = container.querySelectorAll('div');
-    const contentDiv = Array.from(divs).find((d) => d.className.includes('heroContent'));
+    const contentDiv = Array.from(divs).find((d) => d.className.includes('z-[2]'));
     expect(contentDiv).toBeInTheDocument();
   });
 });

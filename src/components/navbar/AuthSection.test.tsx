@@ -5,10 +5,6 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { AuthSection } from './AuthSection';
 
-vi.mock('../Navbar.module.css', () => ({
-  default: new Proxy({}, { get: () => 'mock-css-class' }),
-}));
-
 describe('AuthSection', () => {
   it('renders a login button with User icon and "Login" text', () => {
     render(<AuthSection onLoginClickAction={vi.fn()} />);

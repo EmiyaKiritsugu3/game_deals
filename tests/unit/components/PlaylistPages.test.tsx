@@ -87,13 +87,6 @@ vi.mock('next/link', () => ({
   }) => React.createElement('a', { href, className }, children),
 }));
 
-vi.mock('@/app/playlists/page.module.css', () => ({
-  default: new Proxy({}, { get: () => 'mock-css' }),
-}));
-vi.mock('@/app/playlists/[id]/page.module.css', () => ({
-  default: new Proxy({}, { get: () => 'mock-css' }),
-}));
-
 describe('PlaylistsListPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -106,9 +99,7 @@ describe('PlaylistsListPage', () => {
     mocks.isLoggedIn = false;
     const { default: PlaylistsPage } = await import('@/app/playlists/page');
     render(React.createElement(PlaylistsPage));
-    expect(
-      screen.getByRole('heading', { name: /sign in to see your playlists/i })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /sign in to see playlists/i })).toBeInTheDocument();
   });
 
   it('renders loading state', async () => {
@@ -136,7 +127,7 @@ describe('PlaylistsListPage', () => {
     expect(screen.getByText('My List')).toBeInTheDocument();
     expect(screen.getByText('Private')).toBeInTheDocument();
     expect(screen.getByText(/Public/i)).toBeInTheDocument();
-    expect(screen.getByText(/Create Playlist/i)).toBeInTheDocument();
+    expect(screen.getByText(/New Playlist/i)).toBeInTheDocument();
   });
 });
 
@@ -192,7 +183,7 @@ describe('PlaylistDetailPage', () => {
     const { default: PlaylistDetailPage } = await import('@/app/playlists/[id]/page');
     render(React.createElement(PlaylistDetailPage, { params: { id: 'p1' } }));
 
-    expect(screen.getByText(/No games in this playlist/i)).toBeInTheDocument();
+    expect(screen.getByText(/No games in playlist yet/i)).toBeInTheDocument();
   });
 
   it('renders game cards in playlist', async () => {

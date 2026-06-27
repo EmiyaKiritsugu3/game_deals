@@ -49,13 +49,6 @@ vi.mock('@/components/DynamicCharts', () => ({
   DynamicStoreCompare: () => <div data-testid="dynamic-store-compare">Store Compare</div>,
 }));
 
-vi.mock('@/components/game/GameHero.module.css', () => ({
-  default: new Proxy({}, { get: () => 'mock-css' }),
-}));
-vi.mock('@/components/game/StoreComparison.module.css', () => ({
-  default: new Proxy({}, { get: () => 'mock-css' }),
-}));
-
 import GameBody from './GameBody';
 
 const mockViewModel = {

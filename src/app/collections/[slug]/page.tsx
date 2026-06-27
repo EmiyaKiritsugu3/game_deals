@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { COLLECTIONS } from '@/data/collections';
 import { getGame } from '@/services/api';
-import styles from '../collections.module.css';
 
 interface CollectionGame {
   gameID: string;
@@ -63,32 +62,38 @@ export default async function CollectionDetailPage({
 
   return (
     <main className="container">
-      <div className={styles.detailPage}>
-        <Link href="/collections" className={styles.detailBackLink}>
+      <div className="pt-8 pb-16">
+        <Link
+          href="/collections"
+          className="inline-flex items-center gap-1 mb-4 text-sm text-muted-foreground no-underline hover:text-primary"
+        >
           ← Back to Collections
         </Link>
 
-        <div className={styles.detailHeader}>
-          <h1>
+        <div className="mb-6">
+          <h1 className="text-3xl mb-1">
             {collection.emoji} {collection.title}
           </h1>
-          <p>{collection.description}</p>
+          <p className="text-muted-foreground">{collection.description}</p>
         </div>
 
-        <div className={styles.detailGrid}>
+        <div className="grid gap-4">
           {games.map((game: CollectionGame) => {
             return (
-              <div key={game.gameID} className={styles.detailGameRow}>
+              <div
+                key={game.gameID}
+                className="flex items-center gap-4 bg-card border border-border rounded-lg p-3 px-4 hover:border-primary"
+              >
                 <Image
                   src={game.thumb}
                   alt={game.title}
                   width={120}
                   height={56}
-                  className={styles.detailGameThumb}
+                  className="rounded object-cover"
                 />
-                <div className={styles.detailGameInfo}>
-                  <div className={styles.detailGameTitle}>{game.title}</div>
-                  <div className={styles.detailGamePrice}>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-sm truncate">{game.title}</div>
+                  <div className="text-sm text-primary font-extrabold">
                     {Number.parseFloat(game.price) === 0 ? 'FREE' : `$${game.price}`}
                     {Number.parseFloat(game.retailPrice) > Number.parseFloat(game.price) && (
                       <span
@@ -104,7 +109,10 @@ export default async function CollectionDetailPage({
                     )}
                   </div>
                 </div>
-                <Link href={`/game/${game.gameID}`} className={styles.detailGameCta}>
+                <Link
+                  href={`/game/${game.gameID}`}
+                  className="inline-flex items-center gap-1 px-4 py-2 bg-primary text-primary-foreground rounded-md font-bold text-xs no-underline whitespace-nowrap hover:opacity-85"
+                >
                   View Deal →
                 </Link>
               </div>

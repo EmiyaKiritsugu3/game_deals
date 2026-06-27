@@ -1,22 +1,23 @@
 import Image from 'next/image';
 import { BUNDLES } from '@/data/bundles';
-import styles from './bundles.module.css';
 
 export const metadata = {
   title: 'Game Bundles | GameDeals',
-  description: 'Find the best game bundle deals from Humble Bundle, Fanatical, and more.',
+  description: 'Find best game bundle deals from Humble Bundle, Fanatical, more.',
 };
 
 export default function BundlesPage() {
   return (
     <main className="container">
-      <div className={styles.bundlesPage}>
-        <div className={styles.bundlesHeader}>
-          <h1>🎁 Game Bundles</h1>
-          <p>Multi-game packages from top stores — save up to 90% vs buying individually.</p>
+      <div className="pt-8 pb-16">
+        <div className="mb-8">
+          <h1 className="text-3xl mb-1">🎁 Game Bundles</h1>
+          <p className="text-muted-foreground">
+            Multi-game packages top stores — save up 90% vs buying individually.
+          </p>
         </div>
 
-        <div className={styles.bundlesGrid}>
+        <div className="grid gap-6">
           {BUNDLES.map((bundle) => {
             const savings = Math.round(
               ((bundle.totalValue - bundle.price) / bundle.totalValue) * 100
@@ -27,9 +28,12 @@ export default function BundlesPage() {
             );
 
             return (
-              <div key={bundle.id} className={styles.bundleCard}>
-                <div className={styles.bundleCardHeader}>
-                  <div className={styles.bundleStoreInfo}>
+              <div
+                key={bundle.id}
+                className="bg-card border border-border rounded-xl overflow-hidden transition-all hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)]"
+              >
+                <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+                  <div className="flex items-center gap-2">
                     {
                       // biome-ignore lint/performance/noImgElement: static store icons
                       <img
@@ -37,17 +41,21 @@ export default function BundlesPage() {
                         alt={bundle.store}
                         width={20}
                         height={20}
-                        className={styles.bundleStoreIcon}
+                        className="rounded"
                       />
                     }
-                    <span className={styles.bundleStoreName}>{bundle.store}</span>
+                    <span className="text-xs text-muted-foreground">{bundle.store}</span>
                   </div>
-                  {bundle.tier && <span className={styles.bundleTier}>{bundle.tier}</span>}
+                  {bundle.tier && (
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-primary/15 text-primary uppercase tracking-wider">
+                      {bundle.tier}
+                    </span>
+                  )}
                 </div>
 
-                <div className={styles.bundleBody}>
-                  <h2 className={styles.bundleName}>{bundle.name}</h2>
-                  <div className={styles.bundleGamesGrid}>
+                <div className="p-5">
+                  <h2 className="text-xl font-extrabold mb-3">{bundle.name}</h2>
+                  <div className="flex gap-2 flex-wrap">
                     {bundle.games.map((game) => {
                       return (
                         <Image
@@ -57,32 +65,34 @@ export default function BundlesPage() {
                           title={`${game.title} — $${game.retailPrice.toFixed(2)}`}
                           width={120}
                           height={56}
-                          className={styles.bundleGameThumb}
+                          className="rounded-md"
                         />
                       );
                     })}
                   </div>
                 </div>
 
-                <div className={styles.bundleFooter}>
-                  <div className={styles.bundlePricing}>
-                    <span className={styles.bundlePrice}>${bundle.price.toFixed(2)}</span>
-                    <span className={styles.bundleValue}>
+                <div className="flex items-center justify-between px-5 py-4 border-t border-border bg-muted/30">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-2xl font-extrabold text-foreground">
+                      ${bundle.price.toFixed(2)}
+                    </span>
+                    <span className="text-sm text-muted-foreground">
                       {bundle.games.length} games · Value{' '}
-                      <strong>${bundle.totalValue.toFixed(2)}</strong>
+                      <strong className="text-primary">${bundle.totalValue.toFixed(2)}</strong>
                     </span>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                  <div className="flex flex-col items-end">
                     <a
                       href={bundle.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={styles.bundleCta}
+                      className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-primary text-primary-foreground rounded-lg font-bold text-sm no-underline hover:opacity-85"
                     >
                       -{savings}% · Get Bundle →
                     </a>
-                    <span className={styles.bundleExpiry}>
+                    <span className="text-xs text-muted-foreground mt-2 text-right">
                       {daysLeft > 0 ? `⏳ ${daysLeft} days left` : '⚠️ Expiring soon'}
                     </span>
                   </div>

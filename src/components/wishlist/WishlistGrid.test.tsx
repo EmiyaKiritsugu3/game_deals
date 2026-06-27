@@ -58,13 +58,6 @@ vi.mock('@/components/AuthModal', () => ({
   default: () => null,
 }));
 
-const cssProxy = vi.hoisted(
-  () => new Proxy({}, { get: (_: unknown, k: string) => (typeof k === 'string' ? k : '') })
-);
-
-vi.mock('./WishlistGrid.module.css', () => ({ default: cssProxy }));
-vi.mock('@/components/PriceAlertModal.module.css', () => ({ default: cssProxy }));
-
 const makeGame = (overrides: Partial<SavedGame> = {}): SavedGame => ({
   gameID: 'g1',
   title: 'Test Game',

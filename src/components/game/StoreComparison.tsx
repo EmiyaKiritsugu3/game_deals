@@ -1,7 +1,6 @@
 import { sortDealsByPrice } from '@/lib/game-data';
 import type { GameDeal } from '@/types/game';
 import GameDealRow from './GameDealRow';
-import styles from './StoreComparison.module.css';
 
 export interface StoreComparisonProps {
   readonly officialDeals: GameDeal[];
@@ -30,11 +29,11 @@ export default function StoreComparison({
   const keyshopBest = sortedKeyshop.length > 0 ? Number.parseFloat(sortedKeyshop[0].price) : null;
 
   return (
-    <div className={styles.storeComparison}>
+    <div className="mb-12">
       {sortedOfficial.length > 0 && (
         <>
-          <h2 className={styles.sectionTitle}>Official Stores</h2>
-          <div className={styles.dealsList}>
+          <h2 className="text-xl font-bold mb-4 text-foreground">Official Stores</h2>
+          <div className="flex flex-col gap-2">
             {sortedOfficial.map((deal) => (
               <GameDealRow
                 key={deal.dealID}
@@ -53,8 +52,13 @@ export default function StoreComparison({
 
       {sortedKeyshop.length > 0 && (
         <>
-          <h2 className={`${styles.sectionTitle} ${styles.keyshopTitle}`}>Keyshops</h2>
-          <div className={styles.dealsList}>
+          <h2 className="mt-6 pt-6 border-t border-dashed border-border relative text-xl font-bold mb-4 text-foreground">
+            Keyshops
+            <span className="absolute right-0 top-[1.5rem] text-xs font-extrabold tracking-widest text-muted-foreground bg-muted px-2 py-0.5 rounded-sm">
+              GREY MARKET
+            </span>
+          </h2>
+          <div className="flex flex-col gap-2">
             {sortedKeyshop.map((deal) => (
               <GameDealRow
                 key={deal.dealID}
