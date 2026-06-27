@@ -8,7 +8,6 @@ Server Components by default (App Router Next.js 16). `'use client'` only when n
 - State/effect hooks (`useState`, `useEffect`)
 - Event handlers (`onClick`, `onSubmit`)
 - Browser APIs (`localStorage`, `IntersectionObserver`)
-- Animation libraries (Framer Motion)
 - Context providers
 
 ## Styling
@@ -30,7 +29,7 @@ Usage in components:
 <div className="bg-bg-dark text-primary font-sans" />
 ```
 
-Legacy components still use CSS Modules (`*.module.css`). The migration to Tailwind v4 is progressive — new code should use utility classes with `@theme` tokens.
+All styling uses Tailwind v4. No CSS Modules remain (migration complete).
 
 ---
 
@@ -69,7 +68,7 @@ const [deals, stores] = await Promise.all([getDeals(), getStores()]);
 
 **Type:** Client Component (`'use client'`)
 **Props:** `{ deals: Deal[] }`
-**Animations:** Framer Motion (`motion.div` with `initial`/`animate`/`exit`)
+**Animations:** CSS `@keyframes` (no JS runtime). Defined in `globals.css` within `@theme` block.
 
 Featured carousel at the top of the home page. Auto-play with 5s `setInterval`.
 
@@ -82,7 +81,7 @@ Featured carousel at the top of the home page. Auto-play with 5s `setInterval`.
 **Why Client Component:**
 - `useState` for carousel `currentIndex`
 - `useEffect` for auto-play timer
-- Framer Motion for transition animations
+- CSS `@keyframes` transitions
 
 ---
 
@@ -145,7 +144,7 @@ export default function SyncManager() {
 
 **Type:** Client Component (`'use client'`)
 **Props:** `{ isOpen: boolean; onClose: () => void }`
-**Animations:** Framer Motion `AnimatePresence` + `motion.div`
+**Animations:** CSS transitions (no JS animation runtime)
 **Providers:** Google OAuth, Discord OAuth, Magic Link (email)
 
 Authentication modal with three methods:
@@ -156,7 +155,7 @@ Authentication modal with three methods:
 
 **UX:**
 - Overlay with `backdrop-blur`
-- Close via X button, overlay click, or `ESC` (Framer Motion manages)
+- Close via X button, overlay click, or `ESC`
 - Loading state during authentication
 - Conditional success/error message
 - Post-login redirect to `/auth/callback`
@@ -168,7 +167,7 @@ Authentication modal with three methods:
 **Type:** Client Component (`'use client'`)
 **Props:** none
 **State:** `localStorage` (key `gd_cookie_consent`)
-**Styling:** Inline styles (does not use CSS Module)
+**Styling:** Inline styles
 
 GDPR consent banner fixed at the page footer.
 
