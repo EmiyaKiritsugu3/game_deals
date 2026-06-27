@@ -2,7 +2,7 @@
 
 | Metadata | |
 |---|---|
-| Last updated | 2026-06-18 |
+| Last updated | 2026-06-27 |
 | Framework | Tailwind CSS v4 |
 | Theme | next-themes (dark/light/system) |
 
@@ -91,15 +91,11 @@ group relative overflow-hidden rounded-[var(--radius)] border bg-card
   → hover:shadow-lg transition-shadow
 ```
 
-### Modals (BaseModal)
+### Modals (shadcn Dialog)
 
-```
-fixed inset-0 z-50 flex items-center justify-center
-  → Overlay: fixed inset-0 bg-black/50 backdrop-blur-sm
-  → Content: z-10 max-w-md rounded-[var(--radius)] border bg-card p-6 shadow-xl
-```
-
-`role="dialog" aria-modal="true"`. Close on Escape. Trap focus.
+Uses shadcn `<Dialog>`, `<DialogContent>`, `<DialogOverlay>` from `@/components/ui/dialog`.
+Includes `<DialogTitle>` for accessible naming, `<DialogDescription>` for screen reader context.
+Default behavior: trap focus, close on Escape, restore focus to trigger on close.
 
 ### Price Tags
 
@@ -144,8 +140,8 @@ Theme toggle: `ThemeToggle.tsx` with `useTheme()` hook, `aria-label` updates dyn
 
 ## File Conventions
 
-- **CSS Modules**: `ComponentName.module.css` (co-located with component)
-- **Global styles**: `src/app/globals.css` (Tailwind directives + CSS custom properties)
+- **Global styles**: `src/app/globals.css` (Tailwind directives + `@theme` design tokens in CSS custom properties)
+- **CSS `@keyframes`**: Defined in `globals.css` below `@import` for animations (no JS runtime)
 - **Custom CSS**: Only for complex layouts not expressible in Tailwind (charts, gradients)
 
 ## Tools
