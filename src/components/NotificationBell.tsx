@@ -89,7 +89,7 @@ export default function NotificationBell() {
 
   const { data, refetch } = useQuery({
     queryKey: ['notifications'],
-    queryFn: getNotificationsAction,
+    queryFn: () => getNotificationsAction(),
     enabled: isLoggedIn,
   });
 

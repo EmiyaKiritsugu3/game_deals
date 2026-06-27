@@ -1,7 +1,7 @@
 'use client';
 
 import { type KeyboardEvent, useId, useRef, useState } from 'react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
 const STAR_PATH =
@@ -161,11 +161,9 @@ export default function RatingStars({
 
   if (interactive) {
     return (
-      <TooltipProvider delayDuration={100}>
+      <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger asChild tabIndex={-1}>
-            {content}
-          </TooltipTrigger>
+          <div className="inline-flex">{content}</div>
           <TooltipContent side="top" className="text-xs">
             {value.toFixed(1)} / {maxStars}
           </TooltipContent>
