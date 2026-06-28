@@ -72,6 +72,10 @@ export default function OutRedirector() {
         return;
       }
 
+      if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+        return;
+      }
+
       if (!isHostnameAllowed(parsed.hostname)) {
         return;
       }
