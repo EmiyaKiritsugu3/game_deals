@@ -289,4 +289,14 @@ describe('getCheapestDeal', () => {
     const deals = [{ price: '0.00' }, { price: '-5.00' }, { price: '5.00' }];
     expect(getCheapestDeal(deals)).toEqual({ price: '-5.00' });
   });
+
+  it('handles undefined input correctly', () => {
+    // @ts-expect-error testing invalid undefined input
+    expect(getCheapestDeal(undefined)).toBeUndefined();
+  });
+
+  it('handles null input correctly', () => {
+    // @ts-expect-error testing invalid null input
+    expect(getCheapestDeal(null)).toBeUndefined();
+  });
 });
