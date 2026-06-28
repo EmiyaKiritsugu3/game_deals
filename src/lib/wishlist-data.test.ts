@@ -2,11 +2,15 @@ import { describe, expect, it, vi } from 'vitest';
 import type { GameDataShape } from './wishlist-data';
 import { buildGameEntry, buildSharedGamesList, decodeSharedWishlistIds } from './wishlist-data';
 
-vi.mock('@/utils/pricing', () => ({
-  getHighResImage: vi.fn((url: string) =>
-    url.includes('capsule_sm_120') ? url.replace('capsule_sm_120', 'header') : url
-  ),
-}));
+vi.mock('@/utils/pricing', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/utils/pricing')>();
+  return {
+    ...actual,
+    getHighResImage: vi.fn((url: string) =>
+      url.includes('capsule_sm_120') ? url.replace('capsule_sm_120', 'header') : url
+    ),
+  };
+});
 
 const mockGameData: GameDataShape = {
   info: { title: 'Test Game', thumb: 'https://example.com/capsule_sm_120_123.jpg' },

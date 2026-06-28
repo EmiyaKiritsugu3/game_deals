@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import { getHighResImage } from '@/services/api';
 import type { GameDetails } from '@/types/game';
+import { getCheapestDeal } from '@/utils/pricing';
 import type { SavedGame } from './useSortedGames';
 
 export function useWishlistSavedGames(
@@ -13,9 +14,7 @@ export function useWishlistSavedGames(
     () =>
       gameResults.reduce((acc, g, idx) => {
         if (!g?.info) return acc;
-        const best = [...g.deals].sort(
-          (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
-        )[0];
+        const best = getCheapestDeal(g.deals);
         acc.push({
           gameID: wishlist[idx],
           title: g.info.title,
