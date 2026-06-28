@@ -4,7 +4,7 @@ const {
   mockFetchGameFromCheapShark,
   mockEnrichWithGreyMarketDeals,
   mockUpdateHistoricalLow,
-  mockFetchGamesBatchFromCheapShark
+  mockFetchGamesBatchFromCheapShark,
 } = vi.hoisted(() => {
   return {
     mockFetchGameFromCheapShark: vi.fn(),
@@ -333,10 +333,6 @@ describe('getStores', () => {
     });
   });
 });
-
-// ---------------------------------------------------------------------------
-// getGame / getGamesBatch — delegates to game-enrichment
-// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 // getGame / getGamesBatch — delegates to game-enrichment
