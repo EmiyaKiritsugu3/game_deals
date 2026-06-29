@@ -1,0 +1,31 @@
+src/components/game/deal-grid.tsx
+  s_61581948362a2a::t_e25d418e8cb78e 101-105
+  s_61581948362a2a::t_ba312a4ddbab96 45-47
+  s_61581948362a2a::t_fed04e1bb88a87 4
+  s_61581948362a2a::t_8b673de14a80b3 3,7,48
+  s_61581948362a2a::t_addcad806d9765 23-25
+  s_61581948362a2a::t_aa9ae52ffecd8b 36-37
+  s_61581948362a2a::t_b587c02dd4450c 8
+  s_61581948362a2a::t_258023acbe3e28 38-39,41-43
+  s_61581948362a2a::t_c72db1628d3c14 55
+  s_61581948362a2a::t_5af363532eb780 97-100,106-123
+src/store/density.ts
+  s_61581948362a2a::t_c72803abc00889 19,21-22
+  s_61581948362a2a::t_39ae7f3914ef90 1-18,20,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "f2e836a41e0c8bcaba51cd42291447af313e57b5",
+  "prompts": {},
+  "sessions": {
+    "s_61581948362a2a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4e037d20-e620-46fe-a6a1-57284916160d",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
