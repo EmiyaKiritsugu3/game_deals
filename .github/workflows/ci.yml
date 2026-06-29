@@ -53,7 +53,7 @@ jobs:
       - name: SonarCloud Scan
         continue-on-error: true  # External service — may fail from token expiry or service outage, not code issues
         if: ${{ github.event_name == 'pull_request' || github.ref == 'refs/heads/main' }}
-        uses: SonarSource/sonarqube-scan-action@8c71dc039c2dd71d3821e89a2b58ecc7fee6ced9
+        uses: SonarSource/sonarqube-scan-action@713881670b6b3676cda39549040e2d88c70d582e
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN || '' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
