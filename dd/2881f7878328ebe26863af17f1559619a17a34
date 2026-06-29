@@ -1,0 +1,40 @@
+src/components/game/how-it-works.tsx
+  s_832983507c4067::t_8af3b0c5fa4f82 1-76
+src/components/game/deal-cta.tsx
+  s_832983507c4067::t_8af3b0c5fa4f82 1-175
+src/components/game/social-login-buttons.tsx
+  s_832983507c4067::t_8af3b0c5fa4f82 1-100,102-114
+  s_832983507c4067::t_18a77ae219e2e9 101
+src/components/game/savings-summary.tsx
+  s_832983507c4067::t_8af3b0c5fa4f82 1-88
+src/components/game/auth-brand-panel.tsx
+  s_832983507c4067::t_8af3b0c5fa4f82 1-110
+src/components/game/scroll-utilities.tsx
+  s_832983507c4067::t_8af3b0c5fa4f82 1-63
+src/components/game/theme-toggle.tsx
+  s_832983507c4067::t_8af3b0c5fa4f82 1-69
+src/components/game/section-divider.tsx
+  s_832983507c4067::t_8af3b0c5fa4f82 1-26
+src/components/game/background-effects.tsx
+  s_832983507c4067::t_8af3b0c5fa4f82 1-52
+src/components/game/price-range-chips.tsx
+  s_832983507c4067::t_8af3b0c5fa4f82 1-69
+src/components/game/smart-filter-chips.tsx
+  s_832983507c4067::t_8af3b0c5fa4f82 1-147
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "dd2881f7878328ebe26863af17f1559619a17a34",
+  "prompts": {},
+  "sessions": {
+    "s_832983507c4067": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "395d65bb-6bcd-4289-8d5f-dc12ba756279",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
