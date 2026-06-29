@@ -1,9 +1,36 @@
 import FilterSidebar from '@/components/FilterSidebar';
-import { getActiveStores, getDealsWithParams, SearchResults } from './SearchResults';
+import { normaliseDeal } from '@/lib/deal-utils';
+import { getDeals, type Store } from '@/services/api';
+import { SearchResults } from './SearchResults';
 
 export const metadata = {
   title: 'Search Results | Game Deals',
 };
+
+async function getActiveStores(): Promise<Store[]> {
+  const storesResponse = (await fetch('https://www.cheapshark.com/api/1.0/stores').then((res) =>
+    res.json()
+  )) as Store[];
+  return storesResponse.filter((s) => s.isActive === 1);
+}
+
+async function getDealsWithParams(
+  query: string,
+  upperPrice?: string,
+  storeID?: string
+): Promise<ReturnType<typeof normaliseDeal>[]> {
+  const apiParams: Record<string, string> = { onSale: '1' };
+  if (query) apiParams.title = query;
+  if (upperPrice) apiParams.upperPrice = upperPrice;
+  if (storeID) apiParams.storeID = storeID;
+  try {
+    const deals = await getDeals(apiParams);
+    return deals.map((d) => normaliseDeal(d));
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
 
 export default async function SearchPage({
   searchParams,

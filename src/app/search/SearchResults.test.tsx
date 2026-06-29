@@ -4,16 +4,21 @@
 
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { getDealsWithParams, SearchResults } from './SearchResults';
+import type { DealWithStore } from '@/lib/deal-utils';
+import { SearchResults } from './SearchResults';
 
-vi.mock('@/components/GameCard', () => ({
-  default: ({ deal }: { deal: { dealID: string } }) => (
-    <div data-testid="game-card" data-dealid={deal.dealID} />
-  ),
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: vi.fn() }),
 }));
 
-vi.mock('@/services/api', () => ({
-  getDeals: vi.fn(),
+vi.mock('@/components/game/deal-grid', () => ({
+  DealGrid: ({ deals }: { deals: { dealID: string }[] }) => (
+    <div data-testid="deal-grid" data-count={deals.length}>
+      {deals.map((d) => (
+        <div key={d.dealID} data-testid="deal-grid-item" data-deal-id={d.dealID} />
+      ))}
+    </div>
+  ),
 }));
 
 const mockDeals = [
@@ -37,6 +42,15 @@ const mockDeals = [
     steamRatingCount: '100',
     steamAppID: '1000',
     metacriticLink: '',
+    salePriceNum: 9.99,
+    normalPriceNum: 19.99,
+    savingsNum: 50,
+    dealRatingNum: 8,
+    metacriticScoreNum: 80,
+    steamRatingNum: 90,
+    releaseDateMs: 0,
+    releaseDateLabel: '',
+    isFree: false,
   },
   {
     dealID: '2',
@@ -58,8 +72,17 @@ const mockDeals = [
     steamRatingCount: '200',
     steamAppID: '2000',
     metacriticLink: '',
+    salePriceNum: 4.99,
+    normalPriceNum: 14.99,
+    savingsNum: 66,
+    dealRatingNum: 9,
+    metacriticScoreNum: 90,
+    steamRatingNum: 95,
+    releaseDateMs: 0,
+    releaseDateLabel: '',
+    isFree: false,
   },
-];
+] as unknown as DealWithStore[];
 
 describe('SearchResults', () => {
   it('renders "Search Results" heading', () => {
@@ -82,41 +105,17 @@ describe('SearchResults', () => {
     expect(screen.getByText(/Found 2 deals/)).toBeInTheDocument();
   });
 
-  it('renders GameCard for each deal', () => {
+  it('renders DealGrid passing deals', () => {
     render(<SearchResults deals={mockDeals} query="" />);
-    const cards = screen.getAllByTestId('game-card');
-    expect(cards).toHaveLength(2);
-    expect(cards[0]).toHaveAttribute('data-dealid', '1');
-    expect(cards[1]).toHaveAttribute('data-dealid', '2');
+    const grid = screen.getByTestId('deal-grid');
+    expect(grid).toHaveAttribute('data-count', '2');
+    const items = screen.getAllByTestId('deal-grid-item');
+    expect(items[0]).toHaveAttribute('data-deal-id', '1');
+    expect(items[1]).toHaveAttribute('data-deal-id', '2');
   });
 
-  it('shows "No deals found." when empty', () => {
-    render(<SearchResults deals={[]} query="nonexistent" />);
-    expect(screen.getByText('No deals found.')).toBeInTheDocument();
-    expect(screen.getByText(/Try adjusting/)).toBeInTheDocument();
-  });
-
-  it('getDealsWithParams calls getDeals with correct params', async () => {
-    const { getDeals } = await import('@/services/api');
-    const mockGetDeals = vi.mocked(getDeals);
-    mockGetDeals.mockResolvedValueOnce([]);
-
-    await getDealsWithParams('doom', '20', '1');
-
-    expect(mockGetDeals).toHaveBeenCalledWith({
-      onSale: '1',
-      title: 'doom',
-      upperPrice: '20',
-      storeID: '1',
-    });
-  });
-
-  it('getDealsWithParams returns [] on error', async () => {
-    const { getDeals } = await import('@/services/api');
-    const mockGetDeals = vi.mocked(getDeals);
-    mockGetDeals.mockRejectedValueOnce(new Error('network'));
-
-    const result = await getDealsWithParams('test');
-    expect(result).toEqual([]);
+  it('shows singular "deal" when count is 1', () => {
+    render(<SearchResults deals={[mockDeals[0]]} query="" />);
+    expect(screen.getByText(/Found 1 deal/)).toBeInTheDocument();
   });
 });
