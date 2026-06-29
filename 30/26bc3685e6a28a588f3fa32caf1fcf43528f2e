@@ -1,0 +1,23 @@
+src/app/page.tsx
+  s_61581948362a2a::t_9e7bf412534c09 11-12
+  s_61581948362a2a::t_27fa0b5f07dd4b 119
+src/components/home/PopularDealsGrid.tsx
+  s_61581948362a2a::t_49482f0135fb3c 1-6,8-30
+  s_61581948362a2a::t_f95bc343aadbfa 7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "3026bc3685e6a28a588f3fa32caf1fcf43528f2e",
+  "prompts": {},
+  "sessions": {
+    "s_61581948362a2a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4e037d20-e620-46fe-a6a1-57284916160d",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": null
+    }
+  }
+}
