@@ -213,7 +213,7 @@ describe('DealGrid', () => {
     it('renders density toggle button', () => {
       render(
         <DealGrid
-          deals={[[makeDeal('1')]] as unknown as DealWithStore[]}
+          deals={[makeDeal('1')] as unknown as DealWithStore[]}
           loading={false}
           error={false}
         />
@@ -225,7 +225,7 @@ describe('DealGrid', () => {
       const onDensityChange = vi.fn();
       render(
         <DealGrid
-          deals={[[makeDeal('1')]] as unknown as DealWithStore[]}
+          deals={[makeDeal('1')] as unknown as DealWithStore[]}
           loading={false}
           error={false}
           density="comfortable"
@@ -239,7 +239,7 @@ describe('DealGrid', () => {
     it('calls store toggle when no onDensityChange prop', () => {
       render(
         <DealGrid
-          deals={[[makeDeal('1')]] as unknown as DealWithStore[]}
+          deals={[makeDeal('1')] as unknown as DealWithStore[]}
           loading={false}
           error={false}
         />
@@ -252,7 +252,7 @@ describe('DealGrid', () => {
       mockStore.density = 'compact';
       render(
         <DealGrid
-          deals={[[makeDeal('1')]] as unknown as DealWithStore[]}
+          deals={[makeDeal('1')] as unknown as DealWithStore[]}
           loading={false}
           error={false}
         />
@@ -264,7 +264,7 @@ describe('DealGrid', () => {
     it('shows comfortable icon when density is comfortable', () => {
       render(
         <DealGrid
-          deals={[[makeDeal('1')]] as unknown as DealWithStore[]}
+          deals={[makeDeal('1')] as unknown as DealWithStore[]}
           loading={false}
           error={false}
         />
@@ -275,7 +275,7 @@ describe('DealGrid', () => {
     it('applies compact grid classes via prop override', () => {
       const { container } = render(
         <DealGrid
-          deals={[[makeDeal('1')]] as unknown as DealWithStore[]}
+          deals={[makeDeal('1')] as unknown as DealWithStore[]}
           loading={false}
           error={false}
           density="compact"
