@@ -20,6 +20,7 @@ export default defineConfig({
         'src/scripts/**',
         'src/data/**',
         'src/db/**',
+        'src/components/ui/**',
         'src/app/global-error.tsx',
         'src/app/auth/error/**',
         'src/app/auth/auth-code-error/**',
