@@ -69,7 +69,7 @@ function createMockGameDetails(overrides: { title?: string; price?: string } = {
       {
         dealID: 'd1',
         storeID: '1',
-        salePrice: overrides.price ?? '9.99',
+        price: overrides.price ?? '9.99',
         retailPrice: '19.99',
       },
     ],
@@ -152,5 +152,31 @@ describe('CollectionDetailPage', () => {
     expect(result).toEqual(
       expect.arrayContaining([{ slug: 'test-collection' }, { slug: 'empty-collection' }])
     );
+  });
+
+  it('renders gracefully if getGamesBatch rejects (fallback to empty gamesData)', async () => {
+    mockGetGamesBatch.mockRejectedValue(new Error('Network failure'));
+    const params = Promise.resolve({ slug: 'test-collection' });
+    render(await CollectionDetailPage({ params }));
+    // When gamesData falls back to {}, the games array becomes empty.
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('🎮 Test Collection');
+    expect(screen.queryByText('Test Game')).not.toBeInTheDocument();
+  });
+
+  it('finds the best deal across multiple stores efficiently', async () => {
+    const gameWithMultipleDeals = createMockGameDetails();
+    gameWithMultipleDeals.deals = [
+      { dealID: '1', storeID: '1', price: '15.99', retailPrice: '19.99' },
+      { dealID: '2', storeID: '2', price: '9.99', retailPrice: '19.99' },
+      { dealID: '3', storeID: '3', price: '12.99', retailPrice: '19.99' },
+    ];
+    mockGetGamesBatch.mockResolvedValueOnce({
+      '100': gameWithMultipleDeals as never,
+    });
+    const params = Promise.resolve({ slug: 'test-collection' });
+    render(await CollectionDetailPage({ params }));
+
+    // The lowest price $9.99 should be displayed
+    expect(screen.getAllByText('$9.99').length).toBeGreaterThan(0);
   });
 });
