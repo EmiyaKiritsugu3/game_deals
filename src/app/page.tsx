@@ -3,12 +3,13 @@ import DealRow from '@/components/DealRow';
 import EndingSoon from '@/components/EndingSoon';
 import FlashSales from '@/components/FlashSales';
 import Freebies from '@/components/Freebies';
-import GameCard from '@/components/GameCard';
 import HistoricalLows from '@/components/HistoricalLows';
 import CommunityListings from '@/components/home/CommunityListings';
 import DiscoveryGrid from '@/components/home/DiscoveryGrid';
 import HomeHero from '@/components/home/HomeHero';
 import HotDealsSection from '@/components/home/HotDealsSection';
+import { PopularDealsGrid } from '@/components/home/PopularDealsGrid';
+import { normaliseDeal } from '@/lib/deal-utils';
 import { getDeals } from '@/services/api';
 
 // ISR: revalida a cada 1h
@@ -115,25 +116,7 @@ export default async function Home() {
 
         {/* Most Popular Games grid */}
         {popular.length > 1 && (
-          <div>
-            <div className="mb-4">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h2 className="text-2xl font-bold tracking-tight text-foreground mb-1">
-                    Most Popular Games
-                  </h2>
-                  <p className="text-sm text-muted-foreground">
-                    The best and most sought-after discounts right now.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 mb-12">
-              {popular.slice(1).map((deal) => (
-                <GameCard key={deal.dealID} deal={deal} />
-              ))}
-            </div>
-          </div>
+          <PopularDealsGrid deals={popular.slice(1).map((d) => normaliseDeal(d))} />
         )}
       </div>
 
