@@ -1,0 +1,40 @@
+src/store/wishlist.ts
+  s_832983507c4067::t_bd9b75bb525ebd 1
+src/lib/store-trust.ts
+  s_832983507c4067::t_51ffb9e0a913c2 36-37
+  s_832983507c4067::t_b28a44a73b7a52 1-35,38-50
+src/store/compare.ts
+  s_832983507c4067::t_67bc2ed8b57d18 6,20
+  s_832983507c4067::t_4db122ecbe6102 3-4,16-17,19,28-29,41
+  s_832983507c4067::t_ebb22c13c997f1 5,7-15,18,21-27,30-40
+  s_832983507c4067::t_bbc55b652fa142 1-2
+src/app/collections/page.tsx
+  s_832983507c4067::t_9c8fa962a700d0 1-2
+src/store/wishlistStore.ts
+  s_832983507c4067::t_7ce41f1c910def 40-42
+  s_832983507c4067::t_84d09209a8ff06 11-14
+src/lib/deal-utils.ts
+  s_832983507c4067::t_3539647e5d9dc6 2-3
+  s_832983507c4067::t_6a556679d13d38 1,4-103
+src/lib/dedup.ts
+  s_832983507c4067::t_572ea1ddca2f6b 1-68,70-97
+  s_832983507c4067::t_c444317f38d087 69
+src/store/auth.ts
+  s_832983507c4067::t_11513a2acc90dc 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "9edb64421584bb5c04b457fee14ebc19a50a3fb9",
+  "prompts": {},
+  "sessions": {
+    "s_832983507c4067": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "395d65bb-6bcd-4289-8d5f-dc12ba756279",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
