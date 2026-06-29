@@ -1,0 +1,19 @@
+biome.json
+  s_832983507c4067::t_bd6d7dcd469a39 38-40,49-52,62-64,74-77,87-89,99-101,111-113,122-166,181
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "6f63ea818d4a8bfb08585cf38dbe8664995af464",
+  "prompts": {},
+  "sessions": {
+    "s_832983507c4067": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "395d65bb-6bcd-4289-8d5f-dc12ba756279",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
