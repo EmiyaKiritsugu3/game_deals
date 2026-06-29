@@ -1,0 +1,19 @@
+src/components/game/deal-grid.test.tsx
+  s_61581948362a2a::t_9609359ab85aa2 216,228,242,255,267,278
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "cb71a3428a070e74eeb867a1bd3e922a916d5fb2",
+  "prompts": {},
+  "sessions": {
+    "s_61581948362a2a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4e037d20-e620-46fe-a6a1-57284916160d",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
