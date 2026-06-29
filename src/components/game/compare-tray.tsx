@@ -24,8 +24,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { dealRedirectUrl } from '@/lib/deal-utils';
 import type { DealWithStore } from '@/lib/deal-utils';
+import { dealRedirectUrl } from '@/lib/deal-utils';
 import { cn } from '@/lib/utils';
 import { useCompare } from '@/store/compare';
 import { useWishlist } from '@/store/wishlist';
@@ -71,7 +71,8 @@ export function CompareTray() {
                   className="object-cover"
                   unoptimized
                 />
-                <button type="button"
+                <button
+                  type="button"
                   onClick={() => remove(deal.dealID)}
                   className="absolute right-0 top-0 grid size-4 place-items-center bg-black/70 text-white opacity-0 transition-opacity group-hover:opacity-100"
                   aria-label={`Remove ${deal.title} from comparison`}
@@ -231,7 +232,11 @@ function CompareDialog({
         d.store ? (
           <span className="inline-flex items-center gap-1.5">
             {}
-            <img src={`https://www.cheapshark.com${d.store.images.logo}`} alt="" className="size-4 rounded object-contain" />
+            <img
+              src={`https://www.cheapshark.com${d.store.images.logo}`}
+              alt=""
+              className="size-4 rounded object-contain"
+            />
             <span className="text-xs">{d.store.storeName}</span>
           </span>
         ) : (
@@ -282,7 +287,8 @@ function CompareDialog({
                     className="object-cover"
                     unoptimized
                   />
-                  <button type="button"
+                  <button
+                    type="button"
                     onClick={() => remove(deal.dealID)}
                     className="absolute right-1.5 top-1.5 grid size-6 place-items-center rounded-md bg-black/70 text-white backdrop-blur-md transition-colors hover:bg-destructive/80"
                     aria-label={`Remove ${deal.title} from comparison`}
@@ -384,10 +390,9 @@ function CompareDialog({
                     <ExternalLink className="size-3.5" />
                     Get deal
                   </a>
-                  <button type="button"
-                    onClick={() =>
-                      toggleWishlist(deal.dealID)
-                    }
+                  <button
+                    type="button"
+                    onClick={() => toggleWishlist(deal.dealID)}
                     className={cn(
                       'inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-all',
                       wished

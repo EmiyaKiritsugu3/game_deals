@@ -15,9 +15,9 @@ import {
 import Image from 'next/image';
 import * as React from 'react';
 import { Badge } from '@/components/ui/badge';
+import type { DealWithStore } from '@/lib/deal-utils';
 import { dealRedirectUrl, formatLastChecked, isRecentlyVerified } from '@/lib/deal-utils';
 import { isOfficialRetailer } from '@/lib/store-trust';
-import type { DealWithStore } from '@/lib/deal-utils';
 import { cn } from '@/lib/utils';
 import { useCompare } from '@/store/compare';
 import { useWishlist } from '@/store/wishlist';
@@ -116,7 +116,8 @@ export function DealCard({
         />
       </span>
       {/* Cover */}
-      <button type="button"
+      <button
+        type="button"
         onClick={() => onOpenDetail?.(deal)}
         className="relative block aspect-[460/215] w-full overflow-hidden bg-card/60"
         aria-label={`View ${deal.title} details`}
@@ -281,7 +282,8 @@ export function DealCard({
 
           <div className="flex items-center gap-1.5">
             {/* Wishlist */}
-            <button type="button"
+            <button
+              type="button"
               onClick={() => toggle(wishlistItem)}
               className={cn(
                 'grid size-8 place-items-center rounded-lg border transition-all duration-300',
@@ -298,7 +300,8 @@ export function DealCard({
             </button>
 
             {/* Compare */}
-            <button type="button"
+            <button
+              type="button"
               onClick={() => compareToggle(deal)}
               disabled={compareDisabled}
               className={cn(
@@ -317,7 +320,8 @@ export function DealCard({
 
             {/* Share */}
             {onShare && (
-              <button type="button"
+              <button
+                type="button"
                 onClick={() => onShare(deal)}
                 className="grid size-8 place-items-center rounded-lg border border-border/50 bg-card/40 text-muted-foreground transition-all hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
                 aria-label={`Share ${deal.title} deal`}
