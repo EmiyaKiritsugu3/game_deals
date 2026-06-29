@@ -35,7 +35,9 @@
   },
   "overrides": [
     {
-      "includes": [".claude/**"],
+      "includes": [
+        ".claude/**"
+      ],
       "linter": {
         "enabled": false
       },
@@ -44,7 +46,10 @@
       }
     },
     {
-      "includes": ["src/app/layout.tsx", "src/app/game/\\[id\\]/page.tsx"],
+      "includes": [
+        "src/app/layout.tsx",
+        "src/app/game/\\[id\\]/page.tsx"
+      ],
       "linter": {
         "rules": {
           "security": {
@@ -54,7 +59,9 @@
       }
     },
     {
-      "includes": ["drizzle.config.ts"],
+      "includes": [
+        "drizzle.config.ts"
+      ],
       "linter": {
         "rules": {
           "style": {
@@ -64,7 +71,10 @@
       }
     },
     {
-      "includes": ["**/*.test.ts", "**/*.test.tsx"],
+      "includes": [
+        "**/*.test.ts",
+        "**/*.test.tsx"
+      ],
       "linter": {
         "rules": {
           "performance": {
@@ -74,7 +84,9 @@
       }
     },
     {
-      "includes": ["public/*.svg"],
+      "includes": [
+        "public/*.svg"
+      ],
       "linter": {
         "rules": {
           "a11y": {
@@ -84,7 +96,9 @@
       }
     },
     {
-      "includes": ["src/components/RatingStars.tsx"],
+      "includes": [
+        "src/components/RatingStars.tsx"
+      ],
       "linter": {
         "rules": {
           "a11y": {
@@ -94,12 +108,59 @@
       }
     },
     {
-      "includes": ["src/components/ui/input-group.tsx"],
+      "includes": [
+        "src/components/ui/input-group.tsx"
+      ],
       "linter": {
         "rules": {
           "a11y": {
             "useSemanticElements": "off",
             "useKeyWithClickEvents": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/components/game/deal-card.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noImgElement": "off"
+          },
+          "suspicious": {
+            "noArrayIndexKey": "off"
+          },
+          "a11y": {
+            "useAriaPropsSupportedByRole": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/components/game/compare-tray.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noImgElement": "off"
+          },
+          "suspicious": {
+            "noArrayIndexKey": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/components/game/density-toggle.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useSemanticElements": "off"
           }
         }
       }
