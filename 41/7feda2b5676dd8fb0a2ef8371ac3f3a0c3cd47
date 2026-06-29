@@ -1,0 +1,19 @@
+pnpm-lock.yaml
+  s_61581948362a2a::t_895ad3c632933e 3883-3884,5492-5493
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "417feda2b5676dd8fb0a2ef8371ac3f3a0c3cd47",
+  "prompts": {},
+  "sessions": {
+    "s_61581948362a2a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4e037d20-e620-46fe-a6a1-57284916160d",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
