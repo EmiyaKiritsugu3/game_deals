@@ -1,0 +1,19 @@
+src/services/api.test.ts
+  s_61581948362a2a::t_52a075a68b6b02 6,10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "da5301cd8e0736a52ce52767a8d80c11265d480e",
+  "prompts": {},
+  "sessions": {
+    "s_61581948362a2a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4e037d20-e620-46fe-a6a1-57284916160d",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": null
+    }
+  }
+}
