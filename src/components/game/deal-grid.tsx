@@ -39,8 +39,8 @@ export function DealGrid({
   if (loading) {
     return (
       <div className={gridCls}>
-        {Array.from({ length: 8 }).map((_unused) => (
-          <div key={item.deal.dealID} className="skeleton-shimmer h-80 rounded-2xl glass" />
+        {Array.from({ length: 8 }).map((_, idx) => (
+          <div key={idx} className="skeleton-shimmer h-80 rounded-2xl glass" />
         ))}
       </div>
     );
