@@ -3,9 +3,11 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vites
 const mockFetchGameFromCheapShark = vi.hoisted(() => vi.fn());
 const mockEnrichWithGreyMarketDeals = vi.hoisted(() => vi.fn());
 const mockUpdateHistoricalLow = vi.hoisted(() => vi.fn());
+const mockFetchGamesBatchFromCheapShark = vi.hoisted(() => vi.fn());
 
 vi.mock('@/services/game-enrichment', () => ({
   fetchGameFromCheapShark: mockFetchGameFromCheapShark,
+  fetchGamesBatchFromCheapShark: mockFetchGamesBatchFromCheapShark,
   enrichWithGreyMarketDeals: mockEnrichWithGreyMarketDeals,
   updateHistoricalLow: mockUpdateHistoricalLow,
 }));
@@ -322,21 +324,6 @@ describe('getStores', () => {
 // ---------------------------------------------------------------------------
 // getGame / getGamesBatch — delegates to game-enrichment
 // ---------------------------------------------------------------------------
-
-const { mockFetchGamesBatchFromCheapShark } = vi.hoisted(() => {
-  return { mockFetchGamesBatchFromCheapShark: vi.fn() };
-});
-
-vi.mock('@/services/game-enrichment', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@/services/game-enrichment')>();
-  return {
-    ...actual,
-    fetchGameFromCheapShark: mockFetchGameFromCheapShark,
-    fetchGamesBatchFromCheapShark: mockFetchGamesBatchFromCheapShark,
-    enrichWithGreyMarketDeals: mockEnrichWithGreyMarketDeals,
-    updateHistoricalLow: mockUpdateHistoricalLow,
-  };
-});
 
 describe('getGame', () => {
   beforeEach(() => {
