@@ -81,7 +81,6 @@ export function CompareTray() {
               </div>
             ))}
             {items.length < 3 &&
-              // biome-ignore lint/suspicious/noArrayIndexKey: empty slots stable
               Array.from({ length: 3 - items.length }).map((_, i) => (
                 <div
                   key={`empty-${i}`}
