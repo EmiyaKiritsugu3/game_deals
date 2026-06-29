@@ -2,6 +2,7 @@
 
 import { Gamepad2, Grid2x2, Inbox, Rows3 } from 'lucide-react';
 import { DealCard, DealCardSkeleton } from '@/components/game/deal-card';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import type { DealWithStore } from '@/lib/deal-utils';
 import { cn } from '@/lib/utils';
 import type { Density } from '@/store/density';
@@ -52,7 +53,7 @@ export function DealGrid({
     return (
       <div className={gridCls}>
         {Array.from({ length: 8 }).map((_, idx) => (
-          <DealCardSkeleton key={idx} />
+          <DealCardSkeleton key={idx} compact={density === 'compact'} />
         ))}
       </div>
     );
@@ -95,24 +96,29 @@ export function DealGrid({
 
   return (
     <section aria-live="polite" aria-busy={loading}>
-      <div className="mb-3 flex items-center justify-end">
-        <button
-          type="button"
-          onClick={() => {
-            const next: Density = density === 'comfortable' ? 'compact' : 'comfortable';
-            onDensityChange?.(next);
-            if (!onDensityChange) storeToggle();
-          }}
-          className="flex size-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
-          aria-label={`Switch to ${density === 'comfortable' ? 'compact' : 'comfortable'} layout`}
-        >
-          {density === 'comfortable' ? <Grid2x2 size={16} /> : <Rows3 size={16} />}
-        </button>
+      <div className="mb-3 flex items-center justify-end gap-2">
+        <Tooltip>
+          <TooltipTrigger
+            onClick={() => {
+              const next: Density = density === 'comfortable' ? 'compact' : 'comfortable';
+              onDensityChange?.(next);
+              if (!onDensityChange) storeToggle();
+            }}
+            className="flex size-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+            aria-label={`Switch to ${density === 'comfortable' ? 'compact' : 'comfortable'} layout`}
+          >
+            {density === 'comfortable' ? <Grid2x2 size={16} /> : <Rows3 size={16} />}
+          </TooltipTrigger>
+          <TooltipContent>
+            {density === 'comfortable' ? 'Compact view' : 'Comfortable view'}
+          </TooltipContent>
+        </Tooltip>
       </div>
       <div className={gridCls}>
-        {items.map((item) => (
+        {items.map((item, idx) => (
           <DealCard
             key={item.deal.dealID}
+            index={idx}
             deal={item.deal}
             variantCount={item.variantCount}
             onOpenDetail={onOpenDetail}
