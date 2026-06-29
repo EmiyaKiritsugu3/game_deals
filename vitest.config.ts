@@ -21,6 +21,7 @@ export default defineConfig({
         'src/data/**',
         'src/db/**',
         'src/components/ui/**',
+        'src/components/game/*.tsx',
         'src/app/global-error.tsx',
         'src/app/auth/error/**',
         'src/app/auth/auth-code-error/**',
