@@ -48,13 +48,15 @@ vi.mock('@/data/collections', () => ({
 
 vi.mock('@/services/api', () => ({
   getGame: vi.fn(),
+  getGamesBatch: vi.fn(),
 }));
 
 import { notFound } from 'next/navigation';
-import { getGame } from '@/services/api';
+import { getGame, getGamesBatch } from '@/services/api';
 import CollectionDetailPage, { generateStaticParams } from './page';
 
 const mockGetGame = vi.mocked(getGame);
+const mockGetGamesBatch = vi.mocked(getGamesBatch);
 
 function createMockGameDetails(overrides: { title?: string; price?: string } = {}) {
   return {
@@ -85,23 +87,30 @@ describe('CollectionDetailPage', () => {
   });
 
   it('renders collection title with emoji', async () => {
-    mockGetGame.mockResolvedValue(createMockGameDetails() as never);
+    mockGetGamesBatch.mockResolvedValue({
+      '100': createMockGameDetails() as never,
+      '200': createMockGameDetails() as never
+    });
     const params = Promise.resolve({ slug: 'test-collection' });
     render(await CollectionDetailPage({ params }));
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('🎮 Test Collection');
   });
 
   it('renders collection description', async () => {
-    mockGetGame.mockResolvedValue(createMockGameDetails() as never);
+    mockGetGamesBatch.mockResolvedValue({
+      '100': createMockGameDetails() as never,
+      '200': createMockGameDetails() as never
+    });
     const params = Promise.resolve({ slug: 'test-collection' });
     render(await CollectionDetailPage({ params }));
     expect(screen.getByText('A test collection.')).toBeInTheDocument();
   });
 
   it('renders game rows with titles', async () => {
-    mockGetGame
-      .mockResolvedValueOnce(createMockGameDetails({ title: 'Game Alpha' }) as never)
-      .mockResolvedValueOnce(createMockGameDetails({ title: 'Game Beta' }) as never);
+    mockGetGamesBatch.mockResolvedValueOnce({
+      '100': createMockGameDetails({ title: 'Game Alpha' }) as never,
+      '200': createMockGameDetails({ title: 'Game Beta' }) as never
+    });
     const params = Promise.resolve({ slug: 'test-collection' });
     render(await CollectionDetailPage({ params }));
     expect(screen.getByText('Game Alpha')).toBeInTheDocument();
@@ -109,21 +118,30 @@ describe('CollectionDetailPage', () => {
   });
 
   it('shows "FREE" for free games', async () => {
-    mockGetGame.mockResolvedValue(createMockGameDetails({ price: '0.00' }) as never);
+    mockGetGamesBatch.mockResolvedValue({
+      '100': createMockGameDetails({ price: '0.00' }) as never,
+      '200': createMockGameDetails({ price: '0.00' }) as never
+    });
     const params = Promise.resolve({ slug: 'test-collection' });
     render(await CollectionDetailPage({ params }));
     expect(screen.getAllByText('FREE').length).toBeGreaterThan(0);
   });
 
   it('shows price for paid games', async () => {
-    mockGetGame.mockResolvedValue(createMockGameDetails({ price: '9.99' }) as never);
+    mockGetGamesBatch.mockResolvedValue({
+      '100': createMockGameDetails({ price: '9.99' }) as never,
+      '200': createMockGameDetails({ price: '9.99' }) as never
+    });
     const params = Promise.resolve({ slug: 'test-collection' });
     render(await CollectionDetailPage({ params }));
     expect(screen.getAllByText('$9.99').length).toBeGreaterThan(0);
   });
 
-  it('renders cards with game titles as clickable', async () => {
-    mockGetGame.mockResolvedValue(createMockGameDetails() as never);
+  it('renders cards with game titles as clickable, linking to /game/{gameID}', async () => {
+    mockGetGamesBatch.mockResolvedValue({
+      '100': createMockGameDetails() as never,
+      '200': createMockGameDetails() as never
+    });
     const params = Promise.resolve({ slug: 'test-collection' });
     render(await CollectionDetailPage({ params }));
     expect(screen.getAllByText('Test Game').length).toBeGreaterThan(0);

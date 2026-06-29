@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { PopularDealsGrid } from '@/components/home/PopularDealsGrid';
 import { COLLECTIONS } from '@/data/collections';
 import { type DealWithStore, normaliseDeal } from '@/lib/deal-utils';
-import { getGame } from '@/services/api';
+import { getGamesBatch } from '@/services/api';
 import type { Deal, GameDetails } from '@/types/game';
 
 export async function generateStaticParams() {
@@ -62,13 +62,13 @@ export default async function CollectionDetailPage({
     notFound();
   }
 
-  const gamesData = await Promise.all(
-    collection.gameIDs.map((id) => getGame(id).catch(() => null))
-  );
+  // ⚡ Bolt: Batch API request to resolve N+1 queries. getGamesBatch chunks requests automatically.
+  const gamesData = await getGamesBatch(collection.gameIDs).catch(() => ({}));
 
-  const deals = gamesData.reduce((acc: DealWithStore[], gameData, idx) => {
+  const deals = collection.gameIDs.reduce((acc: DealWithStore[], gameID) => {
+    const gameData = gamesData[gameID];
     if (!gameData?.info) return acc;
-    acc.push(gameDataToDeal(gameData, collection.gameIDs[idx]));
+    acc.push(gameDataToDeal(gameData, gameID));
     return acc;
   }, [] as DealWithStore[]);
 

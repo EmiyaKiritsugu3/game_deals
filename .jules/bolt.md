@@ -8,3 +8,6 @@
 ## 2024-06-27 - [Avoid Array Allocation in Find Minimum]
 **Learning:** Found an unnecessary `[...arr].sort()[0]` pattern used to find the minimum price object in `updateHistoricalLow`. While finding a minimum via sorting takes O(N log N), the array spreading `[...arr]` also incurs an O(N) memory allocation overhead which can trigger garbage collection more frequently, especially in server-side batch operations like fetching 25 game deals.
 **Action:** Always replace sorting-for-minimum patterns with a single-pass O(N) `for` loop to eliminate array spreading overhead and achieve O(1) space complexity.
+## 2026-06-29 - Batched API Requests Replace Promise.all
+**Learning:** When refactoring from multiple Promise.all queries to batched queries, you must consider the lost `.catch()` from the individual calls, otherwise the entire component crashes.
+**Action:** Replaced `Promise.all(gameIDs.map(id => getGame(id)))` with `await getGamesBatch(gameIDs).catch(() => ({}))` to fix N+1 issue without sacrificing fallback behavior.
