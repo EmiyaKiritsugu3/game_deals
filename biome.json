@@ -142,6 +142,16 @@
           }
         }
       }
+    },
+    {
+      "includes": ["src/components/game/deal-grid.tsx"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noArrayIndexKey": "off"
+          }
+        }
+      }
     }
   ],
   "css": {
