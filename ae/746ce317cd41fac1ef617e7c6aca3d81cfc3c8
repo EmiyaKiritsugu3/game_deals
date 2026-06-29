@@ -1,0 +1,23 @@
+biome.json
+  s_832983507c4067::t_e507d499629f12 38,47,57,67,77,87,97,108,124,137,159
+src/components/game/compare-tray.tsx
+  s_832983507c4067::t_5d0b2690a173fe 28,74-75,235-239,290-291,393-395
+src/components/game/deal-card.tsx
+  s_832983507c4067::t_4e62d3ca7b2191 18,119-120,285-286,303-304,323-324
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "ae746ce317cd41fac1ef617e7c6aca3d81cfc3c8",
+  "prompts": {},
+  "sessions": {
+    "s_832983507c4067": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "395d65bb-6bcd-4289-8d5f-dc12ba756279",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
