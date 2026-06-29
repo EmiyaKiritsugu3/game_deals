@@ -1,10 +1,11 @@
 'use client';
 
-import { Gamepad2, Inbox } from 'lucide-react';
+import { Gamepad2, Grid2x2, Inbox, Rows3 } from 'lucide-react';
+import { DealCard, DealCardSkeleton } from '@/components/game/deal-card';
 import type { DealWithStore } from '@/lib/deal-utils';
 import { cn } from '@/lib/utils';
-// DealCard and DealCardSkeleton removed (deal-card not yet ported)
-// density-toggle import removed;
+import type { Density } from '@/store/density';
+import { useDensity } from '@/store/density';
 
 export interface DealGridItem {
   deal: DealWithStore;
@@ -19,6 +20,9 @@ interface DealGridProps {
   error: boolean;
   onOpenDetail?: (deal: DealWithStore) => void;
   onShare?: (deal: DealWithStore) => void;
+  /** Density override — uses store default if omitted. */
+  density?: Density;
+  onDensityChange?: (d: Density) => void;
 }
 
 function isGridItemsArray(arr: DealWithStore[] | DealGridItem[]): arr is DealGridItem[] {
@@ -29,18 +33,26 @@ export function DealGrid({
   deals,
   loading,
   error,
-  // density = 'comfortable',
+  onOpenDetail,
+  onShare,
+  density: densityProp,
+  onDensityChange,
 }: DealGridProps) {
+  const storeDensity = useDensity((s) => s.density);
+  const storeToggle = useDensity((s) => s.toggle);
+  const density = densityProp ?? storeDensity;
   const gridCls = cn(
-    'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 stagger-children'
-    // density === 'comfortable' ? 'gap-4' : 'gap-3 xl:grid-cols-5'
+    'grid stagger-children',
+    density === 'comfortable'
+      ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'
+      : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'
   );
 
   if (loading) {
     return (
       <div className={gridCls}>
         {Array.from({ length: 8 }).map((_, idx) => (
-          <div key={idx} className="skeleton-shimmer h-80 rounded-2xl glass" />
+          <DealCardSkeleton key={idx} />
         ))}
       </div>
     );
@@ -82,13 +94,32 @@ export function DealGrid({
     : (deals as DealWithStore[]).map((d) => ({ deal: d, variantCount: 1 }) as DealGridItem);
 
   return (
-    <div className={gridCls} aria-live="polite" aria-busy={loading}>
-      {items.map((item) => (
-        <div key={item.deal.dealID} className="flex flex-col rounded-2xl glass lift-on-hover p-4">
-          <p className="font-semibold text-sm truncate">{item.deal.title}</p>
-          <p className="text-xs text-muted-foreground mt-1">${item.deal.salePrice}</p>
-        </div>
-      ))}
-    </div>
+    <section aria-live="polite" aria-busy={loading}>
+      <div className="mb-3 flex items-center justify-end">
+        <button
+          type="button"
+          onClick={() => {
+            const next: Density = density === 'comfortable' ? 'compact' : 'comfortable';
+            onDensityChange?.(next);
+            if (!onDensityChange) storeToggle();
+          }}
+          className="flex size-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+          aria-label={`Switch to ${density === 'comfortable' ? 'compact' : 'comfortable'} layout`}
+        >
+          {density === 'comfortable' ? <Grid2x2 size={16} /> : <Rows3 size={16} />}
+        </button>
+      </div>
+      <div className={gridCls}>
+        {items.map((item) => (
+          <DealCard
+            key={item.deal.dealID}
+            deal={item.deal}
+            variantCount={item.variantCount}
+            onOpenDetail={onOpenDetail}
+            onShare={onShare}
+          />
+        ))}
+      </div>
+    </section>
   );
 }
