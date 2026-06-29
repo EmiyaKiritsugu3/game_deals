@@ -63,7 +63,9 @@ export default async function CollectionDetailPage({
   }
 
   // ⚡ Bolt: Batch API request to resolve N+1 queries. getGamesBatch chunks requests automatically.
-  const gamesData = await getGamesBatch(collection.gameIDs).catch(() => ({}));
+  const gamesData = await getGamesBatch(collection.gameIDs).catch(
+    () => ({}) as Record<string, GameDetails>
+  );
 
   const deals = collection.gameIDs.reduce((acc: DealWithStore[], gameID) => {
     const gameData = gamesData[gameID];
