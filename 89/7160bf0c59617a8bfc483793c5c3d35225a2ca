@@ -1,0 +1,26 @@
+src/components/game/deal-card.tsx
+  s_832983507c4067::t_f6456822bb3ce1 188,344
+  s_832983507c4067::t_e170f0ff222c5f 20-165,284-320
+  s_832983507c4067::t_b0055e1230e8d4 1-19,166-187,189-283,321-343,345-444
+src/components/game/compare-tray.tsx
+  s_832983507c4067::t_e170f0ff222c5f 28-74,84,235,286-390
+  s_832983507c4067::t_202dd5bf66f568 83,87
+  s_832983507c4067::t_f6456822bb3ce1 86,285
+  s_832983507c4067::t_7e46ecd984fcb1 1-27,75-82,85,88-234,236-284,391-416
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "897160bf0c59617a8bfc483793c5c3d35225a2ca",
+  "prompts": {},
+  "sessions": {
+    "s_832983507c4067": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "395d65bb-6bcd-4289-8d5f-dc12ba756279",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
