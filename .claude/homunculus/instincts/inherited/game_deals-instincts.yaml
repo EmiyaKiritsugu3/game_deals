@@ -1,0 +1,280 @@
+# Instincts generated from https://github.com/EmiyaKiritsugu3/game_deals
+# Generated: 2026-06-29T18:40:43.487Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: game_deals-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: https://github.com/EmiyaKiritsugu3/game_deals
+---
+
+# Game_deals Commit Conventional
+
+## Action
+
+Use conventional commit format with prefixes: perf
+
+## Evidence
+
+- 1 commits analyzed
+- Detected conventional commit pattern
+- Examples: perf(collections): batch API requests and optimize price finding
+
+---
+id: game_deals-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/EmiyaKiritsugu3/game_deals
+---
+
+# Game_deals Commit Length
+
+## Action
+
+Write moderate-length commit messages (~64 characters)
+
+## Evidence
+
+- Average commit message length: 64 chars
+- Based on 1 commits
+
+---
+id: game_deals-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/EmiyaKiritsugu3/game_deals
+---
+
+# Game_deals Naming Files
+
+## Action
+
+Use camelCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: camelCase
+
+---
+id: game_deals-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/EmiyaKiritsugu3/game_deals
+---
+
+# Game_deals Export Style
+
+## Action
+
+Prefer default exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: default
+
+---
+id: game_deals-test-colocate
+trigger: "when writing tests"
+confidence: 0.85
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/EmiyaKiritsugu3/game_deals
+---
+
+# Game_deals Test Colocate
+
+## Action
+
+Place test file next to the source file (e.g., Button.test.tsx next to Button.tsx)
+
+## Evidence
+
+- Colocated test pattern detected
+- Tests live alongside source files
+
+---
+id: game_deals-instinct-file-naming
+trigger: "When creating a new file in the codebase"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: EmiyaKiritsugu3/game_deals
+---
+
+# Game_deals Instinct File Naming
+
+## Action
+
+Name the file using camelCase
+
+## Evidence
+
+- Pattern in namingConventions.files: camelCase
+
+---
+id: game_deals-instinct-function-naming
+trigger: "When defining a new function"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: EmiyaKiritsugu3/game_deals
+---
+
+# Game_deals Instinct Function Naming
+
+## Action
+
+Name the function using camelCase
+
+## Evidence
+
+- Pattern in namingConventions.functions: camelCase
+
+---
+id: game_deals-instinct-class-naming
+trigger: "When defining a new class"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: EmiyaKiritsugu3/game_deals
+---
+
+# Game_deals Instinct Class Naming
+
+## Action
+
+Name the class using PascalCase
+
+## Evidence
+
+- Pattern in namingConventions.classes: PascalCase
+
+---
+id: game_deals-instinct-constant-naming
+trigger: "When declaring a constant"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: EmiyaKiritsugu3/game_deals
+---
+
+# Game_deals Instinct Constant Naming
+
+## Action
+
+Name the constant using SCREAMING_SNAKE_CASE
+
+## Evidence
+
+- Pattern in namingConventions.constants: SCREAMING_SNAKE_CASE
+
+---
+id: game_deals-instinct-import-style
+trigger: "When importing modules"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: EmiyaKiritsugu3/game_deals
+---
+
+# Game_deals Instinct Import Style
+
+## Action
+
+Use either default or named imports as appropriate (mixed style)
+
+## Evidence
+
+- Pattern in importStyle: mixed
+
+---
+id: game_deals-instinct-export-style
+trigger: "When exporting modules"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: EmiyaKiritsugu3/game_deals
+---
+
+# Game_deals Instinct Export Style
+
+## Action
+
+Prefer default exports
+
+## Evidence
+
+- Pattern in exportStyle: default
+
+---
+id: game_deals-instinct-test-location
+trigger: "When adding or updating tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: EmiyaKiritsugu3/game_deals
+---
+
+# Game_deals Instinct Test Location
+
+## Action
+
+Place test files next to the source files they test (colocated)
+
+## Evidence
+
+- Pattern in testLocation: colocated
+
+---
+id: game_deals-instinct-commit-format
+trigger: "When making a git commit"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: EmiyaKiritsugu3/game_deals
+---
+
+# Game_deals Instinct Commit Format
+
+## Action
+
+Format the commit message using the Conventional Commits style, including a type prefix (e.g., perf:)
+
+## Evidence
+
+- Pattern in commits.type: conventional
+- Example: perf(collections): batch API requests and optimize price finding
+
+---
+id: game_deals-instinct-commit-prefix-perf
+trigger: "When making a commit related to performance improvements"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: EmiyaKiritsugu3/game_deals
+---
+
+# Game_deals Instinct Commit Prefix Perf
+
+## Action
+
+Use the 'perf' prefix in the commit message
+
+## Evidence
+
+- Pattern in commits.prefixes: perf
+- Example: perf(collections): batch API requests and optimize price finding
+
