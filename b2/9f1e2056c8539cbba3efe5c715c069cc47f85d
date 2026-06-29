@@ -1,0 +1,19 @@
+src/components/game/deal-grid.tsx
+  s_832983507c4067::t_48f398fab492d7 42-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "b29f1e2056c8539cbba3efe5c715c069cc47f85d",
+  "prompts": {},
+  "sessions": {
+    "s_832983507c4067": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "395d65bb-6bcd-4289-8d5f-dc12ba756279",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
