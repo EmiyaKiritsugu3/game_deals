@@ -1,0 +1,23 @@
+.jules/bolt.md
+  s_475cd6c8af4a6b::t_97eef50ff99509 11
+src/services/api.test.ts
+  s_475cd6c8af4a6b::t_96a2b473f6708b 341-343
+src/services/game-enrichment.ts
+  s_475cd6c8af4a6b::t_f2ce477874ee5c 57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.4",
+  "base_commit_sha": "0408e53cebbd2a4c2f8d2d25765f9fab58816d6a",
+  "prompts": {},
+  "sessions": {
+    "s_475cd6c8af4a6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f0602e60-41bf-4c82-9d51-90572a8e083c",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
