@@ -1,0 +1,47 @@
+src/components/game/auth-dialog.tsx
+  s_b31fd2555aac21::t_1a22e048497431 26,110,139-153,158,280-283,299,354-356,374,391-394,414-419,559
+src/components/game/command-palette.tsx
+  s_b31fd2555aac21::t_e4de78f1783bbc 159,178
+src/components/game/deal-stats-dashboard.tsx
+  s_b31fd2555aac21::t_bfbf3e43b2a991 298,407
+src/components/game/faq-section.tsx
+  s_b31fd2555aac21::t_d1e3e53df529f2 230
+src/components/game/featured-deals.tsx
+  s_b31fd2555aac21::t_85edf57fd5d08b 33-38
+src/components/game/game-detail-dialog.tsx
+  s_b31fd2555aac21::t_50c603073b2140 50-51,106,172-173,220
+src/components/game/recently-free-section.tsx
+  s_b31fd2555aac21::t_746d75c5d6523a 162
+src/components/game/savings-leaderboard.tsx
+  s_b31fd2555aac21::t_a1840c6c16cf18 160
+src/components/game/site-footer.tsx
+  s_b31fd2555aac21::t_d941bae014d2f2 11,19,136,213,222,243,265
+src/components/game/site-header.tsx
+  s_b31fd2555aac21::t_8583165722700f 161
+src/components/game/social-login-buttons.tsx
+  s_b31fd2555aac21::t_882ce2fff5d476 110
+src/components/game/stores-showcase.tsx
+  s_b31fd2555aac21::t_cbfc9c3397c13a 74,90
+src/components/game/trending-section.tsx
+  s_b31fd2555aac21::t_ad4fab78d35b54 89,91,174
+src/components/game/why-trust-us.tsx
+  s_b31fd2555aac21::t_15b5dbf0877db8 144
+src/components/game/wishlist-drawer.tsx
+  s_b31fd2555aac21::t_aca83ec0af3e1a 163-165,189,201,293-298
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.4",
+  "base_commit_sha": "8599a7708f02289b8c5491d7804e156bd695f3d4",
+  "prompts": {},
+  "sessions": {
+    "s_b31fd2555aac21": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "da295376-6578-47dc-b15a-aceae500e428",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
