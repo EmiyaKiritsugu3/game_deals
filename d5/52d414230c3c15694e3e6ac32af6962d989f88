@@ -1,0 +1,21 @@
+src/app/collections/[slug]/page.tsx
+  s_475cd6c8af4a6b::t_ea7624c8366be2 66-68
+src/app/collections/[slug]/CollectionDetailPage.test.tsx
+  s_475cd6c8af4a6b::t_adb4dd8a2ff24f 54,90,100,110,121,131,141
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.4",
+  "base_commit_sha": "d552d414230c3c15694e3e6ac32af6962d989f88",
+  "prompts": {},
+  "sessions": {
+    "s_475cd6c8af4a6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f0602e60-41bf-4c82-9d51-90572a8e083c",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
