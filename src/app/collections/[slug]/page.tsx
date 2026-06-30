@@ -5,6 +5,7 @@ import { COLLECTIONS } from '@/data/collections';
 import { type DealWithStore, normaliseDeal } from '@/lib/deal-utils';
 import { getGamesBatch } from '@/services/api';
 import type { Deal, GameDetails } from '@/types/game';
+import { getCheapestDeal } from '@/utils/pricing';
 
 export async function generateStaticParams() {
   return COLLECTIONS.map((col) => ({ slug: col.slug }));
@@ -23,9 +24,7 @@ export async function generateMetadata({
 }
 
 function gameDataToDeal(gameData: GameDetails, gameID: string): DealWithStore {
-  const bestDeal = [...gameData.deals].sort(
-    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
-  )[0];
+  const bestDeal = getCheapestDeal(gameData.deals);
   const deal: Deal = {
     internalName: gameID,
     title: gameData.info.title,
