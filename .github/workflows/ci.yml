@@ -34,24 +34,20 @@ jobs:
       CRON_SECRET: ${{ secrets.CRON_SECRET || 'placeholder-cron-secret' }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
-      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+      - uses: oven-sh/setup-bun@v2
         with:
-          version: 11.8.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
-        with:
-          node-version: 22
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
+          bun-version: latest
+      - run: bun install --frozen-lockfile
       - name: Lint
-        run: pnpm lint
+        run: bunx biome check .
       - name: Dependency audit
-        run: pnpm audit --audit-level=high
+        run: bunx npm audit --audit-level=high
       - name: Type check
-        run: pnpm exec tsc --noEmit
+        run: bunx tsc --noEmit
       - name: Unit Tests + Coverage
-        run: pnpm test:coverage
+        run: bun test --coverage
       - name: SonarCloud Scan
-        continue-on-error: true  # External service — may fail from token expiry or service outage, not code issues
+        continue-on-error: true
         if: ${{ github.event_name == 'pull_request' || github.ref == 'refs/heads/main' }}
         uses: SonarSource/sonarqube-scan-action@713881670b6b3676cda39549040e2d88c70d582e
         env:
@@ -60,12 +56,12 @@ jobs:
       - name: Setup env
         run: cp .env.example .env.local
       - name: Build
-        run: pnpm build
+        run: bun --bun next build
       - name: Dead code
-        run: pnpm knip --no-exit-code
+        run: bunx knip --no-exit-code
       - name: Fallow audit
-        run: pnpm fallow:audit
-        continue-on-error: true  # Inherits pre-existing findings — CI excludes fallow per AGENTS.md
+        run: bunx fallow audit
+        continue-on-error: true
 
   e2e:
     runs-on: ubuntu-latest
@@ -92,22 +88,18 @@ jobs:
       CRON_SECRET: ${{ secrets.CRON_SECRET || 'placeholder-cron-secret' }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
-      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+      - uses: oven-sh/setup-bun@v2
         with:
-          version: 11.8.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
-        with:
-          node-version: 22
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
+          bun-version: latest
+      - run: bun install --frozen-lockfile
       - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
+        run: bunx playwright install --with-deps chromium
       - name: Setup env
         run: cp .env.example .env.local
       - name: Build
-        run: pnpm build
+        run: bun --bun next build
       - name: E2E Tests
-        run: pnpm test:e2e
+        run: bunx playwright test
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a

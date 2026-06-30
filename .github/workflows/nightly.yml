@@ -2,9 +2,7 @@ name: Nightly CI
 
 on:
   schedule:
-    # 3am UTC = meia-noite Fortaleza (UTC-3)
     - cron: '0 3 * * *'
-  # Permite disparo manual pelo GitHub UI
   workflow_dispatch:
 
 concurrency:
@@ -12,7 +10,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # ── Mutation Testing (padrão-ouro de qualidade) ──
   mutation:
     runs-on: ubuntu-latest
     timeout-minutes: 90
@@ -36,50 +33,31 @@ jobs:
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'placeholder-publishable-key' }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
-      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+      - uses: oven-sh/setup-bun@v2
         with:
-          version: 11.8.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
-        with:
-          node-version: 22
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
-
-      # TODO: Install & run Stryker when configured
-      # - run: pnpm add -D @stryker-mutator/core @stryker-mutator/typescript-checker
-      # - run: pnpm exec stryker run
-      # Placeholder: mutation testing infra — tracks coverage quality, not just quantity.
-      # 100% line coverage with 4% mutation score = decorative test suite.
-      # Target: >=60% mutation score. Scheduled nightly because 10-100x slower than coverage.
+          bun-version: latest
+      - run: bun install --frozen-lockfile
       - name: Mutation Testing (placeholder)
         run: |
-          echo "⚠️  Stryker mutation testing not yet configured."
-          echo "    Install: pnpm add -D @stryker-mutator/core @stryker-mutator/typescript-checker"
-          echo "    Target: ≥60% mutation score"
-          echo "    Why: 100% line coverage can mean 4% mutation score (MutGen, arXiv 2025)"
+          echo "Install: bun add -D @stryker-mutator/core @stryker-mutator/typescript-checker"
+          echo "Target: 60% mutation score"
 
-  # ── Full Audit (Fallow + Knip) ──
   audit:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
-      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+      - uses: oven-sh/setup-bun@v2
         with:
-          version: 11.8.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
-        with:
-          node-version: 22
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
+          bun-version: latest
+      - run: bun install --frozen-lockfile
       - name: Dead code (strict)
-        run: pnpm knip
-        continue-on-error: true  # Nightly informational — may flag in-progress work or planned removals
+        run: bunx knip
+        continue-on-error: true
       - name: Complexity audit
-        run: pnpm fallow:audit
-        continue-on-error: true  # Nightly informational — inherits pre-existing findings
+        run: bunx fallow audit
+        continue-on-error: true
 
-  # ── Full E2E (sem skip, com DB real) ──
   e2e-full:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -104,24 +82,20 @@ jobs:
       CRON_SECRET: ${{ secrets.CRON_SECRET || 'placeholder-cron-secret' }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
-      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+      - uses: oven-sh/setup-bun@v2
         with:
-          version: 11.8.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
-        with:
-          node-version: 22
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
+          bun-version: latest
+      - run: bun install --frozen-lockfile
       - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
+        run: bunx playwright install --with-deps chromium
       - name: Setup env
         run: cp .env.example .env.local
       - name: Build
-        run: pnpm build
+        run: bun --bun next build
       - name: Run DB migrations
-        run: pnpm db:migrate
+        run: bunx drizzle-kit migrate
       - name: Full E2E suite
-        run: pnpm test:e2e
+        run: bunx playwright test
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
@@ -130,24 +104,18 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
-  # ── Coverage Trend Report ──
   coverage-trend:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
-      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+      - uses: oven-sh/setup-bun@v2
         with:
-          version: 11.8.0
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
-        with:
-          node-version: 22
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
+          bun-version: latest
+      - run: bun install --frozen-lockfile
       - name: Coverage report
         run: |
-          pnpm test:coverage 2>&1 | tee coverage-nightly.txt
-          echo "--- COVERAGE SUMMARY ---"
+          bun test --coverage 2>&1 | tee coverage-nightly.txt
           grep -E "All files| Branches | Lines |Functions|Statements" coverage-nightly.txt || true
       - name: Upload coverage data
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
