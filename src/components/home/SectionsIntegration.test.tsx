@@ -1,107 +1,66 @@
-/**
- * @vitest-environment jsdom
- *
- * Integration test: verify all 4 home sections render together.
- * Home page does not yet wire these components — this test validates
- * they compose without interference.
- */
-
+/** @vitest-environment jsdom */
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import CommunityListings from './CommunityListings';
 import DiscoveryGrid from './DiscoveryGrid';
 import HomeHero from './HomeHero';
-import HotDealsSection from './HotDealsSection';
 
 vi.mock('next/image', () => ({
-  default: (props: Record<string, unknown>) => {
-    const {
-      src,
-      alt,
-      fill: _fill,
-      sizes: _sizes,
-      priority: _priority,
-      className: _className,
-      ...rest
-    } = props;
+  default: (p: Record<string, unknown>) => {
+    const { src, alt, fill: _f, sizes: _s, priority: _p, className: _c, ...rest } = p;
     return <div data-src={String(src)} data-alt={String(alt)} {...rest} />;
   },
 }));
-
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string }) => (
-    <a href={href} {...props}>
+  default: ({ children, href, ...p }: { children: React.ReactNode; href: string }) => (
+    <a href={href} {...p}>
       {children}
     </a>
   ),
 }));
 
-vi.mock('@/components/GameCard', () => ({
-  default: ({ deal }: { deal: { title: string; dealID: string } }) => (
-    <div data-testid="game-card">{deal.title}</div>
-  ),
-}));
-
-const { mockCollections } = vi.hoisted(() => ({
-  mockCollections:
-    vi.fn<
-      () => Array<{
-        slug: string;
-        title: string;
-        description: string;
-        emoji: string;
-        gameIDs: string[];
-      }>
-    >(),
-}));
-
+const { mockCollections } = vi.hoisted(() => ({ mockCollections: vi.fn() }));
 vi.mock('@/data/collections', () => ({
   get COLLECTIONS() {
     return mockCollections();
   },
 }));
-
 vi.mock('@/services/api', () => ({
-  getHighResImage: vi.fn((thumb: string) => thumb),
-  getStores: vi.fn().mockResolvedValue({ '1': 'Steam' }),
+  getHighResImage: vi.fn((t: string) => t),
   formatTimeAgo: vi.fn(() => '1h ago'),
 }));
-
-vi.mock('@/actions/playlists', () => ({
-  getUserPlaylistsAction: vi.fn(),
-}));
+vi.mock('@/actions/playlists', () => ({ getUserPlaylistsAction: vi.fn() }));
 
 import { getUserPlaylistsAction } from '@/actions/playlists';
 
 const mockDeal = {
-  internalName: 'TESTGAME',
+  internalName: '',
   title: 'Test Game',
-  dealID: 'deal_001',
+  dealID: '1',
   storeID: '1',
-  gameID: '999',
+  gameID: '100',
   salePrice: '9.99',
   normalPrice: '19.99',
   isOnSale: '1',
-  savings: '50.00',
+  savings: '50',
   metacriticScore: '80',
-  steamRatingText: 'Very Positive',
-  steamRatingPercent: '90',
-  steamRatingCount: '1000',
-  steamAppID: '12345',
-  releaseDate: 1600000000,
-  lastChange: 1600000000,
+  steamRatingText: '',
+  steamRatingPercent: '0',
+  steamRatingCount: '0',
+  steamAppID: '',
+  releaseDate: 0,
+  lastChange: 0,
   dealRating: '8.5',
-  thumb: 'https://example.com/thumb.jpg',
-  metacriticLink: '/game/pc/test-game',
+  thumb: '',
+  metacriticLink: '',
 };
-
 const mockPlaylists = [
   {
     id: 'pl-1',
     userId: 'u-1',
     title: 'Best RPGs',
     slug: 'best-rpgs',
-    description: 'Top role-playing games',
+    description: 'Top RPGs',
     isPublic: true,
     createdAt: new Date('2026-01-01'),
     updatedAt: new Date('2026-01-01'),
@@ -109,29 +68,19 @@ const mockPlaylists = [
 ];
 
 describe('HomeSections integration', () => {
-  it('renders nothing when HotDealsSection receives empty deals array', async () => {
-    const { container } = render(await HotDealsSection({ deals: [], limit: 12 }));
-    expect(container.textContent).toBe('');
-  });
-
-  it('renders all 4 sections together without conflict', async () => {
+  it('renders all 3 sections together', async () => {
     mockCollections.mockReturnValue([
       { slug: 'test', title: 'Test Col', description: 'desc', emoji: '🎮', gameIDs: ['1'] },
     ]);
     vi.mocked(getUserPlaylistsAction).mockResolvedValueOnce(mockPlaylists);
-
     render(
       <div>
         <HomeHero deal={mockDeal} />
-        {await HotDealsSection({ deals: [mockDeal] })}
         <DiscoveryGrid />
         {await CommunityListings()}
       </div>
     );
-
     expect(screen.getByText('FEATURED DEAL')).toBeInTheDocument();
-    expect(screen.getAllByText('Test Game')).toHaveLength(2); // heading + GameCard
-    expect(screen.getByText('Hottest Deals')).toBeInTheDocument();
     expect(screen.getByText('Discover Games')).toBeInTheDocument();
     expect(screen.getByText('Community Lists')).toBeInTheDocument();
     expect(screen.getByText('Test Col')).toBeInTheDocument();

@@ -64,7 +64,7 @@ export interface LeaderboardEntry {
 // --- Constants ---
 
 /** consumed by seedBadges() at deploy time */
-export const BADGE_DEFS: BadgeDef[] = [
+const BADGE_DEFS: BadgeDef[] = [
   { name: 'First Wish', actionType: 'wishlist_add', count: 1, xp: 10, rarity: 'Common' },
   { name: 'Wishlist Collector', actionType: 'wishlist_add', count: 10, xp: 50, rarity: 'Uncommon' },
   { name: 'Wishlist Hoarder', actionType: 'wishlist_add', count: 50, xp: 150, rarity: 'Rare' },

@@ -1,7 +1,5 @@
 import type { Deal, Store } from '@/types/game';
 
-const IMG_BASE = 'https://www.cheapshark.com';
-
 export interface CheapSharkStore extends Store {
   images: { banner: string; logo: string; icon: string };
 }
@@ -17,24 +15,6 @@ export interface DealWithStore extends Deal {
   releaseDateMs: number;
   releaseDateLabel: string;
   isFree: boolean;
-}
-
-export type SortOption =
-  | 'deal-rating'
-  | 'savings'
-  | 'price-asc'
-  | 'price-desc'
-  | 'metacritic'
-  | 'recent';
-
-export function enrichStore<T extends CheapSharkStore>(s: T) {
-  return {
-    ...s,
-    isActiveBool: s.isActive === 1,
-    bannerUrl: `${IMG_BASE}${s.images.banner}`,
-    logoUrl: `${IMG_BASE}${s.images.logo}`,
-    iconUrl: `${IMG_BASE}${s.images.icon}`,
-  };
 }
 
 export function normaliseDeal(d: Deal, store?: CheapSharkStore): DealWithStore {

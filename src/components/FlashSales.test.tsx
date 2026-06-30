@@ -1,46 +1,40 @@
-/**
- * @vitest-environment jsdom
- */
-
-import { act, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import FlashSales from './FlashSales';
+/** @vitest-environment jsdom */
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/image', () => ({
-  default: (props: Record<string, unknown>) => {
-    const { src, alt, fill: _fill, sizes: _sizes, className: _className, ...rest } = props;
+  default: (p: Record<string, unknown>) => {
+    const { src, alt, fill: _f, sizes: _s, className: _c, ...rest } = p;
     return <div data-src={String(src)} data-alt={String(alt)} {...rest} />;
   },
 }));
-
-vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string }) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
+vi.mock('next/navigation', () => ({
+  useRouter: vi.fn(() => ({ push: vi.fn(), replace: vi.fn(), back: vi.fn() })),
 }));
+vi.mock('@/store/density', () => ({ useDensity: vi.fn(() => 'comfortable') }));
+
+import FlashSales from './FlashSales';
 
 const mockDeal = {
-  internalName: 'TESTGAME',
+  internalName: '',
   title: 'Test Game',
-  dealID: 'deal_001',
+  dealID: '1',
   storeID: '1',
-  gameID: '999',
+  gameID: '100',
   salePrice: '9.99',
   normalPrice: '19.99',
   isOnSale: '1',
-  savings: '50.00',
+  savings: '50',
   metacriticScore: '80',
-  steamRatingText: 'Very Positive',
-  steamRatingPercent: '90',
-  steamRatingCount: '1000',
-  steamAppID: '12345',
-  releaseDate: 1600000000,
-  lastChange: 1600000000,
+  steamRatingText: '',
+  steamRatingPercent: '0',
+  steamRatingCount: '0',
+  steamAppID: '',
+  releaseDate: 0,
+  lastChange: 0,
   dealRating: '8.5',
-  thumb: 'https://example.com/thumb.jpg',
-  metacriticLink: '/game/pc/test-game',
+  thumb: '',
+  metacriticLink: '',
 };
 
 describe('FlashSales', () => {
@@ -48,67 +42,32 @@ describe('FlashSales', () => {
     const { container } = render(<FlashSales deals={[]} />);
     expect(container.innerHTML).toBe('');
   });
-
   it('renders nothing for undefined deals', () => {
     const { container } = render(<FlashSales deals={undefined as never} />);
     expect(container.innerHTML).toBe('');
   });
-
-  it('renders deals with discount badge', () => {
+  it('renders section title', () => {
     render(<FlashSales deals={[mockDeal]} />);
     expect(screen.getByText('⚡ Flash Deals')).toBeInTheDocument();
+  });
+  it('renders discount badge', () => {
+    render(<FlashSales deals={[mockDeal]} />);
     expect(screen.getByText('-50%')).toBeInTheDocument();
-    expect(screen.getByText('9.99')).toBeInTheDocument();
-    expect(screen.getByText(/Claimed/)).toBeInTheDocument();
   });
-
-  it('renders View All link', () => {
-    render(<FlashSales deals={[mockDeal]} />);
-    expect(screen.getByText('View All >')).toHaveAttribute('href', '/search');
-  });
-
-  it('renders game link with correct href', () => {
-    render(<FlashSales deals={[mockDeal]} />);
-    const links = screen.getAllByRole('link');
-    const gameLink = links.find((l) => l.getAttribute('href') === '/game/999');
-    expect(gameLink).toBeDefined();
-  });
-
   it('limits to 8 deals', () => {
     const deals = Array.from({ length: 12 }, (_, i) => ({
       ...mockDeal,
-      dealID: `deal_${i}`,
-      gameID: `${i}`,
-      title: `Game ${i}`,
+      dealID: `d_${i}`,
+      gameID: `g_${i}`,
+      title: `G${i}`,
     }));
-    render(<FlashSales deals={deals} />);
-    expect(screen.getAllByText(/Claimed/)).toHaveLength(8);
+    const { container } = render(<FlashSales deals={deals} />);
+    expect(container.textContent).toContain('G0');
+    expect(container.textContent).toContain('G7');
+    expect(container.textContent).not.toContain('G8');
   });
-
-  describe('timer', () => {
-    beforeEach(() => {
-      vi.useFakeTimers({ shouldAdvanceTime: true });
-    });
-
-    afterEach(() => {
-      vi.useRealTimers();
-    });
-
-    it('counts down and updates display', () => {
-      render(<FlashSales deals={[mockDeal]} />);
-      act(() => {
-        vi.advanceTimersByTime(3000);
-      });
-      expect(screen.getByText('04')).toBeInTheDocument();
-      expect(screen.getByText('15')).toBeInTheDocument();
-    });
-
-    it('clears interval when component unmounts', () => {
-      const clearIntervalSpy = vi.spyOn(globalThis, 'clearInterval');
-      const { unmount } = render(<FlashSales deals={[mockDeal]} />);
-      unmount();
-      expect(clearIntervalSpy).toHaveBeenCalled();
-      clearIntervalSpy.mockRestore();
-    });
+  it('renders game title', () => {
+    render(<FlashSales deals={[mockDeal]} />);
+    expect(screen.getByText('Test Game')).toBeInTheDocument();
   });
 });

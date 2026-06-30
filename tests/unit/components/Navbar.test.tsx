@@ -61,10 +61,6 @@ vi.mock('@/components/InstallPWAButton', () => ({
   default: () => React.createElement('div', { 'data-testid': 'install-pwa' }),
 }));
 
-vi.mock('@/components/Navbar.module.css', () => ({
-  default: new Proxy({}, { get: () => 'mock-css-class' }),
-}));
-
 vi.mock('next/link', () => ({
   default: ({
     children,

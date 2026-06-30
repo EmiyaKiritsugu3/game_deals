@@ -4,7 +4,15 @@ import { useRouter } from 'next/navigation';
 import { DealGrid } from '@/components/game/deal-grid';
 import type { DealWithStore } from '@/lib/deal-utils';
 
-export function PopularDealsGrid({ deals }: Readonly<{ deals: DealWithStore[] }>) {
+export function PopularDealsGrid({
+  deals,
+  title = 'Most Popular Games',
+  description = 'The best and most sought-after discounts right now.',
+}: Readonly<{
+  deals: DealWithStore[];
+  title?: string;
+  description?: string;
+}>) {
   const router = useRouter();
 
   if (!deals.length) return null;
@@ -12,12 +20,8 @@ export function PopularDealsGrid({ deals }: Readonly<{ deals: DealWithStore[] }>
   return (
     <div className="mb-12">
       <div className="mb-4">
-        <h2 className="text-2xl font-bold tracking-tight text-foreground mb-1">
-          Most Popular Games
-        </h2>
-        <p className="text-sm text-muted-foreground">
-          The best and most sought-after discounts right now.
-        </p>
+        <h2 className="text-2xl font-bold tracking-tight text-foreground mb-1">{title}</h2>
+        <p className="text-sm text-muted-foreground">{description}</p>
       </div>
       <DealGrid
         deals={deals}

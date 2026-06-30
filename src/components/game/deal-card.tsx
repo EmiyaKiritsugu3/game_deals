@@ -151,11 +151,14 @@ export function DealCard({
           >
             {tier.hot && <Flame className="size-3" />}-{Math.round(deal.savingsNum)}%
           </span>
-          {tier.hot && (
-            <span className="inline-flex w-fit items-center rounded-md bg-black/50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-amber-300 backdrop-blur-sm">
-              {tier.label}
-            </span>
-          )}
+          <span
+            className={cn(
+              'inline-flex w-fit items-center rounded-md px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider backdrop-blur-sm',
+              tier.hot ? 'bg-black/50 text-amber-300' : 'bg-black/30 text-zinc-400'
+            )}
+          >
+            {tier.label}
+          </span>
         </div>
 
         {/* Store chip + Verified badge */}

@@ -1,4 +1,4 @@
-export const OFFICIAL_RETAILER_STORE_IDS = new Set([
+const OFFICIAL_RETAILER_STORE_IDS = new Set([
   '1', // Steam
   '7', // GOG
   '8', // EA Origin
@@ -26,25 +26,6 @@ export const OFFICIAL_RETAILER_STORE_IDS = new Set([
   '45', // Instant Gaming (official section)
 ]);
 
-export const MARKETPLACE_STORE_IDS = new Set([
-  '101', // CDKeys
-  '102', // Kinguin
-  '103', // Eneba
-  '104', // Gamivo
-]);
-
-export type StoreTier = 'official' | 'marketplace' | 'unknown';
-
 export function isOfficialRetailer(storeID: string): boolean {
   return OFFICIAL_RETAILER_STORE_IDS.has(storeID);
-}
-
-export function isMarketplace(storeID: string): boolean {
-  return MARKETPLACE_STORE_IDS.has(storeID);
-}
-
-export function getStoreTier(storeID: string): 'official' | 'marketplace' | 'unknown' {
-  if (isOfficialRetailer(storeID)) return 'official';
-  if (isMarketplace(storeID)) return 'marketplace';
-  return 'unknown';
 }

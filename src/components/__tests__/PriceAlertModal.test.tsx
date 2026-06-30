@@ -15,10 +15,6 @@ vi.mock('@/components/AlertFormFields', () => ({
   default: () => <div>AlertFormFields</div>,
 }));
 
-vi.mock('@/lib/affiliate', () => ({
-  default: () => null,
-}));
-
 describe('PriceAlertModal', () => {
   it('renders via shadcn Dialog', () => {
     render(

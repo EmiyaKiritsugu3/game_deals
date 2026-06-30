@@ -34,10 +34,6 @@ vi.mock('zustand/middleware', () => ({
   persist: (config: unknown, _options: Record<string, unknown>) => config,
 }));
 
-vi.mock('@/components/game/GameDealRow.module.css', () => ({
-  default: new Proxy({}, { get: (_, prop) => String(prop) }),
-}));
-
 const filterSidebarMocks = vi.hoisted(() => ({
   push: vi.fn(),
 }));
@@ -45,10 +41,6 @@ const filterSidebarMocks = vi.hoisted(() => ({
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: filterSidebarMocks.push }),
   useSearchParams: () => new URLSearchParams(),
-}));
-
-vi.mock('@/components/FilterSidebar.module.css', () => ({
-  default: new Proxy({}, { get: (_, prop) => String(prop) }),
 }));
 
 const searchBoxMocks = vi.hoisted(() => ({
@@ -75,10 +67,6 @@ vi.mock('@/actions/search', () => ({
 
 vi.mock('@/hooks/useClickOutside', () => ({
   useClickOutside: () => React.createRef<HTMLDivElement>(),
-}));
-
-vi.mock('@/components/Navbar.module.css', () => ({
-  default: new Proxy({}, { get: (_, prop) => String(prop) }),
 }));
 
 afterEach(() => {

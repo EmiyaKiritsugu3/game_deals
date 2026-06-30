@@ -38,10 +38,6 @@ const mockStores = [
   { storeID: '30', storeName: 'Square Enix' },
 ];
 
-vi.mock('@/components/StoreFilter.module.css', () => ({
-  default: new Proxy({}, { get: () => 'mock-css-class' }),
-}));
-
 describe('StoreFilter', () => {
   const onToggle = vi.fn();
 

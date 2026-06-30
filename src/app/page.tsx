@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import DealRow from '@/components/DealRow';
 import EndingSoon from '@/components/EndingSoon';
 import FlashSales from '@/components/FlashSales';
 import Freebies from '@/components/Freebies';
@@ -41,58 +40,19 @@ export default async function Home() {
           <HotDealsSection deals={popular} limit={10} />
         </Suspense>
 
-        {/* New Deals + Best Deals */}
-        <div className="grid grid-cols-2 gap-10 mb-12 items-start max-lg:grid-cols-1 max-lg:gap-8">
-          <div>
-            <div className="mb-4">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h2 className="text-2xl font-bold tracking-tight text-foreground mb-1">
-                    New Deals
-                  </h2>
-                  <p className="text-sm text-muted-foreground">Just added to the tracker.</p>
-                </div>
-                <a
-                  href="/search?sortBy=Recent"
-                  className="text-xs font-semibold text-primary no-underline whitespace-nowrap tracking-wider shrink-0 hover:opacity-75"
-                >
-                  SEE ALL ▶
-                </a>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2" aria-live="polite">
-              {recentDeals.map((deal) => (
-                <DealRow key={deal.dealID} deal={deal} />
-              ))}
-            </div>
-          </div>
+        {/* New Deals */}
+        <PopularDealsGrid
+          deals={recentDeals.map((d) => normaliseDeal(d))}
+          title="New Deals"
+          description="Just added to the tracker."
+        />
 
-          <div>
-            <div className="mb-4">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h2 className="text-2xl font-bold tracking-tight text-foreground mb-1">
-                    Best Deals
-                  </h2>
-                  <p className="text-sm text-muted-foreground">
-                    Highest discount percentages available.
-                  </p>
-                </div>
-                <a
-                  href="/search?sortBy=Savings"
-                  className="text-xs font-semibold text-primary no-underline whitespace-nowrap tracking-wider shrink-0 hover:opacity-75"
-                >
-                  SEE ALL ▶
-                </a>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              {bestDeals.map((deal) => (
-                <DealRow key={deal.dealID} deal={deal} />
-              ))}
-            </div>
-          </div>
-        </div>
+        {/* Best Deals */}
+        <PopularDealsGrid
+          deals={bestDeals.map((d) => normaliseDeal(d))}
+          title="Best Deals"
+          description="Highest discount percentages available."
+        />
 
         {/* Discovery Grid — collections */}
         <Suspense fallback={<div>Loading collections...</div>}>

@@ -29,10 +29,6 @@ vi.mock('next-themes', () => ({
   }),
 }));
 
-vi.mock('@/components/ThemeToggle.module.css', () => ({
-  default: new Proxy({}, { get: () => 'mock-css-class' }),
-}));
-
 describe('ThemeToggle', () => {
   beforeEach(() => {
     mocks.theme = 'dark';

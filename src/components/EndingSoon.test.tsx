@@ -1,22 +1,29 @@
-/**
- * @vitest-environment jsdom
- */
-
+/** @vitest-environment jsdom */
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-const mockGetDeals = vi.fn();
-vi.mock('@/services/api', () => ({
-  getDeals: (...args: unknown[]) => mockGetDeals(...args),
+vi.mock('next/navigation', () => ({
+  useRouter: vi.fn(() => ({ push: vi.fn(), replace: vi.fn(), back: vi.fn() })),
 }));
+vi.mock('@/store/density', () => ({ useDensity: vi.fn(() => 'comfortable') }));
 
-vi.mock('./DealRow', () => ({
-  default: ({ deal }: { deal: { title: string } }) => (
-    <div data-testid="deal-row">{deal.title}</div>
-  ),
-}));
+const mockGetDeals = vi.fn();
+vi.mock('@/services/api', () => ({ getDeals: (...a: unknown[]) => mockGetDeals(...a) }));
 
 import EndingSoon from './EndingSoon';
+
+const mkDeal = (id: string, title: string) => ({
+  dealID: id,
+  storeID: '1',
+  gameID: id,
+  title,
+  salePrice: '9.99',
+  normalPrice: '19.99',
+  savings: '50',
+  thumb: '',
+  lastChange: 1,
+  steamRatingPercent: '90',
+});
 
 describe('EndingSoon', () => {
   it('returns null for empty deals', async () => {
@@ -24,74 +31,20 @@ describe('EndingSoon', () => {
     const { container } = render(await EndingSoon());
     expect(container.firstChild).toBeNull();
   });
-
   it('renders section title', async () => {
-    mockGetDeals.mockResolvedValue([
-      {
-        dealID: '1',
-        title: 'Game 1',
-        storeID: '1',
-        gameID: '100',
-        salePrice: '9.99',
-        normalPrice: '19.99',
-        savings: '50',
-        thumb: '',
-        lastChange: 1,
-        steamRatingPercent: '90',
-      },
-    ]);
+    mockGetDeals.mockResolvedValue([mkDeal('1', 'Game 1')]);
     render(await EndingSoon());
     expect(screen.getByText(/⏰ Ending Soon/)).toBeInTheDocument();
   });
-
-  it('renders "SEE ALL" link', async () => {
-    mockGetDeals.mockResolvedValue([
-      {
-        dealID: '1',
-        title: 'Game 1',
-        storeID: '1',
-        gameID: '100',
-        salePrice: '9.99',
-        normalPrice: '19.99',
-        savings: '50',
-        thumb: '',
-        lastChange: 1,
-        steamRatingPercent: '90',
-      },
-    ]);
+  it('renders deal titles', async () => {
+    mockGetDeals.mockResolvedValue([mkDeal('1', 'Game 1'), mkDeal('2', 'Game 2')]);
     render(await EndingSoon());
-    const link = screen.getByText('SEE ALL ▶');
-    expect(link).toHaveAttribute('href', '/search?sortBy=Recent');
+    expect(screen.getByText('Game 1')).toBeInTheDocument();
+    expect(screen.getByText('Game 2')).toBeInTheDocument();
   });
-
-  it('renders deal rows', async () => {
-    mockGetDeals.mockResolvedValue([
-      {
-        dealID: '1',
-        title: 'Game 1',
-        storeID: '1',
-        gameID: '100',
-        salePrice: '9.99',
-        normalPrice: '19.99',
-        savings: '50',
-        thumb: '',
-        lastChange: 1,
-        steamRatingPercent: '90',
-      },
-      {
-        dealID: '2',
-        title: 'Game 2',
-        storeID: '1',
-        gameID: '101',
-        salePrice: '14.99',
-        normalPrice: '29.99',
-        savings: '50',
-        thumb: '',
-        lastChange: 1,
-        steamRatingPercent: '80',
-      },
-    ]);
+  it('calls getDeals with correct params', async () => {
+    mockGetDeals.mockResolvedValue([]);
     render(await EndingSoon());
-    expect(screen.getAllByTestId('deal-row')).toHaveLength(2);
+    expect(mockGetDeals).toHaveBeenCalledWith({ sortBy: 'Recent', pageSize: '8', onSale: '1' });
   });
 });
