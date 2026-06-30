@@ -3,9 +3,13 @@ import type { GameDetails } from '@/types/game';
 
 const mockGenerateGreyMarketDeals = vi.hoisted(() => vi.fn());
 
-vi.mock('@/utils/pricing', () => ({
-  generateGreyMarketDeals: mockGenerateGreyMarketDeals,
-}));
+vi.mock('@/utils/pricing', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/utils/pricing')>();
+  return {
+    ...actual,
+    generateGreyMarketDeals: mockGenerateGreyMarketDeals,
+  };
+});
 
 import {
   enrichWithGreyMarketDeals,

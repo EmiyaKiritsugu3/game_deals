@@ -9,6 +9,7 @@ import {
   SITE_URL,
 } from '@/lib/metadata-helpers';
 import { getGame, getHighResImage, getStores, isGreyMarketStore } from '@/services/api';
+import { getCheapestDeal } from '@/utils/pricing';
 
 export async function generateMetadata({
   params,
@@ -22,8 +23,8 @@ export async function generateMetadata({
     return { title: 'Game Not Found' };
   }
 
-  const sortedDeals = sortDealsByPrice(game.deals);
-  const bestPrice = sortedDeals[0]?.price;
+  const bestDeal = getCheapestDeal(game.deals);
+  const bestPrice = bestDeal?.price;
   const title = extractTitle(game.info.title, bestPrice);
   const description = extractDescription(
     game.info.title,
@@ -55,15 +56,16 @@ export default async function GamePage({ params }: Readonly<{ params: Promise<{ 
   }
 
   const highResThumb = getHighResImage(game.info.thumb);
+  const bestDeal = getCheapestDeal(game.deals);
   const sortedDeals = sortDealsByPrice(game.deals);
-  const bestCurrentPrice = Number.parseFloat(sortedDeals[0]?.price ?? '9999');
+  const bestCurrentPrice = Number.parseFloat(bestDeal?.price ?? '9999');
   const { official, keyshop } = splitDealsByGreyMarket(sortedDeals, isGreyMarketStore);
   const stats = buildGameStats(game, bestCurrentPrice);
 
   const viewModel = {
     gameTitle: game.info.title,
     highResThumb,
-    bestRawPrice: sortedDeals[0]?.price ?? '0',
+    bestRawPrice: bestDeal?.price ?? '0',
     stats,
     official,
     keyshop,

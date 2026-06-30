@@ -4,6 +4,7 @@ import {
   formatTimeAgo,
   generateGreyMarketDeals,
   generatePriceHistory,
+  getCheapestDeal,
   getHighResImage,
 } from './pricing';
 
@@ -266,5 +267,36 @@ describe('generatePriceHistory', () => {
   it('returns month names in correct order', () => {
     const result = generatePriceHistory(59.99, 29.99, 19.99, 'months-test');
     expect(result.map((pt) => pt.name)).toEqual(['Out', 'Nov', 'Dez', 'Jan', 'Fev', 'Mar']);
+  });
+});
+
+describe('getCheapestDeal', () => {
+  it('returns undefined if deals array is empty', () => {
+    expect(getCheapestDeal([])).toBeUndefined();
+  });
+
+  it('returns the only deal if array has one element', () => {
+    const deals = [{ price: '10.00' }];
+    expect(getCheapestDeal(deals)).toEqual({ price: '10.00' });
+  });
+
+  it('returns the cheapest deal correctly', () => {
+    const deals = [{ price: '15.00' }, { price: '5.00' }, { price: '10.00' }];
+    expect(getCheapestDeal(deals)).toEqual({ price: '5.00' });
+  });
+
+  it('handles negative prices correctly', () => {
+    const deals = [{ price: '0.00' }, { price: '-5.00' }, { price: '5.00' }];
+    expect(getCheapestDeal(deals)).toEqual({ price: '-5.00' });
+  });
+
+  it('handles undefined input correctly', () => {
+    // @ts-expect-error testing invalid undefined input
+    expect(getCheapestDeal(undefined)).toBeUndefined();
+  });
+
+  it('handles null input correctly', () => {
+    // @ts-expect-error testing invalid null input
+    expect(getCheapestDeal(null)).toBeUndefined();
   });
 });

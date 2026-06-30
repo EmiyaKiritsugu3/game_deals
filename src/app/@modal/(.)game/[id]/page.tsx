@@ -3,6 +3,7 @@ import GameBody from '@/components/game/GameBody';
 import SidebarModal from '@/components/SidebarModal';
 import { buildGameStats, sortDealsByPrice, splitDealsByGreyMarket } from '@/lib/game-data';
 import { getGame, getHighResImage, getStores, isGreyMarketStore } from '@/services/api';
+import { getCheapestDeal } from '@/utils/pricing';
 
 async function GameModalContent({ id }: Readonly<{ id: string }>) {
   const [game, stores] = await Promise.all([getGame(id), getStores()]);
@@ -18,15 +19,16 @@ async function GameModalContent({ id }: Readonly<{ id: string }>) {
   }
 
   const highResThumb = getHighResImage(game.info.thumb);
+  const bestDeal = getCheapestDeal(game.deals);
   const sortedDeals = sortDealsByPrice(game.deals);
-  const bestCurrentPrice = Number.parseFloat(sortedDeals[0]?.price ?? '9999');
+  const bestCurrentPrice = Number.parseFloat(bestDeal?.price ?? '9999');
   const { official, keyshop } = splitDealsByGreyMarket(sortedDeals, isGreyMarketStore);
   const stats = buildGameStats(game, bestCurrentPrice);
 
   const viewModel = {
     gameTitle: game.info.title,
     highResThumb,
-    bestRawPrice: sortedDeals[0]?.price ?? '0',
+    bestRawPrice: bestDeal?.price ?? '0',
     stats,
     official,
     keyshop,

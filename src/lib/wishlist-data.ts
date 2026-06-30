@@ -1,4 +1,5 @@
 import { getHighResImage } from '@/services/api';
+import { getCheapestDeal } from '@/utils/pricing';
 
 export type GameEntry = {
   gameID: string;
@@ -48,9 +49,7 @@ export function decodeSharedWishlistIds(idsParam: string | null): string[] {
 
 export function buildGameEntry(gameData: GameDataShape | null, gameId: string): GameEntry | null {
   if (!gameData?.info) return null;
-  const [currentBest] = [...gameData.deals].sort(
-    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
-  );
+  const currentBest = getCheapestDeal(gameData.deals);
   if (currentBest) {
     return {
       gameID: gameId,

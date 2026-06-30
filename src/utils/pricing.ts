@@ -1,6 +1,26 @@
 import { GREY_MARKET_SHOPS } from '@/constants/stores';
 import type { GameDeal, PriceHistoryPoint } from '@/types/game';
 
+/**
+ * Find the cheapest deal in O(N) time without allocating new arrays or sorting.
+ * ⚡ Bolt Performance: Prevents O(N log N) time complexity and O(N) memory allocation per iteration.
+ */
+export function getCheapestDeal<T extends { price: string }>(deals: T[]): T | undefined {
+  if (!deals || deals.length === 0) return undefined;
+  let bestDeal = deals[0];
+  let minPrice = Number.parseFloat(bestDeal.price);
+
+  for (let i = 1; i < deals.length; i++) {
+    const currentPrice = Number.parseFloat(deals[i].price);
+    if (currentPrice < minPrice) {
+      minPrice = currentPrice;
+      bestDeal = deals[i];
+    }
+  }
+
+  return bestDeal;
+}
+
 /** Round savings percentage to integer */
 export function computeSavings(savings: string): number {
   return Math.round(Number.parseFloat(savings));
@@ -46,10 +66,8 @@ export function generateGreyMarketDeals(officialDeals: GameDeal[], dealIDRef: st
   if (!officialDeals || officialDeals.length === 0) return [];
 
   // Base it off the current cheapest official deal
-  const sortedOfficial = [...officialDeals].sort(
-    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
-  );
-  const bestOfficial = sortedOfficial[0];
+  const bestOfficial = getCheapestDeal(officialDeals);
+  if (!bestOfficial) return [];
   const retailPrice = Number.parseFloat(bestOfficial.retailPrice);
   const bestPrice = Number.parseFloat(bestOfficial.price);
 
