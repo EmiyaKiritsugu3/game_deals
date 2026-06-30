@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import * as React from 'react';
-import { dealRedirectUrl } from '@/lib/deal-utils';
+import { dealRedirectUrl, toWishlistPayload } from '@/lib/deal-utils';
 import { dedupeToList } from '@/lib/dedup';
 import type { DealWithStore } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -289,19 +289,7 @@ function HourWishlistButton({ deal }: { deal: DealWithStore }) {
   return (
     <button
       type="button"
-      onClick={() =>
-        toggle({
-          dealID: deal.dealID,
-          gameID: deal.gameID,
-          title: deal.title,
-          thumb: deal.thumb,
-          salePrice: deal.salePrice,
-          normalPrice: deal.normalPrice,
-          savings: deal.savings,
-          storeName: deal.store?.storeName,
-          storeID: deal.storeID,
-        })
-      }
+      onClick={() => toggle(toWishlistPayload(deal))}
       className={cn(
         'grid size-9 place-items-center rounded-full border backdrop-blur-md transition-all hover:scale-110',
         has

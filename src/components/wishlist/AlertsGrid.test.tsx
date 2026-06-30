@@ -102,7 +102,12 @@ describe('AlertsGrid', () => {
 
   it('renders multiple alerts with different prices', () => {
     const alerts = [
-      makeAlert({ gameID: 'g1', gameTitle: 'Game One', targetPrice: 5, currentPrice: 8 }),
+      makeAlert({
+        gameID: 'g1',
+        gameTitle: 'Game One',
+        targetPrice: 5,
+        currentPrice: 8,
+      }),
       makeAlert({
         gameID: 'g2',
         gameTitle: 'Game Two',

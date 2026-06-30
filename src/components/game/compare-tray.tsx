@@ -24,7 +24,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { dealRedirectUrl } from '@/lib/deal-utils';
+import { dealRedirectUrl, toWishlistPayload } from '@/lib/deal-utils';
 import type { DealWithStore } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { useCompare } from '@/store/compare';
@@ -368,7 +368,9 @@ function CompareDialog({
           {/* Per-deal actions */}
           <div
             className="mt-4 grid gap-3"
-            style={{ gridTemplateColumns: `120px repeat(${items.length}, minmax(0, 1fr))` }}
+            style={{
+              gridTemplateColumns: `120px repeat(${items.length}, minmax(0, 1fr))`,
+            }}
           >
             <div />
             {items.map((deal) => {
@@ -385,19 +387,7 @@ function CompareDialog({
                     Get deal
                   </a>
                   <button
-                    onClick={() =>
-                      toggleWishlist({
-                        dealID: deal.dealID,
-                        gameID: deal.gameID,
-                        title: deal.title,
-                        thumb: deal.thumb,
-                        salePrice: deal.salePrice,
-                        normalPrice: deal.normalPrice,
-                        savings: deal.savings,
-                        storeName: deal.store?.storeName,
-                        storeID: deal.storeID,
-                      })
-                    }
+                    onClick={() => toggleWishlist(toWishlistPayload(deal))}
                     className={cn(
                       'inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-all',
                       wished

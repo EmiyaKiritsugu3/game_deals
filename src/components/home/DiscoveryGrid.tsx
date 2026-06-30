@@ -42,7 +42,8 @@ export default function DiscoveryGrid() {
                 </CardHeader>
                 <CardContent>
                   <span className="text-xs text-muted-foreground">
-                    {col.gameIDs.length} game{col.gameIDs.length !== 1 ? 's' : ''}
+                    {col.gameIDs.length} game
+                    {col.gameIDs.length !== 1 ? 's' : ''}
                   </span>
                 </CardContent>
               </Card>

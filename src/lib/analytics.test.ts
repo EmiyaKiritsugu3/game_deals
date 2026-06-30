@@ -19,6 +19,9 @@ describe('trackEvent', () => {
 
   it('calls track with numeric properties', () => {
     trackEvent('price_alert', { price: 9.99, count: 3 });
-    expect(track).toHaveBeenCalledWith('price_alert', { price: 9.99, count: 3 });
+    expect(track).toHaveBeenCalledWith('price_alert', {
+      price: 9.99,
+      count: 3,
+    });
   });
 });

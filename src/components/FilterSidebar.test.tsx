@@ -86,7 +86,9 @@ describe('FilterSidebar', () => {
 
   it('apply filters pushes to router with params', () => {
     render(<FilterSidebar stores={stores} />);
-    fireEvent.change(screen.getByLabelText('Maximum price'), { target: { value: '50' } });
+    fireEvent.change(screen.getByLabelText('Maximum price'), {
+      target: { value: '50' },
+    });
     fireEvent.click(screen.getByText('Steam'));
     fireEvent.click(screen.getByText('Apply Filters'));
     expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('upperPrice=50'));
@@ -103,7 +105,9 @@ describe('FilterSidebar', () => {
   it('clear filters resets state and pushes clean URL', () => {
     render(<FilterSidebar stores={stores} />);
     fireEvent.click(screen.getByText('Steam'));
-    fireEvent.change(screen.getByLabelText('Maximum price'), { target: { value: '25' } });
+    fireEvent.change(screen.getByLabelText('Maximum price'), {
+      target: { value: '25' },
+    });
     fireEvent.click(screen.getByText('Clear'));
     expect(mockPush).toHaveBeenCalledWith('/search?');
     expect(screen.getByLabelText('Maximum price')).toHaveValue(null);

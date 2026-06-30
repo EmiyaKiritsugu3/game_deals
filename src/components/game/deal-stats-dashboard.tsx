@@ -17,11 +17,41 @@ export function DealStatsDashboard({ deals }: DealStatsDashboardProps) {
 
     // Savings distribution (5 buckets)
     const buckets = [
-      { label: '0-25%', min: 0, max: 25, count: 0, color: 'oklch(0.7 0.1 200)' },
-      { label: '25-50%', min: 25, max: 50, count: 0, color: 'oklch(0.7 0.15 180)' },
-      { label: '50-75%', min: 50, max: 75, count: 0, color: 'oklch(0.78 0.2 145)' },
-      { label: '75-90%', min: 75, max: 90, count: 0, color: 'oklch(0.78 0.16 70)' },
-      { label: '90-100%', min: 90, max: 101, count: 0, color: 'oklch(0.82 0.2 300)' },
+      {
+        label: '0-25%',
+        min: 0,
+        max: 25,
+        count: 0,
+        color: 'oklch(0.7 0.1 200)',
+      },
+      {
+        label: '25-50%',
+        min: 25,
+        max: 50,
+        count: 0,
+        color: 'oklch(0.7 0.15 180)',
+      },
+      {
+        label: '50-75%',
+        min: 50,
+        max: 75,
+        count: 0,
+        color: 'oklch(0.78 0.2 145)',
+      },
+      {
+        label: '75-90%',
+        min: 75,
+        max: 90,
+        count: 0,
+        color: 'oklch(0.78 0.16 70)',
+      },
+      {
+        label: '90-100%',
+        min: 90,
+        max: 101,
+        count: 0,
+        color: 'oklch(0.82 0.2 300)',
+      },
     ];
     for (const d of deduped) {
       const b = buckets.find((b) => d.savingsNum >= b.min && d.savingsNum < b.max);
@@ -52,11 +82,41 @@ export function DealStatsDashboard({ deals }: DealStatsDashboardProps) {
 
     // Price tier breakdown (donut chart)
     const tiers = [
-      { label: 'Free', min: 0, max: 0.01, count: 0, color: 'oklch(0.82 0.2 300)' },
-      { label: 'Under $5', min: 0.01, max: 5, count: 0, color: 'oklch(0.78 0.2 145)' },
-      { label: '$5-$15', min: 5, max: 15, count: 0, color: 'oklch(0.78 0.16 70)' },
-      { label: '$15-$30', min: 15, max: 30, count: 0, color: 'oklch(0.7 0.15 60)' },
-      { label: '$30+', min: 30, max: Infinity, count: 0, color: 'oklch(0.6 0.1 240)' },
+      {
+        label: 'Free',
+        min: 0,
+        max: 0.01,
+        count: 0,
+        color: 'oklch(0.82 0.2 300)',
+      },
+      {
+        label: 'Under $5',
+        min: 0.01,
+        max: 5,
+        count: 0,
+        color: 'oklch(0.78 0.2 145)',
+      },
+      {
+        label: '$5-$15',
+        min: 5,
+        max: 15,
+        count: 0,
+        color: 'oklch(0.78 0.16 70)',
+      },
+      {
+        label: '$15-$30',
+        min: 15,
+        max: 30,
+        count: 0,
+        color: 'oklch(0.7 0.15 60)',
+      },
+      {
+        label: '$30+',
+        min: 30,
+        max: Infinity,
+        count: 0,
+        color: 'oklch(0.6 0.1 240)',
+      },
     ];
     for (const d of deduped) {
       const t = tiers.find((t) => d.salePriceNum >= t.min && d.salePriceNum < t.max);
@@ -292,7 +352,9 @@ function StatCard({
   return (
     <div
       className="group relative overflow-hidden rounded-2xl glass p-3.5 lift-on-hover hover:border-primary/40"
-      style={{ animation: `fade-in-up 0.5s cubic-bezier(0.22,1,0.36,1) ${delay}ms both` }}
+      style={{
+        animation: `fade-in-up 0.5s cubic-bezier(0.22,1,0.36,1) ${delay}ms both`,
+      }}
     >
       <div className="flex items-center justify-between">
         <span className={cn('grid size-8 place-items-center rounded-lg bg-card/60', accent)}>
@@ -340,7 +402,16 @@ function PriceTierDonut({
       const dashLength = pct * circumference;
       const startOffset =
         acc.length > 0 ? acc[acc.length - 1].startOffset + acc[acc.length - 1].dashLength : 0;
-      return [...acc, { label: t.label, count: t.count, color: t.color, dashLength, startOffset }];
+      return [
+        ...acc,
+        {
+          label: t.label,
+          count: t.count,
+          color: t.color,
+          dashLength,
+          startOffset,
+        },
+      ];
     }, []);
   }, [tiers, total, circumference]);
 

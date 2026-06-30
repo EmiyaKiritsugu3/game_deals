@@ -135,7 +135,7 @@ export function FilterBar(props: FilterBarProps) {
                 <SelectItem key={s.storeID} value={s.storeID}>
                   <span className="flex items-center gap-2">
                     {}
-                    <img src={s.logoUrl} // biome-ignore lint/performance/noImgElement: store logos from CheapShark alt="" className="size-4 rounded-[3px] object-contain" />
+                    <img src={s.logoUrl} alt="" className="size-4 rounded-[3px] object-contain" />
                     {s.storeName}
                   </span>
                 </SelectItem>
@@ -214,7 +214,7 @@ function StoreButton({
       )}
     >
       {logoUrl ? (
-        <img src={logoUrl} // biome-ignore lint/performance/noImgElement: store logo alt="" className="size-5 rounded object-contain" />
+        <img src={logoUrl} alt="" className="size-5 rounded object-contain" />
       ) : (
         <span className="grid size-5 place-items-center rounded bg-primary/20 text-[9px] font-bold text-primary">
           ALL

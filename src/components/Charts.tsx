@@ -99,7 +99,11 @@ export function PriceHistoryChart({
                 strokeWidth: 2,
                 r: 6,
               }}
-              activeDot={{ r: 8, fill: 'hsl(var(--primary))', stroke: 'hsl(var(--background))' }}
+              activeDot={{
+                r: 8,
+                fill: 'hsl(var(--primary))',
+                stroke: 'hsl(var(--background))',
+              }}
             />
           </LineChart>
         </ResponsiveContainer>

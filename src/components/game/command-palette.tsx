@@ -99,7 +99,6 @@ export function CommandPalette({ deals, onOpenDetail, open, onOpenChange }: Comm
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [recentSearches, setRecentSearches] = React.useState<string[]>([]);
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const _toggle = useWishlist((s) => s.toggle);
   const wishlistHas = useWishlist((s) => s.has);
 
   // Load recent searches on open

@@ -46,7 +46,10 @@ describe('useWishlistGames', () => {
 
   it('fetches stores and games when gameIds provided', async () => {
     mockGetStores.mockResolvedValue({ 1: 'Steam' });
-    mockGetGamesBatch.mockResolvedValue({ g1: { title: 'Game1' }, g2: { title: 'Game2' } });
+    mockGetGamesBatch.mockResolvedValue({
+      g1: { title: 'Game1' },
+      g2: { title: 'Game2' },
+    });
 
     const { result } = renderHook(() => useWishlistGames(['g1', 'g2']), {
       wrapper: createWrapper(),

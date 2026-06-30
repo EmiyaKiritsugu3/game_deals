@@ -58,7 +58,9 @@ function StatCard({
   return (
     <div
       className="group relative overflow-hidden rounded-2xl glass p-4 sm:p-5 lift-on-hover hover:border-primary/30"
-      style={{ animation: `fade-in-up 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms both` }}
+      style={{
+        animation: `fade-in-up 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms both`,
+      }}
     >
       <div
         className="absolute -right-6 -top-6 size-20 rounded-full opacity-30 blur-2xl transition-opacity group-hover:opacity-60"
@@ -79,7 +81,9 @@ function StatCard({
         </div>
         <span
           className="grid size-9 shrink-0 place-items-center rounded-xl border border-border/50 bg-card/40 transition-transform group-hover:scale-110 group-hover:-rotate-6"
-          style={{ color: accent.includes('emerald') ? 'var(--primary)' : 'var(--hot)' }}
+          style={{
+            color: accent.includes('emerald') ? 'var(--primary)' : 'var(--hot)',
+          }}
         >
           <Icon className="size-4" />
         </span>

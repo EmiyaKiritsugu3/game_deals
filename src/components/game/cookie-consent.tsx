@@ -101,6 +101,7 @@ export function CookieConsent() {
                 We respect your privacy
               </h2>
               <button
+                type="button"
                 onClick={reject}
                 className="grid size-7 shrink-0 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent/30 hover:text-foreground"
                 aria-label="Dismiss"
@@ -113,6 +114,7 @@ export function CookieConsent() {
               only use browser local storage to remember your wishlist and preferences. We may earn
               a commission when you click deal links —{' '}
               <button
+                type="button"
                 onClick={() => openLegalDoc('affiliate')}
                 className="font-medium text-primary underline-offset-2 hover:underline"
               >
@@ -142,6 +144,7 @@ export function CookieConsent() {
                     <p className="mt-0.5 text-muted-foreground">
                       We don't use any. There's nothing to opt out of.{' '}
                       <button
+                        type="button"
                         onClick={() => openLegalDoc('cookies')}
                         className="font-medium text-primary underline-offset-2 hover:underline"
                       >
@@ -151,6 +154,7 @@ export function CookieConsent() {
                   </div>
                 </div>
                 <button
+                  type="button"
                   onClick={() => {
                     // Reset all local data (wishlist, compare, theme) — except consent itself
                     try {
@@ -187,6 +191,7 @@ export function CookieConsent() {
                 Essential only
               </Button>
               <button
+                type="button"
                 onClick={() => setExpanded((v) => !v)}
                 className="ml-auto text-xs font-medium text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
               >

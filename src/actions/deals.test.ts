@@ -28,7 +28,9 @@ const {
   };
 });
 
-vi.mock('@/db', () => ({ db: { execute, insert: mockInsert, select: mockSelect } }));
+vi.mock('@/db', () => ({
+  db: { execute, insert: mockInsert, select: mockSelect },
+}));
 
 vi.mock('@/services/fetch-helpers', () => ({
   fetchDealsWithFallback: mockFetchDealsWithFallback,
@@ -408,7 +410,10 @@ describe('getStoresAction', () => {
 
 describe('getGameAction', () => {
   it('delegates to fetchGameDetails with correct args', async () => {
-    mockFetchGameDetails.mockResolvedValueOnce({ gameID: '123', name: 'Test Game' });
+    mockFetchGameDetails.mockResolvedValueOnce({
+      gameID: '123',
+      name: 'Test Game',
+    });
     const result = await getGameAction('123');
     expect(mockFetchGameDetails).toHaveBeenCalledWith('123', 'getGameAction');
     expect(result).toEqual({ gameID: '123', name: 'Test Game' });
@@ -433,7 +438,9 @@ describe('ingestPricesAction (success path)', () => {
     ]);
     mockBuildPriceHistoryValues.mockReturnValueOnce([{ gameId: 'uuid-1', price: 9.99 }]);
 
-    const mockValues = vi.fn(() => ({ onConflictDoUpdate: mockOnConflictDoUpdate }));
+    const mockValues = vi.fn(() => ({
+      onConflictDoUpdate: mockOnConflictDoUpdate,
+    }));
     mockInsert.mockReturnValueOnce({ values: mockValues });
 
     const result = await ingestPricesAction();

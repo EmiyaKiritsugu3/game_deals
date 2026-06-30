@@ -106,7 +106,14 @@ describe('SearchBox', () => {
 
   it('displays game results with image, title, and price', () => {
     openDropdownWithResults(
-      [{ gameID: '100', external: 'Super Mario', thumb: 'mario.jpg', cheapest: '39.99' }],
+      [
+        {
+          gameID: '100',
+          external: 'Super Mario',
+          thumb: 'mario.jpg',
+          cheapest: '39.99',
+        },
+      ],
       false
     );
     expect(screen.getByText('Super Mario')).toBeInTheDocument();
@@ -117,7 +124,14 @@ describe('SearchBox', () => {
 
   it('renders result links with correct href', () => {
     openDropdownWithResults(
-      [{ gameID: '100', external: 'Super Mario', thumb: 'm.jpg', cheapest: '39.99' }],
+      [
+        {
+          gameID: '100',
+          external: 'Super Mario',
+          thumb: 'm.jpg',
+          cheapest: '39.99',
+        },
+      ],
       false
     );
     const link = screen.getByRole('link', { name: /super mario/i });
@@ -203,7 +217,9 @@ describe('SearchBox', () => {
   });
 
   it('closes dropdown on click outside', () => {
-    mockUseClickOutside.mockReturnValue({ current: document.createElement('div') });
+    mockUseClickOutside.mockReturnValue({
+      current: document.createElement('div'),
+    });
 
     renderSearchBox();
     expect(mockUseClickOutside).toHaveBeenCalled();

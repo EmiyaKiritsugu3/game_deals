@@ -8,7 +8,10 @@ import type { ErrorEvent, EventHint } from '@sentry/nextjs';
 
 interface SentryEventLike {
   request?: { headers?: Record<string, string | undefined> };
-  contexts?: { runtime?: Record<string, unknown>; env?: Record<string, unknown> };
+  contexts?: {
+    runtime?: Record<string, unknown>;
+    env?: Record<string, unknown>;
+  };
   message?: unknown;
   [key: string]: unknown;
 }

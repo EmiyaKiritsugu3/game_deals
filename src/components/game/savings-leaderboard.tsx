@@ -186,7 +186,10 @@ function LeaderboardRow({
                       ? 'bg-gradient-to-r from-amber-700 to-amber-600'
                       : 'bg-gradient-to-r from-primary/60 to-primary'
               )}
-              style={{ width: `${barWidth}%`, animationDelay: `${rank * 80 + 200}ms` }}
+              style={{
+                width: `${barWidth}%`,
+                animationDelay: `${rank * 80 + 200}ms`,
+              }}
             />
           </div>
           <span

@@ -66,7 +66,15 @@ describe('NotificationBell', () => {
   it('shows unread count badge', async () => {
     mockIsLoggedIn = true;
     mockGetNotifications.mockResolvedValue({
-      items: [{ id: '1', title: 'Test', body: null, createdAt: new Date(), readAt: null }],
+      items: [
+        {
+          id: '1',
+          title: 'Test',
+          body: null,
+          createdAt: new Date(),
+          readAt: null,
+        },
+      ],
       unread: 1,
     });
     renderWithQuery(<NotificationBell />);
@@ -122,7 +130,15 @@ describe('NotificationBell', () => {
     const user = userEvent.setup();
     mockIsLoggedIn = true;
     mockGetNotifications.mockResolvedValue({
-      items: [{ id: '1', title: 'Test', body: null, createdAt: new Date(), readAt: null }],
+      items: [
+        {
+          id: '1',
+          title: 'Test',
+          body: null,
+          createdAt: new Date(),
+          readAt: null,
+        },
+      ],
       unread: 1,
     });
     mockMarkAllRead.mockResolvedValue(undefined);

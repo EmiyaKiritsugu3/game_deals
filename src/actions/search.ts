@@ -29,7 +29,10 @@ export async function searchGamesAction(query: string, limit = 10) {
     try {
       const res = await fetch(
         `https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(query)}&limit=${limit}`,
-        { headers: { 'User-Agent': 'GameDeals/1.0' }, signal: controller.signal }
+        {
+          headers: { 'User-Agent': 'GameDeals/1.0' },
+          signal: controller.signal,
+        }
       );
       clearTimeout(timeout);
       if (!res.ok) {

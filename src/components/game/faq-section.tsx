@@ -120,6 +120,7 @@ const FAQS: FaqItem[] = [
           Rankings are <strong>never</strong> influenced by commission rates. A higher-commission
           store will never outrank a cheaper or better-rated one.{' '}
           <button
+            type="button"
             onClick={() => openLegalDoc('affiliate')}
             className="font-medium text-primary underline-offset-2 hover:underline"
           >
@@ -226,7 +227,7 @@ export function FaqSection() {
           const Icon = faq.icon;
           return (
             <AccordionItem
-              key={i} /* biome-ignore lint/suspicious/noArrayIndexKey: static FAQ list */
+              key={i}
               value={`faq-${i}`}
               className="overflow-hidden rounded-2xl border border-border/40 glass px-4 transition-colors data-[state=open]:border-primary/40"
             >

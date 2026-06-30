@@ -47,7 +47,12 @@ vi.mock('next/link', () => ({
 }));
 
 const defaultProps = {
-  user: { id: 'u1', name: 'TestUser', email: 'test@example.com', avatar: '/avatar.png' },
+  user: {
+    id: 'u1',
+    name: 'TestUser',
+    email: 'test@example.com',
+    avatar: '/avatar.png',
+  },
   serverUser: null,
 };
 
@@ -113,7 +118,10 @@ describe('UserMenu', () => {
   it('falls back to serverUser metadata when user is null', () => {
     const serverUser = {
       id: 's1',
-      user_metadata: { full_name: 'ServerName', avatar_url: '/server-avatar.png' },
+      user_metadata: {
+        full_name: 'ServerName',
+        avatar_url: '/server-avatar.png',
+      },
     } as never;
     render(<UserMenu user={null} serverUser={serverUser} />);
     expect(screen.getByText('ServerName')).toBeInTheDocument();

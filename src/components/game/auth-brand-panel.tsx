@@ -70,9 +70,21 @@ export function AuthBrandPanel() {
         {/* Trust pillars */}
         <ul className="mt-6 space-y-3">
           {[
-            { icon: ShieldCheck, title: 'Privacy-first', body: 'No password. We never track you.' },
-            { icon: Zap, title: 'Instant sign-in', body: 'Magic link lands in 30 seconds.' },
-            { icon: TrendingDown, title: 'Smarter savings', body: 'Cross-device wishlist sync.' },
+            {
+              icon: ShieldCheck,
+              title: 'Privacy-first',
+              body: 'No password. We never track you.',
+            },
+            {
+              icon: Zap,
+              title: 'Instant sign-in',
+              body: 'Magic link lands in 30 seconds.',
+            },
+            {
+              icon: TrendingDown,
+              title: 'Smarter savings',
+              body: 'Cross-device wishlist sync.',
+            },
           ].map((item, i) => {
             const Icon = item.icon;
             return (

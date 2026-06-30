@@ -6,7 +6,7 @@ import * as React from 'react';
 import { GetDealCta } from '@/components/game/deal-cta';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { dealRedirectUrl } from '@/lib/deal-utils';
+import { dealRedirectUrl, toWishlistPayload } from '@/lib/deal-utils';
 import type { DealWithStore } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { useWishlist } from '@/store/wishlist';
@@ -31,7 +31,7 @@ export function FeaturedDeals({ deals, onOpenDetail }: FeaturedDealsProps) {
     return (
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="h-64 skeleton-shimmer rounded-2xl glass" />
+          <div key={`skeleton-${i}`} className="h-64 skeleton-shimmer rounded-2xl glass" />
         ))}
       </div>
     );
@@ -105,7 +105,9 @@ function FeaturedCard({
     <article
       data-feature-card
       className="group relative flex w-[300px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl glass conic-border lift-on-hover hover:border-primary/40 sm:w-[340px]"
-      style={{ animation: `fade-in-up 0.6s cubic-bezier(0.22,1,0.36,1) ${index * 80}ms both` }}
+      style={{
+        animation: `fade-in-up 0.6s cubic-bezier(0.22,1,0.36,1) ${index * 80}ms both`,
+      }}
     >
       <button
         type="button"
@@ -166,19 +168,7 @@ function FeaturedCard({
       {/* Wishlist — sibling (not nested) to avoid invalid <button> in <button> */}
       <button
         type="button"
-        onClick={() =>
-          toggle({
-            dealID: deal.dealID,
-            gameID: deal.gameID,
-            title: deal.title,
-            thumb: deal.thumb,
-            salePrice: deal.salePrice,
-            normalPrice: deal.normalPrice,
-            savings: deal.savings,
-            storeName: deal.store?.storeName,
-            storeID: deal.storeID,
-          })
-        }
+        onClick={() => toggle(toWishlistPayload(deal))}
         className={cn(
           'absolute right-3 top-3 z-10 grid size-9 place-items-center rounded-full border backdrop-blur-md transition-all hover:scale-110',
           has

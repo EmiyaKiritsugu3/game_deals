@@ -1,4 +1,33 @@
+import type { WishlistItem } from '@/store/wishlist';
 import type { Deal, DealWithStore, Store } from './types';
+
+/** Build the minimum payload needed to wishlist a deal. */
+export function toWishlistPayload(
+  deal: Pick<
+    DealWithStore,
+    | 'dealID'
+    | 'gameID'
+    | 'title'
+    | 'thumb'
+    | 'salePrice'
+    | 'normalPrice'
+    | 'savings'
+    | 'storeID'
+    | 'store'
+  >
+): Omit<WishlistItem, 'addedAt' | 'baselinePrice' | 'lowestPrice'> {
+  return {
+    dealID: deal.dealID,
+    gameID: deal.gameID,
+    title: deal.title,
+    thumb: deal.thumb,
+    salePrice: deal.salePrice,
+    normalPrice: deal.normalPrice,
+    savings: deal.savings,
+    storeName: deal.store?.storeName,
+    storeID: deal.storeID,
+  };
+}
 
 const IMG_BASE = 'https://www.cheapshark.com';
 
@@ -76,7 +105,10 @@ export function formatLastChecked(
   if (hours < 24) return `${hours}h ago`;
   const days = Math.floor(hours / 24);
   if (days < 7) return `${days}d ago`;
-  return new Date(ms).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  return new Date(ms).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+  });
 }
 
 /**

@@ -12,7 +12,9 @@ vi.mock('@/lib/cron-auth', () => ({
   verifyCronAuth: (request: Request) => {
     const auth = request.headers.get('authorization');
     if (!auth || auth !== 'Bearer valid-secret') {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+      });
     }
     return null;
   },
@@ -36,7 +38,13 @@ describe('GET /api/cron/check-alerts', () => {
     checkTriggeredAlertsAction.mockResolvedValueOnce({
       checked: 10,
       triggered: [
-        { userId: 'u1', gameId: 'g1', currentLowest: 5, targetPrice: 10, notificationId: 'n1' },
+        {
+          userId: 'u1',
+          gameId: 'g1',
+          currentLowest: 5,
+          targetPrice: 10,
+          notificationId: 'n1',
+        },
       ],
     });
     const response = await GET(buildRequest());

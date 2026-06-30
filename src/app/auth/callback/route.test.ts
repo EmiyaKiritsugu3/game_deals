@@ -7,7 +7,9 @@ vi.mock('@/lib/rate-limit', () => ({
 
 vi.mock('@/utils/supabase/server', () => ({
   createClient: vi.fn().mockResolvedValue({
-    auth: { exchangeCodeForSession: vi.fn().mockResolvedValue({ error: null }) },
+    auth: {
+      exchangeCodeForSession: vi.fn().mockResolvedValue({ error: null }),
+    },
   }),
 }));
 

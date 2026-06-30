@@ -85,14 +85,18 @@ describe('CollectionDetailPage', () => {
   });
 
   it('renders collection title with emoji', async () => {
-    mockGetGamesBatch.mockResolvedValue({ '100': createMockGameDetails() as never });
+    mockGetGamesBatch.mockResolvedValue({
+      '100': createMockGameDetails() as never,
+    });
     const params = Promise.resolve({ slug: 'test-collection' });
     render(await CollectionDetailPage({ params }));
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('🎮 Test Collection');
   });
 
   it('renders collection description', async () => {
-    mockGetGamesBatch.mockResolvedValue({ '100': createMockGameDetails() as never });
+    mockGetGamesBatch.mockResolvedValue({
+      '100': createMockGameDetails() as never,
+    });
     const params = Promise.resolve({ slug: 'test-collection' });
     render(await CollectionDetailPage({ params }));
     expect(screen.getByText('A test collection.')).toBeInTheDocument();
@@ -128,7 +132,9 @@ describe('CollectionDetailPage', () => {
   });
 
   it('links to /game/{gameID}', async () => {
-    mockGetGamesBatch.mockResolvedValue({ '100': createMockGameDetails() as never });
+    mockGetGamesBatch.mockResolvedValue({
+      '100': createMockGameDetails() as never,
+    });
     const params = Promise.resolve({ slug: 'test-collection' });
     render(await CollectionDetailPage({ params }));
     expect(screen.getAllByText('Test Game').length).toBeGreaterThan(0);

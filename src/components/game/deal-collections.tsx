@@ -3,7 +3,7 @@
 import { ArrowRight, ChevronRight, Crown, Flame, Gamepad2, Gem, Heart } from 'lucide-react';
 import Image from 'next/image';
 import * as React from 'react';
-import { dealRedirectUrl } from '@/lib/deal-utils';
+import { dealRedirectUrl, toWishlistPayload } from '@/lib/deal-utils';
 import { dedupeToList } from '@/lib/dedup';
 import type { DealWithStore } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -138,7 +138,9 @@ function CollectionCard({
       {/* Ambient glow that matches the collection accent */}
       <div
         className="pointer-events-none absolute -right-20 -top-20 size-64 rounded-full opacity-30 blur-3xl transition-opacity duration-500 group-hover:opacity-50"
-        style={{ background: `radial-gradient(circle, ${collection.glow}, transparent 60%)` }}
+        style={{
+          background: `radial-gradient(circle, ${collection.glow}, transparent 60%)`,
+        }}
       />
       {/* Subtle grid texture */}
       <div className="bg-grid pointer-events-none absolute inset-0 opacity-[0.03]" />
@@ -292,19 +294,7 @@ function CollectionWishlistButton({ deal }: { deal: DealWithStore }) {
   return (
     <button
       type="button"
-      onClick={() =>
-        toggle({
-          dealID: deal.dealID,
-          gameID: deal.gameID,
-          title: deal.title,
-          thumb: deal.thumb,
-          salePrice: deal.salePrice,
-          normalPrice: deal.normalPrice,
-          savings: deal.savings,
-          storeName: deal.store?.storeName,
-          storeID: deal.storeID,
-        })
-      }
+      onClick={() => toggle(toWishlistPayload(deal))}
       className={cn(
         'grid size-8 shrink-0 place-items-center rounded-lg border transition-all',
         has

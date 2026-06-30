@@ -117,7 +117,9 @@ function SignInForm({
       if (data.magicLinkUrl) setMagicLinkUrl(data.magicLinkUrl);
       if (data.expiresIn) setExpiresAt(Date.now() + data.expiresIn);
       setDialogView('code-entry');
-      toast.success('Magic link sent', { description: `Check ${email.trim()} for your code.` });
+      toast.success('Magic link sent', {
+        description: `Check ${email.trim()} for your code.`,
+      });
     } catch {
       toast.error('Network error. Please try again.');
     } finally {
@@ -321,13 +323,6 @@ function CodeEntryForm({
     return () => clearInterval(id);
   }, [resendCooldown]);
 
-  // Auto-submit when 6 digits entered
-  React.useEffect(() => {
-    if (code.length === 6 && !verifying) {
-      void verify(code);
-    }
-  }, [code, verifying, verify]);
-
   const verify = async (codeValue: string) => {
     if (!pendingEmail) return;
     setVerifying(true);
@@ -353,6 +348,13 @@ function CodeEntryForm({
       setVerifying(false);
     }
   };
+
+  // Auto-submit when 6 digits entered
+  React.useEffect(() => {
+    if (code.length === 6 && !verifying) {
+      void verify(code);
+    }
+  }, [code, verifying, verify]);
 
   // Click-through magic link path (the "fast" option)
   const handleMagicLinkClick = async () => {
@@ -398,7 +400,9 @@ function CodeEntryForm({
         if (data.expiresIn) setExpiresAt(Date.now() + data.expiresIn);
         setCode('');
         setError(null);
-        toast.success('New link sent', { description: `Check ${pendingEmail}.` });
+        toast.success('New link sent', {
+          description: `Check ${pendingEmail}.`,
+        });
       }
     } catch {
       toast.error('Could not resend. Try again.');

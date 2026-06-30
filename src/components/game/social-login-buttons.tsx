@@ -58,8 +58,18 @@ interface SocialProviderConfig {
 }
 
 const PROVIDERS: SocialProviderConfig[] = [
-  { provider: 'google', label: 'Google', icon: GoogleIcon, hoverCls: 'hover:border-red-400/50' },
-  { provider: 'github', label: 'GitHub', icon: GithubIcon, hoverCls: 'hover:border-foreground/40' },
+  {
+    provider: 'google',
+    label: 'Google',
+    icon: GoogleIcon,
+    hoverCls: 'hover:border-red-400/50',
+  },
+  {
+    provider: 'github',
+    label: 'GitHub',
+    icon: GithubIcon,
+    hoverCls: 'hover:border-foreground/40',
+  },
   {
     provider: 'discord',
     label: 'Discord',

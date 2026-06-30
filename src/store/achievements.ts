@@ -165,7 +165,10 @@ export const useAchievements = create<AchievementState>()(
       increment: (achievementId, by = 1) => {
         const ach = ACHIEVEMENTS.find((a) => a.id === achievementId);
         if (!ach) return;
-        const current = get().progress[achievementId] ?? { count: 0, unlocked: false };
+        const current = get().progress[achievementId] ?? {
+          count: 0,
+          unlocked: false,
+        };
         if (current.unlocked) return; // already unlocked — no-op
         const newCount = Math.min(current.count + by, ach.goal);
         const newlyUnlocked = newCount >= ach.goal;
@@ -189,7 +192,10 @@ export const useAchievements = create<AchievementState>()(
       setCount: (achievementId, count) => {
         const ach = ACHIEVEMENTS.find((a) => a.id === achievementId);
         if (!ach) return;
-        const current = get().progress[achievementId] ?? { count: 0, unlocked: false };
+        const current = get().progress[achievementId] ?? {
+          count: 0,
+          unlocked: false,
+        };
         if (current.unlocked) return;
         const clampedCount = Math.min(Math.max(0, count), ach.goal);
         const newlyUnlocked = clampedCount >= ach.goal;

@@ -38,7 +38,9 @@ describe('useGameRating', () => {
   it('fetches user rating for a game', async () => {
     mocks.getGameRating.mockResolvedValue({ rating: 4 });
     const { Wrapper } = createCtx();
-    const { result } = renderHook(() => useGameRating('game-1'), { wrapper: Wrapper });
+    const { result } = renderHook(() => useGameRating('game-1'), {
+      wrapper: Wrapper,
+    });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
@@ -49,7 +51,9 @@ describe('useGameRating', () => {
   it('returns null when user has not rated', async () => {
     mocks.getGameRating.mockResolvedValue(null);
     const { Wrapper } = createCtx();
-    const { result } = renderHook(() => useGameRating('game-1'), { wrapper: Wrapper });
+    const { result } = renderHook(() => useGameRating('game-1'), {
+      wrapper: Wrapper,
+    });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
@@ -58,7 +62,9 @@ describe('useGameRating', () => {
 
   it('is disabled without gameId', () => {
     const { Wrapper } = createCtx();
-    const { result } = renderHook(() => useGameRating(''), { wrapper: Wrapper });
+    const { result } = renderHook(() => useGameRating(''), {
+      wrapper: Wrapper,
+    });
 
     expect(result.current.isFetching).toBe(false);
     expect(mocks.getGameRating).not.toHaveBeenCalled();
@@ -73,7 +79,9 @@ describe('useGameAvgRating', () => {
   it('fetches average rating for a game', async () => {
     mocks.getAvgRating.mockResolvedValue({ average: 4.2, count: 10 });
     const { Wrapper } = createCtx();
-    const { result } = renderHook(() => useGameAvgRating('game-1'), { wrapper: Wrapper });
+    const { result } = renderHook(() => useGameAvgRating('game-1'), {
+      wrapper: Wrapper,
+    });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
@@ -84,7 +92,9 @@ describe('useGameAvgRating', () => {
   it('returns zero when no ratings', async () => {
     mocks.getAvgRating.mockResolvedValue({ average: 0, count: 0 });
     const { Wrapper } = createCtx();
-    const { result } = renderHook(() => useGameAvgRating('game-1'), { wrapper: Wrapper });
+    const { result } = renderHook(() => useGameAvgRating('game-1'), {
+      wrapper: Wrapper,
+    });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
@@ -93,7 +103,9 @@ describe('useGameAvgRating', () => {
 
   it('is disabled without gameId', () => {
     const { Wrapper } = createCtx();
-    const { result } = renderHook(() => useGameAvgRating(''), { wrapper: Wrapper });
+    const { result } = renderHook(() => useGameAvgRating(''), {
+      wrapper: Wrapper,
+    });
 
     expect(result.current.isFetching).toBe(false);
     expect(mocks.getAvgRating).not.toHaveBeenCalled();
@@ -110,7 +122,9 @@ describe('useRateGame', () => {
     const { queryClient, Wrapper } = createCtx();
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
 
-    const { result } = renderHook(() => useRateGame('game-1'), { wrapper: Wrapper });
+    const { result } = renderHook(() => useRateGame('game-1'), {
+      wrapper: Wrapper,
+    });
 
     await act(async () => {
       await result.current.mutateAsync(3);
@@ -138,7 +152,9 @@ describe('useRateGame', () => {
 
     queryClient.setQueryData(['game-rating', 'g1'], { rating: 2 });
 
-    const { result } = renderHook(() => useRateGame('g1'), { wrapper: Wrapper });
+    const { result } = renderHook(() => useRateGame('g1'), {
+      wrapper: Wrapper,
+    });
 
     // fire mutation; don't await — we want to check mid-flight
     result.current.mutate(5);
@@ -150,7 +166,9 @@ describe('useRateGame', () => {
       await Promise.resolve();
     });
 
-    expect(queryClient.getQueryData(['game-rating', 'g1'])).toEqual({ rating: 5 });
+    expect(queryClient.getQueryData(['game-rating', 'g1'])).toEqual({
+      rating: 5,
+    });
 
     // resolve the deferred so the mutation settles cleanly
     await act(async () => {
@@ -170,7 +188,9 @@ describe('useRateGame', () => {
 
     queryClient.setQueryData(['game-rating', 'g1'], { rating: 2 });
 
-    const { result } = renderHook(() => useRateGame('g1'), { wrapper: Wrapper });
+    const { result } = renderHook(() => useRateGame('g1'), {
+      wrapper: Wrapper,
+    });
 
     result.current.mutate(5);
     // flush TanStack Query microtasks
@@ -182,7 +202,9 @@ describe('useRateGame', () => {
       await Promise.resolve();
     });
 
-    expect(queryClient.getQueryData(['game-rating', 'g1'])).toEqual({ rating: 5 });
+    expect(queryClient.getQueryData(['game-rating', 'g1'])).toEqual({
+      rating: 5,
+    });
 
     // now reject
     await act(async () => {
@@ -190,7 +212,9 @@ describe('useRateGame', () => {
     });
 
     await waitFor(() => {
-      expect(queryClient.getQueryData(['game-rating', 'g1'])).toEqual({ rating: 2 });
+      expect(queryClient.getQueryData(['game-rating', 'g1'])).toEqual({
+        rating: 2,
+      });
     });
   });
 });

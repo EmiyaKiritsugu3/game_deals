@@ -15,7 +15,12 @@ import {
 import Image from 'next/image';
 import * as React from 'react';
 import { Badge } from '@/components/ui/badge';
-import { dealRedirectUrl, formatLastChecked, isRecentlyVerified } from '@/lib/deal-utils';
+import {
+  dealRedirectUrl,
+  formatLastChecked,
+  isRecentlyVerified,
+  toWishlistPayload,
+} from '@/lib/deal-utils';
 import { isOfficialRetailer } from '@/lib/store-trust';
 import type { DealWithStore } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -35,19 +40,38 @@ interface DealCardProps {
 
 function discountTier(savings: number) {
   if (savings >= 90)
-    return { label: 'GIVEAWAY', cls: 'from-fuchsia-500 to-amber-400 text-black', hot: true };
+    return {
+      label: 'GIVEAWAY',
+      cls: 'from-fuchsia-500 to-amber-400 text-black',
+      hot: true,
+    };
   if (savings >= 75)
-    return { label: 'MEGA', cls: 'from-amber-400 to-amber-500 text-black', hot: true };
+    return {
+      label: 'MEGA',
+      cls: 'from-amber-400 to-amber-500 text-black',
+      hot: true,
+    };
   if (savings >= 50)
-    return { label: 'HOT', cls: 'from-primary to-emerald-400 text-primary-foreground', hot: true };
+    return {
+      label: 'HOT',
+      cls: 'from-primary to-emerald-400 text-primary-foreground',
+      hot: true,
+    };
   if (savings >= 25)
-    return { label: 'DEAL', cls: 'from-primary/80 to-primary text-primary-foreground', hot: false };
-  return { label: 'SAVE', cls: 'from-zinc-600 to-zinc-700 text-white', hot: false };
+    return {
+      label: 'DEAL',
+      cls: 'from-primary/80 to-primary text-primary-foreground',
+      hot: false,
+    };
+  return {
+    label: 'SAVE',
+    cls: 'from-zinc-600 to-zinc-700 text-white',
+    hot: false,
+  };
 }
 
 function Stars({ rating }: { rating: number }) {
   if (rating <= 0) return null;
-  const _full = Math.round(rating);
   return (
     <span className="inline-flex items-center gap-0.5" aria-label={`Deal rating ${rating} of 10`}>
       {Array.from({ length: 5 }).map((_, i) => (
@@ -87,17 +111,7 @@ export function DealCard({
   const lastCheckedLabel = formatLastChecked(deal.lastChange);
   const recentlyVerified = isRecentlyVerified(deal.lastChange, 10);
 
-  const wishlistItem = {
-    dealID: deal.dealID,
-    gameID: deal.gameID,
-    title: deal.title,
-    thumb: deal.thumb,
-    salePrice: deal.salePrice,
-    normalPrice: deal.normalPrice,
-    savings: deal.savings,
-    storeName: deal.store?.storeName,
-    storeID: deal.storeID,
-  };
+  const wishlistItem = toWishlistPayload(deal);
 
   const delayMs = Math.min(index, 12) * 50;
 

@@ -26,10 +26,22 @@ export default function PageError({ error, reset, pageName }: Readonly<PageError
       }}
     >
       <div>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.75rem' }}>
+        <h1
+          style={{
+            fontSize: '1.5rem',
+            fontWeight: 600,
+            marginBottom: '0.75rem',
+          }}
+        >
           Something went wrong loading {pageName}
         </h1>
-        <p style={{ color: 'hsl(226 10% 65%)', marginBottom: '1.5rem', maxWidth: '400px' }}>
+        <p
+          style={{
+            color: 'hsl(226 10% 65%)',
+            marginBottom: '1.5rem',
+            maxWidth: '400px',
+          }}
+        >
           We couldn&apos;t load this page. Please try again.
         </p>
         <button

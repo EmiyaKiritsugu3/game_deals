@@ -63,9 +63,9 @@ export async function createPlaylistAction(
     )) as unknown as PlaylistRow[];
 
     if (result.length > 0) {
-      processAction(userId, 'playlist_create', { playlistId: result[0].id }).catch((e) =>
-        console.error('Gamification failed (non-blocking):', e)
-      );
+      processAction(userId, 'playlist_create', {
+        playlistId: result[0].id,
+      }).catch((e) => console.error('Gamification failed (non-blocking):', e));
       return result[0];
     }
 
@@ -134,9 +134,10 @@ export async function addGameToPlaylistAction(
 
   const added = result.length > 0;
   if (added) {
-    processAction(userId, 'playlist_add', { gameId: cheapsharkId, playlistId }).catch((e) =>
-      console.error('Gamification failed (non-blocking):', e)
-    );
+    processAction(userId, 'playlist_add', {
+      gameId: cheapsharkId,
+      playlistId,
+    }).catch((e) => console.error('Gamification failed (non-blocking):', e));
   }
   return added;
 }

@@ -77,7 +77,7 @@ export default function Home() {
   // User preferences — wired to behavior
   const prefs = usePreferences();
   // Override density when compactGrid preference is on
-  const effectiveDensity: GridDensity = prefs.compactGrid ? 'compact' : density;
+  const effectiveDensity = prefs.compactGrid ? 'compact' : density;
 
   // Dialog state
   const [activeDeal, setActiveDeal] = React.useState<DealWithStore | null>(null);
@@ -163,7 +163,7 @@ export default function Home() {
     };
   }, [dealsQuery.data, storesQuery.data]);
 
-  // Reset pagination on filter change
+  // Reset pagination on mount only — filters reset page via their own handlers
   React.useEffect(() => {
     setVisibleCount(PAGE_SIZE);
   }, []);
@@ -288,9 +288,9 @@ export default function Home() {
           {storesQuery.isLoading ? (
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-                {Array.from({ length: 6 }).map((_, i) => ({
-                  /* biome-ignore lint/suspicious/noArrayIndexKey: static list */
-                }))}
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="skeleton-shimmer h-28 rounded-2xl glass" />
+                ))}
               </div>
             </div>
           ) : (
@@ -450,7 +450,7 @@ export default function Home() {
               <div className="flex gap-3">
                 <a
                   href="#deals"
-                  className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-all hover:brightness-110 sheen"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/30 hover:brightness-110 sheen transition-all"
                 >
                   <Flame className="size-4" />
                   Start saving

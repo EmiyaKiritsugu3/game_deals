@@ -6,7 +6,7 @@ import * as React from 'react';
 import { GrabDealCta } from '@/components/game/deal-cta';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { dealRedirectUrl } from '@/lib/deal-utils';
+import { dealRedirectUrl, toWishlistPayload } from '@/lib/deal-utils';
 import { dedupeToList } from '@/lib/dedup';
 import type { DealWithStore } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -224,19 +224,7 @@ export function DealOfTheDay({ deals, onOpenDetail }: DealOfTheDayProps) {
               <GrabDealCta href={dealRedirectUrl(deal.dealID)} size="lg" label="Grab this deal" />
               <Button
                 variant="outline"
-                onClick={() =>
-                  toggle({
-                    dealID: deal.dealID,
-                    gameID: deal.gameID,
-                    title: deal.title,
-                    thumb: deal.thumb,
-                    salePrice: deal.salePrice,
-                    normalPrice: deal.normalPrice,
-                    savings: deal.savings,
-                    storeName: deal.store?.storeName,
-                    storeID: deal.storeID,
-                  })
-                }
+                onClick={() => toggle(toWishlistPayload(deal))}
                 className={cn(
                   'gap-2 rounded-full border-border/50 bg-card/40 backdrop-blur-md transition-all hover:border-primary/40',
                   has && 'border-primary/40 bg-primary/10 text-primary'

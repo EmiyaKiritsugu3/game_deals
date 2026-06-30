@@ -3,7 +3,11 @@ import { normaliseDeal } from '@/lib/deal-utils';
 import { getDeals } from '@/services/api';
 
 export default async function EndingSoon() {
-  const deals = await getDeals({ sortBy: 'Recent', pageSize: '8', onSale: '1' });
+  const deals = await getDeals({
+    sortBy: 'Recent',
+    pageSize: '8',
+    onSale: '1',
+  });
 
   if (deals.length === 0) return null;
 

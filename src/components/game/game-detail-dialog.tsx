@@ -71,15 +71,15 @@ export function GameDetailDialog({ deal, open, onOpenChange }: GameDetailDialogP
   }, [
     deal?.dealID,
     open,
-    deal.thumb,
-    deal.storeID,
-    deal.salePrice,
-    deal.title,
-    deal.normalPrice,
+    deal?.thumb,
+    deal?.storeID,
+    deal?.salePrice,
+    deal?.title,
+    deal?.normalPrice,
     addRecentlyViewed,
-    deal.savings,
-    deal.store?.storeName,
-    deal.gameID,
+    deal?.savings,
+    deal?.store?.storeName,
+    deal?.gameID,
     deal,
   ]);
 
@@ -359,7 +359,10 @@ function PriceHistoryCard({
       : currentPrice;
 
     return [
-      { label: 'Launch', price: retailPrice > 0 ? retailPrice : currentPrice * 1.8 },
+      {
+        label: 'Launch',
+        price: retailPrice > 0 ? retailPrice : currentPrice * 1.8,
+      },
       { label: 'Mid', price: Math.min(avgCurrent * 1.15, retailPrice * 0.7) },
       { label: 'Lowest', price: cheapestEver, highlight: true },
       { label: 'Now', price: currentPrice },

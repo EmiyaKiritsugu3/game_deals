@@ -25,7 +25,9 @@ describe('requireUser', () => {
   it('returns user when valid session', async () => {
     const mockUser = { id: 'user-123', email: 'test@example.com' };
     mockCreateClient.mockResolvedValue({
-      auth: { getUser: vi.fn().mockResolvedValue({ data: { user: mockUser } }) },
+      auth: {
+        getUser: vi.fn().mockResolvedValue({ data: { user: mockUser } }),
+      },
     } as never);
 
     const result = await requireUser();
@@ -57,7 +59,9 @@ describe('getOptionalUser', () => {
   it('returns user when valid session', async () => {
     const mockUser = { id: 'user-456', email: 'optional@example.com' };
     mockCreateClient.mockResolvedValue({
-      auth: { getUser: vi.fn().mockResolvedValue({ data: { user: mockUser } }) },
+      auth: {
+        getUser: vi.fn().mockResolvedValue({ data: { user: mockUser } }),
+      },
     } as never);
 
     const result = await getOptionalUser();

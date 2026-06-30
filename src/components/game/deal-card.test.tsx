@@ -32,7 +32,12 @@ vi.mock('@/store/wishlist', () => ({
 
 vi.mock('@/store/compare', () => ({
   useCompare: (selector: (s: Record<string, unknown>) => unknown) =>
-    selector({ toggle: mockCompareToggle, has: mockCompareHas, items: [], maxItems: 3 }),
+    selector({
+      toggle: mockCompareToggle,
+      has: mockCompareHas,
+      items: [],
+      maxItems: 3,
+    }),
 }));
 
 import type { DealWithStore } from '@/lib/types';

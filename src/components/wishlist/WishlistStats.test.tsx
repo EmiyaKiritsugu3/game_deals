@@ -64,7 +64,9 @@ describe('WishlistStats', () => {
     const onSort = vi.fn();
     render(<WishlistStats {...defaultProps} onSortModeChange={onSort} />);
 
-    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'price' } });
+    fireEvent.change(screen.getByRole('combobox'), {
+      target: { value: 'price' },
+    });
     expect(onSort).toHaveBeenCalledWith('price');
   });
 
@@ -74,7 +76,10 @@ describe('WishlistStats', () => {
   });
 
   it('shows "Link copied!" when copied is true', () => {
-    vi.mocked(useShareWishlist).mockReturnValue({ copied: true, share: vi.fn() });
+    vi.mocked(useShareWishlist).mockReturnValue({
+      copied: true,
+      share: vi.fn(),
+    });
 
     render(<WishlistStats {...defaultProps} />);
     expect(screen.getByText('✅ Link copied!')).toBeInTheDocument();
@@ -82,7 +87,10 @@ describe('WishlistStats', () => {
 
   it('calls share when share button is clicked', () => {
     const mockShare = vi.fn();
-    vi.mocked(useShareWishlist).mockReturnValue({ copied: false, share: mockShare });
+    vi.mocked(useShareWishlist).mockReturnValue({
+      copied: false,
+      share: mockShare,
+    });
 
     render(<WishlistStats {...defaultProps} />);
     fireEvent.click(screen.getByText('🔗 Share Wishlist'));

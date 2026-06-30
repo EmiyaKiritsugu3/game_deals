@@ -56,7 +56,11 @@ const DOCS: Record<LegalDocKey, LegalDoc> = {
             <button
               className="font-medium text-primary underline-offset-2 hover:underline"
               onClick={() =>
-                window.dispatchEvent(new CustomEvent('dealforge:open-legal', { detail: 'cookies' }))
+                window.dispatchEvent(
+                  new CustomEvent('dealforge:open-legal', {
+                    detail: 'cookies',
+                  })
+                )
               }
             >
               Cookie Policy
@@ -103,7 +107,9 @@ const DOCS: Record<LegalDocKey, LegalDoc> = {
               className="font-medium text-primary underline-offset-2 hover:underline"
               onClick={() =>
                 window.dispatchEvent(
-                  new CustomEvent('dealforge:open-legal', { detail: 'affiliate' })
+                  new CustomEvent('dealforge:open-legal', {
+                    detail: 'affiliate',
+                  })
                 )
               }
             >
@@ -224,7 +230,9 @@ const DOCS: Record<LegalDocKey, LegalDoc> = {
               className="font-medium text-primary underline-offset-2 hover:underline"
               onClick={() =>
                 window.dispatchEvent(
-                  new CustomEvent('dealforge:open-legal', { detail: 'affiliate' })
+                  new CustomEvent('dealforge:open-legal', {
+                    detail: 'affiliate',
+                  })
                 )
               }
             >

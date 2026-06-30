@@ -6,7 +6,7 @@ import * as React from 'react';
 import { ClaimFreeCta } from '@/components/game/deal-cta';
 import { Button } from '@/components/ui/button';
 import { useFreeGames } from '@/hooks/use-game-data';
-import { dealRedirectUrl } from '@/lib/deal-utils';
+import { dealRedirectUrl, toWishlistPayload } from '@/lib/deal-utils';
 import { dedupeToList } from '@/lib/dedup';
 import type { DealWithStore } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -220,19 +220,7 @@ function FreeGameCard({
         <div className="flex items-center gap-1.5">
           <button
             type="button"
-            onClick={() =>
-              toggle({
-                dealID: deal.dealID,
-                gameID: deal.gameID,
-                title: deal.title,
-                thumb: deal.thumb,
-                salePrice: deal.salePrice,
-                normalPrice: deal.normalPrice,
-                savings: deal.savings,
-                storeName: deal.store?.storeName,
-                storeID: deal.storeID,
-              })
-            }
+            onClick={() => toggle(toWishlistPayload(deal))}
             className={cn(
               'grid size-8 place-items-center rounded-lg border transition-all hover:scale-110',
               has

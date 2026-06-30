@@ -48,12 +48,42 @@ const DEFAULT_PREFS: UserPreferences = {
   showVerifiedOnly: false,
 };
 
-const ACCENT_COLORS: Array<{ key: AccentColor; label: string; color: string; oklch: string }> = [
-  { key: 'emerald', label: 'Emerald', color: 'bg-emerald-500', oklch: 'oklch(0.78 0.2 145)' },
-  { key: 'amber', label: 'Amber', color: 'bg-amber-500', oklch: 'oklch(0.78 0.16 70)' },
-  { key: 'fuchsia', label: 'Fuchsia', color: 'bg-fuchsia-500', oklch: 'oklch(0.7 0.2 300)' },
-  { key: 'cyan', label: 'Cyan', color: 'bg-cyan-500', oklch: 'oklch(0.7 0.2 200)' },
-  { key: 'rose', label: 'Rose', color: 'bg-rose-500', oklch: 'oklch(0.72 0.22 10)' },
+const ACCENT_COLORS: Array<{
+  key: AccentColor;
+  label: string;
+  color: string;
+  oklch: string;
+}> = [
+  {
+    key: 'emerald',
+    label: 'Emerald',
+    color: 'bg-emerald-500',
+    oklch: 'oklch(0.78 0.2 145)',
+  },
+  {
+    key: 'amber',
+    label: 'Amber',
+    color: 'bg-amber-500',
+    oklch: 'oklch(0.78 0.16 70)',
+  },
+  {
+    key: 'fuchsia',
+    label: 'Fuchsia',
+    color: 'bg-fuchsia-500',
+    oklch: 'oklch(0.7 0.2 300)',
+  },
+  {
+    key: 'cyan',
+    label: 'Cyan',
+    color: 'bg-cyan-500',
+    oklch: 'oklch(0.7 0.2 200)',
+  },
+  {
+    key: 'rose',
+    label: 'Rose',
+    color: 'bg-rose-500',
+    oklch: 'oklch(0.72 0.22 10)',
+  },
 ];
 
 const PREFS_KEY = 'dealforge-preferences';
@@ -118,7 +148,9 @@ export function PreferencesPanel({ open, onOpenChange }: PreferencesPanelProps) 
       auth: JSON.parse(localStorage.getItem('dealforge-auth') || '{}'),
       exportedAt: new Date().toISOString(),
     };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: 'application/json',
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -214,7 +246,9 @@ export function PreferencesPanel({ open, onOpenChange }: PreferencesPanelProps) 
                         ? 'border-primary/40 bg-primary/10'
                         : 'border-border/50 bg-card/40 hover:border-primary/30'
                     )}
-                    style={{ animation: `palette-slide 0.3s ease-out ${i * 50}ms both` }}
+                    style={{
+                      animation: `palette-slide 0.3s ease-out ${i * 50}ms both`,
+                    }}
                     aria-label={`Set accent to ${c.label}`}
                     aria-pressed={prefs.accent === c.key}
                   >

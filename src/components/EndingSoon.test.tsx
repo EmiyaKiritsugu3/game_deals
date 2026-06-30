@@ -8,7 +8,9 @@ vi.mock('next/navigation', () => ({
 vi.mock('@/store/density', () => ({ useDensity: vi.fn(() => 'comfortable') }));
 
 const mockGetDeals = vi.fn();
-vi.mock('@/services/api', () => ({ getDeals: (...a: unknown[]) => mockGetDeals(...a) }));
+vi.mock('@/services/api', () => ({
+  getDeals: (...a: unknown[]) => mockGetDeals(...a),
+}));
 
 import EndingSoon from './EndingSoon';
 
@@ -45,6 +47,10 @@ describe('EndingSoon', () => {
   it('calls getDeals with correct params', async () => {
     mockGetDeals.mockResolvedValue([]);
     render(await EndingSoon());
-    expect(mockGetDeals).toHaveBeenCalledWith({ sortBy: 'Recent', pageSize: '8', onSale: '1' });
+    expect(mockGetDeals).toHaveBeenCalledWith({
+      sortBy: 'Recent',
+      pageSize: '8',
+      onSale: '1',
+    });
   });
 });

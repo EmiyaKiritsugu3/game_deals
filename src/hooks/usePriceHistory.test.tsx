@@ -37,7 +37,9 @@ describe('useDailyPriceHistory', () => {
     const mockData = [{ date: '2026-06-01', price: '9.99' }];
     getDailyPriceHistoryAction.mockResolvedValue(mockData);
 
-    const { result } = renderHook(() => useDailyPriceHistory('123'), { wrapper: createWrapper() });
+    const { result } = renderHook(() => useDailyPriceHistory('123'), {
+      wrapper: createWrapper(),
+    });
 
     await vi.waitFor(() => {
       expect(result.current.isSuccess).toBe(true);
@@ -48,14 +50,18 @@ describe('useDailyPriceHistory', () => {
   });
 
   it('is disabled when gameId is null', () => {
-    const { result } = renderHook(() => useDailyPriceHistory(null), { wrapper: createWrapper() });
+    const { result } = renderHook(() => useDailyPriceHistory(null), {
+      wrapper: createWrapper(),
+    });
 
     expect(getDailyPriceHistoryAction).not.toHaveBeenCalled();
     expect(result.current.data).toBeUndefined();
   });
 
   it('is disabled when gameId is empty string', () => {
-    const { result } = renderHook(() => useDailyPriceHistory(''), { wrapper: createWrapper() });
+    const { result } = renderHook(() => useDailyPriceHistory(''), {
+      wrapper: createWrapper(),
+    });
 
     expect(getDailyPriceHistoryAction).not.toHaveBeenCalled();
     expect(result.current.data).toBeUndefined();
@@ -64,7 +70,9 @@ describe('useDailyPriceHistory', () => {
   it('uses default days=90', async () => {
     getDailyPriceHistoryAction.mockResolvedValue([]);
 
-    const { result } = renderHook(() => useDailyPriceHistory('123'), { wrapper: createWrapper() });
+    const { result } = renderHook(() => useDailyPriceHistory('123'), {
+      wrapper: createWrapper(),
+    });
 
     await vi.waitFor(() => {
       expect(result.current.isSuccess).toBe(true);

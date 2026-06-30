@@ -33,11 +33,8 @@ export function DealTicker({ deals }: DealTickerProps) {
 
         <div className="relative flex-1 overflow-hidden">
           <div className="flex w-max animate-ticker items-center gap-6 pr-6">
-            {loop.map((d, i) => (
-              <span
-                key={`${d.dealID}-${i}`} /* biome-ignore lint/suspicious/noArrayIndexKey: static display */
-                className="inline-flex shrink-0 items-center gap-2 text-sm"
-              >
+            {loop.map((d, _i) => (
+              <span key={d.dealID} className="inline-flex shrink-0 items-center gap-2 text-sm">
                 <TrendingDown className="size-3.5 text-primary" />
                 <span className="font-medium text-foreground/90">{d.title}</span>
                 <span className="rounded bg-primary/15 px-1.5 py-0.5 text-xs font-bold text-primary">

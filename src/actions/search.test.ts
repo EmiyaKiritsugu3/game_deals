@@ -92,7 +92,14 @@ describe('searchGamesAction', () => {
   });
 
   it('falls back to CheapShark when no api key is configured and returns results', async () => {
-    const mockData = [{ gameID: '123', external: 'Zelda', thumb: '/zelda.jpg', cheapest: '29.99' }];
+    const mockData = [
+      {
+        gameID: '123',
+        external: 'Zelda',
+        thumb: '/zelda.jpg',
+        cheapest: '29.99',
+      },
+    ];
     globalThis.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve(mockData),

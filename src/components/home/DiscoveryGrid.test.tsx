@@ -31,7 +31,13 @@ afterEach(() => {
 describe('DiscoveryGrid', () => {
   it('renders section heading', () => {
     mockCollections.mockReturnValue([
-      { slug: 'test', title: 'Test', description: '', emoji: '🎮', gameIDs: ['1'] },
+      {
+        slug: 'test',
+        title: 'Test',
+        description: '',
+        emoji: '🎮',
+        gameIDs: ['1'],
+      },
     ]);
     render(<DiscoveryGrid />);
     expect(screen.getByText('Discover Games')).toBeInTheDocument();
@@ -112,7 +118,13 @@ describe('DiscoveryGrid', () => {
 
   it('renders All Collections link', () => {
     mockCollections.mockReturnValue([
-      { slug: 'test', title: 'Test', description: '', emoji: '🎮', gameIDs: ['1'] },
+      {
+        slug: 'test',
+        title: 'Test',
+        description: '',
+        emoji: '🎮',
+        gameIDs: ['1'],
+      },
     ]);
     render(<DiscoveryGrid />);
     const link = screen.getByText('All Collections →');

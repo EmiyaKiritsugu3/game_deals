@@ -155,7 +155,9 @@ export function PriceSparkline({
               stroke="oklch(0.78 0.2 145)"
               strokeWidth="0.6"
               className="animate-ring-expand"
-              style={{ transformOrigin: `${coords[currentIndex].x}px ${coords[currentIndex].y}px` }}
+              style={{
+                transformOrigin: `${coords[currentIndex].x}px ${coords[currentIndex].y}px`,
+              }}
             />
           </g>
         )}

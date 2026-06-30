@@ -24,8 +24,16 @@ const mockBundles = [
     tier: 'Standard',
     url: 'https://example.com/bundle',
     games: [
-      { title: 'Game A', retailPrice: 29.99, thumb: 'https://example.com/a.jpg' },
-      { title: 'Game B', retailPrice: 19.99, thumb: 'https://example.com/b.jpg' },
+      {
+        title: 'Game A',
+        retailPrice: 29.99,
+        thumb: 'https://example.com/a.jpg',
+      },
+      {
+        title: 'Game B',
+        retailPrice: 19.99,
+        thumb: 'https://example.com/b.jpg',
+      },
     ],
   },
   {
@@ -37,7 +45,13 @@ const mockBundles = [
     totalValue: 30.0,
     expiresAt: '2025-01-01T00:00:00Z',
     url: 'https://example.com/bundle2',
-    games: [{ title: 'Game C', retailPrice: 30.0, thumb: 'https://example.com/c.jpg' }],
+    games: [
+      {
+        title: 'Game C',
+        retailPrice: 30.0,
+        thumb: 'https://example.com/c.jpg',
+      },
+    ],
   },
 ];
 

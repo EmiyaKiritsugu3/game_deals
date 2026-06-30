@@ -34,7 +34,13 @@ export function SavingsSummary({ deals }: SavingsSummaryProps) {
     const totalCurrent = deals.reduce((s, d) => s + d.salePriceNum, 0);
     const totalSaved = Math.max(0, totalRetail - totalCurrent);
     const freeCount = deals.filter((d) => d.isFree).length;
-    return { totalRetail, totalCurrent, totalSaved, freeCount, count: deals.length };
+    return {
+      totalRetail,
+      totalCurrent,
+      totalSaved,
+      freeCount,
+      count: deals.length,
+    };
   }, [deals]);
 
   const saved = useCountUp(stats.totalSaved);
