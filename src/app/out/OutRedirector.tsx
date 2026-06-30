@@ -62,6 +62,7 @@ export default function OutRedirector() {
       const store = searchParams.get('store');
 
       if (!rawUrl) {
+        globalThis.location.replace('/');
         return;
       }
 
@@ -69,10 +70,18 @@ export default function OutRedirector() {
       try {
         parsed = new URL(decodeURIComponent(rawUrl));
       } catch {
+        globalThis.location.replace('/');
+        return;
+      }
+
+      // Security: Validate protocol to prevent javascript: XSS
+      if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+        globalThis.location.replace('/');
         return;
       }
 
       if (!isHostnameAllowed(parsed.hostname)) {
+        globalThis.location.replace('/');
         return;
       }
 
