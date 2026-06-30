@@ -7,14 +7,16 @@ import { describe, expect, it, vi } from 'vitest';
 vi.mock('@vercel/analytics/react', () => ({ Analytics: () => null }));
 vi.mock('@vercel/speed-insights/next', () => ({ SpeedInsights: () => null }));
 vi.mock('next/font/google', () => ({
-  Inter: () => ({ variable: '--font-inter' }),
-  Geist: () => ({ className: 'geist-font' }),
+  Geist: () => ({ variable: '--font-geist-sans' }),
+  Geist_Mono: () => ({ variable: '--font-geist-mono' }),
+  Space_Grotesk: () => ({ variable: '--font-display' }),
 }));
 vi.mock('nuqs/adapters/next/app', () => ({
   NuqsAdapter: ({ children }: { children: React.ReactNode }) => children,
 }));
 vi.mock('next-themes', () => ({
   ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  useTheme: () => ({ theme: 'dark', setTheme: () => {} }),
 }));
 vi.mock('@/components/CookieBanner', () => ({ default: () => null }));
 vi.mock('@/components/Navbar', () => ({ default: () => null }));
@@ -32,7 +34,6 @@ describe('Layout accessibility', () => {
 
     const layout = await RootLayout({
       children: <div>Page content</div>,
-      modal: null,
     });
 
     render(layout);

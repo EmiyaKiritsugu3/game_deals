@@ -15,9 +15,9 @@ import {
 import Image from 'next/image';
 import * as React from 'react';
 import { Badge } from '@/components/ui/badge';
-import type { DealWithStore } from '@/lib/deal-utils';
 import { dealRedirectUrl, formatLastChecked, isRecentlyVerified } from '@/lib/deal-utils';
 import { isOfficialRetailer } from '@/lib/store-trust';
+import type { DealWithStore } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { useCompare } from '@/store/compare';
 import { useWishlist } from '@/store/wishlist';
@@ -87,14 +87,24 @@ export function DealCard({
   const lastCheckedLabel = formatLastChecked(deal.lastChange);
   const recentlyVerified = isRecentlyVerified(deal.lastChange, 10);
 
-  const wishlistItem = deal.dealID;
+  const wishlistItem = {
+    dealID: deal.dealID,
+    gameID: deal.gameID,
+    title: deal.title,
+    thumb: deal.thumb,
+    salePrice: deal.salePrice,
+    normalPrice: deal.normalPrice,
+    savings: deal.savings,
+    storeName: deal.store?.storeName,
+    storeID: deal.storeID,
+  };
 
   const delayMs = Math.min(index, 12) * 50;
 
   return (
     <article
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-2xl glass conic-border lift-on-hover hover:border-primary/40 hover:shadow-[0_12px_32px_-12px_oklch(0.78_0.2_145/0.2)]'
+        'group relative flex flex-col overflow-hidden rounded-2xl glass conic-border lift-on-hover hover:border-primary/40 hover:shadow-[0_20px_50px_-20px_oklch(0.78_0.2_145/0.35)]'
       )}
       style={{
         animation: tier.hot
@@ -151,14 +161,11 @@ export function DealCard({
           >
             {tier.hot && <Flame className="size-3" />}-{Math.round(deal.savingsNum)}%
           </span>
-          <span
-            className={cn(
-              'inline-flex w-fit items-center rounded-md px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider backdrop-blur-sm',
-              tier.hot ? 'bg-black/50 text-amber-300' : 'bg-black/30 text-zinc-400'
-            )}
-          >
-            {tier.label}
-          </span>
+          {tier.hot && (
+            <span className="inline-flex w-fit items-center rounded-md bg-black/50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-amber-300 backdrop-blur-sm">
+              {tier.label}
+            </span>
+          )}
         </div>
 
         {/* Store chip + Verified badge */}
@@ -166,7 +173,7 @@ export function DealCard({
           <div className="absolute right-2.5 top-2.5 flex flex-col items-end gap-1">
             <span className="inline-flex items-center gap-1.5 rounded-lg bg-black/45 px-2 py-1 text-[10px] font-semibold text-white backdrop-blur-md ring-1 ring-white/10">
               <img
-                src={`https://www.cheapshark.com${deal.store.images.logo}`}
+                src={deal.store.logoUrl}
                 alt=""
                 className="size-3.5 rounded-[3px] object-contain"
                 onError={(e) => (e.currentTarget.style.display = 'none')}
@@ -257,26 +264,26 @@ export function DealCard({
       </button>
 
       {/* Body */}
-      <div className="flex flex-1 flex-col gap-2.5 p-3">
+      <div className="flex flex-1 flex-col gap-3 p-3">
         <div className="flex items-end justify-between gap-2">
           <div className="min-w-0">
             {deal.isFree ? (
-              <span className="text-xl font-semibold tracking-tight text-gradient-emerald">
+              <span className="text-xl font-extrabold tracking-tight text-gradient-emerald">
                 FREE
               </span>
             ) : (
               <div className="flex items-baseline gap-1.5">
-                <span className="text-lg font-semibold tracking-tight text-foreground tabular-nums">
+                <span className="text-xl font-extrabold tracking-tight text-foreground tabular-nums">
                   ${deal.salePrice}
                 </span>
                 {deal.normalPriceNum > deal.salePriceNum && (
-                  <span className="text-xs font-light text-muted-foreground line-through tabular-nums">
+                  <span className="text-xs font-medium text-muted-foreground line-through tabular-nums">
                     ${deal.normalPrice}
                   </span>
                 )}
               </div>
             )}
-            <p className="text-[10px] font-light text-muted-foreground/80">
+            <p className="text-[11px] text-muted-foreground">
               {deal.isFree
                 ? '100% off'
                 : `Save $${(deal.normalPriceNum - deal.salePriceNum).toFixed(2)}`}

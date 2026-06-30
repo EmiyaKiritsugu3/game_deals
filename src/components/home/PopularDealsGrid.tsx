@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { DealGrid } from '@/components/game/deal-grid';
-import type { DealWithStore } from '@/lib/deal-utils';
+import type { DealWithStore } from '@/lib/types';
 
 export function PopularDealsGrid({
   deals,

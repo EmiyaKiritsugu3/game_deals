@@ -8,7 +8,7 @@ vi.mock('zustand/middleware', () => ({
 
 describe('wishlistStore', () => {
   beforeEach(() => {
-    useWishlist.setState({ wishlist: [] });
+    useWishlist.setState({ items: [], wishlist: [] });
   });
 
   it('starts with an empty wishlist', () => {
