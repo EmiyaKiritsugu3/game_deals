@@ -52,7 +52,7 @@ export default function SidebarModal({ children }: Readonly<{ children: React.Re
         <button
           type="button"
           onClick={dismissModal}
-          className="absolute top-6 right-6 bg-card border border-border text-muted-foreground w-10 h-10 rounded-full flex items-center justify-center cursor-pointer z-[200] transition-all duration-200 hover:bg-primary hover:text-primary-foreground hover:border-primary hover:scale-105"
+          className="absolute top-6 right-6 bg-card border border-border text-muted-foreground w-10 h-10 rounded-full flex items-center justify-center cursor-pointer z-[200] transition-all duration-200 hover:bg-primary hover:text-primary-foreground hover:border-primary hover:scale-105 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           aria-label="Close sidebar"
         >
           <X size={24} />

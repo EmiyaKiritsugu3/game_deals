@@ -28,7 +28,7 @@ export default function HeartButton({ gameID, className = '' }: HeartButtonProps
   return (
     <button
       type="button"
-      className={`bg-black/40 border border-white/10 rounded-full w-9 h-9 flex items-center justify-center cursor-pointer text-muted-foreground transition-all duration-200 backdrop-blur-sm z-10 hover:bg-black/60 hover:text-foreground hover:scale-105 ${isSaved ? 'text-red-500 border-red-500/30' : ''} ${className}`}
+      className={`bg-black/40 border border-white/10 rounded-full w-9 h-9 flex items-center justify-center cursor-pointer text-muted-foreground transition-all duration-200 backdrop-blur-sm z-10 hover:bg-black/60 hover:text-foreground hover:scale-105 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ${isSaved ? 'text-red-500 border-red-500/30' : ''} ${className}`}
       onClick={handleToggle}
       aria-label={isSaved ? 'Remove from Wishlist' : 'Add to Wishlist'}
       title={isSaved ? 'Remove from Wishlist' : 'Add to Wishlist'}

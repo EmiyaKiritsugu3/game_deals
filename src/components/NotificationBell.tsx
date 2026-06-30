@@ -17,7 +17,7 @@ function NotificationBellButton({
   return (
     <button
       type="button"
-      className="bg-none border border-border rounded-full w-9 h-9 inline-flex items-center justify-center text-foreground cursor-pointer relative transition-colors duration-150 hover:bg-muted"
+      className="bg-none border border-border rounded-full w-9 h-9 inline-flex items-center justify-center text-foreground cursor-pointer relative transition-colors duration-150 hover:bg-muted focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
       onClick={onClick}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
