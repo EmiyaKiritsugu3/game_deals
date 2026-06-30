@@ -124,7 +124,7 @@ jobs:
         run: pnpm test:e2e
       - name: Upload Playwright report
         if: failure()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: playwright-report-nightly
           path: playwright-report/
@@ -150,7 +150,7 @@ jobs:
           echo "--- COVERAGE SUMMARY ---"
           grep -E "All files| Branches | Lines |Functions|Statements" coverage-nightly.txt || true
       - name: Upload coverage data
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: coverage-nightly
           path: |
