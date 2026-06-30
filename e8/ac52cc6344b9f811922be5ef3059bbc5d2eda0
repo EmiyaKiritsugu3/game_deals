@@ -1,0 +1,57 @@
+src/components/game/legal-modal.tsx
+  s_9c0b5e0c819277::t_55e9e336c63308 537-539
+  s_9c0b5e0c819277::t_0eec3688f9d35b 536
+  s_9c0b5e0c819277::t_ee98b920100ca3 57
+  s_9c0b5e0c819277::t_14b07dac49f328 108,232
+src/components/game/deal-of-the-day.tsx
+  s_9c0b5e0c819277::t_e3d04e8cf376d3 156
+src/components/game/newly-added-section.tsx
+  s_9c0b5e0c819277::t_bf6cc727fd449c 86-89
+  s_9c0b5e0c819277::t_9d90b880dc28ad 183
+src/components/game/price-sparkline.tsx
+  s_9c0b5e0c819277::t_0eafed9bf754c3 169
+  s_9c0b5e0c819277::t_8bcd2454ee5f83 170
+src/components/game/achievements-ui.tsx
+  s_9c0b5e0c819277::t_90fc52ec6aef8b 75
+src/components/game/mini-sparkline.tsx
+  s_9c0b5e0c819277::t_55e9e336c63308 35-42
+src/components/game/filter-bar.tsx
+  s_9c0b5e0c819277::t_1fa0245d5803c6 220
+  s_9c0b5e0c819277::t_cacd7419d700b9 210
+  s_9c0b5e0c819277::t_b2b78e0d7f3ffa 139
+  s_9c0b5e0c819277::t_57ef3e32011df7 62
+src/components/game/deal-of-the-hour.tsx
+  s_9c0b5e0c819277::t_f68c2f89cb93d5 252
+  s_9c0b5e0c819277::t_78a76dad8b478b 139
+  s_9c0b5e0c819277::t_43438e5ccbcaad 88
+src/components/game/free-games-section.tsx
+  s_9c0b5e0c819277::t_eaa8a7dd667c01 193
+  s_9c0b5e0c819277::t_fdcf59699a2ca7 98
+  s_9c0b5e0c819277::t_95ffacdd077e0b 99
+src/components/game/price-drop-alerts.tsx
+  s_9c0b5e0c819277::t_5c8e50af2d3908 146
+  s_9c0b5e0c819277::t_36bbef471f9159 190
+src/app/page.tsx
+  s_9c0b5e0c819277::t_ea08ccdf69de0f 292
+  s_9c0b5e0c819277::t_325b5533722bd0 293
+src/components/game/compare-tray.tsx
+  s_9c0b5e0c819277::t_b7ebbbe3f0c34d 287
+  s_9c0b5e0c819277::t_aaf98424386d10 75
+  s_9c0b5e0c819277::t_2c199babb89af8 392
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.4",
+  "base_commit_sha": "e8ac52cc6344b9f811922be5ef3059bbc5d2eda0",
+  "prompts": {},
+  "sessions": {
+    "s_9c0b5e0c819277": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4e9331ff-6050-4b0e-95e2-d49c036c1964",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
