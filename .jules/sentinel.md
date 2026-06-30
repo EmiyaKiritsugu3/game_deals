@@ -10,3 +10,8 @@
 **Vulnerability:** Open redirect in authentication callback due to inadequate prefix checks.
 **Learning:** Validating URL paths strictly with `startsWith('/')` and similar manual checks is insufficient because Node's URL parser and browsers interpret strings differently. A significant issue was that an absolute URL with a malicious protocol like `javascript://...` bypasses the `startsWith` checks, causing the app to redirect to XSS payloads. By parsing with the `URL` constructor using the base origin and verifying `url.origin === origin`, we ensure the redirect stays intra-domain.
 **Prevention:** Use the `URL` constructor with the base `origin` and strictly verify the resulting `origin` matches the trusted base, rather than using string matching for redirect destinations.
+
+## 2025-02-28 - [HIGH] Fix XSS via malicious protocol in affiliate redirect
+**Vulnerability:** Found an Open Redirect and potential XSS vulnerability in `src/app/out/[storeId]/[gameSlug]/route.ts`. The `isDomainAllowed` check only validated `url.hostname` against the `ALLOWED_DOMAINS` set, without verifying the protocol.
+**Learning:** Checking `hostname` alone is insufficient when parsing URLs. An attacker can craft a URL with a malicious protocol (like `javascript://store.steampowered.com/%0Aalert('XSS')`) that bypasses the hostname check but executes arbitrary code upon redirection.
+**Prevention:** Always validate both the domain *and* the protocol (`http:` or `https:`) when accepting and parsing arbitrary URLs to redirect users.

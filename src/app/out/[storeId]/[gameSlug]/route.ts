@@ -33,6 +33,9 @@ async function lookupDealUrl(storeId: string): Promise<string> {
 }
 
 function isDomainAllowed(url: URL): boolean {
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    return false;
+  }
   return ALLOWED_DOMAINS.has(url.hostname);
 }
 
@@ -82,7 +85,7 @@ export async function GET(
   const { storeId, gameSlug } = await params;
 
   if (!isValidStoreId(storeId) || !isValidGameSlug(gameSlug)) {
-    return NextResponse.redirect('/', 302);
+    return NextResponse.redirect(new URL('/', request.url), 302);
   }
 
   let targetUrl = await lookupDealUrl(storeId);
@@ -97,5 +100,5 @@ export async function GET(
     return NextResponse.redirect(targetUrl, 302);
   }
 
-  return NextResponse.redirect('/', 302);
+  return NextResponse.redirect(new URL('/', request.url), 302);
 }

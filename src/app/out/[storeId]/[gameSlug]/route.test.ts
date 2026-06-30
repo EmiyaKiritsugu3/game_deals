@@ -31,23 +31,21 @@ describe('GET /out/[storeId]/[gameSlug]', () => {
   });
 
   it('does not track on invalid store id', async () => {
-    await expect(() =>
-      GET(new Request('http://localhost:3000/out/999/game'), {
-        params: Promise.resolve({ storeId: '999', gameSlug: 'game' }),
-      })
-    ).rejects.toThrow();
+    const res = await GET(new Request('http://localhost:3000/out/999/game'), {
+      params: Promise.resolve({ storeId: '999', gameSlug: 'game' }),
+    });
 
     expect(track).not.toHaveBeenCalled();
+    expect(res.headers.get('location')).toBe('http://localhost:3000/');
   });
 
   it('does not track on invalid game slug', async () => {
-    await expect(() =>
-      GET(new Request('http://localhost:3000/out/1/!nv@lid'), {
-        params: Promise.resolve({ storeId: '1', gameSlug: '!nv@lid' }),
-      })
-    ).rejects.toThrow();
+    const res = await GET(new Request('http://localhost:3000/out/1/!nv@lid'), {
+      params: Promise.resolve({ storeId: '1', gameSlug: '!nv@lid' }),
+    });
 
     expect(track).not.toHaveBeenCalled();
+    expect(res.headers.get('location')).toBe('http://localhost:3000/');
   });
 
   it('does not block redirect on track failure', async () => {
@@ -164,5 +162,44 @@ describe('IP extraction (anti-spoofing)', () => {
 
     const ip = extractIpFromExecute();
     expect(ip).toBe('::1');
+  });
+});
+
+describe('Protocol Validation Security', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    track.mockResolvedValue(undefined);
+  });
+
+  it('blocks javascript: protocol to prevent XSS', async () => {
+    execute.mockResolvedValue([
+      { url: 'javascript://store.steampowered.com/%0Aalert(1)', storeId: '1' },
+    ]);
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const response = await GET(new Request('http://localhost:3000/out/1/awesome-game'), {
+      params: Promise.resolve({ storeId: '1', gameSlug: 'awesome-game' }),
+    });
+
+    expect(response.status).toBe(302);
+    expect(response.headers.get('location')).toBe('http://localhost:3000/');
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  it('blocks data: protocol to prevent XSS', async () => {
+    execute.mockResolvedValue([
+      { url: 'data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTs8L3NjcmlwdD4=', storeId: '1' },
+    ]);
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const response = await GET(new Request('http://localhost:3000/out/1/awesome-game'), {
+      params: Promise.resolve({ storeId: '1', gameSlug: 'awesome-game' }),
+    });
+
+    expect(response.status).toBe(302);
+    expect(response.headers.get('location')).toBe('http://localhost:3000/');
+    expect(warnSpy).toHaveBeenCalled(); // Since it has no hostname or a different one, it gets blocked
+    warnSpy.mockRestore();
   });
 });
