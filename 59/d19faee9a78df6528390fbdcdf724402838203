@@ -1,0 +1,34 @@
+.husky/pre-commit
+  s_9c0b5e0c819277::t_f81f53b93b8aae 1-2
+package.json
+  s_9c0b5e0c819277::t_37e91636f0e900 6-12,15-24,27-28,34-35,43,73,76
+bunfig.toml
+  s_9c0b5e0c819277::t_93bb806bc200bb 4
+  s_9c0b5e0c819277::t_ad33ff6efea0c6 1,5-17
+  s_9c0b5e0c819277::t_fa8c969b0e8a39 3
+  s_9c0b5e0c819277::t_f2d3e18e007c09 2
+bun.lock
+  s_9c0b5e0c819277::t_a4afae8641423e 1-1415
+.github/workflows/nightly.yml
+  s_9c0b5e0c819277::t_5bd39a007ddccf 36,38-39,42-43,50,52-53,55-56,58-59,85,87-88,90,94,96,98,112,114-115,118
+.github/workflows/ci.yml
+  s_9c0b5e0c819277::t_c7b5a75e68e31d 37,39-40,42,44,46,48,50,59,61,63-64,91,93-94,96,100,102
+.husky/pre-push
+  s_9c0b5e0c819277::t_0b368b02f4d045 5-6,10,15,19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.4",
+  "base_commit_sha": "59d19faee9a78df6528390fbdcdf724402838203",
+  "prompts": {},
+  "sessions": {
+    "s_9c0b5e0c819277": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4e9331ff-6050-4b0e-95e2-d49c036c1964",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
