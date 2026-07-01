@@ -1,0 +1,19 @@
+vercel.json
+  s_9985ade9a8bc0c::t_6fc50ba2a5b468 3-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.6",
+  "base_commit_sha": "672c79c6b3bf46728eac1124595cad90c34bd619",
+  "prompts": {},
+  "sessions": {
+    "s_9985ade9a8bc0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d15caf6e-8b1e-4673-82f5-bf620fc6d627",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
