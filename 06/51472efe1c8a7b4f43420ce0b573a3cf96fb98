@@ -1,0 +1,26 @@
+.husky/pre-push
+  s_9985ade9a8bc0c::t_a5f3ff9b25f7fd 10
+.github/workflows/ci.yml
+  s_9985ade9a8bc0c::t_0344eb3f836f96 39,93
+  s_9985ade9a8bc0c::t_1f8508b90e08fa 48
+.husky/pre-commit
+  s_9985ade9a8bc0c::t_e7b10804a7521e 2
+package.json
+  s_9985ade9a8bc0c::t_7a45bdf09af1da 38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.6",
+  "base_commit_sha": "0651472efe1c8a7b4f43420ce0b573a3cf96fb98",
+  "prompts": {},
+  "sessions": {
+    "s_9985ade9a8bc0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d15caf6e-8b1e-4673-82f5-bf620fc6d627",
+        "model": "unknown"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
