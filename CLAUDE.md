@@ -2,21 +2,23 @@
 
 Game deal aggregator. Next.js 16 App Router, React 19, Supabase SSR auth, Drizzle ORM, TanStack Query. CheapShark API + Typesense search.
 
+**Runtime:** Bun 1.3.13. `bun run` for scripts, `bunx` for tools.
+
 ## Commands
 
 ```bash
-pnpm dev                  # Start dev server (Turbopack)
-pnpm build                # Production build
-pnpm lint                 # Biome check (no fix)
-pnpm lint:fix             # Biome check + auto-fix
-pnpm format               # Biome format
-pnpm test                 # Vitest unit tests
-pnpm test:watch           # Vitest in watch mode
-pnpm test:e2e             # Playwright E2E tests
-pnpm db:generate          # Drizzle Kit generate migration
-pnpm db:migrate           # Drizzle Kit apply migrations
-pnpm db:push              # Drizzle Kit push schema directly (dev)
-pnpm db:studio            # Drizzle Kit Studio (visual DB browser)
+bun dev                   # Start dev server (Turbopack)
+bun --bun next build      # Production build
+bun run lint              # Biome check (no fix)
+bun run lint:fix          # Biome check + auto-fix
+bun run format            # Biome format
+bun run test              # Vitest unit tests
+bun run test:watch        # Vitest in watch mode
+bun run test:e2e          # Playwright E2E tests
+bun run db:generate       # Drizzle Kit generate migration
+bun run db:migrate        # Drizzle Kit apply migrations
+bun run db:push           # Drizzle Kit push schema directly (dev)
+bun run db:studio         # Drizzle Kit Studio (visual DB browser)
 ```
 
 ## Conventions
@@ -55,7 +57,7 @@ src/
 
 ## Watch Out
 
-- **Never `pnpm dev` in parallel subagents** — Next.js 16 + Turbopack allocates 30GB virtual mem. Use `pnpm build && pnpm start`.
+- **Never `bun dev` in parallel subagents** — Next.js 16 + Turbopack allocates 30GB virtual mem. Use `bun --bun next build && bun start`.
 - **CI uses BASE branch workflow** — env vars on feature branch won't take effect until merged. Use `gh secret set`.
 - **Never trust `rtk lint`** — verify with `./node_modules/.bin/biome check .`
 - **SonarCloud ≠ Biome** — SonarCloud ignores `// biome-ignore`. Fix root cause.
@@ -65,6 +67,6 @@ src/
 - **PWA service worker excludes `/api/`, `/auth/`, `/out/`** — never cache sensitive paths.
 - **E2E flaky tests** — CheapShark 429 rate limits cause game data failures. Use `test.skip()` with game title visibility check before tests that depend on game/alert buttons.
 - **game-deals-research** repo privado em `~/dev/game-deals-research/` — pipeline de conteúdo externo, não integrado.
-- **`pnpm lint` may fail in pre-push hook** — hook runs `pnpm lint` (`biome check .`) but husky may also try eslint (not installed). Run `./node_modules/.bin/biome check .` directly if `pnpm lint` fails.
+- **`bun run lint` may fail in pre-push hook** — hook runs `biome check .` directly. Run `./node_modules/.bin/biome check .` if pre-push fails.
 - **SonarCloud false positives on globals.css** — `sonar-project.properties` excludes `src/app/globals.css`. Tailwind v4 `@custom-variant` blocks trigger 16 false "missing scoping root" bugs.
 - **Do NOT add `.module.css` files** — all styling is Tailwind utilities + CSS custom properties in `globals.css`.
