@@ -1,0 +1,24 @@
+src/components/game/command-palette.tsx
+  s_b7109fbe02af0e::t_73dc33bd86bfba 247
+src/components/game/wishlist-drawer.tsx
+  s_b7109fbe02af0e::t_73dc33bd86bfba 49
+  s_b7109fbe02af0e::t_18e1c3b3b5a481 43-45
+src/components/game/cookie-consent.tsx
+  s_b7109fbe02af0e::t_867f4cf905725f 114-115
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.6",
+  "base_commit_sha": "d9ce71517839505b487bc96978d27ba9ca292ce7",
+  "prompts": {},
+  "sessions": {
+    "s_b7109fbe02af0e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "277f0fc8-b51e-4bbb-aa15-580d1e65b57a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
