@@ -109,7 +109,7 @@ test.describe('Navigation', () => {
   test('9. Page renders with main element visible', async ({ page }) => {
     await page.goto('/alerts', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(1_500);
-    await expect(page.locator('main')).toBeVisible();
+    await expect(page.locator('main').first()).toBeVisible();
   });
 
   test('10. Home page has accessible navigation', async ({ page }) => {
