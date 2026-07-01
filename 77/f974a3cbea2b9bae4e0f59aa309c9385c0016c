@@ -1,0 +1,19 @@
+tests/e2e/alerts.spec.ts
+  s_b31fd2555aac21::t_aab3027619836c 112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.6",
+  "base_commit_sha": "77f974a3cbea2b9bae4e0f59aa309c9385c0016c",
+  "prompts": {},
+  "sessions": {
+    "s_b31fd2555aac21": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "da295376-6578-47dc-b15a-aceae500e428",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
