@@ -60,7 +60,7 @@ export function AuthDialog() {
           <div className="relative flex min-h-[560px] flex-col p-6 sm:p-8">
             {view === 'sign-in' && <SignInForm onSuccess={setUser} />}
             {view === 'code-entry' && (
-              <CodeEntryForm onSuccess={setUser} onBack={() => setDialogView('sign-in')} />
+              <CodeEntryForm onBack={() => setDialogView('sign-in')} />
             )}
             {view === 'success' && (
               <SuccessState user={useAuth.getState().user} onDone={closeDialog} />
@@ -296,10 +296,8 @@ function SignInForm({
 /* -------------------------------------------------------------------------- */
 
 function CodeEntryForm({
-  onSuccess: _onSuccess,
   onBack,
 }: {
-  onSuccess: (user: NonNullable<ReturnType<typeof useAuth.getState>['user']>) => void;
   onBack: () => void;
 }) {
   const pendingEmail = useAuth((s) => s.pendingEmail);

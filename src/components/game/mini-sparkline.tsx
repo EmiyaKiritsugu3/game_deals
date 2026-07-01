@@ -29,7 +29,7 @@ export function MiniSparkline({
   className,
   idSuffix = '',
 }: MiniSparklineProps) {
-  const gid = `mini-spark-${idSuffix || Math.random().toString(36).slice(2, 8)}`;
+  const gid = `mini-spark-${idSuffix || crypto.randomUUID()}`;
   const validPrices = prices.filter((p) => p > 0);
   if (validPrices.length < 2) {
     return (
