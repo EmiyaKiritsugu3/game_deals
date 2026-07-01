@@ -9,6 +9,7 @@ esbuild = true
 sharp = true
 "typesense-instantsearch-adapter" = true
 "unrs-resolver" = true
+	"@fallow-cli" = true
 
 [install.cache]
 dir = "~/.bun/install/cache"
