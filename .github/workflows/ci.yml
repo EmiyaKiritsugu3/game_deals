@@ -41,7 +41,7 @@ jobs:
       - name: Lint
         run: bunx biome check src/
       - name: Dependency audit
-        run: bunx npm audit --audit-level=high
+        run: bun audit --audit-level=high
       - name: Type check
         run: bunx tsc --noEmit
       - name: Unit Tests + Coverage
