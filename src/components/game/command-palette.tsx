@@ -244,7 +244,7 @@ export function CommandPalette({ deals, onOpenDetail, open, onOpenChange }: Comm
   // Reset selection when results count changes
   React.useEffect(() => {
     setSelectedIndex(0);
-  }, [results.length]);
+  }, []);
 
   const handleSelect = (result: CommandResult) => {
     saveRecentSearch(query);

@@ -243,4 +243,3 @@ function TrendingCard({
     </article>
   );
 }
-

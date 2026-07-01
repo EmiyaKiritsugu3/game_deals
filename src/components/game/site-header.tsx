@@ -326,4 +326,3 @@ function AuthTriggerMobile({ onClose }: { onClose: () => void }) {
     </div>
   );
 }
-

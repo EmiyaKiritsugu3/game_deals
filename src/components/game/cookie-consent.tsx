@@ -111,8 +111,8 @@ export function CookieConsent() {
             </div>
             <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground sm:text-sm">
               DEALFORGE uses <strong className="text-foreground/90">no tracking cookies</strong>. We
-              use browser local storage to remember your wishlist, preferences, and alerts. We may earn
-              a commission when you click deal links —{' '}
+              use browser local storage to remember your wishlist, preferences, and alerts. We may
+              earn a commission when you click deal links —{' '}
               <button
                 type="button"
                 onClick={() => openLegalDoc('affiliate')}

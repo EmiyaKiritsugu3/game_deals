@@ -40,11 +40,13 @@ export function WishlistDrawer() {
   const [expandedId, setExpandedId] = React.useState<string | null>(null);
   React.useEffect(() => {
     if (isOpen) {
-      setExpandedId((prev) => (prev && items.some((i) => i.dealID === prev) ? prev : items[0]?.dealID ?? null));
+      setExpandedId((prev) =>
+        prev && items.some((i) => i.dealID === prev) ? prev : (items[0]?.dealID ?? null)
+      );
     } else {
       setExpandedId(null);
     }
-  }, [isOpen]);
+  }, [isOpen, items[0]?.dealID, items.some]);
   // Keep expandedId in sync when items change while drawer is open
   React.useEffect(() => {
     if (isOpen && expandedId && !items.some((i) => i.dealID === expandedId)) {
@@ -339,4 +341,3 @@ function formatRelative(timestamp: number): string {
   const days = Math.floor(hours / 24);
   return `${days}d ago`;
 }
-
