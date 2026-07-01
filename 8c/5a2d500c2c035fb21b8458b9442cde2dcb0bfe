@@ -1,0 +1,19 @@
+src/app/search/SearchResults.test.tsx
+  s_b31fd2555aac21::t_ee8a51d5b05bca 7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.4",
+  "base_commit_sha": "8c5a2d500c2c035fb21b8458b9442cde2dcb0bfe",
+  "prompts": {},
+  "sessions": {
+    "s_b31fd2555aac21": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "da295376-6578-47dc-b15a-aceae500e428",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
