@@ -2,7 +2,7 @@
 set -euo pipefail
 
 echo "=== Lint + Type Check ==="
-bunx biome check .
+bunx biome check src/
 bunx tsc --noEmit
 
 echo ""

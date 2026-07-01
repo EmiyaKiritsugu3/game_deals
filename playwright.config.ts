@@ -25,7 +25,7 @@ export default defineConfig({
   ],
   // Production mode for stable visuals (next dev can cause OOM per AGENTS.md)
   webServer: {
-    command: 'pnpm build && pnpm start',
+    command: 'bun --bun next build && bun --bun next start',
     port: 3000,
     timeout: 300_000,
     reuseExistingServer: true,
