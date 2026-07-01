@@ -59,9 +59,7 @@ export function AuthDialog() {
           {/* Right: form panel */}
           <div className="relative flex min-h-[560px] flex-col p-6 sm:p-8">
             {view === 'sign-in' && <SignInForm onSuccess={setUser} />}
-            {view === 'code-entry' && (
-              <CodeEntryForm onBack={() => setDialogView('sign-in')} />
-            )}
+            {view === 'code-entry' && <CodeEntryForm onBack={() => setDialogView('sign-in')} />}
             {view === 'success' && (
               <SuccessState user={useAuth.getState().user} onDone={closeDialog} />
             )}
@@ -295,11 +293,7 @@ function SignInForm({
 /*                              CODE-ENTRY VIEW                               */
 /* -------------------------------------------------------------------------- */
 
-function CodeEntryForm({
-  onBack,
-}: {
-  onBack: () => void;
-}) {
+function CodeEntryForm({ onBack }: { onBack: () => void }) {
   const pendingEmail = useAuth((s) => s.pendingEmail);
   const devCode = useAuth((s) => s.devCode);
   const magicLinkUrl = useAuth((s) => s.magicLinkUrl);
