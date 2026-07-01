@@ -1,0 +1,19 @@
+vitest.config.ts
+  s_b31fd2555aac21::t_32da6b6d82050e 33-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.4",
+  "base_commit_sha": "2e69db88e5f7c69ed169356e5a650c2477569e34",
+  "prompts": {},
+  "sessions": {
+    "s_b31fd2555aac21": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "da295376-6578-47dc-b15a-aceae500e428",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
