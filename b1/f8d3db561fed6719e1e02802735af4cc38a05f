@@ -1,0 +1,89 @@
+src/components/game/social-login-buttons.tsx
+  s_b31fd2555aac21::t_882ce2fff5d476 110
+src/components/game/savings-leaderboard.tsx
+  s_b31fd2555aac21::t_a1840c6c16cf18 160
+src/components/game/site-footer.tsx
+  s_b31fd2555aac21::t_d941bae014d2f2 11,19,136,213,222,243,265
+src/components/game/auth-dialog.tsx
+  s_b31fd2555aac21::t_1a22e048497431 26,110,139-153,158,280-283,299,354-356,374,391-394,414-419,559
+src/components/game/why-trust-us.tsx
+  s_b31fd2555aac21::t_15b5dbf0877db8 144
+src/components/game/command-palette.tsx
+  s_b31fd2555aac21::t_e4de78f1783bbc 159,178
+src/components/game/trending-section.tsx
+  s_b31fd2555aac21::t_ad4fab78d35b54 89,91,174
+src/components/game/wishlist-drawer.tsx
+  s_b31fd2555aac21::t_aca83ec0af3e1a 163-165,189,201,293-298
+src/components/game/faq-section.tsx
+  s_b31fd2555aac21::t_d1e3e53df529f2 230
+src/components/game/site-header.tsx
+  s_b31fd2555aac21::t_8583165722700f 161
+src/components/game/stores-showcase.tsx
+  s_b31fd2555aac21::t_cbfc9c3397c13a 74,90
+src/components/game/deal-stats-dashboard.tsx
+  s_b31fd2555aac21::t_bfbf3e43b2a991 298,407
+src/components/game/game-detail-dialog.tsx
+  s_b31fd2555aac21::t_50c603073b2140 50-51,106,172-173,220
+src/components/game/featured-deals.tsx
+  s_b31fd2555aac21::t_85edf57fd5d08b 33-38
+src/components/game/recently-free-section.tsx
+  s_b31fd2555aac21::t_746d75c5d6523a 162
+biome.json
+  s_b31fd2555aac21::t_7fa7120153e2bc 38-40,49-52,62-64,74-77,87-89,99-101,111-113,124-126,142-144,157-159,169-209
+src/components/game/deal-of-the-day.tsx
+  s_9c0b5e0c819277::t_881271054ac2af 156
+src/components/game/deal-of-the-hour.tsx
+  s_9c0b5e0c819277::t_dc2f38a681831e 88,139,252
+src/components/game/filter-bar.tsx
+  s_9c0b5e0c819277::t_aba9798eaa93fe 62,139,210,220
+src/components/game/legal-modal.tsx
+  s_9c0b5e0c819277::t_5395d6716ab346 57,108,232,536-539
+src/components/game/mini-sparkline.tsx
+  s_9c0b5e0c819277::t_cc2fff9ed55274 35-42
+src/components/game/newly-added-section.tsx
+  s_9c0b5e0c819277::t_729481036246d2 86-89,183
+src/components/game/price-drop-alerts.tsx
+  s_9c0b5e0c819277::t_e412b6f1a76c1c 146,190
+src/app/page.tsx
+  s_b691f5588b3d10::t_3d992fc2edcd51 292-293
+src/components/game/achievements-ui.tsx
+  s_b691f5588b3d10::t_b1e3fea0f6a34f 75
+src/components/game/compare-tray.tsx
+  s_b691f5588b3d10::t_02b20b1c5f269a 75,287,392
+src/components/game/free-games-section.tsx
+  s_b691f5588b3d10::t_0a61d97813422f 98-99,193
+src/components/game/price-sparkline.tsx
+  s_b691f5588b3d10::t_31b96b5d14bf55 169-170
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.4",
+  "base_commit_sha": "b1f8d3db561fed6719e1e02802735af4cc38a05f",
+  "prompts": {},
+  "sessions": {
+    "s_9c0b5e0c819277": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4e9331ff-6050-4b0e-95e2-d49c036c1964",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    },
+    "s_b31fd2555aac21": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "da295376-6578-47dc-b15a-aceae500e428",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    },
+    "s_b691f5588b3d10": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a4f4d9881751d03ba",
+        "model": "unknown"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
