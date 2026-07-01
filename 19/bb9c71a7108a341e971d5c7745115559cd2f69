@@ -1,0 +1,20 @@
+CLAUDE.md
+  s_9985ade9a8bc0c::t_bb611986f499fe 5-6,10-21
+  s_9985ade9a8bc0c::t_232a13cf1265d6 60,70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.6",
+  "base_commit_sha": "19bb9c71a7108a341e971d5c7745115559cd2f69",
+  "prompts": {},
+  "sessions": {
+    "s_9985ade9a8bc0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d15caf6e-8b1e-4673-82f5-bf620fc6d627",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
