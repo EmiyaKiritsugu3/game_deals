@@ -35,9 +35,7 @@
   },
   "overrides": [
     {
-      "includes": [
-        ".claude/**"
-      ],
+      "includes": [".claude/**"],
       "linter": {
         "enabled": false
       },
@@ -46,10 +44,7 @@
       }
     },
     {
-      "includes": [
-        "src/app/layout.tsx",
-        "src/app/game/\\[id\\]/page.tsx"
-      ],
+      "includes": ["src/app/layout.tsx", "src/app/game/\\[id\\]/page.tsx"],
       "linter": {
         "rules": {
           "security": {
@@ -59,9 +54,7 @@
       }
     },
     {
-      "includes": [
-        "drizzle.config.ts"
-      ],
+      "includes": ["drizzle.config.ts"],
       "linter": {
         "rules": {
           "style": {
@@ -71,10 +64,7 @@
       }
     },
     {
-      "includes": [
-        "**/*.test.ts",
-        "**/*.test.tsx"
-      ],
+      "includes": ["**/*.test.ts", "**/*.test.tsx"],
       "linter": {
         "rules": {
           "performance": {
@@ -84,9 +74,7 @@
       }
     },
     {
-      "includes": [
-        "public/*.svg"
-      ],
+      "includes": ["public/*.svg"],
       "linter": {
         "rules": {
           "a11y": {
@@ -96,9 +84,7 @@
       }
     },
     {
-      "includes": [
-        "src/components/RatingStars.tsx"
-      ],
+      "includes": ["src/components/RatingStars.tsx"],
       "linter": {
         "rules": {
           "a11y": {
@@ -108,9 +94,7 @@
       }
     },
     {
-      "includes": [
-        "src/components/ui/input-group.tsx"
-      ],
+      "includes": ["src/components/ui/input-group.tsx"],
       "linter": {
         "rules": {
           "a11y": {
@@ -121,9 +105,7 @@
       }
     },
     {
-      "includes": [
-        "src/components/game/deal-card.tsx"
-      ],
+      "includes": ["src/components/game/deal-card.tsx"],
       "linter": {
         "rules": {
           "performance": {
@@ -139,9 +121,7 @@
       }
     },
     {
-      "includes": [
-        "src/components/game/compare-tray.tsx"
-      ],
+      "includes": ["src/components/game/compare-tray.tsx"],
       "linter": {
         "rules": {
           "performance": {
@@ -154,9 +134,7 @@
       }
     },
     {
-      "includes": [
-        "src/components/game/density-toggle.tsx"
-      ],
+      "includes": ["src/components/game/density-toggle.tsx"],
       "linter": {
         "rules": {
           "a11y": {
@@ -166,9 +144,7 @@
       }
     },
     {
-      "includes": [
-        "src/components/game/deal-grid.tsx"
-      ],
+      "includes": ["src/components/game/deal-grid.tsx"],
       "linter": {
         "rules": {
           "suspicious": {
@@ -178,9 +154,7 @@
       }
     },
     {
-      "includes": [
-        "src/components/ui/input-otp.tsx"
-      ],
+      "includes": ["src/components/ui/input-otp.tsx"],
       "linter": {
         "rules": {
           "a11y": {
@@ -192,9 +166,7 @@
       }
     },
     {
-      "includes": [
-        "src/components/ui/label.tsx"
-      ],
+      "includes": ["src/components/ui/label.tsx"],
       "linter": {
         "rules": {
           "a11y": {
@@ -204,9 +176,7 @@
       }
     },
     {
-      "includes": [
-        "src/components/ui/slider.tsx"
-      ],
+      "includes": ["src/components/ui/slider.tsx"],
       "linter": {
         "rules": {
           "suspicious": {
