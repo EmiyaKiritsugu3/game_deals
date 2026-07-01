@@ -4,7 +4,7 @@
 
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import type { DealWithStore } from '@/lib/deal-utils';
+import type { DealWithStore } from '@/lib/types';
 import { SearchResults } from './SearchResults';
 
 vi.mock('next/navigation', () => ({
