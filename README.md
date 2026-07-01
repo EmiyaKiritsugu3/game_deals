@@ -29,40 +29,40 @@ Game deal aggregator — Next.js 16, Supabase SSR, Drizzle ORM, TanStack Query, 
 ## Commands
 
 ```bash
-pnpm dev                  # Dev server (Turbopack)
-pnpm build                # Production build (needs .env.local)
-pnpm start                # Production server
-pnpm lint                 # Biome check
-pnpm lint:fix             # Biome check + auto-fix
-pnpm format               # Biome format
-pnpm test                 # Vitest unit (916 tests)
-pnpm test:watch           # Vitest watch
-pnpm test:coverage        # Vitest with coverage
-pnpm test:e2e             # Playwright E2E
-pnpm test:e2e:visual         # Playwright visual regression
-pnpm test:e2e:visual:update   # Update visual baselines (manual)
-pnpm check                # Local full CI (lint→tsc→test→build→knip→fallow)
-pnpm knip                 # Dead code analysis
-pnpm audit                # pnpm audit --audit-level=high
-pnpm fallow:audit         # Fallow security audit
-pnpm db:generate          # Drizzle Kit generate migration
-pnpm db:migrate           # Drizzle Kit apply migrations
-pnpm db:push              # Drizzle Kit push schema (dev)
-pnpm db:studio            # Drizzle Studio (visual DB browser)
+bun dev                  # Dev server (Turbopack)
+bun build                # Production build (needs .env.local)
+bun start                # Production server
+bun lint                 # Biome check
+bun lint:fix             # Biome check + auto-fix
+bun format               # Biome format
+bun test                 # Vitest unit (916 tests)
+bun test:watch           # Vitest watch
+bun test:coverage        # Vitest with coverage
+bun test:e2e             # Playwright E2E
+bun test:e2e:visual         # Playwright visual regression
+bun test:e2e:visual:update   # Update visual baselines (manual)
+bun check                # Local full CI (lint→tsc→test→build→knip→fallow)
+bun knip                 # Dead code analysis
+bun audit                # bunx npm audit --audit-level=high --audit-level=high
+bun fallow:audit         # Fallow security audit
+bun db:generate          # Drizzle Kit generate migration
+bun db:migrate           # Drizzle Kit apply migrations
+bun db:push              # Drizzle Kit push schema (dev)
+bun db:studio            # Drizzle Studio (visual DB browser)
 ```
 
 ## Local CI
 
-Pre-commit: `pnpm exec lint-staged` (Biome format on staged files).
-Pre-push: `pnpm check` (lint → tsc → test → build → knip → fallow).
+Pre-commit: `bunx lint-staged` (Biome format on staged files).
+Pre-push: `bun run check` (lint → tsc → test → build → knip → fallow).
 CI (GitHub Actions): `.github/workflows/ci.yml` — same steps.
 
 ## Setup
 
 ```bash
-pnpm install
+bun install
 cp .env.example .env.local
-pnpm dev
+bun dev
 ```
 
 ## Environment Variables

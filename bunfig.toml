@@ -1,0 +1,18 @@
+[install]
+linker = "hoisted"
+frozenLockfile = true
+minimumReleaseAge = 0
+
+[install.trusted]
+"@sentry/cli" = true
+esbuild = true
+sharp = true
+"typesense-instantsearch-adapter" = true
+"unrs-resolver" = true
+	"@fallow-cli" = true
+
+[install.cache]
+dir = "~/.bun/install/cache"
+
+[test]
+coverageThreshold = { line = 0.8, function = 0.7, statement = 0.8 }

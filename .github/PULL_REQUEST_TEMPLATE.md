@@ -12,11 +12,11 @@
 
 ## Verification
 
-- [ ] `pnpm check` passes (lint → tsc → test → build → knip)
+- [ ] `bun run check` passes (lint → tsc → test → build → knip)
 - [ ] No TypeScript errors (`./node_modules/.bin/tsc --noEmit`)
-- [ ] All tests pass (`pnpm test` — 980 tests)
+- [ ] All tests pass (`bun run test` — 980 tests)
 - [ ] SonarQube: 0 new issues
-- [ ] Visual changes tested via `pnpm test:e2e:visual`
+- [ ] Visual changes tested via `bun run test:e2e:visual`
 
 ## Breaking Changes
 
