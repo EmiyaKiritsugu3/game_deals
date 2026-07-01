@@ -159,6 +159,7 @@ function ArchiveCard({
           {deal.store && (
             <span className="mb-1 inline-flex items-center gap-1.5 rounded-md bg-black/55 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur-md ring-1 ring-white/10">
               {}
+              {/* biome-ignore lint/performance/noImgElement: store logos from CDN */}
               <img
                 src={deal.store.logoUrl}
                 alt=""

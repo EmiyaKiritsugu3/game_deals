@@ -59,6 +59,7 @@ export function FilterBar(props: FilterBarProps) {
             />
             {props.search && (
               <button
+                type="button"
                 onClick={() => props.onSearchChange('')}
                 className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-muted-foreground hover:text-foreground"
                 aria-label="Clear"
@@ -135,6 +136,7 @@ export function FilterBar(props: FilterBarProps) {
                 <SelectItem key={s.storeID} value={s.storeID}>
                   <span className="flex items-center gap-2">
                     {}
+                    {/* biome-ignore lint/performance/noImgElement: CheapShark store logos */}
                     <img src={s.logoUrl} alt="" className="size-4 rounded-[3px] object-contain" />
                     {s.storeName}
                   </span>
@@ -205,6 +207,7 @@ function StoreButton({
 }) {
   return (
     <button
+      type="button"
       onClick={onClick}
       className={cn(
         'flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-medium transition-all',
@@ -214,6 +217,7 @@ function StoreButton({
       )}
     >
       {logoUrl ? (
+        // biome-ignore lint/performance/noImgElement: CheapShark store logos
         <img src={logoUrl} alt="" className="size-5 rounded object-contain" />
       ) : (
         <span className="grid size-5 place-items-center rounded bg-primary/20 text-[9px] font-bold text-primary">

@@ -166,8 +166,8 @@ export function PriceSparkline({
       {/* X-axis labels */}
       <div className="mt-1 flex justify-between px-1 text-[9px] text-muted-foreground">
         {points.map((p, i) => (
-          <span
-            key={i}
+          <span /* biome-ignore lint/suspicious/noArrayIndexKey: static index labels */
+            key={`index-${i}`}
             className={
               i === 0 || i === points.length - 1 || p.highlight ? 'opacity-90' : 'opacity-40'
             }

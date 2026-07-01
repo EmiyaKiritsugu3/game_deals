@@ -30,9 +30,12 @@ export function FeaturedDeals({ deals, onOpenDetail }: FeaturedDealsProps) {
   if (!deals.length) {
     return (
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <div key={`skeleton-${i}`} className="h-64 skeleton-shimmer rounded-2xl glass" />
-        ))}
+        {(() => {
+          const keys = Array.from({ length: 3 }, (_, i) => `skeleton-${i}`);
+          return keys.map((key) => (
+            <div key={key} className="h-64 skeleton-shimmer rounded-2xl glass" />
+          ));
+        })()}
       </div>
     );
   }

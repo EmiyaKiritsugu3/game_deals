@@ -158,6 +158,7 @@ export function SiteHeader({ onSearch, searchValue, searchInputRef }: SiteHeader
           />
           {searchValue && (
             <button
+              type="button"
               onClick={() => onSearch('')}
               className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-muted-foreground hover:text-foreground transition-colors"
               aria-label="Clear search"

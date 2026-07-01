@@ -141,6 +141,7 @@ function CommitmentButton({
 }) {
   return (
     <button
+      type="button"
       onClick={() => openLegalDoc(docKey)}
       className="group inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-card/40 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-all hover:border-primary/40 hover:text-primary"
     >

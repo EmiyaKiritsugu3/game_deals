@@ -54,6 +54,7 @@ const DOCS: Record<LegalDocKey, LegalDoc> = {
             DEALFORGE sets <strong>no tracking cookies</strong>. We use browser local storage (not
             cookies) for your wishlist and preferences. See our{' '}
             <button
+              type="button"
               className="font-medium text-primary underline-offset-2 hover:underline"
               onClick={() =>
                 window.dispatchEvent(
@@ -104,6 +105,7 @@ const DOCS: Record<LegalDocKey, LegalDoc> = {
             We may earn a commission when you click a deal link and complete a purchase. This never
             affects the price you pay. See our{' '}
             <button
+              type="button"
               className="font-medium text-primary underline-offset-2 hover:underline"
               onClick={() =>
                 window.dispatchEvent(
@@ -227,6 +229,7 @@ const DOCS: Record<LegalDocKey, LegalDoc> = {
             Deal links are affiliate links — we may earn a commission on completed purchases at no
             extra cost to you. This is how DEALFORGE stays free. See our{' '}
             <button
+              type="button"
               className="font-medium text-primary underline-offset-2 hover:underline"
               onClick={() =>
                 window.dispatchEvent(
@@ -530,8 +533,10 @@ export function LegalModal({ open, onOpenChange, docKey }: LegalModalProps) {
           <div className="p-5 sm:p-6">
             <p className="text-sm leading-relaxed text-foreground/90">{doc.intro}</p>
             <div className="mt-5 space-y-5">
-              {doc.sections.map((section, i) => (
-                <section key={i}>
+              {doc.sections.map((section, idx) => (
+                <section /* biome-ignore lint/suspicious/noArrayIndexKey: static sections */
+                  key={idx}
+                >
                   <h3 className="text-sm font-semibold text-foreground">{section.heading}</h3>
                   <div className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                     {section.body}

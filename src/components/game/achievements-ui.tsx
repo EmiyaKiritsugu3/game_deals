@@ -72,7 +72,7 @@ export function AchievementToast() {
               ];
               const color = colors[i % colors.length];
               return (
-                <span
+                <span /* biome-ignore lint/suspicious/noArrayIndexKey: static confetti items */
                   key={i}
                   className="animate-confetti-fall absolute top-0 size-1.5 rounded-sm"
                   style={{

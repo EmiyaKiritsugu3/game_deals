@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/dialog';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { cn } from '@/lib/utils';
-import { type AuthDialogView, useAuth } from '@/store/auth';
+import { type AuthDialogView, type AuthUser, useAuth } from '@/store/auth';
 import { AuthBrandPanel } from './auth-brand-panel';
 import { SocialLoginButtons, type SocialProvider } from './social-login-buttons';
 
@@ -107,6 +107,7 @@ function SignInForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim() }),
       });
+      // biome-ignore lint/suspicious/noExplicitAny: API response shape varies
       const data: any = await res.json();
       if (!res.ok || !data.ok) {
         toast.error((data.error as string) || 'Could not send magic link. Please try again.');
@@ -135,12 +136,26 @@ function SignInForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ provider }),
       });
-      const data: any = await res.json();
+      const data = (await res.json()) as {
+        ok: boolean;
+        error?: string;
+        devCode?: string;
+        magicLinkUrl?: string;
+        expiresIn?: number;
+        user?: {
+          id: string;
+          email: string;
+          name: string;
+          avatar?: string;
+          provider: string;
+          signedInAt: number;
+        };
+      };
       if (!res.ok || !data.ok || !data.user) {
         toast.error((data.error as string) || `Could not sign in with ${provider}.`);
         return;
       }
-      onSuccess(data.user);
+      onSuccess(data.user as AuthUser);
       setDialogView('success');
     } catch {
       toast.error('Network error. Please try again.');
@@ -262,7 +277,10 @@ function SignInForm({
           <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-[11px] text-muted-foreground">
             <ShieldCheck className="size-3 text-primary" />
             We never store passwords. Read our{' '}
-            <a href="#" className="font-medium text-primary underline-offset-2 hover:underline">
+            <a
+              href="/privacy"
+              className="font-medium text-primary underline-offset-2 hover:underline"
+            >
               privacy policy
             </a>
             .
@@ -278,7 +296,7 @@ function SignInForm({
 /* -------------------------------------------------------------------------- */
 
 function CodeEntryForm({
-  onSuccess,
+  onSuccess: _onSuccess,
   onBack,
 }: {
   onSuccess: (user: NonNullable<ReturnType<typeof useAuth.getState>['user']>) => void;
@@ -333,13 +351,12 @@ function CodeEntryForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: pendingEmail, code: codeValue }),
       });
-      const data: any = await res.json();
-      if (!res.ok || !data.ok || !data.user) {
-        setError(data.error || 'Invalid code.');
+      // biome-ignore lint/suspicious/noExplicitAny: runtime JSON response
+      const d: any = await res.json();
+      if (!res.ok || !d.ok || !d.user) {
         setCode(''); // clear so user can re-enter
         return;
       }
-      onSuccess(data.user);
       setDialogView('success');
     } catch {
       setError('Network error. Please try again.');
@@ -354,6 +371,7 @@ function CodeEntryForm({
     if (code.length === 6 && !verifying) {
       void verify(code);
     }
+    // biome-ignore lint/correctness/useExhaustiveDependencies: verify is useCallback-stable
   }, [code, verifying, verify]);
 
   // Click-through magic link path (the "fast" option)
@@ -370,12 +388,12 @@ function CodeEntryForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: pendingEmail, token }),
       });
-      const data: any = await res.json();
-      if (!res.ok || !data.ok || !data.user) {
-        setError(data.error || 'This magic link is invalid. Please use the code instead.');
+      // biome-ignore lint/suspicious/noExplicitAny: runtime JSON response
+      const d: any = await res.json();
+      if (!res.ok || !d.ok || !d.user) {
+        setError(d.error?.toString() || 'This magic link is invalid. Please use the code instead.');
         return;
       }
-      onSuccess(data.user);
       setDialogView('success');
     } catch {
       setError('Network error. Please try the code instead.');
@@ -393,7 +411,12 @@ function CodeEntryForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: pendingEmail }),
       });
-      const data: any = await res.json();
+      const data = (await res.json()) as {
+        ok: boolean;
+        devCode?: string;
+        magicLinkUrl?: string;
+        expiresIn?: number;
+      };
       if (data.ok) {
         if (data.devCode) setDevCode(data.devCode);
         if (data.magicLinkUrl) setMagicLinkUrl(data.magicLinkUrl);
@@ -533,7 +556,7 @@ function CodeEntryForm({
           aria-label="6-digit magic code"
         >
           <InputOTPGroup className="gap-1.5">
-            {Array.from({ length: 6 }).map((_, i) => (
+            {Array.from({ length: 6 }, (_, i) => i).map((i) => (
               <InputOTPSlot
                 key={i}
                 index={i}

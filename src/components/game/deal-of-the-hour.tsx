@@ -85,11 +85,7 @@ export function DealOfTheHour({ deals, onOpenDetail }: DealOfTheHourProps) {
       id="deal-of-hour"
       className="mx-auto mt-12 max-w-7xl scroll-mt-20 px-4 sm:px-6 lg:px-8"
     >
-      <div
-        className="relative overflow-hidden rounded-3xl border border-hot/30 glass-strong"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-      >
+      <div className="relative overflow-hidden rounded-3xl border border-hot/30 glass-strong">
         {/* Ambient glow */}
         <div
           className="pointer-events-none absolute -right-20 -top-20 size-72 rounded-full opacity-30 blur-3xl"
@@ -140,6 +136,7 @@ export function DealOfTheHour({ deals, onOpenDetail }: DealOfTheHourProps) {
               </span>
               {activeDeal.store && (
                 <span className="inline-flex items-center gap-1 rounded-full border border-border/50 bg-card/40 px-2 py-1 text-[10px] font-medium backdrop-blur-md">
+                  {/* biome-ignore lint/performance/noImgElement: store logos from CheapShark */}
                   <img
                     src={activeDeal.store.logoUrl}
                     alt=""
@@ -252,7 +249,7 @@ export function DealOfTheHour({ deals, onOpenDetail }: DealOfTheHourProps) {
           {/* Dots */}
           <div className="flex items-center gap-1.5">
             {top5.map((_, i) => (
-              <button
+              <button /* biome-ignore lint/suspicious/noArrayIndexKey: static dots */
                 key={i}
                 type="button"
                 onClick={() => {

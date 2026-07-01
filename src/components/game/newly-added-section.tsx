@@ -83,7 +83,10 @@ export function NewlyAddedSection({ onOpenDetail }: NewlyAddedSectionProps) {
       {query.isLoading ? (
         <div className="no-scrollbar -mx-4 flex gap-4 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="skeleton-shimmer h-44 w-[260px] shrink-0 rounded-2xl glass" />
+            <div /* biome-ignore lint/suspicious/noArrayIndexKey: static skeleton */
+              key={`skeleton-${i}`}
+              className="skeleton-shimmer h-44 w-[260px] shrink-0 rounded-2xl glass"
+            />
           ))}
         </div>
       ) : deals.length === 0 ? (
@@ -177,6 +180,7 @@ function NewlyAddedCard({
           )}
           {deal.store && (
             <span className="inline-flex items-center gap-1 rounded-md bg-black/60 px-1.5 py-0.5 text-[9px] font-semibold text-white backdrop-blur-md ring-1 ring-white/10">
+              {/* biome-ignore lint/performance/noImgElement: store logos from CheapShark */}
               <img
                 src={deal.store.logoUrl}
                 alt=""

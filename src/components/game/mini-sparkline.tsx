@@ -32,7 +32,14 @@ export function MiniSparkline({
   const gid = `mini-spark-${idSuffix || Math.random().toString(36).slice(2, 8)}`;
   const validPrices = prices.filter((p) => p > 0);
   if (validPrices.length < 2) {
-    return <div className={className} style={{ height }} aria-label="Not enough price history" />;
+    return (
+      <div
+        className={className}
+        style={{ height }}
+        role="img"
+        aria-label="Not enough price history"
+      />
+    );
   }
 
   const pad = 3;

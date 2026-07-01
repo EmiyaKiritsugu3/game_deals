@@ -86,9 +86,9 @@ export function TrendingSection({ onOpenDetail }: TrendingSectionProps) {
 
       {isLoading ? (
         <div className="no-scrollbar flex gap-4 overflow-x-auto pb-2">
-          {Array.from({ length: 4 }).map((_, i) => (
+          {Array.from({ length: 4 }, (_, i) => i).map((key) => (
             <div
-              key={i}
+              key={key}
               className="skeleton-shimmer h-44 w-[280px] shrink-0 rounded-2xl glass sm:w-[320px]"
             />
           ))}
@@ -171,6 +171,7 @@ function TrendingCard({
           {deal.store && (
             <span className="mb-1.5 inline-flex items-center gap-1.5 rounded-md bg-black/50 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur-md ring-1 ring-white/10">
               {}
+              {/* biome-ignore lint/performance/noImgElement: store logos from CDN */}
               <img
                 src={deal.store.logoUrl}
                 alt=""

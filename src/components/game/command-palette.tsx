@@ -156,6 +156,7 @@ export function CommandPalette({ deals, onOpenDetail, open, onOpenChange }: Comm
     const t = setTimeout(async () => {
       try {
         const res = await fetch(`/api/games?title=${encodeURIComponent(q)}`);
+        // biome-ignore lint/suspicious/noExplicitAny: API JSON shape
         const data: any = await res.json();
         if (data.games && Array.isArray(data.games)) {
           // Convert GameSearchResult → DealWithStore-like for uniform rendering
@@ -174,6 +175,7 @@ export function CommandPalette({ deals, onOpenDetail, open, onOpenChange }: Comm
                 const title = g.title || g.external || 'Unknown';
                 return {
                   internalName:
+                    // biome-ignore lint/suspicious/noExplicitAny: API JSON
                     (g as any).internalName || title.toLowerCase().replace(/[^a-z0-9]/g, ''),
                   title,
                   metacriticLink: null,

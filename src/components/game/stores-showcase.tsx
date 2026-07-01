@@ -71,6 +71,7 @@ export function StoresShowcase({ stores, onSelectStore, activeStoreID }: StoresS
           return (
             <button
               key={store.storeID}
+              type="button"
               onClick={() => onSelectStore?.(active ? '' : store.storeID)}
               className={cn(
                 'group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl glass p-5 lift-on-hover conic-border',
@@ -86,6 +87,7 @@ export function StoresShowcase({ stores, onSelectStore, activeStoreID }: StoresS
                   tier === 'official' ? 'bg-primary/15' : 'bg-amber-500/10'
                 )}
               />
+              {/* biome-ignore lint/performance/noImgElement: store logos from CDN */}
               <img
                 src={store.logoUrl}
                 alt={`${store.storeName} logo`}

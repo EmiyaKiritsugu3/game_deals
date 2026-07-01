@@ -289,7 +289,8 @@ export default function Home() {
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
                 {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="skeleton-shimmer h-28 rounded-2xl glass" />
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static skeleton
+                  <div key={`skeleton-${i}`} className="skeleton-shimmer h-28 rounded-2xl glass" />
                 ))}
               </div>
             </div>

@@ -295,6 +295,7 @@ export function DealStatsDashboard({ deals }: DealStatsDashboardProps) {
               >
                 <div className="flex w-32 shrink-0 items-center gap-2">
                   {st.logo && (
+                    // biome-ignore lint/performance/noImgElement: CDN store logos
                     <img
                       src={st.logo}
                       alt=""
@@ -403,6 +404,7 @@ function PriceTierDonut({
       const startOffset =
         acc.length > 0 ? acc[acc.length - 1].startOffset + acc[acc.length - 1].dashLength : 0;
       return [
+        // biome-ignore lint/performance/noAccumulatingSpread: known-size array
         ...acc,
         {
           label: t.label,

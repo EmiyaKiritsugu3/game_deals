@@ -157,6 +157,7 @@ function LeaderboardRow({
           {deal.store && (
             <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
               {}
+              {/* biome-ignore lint/performance/noImgElement: store logos from CDN */}
               <img
                 src={deal.store.logoUrl}
                 alt=""

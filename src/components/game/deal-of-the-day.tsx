@@ -153,6 +153,7 @@ export function DealOfTheDay({ deals, onOpenDetail }: DealOfTheDayProps) {
                 {deal.store && (
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-card/40 px-2.5 py-1 text-xs font-medium backdrop-blur-md">
                     {}
+                    {/* biome-ignore lint/performance/noImgElement: store logos from CheapShark */}
                     <img
                       src={deal.store.logoUrl}
                       alt=""

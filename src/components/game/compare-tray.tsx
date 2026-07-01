@@ -72,6 +72,7 @@ export function CompareTray() {
                   unoptimized
                 />
                 <button
+                  type="button"
                   onClick={() => remove(deal.dealID)}
                   className="absolute right-0 top-0 grid size-4 place-items-center bg-black/70 text-white opacity-0 transition-opacity group-hover:opacity-100"
                   aria-label={`Remove ${deal.title} from comparison`}
@@ -283,6 +284,7 @@ function CompareDialog({
                     unoptimized
                   />
                   <button
+                    type="button"
                     onClick={() => remove(deal.dealID)}
                     className="absolute right-1.5 top-1.5 grid size-6 place-items-center rounded-md bg-black/70 text-white backdrop-blur-md transition-colors hover:bg-destructive/80"
                     aria-label={`Remove ${deal.title} from comparison`}
@@ -387,6 +389,7 @@ function CompareDialog({
                     Get deal
                   </a>
                   <button
+                    type="button"
                     onClick={() => toggleWishlist(toWishlistPayload(deal))}
                     className={cn(
                       'inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-all',

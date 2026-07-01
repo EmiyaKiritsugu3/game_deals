@@ -143,6 +143,7 @@ export function PriceDropAlerts({ liveDeals, dropThreshold = 0 }: PriceDropAlert
               </div>
             </div>
             <button
+              type="button"
               onClick={clearPriceDrops}
               className="grid size-6 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent/40 hover:text-foreground"
               aria-label="Dismiss all price alerts"
@@ -186,6 +187,7 @@ export function PriceDropAlerts({ liveDeals, dropThreshold = 0 }: PriceDropAlert
                     </div>
                   </div>
                   <button
+                    type="button"
                     onClick={() => dismissPriceDrop(drop.id)}
                     className="grid size-6 shrink-0 place-items-center rounded text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
                     aria-label={`Dismiss alert for ${drop.title}`}

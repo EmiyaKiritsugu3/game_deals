@@ -107,7 +107,7 @@ export function SocialLoginButtons({ onSignIn, loading, disabled }: SocialLoginB
             {isLoading ? (
               <span
                 className="size-5 animate-spin rounded-full border-2 border-primary/30 border-t-primary"
-                aria-label={`Signing in with ${label}`}
+                aria-hidden="true"
               />
             ) : (
               <Icon className="size-5 transition-transform duration-300 group-hover:scale-110" />

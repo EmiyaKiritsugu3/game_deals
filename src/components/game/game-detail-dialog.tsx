@@ -47,11 +47,8 @@ interface DealEntry {
 }
 
 export function GameDetailDialog({ deal, open, onOpenChange }: GameDetailDialogProps) {
-  const { data, isLoading, isError } = useGameDetail(deal?.gameID ?? null) as {
-    data: any;
-    isLoading: boolean;
-    isError: boolean;
-  };
+  // biome-ignore lint/suspicious/noExplicitAny: useGameDetail generic
+  const { data, isLoading, isError } = useGameDetail(deal?.gameID ?? null) as any;
   const addRecentlyViewed = useWishlist((s) => s.addRecentlyViewed);
 
   React.useEffect(() => {
@@ -106,6 +103,7 @@ export function GameDetailDialog({ deal, open, onOpenChange }: GameDetailDialogP
                     {deal.store && (
                       <span className="mb-2 inline-flex items-center gap-1.5 rounded-md bg-black/50 px-2 py-0.5 text-[11px] font-semibold text-white backdrop-blur-md ring-1 ring-white/10">
                         {}
+                        {/* biome-ignore lint/performance/noImgElement: store logos from CDN */}
                         <img
                           src={deal.store.logoUrl}
                           alt=""
@@ -171,8 +169,8 @@ export function GameDetailDialog({ deal, open, onOpenChange }: GameDetailDialogP
               {isLoading && (
                 <div className="mt-6 space-y-3">
                   <Skeleton className="h-5 w-40" />
-                  {Array.from({ length: 4 }).map((_, i) => (
-                    <Skeleton key={i} className="h-14 w-full" />
+                  {[1, 2, 3, 4].map((key) => (
+                    <Skeleton key={key} className="h-14 w-full" />
                   ))}
                 </div>
               )}
@@ -219,6 +217,7 @@ export function GameDetailDialog({ deal, open, onOpenChange }: GameDetailDialogP
                           >
                             <div className="grid size-10 shrink-0 place-items-center rounded-lg border border-border/50 bg-card/50">
                               {d.store?.logoUrl ? (
+                                // biome-ignore lint/performance/noImgElement: store logos from CDN
                                 <img
                                   src={d.store.logoUrl}
                                   alt=""

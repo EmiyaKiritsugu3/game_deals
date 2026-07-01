@@ -227,7 +227,7 @@ export function FaqSection() {
           const Icon = faq.icon;
           return (
             <AccordionItem
-              key={i}
+              key={faq.q}
               value={`faq-${i}`}
               className="overflow-hidden rounded-2xl border border-border/40 glass px-4 transition-colors data-[state=open]:border-primary/40"
             >

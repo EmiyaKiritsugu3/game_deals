@@ -160,17 +160,10 @@ export function WishlistDrawer() {
                           unoptimized
                         />
                       </button>
-                      <div
-                        className="min-w-0 flex-1 cursor-pointer"
+                      <button
+                        type="button"
+                        className="min-w-0 flex-1 cursor-pointer text-left"
                         onClick={() => setExpandedId(isExpanded ? null : item.dealID)}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            setExpandedId(isExpanded ? null : item.dealID);
-                          }
-                        }}
                       >
                         <p className="line-clamp-1 text-sm font-semibold">{item.title}</p>
                         <div className="mt-0.5 flex items-center gap-2 text-xs">
@@ -193,7 +186,7 @@ export function WishlistDrawer() {
                             {item.storeName}
                           </p>
                         )}
-                      </div>
+                      </button>
                       <div className="flex shrink-0 items-center gap-1">
                         <a
                           href={dealRedirectUrl(item.dealID)}
@@ -205,6 +198,7 @@ export function WishlistDrawer() {
                           <ExternalLink className="size-3.5" />
                         </a>
                         <button
+                          type="button"
                           onClick={() => remove(item.dealID)}
                           className="grid size-8 place-items-center rounded-lg border border-border/50 bg-card/40 text-muted-foreground transition-all hover:border-destructive/40 hover:text-destructive"
                           aria-label={`Remove ${item.title} from wishlist`}
@@ -296,11 +290,12 @@ export function WishlistDrawer() {
                 <X className="size-4" />
                 Clear all
               </Button>
-              <Button className="flex-[2] gap-1.5 bg-primary text-primary-foreground shadow-md shadow-primary/30 sheen">
-                <a href="#deals" onClick={() => setOpen(false)}>
-                  <ShoppingBag className="size-4" />
-                  Keep browsing
-                </a>
+              <Button
+                className="flex-[2] gap-1.5 bg-primary text-primary-foreground shadow-md shadow-primary/30 sheen"
+                onClick={() => setOpen(false)}
+              >
+                <ShoppingBag className="size-4" />
+                Keep browsing
               </Button>
             </div>
           </div>
