@@ -7,7 +7,7 @@ bunx tsc --noEmit
 
 echo ""
 echo "=== Tests + Coverage ==="
-bun test --coverage
+bunx vitest run --coverage
 
 echo ""
 echo "=== Build ==="

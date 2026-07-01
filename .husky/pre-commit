@@ -1,2 +1,2 @@
 bunx lint-staged
-bun test --changed --reporter=verbose
+bunx vitest --changed --reporter=verbose
