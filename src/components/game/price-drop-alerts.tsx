@@ -102,12 +102,15 @@ export function PriceDropAlerts({ liveDeals, dropThreshold = 0 }: PriceDropAlert
     }
   }, [items, liveDeals, priceMap, recordPriceCheck, dropThreshold]);
 
+  const runCheckRef = React.useRef(runCheck);
+  runCheckRef.current = runCheck;
+
   React.useEffect(() => {
     const tick = () => {
       const now = Date.now();
       if (now - lastCheckRef.current >= CHECK_INTERVAL) {
         lastCheckRef.current = now;
-        runCheck();
+        runCheckRef.current();
       }
     };
     // Initial check shortly after mount (lets the feed populate).
@@ -119,7 +122,7 @@ export function PriceDropAlerts({ liveDeals, dropThreshold = 0 }: PriceDropAlert
       clearInterval(interval);
       document.removeEventListener('visibilitychange', tick);
     };
-  }, [runCheck]);
+  }, []);
 
   const activeDrops = priceDrops.filter((d) => !d.dismissed);
   if (activeDrops.length === 0) return null;

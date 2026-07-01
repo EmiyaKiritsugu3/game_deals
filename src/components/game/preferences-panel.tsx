@@ -126,12 +126,11 @@ interface PreferencesPanelProps {
 }
 
 export function PreferencesPanel({ open, onOpenChange }: PreferencesPanelProps) {
-  const [prefs, setPrefs] = React.useState<UserPreferences>(DEFAULT_PREFS);
+  const [prefs, setPrefs] = React.useState<UserPreferences>(() => {
+    if (typeof window !== 'undefined') return loadPrefs();
+    return DEFAULT_PREFS;
+  });
   const { theme, setTheme } = useTheme();
-
-  React.useEffect(() => {
-    setPrefs(loadPrefs());
-  }, []);
 
   const update = (partial: Partial<UserPreferences>) => {
     const next = { ...prefs, ...partial };

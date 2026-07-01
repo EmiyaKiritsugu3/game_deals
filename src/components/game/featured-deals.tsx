@@ -4,7 +4,6 @@ import { ChevronLeft, ChevronRight, Flame, Heart, Star, TrendingDown } from 'luc
 import Image from 'next/image';
 import * as React from 'react';
 import { GetDealCta } from '@/components/game/deal-cta';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { dealRedirectUrl, toWishlistPayload } from '@/lib/deal-utils';
 import type { DealWithStore } from '@/lib/types';
@@ -209,4 +208,3 @@ function FeaturedCard({
   );
 }
 
-export { Badge };

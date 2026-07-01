@@ -175,16 +175,13 @@ export function HeroSection({ stats, source }: HeroSectionProps) {
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
             </a>
           </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="h-12 w-full rounded-full border-border/60 bg-card/40 px-7 text-base font-semibold backdrop-blur-md transition-all hover:border-primary/40 hover:bg-accent/30 sm:w-auto"
+          <a
+            href="#how"
+            className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-border/60 bg-card/40 px-7 text-base font-semibold backdrop-blur-md transition-all hover:border-primary/40 hover:bg-accent/30 sm:w-auto"
           >
-            <a href="#how">
-              <ShieldCheck className="size-4" />
-              How it works
-            </a>
-          </Button>
+            <ShieldCheck className="size-4" />
+            How it works
+          </a>
         </div>
 
         {/* Trust row */}

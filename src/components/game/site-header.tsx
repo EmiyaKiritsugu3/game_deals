@@ -20,7 +20,6 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import * as React from 'react';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -115,16 +114,13 @@ export function SiteHeader({ onSearch, searchValue, searchInputRef }: SiteHeader
           ))}
           {/* More dropdown */}
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <button
-                type="button"
-                className="group relative inline-flex items-center gap-1 px-2.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:rounded"
-                aria-label="More navigation options"
-              >
-                More
-                <ChevronDown className="size-3.5 transition-transform group-data-[state=open]:rotate-180" />
-                <span className="absolute inset-x-2.5 -bottom-0.5 h-px scale-x-0 bg-gradient-to-r from-primary to-transparent transition-transform duration-300 group-hover:scale-x-100" />
-              </button>
+            <DropdownMenuTrigger
+              className="group relative inline-flex items-center gap-1 px-2.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:rounded"
+              aria-label="More navigation options"
+            >
+              More
+              <ChevronDown className="size-3.5 transition-transform group-data-[state=open]:rotate-180" />
+              <span className="absolute inset-x-2.5 -bottom-0.5 h-px scale-x-0 bg-gradient-to-r from-primary to-transparent transition-transform duration-300 group-hover:scale-x-100" />
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="start"
@@ -331,4 +327,3 @@ function AuthTriggerMobile({ onClose }: { onClose: () => void }) {
   );
 }
 
-export { Badge };

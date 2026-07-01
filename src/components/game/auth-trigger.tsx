@@ -58,17 +58,14 @@ export function AuthTrigger() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <button
-          type="button"
-          className="group relative flex h-9 items-center gap-1.5 rounded-full border border-border/60 bg-card/40 pl-1 pr-2.5 backdrop-blur-md transition-all hover:border-primary/40 hover:bg-accent/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          aria-label={`Account menu for ${user.name}`}
-        >
-          <span className="grid size-7 place-items-center rounded-full bg-gradient-to-br from-primary/80 to-primary/50 text-[11px] font-bold text-primary-foreground shadow-inner">
-            {initials || <User className="size-3.5" />}
-          </span>
-          <ChevronDown className="size-3 text-muted-foreground transition-transform group-hover:translate-y-0.5" />
-        </button>
+      <DropdownMenuTrigger
+        className="group relative flex h-9 items-center gap-1.5 rounded-full border border-border/60 bg-card/40 pl-1 pr-2.5 backdrop-blur-md transition-all hover:border-primary/40 hover:bg-accent/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        aria-label={`Account menu for ${user.name}`}
+      >
+        <span className="grid size-7 place-items-center rounded-full bg-gradient-to-br from-primary/80 to-primary/50 text-[11px] font-bold text-primary-foreground shadow-inner">
+          {initials || <User className="size-3.5" />}
+        </span>
+        <ChevronDown className="size-3 text-muted-foreground transition-transform group-hover:translate-y-0.5" />
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"

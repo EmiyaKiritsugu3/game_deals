@@ -116,3 +116,37 @@ export interface DealQuery {
   title?: string;
   onSale?: boolean;
 }
+
+/** An item in the user's wishlist. */
+export interface WishlistItem {
+  dealID: string;
+  gameID: string;
+  title: string;
+  thumb: string;
+  salePrice: string;
+  normalPrice: string;
+  savings: string;
+  storeName?: string;
+  storeID?: string;
+  addedAt: number;
+  /** Baseline price captured when wishlisted — used for drop detection. */
+  baselinePrice: number;
+  /** Lowest price seen since wishlisting. */
+  lowestPrice: number;
+  /** Last time price checked. */
+  lastChecked?: number;
+}
+
+/** A detected price-drop event. */
+export interface PriceDropEvent {
+  id: string;
+  dealID: string;
+  gameID: string;
+  title: string;
+  thumb: string;
+  oldPrice: number;
+  newPrice: number;
+  storeName?: string;
+  timestamp: number;
+  dismissed?: boolean;
+}

@@ -1,4 +1,4 @@
-import type { WishlistItem } from '@/store/wishlist';
+import type { WishlistItem } from '@/lib/types';
 import type { Deal, DealWithStore, Store } from './types';
 
 /** Build the minimum payload needed to wishlist a deal. */

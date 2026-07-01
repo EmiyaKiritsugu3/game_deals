@@ -1,5 +1,9 @@
 'use client';
 
+import * as React from 'react';
+
+let nextSuffix = 0;
+
 interface MiniSparklineProps {
   /** Synthesized price timeline (e.g. [retail, mid, lowest, current]). */
   prices: number[];
@@ -29,7 +33,8 @@ export function MiniSparkline({
   className,
   idSuffix = '',
 }: MiniSparklineProps) {
-  const gid = `mini-spark-${idSuffix || crypto.randomUUID()}`;
+  const [stableSuffix] = React.useState(() => idSuffix || `s${nextSuffix++}`);
+  const gid = `mini-spark-${stableSuffix}`;
   const validPrices = prices.filter((p) => p > 0);
   if (validPrices.length < 2) {
     return (

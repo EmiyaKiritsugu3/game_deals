@@ -47,8 +47,7 @@ interface DealEntry {
 }
 
 export function GameDetailDialog({ deal, open, onOpenChange }: GameDetailDialogProps) {
-  // biome-ignore lint/suspicious/noExplicitAny: useGameDetail generic
-  const { data, isLoading, isError } = useGameDetail(deal?.gameID ?? null) as any;
+  const { data, isLoading, isError } = useGameDetail(deal?.gameID ?? null);
   const addRecentlyViewed = useWishlist((s) => s.addRecentlyViewed);
 
   React.useEffect(() => {
@@ -189,7 +188,7 @@ export function GameDetailDialog({ deal, open, onOpenChange }: GameDetailDialogP
                   cheapestEverDate={data.cheapestPriceEver.date * 1000}
                   currentPrice={deal.salePriceNum}
                   retailPrice={deal.normalPriceNum}
-                  storeDeals={(data.deals as DealEntry[] | undefined) ?? []}
+                  storeDeals={(data.deals as unknown as DealEntry[] | undefined) ?? []}
                 />
               )}
 
@@ -201,7 +200,7 @@ export function GameDetailDialog({ deal, open, onOpenChange }: GameDetailDialogP
                     <h3 className="text-sm font-semibold">Compare {data.deals.length} stores</h3>
                   </div>
                   <div className="space-y-2">
-                    {[...(data.deals as DealEntry[])]
+                    {[...(data.deals as unknown as DealEntry[])]
                       .sort((a, b) => a.priceNum - b.priceNum)
                       .map((d, i) => {
                         const isCheapest = i === 0;

@@ -3,7 +3,6 @@
 import { ChevronRight, Flame, Heart, Star, TrendingUp } from 'lucide-react';
 import Image from 'next/image';
 import * as React from 'react';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useDeals } from '@/hooks/use-game-data';
 import { dealRedirectUrl } from '@/lib/deal-utils';
@@ -245,4 +244,3 @@ function TrendingCard({
   );
 }
 
-export { Badge };

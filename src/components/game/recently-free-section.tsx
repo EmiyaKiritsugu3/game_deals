@@ -3,7 +3,6 @@
 import { ChevronRight, Clock, ExternalLink, Gift, Heart, History } from 'lucide-react';
 import Image from 'next/image';
 import * as React from 'react';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { dealRedirectUrl, enrichStore, normaliseDeal } from '@/lib/deal-utils';
 import { FALLBACK_DEALS, FALLBACK_STORES } from '@/lib/fallback';
@@ -229,4 +228,3 @@ function ArchiveCard({
   );
 }
 
-export { Badge };

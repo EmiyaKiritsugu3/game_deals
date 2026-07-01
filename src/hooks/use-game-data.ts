@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
-import type { DealWithStore, SortOption, Store } from '@/lib/types';
+import type { DealWithStore, GameDealEntry, SortOption, Store } from '@/lib/types';
 
 async function fetchJson<T>(url: string): Promise<T> {
   const res = await fetch(url);
@@ -79,7 +79,11 @@ export function useStores() {
 }
 
 export function useGameDetail(gameID: string | null) {
-  return useQuery({
+  return useQuery<{
+    deals: GameDealEntry[];
+    storeDeals: GameDealEntry[];
+    cheapestPriceEver: { price: string; date: number } | null;
+  }>({
     queryKey: ['game-detail', gameID],
     queryFn: () => fetchJson(`/api/game/${gameID}`),
     enabled: !!gameID,

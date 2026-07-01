@@ -299,6 +299,7 @@ function CodeEntryForm({ onBack }: { onBack: () => void }) {
   const magicLinkUrl = useAuth((s) => s.magicLinkUrl);
   const expiresAt = useAuth((s) => s.expiresAt);
   const setDialogView = useAuth((s) => s.setDialogView);
+  const setUser = useAuth((s) => s.setUser);
   const setDevCode = useAuth((s) => s.setDevCode);
   const setMagicLinkUrl = useAuth((s) => s.setMagicLinkUrl);
   const setExpiresAt = useAuth((s) => s.setExpiresAt);
@@ -386,6 +387,7 @@ function CodeEntryForm({ onBack }: { onBack: () => void }) {
         setError(d.error?.toString() || 'This magic link is invalid. Please use the code instead.');
         return;
       }
+      setUser(d.user);
       setDialogView('success');
     } catch {
       setError('Network error. Please try the code instead.');

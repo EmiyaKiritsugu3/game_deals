@@ -98,6 +98,7 @@ export function CommandPalette({ deals, onOpenDetail, open, onOpenChange }: Comm
   const [query, setQuery] = React.useState('');
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [recentSearches, setRecentSearches] = React.useState<string[]>([]);
+  const abortRef = React.useRef<AbortController | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const wishlistHas = useWishlist((s) => s.has);
 
@@ -153,9 +154,12 @@ export function CommandPalette({ deals, onOpenDetail, open, onOpenChange }: Comm
       return;
     }
     setServerLoading(true);
+    abortRef.current?.abort();
+    const ac = new AbortController();
+    abortRef.current = ac;
     const t = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/games?title=${encodeURIComponent(q)}`);
+        const res = await fetch(`/api/games?title=${encodeURIComponent(q)}`, { signal: ac.signal });
         // biome-ignore lint/suspicious/noExplicitAny: API JSON shape
         const data: any = await res.json();
         if (data.games && Array.isArray(data.games)) {
@@ -218,13 +222,18 @@ export function CommandPalette({ deals, onOpenDetail, open, onOpenChange }: Comm
             }));
           setServerResults(newResults);
         }
-      } catch {
+      } catch (err: unknown) {
+        if (err instanceof DOMException && err.name === 'AbortError') return;
+        console.error('Server search failed:', err);
         setServerResults([]);
       } finally {
         setServerLoading(false);
       }
     }, 300); // 300ms debounce
-    return () => clearTimeout(t);
+    return () => {
+      clearTimeout(t);
+      ac.abort();
+    };
   }, [query]); // Only depend on query — local IDs read from ref
 
   // Merge local + server results
@@ -232,10 +241,10 @@ export function CommandPalette({ deals, onOpenDetail, open, onOpenChange }: Comm
     return [...localResults, ...serverResults].slice(0, 8);
   }, [localResults, serverResults]);
 
-  // Reset selection when results change
+  // Reset selection when results count changes
   React.useEffect(() => {
     setSelectedIndex(0);
-  }, []);
+  }, [results.length]);
 
   const handleSelect = (result: CommandResult) => {
     saveRecentSearch(query);

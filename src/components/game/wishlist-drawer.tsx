@@ -37,20 +37,20 @@ export function WishlistDrawer() {
   const avgSavings = totalRetail > 0 ? Math.round((totalSavings / totalRetail) * 100) : 0;
 
   // Track which item is "expanded" (showing the sparkline + price stats).
-  // Default to expanding the first item so users immediately see the feature.
   const [expandedId, setExpandedId] = React.useState<string | null>(null);
   React.useEffect(() => {
-    // Auto-expand the first item when the drawer opens (if nothing expanded yet)
-    if (isOpen && items.length > 0 && !expandedId) {
-      setExpandedId(items[0].dealID);
+    if (isOpen) {
+      setExpandedId((prev) => (prev && items.some((i) => i.dealID === prev) ? prev : items[0]?.dealID ?? null));
+    } else {
+      setExpandedId(null);
     }
-    if (!isOpen) {
-      // keep state so re-opening resumes; but if item was removed, clear it
-      if (expandedId && !items.some((i) => i.dealID === expandedId)) {
-        setExpandedId(null);
-      }
+  }, [isOpen]);
+  // Keep expandedId in sync when items change while drawer is open
+  React.useEffect(() => {
+    if (isOpen && expandedId && !items.some((i) => i.dealID === expandedId)) {
+      setExpandedId(items[0]?.dealID ?? null);
     }
-  }, [isOpen, items, expandedId]);
+  }, [items, isOpen, expandedId]);
 
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
@@ -340,4 +340,3 @@ function formatRelative(timestamp: number): string {
   return `${days}d ago`;
 }
 
-export { cn };
