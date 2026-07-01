@@ -1,0 +1,19 @@
+bunfig.toml
+  s_9985ade9a8bc0c::t_ffa70ad27eaa74 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.6",
+  "base_commit_sha": "4c80ddadfb50368f7248af58f25a6e1842d58a77",
+  "prompts": {},
+  "sessions": {
+    "s_9985ade9a8bc0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d15caf6e-8b1e-4673-82f5-bf620fc6d627",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
