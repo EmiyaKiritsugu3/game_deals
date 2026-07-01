@@ -16,7 +16,10 @@ export const useDensity = create<DensityState>()(
     (set, get) => ({
       density: 'comfortable',
       setDensity: (d) => set({ density: d }),
-      toggle: () => set({ density: get().density === 'comfortable' ? 'compact' : 'comfortable' }),
+      toggle: () =>
+        set({
+          density: get().density === 'comfortable' ? 'compact' : 'comfortable',
+        }),
     }),
     { name: 'deal-grid-density' }
   )

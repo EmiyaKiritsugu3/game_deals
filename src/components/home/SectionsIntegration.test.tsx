@@ -70,7 +70,13 @@ const mockPlaylists = [
 describe('HomeSections integration', () => {
   it('renders all 3 sections together', async () => {
     mockCollections.mockReturnValue([
-      { slug: 'test', title: 'Test Col', description: 'desc', emoji: '🎮', gameIDs: ['1'] },
+      {
+        slug: 'test',
+        title: 'Test Col',
+        description: 'desc',
+        emoji: '🎮',
+        gameIDs: ['1'],
+      },
     ]);
     vi.mocked(getUserPlaylistsAction).mockResolvedValueOnce(mockPlaylists);
     render(

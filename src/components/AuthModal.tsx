@@ -55,7 +55,10 @@ function AuthFormFields({
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
 
   const handleSocialLogin = async (provider: 'google' | 'discord' | 'github') => {
     setIsLoading(true);
@@ -75,12 +78,17 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     setMessage(null);
     const { error } = await getBrowserClient().auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${globalThis.location.origin}/auth/callback` },
+      options: {
+        emailRedirectTo: `${globalThis.location.origin}/auth/callback`,
+      },
     });
     if (error) {
       setMessage({ type: 'error', text: error.message });
     } else {
-      setMessage({ type: 'success', text: 'Check your email for the magic link!' });
+      setMessage({
+        type: 'success',
+        text: 'Check your email for the magic link!',
+      });
     }
     setIsLoading(false);
   };

@@ -6,7 +6,12 @@ const SITE_URL = 'https://gamedeals.com.br';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages = [
-    { url: SITE_URL, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 1 },
+    {
+      url: SITE_URL,
+      lastModified: new Date(),
+      changeFrequency: 'daily' as const,
+      priority: 1,
+    },
     {
       url: `${SITE_URL}/search`,
       lastModified: new Date(),

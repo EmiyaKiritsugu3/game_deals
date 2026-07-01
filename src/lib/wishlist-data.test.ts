@@ -13,7 +13,10 @@ vi.mock('@/utils/pricing', async (importOriginal) => {
 });
 
 const mockGameData: GameDataShape = {
-  info: { title: 'Test Game', thumb: 'https://example.com/capsule_sm_120_123.jpg' },
+  info: {
+    title: 'Test Game',
+    thumb: 'https://example.com/capsule_sm_120_123.jpg',
+  },
   deals: [
     { price: '19.99', retailPrice: '59.99', savings: '66.67', storeID: '1' },
     { price: '29.99', retailPrice: '59.99', savings: '50.01', storeID: '2' },
@@ -100,9 +103,19 @@ describe('buildGameEntry', () => {
     const data: GameDataShape = {
       info: { title: 'Sorted Game', thumb: 'https://example.com/thumb.jpg' },
       deals: [
-        { price: '49.99', retailPrice: '59.99', savings: '16.67', storeID: '2' },
+        {
+          price: '49.99',
+          retailPrice: '59.99',
+          savings: '16.67',
+          storeID: '2',
+        },
         { price: '9.99', retailPrice: '59.99', savings: '83.34', storeID: '1' },
-        { price: '29.99', retailPrice: '59.99', savings: '50.01', storeID: '3' },
+        {
+          price: '29.99',
+          retailPrice: '59.99',
+          savings: '50.01',
+          storeID: '3',
+        },
       ],
       cheapestPriceEver: { price: '5.99' },
     };
@@ -145,7 +158,14 @@ describe('buildGameEntry', () => {
   it('rounds savings to nearest integer', () => {
     const data: GameDataShape = {
       info: { title: 'Savings Game', thumb: 'https://example.com/thumb.jpg' },
-      deals: [{ price: '14.99', retailPrice: '29.99', savings: '50.01667', storeID: '5' }],
+      deals: [
+        {
+          price: '14.99',
+          retailPrice: '29.99',
+          savings: '50.01667',
+          storeID: '5',
+        },
+      ],
       cheapestPriceEver: { price: '9.99' },
     };
     const entry = buildGameEntry(data, 'savings-1');

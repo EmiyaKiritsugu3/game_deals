@@ -130,7 +130,10 @@ export function generatePriceHistory(
 
   if (currentPrice > lowestPrice * 1.05) {
     const lowestMonthIndex = hash % 4;
-    data[lowestMonthIndex] = { name: months[lowestMonthIndex], price: lowestPrice };
+    data[lowestMonthIndex] = {
+      name: months[lowestMonthIndex],
+      price: lowestPrice,
+    };
   }
 
   return data;

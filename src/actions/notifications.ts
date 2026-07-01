@@ -27,7 +27,10 @@ export async function getNotificationsAction(limit = 20) {
     SELECT
       (SELECT json_agg(recent.*) FROM recent) AS rows,
       (SELECT unread FROM cnt) AS unread
-  `)) as unknown as Array<{ rows: Array<typeof notifications.$inferSelect>; unread: number }>;
+  `)) as unknown as Array<{
+    rows: Array<typeof notifications.$inferSelect>;
+    unread: number;
+  }>;
 
   return {
     items: Array.isArray(rows) ? rows : [],

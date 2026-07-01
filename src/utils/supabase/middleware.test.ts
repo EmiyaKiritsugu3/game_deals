@@ -138,11 +138,19 @@ describe('isProtectedPath (boundary matching)', () => {
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = 'test-key';
   });
 
-  const cases: Array<{ input: string; expectedProtected: boolean; label: string }> = [
+  const cases: Array<{
+    input: string;
+    expectedProtected: boolean;
+    label: string;
+  }> = [
     { input: '/wishlist', expectedProtected: true, label: 'exact match' },
     { input: '/wishlist/', expectedProtected: true, label: 'trailing slash' },
     { input: '/wishlist/games', expectedProtected: true, label: 'subpath' },
-    { input: '/wishlistXYZ', expectedProtected: false, label: 'boundary — no false positive' },
+    {
+      input: '/wishlistXYZ',
+      expectedProtected: false,
+      label: 'boundary — no false positive',
+    },
     { input: '/Wishlist', expectedProtected: true, label: 'case insensitive' },
     { input: '/admin', expectedProtected: false, label: 'unprotected path' },
   ];

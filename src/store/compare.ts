@@ -1,5 +1,7 @@
+'use client';
+
 import { create } from 'zustand';
-import type { DealWithStore } from '@/lib/deal-utils';
+import type { DealWithStore } from '@/lib/types';
 
 interface CompareState {
   items: DealWithStore[];
@@ -19,6 +21,7 @@ export const useCompare = create<CompareState>()((set, get) => ({
   items: [],
   isOpen: false,
   maxItems: 3,
+
   toggle: (deal) => {
     const exists = get().items.some((i) => i.dealID === deal.dealID);
     if (exists) {
@@ -27,13 +30,17 @@ export const useCompare = create<CompareState>()((set, get) => ({
       set((s) => ({ items: [...s.items, deal] }));
     }
   },
+
   add: (deal) => {
     if (get().items.length >= get().maxItems) return;
     if (get().items.some((i) => i.dealID === deal.dealID)) return;
     set((s) => ({ items: [...s.items, deal] }));
   },
+
   remove: (dealID) => set((s) => ({ items: s.items.filter((i) => i.dealID !== dealID) })),
+
   has: (dealID) => get().items.some((i) => i.dealID === dealID),
+
   clear: () => set({ items: [] }),
   open: () => set({ isOpen: true }),
   close: () => set({ isOpen: false }),

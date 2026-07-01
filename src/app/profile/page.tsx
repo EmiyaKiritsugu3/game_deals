@@ -72,7 +72,9 @@ export default async function ProfilePage() {
                   <div
                     key={badge.id}
                     className="flex flex-col items-center gap-1 p-3 rounded-lg border"
-                    style={{ borderColor: RARITY_COLORS[badge.rarity ?? 'Common'] ?? '#9ca3af' }}
+                    style={{
+                      borderColor: RARITY_COLORS[badge.rarity ?? 'Common'] ?? '#9ca3af',
+                    }}
                   >
                     {/* biome-ignore lint/security/noDangerouslySetInnerHtml: inline SVG from seed data, trusted content */}
                     <div dangerouslySetInnerHTML={{ __html: badge.iconSvg }} className="w-8 h-8" />

@@ -24,7 +24,9 @@ export const useAlerts = create<AlertState>()(
             ),
           });
         } else {
-          set({ alerts: [...get().alerts, { ...alert, createdAt: Date.now() }] });
+          set({
+            alerts: [...get().alerts, { ...alert, createdAt: Date.now() }],
+          });
         }
       },
       removeAlert: (gameID) =>

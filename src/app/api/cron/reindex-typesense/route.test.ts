@@ -9,7 +9,9 @@ vi.mock('@/lib/cron-auth', () => ({
   verifyCronAuth: (request: Request) => {
     const auth = request.headers.get('authorization');
     if (!auth || auth !== 'Bearer valid-secret') {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+      });
     }
     return null;
   },
@@ -48,7 +50,10 @@ describe('GET /api/cron/reindex-typesense', () => {
     const response = await GET(buildRequest());
     expect(response.status).toBe(500);
     const body = await response.json();
-    expect(body).toMatchObject({ success: false, error: 'Typesense not configured' });
+    expect(body).toMatchObject({
+      success: false,
+      error: 'Typesense not configured',
+    });
   });
 
   it('returns 401 with missing auth header', async () => {

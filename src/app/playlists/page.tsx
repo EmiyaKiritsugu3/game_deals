@@ -47,7 +47,12 @@ function EmptyState() {
 function PlaylistCard({
   playlist,
 }: Readonly<{
-  playlist: { id: string; title: string; description: string | null; isPublic: boolean };
+  playlist: {
+    id: string;
+    title: string;
+    description: string | null;
+    isPublic: boolean;
+  };
 }>) {
   return (
     <Link

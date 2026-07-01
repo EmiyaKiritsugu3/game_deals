@@ -17,9 +17,10 @@ afterAll(() => {
 
 const { redirectMock, getUserMock, profileMock } = vi.hoisted(() => ({
   redirectMock: vi.fn(),
-  getUserMock: vi
-    .fn()
-    .mockResolvedValue({ data: { user: null }, error: { message: 'Not authenticated' } }),
+  getUserMock: vi.fn().mockResolvedValue({
+    data: { user: null },
+    error: { message: 'Not authenticated' },
+  }),
   profileMock: vi.fn().mockResolvedValue({
     stats: { xp: 0, level: 0, optInLeaderboard: false },
     badges: [],
@@ -35,7 +36,10 @@ vi.mock('next/navigation', () => ({
 }));
 
 vi.mock('next/headers', () => ({
-  cookies: () => ({ getAll: () => [{ name: 'sb-token', value: 'token' }], set: () => {} }),
+  cookies: () => ({
+    getAll: () => [{ name: 'sb-token', value: 'token' }],
+    set: () => {},
+  }),
 }));
 
 vi.mock('@/utils/supabase/server', () => ({
@@ -44,7 +48,12 @@ vi.mock('@/utils/supabase/server', () => ({
 
 vi.mock('@/services/gamification', () => ({
   getUserProfile: profileMock,
-  RARITY_COLORS: { Common: '#9ca3af', Uncommon: '#22c55e', Rare: '#3b82f6', Epic: '#a855f7' },
+  RARITY_COLORS: {
+    Common: '#9ca3af',
+    Uncommon: '#22c55e',
+    Rare: '#3b82f6',
+    Epic: '#a855f7',
+  },
 }));
 
 vi.mock('@/actions/gamification', () => ({
@@ -53,7 +62,11 @@ vi.mock('@/actions/gamification', () => ({
 }));
 
 vi.mock('@/db', () => ({
-  db: { insert: () => ({ values: () => ({ onConflictDoUpdate: () => Promise.resolve({}) }) }) },
+  db: {
+    insert: () => ({
+      values: () => ({ onConflictDoUpdate: () => Promise.resolve({}) }),
+    }),
+  },
 }));
 
 describe('ProfilePage', () => {
@@ -100,7 +113,12 @@ describe('ProfilePage', () => {
         },
       ],
       recentActivity: [
-        { id: 'a1', actionType: 'playlist_create', details: null, createdAt: new Date() },
+        {
+          id: 'a1',
+          actionType: 'playlist_create',
+          details: null,
+          createdAt: new Date(),
+        },
       ],
     });
 

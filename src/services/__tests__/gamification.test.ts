@@ -222,7 +222,14 @@ describe('getUserProfile', () => {
             awardedAt: new Date(),
           },
         ],
-        [{ id: 'a1', actionType: 'wishlist_add', details: null, createdAt: new Date() }],
+        [
+          {
+            id: 'a1',
+            actionType: 'wishlist_add',
+            details: null,
+            createdAt: new Date(),
+          },
+        ],
       ],
     });
 

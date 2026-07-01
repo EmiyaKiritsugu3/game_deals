@@ -32,10 +32,15 @@ vi.mock('@/store/wishlist', () => ({
 
 vi.mock('@/store/compare', () => ({
   useCompare: (selector: (s: Record<string, unknown>) => unknown) =>
-    selector({ toggle: mockCompareToggle, has: mockCompareHas, items: [], maxItems: 3 }),
+    selector({
+      toggle: mockCompareToggle,
+      has: mockCompareHas,
+      items: [],
+      maxItems: 3,
+    }),
 }));
 
-import type { DealWithStore } from '@/lib/deal-utils';
+import type { DealWithStore } from '@/lib/types';
 import { DealCard, DealCardSkeleton } from './deal-card';
 
 const BASE_DEAL: DealWithStore = {
@@ -131,7 +136,7 @@ describe('interaction buttons', () => {
     const { container } = render(<DealCard deal={BASE_DEAL} />);
     const btn = container.querySelector('[aria-label="Add to wishlist"]') as HTMLElement;
     fireEvent.click(btn);
-    expect(mockToggle).toHaveBeenCalledWith('test-1');
+    expect(mockToggle).toHaveBeenCalledWith(expect.objectContaining({ dealID: 'test-1' }));
   });
 
   it('shows wishlist pressed state', () => {

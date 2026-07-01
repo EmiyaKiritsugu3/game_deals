@@ -65,16 +65,76 @@ export interface LeaderboardEntry {
 
 /** consumed by seedBadges() at deploy time */
 const BADGE_DEFS: BadgeDef[] = [
-  { name: 'First Wish', actionType: 'wishlist_add', count: 1, xp: 10, rarity: 'Common' },
-  { name: 'Wishlist Collector', actionType: 'wishlist_add', count: 10, xp: 50, rarity: 'Uncommon' },
-  { name: 'Wishlist Hoarder', actionType: 'wishlist_add', count: 50, xp: 150, rarity: 'Rare' },
-  { name: 'Playlist Creator', actionType: 'playlist_create', count: 1, xp: 25, rarity: 'Common' },
-  { name: 'Playlist Master', actionType: 'playlist_create', count: 5, xp: 75, rarity: 'Uncommon' },
-  { name: 'Playlist Legend', actionType: 'playlist_create', count: 10, xp: 150, rarity: 'Rare' },
-  { name: 'Bargain Hunter', actionType: 'alert_create', count: 1, xp: 15, rarity: 'Common' },
-  { name: 'Deal Hawk', actionType: 'alert_create', count: 5, xp: 75, rarity: 'Uncommon' },
-  { name: 'Price Watcher', actionType: 'alert_create', count: 15, xp: 150, rarity: 'Rare' },
-  { name: 'All-Rounder', actionType: '__meta__', count: 3, xp: 100, rarity: 'Epic' },
+  {
+    name: 'First Wish',
+    actionType: 'wishlist_add',
+    count: 1,
+    xp: 10,
+    rarity: 'Common',
+  },
+  {
+    name: 'Wishlist Collector',
+    actionType: 'wishlist_add',
+    count: 10,
+    xp: 50,
+    rarity: 'Uncommon',
+  },
+  {
+    name: 'Wishlist Hoarder',
+    actionType: 'wishlist_add',
+    count: 50,
+    xp: 150,
+    rarity: 'Rare',
+  },
+  {
+    name: 'Playlist Creator',
+    actionType: 'playlist_create',
+    count: 1,
+    xp: 25,
+    rarity: 'Common',
+  },
+  {
+    name: 'Playlist Master',
+    actionType: 'playlist_create',
+    count: 5,
+    xp: 75,
+    rarity: 'Uncommon',
+  },
+  {
+    name: 'Playlist Legend',
+    actionType: 'playlist_create',
+    count: 10,
+    xp: 150,
+    rarity: 'Rare',
+  },
+  {
+    name: 'Bargain Hunter',
+    actionType: 'alert_create',
+    count: 1,
+    xp: 15,
+    rarity: 'Common',
+  },
+  {
+    name: 'Deal Hawk',
+    actionType: 'alert_create',
+    count: 5,
+    xp: 75,
+    rarity: 'Uncommon',
+  },
+  {
+    name: 'Price Watcher',
+    actionType: 'alert_create',
+    count: 15,
+    xp: 150,
+    rarity: 'Rare',
+  },
+  {
+    name: 'All-Rounder',
+    actionType: '__meta__',
+    count: 3,
+    xp: 100,
+    rarity: 'Epic',
+  },
 ];
 
 // --- Helpers ---
@@ -202,7 +262,10 @@ export async function processAction(
 export async function getUserProfile(userId: string): Promise<UserProfile | null> {
   try {
     const [statsRow] = await db
-      .select({ xp: userStats.xp, optInLeaderboard: userStats.optInLeaderboard })
+      .select({
+        xp: userStats.xp,
+        optInLeaderboard: userStats.optInLeaderboard,
+      })
       .from(userStats)
       .where(eq(userStats.userId, userId));
 

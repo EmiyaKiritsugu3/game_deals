@@ -115,7 +115,9 @@ describe('usePlaylistMutations', () => {
       result.current.addMutation.mutate('p1');
     });
 
-    expect(mocks.invalidateMock).toHaveBeenCalledWith({ queryKey: ['playlists'] });
+    expect(mocks.invalidateMock).toHaveBeenCalledWith({
+      queryKey: ['playlists'],
+    });
   });
 
   it('creatMutation throws when no user', async () => {
@@ -153,7 +155,9 @@ describe('usePlaylistMutations', () => {
 
     expect(mocks.createPlaylistAction).toHaveBeenCalledWith('user-1', 'My List');
     expect(mocks.addGameToPlaylistAction).toHaveBeenCalledWith('new-list', 'g1');
-    expect(mocks.invalidateMock).toHaveBeenCalledWith({ queryKey: ['playlists'] });
+    expect(mocks.invalidateMock).toHaveBeenCalledWith({
+      queryKey: ['playlists'],
+    });
   });
 
   it('removeGameMutation calls removeGameFromPlaylistAction', async () => {
@@ -164,11 +168,16 @@ describe('usePlaylistMutations', () => {
     });
 
     await act(async () => {
-      result.current.removeGameMutation.mutate({ playlistId: 'p1', gameId: 'g1-uuid' });
+      result.current.removeGameMutation.mutate({
+        playlistId: 'p1',
+        gameId: 'g1-uuid',
+      });
     });
 
     expect(mocks.removeGameFromPlaylistAction).toHaveBeenCalledWith('p1', 'g1-uuid');
-    expect(mocks.invalidateMock).toHaveBeenCalledWith({ queryKey: ['playlists'] });
+    expect(mocks.invalidateMock).toHaveBeenCalledWith({
+      queryKey: ['playlists'],
+    });
   });
 
   it('deletePlaylistMutation calls deletePlaylistAction', async () => {
@@ -183,7 +192,9 @@ describe('usePlaylistMutations', () => {
     });
 
     expect(mocks.deletePlaylistAction).toHaveBeenCalledWith('p1');
-    expect(mocks.invalidateMock).toHaveBeenCalledWith({ queryKey: ['playlists'] });
+    expect(mocks.invalidateMock).toHaveBeenCalledWith({
+      queryKey: ['playlists'],
+    });
   });
 
   it('updatePlaylistMutation calls updatePlaylistAction', async () => {
@@ -199,6 +210,8 @@ describe('usePlaylistMutations', () => {
     });
 
     expect(mocks.updatePlaylistAction).toHaveBeenCalledWith('p1', data);
-    expect(mocks.invalidateMock).toHaveBeenCalledWith({ queryKey: ['playlists'] });
+    expect(mocks.invalidateMock).toHaveBeenCalledWith({
+      queryKey: ['playlists'],
+    });
   });
 });

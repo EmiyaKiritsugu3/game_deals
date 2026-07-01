@@ -39,7 +39,9 @@ export async function searchGames(query: string, limit = 10) {
   );
 
   if (!response.ok) return [];
-  const data = (await response.json()) as { hits: Array<Record<string, unknown>> };
+  const data = (await response.json()) as {
+    hits: Array<Record<string, unknown>>;
+  };
   return data.hits || [];
 }
 
@@ -65,7 +67,10 @@ export async function indexGamesBatch(
   const protocol = process.env.TYPESENSE_PROTOCOL || 'https';
   const apiKey = process.env.TYPESENSE_ADMIN_KEY || '';
 
-  const documents = games.map((g) => ({ ...g, cheapestPrice: Number.parseFloat(g.cheapest) || 0 }));
+  const documents = games.map((g) => ({
+    ...g,
+    cheapestPrice: Number.parseFloat(g.cheapest) || 0,
+  }));
 
   const url = `${protocol}://${host}:${port}/collections/${TYPESENSE_COLLECTION_NAME}/documents/import?action=upsert`;
 

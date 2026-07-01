@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PopularDealsGrid } from '@/components/home/PopularDealsGrid';
 import { COLLECTIONS } from '@/data/collections';
-import { type DealWithStore, normaliseDeal } from '@/lib/deal-utils';
+import { normaliseDeal } from '@/lib/deal-utils';
+import type { DealWithStore } from '@/lib/types';
 import { getGamesBatch } from '@/services/api';
 import type { Deal, GameDetails } from '@/types/game';
 

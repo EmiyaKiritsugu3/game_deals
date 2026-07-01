@@ -24,7 +24,9 @@ describe('useUserAlerts', () => {
 
   it('fetches alerts when enabled is true', async () => {
     mockGetUserAlertsAction.mockResolvedValue([{ gameId: '123' }]);
-    const { result } = renderHook(() => useUserAlerts(true), { wrapper: Wrapper });
+    const { result } = renderHook(() => useUserAlerts(true), {
+      wrapper: Wrapper,
+    });
     await vi.waitFor(() => {
       expect(result.current.data).toEqual([{ gameId: '123' }]);
     });
@@ -37,7 +39,9 @@ describe('useUserAlerts', () => {
   });
 
   it('uses the correct query key and staleTime', () => {
-    const { result } = renderHook(() => useUserAlerts(true), { wrapper: Wrapper });
+    const { result } = renderHook(() => useUserAlerts(true), {
+      wrapper: Wrapper,
+    });
     expect(result.current.data).toBeUndefined();
   });
 });

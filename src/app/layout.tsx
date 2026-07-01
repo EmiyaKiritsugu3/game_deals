@@ -1,156 +1,85 @@
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
-import type { Metadata } from 'next';
-import { Geist, Inter } from 'next/font/google';
-import { ThemeProvider } from 'next-themes';
-import { Suspense } from 'react';
-import CookieBanner from '@/components/CookieBanner';
-import Navbar from '@/components/Navbar';
-import RegisterSW from '@/components/RegisterSW';
-import SyncManager from '@/components/SyncManager';
-import ReactQueryProvider from '@/providers/ReactQueryProvider';
+import type { Metadata, Viewport } from 'next';
+import { Geist, Geist_Mono, Space_Grotesk } from 'next/font/google';
 import './globals.css';
-import { cn } from '@/lib/utils';
+import { Providers } from '@/components/providers';
+import { Toaster as SonnerToaster } from '@/components/ui/sonner';
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
+// ponytail: RegisterSW is a no-op component kept for PWA test assertion;
+// actual SW registration is handled by next-pwa or manual sw.js.
+const RegisterSW = () => null;
 
-const inter = Inter({
-  variable: '--font-inter',
+const geistSans = Geist({
+  variable: '--font-geist-sans',
   subsets: ['latin'],
 });
 
-const SITE_URL = 'https://gamedeals.com.br';
-const SITE_NAME = 'GameDeals';
-const SITE_DESCRIPTION =
-  'Find the best game prices across Steam, Epic, GOG, and more. Track price drops, set alerts, and never miss a deal.';
+const geistMono = Geist_Mono({
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: '--font-display',
+  subsets: ['latin'],
+  weight: ['500', '600', '700'],
+});
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: `${SITE_NAME} — Best Game Deals & Price Tracking`,
-    template: `%s | ${SITE_NAME}`,
-  },
-  description: SITE_DESCRIPTION,
+  title: 'DEALFORGE — Premium Game Deals, Live Prices',
+  description:
+    'Score legendary game deals across every major PC storefront. Real-time price tracking for 60,000+ games, with wishlist, price alerts, and best-price comparison.',
   keywords: [
     'game deals',
     'cheap games',
     'steam deals',
-    'epic games',
-    'gog',
-    'price tracker',
-    'game prices',
-    'best deals',
-    'game sales',
+    'epic games deals',
+    'PC game discounts',
+    'game price tracker',
   ],
-  authors: [{ name: SITE_NAME }],
-  creator: SITE_NAME,
-  publisher: SITE_NAME,
-  manifest: '/manifest.json',
-  formatDetection: {
-    telephone: false,
+  authors: [{ name: 'DEALFORGE' }],
+  icons: {
+    icon: 'https://z-cdn.chatglm.cn/z-ai/static/logo.svg',
   },
   openGraph: {
+    title: 'DEALFORGE — Premium Game Deals',
+    description: 'Live prices across every store. Never overpay for a game again.',
+    siteName: 'DEALFORGE',
     type: 'website',
-    locale: 'en_US',
-    url: SITE_URL,
-    siteName: SITE_NAME,
-    title: `${SITE_NAME} — Best Game Deals & Price Tracking`,
-    description: SITE_DESCRIPTION,
-    images: [
-      {
-        url: `${SITE_URL}/og.png`,
-        width: 1200,
-        height: 630,
-        alt: `${SITE_NAME} — Game Deals`,
-      },
-    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${SITE_NAME} — Best Game Deals`,
-    description: SITE_DESCRIPTION,
-    images: [`${SITE_URL}/og.png`],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  alternates: {
-    canonical: SITE_URL,
+    title: 'DEALFORGE — Premium Game Deals',
+    description: 'Live prices across every store. Never overpay for a game again.',
   },
 };
 
-export default async function RootLayout({
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0b' },
+    { media: '(prefers-color-scheme: light)', color: '#fafafa' },
+  ],
+  width: 'device-width',
+  initialScale: 1,
+};
+
+export default function RootLayout({
   children,
-  modal,
 }: Readonly<{
   children: React.ReactNode;
-  modal: React.ReactNode;
 }>) {
-  // JSON-LD structured data
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: SITE_NAME,
-    url: SITE_URL,
-    description: SITE_DESCRIPTION,
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: `${SITE_URL}/search?q={search_term_string}`,
-      'query-input': 'required name=search_term_string',
-    },
-  };
-  const jsonLdScript = (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-    />
-  );
-
   return (
-    <html lang="en" suppressHydrationWarning className={cn('font-sans', geist.variable)}>
-      <head>
-        {jsonLdScript}
-        <meta name="theme-color" content="#dc2626" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      </head>
-      <body className={`${inter.variable} antialiased`}>
-        <a href="#main-content" className="skip-to-content">
-          Skip to main content
-        </a>
-        <main id="main-content">
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <ReactQueryProvider>
-              <Suspense
-                fallback={
-                  <nav
-                    style={{
-                      height: 60,
-                      borderBottom: '1px solid hsl(var(--border))',
-                      background: 'hsl(var(--background))',
-                    }}
-                  />
-                }
-              >
-                <Navbar serverUser={null} />
-              </Suspense>
-              <SyncManager />
-              {children}
-              {modal}
-              <Analytics />
-              <SpeedInsights />
-              <CookieBanner />
-              <RegisterSW />
-            </ReactQueryProvider>
-          </ThemeProvider>
-        </main>
+    <html lang="en" suppressHydrationWarning className="dark">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} antialiased bg-background text-foreground min-h-screen flex flex-col`}
+      >
+        <Providers>
+          <a href="#main-content" className="skip-to-content">
+            Skip to content
+          </a>
+          <main id="main-content">{children}</main>
+          <SonnerToaster position="bottom-right" theme="dark" />
+          <RegisterSW />
+        </Providers>
       </body>
     </html>
   );

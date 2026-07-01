@@ -15,7 +15,12 @@ vi.mock('@/lib/supabase-browser', () => ({
 }));
 
 function createMockSupabaseUser(
-  overrides: Partial<{ id: string; email: string; fullName: string; avatarUrl: string }> = {}
+  overrides: Partial<{
+    id: string;
+    email: string;
+    fullName: string;
+    avatarUrl: string;
+  }> = {}
 ) {
   return {
     id: overrides.id ?? 'test-user-1',

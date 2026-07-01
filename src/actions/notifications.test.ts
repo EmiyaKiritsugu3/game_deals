@@ -75,7 +75,9 @@ describe('getNotificationsAction', () => {
     execute.mockResolvedValueOnce([{ rows: [], unread: 0 }]);
     await getNotificationsAction(5);
     expect(execute).toHaveBeenCalledTimes(1);
-    const sqlObj = execute.mock.calls[0][0] as { queryChunks: Array<{ value: string[] } | number> };
+    const sqlObj = execute.mock.calls[0][0] as {
+      queryChunks: Array<{ value: string[] } | number>;
+    };
     const sqlText = sqlObj.queryChunks
       .map((c: { value: string[] } | number) =>
         typeof c === 'object' ? (c.value[0] ?? '') : String(c)

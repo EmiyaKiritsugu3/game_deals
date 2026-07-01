@@ -106,7 +106,9 @@ export async function getStoresAction(): Promise<Record<string, string>> {
   const map: Record<string, string> = {};
 
   try {
-    const res = await fetch(`${BASE_URL}/stores`, { next: { revalidate: 86400 } });
+    const res = await fetch(`${BASE_URL}/stores`, {
+      next: { revalidate: 86400 },
+    });
     if (res.ok) {
       const stores = (await res.json()) as Store[];
       for (const s of stores) {
@@ -137,9 +139,11 @@ export async function getGameAction(id: string): Promise<GameDetails | null> {
  * Para lógica de negócio (keyshops, DRM, pricing), use services/api.ts.
  */
 
-async function performIngestion(
-  deals: CheapSharkDeal[]
-): Promise<{ dealsIngested: number; gamesUpserted: number; pricesRecorded: number }> {
+async function performIngestion(deals: CheapSharkDeal[]): Promise<{
+  dealsIngested: number;
+  gamesUpserted: number;
+  pricesRecorded: number;
+}> {
   const idMap = await upsertGames(deals);
   let dealsIngested = 0;
   let pricesRecorded = 0;
@@ -186,7 +190,12 @@ export async function ingestPricesAction(): Promise<{
   try {
     const deals = await fetchCheapSharkDeals();
     if (!deals || deals.length === 0) {
-      return { success: true, dealsIngested: 0, gamesUpserted: 0, pricesRecorded: 0 };
+      return {
+        success: true,
+        dealsIngested: 0,
+        gamesUpserted: 0,
+        pricesRecorded: 0,
+      };
     }
 
     const { dealsIngested, gamesUpserted, pricesRecorded } = await performIngestion(deals);

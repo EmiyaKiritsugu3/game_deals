@@ -58,7 +58,9 @@ describe('useWishlistSync', () => {
     mockIsLoggedIn = false;
     mockWishlist = [];
     mockGetBrowserClient.mockReturnValue({
-      from: vi.fn().mockReturnValue({ upsert: vi.fn().mockResolvedValue({ error: null }) }),
+      from: vi.fn().mockReturnValue({
+        upsert: vi.fn().mockResolvedValue({ error: null }),
+      }),
     });
   });
 
@@ -123,7 +125,10 @@ describe('useWishlistSync', () => {
     mockUser = { id: 'u1' };
     mockIsLoggedIn = true;
     mockWishlist = ['111', '222'];
-    mockResolveGameUuidsAction.mockResolvedValue({ '111': 'uuid-1', '222': 'uuid-2' });
+    mockResolveGameUuidsAction.mockResolvedValue({
+      '111': 'uuid-1',
+      '222': 'uuid-2',
+    });
 
     const mockUpsert = vi.fn().mockResolvedValue({ error: null });
     mockGetBrowserClient.mockReturnValue({

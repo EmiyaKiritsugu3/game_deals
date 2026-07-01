@@ -3,7 +3,7 @@
  */
 
 import { fireEvent, render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 // Mock child components
 vi.mock('@/components/game/deal-card', () => ({
@@ -45,23 +45,10 @@ vi.mock('@/components/ui/tooltip', () => ({
 
 vi.mock('lucide-react', () => ({
   Gamepad2: () => <div data-testid="icon-gamepad" />,
-  Grid2x2: () => <div data-testid="icon-grid" />,
   Inbox: () => <div data-testid="icon-inbox" />,
-  Rows3: () => <div data-testid="icon-rows" />,
 }));
 
-// Store mock
-const mockStore = vi.hoisted(() => ({
-  density: 'comfortable' as 'comfortable' | 'compact',
-  setDensity: vi.fn(),
-  toggle: vi.fn(),
-}));
-
-vi.mock('@/store/density', () => ({
-  useDensity: (selector: (s: typeof mockStore) => unknown) => selector(mockStore),
-}));
-
-import type { DealWithStore } from '@/lib/deal-utils';
+import type { DealWithStore } from '@/lib/types';
 import { DealGrid, type DealGridItem } from './deal-grid';
 
 const makeDeal = (id: string, overrides?: Record<string, unknown>) => ({
@@ -88,10 +75,6 @@ const makeDeal = (id: string, overrides?: Record<string, unknown>) => ({
 });
 
 describe('DealGrid', () => {
-  beforeEach(() => {
-    mockStore.density = 'comfortable';
-  });
-
   describe('loading state', () => {
     it('renders 8 skeletons when loading', () => {
       render(<DealGrid deals={[]} loading error={false} />);
@@ -106,8 +89,7 @@ describe('DealGrid', () => {
     });
 
     it('renders skeletons with compact=true when density is compact', () => {
-      mockStore.density = 'compact';
-      render(<DealGrid deals={[]} loading error={false} />);
+      render(<DealGrid deals={[]} loading error={false} density="compact" />);
       for (const s of screen.getAllByTestId('deal-card-skeleton')) {
         expect(s).toHaveAttribute('data-compact', 'true');
       }
@@ -206,83 +188,6 @@ describe('DealGrid', () => {
       );
       fireEvent.click(screen.getByTestId('share'));
       expect(onShare).toHaveBeenCalledWith(deals[0]);
-    });
-  });
-
-  describe('density toggle', () => {
-    it('renders density toggle button', () => {
-      render(
-        <DealGrid
-          deals={[makeDeal('1')] as unknown as DealWithStore[]}
-          loading={false}
-          error={false}
-        />
-      );
-      expect(screen.getByLabelText('Switch to compact layout')).toBeInTheDocument();
-    });
-
-    it('calls onDensityChange when prop provided', () => {
-      const onDensityChange = vi.fn();
-      render(
-        <DealGrid
-          deals={[makeDeal('1')] as unknown as DealWithStore[]}
-          loading={false}
-          error={false}
-          density="comfortable"
-          onDensityChange={onDensityChange}
-        />
-      );
-      fireEvent.click(screen.getByLabelText('Switch to compact layout'));
-      expect(onDensityChange).toHaveBeenCalledWith('compact');
-    });
-
-    it('calls store toggle when no onDensityChange prop', () => {
-      render(
-        <DealGrid
-          deals={[makeDeal('1')] as unknown as DealWithStore[]}
-          loading={false}
-          error={false}
-        />
-      );
-      fireEvent.click(screen.getByLabelText('Switch to compact layout'));
-      expect(mockStore.toggle).toHaveBeenCalledOnce();
-    });
-
-    it('shows compact icon when density is compact', () => {
-      mockStore.density = 'compact';
-      render(
-        <DealGrid
-          deals={[makeDeal('1')] as unknown as DealWithStore[]}
-          loading={false}
-          error={false}
-        />
-      );
-      expect(screen.getByTestId('icon-rows')).toBeInTheDocument();
-      expect(screen.getByLabelText('Switch to comfortable layout')).toBeInTheDocument();
-    });
-
-    it('shows comfortable icon when density is comfortable', () => {
-      render(
-        <DealGrid
-          deals={[makeDeal('1')] as unknown as DealWithStore[]}
-          loading={false}
-          error={false}
-        />
-      );
-      expect(screen.getByTestId('icon-grid')).toBeInTheDocument();
-    });
-
-    it('applies compact grid classes via prop override', () => {
-      const { container } = render(
-        <DealGrid
-          deals={[makeDeal('1')] as unknown as DealWithStore[]}
-          loading={false}
-          error={false}
-          density="compact"
-        />
-      );
-      const grid = container.querySelector('.grid-cols-2');
-      expect(grid).toBeInTheDocument();
     });
   });
 });

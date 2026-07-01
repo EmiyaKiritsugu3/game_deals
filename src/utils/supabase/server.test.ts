@@ -72,8 +72,12 @@ describe('createClient', () => {
     ]);
 
     expect(mockSet).toHaveBeenCalledTimes(2);
-    expect(mockSet).toHaveBeenCalledWith('sb-access', 'token-1', { httpOnly: true });
-    expect(mockSet).toHaveBeenCalledWith('sb-refresh', 'token-2', { path: '/' });
+    expect(mockSet).toHaveBeenCalledWith('sb-access', 'token-1', {
+      httpOnly: true,
+    });
+    expect(mockSet).toHaveBeenCalledWith('sb-refresh', 'token-2', {
+      path: '/',
+    });
   });
 
   it('setAll swallows errors from cookie store (Server Component context)', async () => {

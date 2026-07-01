@@ -45,7 +45,9 @@ export function usePlaylistMutations(gameId: string) {
     },
     onSuccess: (_data, params) => {
       queryClient.invalidateQueries({ queryKey: ['playlists'] });
-      queryClient.invalidateQueries({ queryKey: ['playlist', params.playlistId] });
+      queryClient.invalidateQueries({
+        queryKey: ['playlist', params.playlistId],
+      });
     },
   });
 

@@ -7,7 +7,10 @@ import SyncManager from './SyncManager';
 // -- shared mock state (mutable across test cases and renders) --
 const mockGetUserWishlistAction = vi.fn<() => Promise<string[]>>();
 let mockAuthState: { user: { id: string } | null; isLoggedIn: boolean };
-let mockWishlistState: { wishlist: string[]; setWishlist: ReturnType<typeof vi.fn> };
+let mockWishlistState: {
+  wishlist: string[];
+  setWishlist: ReturnType<typeof vi.fn>;
+};
 
 vi.mock('@/actions/wishlist', () => ({
   getUserWishlistAction: () => mockGetUserWishlistAction(),

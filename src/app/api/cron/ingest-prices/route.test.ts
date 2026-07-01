@@ -9,7 +9,9 @@ vi.mock('@/lib/cron-auth', () => ({
   verifyCronAuth: (request: Request) => {
     const auth = request.headers.get('authorization');
     if (!auth || auth !== 'Bearer valid-secret') {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+      });
     }
     return null;
   },
@@ -37,7 +39,11 @@ describe('GET /api/cron/ingest-prices', () => {
     const response = await GET(buildRequest());
     expect(response.status).toBe(200);
     const body = await response.json();
-    expect(body).toMatchObject({ success: true, dealsIngested: 42, gamesUpserted: 10 });
+    expect(body).toMatchObject({
+      success: true,
+      dealsIngested: 42,
+      gamesUpserted: 10,
+    });
   });
 
   it('returns 500 on ingestion failure', async () => {
@@ -48,7 +54,10 @@ describe('GET /api/cron/ingest-prices', () => {
     const response = await GET(buildRequest());
     expect(response.status).toBe(500);
     const body = await response.json();
-    expect(body).toMatchObject({ success: false, error: 'CheapShark returned 429' });
+    expect(body).toMatchObject({
+      success: false,
+      error: 'CheapShark returned 429',
+    });
   });
 
   it('returns 401 with missing auth header', async () => {
@@ -70,6 +79,10 @@ describe('GET /api/cron/ingest-prices', () => {
     const response = await GET(buildRequest());
     expect(response.status).toBe(200);
     const body = await response.json();
-    expect(body).toMatchObject({ success: true, dealsIngested: 0, gamesUpserted: 0 });
+    expect(body).toMatchObject({
+      success: true,
+      dealsIngested: 0,
+      gamesUpserted: 0,
+    });
   });
 });

@@ -17,7 +17,10 @@ export function formatChartData(
 ): PriceHistoryPoint[] {
   if (realData && realData.length > 2) {
     return realData.map((d) => ({
-      name: new Date(d.bucket).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      name: new Date(d.bucket).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+      }),
       price: d.avg_price || d.min_price,
     }));
   }

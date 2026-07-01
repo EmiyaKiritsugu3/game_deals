@@ -346,7 +346,11 @@ describe('getGame', () => {
   });
 
   const sampleGameDetails = {
-    info: { title: 'Test Game', steamAppID: '12345', thumb: 'https://example.com/thumb.jpg' },
+    info: {
+      title: 'Test Game',
+      steamAppID: '12345',
+      thumb: 'https://example.com/thumb.jpg',
+    },
     cheapestPriceEver: { price: '9.99', date: 1600000000 },
     deals: [
       {
@@ -431,8 +435,12 @@ describe('getGamesBatch', () => {
 
   it('chunks requests to CheapShark when more than 25 IDs', async () => {
     const ids = Array.from({ length: 30 }, (_, i) => String(i + 1));
-    mockFetchGamesBatchFromCheapShark.mockResolvedValueOnce({ '1': sampleGameDetails1 });
-    mockFetchGamesBatchFromCheapShark.mockResolvedValueOnce({ '26': sampleGameDetails2 });
+    mockFetchGamesBatchFromCheapShark.mockResolvedValueOnce({
+      '1': sampleGameDetails1,
+    });
+    mockFetchGamesBatchFromCheapShark.mockResolvedValueOnce({
+      '26': sampleGameDetails2,
+    });
 
     const result = await getGamesBatch(ids);
 
@@ -447,7 +455,9 @@ describe('getGamesBatch', () => {
   });
 
   it('enriches games fetched in batch', async () => {
-    mockFetchGamesBatchFromCheapShark.mockResolvedValueOnce({ '1': sampleGameDetails1 });
+    mockFetchGamesBatchFromCheapShark.mockResolvedValueOnce({
+      '1': sampleGameDetails1,
+    });
     await getGamesBatch(['1']);
 
     expect(mockEnrichWithGreyMarketDeals).toHaveBeenCalledWith(sampleGameDetails1, '1');
