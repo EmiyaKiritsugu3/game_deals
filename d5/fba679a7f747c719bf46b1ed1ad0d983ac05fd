@@ -1,0 +1,61 @@
+src/hooks/use-game-data.ts
+  s_b7109fbe02af0e::t_7f5dcace8e4b85 5
+  s_b7109fbe02af0e::t_0889a401ed3908 82,86
+  s_b7109fbe02af0e::t_d6fb690ba0b773 83-85
+src/components/game/preferences-panel.tsx
+  s_b7109fbe02af0e::t_41ba2993768c6e 129-132
+src/lib/types.ts
+  s_b7109fbe02af0e::t_77d7f9906bb4be 119-152
+src/components/game/wishlist-drawer.tsx
+  s_b7109fbe02af0e::t_f2dfa36d353842 42-45,47-51,53
+src/components/game/site-header.tsx
+  s_b7109fbe02af0e::t_fe979096368da3 117-123
+src/store/wishlist.ts
+  s_b7109fbe02af0e::t_4a06d74538cff7 1
+src/components/game/auth-dialog.tsx
+  s_b7109fbe02af0e::t_5b9529e15a196c 390
+  s_b7109fbe02af0e::t_2549bf2ab63acc 302
+src/lib/deal-utils.ts
+  s_b7109fbe02af0e::t_e36296f714ef25 1
+src/components/game/price-drop-alerts.tsx
+  s_b7109fbe02af0e::t_9e163e2663077d 105-107,113,125
+src/components/game/command-palette.tsx
+  s_b7109fbe02af0e::t_d2b7b2c9723664 244,247
+  s_b7109fbe02af0e::t_27c9f5ff58c2c7 157-159,162,225-227,233-236
+  s_b7109fbe02af0e::t_bcf417366869fa 101
+src/components/game/mini-sparkline.tsx
+  s_b7109fbe02af0e::t_cb082b89efabb7 3-6
+  s_b7109fbe02af0e::t_d779e8d64e0228 36-37
+src/components/game/hero-section.tsx
+  s_b7109fbe02af0e::t_8fc6e0977a9a43 178-180,182-184
+src/components/game/cookie-consent.tsx
+  s_b7109fbe02af0e::t_3f6623603142de 114
+src/components/providers.tsx
+  s_b7109fbe02af0e::t_ed5063bf888f72 6-37
+  s_b7109fbe02af0e::t_22b31435497a72 56-59
+src/components/game/game-detail-dialog.tsx
+  s_b7109fbe02af0e::t_c6167eb5e17cbe 191
+  s_b7109fbe02af0e::t_0be0c5078e3f5f 203
+  s_b7109fbe02af0e::t_a8b8df1c937750 50
+src/store/wishlistStore.ts
+  s_b7109fbe02af0e::t_9274292c315782 1-2
+  s_b7109fbe02af0e::t_768ebd525a0a9e 5
+src/components/game/auth-trigger.tsx
+  s_b7109fbe02af0e::t_fd77bcf8763c0b 61-68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.6",
+  "base_commit_sha": "d5fba679a7f747c719bf46b1ed1ad0d983ac05fd",
+  "prompts": {},
+  "sessions": {
+    "s_b7109fbe02af0e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "277f0fc8-b51e-4bbb-aa15-580d1e65b57a",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
