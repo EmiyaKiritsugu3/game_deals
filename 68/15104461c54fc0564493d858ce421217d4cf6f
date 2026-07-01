@@ -1,0 +1,28 @@
+.husky/pre-push
+  s_9985ade9a8bc0c::t_aa0542a9b29dd5 5
+playwright.config.ts
+  s_9985ade9a8bc0c::t_47607e4abfdbd6 28
+.github/workflows/nightly.yml
+  s_9985ade9a8bc0c::t_0f57befba4400f 39,53,88,115
+.gitignore
+  s_9985ade9a8bc0c::t_5fecf818b88721 65-67
+.github/workflows/ci.yml
+  s_9985ade9a8bc0c::t_37ecf3cb976914 42
+  s_9985ade9a8bc0c::t_d4b6e52d81220e 40,94
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.6",
+  "base_commit_sha": "6815104461c54fc0564493d858ce421217d4cf6f",
+  "prompts": {},
+  "sessions": {
+    "s_9985ade9a8bc0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d15caf6e-8b1e-4673-82f5-bf620fc6d627",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
