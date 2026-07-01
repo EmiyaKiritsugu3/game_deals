@@ -1,0 +1,19 @@
+src/components/game/auth-dialog.tsx
+  s_b31fd2555aac21::t_06ab8fb8b9cab1 62,296
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.6",
+  "base_commit_sha": "c52b670376da4514645d401f47c377a891fe2bc1",
+  "prompts": {},
+  "sessions": {
+    "s_b31fd2555aac21": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "da295376-6578-47dc-b15a-aceae500e428",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
