@@ -54,7 +54,7 @@ GameDeals is a game price aggregator (like gg.deals/IsThereAnyDeal) with affilia
 - **Trivial + portable deploy**: `git push` → Vercel; Adapter API + OpenNext for future multi-cloud
 - **Premium search UX**: Typesense <50ms, typo tolerance, faceted filters, semantic search ready
 - **Real price history**: TimescaleDB continuous aggregates = verified historical low, not simulated
-- **Developer Experience**: Biome fast lint, pnpm fast installs, Vitest/Playwright integrated
+- **Developer Experience**: Biome fast lint, Bun fast installs, Vitest/Playwright integrated
 
 ### Negative / Trade-offs
 - **Tailwind v4 migration**: Requires converting CSS Modules → utilities + `@theme` (mitigated: automated upgrade tool + token preservation)
@@ -81,5 +81,6 @@ GameDeals is a game price aggregator (like gg.deals/IsThereAnyDeal) with affilia
 - [Supabase pgvector](https://supabase.com/docs/guides/database/extensions/pgvector) — Hybrid search (FTS + vector)
 - [Typesense v30.2](https://typesense.org/docs/30.2/api/) — Vector search, auto-schema, federated search
 - [Biome v2.4](https://biomejs.dev/blog/biome-v2-4/) — Embedded snippets, HTML a11y, framework support
-- [pnpm 11.5](https://pnpm.io/blog/releases/11.5) — hoistingLimits, supply-chain security
+- [Bun Docs](https://bun.sh/docs) — Runtime, package manager, test runner
+- [pnpm 11.5](https://pnpm.io/blog/releases/11.5) — hoistingLimits, supply-chain security (previous package manager)
 - [OpenNext](https://opennext.js.org/) — AWS/Cloudflare/Netlify adapters for Next.js

@@ -50,7 +50,7 @@ GameDeals is a Next.js app optimized for Edge/Serverless. We need:
 }
 ```
 
-### CI/CD: GitHub Actions + pnpm + Biome + Vitest
+### CI/CD: GitHub Actions + Bun + Biome + Vitest
 
 ```yaml
 # .github/workflows/ci.yml
@@ -59,19 +59,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: '22', cache: 'pnpm' }
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm lint           # Biome check
-      - run: pnpm vitest run --coverage # Unit tests
-      - run: pnpm playwright install    # E2E
-      - run: pnpm playwright test
+      - uses: oven-sh/setup-bun@v2
+        with: { bun-version: '1.3.13' }
+      - run: bun ci                   # Install (frozen lockfile)
+      - run: bunx biome check src/    # Lint (scoped to src/)
+      - run: bunx vitest run --coverage # Unit tests
+      - run: bunx playwright install   # E2E
+      - run: bunx playwright test
   deploy:
     needs: quality
     runs-on: ubuntu-latest
     steps:
-      - run: pnpm vercel --prod
+      - run: bunx vercel --prod
 ```
 
 ---
