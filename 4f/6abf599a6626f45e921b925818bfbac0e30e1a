@@ -1,0 +1,22 @@
+docs/runbook.md
+  s_bcce7e906d1749::t_e42195e79e503c 1243-1265
+  s_bcce7e906d1749::t_2bd8f56391556a 11
+docs/design-system.md
+  s_bcce7e906d1749::t_fe59dd87504b3b 5,8-11,15-16,18,22-27,33-38,40,42-49,53-59,71-73,86,90-91,95-100,103,105-109,113-116,122
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.9",
+  "base_commit_sha": "4f6abf599a6626f45e921b925818bfbac0e30e1a",
+  "prompts": {},
+  "sessions": {
+    "s_bcce7e906d1749": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "df5ea546-a86f-4038-bf5c-dae77d2d9ecb",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
