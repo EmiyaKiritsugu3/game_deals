@@ -1,0 +1,22 @@
+src/components/game/smart-filter-chips.tsx
+  s_bcce7e906d1749::t_80c1a66fb177a6 51,58,65
+  s_bcce7e906d1749::t_4ec634ed7ce5c2 20
+src/components/game/deal-cta.tsx
+  s_bcce7e906d1749::t_a7bb79b7c1fde7 31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.9",
+  "base_commit_sha": "f02ddfcfdf3a7c0640e673bab5b1336d9c471e1b",
+  "prompts": {},
+  "sessions": {
+    "s_bcce7e906d1749": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "df5ea546-a86f-4038-bf5c-dae77d2d9ecb",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
