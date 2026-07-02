@@ -19,7 +19,7 @@ const STEPS = [
     icon: ShoppingBag,
     title: 'Claim',
     body: 'Click through to the verified store with the lowest price. No middleman, no markup.',
-    accent: 'from-fuchsia-500/20 to-fuchsia-500/5',
+    accent: 'from-primary/20 to-primary/5',
   },
   {
     icon: ShieldCheck,

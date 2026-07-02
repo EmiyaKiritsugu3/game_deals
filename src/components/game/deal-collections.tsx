@@ -51,7 +51,7 @@ const COLLECTIONS: Collection[] = [
     title: 'Indie Darlings',
     subtitle: 'Critically-acclaimed smaller games',
     icon: Flame,
-    accent: 'from-fuchsia-500/80 to-purple-500/60',
+    accent: 'from-hot/80 to-hot/40',
     glow: 'oklch(0.7 0.2 300 / 0.4)',
     filter: (d) => d.metacriticScoreNum >= 80 && d.salePriceNum <= 20 && d.dealRatingNum >= 7,
   },
@@ -60,7 +60,7 @@ const COLLECTIONS: Collection[] = [
     title: 'Weekend Co-op',
     subtitle: 'Top-rated picks for playing with friends',
     icon: Gamepad2,
-    accent: 'from-cyan-500/80 to-primary/60',
+    accent: 'from-hot/80 to-primary/60',
     glow: 'oklch(0.7 0.2 200 / 0.4)',
     filter: (d) => d.steamRatingNum >= 80 && d.dealRatingNum >= 8 && d.savingsNum >= 50,
   },
@@ -86,7 +86,7 @@ export function DealCollections({ deals, onOpenDetail }: DealCollectionsProps) {
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-fuchsia-400/30 bg-fuchsia-500/10 px-2.5 py-1 text-xs font-semibold text-fuchsia-300">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-hot/30 bg-hot/10 px-2.5 py-1 text-xs font-semibold text-hot">
               <Gem className="size-3.5" />
               Collections
             </span>

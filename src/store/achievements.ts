@@ -11,7 +11,7 @@ export interface Achievement {
   /** Goal value to unlock */
   goal: number;
   /** Optional accent color for the badge */
-  accent: 'primary' | 'hot' | 'fuchsia' | 'amber' | 'cyan';
+  accent: 'primary' | 'hot' | 'amber';
   /** Points awarded (for total score) */
   points: number;
 }
@@ -98,7 +98,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     description: 'Add a free game to your wishlist',
     icon: 'Gift',
     goal: 1,
-    accent: 'fuchsia',
+    accent: 'hot',
     points: 20,
   },
   {
@@ -107,7 +107,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     description: 'Add 5 free games to your wishlist',
     icon: 'Gift',
     goal: 5,
-    accent: 'fuchsia',
+    accent: 'hot',
     points: 60,
   },
   {
@@ -116,7 +116,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     description: 'Visit DEALFORGE on 3 different days',
     icon: 'Calendar',
     goal: 3,
-    accent: 'cyan',
+    accent: 'hot', // ponytail: was cyan; mapped to hot per One Voice Rule
     points: 30,
   },
   {

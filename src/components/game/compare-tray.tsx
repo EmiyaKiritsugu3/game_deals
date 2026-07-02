@@ -45,7 +45,7 @@ export function CompareTray() {
       <div className="fixed inset-x-0 bottom-0 z-40 px-4 pb-4 sm:px-6">
         <div className="mx-auto flex max-w-3xl items-center gap-3 rounded-2xl glass-strong border-primary/30 p-2.5 shadow-2xl shadow-primary/10 animate-rise-fade">
           <div className="flex items-center gap-2 pl-1">
-            <span className="grid size-8 place-items-center rounded-lg bg-primary/15 text-primary">
+            <span className="grid size-9 place-items-center rounded-lg bg-primary/15 text-primary">
               <GitCompare className="size-4" />
             </span>
             <div className="hidden sm:block">
@@ -253,7 +253,7 @@ function CompareDialog({
       <DialogContent className="max-w-4xl overflow-hidden rounded-2xl border-border/60 bg-card/85 p-0 backdrop-blur-2xl">
         <DialogHeader className="border-b border-border/40 p-5">
           <DialogTitle className="flex items-center gap-2">
-            <span className="grid size-8 place-items-center rounded-lg bg-primary/15 text-primary">
+            <span className="grid size-9 place-items-center rounded-lg bg-primary/15 text-primary">
               <GitCompare className="size-4" />
             </span>
             Side-by-side comparison

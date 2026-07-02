@@ -17,7 +17,7 @@ export interface SmartFilter {
   label: string;
   icon: React.ElementType;
   /** Accent color class used when the chip is active. */
-  accent: 'primary' | 'amber' | 'purple' | 'cyan' | 'rose';
+  accent: 'primary' | 'amber';
   /** Human-readable predicate description (for tooltip/title). */
   description: string;
 }
@@ -48,21 +48,21 @@ export const SMART_FILTERS: SmartFilter[] = [
     key: 'steam-80',
     label: 'Steam ≥ 80%',
     icon: Star,
-    accent: 'cyan',
+    accent: 'primary',
     description: 'Steam positive review ratio 80% or higher',
   },
   {
     key: 'newest',
     label: 'Released 2023+',
     icon: Calendar,
-    accent: 'purple',
+    accent: 'primary',
     description: 'Games released in 2023 or later',
   },
   {
     key: 'biggest-savings',
     label: 'Savings ≥ 90%',
     icon: Percent,
-    accent: 'rose',
+    accent: 'amber',
     description: 'At least 90% off retail price',
   },
 ];
@@ -71,10 +71,6 @@ const ACCENT_ACTIVE: Record<SmartFilter['accent'], string> = {
   primary: 'chip-active border-primary/50 text-primary',
   amber:
     'bg-amber-500/15 border-amber-400/60 text-amber-300 shadow-[0_0_0_1px_oklch(0.78_0.16_70/0.4),0_6px_20px_-8px_oklch(0.78_0.16_70/0.6)]',
-  purple:
-    'bg-fuchsia-500/15 border-fuchsia-400/60 text-fuchsia-300 shadow-[0_0_0_1px_oklch(0.7_0.2_300/0.4),0_6px_20px_-8px_oklch(0.7_0.2_300/0.6)]',
-  cyan: 'bg-cyan-500/15 border-cyan-400/60 text-cyan-300 shadow-[0_0_0_1px_oklch(0.7_0.2_200/0.4),0_6px_20px_-8px_oklch(0.7_0.2_200/0.6)]',
-  rose: 'bg-rose-500/15 border-rose-400/60 text-rose-300 shadow-[0_0_0_1px_oklch(0.72_0.22_10/0.4),0_6px_20px_-8px_oklch(0.72_0.22_10/0.6)]',
 };
 
 interface SmartFilterChipsProps {

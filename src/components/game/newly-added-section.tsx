@@ -44,10 +44,10 @@ export function NewlyAddedSection({ onOpenDetail }: NewlyAddedSectionProps) {
       <div className="mb-5 flex items-end justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <span className="relative inline-flex items-center gap-1.5 rounded-full border border-fuchsia-400/30 bg-fuchsia-500/10 px-2.5 py-1 text-xs font-semibold text-fuchsia-300">
+            <span className="relative inline-flex items-center gap-1.5 rounded-full border border-hot/30 bg-hot/10 px-2.5 py-1 text-xs font-semibold text-hot">
               <span className="relative flex size-1.5">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-fuchsia-400 opacity-75" />
-                <span className="relative inline-flex size-1.5 rounded-full bg-fuchsia-400" />
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-hot opacity-75" />
+                <span className="relative inline-flex size-1.5 rounded-full bg-hot" />
               </span>
               NEW
             </span>
@@ -63,7 +63,7 @@ export function NewlyAddedSection({ onOpenDetail }: NewlyAddedSectionProps) {
             variant="outline"
             size="icon"
             onClick={() => scrollBy(-1)}
-            className="size-9 rounded-full border-border/50 bg-card/40 backdrop-blur-md hover:border-fuchsia-400/40"
+            className="size-9 rounded-full border-border/50 bg-card/40 backdrop-blur-md hover:border-hot/40"
             aria-label="Previous"
           >
             <ChevronLeft className="size-4" />
@@ -72,7 +72,7 @@ export function NewlyAddedSection({ onOpenDetail }: NewlyAddedSectionProps) {
             variant="outline"
             size="icon"
             onClick={() => scrollBy(1)}
-            className="size-9 rounded-full border-border/50 bg-card/40 backdrop-blur-md hover:border-fuchsia-400/40"
+            className="size-9 rounded-full border-border/50 bg-card/40 backdrop-blur-md hover:border-hot/40"
             aria-label="Next"
           >
             <ChevronRight className="size-4" />
@@ -126,7 +126,7 @@ function NewlyAddedCard({
   return (
     <article
       data-new-card
-      className="group relative flex w-[260px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl glass lift-on-hover hover:border-fuchsia-400/40 sm:w-[280px]"
+      className="group relative flex w-[260px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl glass lift-on-hover hover:border-hot/40 sm:w-[280px]"
       style={{
         animation: `fade-in-up 0.6s cubic-bezier(0.22,1,0.36,1) ${index * 60}ms both`,
       }}
@@ -148,15 +148,15 @@ function NewlyAddedCard({
             unoptimized
           />
         ) : (
-          <div className="grid h-full w-full place-items-center bg-gradient-to-br from-fuchsia-500/10 to-amber-400/10">
-            <Sparkles className="size-8 text-fuchsia-400/40" />
+          <div className="grid h-full w-full place-items-center bg-gradient-to-br from-hot/10 to-amber-400/10">
+            <Sparkles className="size-8 text-hot/40" />
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
         {/* NEW badge with pulsing dot */}
         <div className="absolute left-2.5 top-2.5 flex items-center gap-1.5">
-          <span className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-fuchsia-500 to-amber-400 px-2 py-1 text-[10px] font-extrabold uppercase tracking-wider text-black shadow-lg animate-new-pulse">
+          <span className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-hot to-amber-400 px-2 py-1 text-[10px] font-extrabold uppercase tracking-wider text-black shadow-lg animate-new-pulse">
             <span className="relative flex size-1.5">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-black/60 opacity-75" />
               <span className="relative inline-flex size-1.5 rounded-full bg-black" />
@@ -241,15 +241,15 @@ function NewlyAddedCard({
             className={cn(
               'grid size-7 place-items-center rounded-lg border transition-all',
               has
-                ? 'border-fuchsia-400/50 bg-fuchsia-500/15 text-fuchsia-300'
-                : 'border-border/50 bg-card/40 text-muted-foreground hover:border-fuchsia-400/40 hover:text-fuchsia-300'
+                ? 'border-hot/50 bg-hot/15 text-hot'
+                : 'border-border/50 bg-card/40 text-muted-foreground hover:border-hot/40 hover:text-hot'
             )}
             aria-label={
               has ? `Remove ${deal.title} from wishlist` : `Add ${deal.title} to wishlist`
             }
             aria-pressed={has}
           >
-            <Heart className={cn('size-3.5', has && 'scale-110 fill-fuchsia-400')} />
+            <Heart className={cn('size-3.5', has && 'scale-110 fill-hot')} />
           </button>
           <a
             href={dealRedirectUrl(deal.dealID)}

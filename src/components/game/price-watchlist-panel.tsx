@@ -119,7 +119,7 @@ export function PriceWatchlistPanel() {
           icon={ShoppingBag}
           label="Free claimed"
           value={String(freeCount)}
-          accent="text-fuchsia-300"
+          accent="text-hot"
         />
       </div>
 
@@ -181,7 +181,7 @@ export function PriceWatchlistPanel() {
                         </span>
                       )}
                       {isFree && (
-                        <span className="inline-flex items-center gap-0.5 rounded-full border border-fuchsia-400/40 bg-fuchsia-500/10 px-1.5 py-0.5 font-semibold text-fuchsia-300">
+                        <span className="inline-flex items-center gap-0.5 rounded-full border border-hot/40 bg-hot/10 px-1.5 py-0.5 font-semibold text-hot">
                           FREE
                         </span>
                       )}

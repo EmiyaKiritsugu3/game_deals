@@ -75,17 +75,15 @@ export function SavingsSummary({ deals }: SavingsSummaryProps) {
       </div>
 
       {stats.freeCount > 0 && (
-        <div className="inline-flex items-center gap-2.5 rounded-xl border border-fuchsia-500/30 bg-fuchsia-500/10 px-3.5 py-2">
-          <span className="grid size-8 place-items-center rounded-lg bg-fuchsia-500/20 text-fuchsia-300">
+        <div className="inline-flex items-center gap-2.5 rounded-xl border border-hot/30 bg-hot/10 px-3.5 py-2">
+          <span className="grid size-8 place-items-center rounded-lg bg-hot/20 text-hot">
             <TrendingDown className="size-4" />
           </span>
           <div className="leading-tight">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-fuchsia-300">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-hot">
               Free to claim
             </p>
-            <p className="font-mono text-lg font-bold tabular-nums text-fuchsia-300">
-              {stats.freeCount}
-            </p>
+            <p className="font-mono text-lg font-bold tabular-nums text-hot">{stats.freeCount}</p>
           </div>
         </div>
       )}

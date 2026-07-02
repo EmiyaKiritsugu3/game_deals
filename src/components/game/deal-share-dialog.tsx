@@ -106,7 +106,7 @@ export function DealShareDialog({ deal, open, onOpenChange }: DealShareDialogPro
       <DialogContent className="glass-strong overflow-hidden border-border/60 p-0 sm:max-w-md sm:rounded-2xl">
         <DialogHeader className="border-b border-border/40 p-4">
           <DialogTitle className="flex items-center gap-2 text-base">
-            <span className="grid size-8 place-items-center rounded-lg bg-primary/15 text-primary">
+            <span className="grid size-9 place-items-center rounded-lg bg-primary/15 text-primary">
               <Share2 className="size-4" />
             </span>
             Share this deal

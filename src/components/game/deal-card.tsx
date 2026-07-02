@@ -118,7 +118,7 @@ export function DealCard({
   return (
     <article
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-2xl glass conic-border lift-on-hover hover:border-primary/40 hover:shadow-[0_20px_50px_-20px_oklch(0.78_0.2_145/0.35)]'
+        'group relative flex flex-col overflow-hidden rounded-2xl glass lift-on-hover hover:border-primary/40 hover:shadow-[0_20px_50px_-20px_oklch(0.78_0.2_145/0.35)]'
       )}
       style={{
         animation: tier.hot
@@ -310,7 +310,7 @@ export function DealCard({
               type="button"
               onClick={() => toggle(wishlistItem)}
               className={cn(
-                'grid size-8 place-items-center rounded-lg border transition-all duration-300',
+                'grid size-9 place-items-center rounded-lg border transition-all duration-300',
                 has
                   ? 'border-primary/40 bg-primary/15 text-primary'
                   : 'border-border/50 bg-card/40 text-muted-foreground hover:border-primary/40 hover:text-primary'
@@ -329,7 +329,7 @@ export function DealCard({
               onClick={() => compareToggle(deal)}
               disabled={compareDisabled}
               className={cn(
-                'grid size-8 place-items-center rounded-lg border transition-all duration-300',
+                'grid size-9 place-items-center rounded-lg border transition-all duration-300',
                 compareHas
                   ? 'border-hot/50 bg-hot/15 text-hot'
                   : 'border-border/50 bg-card/40 text-muted-foreground hover:border-hot/40 hover:text-hot',
@@ -347,7 +347,7 @@ export function DealCard({
               <button
                 type="button"
                 onClick={() => onShare(deal)}
-                className="grid size-8 place-items-center rounded-lg border border-border/50 bg-card/40 text-muted-foreground transition-all hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                className="grid size-9 place-items-center rounded-lg border border-border/50 bg-card/40 text-muted-foreground transition-all hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
                 aria-label={`Share ${deal.title} deal`}
               >
                 <Share2 className="size-4" />
@@ -359,7 +359,7 @@ export function DealCard({
               href={dealRedirectUrl(deal.dealID)}
               target="_blank"
               rel="noopener noreferrer sponsored"
-              className="grid size-8 place-items-center rounded-lg border border-border/50 bg-card/40 text-muted-foreground transition-all hover:border-primary/40 hover:text-primary"
+              className="grid size-9 place-items-center rounded-lg border border-border/50 bg-card/40 text-muted-foreground transition-all hover:border-primary/40 hover:text-primary"
               aria-label={`Open ${deal.title} deal (external)`}
             >
               <ExternalLink className="size-4" />

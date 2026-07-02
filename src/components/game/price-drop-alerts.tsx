@@ -134,7 +134,7 @@ export function PriceDropAlerts({ liveDeals, dropThreshold = 0 }: PriceDropAlert
         <div className="relative">
           <div className="flex items-center justify-between gap-2 pb-2">
             <div className="flex items-center gap-2">
-              <span className="relative grid size-8 place-items-center rounded-lg bg-primary/15 text-primary">
+              <span className="relative grid size-9 place-items-center rounded-lg bg-primary/15 text-primary">
                 <BellRing className="size-4" />
                 <span className="absolute inset-0 rounded-lg ring-1 ring-primary/30 animate-pulse-ring" />
               </span>

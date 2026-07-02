@@ -92,7 +92,7 @@ export function RecentlyViewedStrip({ onOpenDetail }: RecentlyViewedStripProps) 
                 <p className="line-clamp-1 text-xs font-semibold">{item.title}</p>
                 <p className="mt-0.5 text-[11px] text-muted-foreground">
                   {Number(item.salePrice) === 0 ? (
-                    <span className="font-bold text-fuchsia-400">FREE</span>
+                    <span className="font-bold text-hot">FREE</span>
                   ) : (
                     <span className="font-semibold text-foreground">${item.salePrice}</span>
                   )}

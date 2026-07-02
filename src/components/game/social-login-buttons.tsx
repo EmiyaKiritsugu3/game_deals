@@ -74,7 +74,7 @@ const PROVIDERS: SocialProviderConfig[] = [
     provider: 'discord',
     label: 'Discord',
     icon: DiscordIcon,
-    hoverCls: 'hover:border-indigo-400/50',
+    hoverCls: 'hover:border-primary/50',
   },
 ];
 

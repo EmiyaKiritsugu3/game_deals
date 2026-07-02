@@ -86,7 +86,7 @@ const FAQS: FaqItem[] = [
   {
     q: 'Do I need an account?',
     icon: Lock,
-    iconCls: 'text-fuchsia-300',
+    iconCls: 'text-primary',
     a: (
       <>
         <p>
