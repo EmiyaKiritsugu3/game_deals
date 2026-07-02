@@ -1,8 +1,6 @@
-# ADR-012: Tooling Chain — Biome, pnpm, Vitest, Playwright
+# ADR-012: Tooling Chain — Biome, Bun, Vitest, Playwright
 
-**Status**: Accepted
-**Date**: 2026-06-10
-**Author**: EmiyaKiritsugu3
+**Status**: Updated (2026-07-01) — pnpm migrated to Bun
 
 ---
 
@@ -12,6 +10,7 @@ Outdated tooling (ESLint + Prettier for lint/format, npm for packages) impacts D
 
 - **Lint + Format + Import Sort** in a single fast tool (Rust)
 - **Package manager** fast, secure, disk-efficient
+- **Runtime** fast JS/TS runtime replacing Node for development and CI
 - **Test framework** Vite-native, fast, TypeScript-first
 - **E2E testing** multi-browser with integrated CI
 
@@ -60,31 +59,7 @@ Outdated tooling (ESLint + Prettier for lint/format, npm for packages) impacts D
 npx @biomejs/biome migrate eslint-prettier
 ```
 
-### Package Manager: pnpm 11.5+
-
-```bash
-# Migration from npm → pnpm
-pnpm import  # Generates pnpm-lock.yaml based on package-lock.json
-pnpm install --frozen-lockfile
-```
-
-**pnpm workspace** (preparation for future monorepo):
-```yaml
-# pnpm-workspace.yaml
-packages:
-  - '.'
-  - 'packages/*'
-```
-
-**Config**:
-```yaml
-# .npmrc
-shamefully-hoist=true
-strict-peer-dependencies=false
-auto-install-peers=true
-```
-
-### Unit/Integration Tests: Vitest
+### Package Manager: Bun 1.3.13
 
 ```typescript
 // vitest.config.ts
@@ -137,30 +112,30 @@ export default defineConfig({
 ## Daily Commands
 
 ```bash
-# Package Management
-pnpm install               # Install dependencies
-pnpm add react-router-dom  # Add dependency
-pnpm remove lodash         # Remove dependency
-pnpm up                    # Update all deps
-pnpm dlx create-next-app   # Run NPX-style without global install
+# Package Management (via Bun)
+bun install                # Install dependencies
+bun add react-router-dom   # Add dependency
+bun remove lodash          # Remove dependency
+bun update                 # Update all deps
+bunx create-next-app       # Run NPX-style without global install
 
 # Lint & Format (Biome)
-pnpm biome ci .            # CI: check lint + format + imports
-pnpm biome check .         # Local: lint + format check
-pnpm biome format --write . # Format all files
-pnpm biome lint --apply     # Auto-fix lint issues
-pnpm biome check --fix .    # Fix everything
+bunx biome ci src/         # CI: check lint + format + imports
+bunx biome check src/      # Local: lint + format check
+bunx biome format --write . # Format all files
+bunx biome lint --write .   # Auto-fix lint issues
+bunx biome check --write .  # Fix everything
 
-# Testing
-pnpm vitest                # Watch mode (dev)
-pnpm vitest run            # CI mode
-pnpm vitest run --coverage # With coverage
+# Testing (via bunx vitest — preserves vitest runner)
+bunx vitest                # Watch mode (dev)
+bunx vitest run            # CI mode
+bunx vitest run --coverage # With coverage
 
-pnpm playwright test       # E2E tests
-pnpm playwright show-report # HTML report
+bunx playwright test       # E2E tests
+bunx playwright show-report # HTML report
 
 # Full CI Pipeline (local)
-pnpm biome ci . && pnpm vitest run && pnpm playwright test
+bunx biome check src/ && bunx vitest run && bunx playwright test
 ```
 
 ---
@@ -171,14 +146,14 @@ pnpm biome ci . && pnpm vitest run && pnpm playwright test
 - **10-30x faster** than ESLint + Prettier (Rust vs JS/TS)
 - **Single tool** for lint + format + import sort + LSP
 - **Sensible zero config** with `recommended` ruleset
-- **pnpm**: 60% less disk (hard links), more secure (lockfile checksums, supply-chain protection)
+- **Bun**: 10x faster installs, built-in test runner + bundler + runtime, Node-compatible. Hoisted linker for node_modules compat. Automatic lockfile migration from pnpm/npm/yarn.
 - **Vitest**: Vite-native, shares config with app, HMR-aware
 - **Playwright**: Multi-browser (Chromium + Firefox + WebKit), tracing, CI-native
 
 ### Negative / Trade-offs
 - **Biome v2.4**: Smaller ecosystem than ESLint (fewer plugins) — but covers 200+ rules
 - **Biome lacks full CSS/JSON formatting** in v2.4 (mitigated: Tailwind v4 + optional Prettier plugin)
-- **pnpm**: `node_modules` with symlinks can cause edge cases with some libs (mitigated: `shamefully-hoist=true`)
+- **Bun hoisted linker**: can extract global cache into `node_modules` via symlinks, causing Biome false-positives when scanning root (mitigated: `biome check src/`)
 - **Playwright**: CI workers can be slow (mitigated: 3 workers, optimized dependencies)
 
 ---
@@ -186,11 +161,13 @@ pnpm biome ci . && pnpm vitest run && pnpm playwright test
 ## References
 - [Biome v2.4 Release](https://biomejs.dev/blog/biome-v2-4/) — Embedded snippets, HTML a11y, framework support
 - [Biome Blog](https://biomejs.dev/blog/) — Roadmap 2026, v2.1, v2.3, v2.4
-- [pnpm 11.5 Blog](https://pnpm.io/blog/releases/11.5) — hoistingLimits, supply-chain security
+- [Bun Docs](https://bun.sh/docs) — Runtime, package manager, test runner
+- [pnpm 11.5 Blog](https://pnpm.io/blog/releases/11.5) — hoistingLimits, supply-chain security (previous package manager)
 - [Vitest Docs](https://vitest.dev/guide/)
 - [Playwright Docs](https://playwright.dev/docs/intro)
 - [ADR-001: Tech Stack](ADR-001-tech-stack.md) — Tooling overview
 - `biome.json` — Config file
-- `pnpm-workspace.yaml` — Workspace config
+- `bunfig.toml` — Bun config (hoisted linker, frozen lockfile, trusted deps, cache dir)
+- `bun.lock` — Bun lockfile (auto-migrated from pnpm-lock.yaml)
 - `vitest.config.ts` — Test config
 - `playwright.config.ts` — E2E config
