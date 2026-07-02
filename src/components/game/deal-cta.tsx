@@ -28,7 +28,7 @@ const VARIANT_CLS: Record<DealCtaVariant, string> = {
     'border border-border/50 bg-card/40 backdrop-blur-md text-foreground hover:border-primary/40 hover:bg-accent/30',
   ghost: 'text-muted-foreground hover:text-foreground hover:bg-accent/30',
   hot: 'bg-gradient-to-br from-hot to-amber-500 text-black shadow-md shadow-hot/30 hover:brightness-110',
-  free: 'bg-gradient-to-br from-fuchsia-500 to-amber-400 text-black shadow-md shadow-fuchsia-500/30 hover:brightness-110',
+  free: 'bg-gradient-to-br from-hot to-amber-500 text-black shadow-md shadow-hot/30 hover:brightness-110',
 };
 
 const SIZE_CLS: Record<DealCtaSize, string> = {
