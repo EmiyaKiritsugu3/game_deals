@@ -83,9 +83,7 @@ export function SavingsSummary({ deals }: SavingsSummaryProps) {
             <p className="text-[10px] font-semibold uppercase tracking-wider text-hot">
               Free to claim
             </p>
-            <p className="font-mono text-lg font-bold tabular-nums text-hot">
-              {stats.freeCount}
-            </p>
+            <p className="font-mono text-lg font-bold tabular-nums text-hot">{stats.freeCount}</p>
           </div>
         </div>
       )}
