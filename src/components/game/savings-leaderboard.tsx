@@ -232,7 +232,7 @@ function LeaderboardRow({
             })
           }
           className={cn(
-            'grid size-8 place-items-center rounded-lg border transition-all hover:scale-110',
+            'grid size-9 place-items-center rounded-lg border transition-all hover:scale-110',
             has
               ? 'border-primary/40 bg-primary/15 text-primary'
               : 'border-border/50 bg-card/40 text-muted-foreground hover:border-primary/40 hover:text-primary'
@@ -246,7 +246,7 @@ function LeaderboardRow({
           href={dealRedirectUrl(deal.dealID)}
           target="_blank"
           rel="noopener noreferrer sponsored"
-          className="grid size-8 place-items-center rounded-lg border border-border/50 bg-card/40 text-muted-foreground transition-all hover:border-primary/40 hover:text-primary"
+          className="grid size-9 place-items-center rounded-lg border border-border/50 bg-card/40 text-muted-foreground transition-all hover:border-primary/40 hover:text-primary"
           aria-label={`Open ${deal.title} deal (external)`}
         >
           <ExternalLink className="size-4" />

@@ -146,7 +146,7 @@ export function GrabDealCta({
 
 /**
  * Convenience preset for the "Claim free" CTA on free-game cards.
- * Fuchsia → amber gradient with sheen.
+ * Amber-hot gradient with sheen.
  */
 export function ClaimFreeCta({
   href,

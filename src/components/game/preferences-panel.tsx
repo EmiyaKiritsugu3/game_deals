@@ -27,7 +27,7 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 
-export type AccentColor = 'emerald' | 'amber' | 'fuchsia' | 'cyan' | 'rose';
+export type AccentColor = 'emerald' | 'amber';
 export type NotificationThreshold = '10' | '25' | '50' | '75';
 
 interface UserPreferences {
@@ -65,24 +65,6 @@ const ACCENT_COLORS: Array<{
     label: 'Amber',
     color: 'bg-amber-500',
     oklch: 'oklch(0.78 0.16 70)',
-  },
-  {
-    key: 'fuchsia',
-    label: 'Fuchsia',
-    color: 'bg-fuchsia-500',
-    oklch: 'oklch(0.7 0.2 300)',
-  },
-  {
-    key: 'cyan',
-    label: 'Cyan',
-    color: 'bg-cyan-500',
-    oklch: 'oklch(0.7 0.2 200)',
-  },
-  {
-    key: 'rose',
-    label: 'Rose',
-    color: 'bg-rose-500',
-    oklch: 'oklch(0.72 0.22 10)',
   },
 ];
 

@@ -37,7 +37,7 @@ export function FreeGamesSection({ onOpenDetail }: FreeGamesSectionProps) {
         <div
           className="pointer-events-none absolute -right-20 -top-24 size-72 rounded-full opacity-40 blur-3xl animate-float-slow"
           style={{
-            background: 'radial-gradient(circle, oklch(0.82 0.2 300 / 0.5), transparent 60%)',
+            background: 'radial-gradient(circle, oklch(0.78 0.2 145 / 0.5), transparent 60%)',
           }}
         />
         <div
@@ -52,7 +52,7 @@ export function FreeGamesSection({ onOpenDetail }: FreeGamesSectionProps) {
           <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
             <div>
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-fuchsia-500/30 bg-fuchsia-500/10 px-2.5 py-1 text-xs font-semibold text-fuchsia-400">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-hot/30 bg-hot/10 px-2.5 py-1 text-xs font-semibold text-hot">
                   <Gift className="size-3.5 animate-heartbeat" />
                   100% Off
                 </span>
@@ -141,7 +141,7 @@ function FreeGameCard({
   return (
     <article
       data-free-card
-      className="group relative flex w-[280px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl glass conic-border lift-on-hover hover:border-fuchsia-400/40 sm:w-[320px]"
+      className="group relative flex w-[280px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl glass lift-on-hover hover:border-hot/40 sm:w-[320px]"
       style={{
         animation: `fade-in-up 0.6s cubic-bezier(0.22,1,0.36,1) ${index * 70}ms both`,
       }}
@@ -163,15 +163,15 @@ function FreeGameCard({
             unoptimized
           />
         ) : (
-          <div className="grid h-full w-full place-items-center bg-gradient-to-br from-fuchsia-500/10 to-amber-500/10">
-            <Gift className="size-8 text-fuchsia-400/50" />
+          <div className="grid h-full w-full place-items-center bg-gradient-to-br from-hot/10 to-amber-500/10">
+            <Gift className="size-8 text-hot/50" />
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
 
         {/* FREE ribbon */}
         <div className="absolute left-3 top-3">
-          <span className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-fuchsia-500 via-amber-400 to-emerald-400 px-3 py-1.5 text-sm font-extrabold text-black shadow-lg animate-gradient-pan">
+          <span className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-hot via-amber-400 to-emerald-400 px-3 py-1.5 text-sm font-extrabold text-black shadow-lg animate-gradient-pan">
             <Gift className="size-4" />
             FREE
           </span>
@@ -179,7 +179,7 @@ function FreeGameCard({
 
         {/* Savings meta */}
         <div className="absolute right-3 top-3">
-          <span className="inline-flex items-center gap-1 rounded-lg bg-black/50 px-2 py-1 text-[10px] font-bold text-fuchsia-300 backdrop-blur-md ring-1 ring-white/10">
+          <span className="inline-flex items-center gap-1 rounded-lg bg-black/50 px-2 py-1 text-[10px] font-bold text-hot backdrop-blur-md ring-1 ring-white/10">
             <Sparkles className="size-3" />
             100% OFF
           </span>
@@ -215,7 +215,7 @@ function FreeGameCard({
       {/* Actions */}
       <div className="flex items-center justify-between gap-2 p-3">
         <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-          <Flame className="size-3.5 text-fuchsia-400" />
+          <Flame className="size-3.5 text-hot" />
           Limited time
         </span>
         <div className="flex items-center gap-1.5">
@@ -225,15 +225,15 @@ function FreeGameCard({
             className={cn(
               'grid size-8 place-items-center rounded-lg border transition-all hover:scale-110',
               has
-                ? 'border-fuchsia-400/50 bg-fuchsia-500/20 text-fuchsia-300'
-                : 'border-border/50 bg-card/40 text-muted-foreground hover:border-fuchsia-400/50 hover:text-fuchsia-300'
+                ? 'border-hot/50 bg-hot/20 text-hot'
+                : 'border-border/50 bg-card/40 text-muted-foreground hover:border-hot/50 hover:text-hot'
             )}
             aria-label={
               has ? `Remove ${deal.title} from wishlist` : `Add ${deal.title} to wishlist`
             }
             aria-pressed={has}
           >
-            <Heart className={cn('size-4', has && 'scale-110 fill-fuchsia-400')} />
+            <Heart className={cn('size-4', has && 'scale-110 fill-hot')} />
           </button>
           <ClaimFreeCta href={dealRedirectUrl(deal.dealID)} size="sm" label="Claim" />
         </div>

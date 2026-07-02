@@ -74,7 +74,7 @@ export function StoresShowcase({ stores, onSelectStore, activeStoreID }: StoresS
               type="button"
               onClick={() => onSelectStore?.(active ? '' : store.storeID)}
               className={cn(
-                'group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl glass p-5 lift-on-hover conic-border',
+                'group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl glass p-5 lift-on-hover',
                 tier === 'official' ? 'hover:border-primary/40' : 'hover:border-border/60'
               )}
               style={{

@@ -106,7 +106,7 @@ function FeaturedCard({
   return (
     <article
       data-feature-card
-      className="group relative flex w-[300px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl glass conic-border lift-on-hover hover:border-primary/40 sm:w-[340px]"
+      className="group relative flex w-[300px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl glass lift-on-hover hover:border-primary/40 sm:w-[340px]"
       style={{
         animation: `fade-in-up 0.6s cubic-bezier(0.22,1,0.36,1) ${index * 80}ms both`,
       }}

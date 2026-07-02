@@ -21,30 +21,6 @@ const ACCENT_VARS: Record<AccentColor, Record<string, string>> = {
     '--sidebar-primary': 'oklch(0.78 0.16 70)',
     '--sidebar-ring': 'oklch(0.78 0.16 70 / 60%)',
   },
-  fuchsia: {
-    '--primary': 'oklch(0.7 0.2 300)',
-    '--primary-foreground': 'oklch(0.16 0.05 300)',
-    '--ring': 'oklch(0.7 0.2 300 / 60%)',
-    '--chart-1': 'oklch(0.7 0.2 300)',
-    '--sidebar-primary': 'oklch(0.7 0.2 300)',
-    '--sidebar-ring': 'oklch(0.7 0.2 300 / 60%)',
-  },
-  cyan: {
-    '--primary': 'oklch(0.7 0.2 200)',
-    '--primary-foreground': 'oklch(0.16 0.05 200)',
-    '--ring': 'oklch(0.7 0.2 200 / 60%)',
-    '--chart-1': 'oklch(0.7 0.2 200)',
-    '--sidebar-primary': 'oklch(0.7 0.2 200)',
-    '--sidebar-ring': 'oklch(0.7 0.2 200 / 60%)',
-  },
-  rose: {
-    '--primary': 'oklch(0.72 0.22 10)',
-    '--primary-foreground': 'oklch(0.16 0.05 10)',
-    '--ring': 'oklch(0.72 0.22 10 / 60%)',
-    '--chart-1': 'oklch(0.72 0.22 10)',
-    '--sidebar-primary': 'oklch(0.72 0.22 10)',
-    '--sidebar-ring': 'oklch(0.72 0.22 10 / 60%)',
-  },
 };
 
 /**

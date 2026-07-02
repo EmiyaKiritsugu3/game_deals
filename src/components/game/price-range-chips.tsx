@@ -41,7 +41,7 @@ export function PriceRangeChips({ value, onChange }: PriceRangeChipsProps) {
               'inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-all duration-300',
               active
                 ? range.free
-                  ? 'chip-active border-fuchsia-400/60 text-fuchsia-300'
+                  ? 'chip-active border-hot/60 text-hot'
                   : 'chip-active'
                 : 'border-border/50 bg-card/40 text-muted-foreground hover:border-primary/30 hover:text-foreground'
             )}

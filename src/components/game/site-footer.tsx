@@ -127,15 +127,19 @@ export function SiteFooter() {
             </div>
             <div className="mt-3 flex items-center gap-2">
               {[
-                { Icon: TwitterIcon, label: 'Twitter' },
-                { Icon: GithubIcon, label: 'GitHub' },
-                { Icon: Rss, label: 'RSS' },
-              ].map(({ Icon, label }) => (
+                { Icon: TwitterIcon, label: 'Twitter', href: 'https://x.com/EmiyaKiritsugu3' },
+                {
+                  Icon: GithubIcon,
+                  label: 'GitHub',
+                  href: 'https://github.com/EmiyaKiritsugu3/game-deals',
+                },
+                { Icon: Rss, label: 'RSS', href: '/rss' },
+              ].map(({ Icon, label, href }) => (
                 <a
                   key={label}
-                  href="/privacy"
+                  href={href}
                   aria-label={label}
-                  className="grid size-8 place-items-center rounded-lg border border-border/50 bg-card/40 text-muted-foreground transition-all hover:border-primary/40 hover:text-primary"
+                  className="grid size-9 place-items-center rounded-lg border border-border/50 bg-card/40 text-muted-foreground transition-all hover:border-primary/40 hover:text-primary"
                 >
                   <Icon className="size-4" />
                 </a>
@@ -144,7 +148,7 @@ export function SiteFooter() {
           </div>
 
           {/* Explore */}
-          <div>
+          <nav>
             <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
               Explore
             </h3>
@@ -166,10 +170,10 @@ export function SiteFooter() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Resources */}
-          <div>
+          <nav>
             <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
               Resources
             </h3>
@@ -229,10 +233,10 @@ export function SiteFooter() {
                 </button>
               </li>
             </ul>
-          </div>
+          </nav>
 
           {/* Legal */}
-          <div>
+          <nav>
             <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
               Legal
             </h3>
@@ -249,7 +253,7 @@ export function SiteFooter() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
         </div>
 
         {/* Affiliate disclosure strip — visible, honest, FTC-compliant */}

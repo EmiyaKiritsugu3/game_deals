@@ -8,17 +8,9 @@ import { ACHIEVEMENTS, useAchievements } from '@/store/achievements';
 const ACCENT_CLS: Record<string, { bg: string; text: string; ring: string }> = {
   primary: { bg: 'bg-primary/15', text: 'text-primary', ring: 'ring-primary/30' },
   hot: { bg: 'bg-hot/15', text: 'text-hot', ring: 'ring-hot/30' },
-  fuchsia: { bg: 'bg-fuchsia-500/15', text: 'text-fuchsia-300', ring: 'ring-fuchsia-400/30' },
   amber: { bg: 'bg-amber-500/15', text: 'text-amber-400', ring: 'ring-amber-400/30' },
-  cyan: { bg: 'bg-cyan-500/15', text: 'text-cyan-300', ring: 'ring-cyan-400/30' },
 };
 
-/**
- * Celebratory toast that pops in when an achievement unlocks. Auto-dismisses
- * after 5 seconds. Renders confetti particles for extra delight.
- *
- * Reads `lastUnlocked` from the achievements store and clears it after display.
- */
 export function AchievementToast() {
   const lastUnlocked = useAchievements((s) => s.lastUnlocked);
   const clearLastUnlocked = useAchievements((s) => s.clearLastUnlocked);
@@ -66,8 +58,8 @@ export function AchievementToast() {
               const colors = [
                 'oklch(0.78 0.2 145)',
                 'oklch(0.78 0.16 70)',
-                'oklch(0.7 0.2 300)',
-                'oklch(0.7 0.2 200)',
+                'oklch(0.78 0.2 145)',
+                'oklch(0.78 0.16 70)',
                 'oklch(0.92 0.16 70)',
               ];
               const color = colors[i % colors.length];

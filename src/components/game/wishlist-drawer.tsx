@@ -59,7 +59,7 @@ export function WishlistDrawer() {
       <SheetContent side="right" className="glass-strong w-full border-border/60 p-0 sm:max-w-md">
         <SheetHeader className="border-b border-border/40 p-5 text-left">
           <SheetTitle className="flex items-center gap-2">
-            <span className="grid size-8 place-items-center rounded-lg bg-primary/15 text-primary">
+            <span className="grid size-9 place-items-center rounded-lg bg-primary/15 text-primary">
               <Heart className="size-4 fill-primary animate-heartbeat" />
             </span>
             Your wishlist
@@ -194,7 +194,7 @@ export function WishlistDrawer() {
                           href={dealRedirectUrl(item.dealID)}
                           target="_blank"
                           rel="noopener noreferrer sponsored"
-                          className="grid size-8 place-items-center rounded-lg border border-border/50 bg-card/40 text-muted-foreground transition-all hover:border-primary/40 hover:text-primary"
+                          className="grid size-9 place-items-center rounded-lg border border-border/50 bg-card/40 text-muted-foreground transition-all hover:border-primary/40 hover:text-primary"
                           aria-label={`Open ${item.title}`}
                         >
                           <ExternalLink className="size-3.5" />
@@ -202,7 +202,7 @@ export function WishlistDrawer() {
                         <button
                           type="button"
                           onClick={() => remove(item.dealID)}
-                          className="grid size-8 place-items-center rounded-lg border border-border/50 bg-card/40 text-muted-foreground transition-all hover:border-destructive/40 hover:text-destructive"
+                          className="grid size-9 place-items-center rounded-lg border border-border/50 bg-card/40 text-muted-foreground transition-all hover:border-destructive/40 hover:text-destructive"
                           aria-label={`Remove ${item.title} from wishlist`}
                         >
                           <Trash2 className="size-3.5" />
