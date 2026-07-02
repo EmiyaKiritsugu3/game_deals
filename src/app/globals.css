@@ -1302,34 +1302,6 @@
 }
 
 /* Conic ring border */
-.conic-border {
-  position: relative;
-}
-.conic-border::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: conic-gradient(
-    from 0deg,
-    oklch(0.78 0.2 145),
-    oklch(0.78 0.16 70),
-    oklch(0.7 0.2 300),
-    oklch(0.78 0.2 145)
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-}
-.conic-border:hover::before {
-  opacity: 1;
-}
 
 /* Grid pattern background */
 .bg-grid {
@@ -1381,55 +1353,9 @@
   padding: 0 1.5rem;
 }
 
-.epicDealBadge {
-  background: linear-gradient(135deg, #ff4b2b, #ff416c);
-  color: white;
-  font-size: 0.7rem;
-  font-weight: 800;
-  padding: 0.15rem 0.5rem;
-  border-radius: 4px;
-  margin-left: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2rem;
-  box-shadow: 0 0 10px rgba(255, 65, 108, 0.4);
-  animation: pulse-flame 2s infinite ease-in-out;
-}
 
-@keyframes pulse-flame {
-  0% {
-    box-shadow: 0 0 5px rgba(255, 65, 108, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 15px rgba(255, 65, 108, 0.6);
-  }
-  100% {
-    box-shadow: 0 0 5px rgba(255, 65, 108, 0.2);
-  }
-}
 
-.drmBadge {
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 0.1rem 0.4rem;
-  border-radius: 3px;
-  background: color-mix(in oklch, var(--muted) 100%, transparent);
-  color: var(--foreground);
-  margin-left: 0.35rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2rem;
-  white-space: nowrap;
-  opacity: 0.85;
-}
 
-.regionBadge {
-  font-size: 0.75rem;
-  margin-left: 0.25rem;
-  opacity: 0.9;
-}
 
 .skip-to-content {
   position: absolute;

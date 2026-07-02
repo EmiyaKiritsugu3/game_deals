@@ -71,7 +71,6 @@ const ACCENT_ACTIVE: Record<SmartFilter['accent'], string> = {
   primary: 'chip-active border-primary/50 text-primary',
   amber:
     'bg-amber-500/15 border-amber-400/60 text-amber-300 shadow-[0_0_0_1px_oklch(0.78_0.16_70/0.4),0_6px_20px_-8px_oklch(0.78_0.16_70/0.6)]',
-    'bg-fuchsia-500/15 border-fuchsia-400/60 text-fuchsia-300 shadow-[0_0_0_1px_oklch(0.7_0.2_300/0.4),0_6px_20px_-8px_oklch(0.7_0.2_300/0.6)]',
 };
 
 interface SmartFilterChipsProps {
