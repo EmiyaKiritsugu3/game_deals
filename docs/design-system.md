@@ -2,47 +2,61 @@
 
 | Metadata | |
 |---|---|
-| Last updated | 2026-06-27 |
+| Last updated | 2026-07-02 |
 | Framework | Tailwind CSS v4 |
 | Theme | next-themes (dark/light/system) |
+| Color space | OKLCH |
+| Register | Product (app UI) |
+
+**Canonical spec:** [DESIGN.md](../DESIGN.md) at project root.
 
 ## Color Tokens
 
-All colors use CSS custom properties via Tailwind's `hsl(var(--*))` pattern for automatic dark/light switching.
+All colors use CSS custom properties via `oklch()` for perceptually-uniform interpolation.
+Defined in `:root` (light) and `.dark` blocks in `src/app/globals.css`.
 
-### Primary
+### Brand
 
 | Token | Light | Dark | Usage |
 |-------|-------|------|-------|
-| `--primary` | Green-600 `#16a34a` | Green-400 `#4ade80` | CTAs, links, active states, brand |
-| `--primary-foreground` | White `#fff` | Black `#000` | Text on primary bg |
+| `--primary` | `oklch(0.62 0.19 150)` Forge Emerald | `oklch(0.78 0.2 145)` | CTAs, links, active states, brand |
+| `--primary-foreground` | `oklch(0.99 0 0)` | `oklch(0.16 0.05 150)` | Text on primary bg |
+| `--hot` | `oklch(0.7 0.17 60)` Deal Amber | `oklch(0.78 0.16 70)` | Discounts, urgency signals, badges |
+| `--hot-foreground` | `oklch(0.99 0 0)` | `oklch(0.16 0.05 70)` | Text on hot bg |
+| `--accent-hl` | `oklch(0.62 0.19 150)` | `oklch(0.78 0.2 145)` | Historic-low badges |
+| `--accent-hl-foreground` | `oklch(0.99 0 0)` | `oklch(0.16 0.05 150)` | Text on HL bg |
 
 ### Surfaces
 
 | Token | Light | Dark | Usage |
 |-------|-------|------|-------|
-| `--background` | White | Gray-950 | Page background |
-| `--foreground` | Gray-900 | Gray-50 | Body text |
-| `--card` | Gray-50 | Gray-900 | Cards, modals, sidebars |
-| `--card-foreground` | Gray-900 | Gray-50 | Text inside cards |
-| `--muted` | Gray-100 | Gray-800 | Subtle backgrounds, hover |
-| `--muted-foreground` | Gray-500 | Gray-400 | Secondary text, captions |
+| `--background` | `oklch(0.985 0.002 240)` | `oklch(0.13 0.004 240)` | Page background |
+| `--foreground` | `oklch(0.16 0.01 240)` | `oklch(0.97 0.005 240)` | Body text |
+| `--card` | `oklch(1 0 0)` | `oklch(0.165 0.005 240)` | Cards, modals, sidebars |
+| `--card-foreground` | `oklch(0.16 0.01 240)` | `oklch(0.97 0.005 240)` | Text inside cards |
+| `--muted` | `oklch(0.96 0.004 240)` | `oklch(0.2 0.005 240)` | Subtle backgrounds, hover |
+| `--muted-foreground` | `oklch(0.5 0.01 240)` | `oklch(0.68 0.01 240)` | Secondary text, captions |
 
-### Borders and Feedback
+### Glass Elevation System
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--border` | Gray-200 / Gray-700 | Card borders, dividers |
-| `--ring` | Green-500 | Focus rings |
-| `--radius` | `4px` | Border radius (cards, buttons, inputs) |
-| `--destructive` | Red-500 `#ef4444` | Delete buttons, errors |
+4-tier glass system defined via Tailwind classes (not custom properties):
+
+| Class | Usage |
+|-------|-------|
+| `glass` | Base cards (`bg-card/40 backdrop-blur-md border border-border/50`) |
+| `glass-panel` | Side panels, dropdowns (thicker bg + blur) |
+| `glass-modal` | Dialogs, overlays (heaviest glass) |
+| `glass-nav` | Navigation bars (subtlest, fits nav context) |
 
 ## Typography
 
-```css
---font-inter: 'Inter', system-ui, -apple-system, sans-serif;
---font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-```
+| Family | Role | CSS variable |
+|--------|------|-------------|
+| Space Grotesk | Display (headings, hero) | `--font-display` |
+| Geist | Body (all text, UI labels) | `--font-sans` |
+| Geist Mono | Code, prices, tabular data | `--font-mono` |
+
+**One Family Rule:** Only Space Grotesk + Geist. No Inter, no JetBrains Mono.
 
 | Class | Size | Usage |
 |-------|------|-------|
@@ -54,7 +68,9 @@ All colors use CSS custom properties via Tailwind's `hsl(var(--*))` pattern for 
 | `text-2xl` | 1.5rem | Page titles (h1) |
 | `text-4xl` | 2.25rem | Hero headings |
 
-**Weights**: `font-normal` (400) body, `font-medium` (500) labels/buttons, `font-semibold` (600) card titles, `font-bold` (700) headings/prices, `font-extrabold` (800) hero/discounts.
+**Weights**: `font-normal` (400) body, `font-medium` (500) labels/buttons,
+`font-semibold` (600) card titles, `font-bold` (700) headings/prices,
+`font-extrabold` (800) hero/discounts.
 
 ## Spacing
 
@@ -67,85 +83,40 @@ Based on Tailwind's 4px grid (`1 = 0.25rem`):
 | `p-6 / gap-6` | 1.5rem | Sections, modals |
 | `p-8` | 2rem | Page sections, hero |
 
-Container: `max-width: 1200px`, centered `mx-auto`, pad `px-6`.
-
-## Component Patterns
-
-### Buttons
-
-```
-Primary:   bg-primary text-primary-foreground rounded-[var(--radius)] px-4 py-2
-Secondary: border bg-card hover:bg-muted rounded-[var(--radius)] px-4 py-2
-Danger:    bg-destructive text-white rounded-[var(--radius)] px-4 py-2
-Ghost:     hover:bg-muted rounded-[var(--radius)] p-2
-```
-
-All buttons: `font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring`.
-
-### Cards (GameCard)
-
-```
-group relative overflow-hidden rounded-[var(--radius)] border bg-card
-  → Image (16:9, object-cover)
-  → p-4: title, price tag, badge
-  → hover:shadow-lg transition-shadow
-```
-
-### Modals (shadcn Dialog)
-
-Uses shadcn `<Dialog>`, `<DialogContent>`, `<DialogOverlay>` from `@/components/ui/dialog`.
-Includes `<DialogTitle>` for accessible naming, `<DialogDescription>` for screen reader context.
-Default behavior: trap focus, close on Escape, restore focus to trigger on close.
-
-### Price Tags
-
-```
-Sale:     text-xl font-bold text-primary
-Original: text-sm text-muted-foreground line-through
-Savings:  rounded bg-green-500/10 px-1.5 py-0.5 text-xs font-bold text-green-600
-FREE:     rounded bg-amber-500/10 px-1.5 py-0.5 text-xs font-bold text-amber-600
-```
-
-### Navbar
-
-```
-sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md
-  → max-w-7xl mx-auto flex h-16 items-center justify-between px-6
-    → Logo, SearchBox, NavActions (auth, theme, wishlist)
-```
+Container: `max-width: 1280px` (`max-w-7xl`), centered `mx-auto`, pad `px-4 sm:px-6 lg:px-8`.
 
 ## Motion
+
+Animations defined as `--animate-*` tokens in `@theme` block. No JS animation libraries.
 
 | Pattern | Class |
 |---------|-------|
 | Hover scale | `hover:scale-105 transition-transform` |
-| Hover color | `hover:bg-muted transition-colors` |
-| Fade in | `animate-in fade-in duration-300` |
-| Slide up | `animate-in slide-in-from-bottom-4 duration-300` |
+| Hover color | `hover:bg-accent/30 transition-colors` |
+| Sheen sweep | `sheen` class (gradient overlay on CTAs) |
+| Heartbeat | `animate-heartbeat` (wishlist icon) |
+| Fade in | `animate-fade-in` |
+| Slide in | `animate-fade-slide-in` |
+| Pulse soft | `animate-pulse-soft` (loading states) |
 | Reduced motion | `motion-reduce:transition-none motion-reduce:animate-none` |
 
-## Dark Mode
+## Design Rules
 
-Enabled via `next-themes` `ThemeProvider` with `attribute="class"`. Dark variants use Tailwind's `dark:` prefix:
-
-```html
-<html class="dark">
-  <body class="bg-background text-foreground">
-    <!-- dark: variants activate -->
-  </body>
-</html>
-```
-
-Theme toggle: `ThemeToggle.tsx` with `useTheme()` hook, `aria-label` updates dynamically.
+- **One Voice Rule:** Only Forge Emerald + Deal Amber. No fuchsia, purple, cyan, rose.
+- **Dark Canvas Rule:** Dark-first design. Light mode is clean, dark mode is deep/near-black.
+- **One Family Rule:** Space Grotesk (display) + Geist (body) only.
+- **Flat-By-Default Rule:** No gradient text, no glassmorphism unless purposeful.
+- **Every pixel earns its place:** No decorative borders, no side-stripe accents.
 
 ## File Conventions
 
-- **Global styles**: `src/app/globals.css` (Tailwind directives + `@theme` design tokens in CSS custom properties)
-- **CSS `@keyframes`**: Defined in `globals.css` below `@import` for animations (no JS runtime)
-- **Custom CSS**: Only for complex layouts not expressible in Tailwind (charts, gradients)
+- **Global styles**: `src/app/globals.css` (Tailwind directives + `@theme` block + keyframes)
+- **CSS `@keyframes`**: Defined in `globals.css` `@theme` as `--animate-*` tokens
+- **No CSS modules**: All styling is Tailwind utilities + CSS custom properties
+- **No `.module.css` files**: Enforced by CLAUDE.md
 
 ## Tools
 
 - [Tailwind CSS v4 Docs](https://tailwindcss.com/docs)
 - [next-themes](https://github.com/pacocoursey/next-themes)
-- [tailwindcss-animate](https://tailwindcss-animate.com) (animation utilities)
+- [tw-animate-css](https://github.com/Wombosvideo/tw-animate-css) (CSS animation utilities)

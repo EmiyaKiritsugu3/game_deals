@@ -8,6 +8,7 @@
 ---
 
 ## Table of Contents
+| 13 | [Design Tokens Reference](#playbook-design-tokens-reference) | LOW
 
 | # | Playbook | Severity |
 |---|----------|----------|
@@ -1239,3 +1240,26 @@ pnpm fallow:audit
 pkill -f "next-server"
 pkill -f "chromium"
 ```
+## Playbook: Design Tokens Reference
+
+**Severity:** LOW
+
+### Palette locations
+
+- `src/app/globals.css` :root + .dark blocks — primary, hot, accent-hl, surfaces
+- `DESIGN.md` at project root — canonical visual spec
+- `docs/design-system.md` — generated reference (sync from globals.css)
+
+### Glass system
+
+| Class | File |
+|-------|------|
+| `.glass` | `src/app/globals.css` (applied via utility classes) |
+| `.glass-panel` | `src/app/globals.css` |
+| `.glass-modal` | `src/app/globals.css` |
+| `.glass-nav` | `src/app/globals.css` |
+
+### One Voice Rule
+
+Only emerald (--primary) + amber (--hot). No fuchsia, purple, cyan, rose.
+Search for palette drift: `grep -rn "fuchsia\|purple\|cyan\|rose" src/ --include="*.tsx" --include="*.ts"`
