@@ -42,6 +42,11 @@ function applyAffiliateParams(url: string, storeId: string): string {
 
   const parsedUrl = new URL(url || config.baseUrl);
 
+  if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+    console.warn(`Blocked redirect to non-http protocol: ${parsedUrl.protocol}`);
+    return '';
+  }
+
   if (!isDomainAllowed(parsedUrl)) {
     console.warn(`Blocked redirect to non-allowlisted domain: ${parsedUrl.hostname}`);
     return '';
@@ -82,7 +87,7 @@ export async function GET(
   const { storeId, gameSlug } = await params;
 
   if (!isValidStoreId(storeId) || !isValidGameSlug(gameSlug)) {
-    return NextResponse.redirect('/', 302);
+    return NextResponse.redirect(new URL('/', request.url), 302);
   }
 
   let targetUrl = await lookupDealUrl(storeId);
@@ -97,5 +102,5 @@ export async function GET(
     return NextResponse.redirect(targetUrl, 302);
   }
 
-  return NextResponse.redirect('/', 302);
+  return NextResponse.redirect(new URL('/', request.url), 302);
 }
