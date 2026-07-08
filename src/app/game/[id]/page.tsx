@@ -94,11 +94,10 @@ export default async function GamePage({ params }: Readonly<{ params: Promise<{ 
 
   return (
     <>
-      {/* NOSONAR */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productJsonLd).replace(/</g, '\\u003c'),
+          __html: JSON.stringify(productJsonLd).replace(/</g, '\\u003c'), // NOSONAR
         }}
       />
       <div className="container">
