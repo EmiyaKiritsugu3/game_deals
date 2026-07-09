@@ -88,6 +88,7 @@ export function UserMenu({ user, serverUser }: UserMenuProps) {
   const { logout } = useAuth();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const wrapperRef = useClickOutside<HTMLDivElement>(() => setIsUserMenuOpen(false));
+  const { name } = getUserDisplay(user, serverUser);
 
   return (
     <div className="relative flex items-center" ref={wrapperRef}>
@@ -104,6 +105,7 @@ export function UserMenu({ user, serverUser }: UserMenuProps) {
         type="button"
         aria-expanded={isUserMenuOpen}
         aria-haspopup="true"
+        aria-label={`User menu for ${name}`}
       >
         <UserAvatar user={user} serverUser={serverUser} />
         <ChevronDown size={14} />
