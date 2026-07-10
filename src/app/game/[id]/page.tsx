@@ -96,7 +96,9 @@ export default async function GamePage({ params }: Readonly<{ params: Promise<{ 
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productJsonLd).replace(/</g, '\\u003c'),
+        }}
       />
       <div className="container">
         <GameBody viewModel={viewModel} id={id} />
