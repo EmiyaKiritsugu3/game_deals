@@ -97,8 +97,7 @@ export default async function GamePage({ params }: Readonly<{ params: Promise<{ 
       {/* eslint-disable-next-line react/no-danger */}
       <script
         type="application/ld+json"
-        // NOSONAR
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd).replace(/</g, '\\u003c') }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd).replace(/</g, '\\u003c') }} // NOSONAR
       />
       <div className="container">
         <GameBody viewModel={viewModel} id={id} />
