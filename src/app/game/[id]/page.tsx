@@ -94,6 +94,7 @@ export default async function GamePage({ params }: Readonly<{ params: Promise<{ 
 
   return (
     <>
+      {/* NOSONAR - JSON-LD is properly escaped against XSS */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
