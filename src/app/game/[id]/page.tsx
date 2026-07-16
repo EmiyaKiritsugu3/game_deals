@@ -96,6 +96,7 @@ export default async function GamePage({ params }: Readonly<{ params: Promise<{ 
     <>
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD injection is escaped for XSS
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd).replace(/</g, '\\u003c') }}
       />
       <div className="container">
