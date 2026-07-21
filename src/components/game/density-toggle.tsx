@@ -21,12 +21,14 @@ export function DensityToggle({ value, onChange }: DensityToggleProps) {
         type="button"
         onClick={() => onChange('comfortable')}
         className={cn(
-          'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-all',
+          'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-all focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2',
           value === 'comfortable'
             ? 'bg-primary/15 text-primary shadow-sm'
             : 'text-muted-foreground hover:text-foreground'
         )}
         aria-pressed={value === 'comfortable'}
+        aria-label="Comfortable density"
+        title="Comfortable density"
       >
         <LayoutGrid className="size-3.5" />
         <span className="hidden sm:inline">Comfortable</span>
@@ -35,12 +37,14 @@ export function DensityToggle({ value, onChange }: DensityToggleProps) {
         type="button"
         onClick={() => onChange('compact')}
         className={cn(
-          'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-all',
+          'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-all focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2',
           value === 'compact'
             ? 'bg-primary/15 text-primary shadow-sm'
             : 'text-muted-foreground hover:text-foreground'
         )}
         aria-pressed={value === 'compact'}
+        aria-label="Compact density"
+        title="Compact density"
       >
         <Rows3 className="size-3.5" />
         <span className="hidden sm:inline">Compact</span>
