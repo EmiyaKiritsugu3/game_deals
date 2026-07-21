@@ -8,7 +8,9 @@ interface HotDealsSectionProps {
 }
 
 export default async function HotDealsSection({ deals, limit = 12 }: HotDealsSectionProps) {
-  const sorted = [...deals]
+  // ⚡ Bolt Performance: Removed unnecessary array spread [...deals] before .filter().
+  // Array.prototype.filter already returns a new array, making the initial O(N) allocation redundant.
+  const sorted = deals
     .filter((d) => d.dealRating && !Number.isNaN(Number.parseFloat(d.dealRating)))
     .sort((a, b) => Number.parseFloat(b.dealRating) - Number.parseFloat(a.dealRating))
     .slice(0, limit);
