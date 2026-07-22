@@ -15,13 +15,13 @@
     "dev": "bun --bun next dev",
     "build": "bun --bun next build",
     "start": "bun --bun next start",
-    "lint": "bunx biome check .",
-    "lint:fix": "bunx biome check --write .",
-    "format": "bunx biome format --write .",
-    "db:generate": "bunx drizzle-kit generate",
-    "db:migrate": "bunx drizzle-kit migrate",
-    "db:push": "bunx drizzle-kit push",
-    "db:studio": "bunx drizzle-kit studio",
+    "lint": "bun x biome check .",
+    "lint:fix": "bun x biome check --write .",
+    "format": "bun x biome format --write .",
+    "db:generate": "bun x drizzle-kit generate",
+    "db:migrate": "bun x drizzle-kit migrate",
+    "db:push": "bun x drizzle-kit push",
+    "db:studio": "bun x drizzle-kit studio",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:changed": "vitest --changed --reporter=verbose",
@@ -31,8 +31,8 @@
     "test:e2e:visual:update": "playwright test tests/e2e/visual.spec.ts --update-snapshots",
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "tdd": "vitest --changed --reporter=verbose --watch",
-    "knip": "bunx knip",
-    "audit": "bunx npm audit --audit-level=high",
+    "knip": "bun x knip",
+    "audit": "bun audit --audit-level=high",
     "check": "bash scripts/check.sh",
     "fallow": "fallow",
     "sonar:local": "bun run test:coverage && sonar-scanner -Dsonar.projectKey=EmiyaKiritsugu3_game_deals -Dsonar.organization=emiyakiritsugu3 -Dsonar.sources=./src -Dsonar.host.url=https://sonarcloud.io -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info -Dsonar.exclusions='src/data/collections.ts,src/data/bundles.ts,**/*.test.ts,**/*.test.tsx,**/*.spec.ts,**/node_modules/**,**/.next/**,**/coverage/**,src/app/globals.css'",
@@ -40,7 +40,7 @@
     "fallow:dead-code": "fallow dead-code",
     "fallow:health": "fallow health",
     "fallow:dupes": "fallow dupes",
-    "prepare": "bunx husky"
+    "prepare": "bun x husky"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -70,10 +70,10 @@
   },
   "lint-staged": {
     "*.{js,ts,tsx,jsx,mjs,cjs}": [
-      "bunx biome check --write"
+      "bun x biome check --write"
     ],
     "*.{json,css}": [
-      "bunx biome check --write"
+      "bun x biome check --write"
     ]
   },
   "devDependencies": {
