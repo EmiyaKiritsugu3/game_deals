@@ -5,3 +5,6 @@
 ## 2024-05-24 - Consistent Keyboard Focus Indicators
 **Learning:** While checking accessibility on key interactive elements (e.g., custom icon buttons, game card triggers), I found that many had hover states but lacked visible focus indicators for keyboard users. Adding a consistent focus ring pattern greatly improves accessibility without compromising the design.
 **Action:** Always apply `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2` (or similar utility classes from the established design system) to all interactive elements (`button`, `a`, `input`, etc.) to ensure keyboard navigability.
+## 2024-07-23 - Accessible Names for Responsive Text
+**Learning:** Interactive components (like the `UserMenu` button) that conditionally hide visible text on smaller viewports (e.g., using `max-lg:hidden`) lose their accessible name for screen readers on mobile devices if they only rely on the visible text content.
+**Action:** Always extract the relevant text data into the parent scope and explicitly apply an `aria-label` to the container or interactive element whenever child text is conditionally hidden via responsive CSS classes.

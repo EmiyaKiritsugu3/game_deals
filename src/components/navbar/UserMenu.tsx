@@ -89,11 +89,14 @@ export function UserMenu({ user, serverUser }: UserMenuProps) {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const wrapperRef = useClickOutside<HTMLDivElement>(() => setIsUserMenuOpen(false));
 
+  const { name } = getUserDisplay(user, serverUser);
+
   return (
     <div className="relative flex items-center" ref={wrapperRef}>
       <button
-        className="flex items-center gap-3 cursor-pointer px-2.5 py-1.5 rounded-full bg-muted/30 border border-border/50 hover:bg-muted/60 transition-colors"
+        className="flex items-center gap-3 cursor-pointer px-2.5 py-1.5 rounded-full bg-muted/30 border border-border/50 hover:bg-muted/60 transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+        aria-label={`User menu for ${name}`}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
