@@ -65,3 +65,5 @@ graphify-out/
 
 # pnpm (migrated to Bun)
 pnpm-lock.yaml
+
+~/.bun/install/cache/
