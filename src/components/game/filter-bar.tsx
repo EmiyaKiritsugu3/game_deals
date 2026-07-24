@@ -61,7 +61,7 @@ export function FilterBar(props: FilterBarProps) {
               <button
                 type="button"
                 onClick={() => props.onSearchChange('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-muted-foreground hover:text-foreground"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                 aria-label="Clear"
               >
                 <X className="size-3.5" />

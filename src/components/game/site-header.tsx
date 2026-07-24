@@ -156,7 +156,7 @@ export function SiteHeader({ onSearch, searchValue, searchInputRef }: SiteHeader
             <button
               type="button"
               onClick={() => onSearch('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-muted-foreground hover:text-foreground transition-colors"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
               aria-label="Clear search"
             >
               <X className="size-3.5" />
