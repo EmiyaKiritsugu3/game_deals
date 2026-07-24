@@ -1,6 +1,54 @@
 # Changelog
 
-## [v0.8.0] — 2026-06-27
+## [v0.11.0] — 2026-07-23
+
+### Sprint Post-Audit — Impeccable Design Cleanup (#89)
+
+- **Biome fixes**: Palette color mismatch (hotpink → oklch var), dead CSS keyframes removed, unused shadcn imports (4 components) deleted.
+- **Fallow**: 91.9/100 health score, 0 new issues.
+- **SonarCloud**: P3 audit pass. CSP nonce legacy pattern, unused `Skeleton` prop, auth error page type guard fixed.
+- **Docs sync**: design-system.md, scripts.md, runbook.md updated post-P3 audit.
+
+### Sprint 19 — pnpm→Bun Migration (#87, #88)
+
+- **Runtime**: pnpm removed, Bun 1.3.13 as sole package manager and task runner.
+- **Lockfile**: `pnpm-lock.yaml` deleted, replaced by `bun.lock`.
+- **CI**: All workflows migrated to `bun install`, `bun run`, `bunx`.
+- **Doc updates**: ADRs, CLAUDE.md, scripts converted.
+- **Performance**: `bun install` ~3× faster than pnpm cold. No dependency version changes.
+
+### Sprint 18 — DEALFORGE UI Port (#86)
+
+- **53 UI components ported** from DEALFORGE design system (11.5K lines added), including:
+  - `DealGrid` + `DealCard` (replaced `GameCard` across search, home, collections)
+  - Glassmorphism, OKLCH tokens, 50+ CSS `@keyframes` animations
+  - `base.css` + `globals.css` refactor (Tailwind v4 `@theme` directive)
+- **Build fix**: Zustand IIFE eval-time crash root-caused and fixed.
+- **Cleanup**: 9 PRs merged (#82 ECC bundle, dependabot bumps, XSS fix, min price, getCheapestDeal), 7 obsolete PRs closed.
+- **Tests**: 1079 passing after port.
+
+## [v0.10.0] — 2026-07-17
+
+### Sprint 17.5 — Security & Performance Patch Batch
+
+- **Security fixes**: XSS in OutRedirector (#61), open redirect in auth callback (#58).
+- **Performance**: O(N) `getCheapestDeal` optimization (#65), N+1 query fix in wishlist/collections (#57).
+- **ECC bundle**: Game Deals encrypted content bundle added (#82).
+- **Accessibility**: focus-visible outlines on all interactive elements (#80), keyboard focus states (#69).
+- **Deps bumps**: actions/checkout v4→v7, setup-node v4→v6, upload-artifact v4→v7, SonarSource/scan v5→v8 (#75-#78).
+
+## [v0.9.0] — 2026-06-30
+
+### Sprint 17 — UI Refresh & CSS Modernization (#56)
+
+- **CSS Modules eliminated**: All 46 `.module.css` files removed. 100% Tailwind v4 + `@theme`.
+- **JS animation runtimes removed**: `motion/react`, `gsap`, `framer-motion` deleted. All animations CSS `@keyframes`.
+- **BaseModal deleted**: Replaced by shadcn `<Dialog>`. Auth/deal/list modals migrated.
+- **AnimatedDiv deleted**: All animated containers migrated to CSS animations.
+- **`tw-animate-css` removed**: Keyframes centralized in `globals.css`.
+- **Dead code**: 6 dead exports removed, 3 dep overrides, ~2.3K LOC deleted.
+- **DealGrid+DealCard**: Replaces GameCard on search, home, collections. 51 new tests.
+- **Doc refresh**: 6 docs updated (design-system, accessibility, core-components, architecture, README, CHANGELOG).
 
 ### Sprint 17 — UI Refresh & CSS Modernization (#56)
 
