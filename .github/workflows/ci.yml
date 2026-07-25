@@ -39,13 +39,13 @@ jobs:
           bun-version: 1.3.13
       - run: bun ci
       - name: Lint
-        run: bunx biome check src/
+        run: bun x biome check src/
       - name: Dependency audit
         run: bun audit --audit-level=high
       - name: Type check
-        run: bunx tsc --noEmit
+        run: bun x tsc --noEmit
       - name: Unit Tests + Coverage
-        run: bunx vitest run --coverage
+        run: bun x vitest run --coverage
       - name: SonarCloud Scan
         continue-on-error: true
         if: ${{ github.event_name == 'pull_request' || github.ref == 'refs/heads/main' }}
@@ -58,9 +58,9 @@ jobs:
       - name: Build
         run: bun --bun next build
       - name: Dead code
-        run: bunx knip --no-exit-code
+        run: bun x knip --no-exit-code
       - name: Fallow audit
-        run: bunx fallow audit
+        run: bun x fallow audit
         continue-on-error: true
 
   e2e:
@@ -93,13 +93,13 @@ jobs:
           bun-version: 1.3.13
       - run: bun ci
       - name: Install Playwright browsers
-        run: bunx playwright install --with-deps chromium
+        run: bun x playwright install --with-deps chromium
       - name: Setup env
         run: cp .env.example .env.local
       - name: Build
         run: bun --bun next build
       - name: E2E Tests
-        run: bunx playwright test
+        run: bun x playwright test
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
