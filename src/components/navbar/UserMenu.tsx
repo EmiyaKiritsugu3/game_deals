@@ -92,7 +92,7 @@ export function UserMenu({ user, serverUser }: UserMenuProps) {
   return (
     <div className="relative flex items-center" ref={wrapperRef}>
       <button
-        className="flex items-center gap-3 cursor-pointer px-2.5 py-1.5 rounded-full bg-muted/30 border border-border/50 hover:bg-muted/60 transition-colors"
+        className="flex items-center gap-3 cursor-pointer px-2.5 py-1.5 rounded-full bg-muted/30 border border-border/50 hover:bg-muted/60 transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
@@ -104,6 +104,7 @@ export function UserMenu({ user, serverUser }: UserMenuProps) {
         type="button"
         aria-expanded={isUserMenuOpen}
         aria-haspopup="true"
+        aria-label="User menu"
       >
         <UserAvatar user={user} serverUser={serverUser} />
         <ChevronDown size={14} />
