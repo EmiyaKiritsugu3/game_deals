@@ -41,7 +41,7 @@ jobs:
       - name: Lint
         run: bun x biome check src/
       - name: Dependency audit
-        run: bun audit --audit-level=high
+        run: bun run audit
       - name: Type check
         run: bun x tsc --noEmit
       - name: Unit Tests + Coverage
