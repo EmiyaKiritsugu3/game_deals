@@ -10,3 +10,8 @@
 **Vulnerability:** Open redirect in authentication callback due to inadequate prefix checks.
 **Learning:** Validating URL paths strictly with `startsWith('/')` and similar manual checks is insufficient because Node's URL parser and browsers interpret strings differently. A significant issue was that an absolute URL with a malicious protocol like `javascript://...` bypasses the `startsWith` checks, causing the app to redirect to XSS payloads. By parsing with the `URL` constructor using the base origin and verifying `url.origin === origin`, we ensure the redirect stays intra-domain.
 **Prevention:** Use the `URL` constructor with the base `origin` and strictly verify the resulting `origin` matches the trusted base, rather than using string matching for redirect destinations.
+
+## 2024-05-24 - Missing Protocol Validation in URL Allowlist
+**Vulnerability:** A URL allowlist check in a Server Route handler (`isDomainAllowed`) only verified the `hostname` property of a `URL` object. This meant malicious protocols like `javascript://valid-domain.com/%0aalert(1)` would be allowed, leading to potential Cross-Site Scripting (XSS) or Open Redirect vulnerabilities when the application redirected to that URL.
+**Learning:** `URL.hostname` extraction bypasses protocol enforcement. A malicious attacker can construct a URL that correctly parses a valid hostname while using a dangerous protocol.
+**Prevention:** Whenever validating a `URL` object against an allowlist for redirects or loading external content, strictly validate the protocol (e.g., `url.protocol === 'http:' || url.protocol === 'https:'`) in addition to the hostname.
