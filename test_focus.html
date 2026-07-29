@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body { background-color: #1a1a1a; color: white; padding: 2rem; display: flex; gap: 2rem; flex-wrap: wrap; }
+      .icon { width: 16px; height: 16px; display: inline-block; background: currentColor; }
+    </style>
+</head>
+<body>
+    <div style="position: relative;">
+        <button
+            class="flex items-center gap-3 cursor-pointer px-2.5 py-1.5 rounded-full bg-slate-800/30 border border-slate-700/50 hover:bg-slate-800/60 transition-colors"
+            type="button"
+            aria-expanded="false"
+            aria-haspopup="true"
+        >
+            <div class="w-7 h-7 rounded-full bg-slate-500"></div>
+            <span class="text-sm font-semibold text-white max-lg:hidden">John Doe</span>
+            <span class="icon"></span>
+        </button>
+    </div>
+
+    <div style="position: relative;">
+        <button
+            class="flex items-center gap-3 cursor-pointer px-2.5 py-1.5 rounded-full bg-slate-800/30 border border-slate-700/50 hover:bg-slate-800/60 transition-colors focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2"
+            type="button"
+            aria-expanded="false"
+            aria-haspopup="true"
+        >
+            <div class="w-7 h-7 rounded-full bg-slate-500"></div>
+            <span class="text-sm font-semibold text-white max-lg:hidden">John Doe</span>
+            <span class="icon"></span>
+        </button>
+    </div>
+</body>
+</html>
