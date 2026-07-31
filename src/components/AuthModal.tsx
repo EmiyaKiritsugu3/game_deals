@@ -10,6 +10,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { getBrowserClient } from '@/lib/supabase-browser';
 import { cn } from '@/lib/utils';
 
@@ -41,12 +43,17 @@ function AuthFormFields({
   setEmail: (v: string) => void;
 }>) {
   return (
-    <div className="flex flex-col gap-4">
-      <input
+    <div className="flex flex-col gap-2">
+      <Label htmlFor="email">
+        Email <span className="text-red-500">*</span>
+      </Label>
+      <Input
+        id="email"
         type="email"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        required
       />
     </div>
   );
