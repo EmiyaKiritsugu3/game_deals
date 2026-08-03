@@ -52,10 +52,10 @@ jobs:
           bun-version: 1.3.13
       - run: bun ci
       - name: Dead code (strict)
-        run: bunx knip
+        run: bun x knip
         continue-on-error: true
       - name: Complexity audit
-        run: bunx fallow audit
+        run: bun x fallow audit
         continue-on-error: true
 
   e2e-full:
@@ -87,15 +87,15 @@ jobs:
           bun-version: 1.3.13
       - run: bun ci
       - name: Install Playwright browsers
-        run: bunx playwright install --with-deps chromium
+        run: bun x playwright install --with-deps chromium
       - name: Setup env
         run: cp .env.example .env.local
       - name: Build
         run: bun --bun next build
       - name: Run DB migrations
-        run: bunx drizzle-kit migrate
+        run: bun x drizzle-kit migrate
       - name: Full E2E suite
-        run: bunx playwright test
+        run: bun x playwright test
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
