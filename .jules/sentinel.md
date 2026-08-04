@@ -10,3 +10,7 @@
 **Vulnerability:** Open redirect in authentication callback due to inadequate prefix checks.
 **Learning:** Validating URL paths strictly with `startsWith('/')` and similar manual checks is insufficient because Node's URL parser and browsers interpret strings differently. A significant issue was that an absolute URL with a malicious protocol like `javascript://...` bypasses the `startsWith` checks, causing the app to redirect to XSS payloads. By parsing with the `URL` constructor using the base origin and verifying `url.origin === origin`, we ensure the redirect stays intra-domain.
 **Prevention:** Use the `URL` constructor with the base `origin` and strictly verify the resulting `origin` matches the trusted base, rather than using string matching for redirect destinations.
+## 2024-05-27 - XSS in JSON-LD via dangerouslySetInnerHTML
+**Vulnerability:** User-controlled data (like game title or descriptions) serialized directly into `<script type="application/ld+json">` using `JSON.stringify()` without escaping HTML characters can lead to XSS if a malicious payload containing `</script>` is injected, allowing arbitrary script execution.
+**Learning:** `JSON.stringify()` does not escape HTML characters by default, and `dangerouslySetInnerHTML` will render them literally.
+**Prevention:** When using `dangerouslySetInnerHTML` for JSON-LD, always escape HTML control characters, specifically replacing `<` with `\u003c`. Ensure to use a double backslash (`\\u003c`) so the Unicode escape is preserved in the JavaScript string.
