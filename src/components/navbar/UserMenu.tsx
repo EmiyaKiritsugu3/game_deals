@@ -88,7 +88,7 @@ export function UserMenu({ user, serverUser }: UserMenuProps) {
   const { logout } = useAuth();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const wrapperRef = useClickOutside<HTMLDivElement>(() => setIsUserMenuOpen(false));
-  const { name } = getUserDisplay(user, serverUser);
+  const name = user?.name || serverUser?.user_metadata?.full_name || 'User';
 
   return (
     <div className="relative flex items-center" ref={wrapperRef}>
