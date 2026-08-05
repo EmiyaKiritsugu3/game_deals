@@ -40,7 +40,7 @@
     "fallow:dead-code": "fallow dead-code",
     "fallow:health": "fallow health",
     "fallow:dupes": "fallow dupes",
-    "prepare": "bunx husky"
+    "prepare": "bun x husky"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -70,10 +70,10 @@
   },
   "lint-staged": {
     "*.{js,ts,tsx,jsx,mjs,cjs}": [
-      "bunx biome check --write"
+      "bun x @biomejs/biome check --write"
     ],
     "*.{json,css}": [
-      "bunx biome check --write"
+      "bun x @biomejs/biome check --write"
     ]
   },
   "devDependencies": {
