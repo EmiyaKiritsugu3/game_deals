@@ -12,3 +12,7 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+
+## 2026-08-06 - Cache external API configurations in Server Components
+**Learning:** Server-side fetch calls in dynamic Next.js routes (like SearchPage) run on every request. If these fetch data that rarely changes (like a list of API stores from CheapShark), they create a measurable network bottleneck, blocking rendering and hitting API rate limits unnecessarily.
+**Action:** Always verify if external static configurations/metadata endpoints in Server Components can be safely cached using Next.js `fetch` options, such as `{ next: { revalidate: 86400 } }`, to significantly reduce TTFB.

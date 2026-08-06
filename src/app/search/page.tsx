@@ -8,9 +8,11 @@ export const metadata = {
 };
 
 async function getActiveStores(): Promise<Store[]> {
-  const storesResponse = (await fetch('https://www.cheapshark.com/api/1.0/stores').then((res) =>
-    res.json()
-  )) as Store[];
+  const storesResponse = (await fetch('https://www.cheapshark.com/api/1.0/stores', {
+    // ⚡ Bolt Performance: Cache this rarely-changing store list to prevent blocking
+    // the server-side render on every search/filter navigation.
+    next: { revalidate: 86400 }, // 24 hours
+  }).then((res) => res.json())) as Store[];
   return storesResponse.filter((s) => s.isActive === 1);
 }
 
