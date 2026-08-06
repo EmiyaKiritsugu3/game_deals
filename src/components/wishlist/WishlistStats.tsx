@@ -66,7 +66,7 @@ export default function WishlistStats({
 
         <button
           type="button"
-          className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-gradient-to-br from-[hsl(220,80%,55%)] to-[hsl(260,70%,60%)] text-white font-bold text-xs border-none cursor-pointer whitespace-nowrap font-inherit hover:-translate-y-0.5 hover:shadow-[0_4px_18px_rgba(100,100,255,0.35)] active:scale-95 transition-all"
+          className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-gradient-to-br from-[hsl(220,80%,55%)] to-[hsl(260,70%,60%)] text-white font-bold text-xs border-none cursor-pointer whitespace-nowrap font-inherit hover:-translate-y-0.5 hover:shadow-[0_4px_18px_rgba(100,100,255,0.35)] active:scale-95 transition-all focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           onClick={share}
         >
           {copied ? '✅ Link copied!' : '🔗 Share Wishlist'}
