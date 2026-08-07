@@ -10,3 +10,8 @@
 **Vulnerability:** Open redirect in authentication callback due to inadequate prefix checks.
 **Learning:** Validating URL paths strictly with `startsWith('/')` and similar manual checks is insufficient because Node's URL parser and browsers interpret strings differently. A significant issue was that an absolute URL with a malicious protocol like `javascript://...` bypasses the `startsWith` checks, causing the app to redirect to XSS payloads. By parsing with the `URL` constructor using the base origin and verifying `url.origin === origin`, we ensure the redirect stays intra-domain.
 **Prevention:** Use the `URL` constructor with the base `origin` and strictly verify the resulting `origin` matches the trusted base, rather than using string matching for redirect destinations.
+
+## 2024-05-16 - XSS in JSON-LD via dangerouslySetInnerHTML
+**Vulnerability:** A cross-site scripting (XSS) vulnerability was found in the `src/app/game/[id]/page.tsx` file where `productJsonLd` was serialized into a `<script type="application/ld+json">` tag using `JSON.stringify()` without escaping HTML characters.
+**Learning:** `JSON.stringify()` does not automatically escape characters like `<`. When injected into `<script>` blocks via `dangerouslySetInnerHTML`, a malicious user input containing a `</script>` tag can terminate the JSON block and execute arbitrary JavaScript.
+**Prevention:** When injecting JSON into HTML script tags using `dangerouslySetInnerHTML`, always sanitize the output by escaping HTML control characters (e.g., using `.replace(/</g, '\\u003c')`). Also use `// NOSONAR` instead of `// biome-ignore lint/security/noDangerouslySetInnerHtml` to correctly suppress the warning in SonarCloud.
