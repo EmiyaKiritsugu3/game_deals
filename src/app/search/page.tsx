@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import FilterSidebar from '@/components/FilterSidebar';
 import { normaliseDeal } from '@/lib/deal-utils';
 import { getDeals, type Store } from '@/services/api';
@@ -7,12 +8,12 @@ export const metadata = {
   title: 'Search Results | Game Deals',
 };
 
-async function getActiveStores(): Promise<Store[]> {
-  const storesResponse = (await fetch('https://www.cheapshark.com/api/1.0/stores').then((res) =>
-    res.json()
-  )) as Store[];
+const getActiveStores = cache(async function getActiveStores(): Promise<Store[]> {
+  const storesResponse = (await fetch('https://www.cheapshark.com/api/1.0/stores', {
+    next: { revalidate: 86400 },
+  }).then((res) => res.json())) as Store[];
   return storesResponse.filter((s) => s.isActive === 1);
-}
+});
 
 async function getDealsWithParams(
   query: string,
