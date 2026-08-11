@@ -1,0 +1,30 @@
+src/lib/json-ld.test.ts
+  s_120cecd54891a5::t_2f435bc5e4a38a 1-4,11,16,20
+  s_120cecd54891a5::t_eac868c336f3b0 5-10,12-15,17-19
+audit-report-2026-08-11.html
+  s_120cecd54891a5::t_b0dfd8b1138e7b 1-242
+src/app/game/[id]/page.tsx
+  s_120cecd54891a5::t_62a9b0f96f8480 4
+  s_120cecd54891a5::t_0d62ae5dea2384 100
+src/lib/json-ld.ts
+  s_120cecd54891a5::t_ead7c2b4fd344e 1-6,8
+  s_120cecd54891a5::t_eac868c336f3b0 7
+.gitignore
+  s_120cecd54891a5::t_3053fc760e2744 68-70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "a2809f064fa3812a4c9c56fd1069e3fdfc5090d6",
+  "prompts": {},
+  "sessions": {
+    "s_120cecd54891a5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e07b28d6-4763-416b-bd21-6aaaa8e14f33",
+        "model": "deepseek-v4-flash"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
