@@ -12,3 +12,7 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+
+## 2024-11-20 - [Optimize SSG Generation Loop with O(N) Minimum Search]
+**Learning:** The SSG generation mapping loop in `src/app/collections/[slug]/page.tsx` previously used `[...gameData.deals].sort(...)[0]` to find the best deal for each game in a collection. During static generation of collections which involves mapping over batch results, this O(N log N) time complexity combined with O(N) memory allocation and copy overhead per game scales poorly and stresses the GC unnecessarily.
+**Action:** Replaced the array-spread and sort with a call to the `getCheapestDeal` utility function which performs a simple single-pass O(N) iteration without allocations. This mirrors previous learnings and ensures minimal CPU time overhead on collection static generation.
