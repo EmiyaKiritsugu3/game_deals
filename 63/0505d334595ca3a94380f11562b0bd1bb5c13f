@@ -1,0 +1,19 @@
+.env.example
+  s_120cecd54891a5::t_512b20231bc0ab 15,18-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "630505d334595ca3a94380f11562b0bd1bb5c13f",
+  "prompts": {},
+  "sessions": {
+    "s_120cecd54891a5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e07b28d6-4763-416b-bd21-6aaaa8e14f33",
+        "model": "z-ai/glm-5.2"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
