@@ -33,7 +33,9 @@ async function lookupDealUrl(storeId: string): Promise<string> {
 }
 
 function isDomainAllowed(url: URL): boolean {
-  return ALLOWED_DOMAINS.has(url.hostname);
+  return (
+    ALLOWED_DOMAINS.has(url.hostname) && (url.protocol === 'http:' || url.protocol === 'https:')
+  );
 }
 
 function applyAffiliateParams(url: string, storeId: string): string {
