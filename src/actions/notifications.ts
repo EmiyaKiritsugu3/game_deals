@@ -4,6 +4,7 @@ import { and, eq, isNull, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { db } from '@/db';
 import { notifications } from '@/db/schema';
+import { assertRateLimit } from '@/lib/server-action-rate-limit';
 import { createClient } from '@/utils/supabase/server';
 
 export async function getNotificationsAction(limit = 20) {
@@ -44,6 +45,7 @@ export async function markNotificationReadAction(id: string) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
+  await assertRateLimit('notifRead', user.id, 60, 60_000);
 
   await db
     .update(notifications)
@@ -59,6 +61,7 @@ export async function markAllNotificationsReadAction() {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
+  await assertRateLimit('notifReadAll', user.id, 30, 60_000);
 
   await db
     .update(notifications)
