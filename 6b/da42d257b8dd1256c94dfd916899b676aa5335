@@ -1,0 +1,23 @@
+src/lib/server-action-rate-limit.test.ts
+  s_120cecd54891a5::t_4f59b21505bfbd 3-5
+  s_120cecd54891a5::t_01bb019641a7ee 1-2,12-13,15-16,18-19,22-24,26,29-41,43-48,50-56
+  s_120cecd54891a5::t_c9921d7bf60fa1 14,17,20-21,25,27-28,42
+  s_120cecd54891a5::t_4b580833300be2 49
+  s_120cecd54891a5::t_241c26e642ec13 6-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "6bda42d257b8dd1256c94dfd916899b676aa5335",
+  "prompts": {},
+  "sessions": {
+    "s_120cecd54891a5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e07b28d6-4763-416b-bd21-6aaaa8e14f33",
+        "model": "z-ai/glm-5.2"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
