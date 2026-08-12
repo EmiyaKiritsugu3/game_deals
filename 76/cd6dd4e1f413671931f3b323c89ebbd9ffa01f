@@ -1,0 +1,21 @@
+drizzle/0016_rls.sql
+  s_120cecd54891a5::t_e88b070da2d023 1-196
+drizzle/meta/_journal.json
+  s_120cecd54891a5::t_b9786bb3982e59 116-122
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "76cd6dd4e1f413671931f3b323c89ebbd9ffa01f",
+  "prompts": {},
+  "sessions": {
+    "s_120cecd54891a5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e07b28d6-4763-416b-bd21-6aaaa8e14f33",
+        "model": "unknown"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
