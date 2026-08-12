@@ -25,7 +25,7 @@ function MenuItem({
   return (
     <Link
       href={href}
-      className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-muted-foreground no-underline rounded-lg hover:bg-muted/80 hover:text-foreground transition-all bg-transparent border-none w-full text-left cursor-pointer"
+      className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-muted-foreground no-underline rounded-lg hover:bg-muted/80 hover:text-foreground transition-all bg-transparent border-none w-full text-left cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
     >
       {icon}
       <span>{label}</span>
@@ -50,7 +50,7 @@ function UserMenuDropdown({
       <MenuDivider />
       <button
         type="button"
-        className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-[hsl(0,80%,60%)] no-underline rounded-lg hover:bg-[hsl(0,80%,60%,0.08)] hover:text-[hsl(0,80%,60%)] transition-all bg-transparent border-none w-full text-left cursor-pointer"
+        className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-[hsl(0,80%,60%)] no-underline rounded-lg hover:bg-[hsl(0,80%,60%,0.08)] hover:text-[hsl(0,80%,60%)] transition-all bg-transparent border-none w-full text-left cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         onClick={onLogout}
       >
         <LogOut size={16} />
@@ -92,7 +92,7 @@ export function UserMenu({ user, serverUser }: UserMenuProps) {
   return (
     <div className="relative flex items-center" ref={wrapperRef}>
       <button
-        className="flex items-center gap-3 cursor-pointer px-2.5 py-1.5 rounded-full bg-muted/30 border border-border/50 hover:bg-muted/60 transition-colors"
+        className="flex items-center gap-3 cursor-pointer px-2.5 py-1.5 rounded-full bg-muted/30 border border-border/50 hover:bg-muted/60 transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
