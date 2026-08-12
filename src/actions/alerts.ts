@@ -3,6 +3,7 @@
 import { sql } from 'drizzle-orm';
 import { resolveGameUuid } from '@/actions/deals';
 import { db } from '@/db';
+import { assertRateLimit } from '@/lib/server-action-rate-limit';
 import { processAction } from '@/services/gamification';
 import type { PriceAlertWithGame } from '@/types/price-alert';
 import { createClient } from '@/utils/supabase/server';
@@ -22,6 +23,7 @@ export async function createPriceAlertAction(
   storeId?: string
 ) {
   const user = await requireAuth();
+  await assertRateLimit('alertCreate', user.id, 10, 60_000);
   const uuid = await resolveGameUuid(gameId);
   if (!uuid) throw new Error('Game not found or not yet ingested');
 
@@ -65,6 +67,7 @@ export async function deletePriceAlertAction(alertId: string) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
+  await assertRateLimit('alertDelete', user.id, 20, 60_000);
 
   const result = await db.execute(
     sql`DELETE FROM price_alerts WHERE id = ${alertId}::uuid AND "userId" = ${user.id}::uuid RETURNING id`

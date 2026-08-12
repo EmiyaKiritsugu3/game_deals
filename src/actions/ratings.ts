@@ -3,6 +3,7 @@
 import { and, eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { gameAvgRatings, gameRatings } from '@/db/schema';
+import { assertRateLimit } from '@/lib/server-action-rate-limit';
 import { createClient } from '@/utils/supabase/server';
 
 async function requireAuth() {
@@ -27,6 +28,7 @@ function validateRating(rating: number): asserts rating is number {
 export async function rateGame(gameId: string, rating: number): Promise<{ id: string }> {
   const user = await requireAuth();
   validateRating(rating);
+  await assertRateLimit('rateGame', user.id, 20, 60_000);
 
   const [result] = await db
     .insert(gameRatings)

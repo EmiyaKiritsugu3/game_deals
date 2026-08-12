@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import GameBody from '@/components/game/GameBody';
 import { buildGameStats, sortDealsByPrice, splitDealsByGreyMarket } from '@/lib/game-data';
+import { safeJsonLdStringify } from '@/lib/json-ld';
 import {
   buildOG,
   buildTwitter,
@@ -96,7 +97,7 @@ export default async function GamePage({ params }: Readonly<{ params: Promise<{ 
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd).replace(/</g, '\\u003c') }} // NOSONAR
+        dangerouslySetInnerHTML={{ __html: safeJsonLdStringify(productJsonLd) }}
       />
       <div className="container">
         <GameBody viewModel={viewModel} id={id} />

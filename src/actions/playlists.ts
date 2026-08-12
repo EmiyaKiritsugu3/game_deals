@@ -3,6 +3,7 @@
 import { type SQL, sql } from 'drizzle-orm';
 import { resolveGameUuid } from '@/actions/deals';
 import { db } from '@/db';
+import { assertRateLimit } from '@/lib/server-action-rate-limit';
 import { processAction } from '@/services/gamification';
 import { createClient } from '@/utils/supabase/server';
 
@@ -50,6 +51,7 @@ export async function createPlaylistAction(
 ): Promise<PlaylistRow> {
   const authedUserId = await getAuthenticatedUserId();
   if (authedUserId !== userId) throw new Error('Unauthorized');
+  await assertRateLimit('playlistCreate', userId, 10, 60_000);
 
   const baseSlug = generateSlug(title);
   let slug = baseSlug;
@@ -114,6 +116,7 @@ export async function addGameToPlaylistAction(
   cheapsharkId: string
 ): Promise<boolean> {
   const userId = await getAuthenticatedUserId();
+  await assertRateLimit('playlistAdd', userId, 30, 60_000);
 
   const gameUuid = await resolveGameUuid(cheapsharkId);
   if (!gameUuid) throw new Error('Game not found or not yet ingested');
@@ -147,6 +150,7 @@ export async function removeGameFromPlaylistAction(
   gameId: string
 ): Promise<boolean> {
   const userId = await getAuthenticatedUserId();
+  await assertRateLimit('playlistRemove', userId, 30, 60_000);
 
   const result = (await db.execute(
     sql`DELETE FROM playlist_games
@@ -166,6 +170,7 @@ export async function updatePlaylistAction(
   data: { title?: string; description?: string | null; isPublic?: boolean }
 ): Promise<PlaylistRow | null> {
   const userId = await getAuthenticatedUserId();
+  await assertRateLimit('playlistUpdate', userId, 20, 60_000);
 
   const sets: SQL[] = [];
   if (data.title !== undefined) {
@@ -194,6 +199,7 @@ export async function updatePlaylistAction(
 
 export async function deletePlaylistAction(id: string): Promise<boolean> {
   const userId = await getAuthenticatedUserId();
+  await assertRateLimit('playlistDelete', userId, 10, 60_000);
 
   // Ownership check FIRST — prevents cross-user playlist_games deletion
   const ownership = (await db.execute(

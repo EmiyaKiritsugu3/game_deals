@@ -1,6 +1,7 @@
 'use server';
 
 import * as Sentry from '@sentry/nextjs';
+import { assertRateLimit } from '@/lib/server-action-rate-limit';
 import { indexGamesBatch, searchGames as typesenseSearch } from '@/lib/typesense';
 import { mapDealsToTypesenseGames } from '@/lib/typesense-map';
 import { fetchCheapSharkDeals } from '@/services/ingest';
@@ -19,6 +20,7 @@ interface TypesenseHit {
  * Fallback pra CheapShark API se Typesense não configurado
  */
 export async function searchGamesAction(query: string, limit = 10) {
+  await assertRateLimit('search', null, 30, 60_000);
   const apiKey =
     process.env.TYPESENSE_ADMIN_KEY || process.env.NEXT_PUBLIC_TYPESENSE_SEARCH_KEY || '';
 

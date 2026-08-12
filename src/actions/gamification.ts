@@ -2,6 +2,7 @@
 
 import { db } from '@/db';
 import { userStats } from '@/db/schema';
+import { assertRateLimit } from '@/lib/server-action-rate-limit';
 import { createClient } from '@/utils/supabase/server';
 
 export async function updateLeaderboardOptIn(optIn: boolean) {
@@ -10,6 +11,7 @@ export async function updateLeaderboardOptIn(optIn: boolean) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) throw new Error('Not authenticated');
+  await assertRateLimit('leaderOptIn', user.id, 10, 60_000);
 
   await db
     .insert(userStats)
