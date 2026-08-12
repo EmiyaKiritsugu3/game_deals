@@ -1,0 +1,45 @@
+src/actions/gamification.ts
+  s_120cecd54891a5::t_d2ef212f4038d5 5
+  s_120cecd54891a5::t_ec10720bee0390 14
+src/actions/notifications.ts
+  s_120cecd54891a5::t_72795955646274 48
+  s_120cecd54891a5::t_cce19dd781c3df 64
+  s_120cecd54891a5::t_a9293f2a3c6156 7
+src/actions/search.ts
+  s_120cecd54891a5::t_a892a2ec76f4cb 4
+  s_120cecd54891a5::t_152646cd2e0845 23
+tests/setup.ts
+  s_120cecd54891a5::t_1b2a07a0f5478a 2-8
+src/lib/server-action-rate-limit.ts
+  s_120cecd54891a5::t_103804b38e4ce1 1-20
+src/actions/ratings.ts
+  s_120cecd54891a5::t_b411d8d11b929e 6
+  s_120cecd54891a5::t_3363fd15346db9 31
+src/actions/playlists.ts
+  s_120cecd54891a5::t_6fa4f15ee5f9e1 202
+  s_120cecd54891a5::t_9b089a3aec9a6a 153
+  s_120cecd54891a5::t_ca0e47a4e3842d 6
+  s_120cecd54891a5::t_d16cc20cc1c164 54
+  s_120cecd54891a5::t_99848b01e25c2e 119
+  s_120cecd54891a5::t_177c9f56805e96 173
+src/actions/alerts.ts
+  s_120cecd54891a5::t_9398af5499ce8b 70
+  s_120cecd54891a5::t_f007ac472f8519 26
+  s_120cecd54891a5::t_43c3d6319d6e61 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "12e808fe9c4accc22e1d7d57302ae6a15b522009",
+  "prompts": {},
+  "sessions": {
+    "s_120cecd54891a5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e07b28d6-4763-416b-bd21-6aaaa8e14f33",
+        "model": "z-ai/glm-5.2"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
