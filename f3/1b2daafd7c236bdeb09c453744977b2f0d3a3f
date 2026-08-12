@@ -1,0 +1,22 @@
+package.json
+  s_120cecd54891a5::t_d9dc29f8325494 66
+  s_120cecd54891a5::t_dd5e9b05b13e09 16,18,56,86-88,91,93-95,99,102-105
+bun.lock
+  s_120cecd54891a5::t_c18ebb91d45279 12,22,34-36,39,41-43,47,50-53,66,68,321,323,325,327,329,331,333,335,337,1071,1307,1311
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "f31b2daafd7c236bdeb09c453744977b2f0d3a3f",
+  "prompts": {},
+  "sessions": {
+    "s_120cecd54891a5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e07b28d6-4763-416b-bd21-6aaaa8e14f33",
+        "model": "z-ai/glm-5.2"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
