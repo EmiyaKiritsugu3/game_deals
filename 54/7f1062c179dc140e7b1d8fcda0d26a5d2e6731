@@ -1,0 +1,23 @@
+src/components/game/compare-tray.tsx
+  s_120cecd54891a5::t_3b603dd058745d 235-242
+src/components/game/filter-bar.tsx
+  s_120cecd54891a5::t_c81c61bb431dda 227-234
+  s_120cecd54891a5::t_530bda5d294488 4
+  s_120cecd54891a5::t_359e3df09cbfbf 140-147
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "547f1062c179dc140e7b1d8fcda0d26a5d2e6731",
+  "prompts": {},
+  "sessions": {
+    "s_120cecd54891a5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e07b28d6-4763-416b-bd21-6aaaa8e14f33",
+        "model": "hy3-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
