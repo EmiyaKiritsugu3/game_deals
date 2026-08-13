@@ -1,0 +1,21 @@
+src/components/game/recently-viewed-strip.tsx
+  s_120cecd54891a5::t_f0b79fdac99839 3
+src/store/density.ts
+  s_120cecd54891a5::t_9296dd8f729343 7-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "9460043fb4d0d646e0224ed65bada1519c390657",
+  "prompts": {},
+  "sessions": {
+    "s_120cecd54891a5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e07b28d6-4763-416b-bd21-6aaaa8e14f33",
+        "model": "hy3-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
