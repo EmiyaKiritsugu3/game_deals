@@ -12,3 +12,6 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+## 2024-05-24 - Avoid O(N log N) Sorts for Min/Max
+**Learning:** Using `[...arr].sort()[0]` inside Server Component loops (like mapping over a batch of collections) incurs unnecessary O(N log N) CPU time and O(N) memory allocation overhead per iteration, cumulatively triggering expensive garbage collection during rendering.
+**Action:** Always use an O(N) single-pass iteration utility like `getCheapestDeal` from `src/utils/pricing.ts` when finding the minimum/maximum price within game deals instead of array cloning and sorting.
