@@ -232,7 +232,14 @@ function CompareDialog({
         d.store ? (
           <span className="inline-flex items-center gap-1.5">
             {}
-            <img src={d.store.logoUrl} alt="" className="size-4 rounded object-contain" />
+            <Image
+              src={d.store.logoUrl}
+              alt=""
+              width={16}
+              height={16}
+              className="size-4 rounded object-contain"
+              unoptimized
+            />
             <span className="text-xs">{d.store.storeName}</span>
           </span>
         ) : (
