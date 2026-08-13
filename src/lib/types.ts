@@ -33,35 +33,12 @@ export interface Deal {
   thumb: string;
 }
 
-export interface GameSearchResult {
-  gameID: string;
-  steamAppID: string | null;
-  cheapest: string;
-  cheapestDealID: string;
-  external: string;
-  internalName: string;
-  thumb: string;
-}
-
 export interface GameDealEntry {
   dealID: string;
   storeID: string;
   price: string;
   retailPrice: string;
   savings: string;
-}
-
-export interface GameDetail {
-  info: {
-    title: string;
-    steamAppID: string | null;
-    thumb: string;
-  };
-  cheapestPriceEver: {
-    price: string;
-    date: number;
-  } | null;
-  deals: GameDealEntry[];
 }
 
 // Normalised shapes the UI consumes
@@ -92,30 +69,6 @@ export type SortOption =
   | 'price-desc'
   | 'metacritic'
   | 'recent';
-
-export interface DealQuery {
-  storeID?: string;
-  pageNumber?: number;
-  pageSize?: number;
-  sortBy?:
-    | 'Deal Rating'
-    | 'Savings'
-    | 'Price'
-    | 'Metacritic'
-    | 'Reviews'
-    | 'Release'
-    | 'Store'
-    | 'Recent';
-  desc?: boolean;
-  lowerPrice?: number;
-  upperPrice?: number;
-  metacritic?: number;
-  aaa?: boolean;
-  steamworks?: boolean;
-  exactTitle?: string;
-  title?: string;
-  onSale?: boolean;
-}
 
 /** An item in the user's wishlist. */
 export interface WishlistItem {

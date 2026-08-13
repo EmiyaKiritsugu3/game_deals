@@ -137,12 +137,3 @@ export function dedupeToList(deals: DealWithStore[], max = 20): DealWithStore[] 
   const { groups } = dedupeDeals(deals, max);
   return groups.map((g) => g.best);
 }
-
-/**
- * For a given deal, find all its sibling variants in the provided list
- * (i.e. other stores carrying the same game). Returns at least the input deal.
- */
-export function findVariants(deal: DealWithStore, all: DealWithStore[]): DealWithStore[] {
-  const key = dedupKey(deal);
-  return all.filter((d) => dedupKey(d) === key).sort((a, b) => a.salePriceNum - b.salePriceNum);
-}

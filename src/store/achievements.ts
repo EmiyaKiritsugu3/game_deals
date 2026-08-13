@@ -139,16 +139,6 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
 ];
 
-/** Helper to get all achievements with their current progress merged in. */
-export function getAchievementProgress(
-  state: Pick<AchievementState, 'progress'>
-): Array<Achievement & AchievementProgress> {
-  return ACHIEVEMENTS.map((a) => {
-    const p = state.progress[a.id] ?? { count: 0, unlocked: false };
-    return { ...a, ...p };
-  });
-}
-
 function todayIso(): string {
   return new Date().toISOString().slice(0, 10);
 }
