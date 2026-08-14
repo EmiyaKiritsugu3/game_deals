@@ -1,0 +1,20 @@
+src/components/AlertCard.tsx
+  s_120cecd54891a5::t_14e81ad7b60948 32-39
+  s_120cecd54891a5::t_57326f1c07146e 2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "0d85582dffb124e74b57d287a0240dafae28b187",
+  "prompts": {},
+  "sessions": {
+    "s_120cecd54891a5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e07b28d6-4763-416b-bd21-6aaaa8e14f33",
+        "model": "deepseek-v4-flash-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
