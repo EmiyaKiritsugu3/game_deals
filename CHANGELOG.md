@@ -1,5 +1,18 @@
 # Changelog
 
+## [v0.12.0] — 2026-08-14
+
+### Correção & Otimização — FASE 2.2–6 (#165, #167, #171, #172, #176, #177)
+
+- **Security (FASE 1)**: XSS JSON-LD escape fix (#153, #165), `.omo/` artifacts removed from git.
+- **RLS (FASE 2.2)**: Row-level security enabled on 6 user-scoped tables (price_alerts, game_ratings, activities, wishlists, profiles, playlist_games), per-userId policies, idempotent migration 0016.
+- **Rate limiting (FASE 2.1)**: All 8 server actions protected — alerts, gamification, notifications, playlists, ratings, search (existing) + deals, wishlist (new). Per-IP anon / per-user authed keys.
+- **Env sync (FASE 3.1)**: `.env.example` matches code reads (Typesense split vars, Sentry removal).
+- **Audit script (FASE 3.2)**: `bun audit` replaces broken `npm audit` (ENOLOCK).
+- **Dead code (FASE 5)**: 15 dead exports removed across 8 files, 4 orphan plan docs archived, 2 zero-importer exports (DOCS re-export, getConsent) dropped.
+- **Performance (FASE 6)**: store-logo `<img>` → `next/image unoptimized` (compare-tray, filter-bar, AlertCard).
+- **Housekeeping (FASE 4)**: v0.11.0 tag, 12 stale merged remote branches pruned.
+
 ## [v0.11.0] — 2026-07-23
 
 ### Sprint Post-Audit — Impeccable Design Cleanup (#89)
