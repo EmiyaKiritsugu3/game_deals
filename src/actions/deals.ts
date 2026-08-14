@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/nextjs';
 import { desc, eq, sql } from 'drizzle-orm';
 import { db } from '@/db';
 import { deals as dealsTable, games, priceHistory } from '@/db/schema';
+import { assertRateLimit } from '@/lib/server-action-rate-limit';
 import { fetchDealsWithFallback, fetchGameDetails } from '@/services/fetch-helpers';
 import {
   buildDealsInsertValues,
@@ -97,12 +98,14 @@ export async function getDealsAction(params?: {
   storeID?: string;
   title?: string;
 }): Promise<Deal[]> {
+  await assertRateLimit('dealsFetch', null, 30, 60_000);
   const sanitized = sanitizeDealParams(params);
   const url = buildDealsUrl(sanitized);
   return fetchDealsWithFallback(url.toString());
 }
 
 export async function getStoresAction(): Promise<Record<string, string>> {
+  await assertRateLimit('storesFetch', null, 30, 60_000);
   const map: Record<string, string> = {};
 
   try {
@@ -131,6 +134,7 @@ export async function getStoresAction(): Promise<Record<string, string>> {
  * Busca detalhes de um jogo
  */
 export async function getGameAction(id: string): Promise<GameDetails | null> {
+  await assertRateLimit('gameFetch', null, 30, 60_000);
   return (await fetchGameDetails(id, 'getGameAction')) as GameDetails | null;
 }
 
@@ -316,6 +320,7 @@ export async function getDailyPriceHistoryAction(cheapsharkId: string, days = 90
  * Busca deals do banco
  */
 export async function getDealsFromDBAction(limit = 20) {
+  await assertRateLimit('dbDealsFetch', null, 60, 60_000);
   const result = await db
     .select({
       gameId: dealsTable.gameId,
