@@ -31,22 +31,22 @@ describe('GET /out/[storeId]/[gameSlug]', () => {
   });
 
   it('does not track on invalid store id', async () => {
-    await expect(() =>
-      GET(new Request('http://localhost:3000/out/999/game'), {
-        params: Promise.resolve({ storeId: '999', gameSlug: 'game' }),
-      })
-    ).rejects.toThrow();
+    const response = await GET(new Request('http://localhost:3000/out/999/game'), {
+      params: Promise.resolve({ storeId: '999', gameSlug: 'game' }),
+    });
 
+    expect(response.status).toBe(302);
+    expect(response.headers.get('Location')).toBe('http://localhost:3000/');
     expect(track).not.toHaveBeenCalled();
   });
 
   it('does not track on invalid game slug', async () => {
-    await expect(() =>
-      GET(new Request('http://localhost:3000/out/1/!nv@lid'), {
-        params: Promise.resolve({ storeId: '1', gameSlug: '!nv@lid' }),
-      })
-    ).rejects.toThrow();
+    const response = await GET(new Request('http://localhost:3000/out/1/!nv@lid'), {
+      params: Promise.resolve({ storeId: '1', gameSlug: '!nv@lid' }),
+    });
 
+    expect(response.status).toBe(302);
+    expect(response.headers.get('Location')).toBe('http://localhost:3000/');
     expect(track).not.toHaveBeenCalled();
   });
 
