@@ -1,6 +1,7 @@
 'use client';
 
 import { Check, SlidersHorizontal, Store as StoreIcon, X } from 'lucide-react';
+import Image from 'next/image';
 import * as React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -136,8 +137,14 @@ export function FilterBar(props: FilterBarProps) {
                 <SelectItem key={s.storeID} value={s.storeID}>
                   <span className="flex items-center gap-2">
                     {}
-                    {/* biome-ignore lint/performance/noImgElement: CheapShark store logos */}
-                    <img src={s.logoUrl} alt="" className="size-4 rounded-[3px] object-contain" />
+                    <Image
+                      src={s.logoUrl}
+                      alt=""
+                      width={16}
+                      height={16}
+                      className="size-4 rounded-[3px] object-contain"
+                      unoptimized
+                    />
                     {s.storeName}
                   </span>
                 </SelectItem>
@@ -217,8 +224,14 @@ function StoreButton({
       )}
     >
       {logoUrl ? (
-        // biome-ignore lint/performance/noImgElement: CheapShark store logos
-        <img src={logoUrl} alt="" className="size-5 rounded object-contain" />
+        <Image
+          src={logoUrl}
+          alt=""
+          width={20}
+          height={20}
+          className="size-5 rounded object-contain"
+          unoptimized
+        />
       ) : (
         <span className="grid size-5 place-items-center rounded bg-primary/20 text-[9px] font-bold text-primary">
           ALL
