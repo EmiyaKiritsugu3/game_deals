@@ -1,0 +1,25 @@
+src/actions/wishlist.ts
+  s_120cecd54891a5::t_66f69a21ed8795 6,10
+src/actions/deals.ts
+  s_120cecd54891a5::t_175aa22ff09ab7 101
+  s_120cecd54891a5::t_a43125c57b158b 7
+  s_120cecd54891a5::t_64a19e1860405f 108
+  s_120cecd54891a5::t_a25fbf65f5a446 137
+  s_120cecd54891a5::t_c7bc24b46a354e 323
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "10e5501efafbfb4898cd9ba55185dd31240346bb",
+  "prompts": {},
+  "sessions": {
+    "s_120cecd54891a5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e07b28d6-4763-416b-bd21-6aaaa8e14f33",
+        "model": "deepseek-v4-flash-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
