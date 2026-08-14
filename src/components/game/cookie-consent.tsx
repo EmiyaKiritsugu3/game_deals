@@ -209,8 +209,3 @@ export function CookieConsent() {
 export function openConsentBanner() {
   window.dispatchEvent(new CustomEvent('dealforge:open-consent'));
 }
-
-/** Returns the current consent state (or null if undecided). */
-export function getConsent(): ConsentState | null {
-  return readConsent();
-}

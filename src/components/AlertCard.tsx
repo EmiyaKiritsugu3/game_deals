@@ -1,4 +1,5 @@
 import { Bell, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import type { PriceAlertWithGame } from '@/types/price-alert';
 
@@ -28,9 +29,14 @@ export default function AlertCard({ alert, onDelete, isDeleting }: AlertCardProp
       <div className="px-5 py-4 flex flex-col gap-3 grow">
         {alert.thumbUrl && (
           <div className="w-full aspect-video overflow-hidden rounded-md bg-muted">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            {/* biome-ignore lint/performance/noImgElement: game thumbnails from CDN */}
-            <img src={alert.thumbUrl} alt={alert.title} className="w-full h-full object-cover" />
+            <Image
+              src={alert.thumbUrl}
+              alt={alert.title}
+              width={400}
+              height={225}
+              className="h-full w-full object-cover"
+              unoptimized
+            />
           </div>
         )}
 
