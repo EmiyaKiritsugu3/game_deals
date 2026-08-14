@@ -305,6 +305,7 @@ export async function resolveCheapsharkByUuidsAction(
  * Busca preço histórico diário de um jogo
  */
 export async function getDailyPriceHistoryAction(cheapsharkId: string, days = 90) {
+  await assertRateLimit('priceHistoryFetch', null, 30, 60_000);
   const uuid = await resolveGameUuid(cheapsharkId);
   if (!uuid) return [];
   try {
