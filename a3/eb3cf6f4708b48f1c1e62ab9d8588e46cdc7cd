@@ -1,0 +1,19 @@
+src/actions/deals.ts
+  s_120cecd54891a5::t_cd222990b3db1d 308
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "a3eb3cf6f4708b48f1c1e62ab9d8588e46cdc7cd",
+  "prompts": {},
+  "sessions": {
+    "s_120cecd54891a5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e07b28d6-4763-416b-bd21-6aaaa8e14f33",
+        "model": "deepseek-v4-flash-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
