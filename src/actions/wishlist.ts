@@ -3,9 +3,11 @@
 import { sql } from 'drizzle-orm';
 import { resolveCheapsharkByUuidsAction } from '@/actions/deals';
 import { db } from '@/db';
+import { assertRateLimit } from '@/lib/server-action-rate-limit';
 import { createClient } from '@/utils/supabase/server';
 
 export async function getUserWishlistAction(): Promise<string[]> {
+  await assertRateLimit('wishlistFetch', null, 30, 60_000);
   const supabase = await createClient();
   const {
     data: { user },
