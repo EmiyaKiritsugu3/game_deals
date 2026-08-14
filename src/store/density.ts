@@ -3,11 +3,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type Density = 'comfortable' | 'compact';
-
 interface DensityState {
-  density: Density;
-  setDensity: (d: Density) => void;
+  density: 'comfortable' | 'compact';
+  setDensity: (d: 'comfortable' | 'compact') => void;
   toggle: () => void;
 }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronRight, Clock, X } from 'lucide-react';
+import { ChevronRight, Clock } from 'lucide-react';
 import Image from 'next/image';
 import * as React from 'react';
 import type { DealWithStore } from '@/lib/types';
@@ -111,5 +111,3 @@ export function RecentlyViewedStrip({ onOpenDetail }: RecentlyViewedStripProps) 
     </section>
   );
 }
-
-export { X };

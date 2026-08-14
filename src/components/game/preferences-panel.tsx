@@ -28,7 +28,6 @@ import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 
 export type AccentColor = 'emerald' | 'amber';
-export type NotificationThreshold = '10' | '25' | '50' | '75';
 
 interface UserPreferences {
   accent: AccentColor;

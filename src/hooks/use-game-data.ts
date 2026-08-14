@@ -1,7 +1,6 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import * as React from 'react';
 import type { DealWithStore, GameDealEntry, SortOption, Store } from '@/lib/types';
 
 async function fetchJson<T>(url: string): Promise<T> {
@@ -89,26 +88,4 @@ export function useGameDetail(gameID: string | null) {
     enabled: !!gameID,
     staleTime: 5 * 60 * 1000,
   });
-}
-
-export function useGameSearch(title: string, debounceMs = 350) {
-  const debounced = useDebounce(title, debounceMs);
-  return useQuery({
-    queryKey: ['games-search', debounced],
-    queryFn: () =>
-      fetchJson<{ games: unknown[]; source: string }>(
-        `/api/games?title=${encodeURIComponent(debounced)}`
-      ),
-    enabled: debounced.length >= 2,
-    staleTime: 60 * 1000,
-  });
-}
-
-export function useDebounce<T>(value: T, delay = 300): T {
-  const [debounced, setDebounced] = React.useState(value);
-  React.useEffect(() => {
-    const t = setTimeout(() => setDebounced(value), delay);
-    return () => clearTimeout(t);
-  }, [value, delay]);
-  return debounced;
 }
