@@ -555,5 +555,3 @@ export function LegalModal({ open, onOpenChange, docKey }: LegalModalProps) {
 export function openLegalDoc(docKey: LegalDocKey) {
   window.dispatchEvent(new CustomEvent('dealforge:open-legal', { detail: docKey }));
 }
-
-export { DOCS };
