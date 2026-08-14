@@ -18,7 +18,7 @@ export default function WishlistIndicator() {
   return (
     <Link
       href="/wishlist"
-      className="flex items-center gap-2 bg-muted px-4 py-2 rounded-[var(--radius)] text-foreground no-underline font-semibold text-[0.9rem] transition-[background,transform] duration-200 border border-border/50 ml-4 hover:bg-accent hover:-translate-y-0.5 hover:border-destructive max-[600px]:px-2"
+      className="flex items-center gap-2 bg-muted px-4 py-2 rounded-[var(--radius)] text-foreground no-underline font-semibold text-[0.9rem] transition-[background,transform] duration-200 border border-border/50 ml-4 hover:bg-accent hover:-translate-y-0.5 hover:border-destructive max-[600px]:px-2 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
       title="View Favorites"
       aria-live="polite"
     >
