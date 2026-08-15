@@ -39,14 +39,14 @@ export default function StoreFilter({
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search stores..."
-        className="w-full py-2.5 px-3 bg-muted/50 border border-border rounded-lg text-foreground text-sm font-inherit outline-none focus:border-primary [box-sizing:border-box] placeholder:text-muted-foreground"
+        className="w-full py-2.5 px-3 bg-muted/50 border border-border rounded-lg text-foreground text-sm font-inherit outline-none focus:border-primary [box-sizing:border-box] placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         aria-label="Search stores"
       />
       <div className="flex items-center gap-2 flex-wrap">
         <button
           type="button"
           onClick={onSelectAll}
-          className="bg-transparent border border-border text-muted-foreground text-xs px-2 py-1 rounded-lg cursor-pointer font-inherit hover:text-foreground hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed"
+          className="bg-transparent border border-border text-muted-foreground text-xs px-2 py-1 rounded-lg cursor-pointer font-inherit hover:text-foreground hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           disabled={!onSelectAll}
         >
           Select All
@@ -54,7 +54,7 @@ export default function StoreFilter({
         <button
           type="button"
           onClick={onClearAll}
-          className="bg-transparent border border-border text-muted-foreground text-xs px-2 py-1 rounded-lg cursor-pointer font-inherit hover:text-foreground hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed"
+          className="bg-transparent border border-border text-muted-foreground text-xs px-2 py-1 rounded-lg cursor-pointer font-inherit hover:text-foreground hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           disabled={!onClearAll}
         >
           Clear All
@@ -77,7 +77,7 @@ export default function StoreFilter({
               type="checkbox"
               checked={selectedStores.has(store.storeID)}
               onChange={() => onToggle(store.storeID)}
-              className="w-4 h-4 accent-[var(--primary)]"
+              className="w-4 h-4 accent-[var(--primary)] focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
               aria-label={store.storeName}
             />
             <span className="text-sm">{store.storeName}</span>

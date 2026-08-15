@@ -77,7 +77,7 @@ export default function FilterSidebar({ stores }: Readonly<{ stores: StoreInfo[]
         <h3 className="text-xl font-bold text-foreground">Filters</h3>
         <button
           onClick={clearFilters}
-          className="bg-transparent border-none text-muted-foreground text-sm cursor-pointer hover:text-foreground"
+          className="bg-transparent border-none text-muted-foreground text-sm cursor-pointer hover:text-foreground focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 focus-visible:rounded-sm"
           type="button"
         >
           Clear
@@ -97,7 +97,7 @@ export default function FilterSidebar({ stores }: Readonly<{ stores: StoreInfo[]
             value={maxPrice}
             onChange={(e) => setMaxPrice(e.target.value)}
             placeholder="Any"
-            className="w-full py-3 pr-4 pl-8 bg-muted/50 border border-border rounded-lg text-foreground outline-none focus:border-primary"
+            className="w-full py-3 pr-4 pl-8 bg-muted/50 border border-border rounded-lg text-foreground outline-none focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
             aria-label="Maximum price"
           />
         </div>
@@ -118,7 +118,7 @@ export default function FilterSidebar({ stores }: Readonly<{ stores: StoreInfo[]
 
       <button
         onClick={applyFilters}
-        className="w-full bg-primary text-primary-foreground border-none p-3 rounded-lg font-bold text-base cursor-pointer hover:brightness-110 hover:-translate-y-0.5 hover:shadow-[0_4px_12px_color-mix(in_srgb,var(--primary)_30%,transparent)] transition-all"
+        className="w-full bg-primary text-primary-foreground border-none p-3 rounded-lg font-bold text-base cursor-pointer hover:brightness-110 hover:-translate-y-0.5 hover:shadow-[0_4px_12px_color-mix(in_srgb,var(--primary)_30%,transparent)] transition-all focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         type="button"
       >
         Apply Filters
