@@ -15,3 +15,8 @@
 **Vulnerability:** XSS vulnerability in `src/app/game/[id]/page.tsx` where user-controlled game titles were serialized into JSON-LD scripts using `JSON.stringify` directly in `dangerouslySetInnerHTML`. An attacker could inject `</script><script>alert(1)</script>` into the title.
 **Learning:** `JSON.stringify` does not escape HTML control characters like `<` or `>`. When rendering this JSON directly into a script tag using React's `dangerouslySetInnerHTML`, it can break out of the script context and execute malicious JavaScript.
 **Prevention:** Always escape HTML control characters when injecting JSON into script tags. Use `.replace(/</g, '\\u003c')` so the unicode escape is correctly preserved in the JavaScript string and not evaluated as an unescaped literal `<`.
+
+## 2024-07-02 - Server-Side XSS/Open Redirect in Route Handler via URL Protocol Parsing
+**Vulnerability:** The server-side API route `src/app/out/[storeId]/[gameSlug]/route.ts` used `new URL()` to parse redirect targets but only validated the hostname using `ALLOWED_DOMAINS.has(url.hostname)`. A malicious URL with a valid hostname but dangerous protocol like `javascript://www.gog.com/alert(1)` passed validation, leading to potential SSRF or Open Redirects when the `Location` header is evaluated by the browser.
+**Learning:** `new URL()` correctly extracts the hostname even for non-HTTP protocols. An allowlist based solely on hostnames is insufficient because it preserves the dangerous protocol.
+**Prevention:** Always explicitly validate that `url.protocol === 'http:' || url.protocol === 'https:'` before treating a parsed URL as safe, even if its hostname is on an allowlist.
