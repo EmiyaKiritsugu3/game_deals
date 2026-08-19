@@ -51,7 +51,9 @@ describe('GET /out/[storeId]/[gameSlug]', () => {
   });
 
   it('blocks unsafe protocols and redirects to root', async () => {
-    execute.mockResolvedValue([{ url: 'javascript://store.steampowered.com/%0aalert(1)', storeId: '1' }]);
+    execute.mockResolvedValue([
+      { url: 'javascript://store.steampowered.com/%0aalert(1)', storeId: '1' },
+    ]);
     const spy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     const response = await GET(new Request('http://localhost:3000/out/1/awesome-game'), {
