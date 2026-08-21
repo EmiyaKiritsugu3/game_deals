@@ -1,0 +1,21 @@
+tests/unit/pwa/manifest.test.ts
+  s_9a88549eb94bc9::t_0ee926d2d03ef7 33,36-38
+CHANGELOG.md
+  s_9a88549eb94bc9::t_5c3de518f57d81 3-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "a183111477aa7fd5300901358e81b8ab82afbcb8",
+  "prompts": {},
+  "sessions": {
+    "s_9a88549eb94bc9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e940348e-6976-4053-b629-f4869d98d974",
+        "model": "hy3-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
