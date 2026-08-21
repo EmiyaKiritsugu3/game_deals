@@ -30,10 +30,12 @@ describe('PWA Manifest', () => {
     expect(content).toContain('icons:');
   });
 
-  it('should have RegisterSW component imported in layout.tsx', () => {
+  it('should have metadata + viewport with themeColor in layout.tsx', () => {
     const layoutPath = join(appDir, 'layout.tsx');
     const content = readFileSync(layoutPath, 'utf-8');
-    expect(content).toContain('RegisterSW');
+    expect(content).toContain('export const metadata');
+    expect(content).toContain('export const viewport');
+    expect(content).toContain('themeColor');
   });
 
   it('should have a favicon file in public/', () => {
