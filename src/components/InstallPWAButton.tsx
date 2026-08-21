@@ -67,7 +67,7 @@ export default function InstallPWAButton() {
       onClick={handleInstall}
       aria-label="Install app"
       title="Install GameDeals as app"
-      className="inline-flex items-center gap-1.5 rounded-lg bg-green-700 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-green-600"
+      className="inline-flex items-center gap-1.5 rounded-lg bg-green-700 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-green-600 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
