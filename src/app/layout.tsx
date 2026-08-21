@@ -4,10 +4,6 @@ import './globals.css';
 import { Providers } from '@/components/providers';
 import { Toaster as SonnerToaster } from '@/components/ui/sonner';
 
-// ponytail: RegisterSW is a no-op component kept for PWA test assertion;
-// actual SW registration is handled by next-pwa or manual sw.js.
-const RegisterSW = () => null;
-
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -78,7 +74,6 @@ export default function RootLayout({
           </a>
           <main id="main-content">{children}</main>
           <SonnerToaster position="bottom-right" theme="dark" />
-          <RegisterSW />
         </Providers>
       </body>
     </html>

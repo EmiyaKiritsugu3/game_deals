@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.12.1] — 2026-08-15
+
+### Knip cleanup (FASE 5 follow-up)
+
+- Removed dead component files: `src/components/game/StoreIcon.tsx` (0 importers), `src/components/RegisterSW.tsx` (no-op shim only).
+- Removed inline `RegisterSW` no-op shim from `src/app/layout.tsx`.
+- Updated PWA manifest test to assert real `metadata`/`viewport`/`themeColor` config instead of the deleted shim.
+- `tw-animate-css` retained — provides `--animate-*` tokens used across globals.css. shadcn/ui barrel exports (Select*, Sheet*, Tooltip*) remain for library completeness.
+
 ## [v0.12.0] — 2026-08-14
 
 ### Correção & Otimização — FASE 2.2–6 (#165, #167, #171, #172, #176, #177)
