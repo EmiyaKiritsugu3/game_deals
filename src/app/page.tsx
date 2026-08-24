@@ -147,10 +147,19 @@ export default function Home() {
 
   const stats = React.useMemo(() => {
     const list = dealsQuery.data?.deals ?? [];
-    const avgSavings = list.length
-      ? Math.round(list.reduce((s, d) => s + d.savingsNum, 0) / list.length)
-      : 0;
-    const topDiscount = list.length ? Math.round(Math.max(...list.map((d) => d.savingsNum))) : 0;
+
+    // ⚡ Bolt Performance: Prevent O(N log N) time complexity, avoid spread operator stack limit, and O(N) memory allocation per iteration by calculating stats in a single pass O(N) loop.
+    let totalSavingsNum = 0;
+    let topDiscountNum = 0;
+    for (const d of list) {
+      totalSavingsNum += d.savingsNum;
+      if (d.savingsNum > topDiscountNum) {
+        topDiscountNum = d.savingsNum;
+      }
+    }
+    const avgSavings = list.length ? Math.round(totalSavingsNum / list.length) : 0;
+    const topDiscount = list.length ? Math.round(topDiscountNum) : 0;
+
     // Marketing-friendly "stores tracked" stat — pad live count to a nicer
     // round number, but keep it truthful by appending a "+" suffix.
     const liveStores = storesQuery.data?.stores.length ?? 0;
