@@ -58,8 +58,8 @@ The project has **916 tests across 102 test files**:
 | **E2E framework** | Playwright v1.60 (configured with webserver, CDP screenshots) |
 | **E2E config** | `playwright.config.ts` exists |
 | **Test directory** | `src/**/*.test.{ts,tsx}`, `tests/**/*.test.{ts,tsx}` |
-| **CI test step** | `pnpm test:coverage` runs in CI workflow |
-| **Pre-push gate** | Tests block push on failure (`pnpm check`) |
+| **CI test step** | `bun test:coverage` runs in CI workflow |
+| **Pre-push gate** | Tests block push on failure (`bun check`) |
 | **SonarCloud** | Quality Gate passes (0 issues, coverage on new code ≥ 80%) |
 
 ### Test Levels
@@ -239,16 +239,16 @@ Pre-commit (lint-staged)
   └─ Biome check --write on staged files
 
 Pre-push (check.sh)
-  1. Lint          (pnpm lint)           — Biome
+  1. Lint          (bun lint)           — Biome
   2. Type check    (tsc --noEmit)        — TypeScript compiler
-  3. Test          (pnpm test:coverage)  — Vitest + Istanbul coverage
-  4. Build         (pnpm build)          — Next.js production build
-  5. Dead code     (pnpm knip)           — Knip (warnings only)
-  6. Security      (pnpm fallow:audit)   — Fallow
+  3. Test          (bun test:coverage)  — Vitest + Istanbul coverage
+  4. Build         (bun build)          — Next.js production build
+  5. Dead code     (bun knip)           — Knip (warnings only)
+  6. Security      (bun fallow:audit)   — Fallow
 
 GitHub Actions CI
   Same 6 steps, with secrets via ${{ secrets.X || 'placeholder' }} pattern.
-  Does NOT run E2E tests (pnpm test:e2e).
+  Does NOT run E2E tests (bun test:e2e).
 ```
 
 ## Appendix B: Coverage Improvement Roadmap

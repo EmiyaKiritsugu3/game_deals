@@ -3,25 +3,25 @@
 ## Quick Start
 
 ```bash
-pnpm tdd              # Watch mode: runs changed tests on save
-pnpm test --changed   # Run only affected tests
-pnpm check            # Full local CI before push
+bun tdd              # Watch mode: runs changed tests on save
+bun test --changed   # Run only affected tests
+bun check            # Full local CI before push
 ```
 
 ## Cycle (Strict)
 
 ```
-1. Failing test → pnpm test --changed RED   → git commit -m "test: ..."
-2. Minimal code  → pnpm test --changed GREEN → git commit -m "feat: ..."
-3. Refactor      → pnpm test --changed GREEN → git commit -m "refactor: ..."
-4. Push (pnpm check must pass)
+1. Failing test → bun test --changed RED   → git commit -m "test: ..."
+2. Minimal code  → bun test --changed GREEN → git commit -m "feat: ..."
+3. Refactor      → bun test --changed GREEN → git commit -m "refactor: ..."
+4. Push (bun check must pass)
 ```
 
 ## Gate Structure
 
 | Gate | What Runs | Max Time | Blocks? |
 |------|-----------|----------|---------|
-| **Pre-commit** | `lint-staged` + `pnpm test --changed` | <10s | Yes |
+| **Pre-commit** | `lint-staged` + `bun test --changed` | <10s | Yes |
 | **Pre-push** | lint → tsc → test:coverage → build → knip | <3min | Yes |
 | **CI (PR)** | quality job + e2e job (parallel) | <20min | Yes |
 | **Nightly** | Stryker mutation testing (planned) | <60min | No |
@@ -63,13 +63,13 @@ pnpm check            # Full local CI before push
 ## Test Scripts Reference
 
 ```bash
-pnpm test                     # Run all unit tests
-pnpm test:changed             # Run only tests for changed files
-pnpm test:coverage            # Run tests with coverage report
-pnpm test:integration         # Run integration tests (real DB)
-pnpm test:e2e                 # Run Playwright E2E tests
-pnpm tdd                      # Watch mode for changed tests (TDD cycle)
-pnpm check                    # Full local CI pipeline (pre-push)
+bun test                     # Run all unit tests
+bun test:changed             # Run only tests for changed files
+bun test:coverage            # Run tests with coverage report
+bun test:integration         # Run integration tests (real DB)
+bun test:e2e                 # Run Playwright E2E tests
+bun tdd                      # Watch mode for changed tests (TDD cycle)
+bun check                    # Full local CI pipeline (pre-push)
 ```
 
 ## Coverage Thresholds
@@ -81,7 +81,7 @@ pnpm check                    # Full local CI pipeline (pre-push)
 | Functions | 19% | 70% |
 | Statements | 25% | 80% |
 
-Thresholds are enforced in `vitest.config.ts`. They increase at each phase. Use `pnpm test:coverage` to check.
+Thresholds are enforced in `vitest.config.ts`. They increase at each phase. Use `bun test:coverage` to check.
 
 ## Phase 1 — Foundation (Current)
 

@@ -46,7 +46,7 @@
 Query the DB for most recent price recording:
 
 ```bash
-pnpm db:studio
+bun db:studio
 # In Drizzle Studio, sort price_history by recorded_at DESC
 ```
 
@@ -299,7 +299,7 @@ Compare with target price in `price_alerts` table.
    ```
    Verify columns use snake_case. If mismatch, run latest migration:
    ```bash
-   pnpm db:migrate
+   bun db:migrate
    ```
 
 ### Escalation
@@ -667,11 +667,11 @@ curl -X GET "https://game-deals.vercel.app/api/cron/reindex-typesense" \
 
 **Severity:** HIGH
 **Service:** CI/CD pipeline
-**Description:** `pnpm build` fails on Vercel or `pnpm check` CI fails. New code cannot reach production.
+**Description:** `bun build` fails on Vercel or `bun check` CI fails. New code cannot reach production.
 
 ### Symptoms
 - Vercel deployment shows "Error" or "Failed" status
-- `pnpm build` fails locally
+- `bun build` fails locally
 - CI (GitHub Actions) fails on lint, tsc, or build step
 - Runtime errors after successful deployment
 
@@ -689,7 +689,7 @@ Or Vercel Dashboard > Deployments > [failed] > Build Logs.
 **2. Reproduce locally**
 
 ```bash
-pnpm build
+bun build
 ```
 
 If build fails, check the error output. Common causes:
@@ -719,7 +719,7 @@ vercel env ls production
 **5. Test TypeScript compilation**
 
 ```bash
-pnpm exec tsc --noEmit
+bun exec tsc --noEmit
 ```
 
 ### Mitigation
@@ -739,12 +739,12 @@ vercel --prod
 
 2. **If TypeScript errors:**
    - Fix the errors locally
-   - Run `pnpm exec tsc --noEmit` to verify
+   - Run `bun exec tsc --noEmit` to verify
    - Commit and re-deploy
 
 3. **If build size exceeds Vercel limit (50MB serverless):**
    Check `.vercel/output` size. Optimize:
-   - Remove unused dependencies (`pnpm knip` to find them)
+   - Remove unused dependencies (`bun knip` to find them)
    - Slim down `node_modules` with `next.config.js` `serverExternalPackages`
 
 4. **Rollback to last known-good deployment:**
@@ -884,7 +884,7 @@ curl -s -o /dev/null -w "%{http_code}" "https://$NEXT_PUBLIC_SUPABASE_URL/rest/v
 
 ```bash
 # Run fallow audit on pre-commit
-pnpm fallow:audit
+bun fallow:audit
 
 # Add .env files to .gitignore (verify they're there)
 grep ".env.local" .gitignore
@@ -965,29 +965,29 @@ pkill -f "next-server" && pkill -f "chromium"
 
 ```bash
 # Start dev with memory limit
-NODE_OPTIONS="--max-old-space-size=4096" pnpm dev
+NODE_OPTIONS="--max-old-space-size=4096" bun dev
 ```
 
-**4. Use pnpm build && pnpm start instead of pnpm dev (for E2E tests)**
+**4. Use bun build && bun start instead of bun dev (for E2E tests)**
 
 ```bash
 # Instead of:
-# pnpm dev && pnpm test:e2e
+# bun dev && bun test:e2e
 
 # Use:
-pnpm build && pnpm start &
+bun build && bun start &
 sleep 5
-pnpm test:e2e
+bun test:e2e
 ```
 
 **5. Limit parallel subagents**
 
-Do not launch `pnpm dev` inside a subagent running in parallel with others. Max 3 parallel subagents when any spawns child processes.
+Do not launch `bun dev` inside a subagent running in parallel with others. Max 3 parallel subagents when any spawns child processes.
 
 ### Escalation
 - **1st line:** Developer workstation troubleshooting
 - **2nd line:** Increase system RAM or configure swap
-- **If persistent:** Use `pnpm build && pnpm start` instead of dev mode
+- **If persistent:** Use `bun build && bun start` instead of dev mode
 
 ---
 
@@ -1177,7 +1177,7 @@ psql "$DATABASE_URL" -c "SELECT store_id, COUNT(*) FROM affiliate_clicks GROUP B
 
 4. **If click logging is down:**
    - Check `affiliate_clicks` table schema in `src/db/schema/affiliates.ts`
-   - Run migration if table doesn't exist: `pnpm db:migrate`
+   - Run migration if table doesn't exist: `bun db:migrate`
 
 ### Escalation
 - **1st line:** Developer on-call
@@ -1217,7 +1217,7 @@ psql "$DATABASE_URL" -c "SELECT store_id, COUNT(*) FROM affiliate_clicks GROUP B
 | Typesense Dashboard | `http://localhost:8108` or cloud dashboard |
 | GitHub Actions | https://github.com/<org>/game-deals/actions |
 | DB (psql) | `psql "$DATABASE_URL"` |
-| DB (Studio) | `pnpm db:studio` |
+| DB (Studio) | `bun db:studio` |
 
 ### Quick Commands
 
@@ -1228,13 +1228,13 @@ curl http://localhost:3000/api/cron/reindex-typesense -H "authorization: Bearer 
 curl http://localhost:3000/api/cron/check-alerts -H "authorization: Bearer $CRON_SECRET"
 
 # Full CI check locally
-pnpm check
+bun check
 
 # Dead code analysis
-pnpm knip
+bun knip
 
 # Security audit
-pnpm fallow:audit
+bun fallow:audit
 
 # Kill stuck processes (OOM)
 pkill -f "next-server"
