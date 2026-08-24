@@ -42,7 +42,7 @@ Things you reach for during regular development and maintenance.
 |----------|-------------|
 | [Runbook](runbook.md) | Common tasks: dev server, DB migrations, cron jobs, debugging |⏳ Planned
 | [API Reference](api-reference.md) | Endpoint docs: internal Server Actions, external CheapShark API |⏳ Planned
-| [ADR — Tooling Chain](adr/ADR-012-tooling-chain.md) | Biome, pnpm, Vitest, Playwright — tools and config reference |
+| [ADR — Tooling Chain](adr/ADR-012-tooling-chain.md) | Biome, bun, Vitest, Playwright — tools and config reference |
 | [Deployment Guide — Vercel](vercel_deployment_guide.md) | Vercel setup, env vars, build config |
 | [Deployment Guide — Clean](clean_deployment_guide.md) | Production deployment checklist and verification |
 | [Supabase Setup Guide](supabase_setup_guide.md) | Local Supabase, migrations, RLS policies |
@@ -71,7 +71,7 @@ Design records explaining why the project is built the way it is.
 | 009 | [Price History Storage](adr/ADR-009-price-history-storage.md) — TimescaleDB + Drizzle ORM | ✅ Accepted |
 | 010 | [Search Architecture](adr/ADR-010-search-architecture.md) — Typesense Cloud → Supabase pgvector+FTS | ✅ Accepted |
 | 011 | [Styling Architecture](adr/ADR-011-styling-tailwind-v4.md) — Tailwind CSS v4, design tokens, glassmorphism | ✅ Accepted |
-| 012 | [Tooling Chain](adr/ADR-012-tooling-chain.md) — Biome, pnpm, Vitest, Playwright | ✅ Accepted |
+| 012 | [Tooling Chain](adr/ADR-012-tooling-chain.md) — Biome, bun, Vitest, Playwright | ✅ Accepted |
 
 Full listing: [ADR Index](adr/README.md) | Template: [New ADR](adr/_template.md)
 

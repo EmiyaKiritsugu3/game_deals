@@ -25,20 +25,20 @@ Run these checks locally before opening a pull request. Every item must pass.
 ### 1.1 Full CI Pipeline
 
 ```bash
-pnpm check
+bun check
 ```
 
 This runs 6 gates in sequence (stops on first failure):
 
 | Step | Command | What it checks |
 |------|---------|----------------|
-| 1. Lint | `pnpm lint` | Biome code style & correctness |
-| 2. Type check | `pnpm exec tsc --noEmit` | TypeScript compilation errors |
+| 1. Lint | `bun lint` | Biome code style & correctness |
+| 2. Type check | `bun exec tsc --noEmit` | TypeScript compilation errors |
 | 7. SonarCloud quality gate | `.github/workflows/ci.yml` | Static analysis via SonarCloud (Security, Reliability, Maintainability) |
-| 3. Tests + Coverage | `pnpm test:coverage` | Vitest unit tests pass, coverage threshold met |
-| 4. Build | `pnpm build` | Production build succeeds (requires `.env.local`) |
-| 5. Dead code | `pnpm knip --no-exit-code` | Unused exports/dependencies (warning only) |
-| 6. Security audit | `pnpm fallow:audit` | Secret leakage, dependency vulnerabilities |
+| 3. Tests + Coverage | `bun test:coverage` | Vitest unit tests pass, coverage threshold met |
+| 4. Build | `bun build` | Production build succeeds (requires `.env.local`) |
+| 5. Dead code | `bun knip --no-exit-code` | Unused exports/dependencies (warning only) |
+| 6. Security audit | `bun fallow:audit` | Secret leakage, dependency vulnerabilities |
 
 > **Note:** If `.env.local` is missing, `check.sh` auto-copies `.env.example`. For accurate build verification, ensure `.env.local` contains valid credentials.
 
@@ -63,14 +63,14 @@ If the release includes schema changes:
 
 ```bash
 # Generate migration from Drizzle schema changes
-pnpm db:generate
+bun db:generate
 
 # Review the generated SQL in drizzle/<timestamp>.sql
 # Apply to local dev database
-pnpm db:migrate
+bun db:migrate
 
 # Verify migration applied cleanly
-pnpm db:studio
+bun db:studio
 ```
 
 - Migration SQL files must be committed alongside code changes.
@@ -81,7 +81,7 @@ pnpm db:studio
 
 - Husky runs `lint-staged` on staged files (`biome check --write`).
 - This catches formatting issues before they reach CI.
-- Verify with: `pnpm exec lint-staged --dry-run`
+- Verify with: `bun exec lint-staged --dry-run`
 
 ---
 
@@ -113,7 +113,7 @@ Feature branch → Pull Request → CI checks → Merge to main → Tag → Verc
    ```
    feat: add price history chart to game detail page
    fix: correct redirect loop in middleware
-   chore: update pnpm to 11.5.3
+   chore: update bun to 11.5.3
    ```
 
 3. Push branch and open PR:
@@ -168,7 +168,7 @@ Before marking a release as complete, verify the production build:
 ### 3.1 Local Build
 
 ```bash
-pnpm build
+bun build
 ```
 
 Expected outcome:
@@ -209,7 +209,7 @@ Deployment is fully automated. No manual CLI commands needed.
 **Pipeline:**
 1. GitHub pushes to `main`
 2. Vercel detects the push (via Git integration)
-3. Vercel runs `pnpm build` with production env vars
+3. Vercel runs `bun build` with production env vars
 4. If build succeeds → deployed to production
 5. If build fails → Vercel marks deployment as failed, no downtime (previous deployment stays live)
 
@@ -379,8 +379,8 @@ ls -la drizzle/ | grep ".sql"
 # Rollback the last migration (down)
 # Drizzle Kit does not have a built-in rollback command.
 # Generate a compensating migration:
-pnpm db:generate  # After reverting schema changes in code
-pnpm db:migrate   # Apply the reversal
+bun db:generate  # After reverting schema changes in code
+bun db:migrate   # Apply the reversal
 
 # Manual SQL rollback (if migration is simple):
 psql "$DATABASE_URL" -f drizzle/<migration-to-undo>.sql --set="ROLLBACK=true"
@@ -460,20 +460,20 @@ For critical issues that cannot wait for the full release cycle:
 
 ```bash
 # Full local CI
-pnpm check
+bun check
 
 # Individual checks
-pnpm lint
-pnpm exec tsc --noEmit
-pnpm test:coverage
-pnpm build
-pnpm knip
-pnpm fallow:audit
+bun lint
+bun exec tsc --noEmit
+bun test:coverage
+bun build
+bun knip
+bun fallow:audit
 
 # DB migrations
-pnpm db:generate
-pnpm db:migrate
-pnpm db:studio
+bun db:generate
+bun db:migrate
+bun db:studio
 
 # Deployment
 git push origin main          # Triggers Vercel auto-deploy
