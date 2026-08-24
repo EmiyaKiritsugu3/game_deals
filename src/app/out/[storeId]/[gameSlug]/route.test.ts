@@ -31,23 +31,21 @@ describe('GET /out/[storeId]/[gameSlug]', () => {
   });
 
   it('does not track on invalid store id', async () => {
-    await expect(() =>
-      GET(new Request('http://localhost:3000/out/999/game'), {
-        params: Promise.resolve({ storeId: '999', gameSlug: 'game' }),
-      })
-    ).rejects.toThrow();
+    const res = await GET(new Request('http://localhost:3000/out/999/game'), {
+      params: Promise.resolve({ storeId: '999', gameSlug: 'game' }),
+    });
 
     expect(track).not.toHaveBeenCalled();
+    expect(res.status).toBe(302);
   });
 
   it('does not track on invalid game slug', async () => {
-    await expect(() =>
-      GET(new Request('http://localhost:3000/out/1/!nv@lid'), {
-        params: Promise.resolve({ storeId: '1', gameSlug: '!nv@lid' }),
-      })
-    ).rejects.toThrow();
+    const res = await GET(new Request('http://localhost:3000/out/1/!nv@lid'), {
+      params: Promise.resolve({ storeId: '1', gameSlug: '!nv@lid' }),
+    });
 
     expect(track).not.toHaveBeenCalled();
+    expect(res.status).toBe(302);
   });
 
   it('does not block redirect on track failure', async () => {
