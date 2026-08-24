@@ -61,13 +61,13 @@ describe('WishlistTabs', () => {
 
   it('renders two buttons with correct roles', () => {
     render(<WishlistTabs {...defaultProps} />);
-    const buttons = screen.getAllByRole('button');
+    const buttons = screen.getAllByRole('tab');
     expect(buttons).toHaveLength(2);
   });
 
   it('has accessible button elements', () => {
     render(<WishlistTabs {...defaultProps} />);
-    const buttons = screen.getAllByRole('button');
+    const buttons = screen.getAllByRole('tab');
     buttons.forEach((btn) => {
       expect(btn.tagName).toBe('BUTTON');
     });
