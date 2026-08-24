@@ -1,0 +1,27 @@
+docs/test-strategy.md
+  s_9a88549eb94bc9::t_bd2496223bba0a 61-62,242,244-247,251
+docs/release-process.md
+  s_9a88549eb94bc9::t_bd2496223bba0a 28,35-36,38-41,66,70,73,84,116,171,212,382-383,463,466-471,474-476
+docs/TDD_WORKFLOW.md
+  s_9a88549eb94bc9::t_07d38745acf8db 6-8,14-17,24,66-72,84
+docs/index.md
+  s_9a88549eb94bc9::t_bd2496223bba0a 45,74
+docs/runbook.md
+  s_9a88549eb94bc9::t_bd2496223bba0a 49,302,670,674,692,722,742,747,887,968,971,975,978,980,985,990,1180,1220,1231,1234,1237
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "c03ee89495386c2112f7ec354447aab736b64279",
+  "prompts": {},
+  "sessions": {
+    "s_9a88549eb94bc9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e940348e-6976-4053-b629-f4869d98d974",
+        "model": "hy3-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
