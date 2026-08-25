@@ -1,0 +1,20 @@
+sonar-project.properties
+  s_0b6bbc8796ba6a::t_565b972e22d6fd 10-12
+  s_0b6bbc8796ba6a::t_7ac034d5fd7ea8 17-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "25c6ad888cbd94f8c7970bd5f28563f2fa04b232",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "x-preview-f-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
