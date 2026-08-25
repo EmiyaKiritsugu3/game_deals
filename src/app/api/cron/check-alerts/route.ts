@@ -3,6 +3,7 @@ import { track } from '@vercel/analytics/server';
 import { NextResponse } from 'next/server';
 import { checkTriggeredAlertsAction } from '@/actions/alerts';
 import { verifyCronAuth } from '@/lib/cron-auth';
+import { cronError, cronLog } from '@/lib/cron-log';
 import { CronError, handleCronError } from '../_lib/errors';
 
 async function executeCheckAlerts(): Promise<NextResponse> {
@@ -17,9 +18,15 @@ async function executeCheckAlerts(): Promise<NextResponse> {
   ]);
 
   for (const a of triggered) {
-    console.log(
-      `ALERT TRIGGERED user=${a.userId} game=${a.gameId} price=${a.currentLowest} target=${a.targetPrice}`
-    );
+    cronLog({
+      cron: 'check-alerts',
+      event: 'alert_triggered',
+      user_id: a.userId,
+      game_id: a.gameId,
+      price: a.currentLowest,
+      target: a.targetPrice,
+      store_id: a.storeId,
+    });
     track('alert_triggered', {
       user_id: a.userId as string,
       game_id: a.gameId as string,
@@ -43,7 +50,7 @@ export async function GET(request: Request) {
   try {
     return await executeCheckAlerts();
   } catch (err) {
-    console.error('check-alerts error:', err instanceof Error ? err.message : err);
+    cronError({ cron: 'check-alerts' }, err);
     Sentry.captureException(err instanceof Error ? err : new Error(String(err)));
     return handleCronError(err);
   }

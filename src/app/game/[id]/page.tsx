@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getAvgRating } from '@/actions/ratings';
 import GameBody from '@/components/game/GameBody';
 import { buildGameStats, sortDealsByPrice, splitDealsByGreyMarket } from '@/lib/game-data';
 import { safeJsonLdStringify } from '@/lib/json-ld';
@@ -37,15 +38,15 @@ export async function generateMetadata({
   return {
     title,
     description,
-    openGraph: buildOG(title, description, game.info.thumb, id),
-    twitter: buildTwitter(title, description, game.info.thumb),
+    openGraph: buildOG(title, description, `${SITE_URL}/og.png/${id}`, id),
+    twitter: buildTwitter(title, description, `${SITE_URL}/og.png/${id}`),
     alternates: { canonical: `${SITE_URL}/game/${id}` },
   };
 }
 
 export default async function GamePage({ params }: Readonly<{ params: Promise<{ id: string }> }>) {
   const { id } = await params;
-  const [game, stores] = await Promise.all([getGame(id), getStores()]);
+  const [game, stores, rating] = await Promise.all([getGame(id), getStores(), getAvgRating(id)]);
 
   if (!game?.info) {
     return (
@@ -75,7 +76,7 @@ export default async function GamePage({ params }: Readonly<{ params: Promise<{ 
   };
 
   // JSON-LD for product
-  const productJsonLd = {
+  const productJsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: game.info.title,
@@ -92,6 +93,15 @@ export default async function GamePage({ params }: Readonly<{ params: Promise<{ 
       },
     })),
   };
+  if (rating.count > 0) {
+    productJsonLd.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: rating.bayesianAvg,
+      reviewCount: rating.count,
+      bestRating: 5,
+      worstRating: 1,
+    };
+  }
 
   return (
     <>

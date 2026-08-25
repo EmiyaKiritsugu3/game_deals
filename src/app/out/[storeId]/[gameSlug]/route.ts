@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { track } from '@vercel/analytics/server';
 import { sql } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
@@ -8,6 +9,8 @@ import {
   isValidGameSlug,
   isValidStoreId,
 } from '@/lib/affiliate-config';
+
+const CLICK_TRACKING_PARAM = 'gamedeals_click';
 
 function getClientIp(request: Request): string {
   const real = request.headers.get('x-real-ip');
@@ -36,7 +39,7 @@ function isDomainAllowed(url: URL): boolean {
   return ALLOWED_DOMAINS.has(url.hostname);
 }
 
-function applyAffiliateParams(url: string, storeId: string): string {
+function applyAffiliateParams(url: string, storeId: string, clickId: string): string {
   const config = affiliateConfig[storeId];
   if (!config) return url;
 
@@ -47,9 +50,14 @@ function applyAffiliateParams(url: string, storeId: string): string {
     return '';
   }
 
-  Object.entries(config.params).forEach(([key, value]) => {
-    parsedUrl.searchParams.append(key, value);
-  });
+  // Read params at click time so env-driven IDs take effect without redeploy.
+  const params = config.params();
+  for (const [key, value] of Object.entries(params)) {
+    if (value) parsedUrl.searchParams.append(key, value);
+  }
+
+  // Correlation key: networks that echo this back let postback join click→conversion.
+  parsedUrl.searchParams.append(CLICK_TRACKING_PARAM, clickId);
 
   const finalUrl = parsedUrl.toString();
   const finalParsed = new URL(finalUrl);
@@ -62,10 +70,11 @@ function applyAffiliateParams(url: string, storeId: string): string {
   return finalUrl;
 }
 
-function logClick(storeId: string, gameSlug: string, ip: string): void {
+function logClick(clickId: string, storeId: string, gameSlug: string, ip: string): void {
+  // Ponytail: fire-and-forget. Redirect must not wait on DB write.
   db.execute(sql`
-    INSERT INTO affiliate_clicks ("storeId", "gameSlug", ip, "timestamp")
-    VALUES (${storeId}, ${gameSlug}, ${ip}, NOW())
+    INSERT INTO affiliate_clicks (id, "storeId", "gameSlug", ip, "timestamp")
+    VALUES (${clickId}::uuid, ${storeId}, ${gameSlug}, ${ip}, NOW())
   `).catch((err) => {
     console.error('affiliate_click insert failed:', err);
   });
@@ -85,12 +94,14 @@ export async function GET(
     return NextResponse.redirect('/', 302);
   }
 
+  const clickId = randomUUID();
+
   let targetUrl = await lookupDealUrl(storeId);
-  targetUrl = applyAffiliateParams(targetUrl, storeId);
+  targetUrl = applyAffiliateParams(targetUrl, storeId, clickId);
 
   if (targetUrl) {
     const ip = getClientIp(request);
-    logClick(storeId, gameSlug, ip);
+    logClick(clickId, storeId, gameSlug, ip);
 
     track('affiliate_click', { store_id: storeId, game_slug: gameSlug }).catch(() => {});
 

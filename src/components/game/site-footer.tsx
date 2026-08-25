@@ -24,6 +24,7 @@ function GithubIcon(props: { className?: string }) {
 
 import { openConsentBanner } from '@/components/game/cookie-consent';
 import { type LegalDocKey, openLegalDoc } from '@/components/game/legal-modal';
+import { NewsletterSignup } from '@/components/newsletter-signup';
 import { cn } from '@/lib/utils';
 
 interface StatusState {
@@ -124,6 +125,9 @@ export function SiteFooter() {
             </p>
             <div className="mt-3">
               <StatusBadge />
+            </div>
+            <div className="mt-4 max-w-xs">
+              <NewsletterSignup />
             </div>
             <div className="mt-3 flex items-center gap-2">
               {[

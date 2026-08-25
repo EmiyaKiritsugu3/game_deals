@@ -9,5 +9,7 @@ export const profiles = pgTable('profiles', {
   avatarUrl: varchar({ length: 500 }),
   role: userRole().default('user'),
   xp: integer().default(0).notNull(),
+  premiumUntil: timestamp(),
+  stripeCustomerId: varchar({ length: 255 }),
   createdAt: timestamp().defaultNow().notNull(),
 });

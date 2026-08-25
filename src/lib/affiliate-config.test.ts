@@ -7,8 +7,8 @@ import {
 } from './affiliate-config';
 
 describe('affiliateConfig', () => {
-  it('has 17 stores', () => {
-    expect(Object.keys(affiliateConfig)).toHaveLength(17);
+  it('has 14 stores (Steam/GOG/Epic removed — closed programs)', () => {
+    expect(Object.keys(affiliateConfig)).toHaveLength(14);
   });
 
   it('every config has a valid baseUrl', () => {
@@ -16,11 +16,17 @@ describe('affiliateConfig', () => {
       expect(() => new URL(c.baseUrl)).not.toThrow();
     });
   });
+
+  it('params factory returns an object', () => {
+    Object.values(affiliateConfig).forEach((c) => {
+      expect(typeof c.params()).toBe('object');
+    });
+  });
 });
 
 describe('ALLOWED_DOMAINS', () => {
-  it('includes steam', () => {
-    expect(ALLOWED_DOMAINS.has('store.steampowered.com')).toBe(true);
+  it('does NOT include steam (program closed)', () => {
+    expect(ALLOWED_DOMAINS.has('store.steampowered.com')).toBe(false);
   });
 
   it('matches each config entry', () => {
@@ -33,9 +39,15 @@ describe('ALLOWED_DOMAINS', () => {
 
 describe('isValidStoreId', () => {
   it('returns true for valid numeric IDs', () => {
-    expect(isValidStoreId('1')).toBe(true);
-    expect(isValidStoreId('7')).toBe(true);
-    expect(isValidStoreId('104')).toBe(true);
+    expect(isValidStoreId('11')).toBe(true); // Humble
+    expect(isValidStoreId('15')).toBe(true); // Fanatical
+    expect(isValidStoreId('104')).toBe(true); // Gamivo
+  });
+
+  it('returns false for removed store IDs', () => {
+    expect(isValidStoreId('1')).toBe(false); // Steam removed
+    expect(isValidStoreId('7')).toBe(false); // GOG removed
+    expect(isValidStoreId('24')).toBe(false); // Epic removed
   });
 
   it('returns false for unknown store IDs', () => {
