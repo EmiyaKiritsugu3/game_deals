@@ -1,0 +1,25 @@
+drizzle/0017_affiliate_conversions.sql
+  s_0b6bbc8796ba6a::t_a9da7544176907 7-8
+  s_0b6bbc8796ba6a::t_5bf9a34397034c 25,28,31
+.github/workflows/ci.yml
+  s_0b6bbc8796ba6a::t_592c0bf2a0034f 100-101
+  s_0b6bbc8796ba6a::t_5390515a1c5470 99,102-109
+drizzle/0009_schema_optimization.sql
+  s_0b6bbc8796ba6a::t_f0cc7e17981d01 16,21,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "341607922608d71b62760f77fad292298cd402c7",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "x-preview-f-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
