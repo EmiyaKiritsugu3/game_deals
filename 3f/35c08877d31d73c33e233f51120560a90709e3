@@ -1,0 +1,24 @@
+tests/unit/routes/subscribe-action.test.ts
+  s_0b6bbc8796ba6a::t_ed7f566f85823f 9-12,76-77
+  s_0b6bbc8796ba6a::t_795344cefab04d 1-8,13-75,78-82
+tests/unit/routes/postback.test.ts
+  s_0b6bbc8796ba6a::t_7a86ff93a1e254 25-27
+  s_0b6bbc8796ba6a::t_aa02c85d2fb601 42-45
+  s_0b6bbc8796ba6a::t_18e27d42491e89 1-24,28-41,46-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "3f35c08877d31d73c33e233f51120560a90709e3",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "x-preview-f-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
