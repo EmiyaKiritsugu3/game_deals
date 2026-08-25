@@ -6,6 +6,7 @@ import { normaliseDeal } from '@/lib/deal-utils';
 import type { DealWithStore } from '@/lib/types';
 import { getGamesBatch } from '@/services/api';
 import type { Deal, GameDetails } from '@/types/game';
+import { getCheapestDeal } from '@/utils/pricing';
 
 export async function generateStaticParams() {
   return COLLECTIONS.map((col) => ({ slug: col.slug }));
@@ -24,9 +25,9 @@ export async function generateMetadata({
 }
 
 function gameDataToDeal(gameData: GameDetails, gameID: string): DealWithStore {
-  const bestDeal = [...gameData.deals].sort(
-    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
-  )[0];
+  // ⚡ Bolt: Replaced [...arr].sort()[0] with getCheapestDeal (O(N) vs O(N log N)).
+  // Prevents array allocation and sort overhead for every deal mapped in SSG.
+  const bestDeal = getCheapestDeal(gameData.deals);
   const deal: Deal = {
     internalName: gameID,
     title: gameData.info.title,
