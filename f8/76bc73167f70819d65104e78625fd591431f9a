@@ -1,0 +1,37 @@
+src/lib/discord-webhook.ts
+  s_0b6bbc8796ba6a::t_4dbf3a336f636e 32
+src/lib/email-templates.ts
+  s_0b6bbc8796ba6a::t_4dbf3a336f636e 37
+src/lib/digest.ts
+  s_0b6bbc8796ba6a::t_4dbf3a336f636e 1,119
+  s_0b6bbc8796ba6a::t_7c11eb9d4f926c 118
+  s_0b6bbc8796ba6a::t_8d8d3d4e497e50 13-26,99,101,106-107,109,111
+src/app/api/subscribe/confirm/route.ts
+  s_0b6bbc8796ba6a::t_4dbf3a336f636e 41
+src/lib/resend.ts
+  s_0b6bbc8796ba6a::t_4dbf3a336f636e 8-9
+src/lib/cron-log.test.ts
+  s_0b6bbc8796ba6a::t_4dbf3a336f636e 2
+src/lib/social-post.ts
+  s_0b6bbc8796ba6a::t_4dbf3a336f636e 32,35-36
+src/lib/email-templates.test.ts
+  s_0b6bbc8796ba6a::t_4dbf3a336f636e 6,13
+src/lib/slack.ts
+  s_0b6bbc8796ba6a::t_4dbf3a336f636e 18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "f876bc73167f70819d65104e78625fd591431f9a",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "x-preview-f-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
