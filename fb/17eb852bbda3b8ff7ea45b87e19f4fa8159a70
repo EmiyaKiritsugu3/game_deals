@@ -1,0 +1,21 @@
+.github/workflows/ci.yml
+  s_0b6bbc8796ba6a::t_c9f2c624ff24cd 105
+  s_0b6bbc8796ba6a::t_66955fd5a01a4a 104,106,108
+  s_0b6bbc8796ba6a::t_8bddcd4b2d97f0 107,109,113
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "fb17eb852bbda3b8ff7ea45b87e19f4fa8159a70",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "x-preview-f-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
