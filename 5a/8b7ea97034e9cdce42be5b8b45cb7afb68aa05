@@ -1,0 +1,29 @@
+tests/unit/routes/newsletter-routes.test.ts
+  s_0b6bbc8796ba6a::t_8fc778d13f590b 30-33,75-80,82,92,99-104
+  s_0b6bbc8796ba6a::t_ff7abe9bdeff35 1-29,34-74,81,83-91,93-98,105-112
+tests/unit/routes/premium-subscribe.test.ts
+  s_0b6bbc8796ba6a::t_7412c3676aaf53 1-21,23-42,44-48,50-70
+  s_0b6bbc8796ba6a::t_8fc778d13f590b 22,43,49
+tests/unit/routes/stripe-webhook.test.ts
+  s_0b6bbc8796ba6a::t_ca5e22a9ed9e57 12-16,20,23,26-29,39-40,45-47,57-58,70-71
+  s_0b6bbc8796ba6a::t_6a416a336e437a 3
+  s_0b6bbc8796ba6a::t_ab9a9d52744f21 6
+  s_0b6bbc8796ba6a::t_fed162d87ae3a7 60
+  s_0b6bbc8796ba6a::t_d77615c40ae890 1-2,4-5,7-11,17-19,21-22,24-25,30-38,41-44,48-56,59,61-69,72-81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "5a8b7ea97034e9cdce42be5b8b45cb7afb68aa05",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "x-preview-f-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
