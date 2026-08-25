@@ -91,7 +91,7 @@ export async function GET(
   const { storeId, gameSlug } = await params;
 
   if (!isValidStoreId(storeId) || !isValidGameSlug(gameSlug)) {
-    return NextResponse.redirect('/', 302);
+    return NextResponse.redirect(new URL('/', request.url), 302);
   }
 
   const clickId = randomUUID();
@@ -108,5 +108,5 @@ export async function GET(
     return NextResponse.redirect(targetUrl, 302);
   }
 
-  return NextResponse.redirect('/', 302);
+  return NextResponse.redirect(new URL('/', request.url), 302);
 }
