@@ -1,0 +1,21 @@
+.github/workflows/cron.yml
+  s_0b6bbc8796ba6a::t_7860e1c062a240 4-17,19-22,26,28,33,35,41,47,52-89
+vercel.json
+  s_0b6bbc8796ba6a::t_3e225ab028756c 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "71df57029958e37ef83d9265ce3c87acdb2e79ce",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "x-preview-f-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
