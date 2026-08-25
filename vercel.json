@@ -1,43 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "bun --bun next build",
-  "installCommand": "bun install",
-  "crons": [
-    {
-      "path": "/api/cron/ingest-prices",
-      "schedule": "0 0 * * *"
-    },
-    {
-      "path": "/api/cron/reindex-typesense",
-      "schedule": "0 3 * * *"
-    },
-    {
-      "path": "/api/cron/check-alerts",
-      "schedule": "0 6 * * *"
-    },
-    {
-      "path": "/api/cron/weekly-free-games",
-      "schedule": "0 12 * * 1"
-    },
-    {
-      "path": "/api/cron/top-deals-digest",
-      "schedule": "0 2 * * 0"
-    },
-    {
-      "path": "/api/cron/discord-flash-deals",
-      "schedule": "*/15 * * * *"
-    },
-    {
-      "path": "/api/cron/affiliate-report",
-      "schedule": "0 9 * * *"
-    },
-    {
-      "path": "/api/cron/pinterest-daily",
-      "schedule": "0 13 * * *"
-    },
-    {
-      "path": "/api/cron/twitter-daily",
-      "schedule": "0 15 * * *"
-    }
-  ]
+  "installCommand": "bun install"
 }
