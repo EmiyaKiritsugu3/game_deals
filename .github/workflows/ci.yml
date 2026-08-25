@@ -96,6 +96,8 @@ jobs:
         run: bunx playwright install --with-deps chromium
       - name: Setup env
         run: cp .env.example .env.local
+      - name: Apply DB migrations (E2E needs full schema incl. views)
+        run: bun run db:migrate
       - name: Build
         run: bun --bun next build
       - name: E2E Tests

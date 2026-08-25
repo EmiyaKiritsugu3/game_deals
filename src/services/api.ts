@@ -96,8 +96,11 @@ export const getStores = cache(async function getStores(): Promise<Record<string
 
     if (res.ok) {
       const stores = (await res.json()) as Store[];
-      for (const s of stores) {
-        map[s.storeID] = s.storeName;
+      // CheapShark can return an error object/HTML under rate limit — guard before iterating.
+      if (Array.isArray(stores)) {
+        for (const s of stores) {
+          map[s.storeID] = s.storeName;
+        }
       }
     }
   } catch (_error) {
