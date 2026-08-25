@@ -1,6 +1,3 @@
-import { eq } from 'drizzle-orm';
-import { db } from '@/db';
-import { profiles } from '@/db/schema';
 import { requireUser, UnauthorizedError } from '@/lib/require-user';
 import { assertRateLimit } from '@/lib/server-action-rate-limit';
 import { createCheckoutSession, StripeError } from '@/lib/stripe';
@@ -14,18 +11,13 @@ export async function POST(): Promise<Response> {
     const user = await requireUser();
     await assertRateLimit('stripe-checkout', user.id, 5, 60_000);
 
-    const [profile] = await db
-      .select({ username: profiles.username })
-      .from(profiles)
-      .where(eq(profiles.id, user.id))
-      .limit(1);
+    if (!user.email) {
+      return Response.json({ error: 'Account has no email' }, { status: 400 });
+    }
 
     const url = await createCheckoutSession({
       userId: user.id,
-      // username optional; fall back to auth id so Stripe always has a contact point.
-      userEmail: profile?.username
-        ? `${profile.username}@users.gamedeals.com.br`
-        : `${user.id}@users.gamedeals.com.br`,
+      userEmail: user.email,
       origin: process.env.NEXT_PUBLIC_SITE_URL ?? new URL('https://gamedeals.com.br').origin,
     });
 

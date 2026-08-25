@@ -39,3 +39,20 @@ describe('digestHtml', () => {
     expect(html).not.toContain('/out/');
   });
 });
+
+describe('digestHtml escaping', () => {
+  it('escapes HTML in untrusted deal title/thumb (XSS via CheapShark data)', () => {
+    const malicious: DigestDeal = {
+      title: '<script>alert(1)</script>',
+      salePrice: 10,
+      normalPrice: 20,
+      savings: 50,
+      thumb: 'https://x.com/a"onerror="alert(1)',
+      dealUrl: '103/1',
+    };
+    const html = digestHtml([malicious], 'Head');
+    expect(html).not.toContain('<script>alert');
+    expect(html).toContain('&lt;script&gt;');
+    expect(html).not.toContain('"onerror=');
+  });
+});

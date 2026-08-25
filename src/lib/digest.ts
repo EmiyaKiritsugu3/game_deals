@@ -25,7 +25,23 @@ function money(n: number): string {
   return `R$ ${n.toFixed(2).replace('.', ',')}`;
 }
 
+/** Escape untrusted strings (deal titles/thumbs come from CheapShark) for safe HTML interpolation. */
+function esc(s: string): string {
+  return s
+    .split('&')
+    .join('&amp;')
+    .split('<')
+    .join('&lt;')
+    .split('>')
+    .join('&gt;')
+    .split('"')
+    .join('&quot;')
+    .split("'")
+    .join('&#39;');
+}
+
 export function digestHtml(deals: DigestDeal[], heading: string): string {
+  const safeHeading = esc(heading);
   const items = deals
     .map(
       (d) => `
@@ -33,9 +49,9 @@ export function digestHtml(deals: DigestDeal[], heading: string): string {
         <td style="padding:8px 0">
           <table role="presentation" width="100%" style="background:#1e293b;border-radius:8px;padding:12px">
             <tr>
-              <td width="80" valign="top"><img src="${d.thumb}" width="80" alt="" /></td>
+              <td width="80" valign="top"><img src="${esc(d.thumb)}" width="80" alt="" /></td>
               <td valign="top" style="padding-left:12px">
-                <a href="${SITE_URL}/out/${encodeURIComponent(d.dealUrl)}" style="color:#22d3ee;font-weight:600;text-decoration:none">${d.title}</a><br />
+                <a href="${SITE_URL}/out/${encodeURIComponent(d.dealUrl)}" style="color:#22d3ee;font-weight:600;text-decoration:none">${esc(d.title)}</a><br />
                 <span style="color:#94a3b8;text-decoration:line-through">${money(d.normalPrice)}</span>
                 <span style="color:#f1f5f9;font-weight:700"> ${money(d.salePrice)}</span>
                 <span style="color:#4ade80;font-weight:700"> (-${Math.round(d.savings)}%)</span>
@@ -53,7 +69,7 @@ export function digestHtml(deals: DigestDeal[], heading: string): string {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px">
 <tr><td align="center">
 <table role="presentation" width="100%" style="max-width:560px;background:#0f172a;color:#cbd5e1;font-size:14px">
-<tr><td style="font-size:20px;font-weight:700;color:#f1f5f9;padding-bottom:16px">${heading}</td></tr>
+<tr><td style="font-size:20px;font-weight:700;color:#f1f5f9;padding-bottom:16px">${safeHeading}</td></tr>
 ${items}
 <tr><td style="padding-top:16px;font-size:12px;color:#64748b">
 Enviado porque você assinou a newsletter do GameDeals ·
