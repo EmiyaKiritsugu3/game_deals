@@ -70,6 +70,11 @@ export async function getGameRating(gameId: string): Promise<{ rating: number } 
 export async function getAvgRating(
   gameId: string
 ): Promise<{ average: number; count: number; bayesianAvg: number }> {
+  const zero = { average: 0, count: 0, bayesianAvg: 0 };
+  // gameId may be a CheapShark numeric ID (unrated game) — the view column is uuid.
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(gameId)) {
+    return zero;
+  }
   const [row] = await db.select().from(gameAvgRatings).where(eq(gameAvgRatings.gameId, gameId));
 
   if (!row) {

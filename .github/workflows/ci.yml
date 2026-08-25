@@ -113,6 +113,10 @@ jobs:
                 END \$\$;"
       - name: Apply DB migrations (E2E needs full schema incl. views)
         run: bun run db:migrate
+      - name: Seed E2E fixture games
+        run: |
+          docker exec ${{ job.services.postgres.id }} psql -U postgres -d gamedeals_test \
+            -c "INSERT INTO games (\"cheapsharkId\", title) VALUES ('612', 'Outer Wilds'), ('999', 'E2E Fixture Game') ON CONFLICT DO NOTHING;"
       - name: Build
         run: bun --bun next build
       - name: E2E Tests
