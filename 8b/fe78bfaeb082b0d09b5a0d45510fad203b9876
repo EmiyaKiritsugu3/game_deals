@@ -1,0 +1,23 @@
+vitest.config.ts
+  s_0b6bbc8796ba6a::t_3f99abdd25d186 32-35,37-40
+src/app/out/[storeId]/[gameSlug]/route.ts
+  s_0b6bbc8796ba6a::t_babd3d71564901 94,111
+src/app/out/[storeId]/[gameSlug]/route.test.ts
+  s_0b6bbc8796ba6a::t_0d9f2ffc098a09 38-41,43-44,48-51,53
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "8bfe78bfaeb082b0d09b5a0d45510fad203b9876",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "x-preview-f-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
