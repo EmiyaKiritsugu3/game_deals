@@ -26,10 +26,6 @@ export function cronLog(context: CronLogContext): void {
   emit('info', context);
 }
 
-export function cronWarn(context: CronLogContext, msg?: string): void {
-  emit('warn', context, msg);
-}
-
 export function cronError(context: CronLogContext, err: unknown, msg?: string): void {
   emit('error', { ...context, error: err instanceof Error ? err.message : String(err) }, msg);
 }

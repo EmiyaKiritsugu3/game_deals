@@ -3,10 +3,6 @@
  * ponytail: react-email adds heavy deps for 2 templates; inline strings scale fine here.
  */
 
-export interface WelcomeEmailData {
-  email: string;
-}
-
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gamedeals.com.br';
 
 function layout(title: string, bodyHtml: string, unsubscribeToken?: string): string {
@@ -38,7 +34,7 @@ function layout(title: string, bodyHtml: string, unsubscribeToken?: string): str
 </html>`;
 }
 
-export function welcomeEmail(_data: WelcomeEmailData): { subject: string; html: string } {
+export function welcomeEmail(): { subject: string; html: string } {
   return {
     subject: 'Bem-vindo ao GameDeals! 🎮',
     html: layout(

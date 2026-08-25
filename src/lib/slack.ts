@@ -11,15 +11,12 @@ export async function postSlackMessage(text: string): Promise<boolean> {
   if (!url) return false;
 
   try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
     const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text }),
-      signal: controller.signal,
+      signal: AbortSignal.timeout(TIMEOUT_MS),
     });
-    clearTimeout(timer);
     return res.ok;
   } catch {
     return false;

@@ -25,15 +25,12 @@ export async function postDiscordEmbed(embed: DiscordEmbed): Promise<boolean> {
 
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     try {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ embeds: [embed] }),
-        signal: controller.signal,
+        signal: AbortSignal.timeout(TIMEOUT_MS),
       });
-      clearTimeout(timer);
       if (res.ok || res.status === 204) return true;
     } catch {
       // retry once on network error/abort

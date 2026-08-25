@@ -1,12 +1,5 @@
-import { eq } from 'drizzle-orm';
-import { db } from '@/db';
-import { newsletterSubscribers } from '@/db/schema';
+import { setTimeout as sleep } from 'node:timers/promises';
 import { sendEmail } from './resend';
-
-/**
- * Shared digest sender for newsletter crons (Tasks 2.1/2.2).
- * Loads active subscribers and sends the same HTML to each, chunked.
- */
 
 export interface DigestDeal {
   title: string;
@@ -15,6 +8,20 @@ export interface DigestDeal {
   savings: number;
   thumb: string;
   dealUrl: string;
+}
+
+// ponytail: dynamic import keeps digestHtml testable without DATABASE_URL at module load.
+async function getSubscribers(): Promise<string[]> {
+  const [{ eq }, { db }, { newsletterSubscribers }] = await Promise.all([
+    import('drizzle-orm'),
+    import('@/db'),
+    import('@/db/schema'),
+  ]);
+  const subs = await db
+    .select({ email: newsletterSubscribers.email })
+    .from(newsletterSubscribers)
+    .where(eq(newsletterSubscribers.status, 'active'));
+  return subs.map((s) => s.email);
 }
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gamedeals.com.br';
@@ -89,30 +96,27 @@ export async function sendDigestToSubscribers(
   heading: string,
   deals: DigestDeal[]
 ): Promise<number> {
-  const subs = await db
-    .select({ email: newsletterSubscribers.email })
-    .from(newsletterSubscribers)
-    .where(eq(newsletterSubscribers.status, 'active'));
+  const emails = await getSubscribers();
 
-  if (subs.length === 0) return 0;
+  if (emails.length === 0) return 0;
 
   const html = digestHtml(deals, heading);
   let sent = 0;
 
-  for (let i = 0; i < subs.length; i += CHUNK_SIZE) {
-    const batch = subs.slice(i, i + CHUNK_SIZE);
+  for (let i = 0; i < emails.length; i += CHUNK_SIZE) {
+    const batch = emails.slice(i, i + CHUNK_SIZE);
     const results = await Promise.allSettled(
-      batch.map((s) =>
+      batch.map((email) =>
         sendEmail({
-          to: s.email,
+          to: email,
           subject: `${heading} | GameDeals`,
           html,
         })
       )
     );
     sent += results.filter((r) => r.status === 'fulfilled').length;
-    if (i + CHUNK_SIZE < subs.length) {
-      await new Promise((resolve) => setTimeout(resolve, BATCH_DELAY_MS));
+    if (i + CHUNK_SIZE < emails.length) {
+      await sleep(BATCH_DELAY_MS);
     }
   }
   return sent;

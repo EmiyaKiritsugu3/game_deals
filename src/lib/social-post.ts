@@ -21,8 +21,6 @@ async function postJson(
   body: unknown,
   token?: string
 ): Promise<{ ok: boolean; status: number }> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
     const res = await fetch(url, {
       method: 'POST',
@@ -31,11 +29,11 @@ async function postJson(
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: JSON.stringify(body),
-      signal: controller.signal,
+      signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     return { ok: res.ok, status: res.status };
-  } finally {
-    clearTimeout(timer);
+  } catch {
+    return { ok: false, status: 0 };
   }
 }
 

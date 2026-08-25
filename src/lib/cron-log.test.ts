@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cronError, cronLog, cronWarn } from './cron-log';
+import { cronError, cronLog } from './cron-log';
 
 describe('cron-log', () => {
   let logSpy: ReturnType<typeof vi.spyOn>;
@@ -35,15 +35,6 @@ describe('cron-log', () => {
     cronLog({ cron: 'x', msg: 'started' });
     const parsed = JSON.parse(logSpy.mock.calls[0]?.[0] as string) as Record<string, unknown>;
     expect(parsed.msg).toBe('started');
-  });
-
-  it('cronWarn tags warn level', () => {
-    cronWarn({ cron: 'x', issue: 'stale' }, 'skipping');
-    expect(logSpy).toHaveBeenCalledTimes(1);
-    const parsed = JSON.parse(logSpy.mock.calls[0]?.[0] as string) as Record<string, unknown>;
-    expect(parsed.level).toBe('warn');
-    expect(parsed.issue).toBe('stale');
-    expect(parsed.msg).toBe('skipping');
   });
 
   it('cronError writes to console.error and serializes Error message', () => {

@@ -38,7 +38,7 @@ export async function GET(request: Request): Promise<Response> {
     .where(eq(newsletterSubscribers.id, row.id));
 
   try {
-    const { subject, html } = welcomeEmail({ email: row.email });
+    const { subject, html } = welcomeEmail();
     await sendEmail({ to: row.email, subject, html });
   } catch {
     // ponytail: log-and-continue; resend manually if needed.

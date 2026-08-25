@@ -5,6 +5,8 @@
  * Env: RESEND_API_KEY, RESEND_FROM_EMAIL, RESEND_REPLY_TO (see .env.example).
  */
 
+import { setTimeout as sleep } from 'node:timers/promises';
+
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const MAX_ATTEMPTS = 3;
 const BASE_DELAY_MS = 500;
@@ -26,10 +28,6 @@ export class ResendError extends Error {
     this.name = 'ResendError';
     this.status = status;
   }
-}
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
