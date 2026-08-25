@@ -4,7 +4,8 @@
 -- click_id correlates back to affiliate_clicks.id for funnel analytics.
 -- Idempotent via unique constraint on order_id (networks retry).
 -- ponytail: jsonb raw_payload for audit trail — no separate audit log needed.
--- ponytail: CONCURRENTLY for indexes to avoid table lock on production deploys.
+-- NOTE: no CONCURRENTLY - drizzle-kit migrate wraps each file in a transaction and
+-- Postgres forbids CREATE INDEX CONCURRENTLY inside transactions.
 
 CREATE TABLE IF NOT EXISTS "affiliate_conversions" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
@@ -21,10 +22,10 @@ CREATE TABLE IF NOT EXISTS "affiliate_conversions" (
 );
 --> statement-breakpoint
 
-CREATE UNIQUE INDEX CONCURRENTLY IF NOT EXISTS "acv_order_id_unique" ON "affiliate_conversions" ("orderId");
+CREATE UNIQUE INDEX IF NOT EXISTS "acv_order_id_unique" ON "affiliate_conversions" ("orderId");
 --> statement-breakpoint
 
-CREATE INDEX CONCURRENTLY IF NOT EXISTS "acv_store_converted_idx" ON "affiliate_conversions" ("storeId", "convertedAt" DESC);
+CREATE INDEX IF NOT EXISTS "acv_store_converted_idx" ON "affiliate_conversions" ("storeId", "convertedAt" DESC);
 --> statement-breakpoint
 
-CREATE INDEX CONCURRENTLY IF NOT EXISTS "acv_click_id_idx" ON "affiliate_conversions" ("clickId");
+CREATE INDEX IF NOT EXISTS "acv_click_id_idx" ON "affiliate_conversions" ("clickId");

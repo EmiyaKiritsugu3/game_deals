@@ -96,6 +96,17 @@ jobs:
         run: bunx playwright install --with-deps chromium
       - name: Setup env
         run: cp .env.example .env.local
+      - name: Stub Supabase bits (migrations reference auth schema/roles; vanilla PG lacks them)
+        run: |
+          docker exec ${{ job.services.postgres.id }} psql -U postgres -d gamedeals_test \
+            -c "CREATE SCHEMA IF NOT EXISTS auth;
+                CREATE TABLE IF NOT EXISTS auth.users (id uuid PRIMARY KEY DEFAULT gen_random_uuid());
+                CREATE FUNCTION IF NOT EXISTS auth.uid() RETURNS uuid LANGUAGE sql STABLE AS \$\$ SELECT NULL::uuid \$\$;
+                DO \$\$\$ BEGIN
+                  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'service_role') THEN CREATE ROLE service_role; END IF;
+                  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'authenticated') THEN CREATE ROLE authenticated; END IF;
+                  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'anon') THEN CREATE ROLE anon; END IF;
+                END \$\$\$;"
       - name: Apply DB migrations (E2E needs full schema incl. views)
         run: bun run db:migrate
       - name: Build
