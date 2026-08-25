@@ -1,0 +1,24 @@
+src/lib/digest.test.ts
+  s_0b6bbc8796ba6a::t_f879ee6eda11d7 42-58
+src/lib/digest.ts
+  s_0b6bbc8796ba6a::t_9f2b586ec2a33c 28-42,44,52,54,72
+src/app/api/stripe/checkout/route.ts
+  s_0b6bbc8796ba6a::t_e862e1c3559bd1 14-16
+  s_0b6bbc8796ba6a::t_ef90279a287c67 20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "1f582478cb442f21b00f24de064c2f242bf0e4b0",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "x-preview-f-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
