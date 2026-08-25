@@ -1,0 +1,25 @@
+tests/unit/components/premium-page.test.tsx
+  s_0b6bbc8796ba6a::t_ab914122db9dfe 1-48
+sonar-project.properties
+  s_0b6bbc8796ba6a::t_d687ef251c7378 12
+tests/unit/components/newsletter-signup.test.tsx
+  s_0b6bbc8796ba6a::t_41270bf5422e50 38-41
+  s_0b6bbc8796ba6a::t_11444276217e24 1-37,42-43,46,50-63
+  s_0b6bbc8796ba6a::t_78974bf7bab7b2 44-45,47-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "3a8f862701af54be429dcfdf8b1678e55f76cf86",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "x-preview-f-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
