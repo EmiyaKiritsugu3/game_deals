@@ -1,0 +1,258 @@
+src/app/newsletter/confirmed/page.tsx
+  s_0b6bbc8796ba6a::t_b6bdddec014c11 1,3-4,9
+  s_0b6bbc8796ba6a::t_73ca20454e396a 2,5-8,10-13,15-20
+  s_0b6bbc8796ba6a::t_a48ad29443f3bf 14
+src/app/api/postback/route.ts
+  s_0b6bbc8796ba6a::t_233e0e8ff73eec 1-91
+drizzle/0019_social_posts.sql
+  s_0b6bbc8796ba6a::t_e6e8b89929eb6f 1-12
+src/app/api/stripe/webhook/route.ts
+  s_0b6bbc8796ba6a::t_b3374cfbb93d88 43-46
+  s_0b6bbc8796ba6a::t_4a7773ec5d8408 1-27,29-42,47-66
+  s_0b6bbc8796ba6a::t_d6cc76272fe87b 28
+src/lib/premium.ts
+  s_0b6bbc8796ba6a::t_37a7ff96bf05d5 1-21
+src/lib/require-admin.ts
+  s_0b6bbc8796ba6a::t_21ef3776769be8 23
+  s_0b6bbc8796ba6a::t_7e2ec95e8f2412 1-22,24-27
+src/lib/digest.test.ts
+  s_0b6bbc8796ba6a::t_921952070f5208 2
+  s_0b6bbc8796ba6a::t_5ac41fbcf3cdfd 1,3-41
+src/lib/digest.ts
+  s_0b6bbc8796ba6a::t_2a95d01459b4df 1-110
+src/db/schema/newsletter_subscribers.ts
+  s_0b6bbc8796ba6a::t_b9f7a755f607a2 1
+  s_0b6bbc8796ba6a::t_eba289dd28c07a 2-28
+src/app/api/subscribe/confirm/route.ts
+  s_0b6bbc8796ba6a::t_8b9250ad28df24 1-48
+src/lib/slack.ts
+  s_0b6bbc8796ba6a::t_1da70c7e495f24 1-27
+src/lib/slack.test.ts
+  s_0b6bbc8796ba6a::t_7e8045518e8035 1-33
+src/app/api/cron/twitter-daily/route.ts
+  s_0b6bbc8796ba6a::t_2b977ee06981c1 1-70
+src/lib/discord-webhook.ts
+  s_0b6bbc8796ba6a::t_3fd2c5c0c9d939 1-43
+src/app/admin/revenue/page.tsx
+  s_0b6bbc8796ba6a::t_f6459529ab99ed 1-55,57-58,61-62,65-67,69-70,74-77,79-88,91-93,98,100,104,106-107
+  s_0b6bbc8796ba6a::t_9a271d42e51ac8 56
+  s_0b6bbc8796ba6a::t_9973b1d6419724 59,63,71
+  s_0b6bbc8796ba6a::t_548278accee1d0 94-97
+  s_0b6bbc8796ba6a::t_9f3e7d46624b28 60,64,68,72-73,78,89-90,99,101-103,105
+src/app/sitemap.ts
+  s_0b6bbc8796ba6a::t_fd8f0d4d855232 5-18
+src/db/schema/users.ts
+  s_0b6bbc8796ba6a::t_cda7a70a1c3009 12-13
+src/app/deals/[slug]/page.tsx
+  s_0b6bbc8796ba6a::t_53da496cd8843c 11,99,107-108
+  s_0b6bbc8796ba6a::t_7544fc7344bfec 1-10,12-88,90-93,96-98,100-106,109-111
+  s_0b6bbc8796ba6a::t_a2fc95a0b8ee7c 89
+  s_0b6bbc8796ba6a::t_880d9415c88993 94-95
+src/app/sitemap/deals.xml/route.ts
+  s_0b6bbc8796ba6a::t_9bfeb4dc4bada8 5,7,10,13
+  s_0b6bbc8796ba6a::t_d8d2da4e2c9081 2-4,6,8-9,11-12,14
+  s_0b6bbc8796ba6a::t_bc8eaca5c20921 1
+drizzle/0017_affiliate_conversions.sql
+  s_0b6bbc8796ba6a::t_aacf94770d17f7 1-30
+src/app/sitemap/.next/trace
+  s_0b6bbc8796ba6a::t_d648f1ca0ee75b 1
+.env.example
+  s_0b6bbc8796ba6a::t_7a248eb59a613c 12-37
+  s_0b6bbc8796ba6a::t_918c938d07ee1d 56-60
+src/actions/subscribe.ts
+  s_0b6bbc8796ba6a::t_bd1ecfb71ee907 1-4,6,8-40,43-52,57-85
+  s_0b6bbc8796ba6a::t_bc8e6902f6d8ba 5
+  s_0b6bbc8796ba6a::t_c6acf893a62c4a 7,53-56
+  s_0b6bbc8796ba6a::t_52bdadbf606fb5 41-42
+docs/affiliate-onboarding.md
+  s_0b6bbc8796ba6a::t_68bca4e291ac67 1-166
+src/app/deals/by-genre/[slug]/page.tsx
+  s_0b6bbc8796ba6a::t_c13547adca57df 1-115
+src/app/sitemap/_lib/serialize.ts
+  s_0b6bbc8796ba6a::t_3bd9f41f523588 9-19,21,23,25,27,36,38,41,43,51-62
+  s_0b6bbc8796ba6a::t_b4142228db444a 34,37,42,46,48
+  s_0b6bbc8796ba6a::t_8cb951cd35714a 20,22,24,26,28
+  s_0b6bbc8796ba6a::t_d35496aa6ea999 1-8,29-33,35,39-40,44-45,47,49-50,63-66
+src/lib/cron-log.ts
+  s_0b6bbc8796ba6a::t_16ec0fbbc82bad 1-35
+src/lib/discord-webhook.test.ts
+  s_0b6bbc8796ba6a::t_856a7cd79ca46b 1-54
+src/app/out/[storeId]/[gameSlug]/route.ts
+  s_0b6bbc8796ba6a::t_e385cd5c973876 73
+  s_0b6bbc8796ba6a::t_8cb5f91767ebbd 1,13-14,42,53-60,74,76-77,97-98,100,104
+drizzle/0020_premium_users.sql
+  s_0b6bbc8796ba6a::t_6a2fef09434647 1-7
+src/app/api/unsubscribe/route.ts
+  s_0b6bbc8796ba6a::t_bf02fd730121b0 1-26
+src/app/api/cron/affiliate-report/route.ts
+  s_0b6bbc8796ba6a::t_972752f074ce9f 27-28
+  s_0b6bbc8796ba6a::t_f73854509aefa8 1-25,29-46
+  s_0b6bbc8796ba6a::t_f0283f2b3471ed 26
+src/components/game/site-footer.tsx
+  s_0b6bbc8796ba6a::t_bda3849d801fab 129-131
+  s_0b6bbc8796ba6a::t_ce64f14e8b43db 27
+src/app/api/health/route.ts
+  s_0b6bbc8796ba6a::t_17bdaaf9e981ac 1-23
+src/lib/resend.ts
+  s_0b6bbc8796ba6a::t_fa6a6a6c56fbf0 1-90
+vercel.json
+  s_0b6bbc8796ba6a::t_ff94dc9b7d0212 33-40
+  s_0b6bbc8796ba6a::t_1556a3ca66aa46 29-32
+  s_0b6bbc8796ba6a::t_14ffb42bf238fb 17-24
+  s_0b6bbc8796ba6a::t_14bf24e9c92610 25-28
+src/app/sitemap/games-1.xml/route.ts
+  s_0b6bbc8796ba6a::t_5d0c5a8f07cb0b 2
+  s_0b6bbc8796ba6a::t_1df884558fa939 1,3-29
+tests/unit/seo/sitemap.test.ts
+  s_0b6bbc8796ba6a::t_1d0877a41e16a7 1,4,8-11,15,18-23
+  s_0b6bbc8796ba6a::t_9b36a6ceb2961f 16-17
+  s_0b6bbc8796ba6a::t_92dbd9b8b4f850 5-6
+  s_0b6bbc8796ba6a::t_b17028dcfb4dc8 24
+src/app/sitemap/collections.xml/route.ts
+  s_0b6bbc8796ba6a::t_726cdcbb2507ec 2-4,6,46
+  s_0b6bbc8796ba6a::t_96aea1336aa318 5,27-28,30,45
+  s_0b6bbc8796ba6a::t_8a963791813188 33
+  s_0b6bbc8796ba6a::t_659247a5110290 7-26,29,31-32,34-44
+  s_0b6bbc8796ba6a::t_2062987d571501 1
+src/lib/stripe.test.ts
+  s_0b6bbc8796ba6a::t_d6cc76272fe87b 3
+  s_0b6bbc8796ba6a::t_a919b2f723fc33 1-2,4-20,22-63,67-75
+  s_0b6bbc8796ba6a::t_88b04255e10553 21
+  s_0b6bbc8796ba6a::t_b3374cfbb93d88 64-66
+src/lib/affiliate-config.ts
+  s_0b6bbc8796ba6a::t_605a57472f3f24 3-4,7-15,19-22,26-28,32-46,50-52,56-74,78-86,90-98
+src/app/sitemap/games-3.xml/route.ts
+  s_0b6bbc8796ba6a::t_1df884558fa939 1,3-29
+  s_0b6bbc8796ba6a::t_ed507f20b76f8a 2
+src/app/sitemap/games-0.xml/route.ts
+  s_0b6bbc8796ba6a::t_46270be10c88ad 1,3-29
+  s_0b6bbc8796ba6a::t_28c73146c790a2 2
+src/app/admin/error.tsx
+  s_0b6bbc8796ba6a::t_bb9f56a7e0a325 1-10
+src/app/sitemap/games-2.xml/route.ts
+  s_0b6bbc8796ba6a::t_1df884558fa939 1,3-29
+  s_0b6bbc8796ba6a::t_ed507f20b76f8a 2
+src/app/sitemap/static.xml/route.ts
+  s_0b6bbc8796ba6a::t_c7a75990e8fd4c 3,6-14,16-20
+  s_0b6bbc8796ba6a::t_c1cd2f9cf3aae0 2,5
+  s_0b6bbc8796ba6a::t_e22c516fe2f148 4,21
+  s_0b6bbc8796ba6a::t_31af1f161da4cc 1
+  s_0b6bbc8796ba6a::t_5096d8b4c5c918 15
+src/app/sitemap/games-4.xml/route.ts
+  s_0b6bbc8796ba6a::t_1df884558fa939 1,3-29
+  s_0b6bbc8796ba6a::t_d47aa87944aad3 2
+src/app/api/cron/pinterest-daily/route.ts
+  s_0b6bbc8796ba6a::t_88b04255e10553 6
+  s_0b6bbc8796ba6a::t_2b977ee06981c1 1-5,7-78
+src/app/api/stripe/checkout/route.ts
+  s_0b6bbc8796ba6a::t_df7b7846c950a6 18,25-28,38-40
+  s_0b6bbc8796ba6a::t_4a7773ec5d8408 1-3,5,7-12,16-17,19-24,29-33,37,41-45
+  s_0b6bbc8796ba6a::t_b3374cfbb93d88 4,6
+  s_0b6bbc8796ba6a::t_d5c10a201198ee 13-15,34-36
+src/app/api/cron/weekly-free-games/route.ts
+  s_0b6bbc8796ba6a::t_1bce566473a784 1-3,7-46
+  s_0b6bbc8796ba6a::t_45bb009029e379 6
+  s_0b6bbc8796ba6a::t_921952070f5208 4-5
+src/app/out/[storeId]/[gameSlug]/route.test.ts
+  s_0b6bbc8796ba6a::t_859bdb022d0f0b 108,113
+  s_0b6bbc8796ba6a::t_0994ee6df530b3 111-112
+  s_0b6bbc8796ba6a::t_42c42ebaa87fbb 107,109-110,114-115
+  s_0b6bbc8796ba6a::t_8bfb2bd5a48d1f 129-131,134,140,148-150,153,156,164-166,168-169,177-179,182,185
+  s_0b6bbc8796ba6a::t_f57a862229423f 20-22,24-25,28-34,50-51,60-62,64-65,75-77,80-81
+src/lib/cron-log.test.ts
+  s_0b6bbc8796ba6a::t_a3a276066d7493 1-21,23-30,32-34,37-42,44-52,54-59,61-65,67-69
+  s_0b6bbc8796ba6a::t_7a31233126c8ad 22,31,35-36
+  s_0b6bbc8796ba6a::t_e7e85f5916d998 43,53,60,66
+src/app/api/cron/top-deals-digest/route.ts
+  s_0b6bbc8796ba6a::t_921952070f5208 5
+  s_0b6bbc8796ba6a::t_83bc7b7dcc2842 36
+  s_0b6bbc8796ba6a::t_abb6f6f92be49c 4
+  s_0b6bbc8796ba6a::t_e64e674818eead 1-3,6-35,37-48
+src/lib/email-templates.test.ts
+  s_0b6bbc8796ba6a::t_15c49346630e26 1-16
+src/db/schema/index.ts
+  s_0b6bbc8796ba6a::t_424e452d51447b 6
+  s_0b6bbc8796ba6a::t_3f6eeef5faa206 13
+  s_0b6bbc8796ba6a::t_da0c9b554e5e36 1
+src/db/schema/social_posts.ts
+  s_0b6bbc8796ba6a::t_8de00aafcf0c34 1-16
+src/app/deals/by-store/[slug]/page.tsx
+  s_0b6bbc8796ba6a::t_6587e406514c4c 1-19,21-28,30-43,46-49,51-52,57-59,61-65,67-69,71-72,74-82,84-86,88-104,106-108,110-117,119-121
+  s_0b6bbc8796ba6a::t_5049e55ff76762 20,29,44-45,50,53-56,60,66,70,73,83,87,105,109,118
+src/lib/social-post.ts
+  s_0b6bbc8796ba6a::t_6a340946d60d2d 1,3-10,12-20,23-24,26,37,39,75
+  s_0b6bbc8796ba6a::t_70415cf182bf80 11,25,38,40-41,43
+  s_0b6bbc8796ba6a::t_782e13a53e7cc4 2,21-22,27-36,42,44-47,59-74
+  s_0b6bbc8796ba6a::t_cbdd48133f6d17 48-58
+src/lib/stripe.ts
+  s_0b6bbc8796ba6a::t_02b61fe1eac89d 1-78,80-96
+  s_0b6bbc8796ba6a::t_4e7a22e3a57edd 79
+src/lib/affiliate-config.test.ts
+  s_0b6bbc8796ba6a::t_ea3204646d075f 10-11,19-24,28-29,42-50
+src/components/newsletter-signup.tsx
+  s_0b6bbc8796ba6a::t_cf6a3edc9e4e47 28
+  s_0b6bbc8796ba6a::t_49c440f409b274 1-3,5-27,29-42
+  s_0b6bbc8796ba6a::t_c6acf893a62c4a 4
+src/app/api/cron/discord-flash-deals/route.ts
+  s_0b6bbc8796ba6a::t_b425dec40d86f8 1
+  s_0b6bbc8796ba6a::t_b7d3d4b422cb79 12
+  s_0b6bbc8796ba6a::t_c5245da7df0aa4 49
+  s_0b6bbc8796ba6a::t_42df4f7072548c 2-11,13-23,25-48,50-84
+  s_0b6bbc8796ba6a::t_dece3238503f01 24
+src/db/schema/affiliate_conversions.ts
+  s_0b6bbc8796ba6a::t_6df66840258c87 1-41
+src/app/og.png/[id]/route.tsx
+  s_0b6bbc8796ba6a::t_53da496cd8843c 12,31,39-42,58-59,71,73,83,97,99-100
+  s_0b6bbc8796ba6a::t_48bbb9a45943ac 1-11,13-30,32-38,43-57,60-70,72,74-82,84-96,98,101-103
+src/app/sitemap/.next/trace-build
+  s_0b6bbc8796ba6a::t_d648f1ca0ee75b 1
+src/lib/resend.test.ts
+  s_0b6bbc8796ba6a::t_a256aa869bd168 1-6,8-22,26-63
+  s_0b6bbc8796ba6a::t_b9f7a755f607a2 23-25
+  s_0b6bbc8796ba6a::t_68bccd2e1cac97 7
+src/app/premium/page.tsx
+  s_0b6bbc8796ba6a::t_b3374cfbb93d88 26
+  s_0b6bbc8796ba6a::t_37a7ff96bf05d5 1-25,27-47
+drizzle/0018_newsletter_subscribers.sql
+  s_0b6bbc8796ba6a::t_bd8982e7f66f0a 16
+  s_0b6bbc8796ba6a::t_5c2a6da18f1823 1-15,17-20
+src/lib/email-templates.ts
+  s_0b6bbc8796ba6a::t_ea5a4fa3d9248a 1-40,42-59
+  s_0b6bbc8796ba6a::t_4e5bebea93651f 41
+src/app/game/[id]/page.tsx
+  s_0b6bbc8796ba6a::t_4b0135557ca09e 79,96-104
+  s_0b6bbc8796ba6a::t_53da496cd8843c 49
+  s_0b6bbc8796ba6a::t_13eeef72f79c3a 41-42
+  s_0b6bbc8796ba6a::t_c0ec8f69f97798 2
+src/app/api/cron/check-alerts/route.ts
+  s_0b6bbc8796ba6a::t_d3d0a3af6375bd 6,21-29,53
+scripts/affiliate-onboarding.sh
+  s_0b6bbc8796ba6a::t_28a9b503e99cb3 1-57
+src/lib/postback-auth.test.ts
+  s_0b6bbc8796ba6a::t_ae342465f3c576 1-48
+src/app/newsletter/unsubscribed/page.tsx
+  s_0b6bbc8796ba6a::t_44af04417f4c0d 1,3-5
+  s_0b6bbc8796ba6a::t_8c7584ea34a309 2,6-8,10-13,15-20
+  s_0b6bbc8796ba6a::t_26b0cf3c35ed3b 14
+  s_0b6bbc8796ba6a::t_3bf860c753300f 9
+src/lib/postback-auth.ts
+  s_0b6bbc8796ba6a::t_c558208a2847e1 1-29
+drizzle/meta/_journal.json
+  s_0b6bbc8796ba6a::t_13946d7fb218cc 123-150
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "0c3944d80543a8f921e92000882434470ce36e6e",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "x-preview-f-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
