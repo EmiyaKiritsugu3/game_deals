@@ -31,23 +31,34 @@ describe('GET /out/[storeId]/[gameSlug]', () => {
   });
 
   it('does not track on invalid store id', async () => {
-    await expect(() =>
-      GET(new Request('http://localhost:3000/out/999/game'), {
-        params: Promise.resolve({ storeId: '999', gameSlug: 'game' }),
-      })
-    ).rejects.toThrow();
+    const response = await GET(new Request('http://localhost:3000/out/999/game'), {
+      params: Promise.resolve({ storeId: '999', gameSlug: 'game' }),
+    });
 
+    expect(response.status).toBe(302);
     expect(track).not.toHaveBeenCalled();
   });
 
   it('does not track on invalid game slug', async () => {
-    await expect(() =>
-      GET(new Request('http://localhost:3000/out/1/!nv@lid'), {
-        params: Promise.resolve({ storeId: '1', gameSlug: '!nv@lid' }),
-      })
-    ).rejects.toThrow();
+    const response = await GET(new Request('http://localhost:3000/out/1/!nv@lid'), {
+      params: Promise.resolve({ storeId: '1', gameSlug: '!nv@lid' }),
+    });
 
+    expect(response.status).toBe(302);
     expect(track).not.toHaveBeenCalled();
+  });
+
+  it('blocks javascript: protocols even with allowed hostname', async () => {
+    execute.mockResolvedValue([
+      { url: 'javascript://store.steampowered.com/%250Aalert(1)//', storeId: '1' },
+    ]);
+
+    const response = await GET(new Request('http://localhost:3000/out/1/awesome-game'), {
+      params: Promise.resolve({ storeId: '1', gameSlug: 'awesome-game' }),
+    });
+
+    expect(response.status).toBe(302);
+    expect(response.headers.get('location')).toBe('http://localhost:3000/');
   });
 
   it('does not block redirect on track failure', async () => {
