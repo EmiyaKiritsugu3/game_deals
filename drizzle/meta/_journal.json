@@ -120,6 +120,34 @@
       "when": 1782390643001,
       "tag": "0016_rls",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1782390700000,
+      "tag": "0017_affiliate_conversions",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1782390750000,
+      "tag": "0018_newsletter_subscribers",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1782390800000,
+      "tag": "0019_social_posts",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1782390850000,
+      "tag": "0020_premium_users",
+      "breakpoints": true
     }
   ]
 }

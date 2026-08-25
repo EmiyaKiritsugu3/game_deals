@@ -1,34 +1,25 @@
-import { describe, expect, it, vi } from 'vitest';
-
-const { mockDbExecute } = vi.hoisted(() => ({
-  mockDbExecute: vi.fn(),
-}));
-
-vi.mock('@/db', () => ({
-  db: {
-    execute: mockDbExecute,
-  },
-}));
-
+import { describe, expect, it } from 'vitest';
 import sitemap from '@/app/sitemap';
 
-describe('sitemap', () => {
-  it('includes game detail pages with correct sitemap format', async () => {
-    mockDbExecute.mockResolvedValue([
-      { cheapsharkId: '111' },
-      { cheapsharkId: '222' },
-      { cheapsharkId: '333' },
-    ]);
+describe('sitemap index', () => {
+  it('returns a sitemap index pointing to child sitemaps', () => {
+    const result = sitemap();
 
-    const result = await sitemap();
-
-    const gameEntries = result.filter((entry) => entry.url.includes('/game/'));
-
-    expect(gameEntries.length).toBeGreaterThan(0);
-    for (const entry of gameEntries) {
+    expect(Array.isArray(result)).toBe(true);
+    expect(result.length).toBeGreaterThan(0);
+    for (const entry of result) {
+      expect(entry.url).toMatch(/\.xml$/);
       expect(entry.lastModified).toBeDefined();
-      expect(entry.changeFrequency).toBe('weekly');
-      expect(entry.priority).toBe(0.7);
     }
+  });
+
+  it('includes static, collections, deals, and games chunks', () => {
+    const result = sitemap();
+    const urls = result.map((e) => e.url);
+
+    expect(urls.some((u) => u.includes('/sitemap/static.xml'))).toBe(true);
+    expect(urls.some((u) => u.includes('/sitemap/collections.xml'))).toBe(true);
+    expect(urls.some((u) => u.includes('/sitemap/deals.xml'))).toBe(true);
+    expect(urls.some((u) => /\/sitemap\/games-\d+\.xml/.test(u))).toBe(true);
   });
 });

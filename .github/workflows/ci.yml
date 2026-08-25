@@ -96,6 +96,27 @@ jobs:
         run: bunx playwright install --with-deps chromium
       - name: Setup env
         run: cp .env.example .env.local
+      - name: Stub Supabase bits (migrations reference auth schema/roles; vanilla PG lacks them)
+        run: |
+          docker exec ${{ job.services.postgres.id }} psql -U postgres -d gamedeals_test \
+            -c "CREATE SCHEMA IF NOT EXISTS auth;
+                CREATE TABLE IF NOT EXISTS auth.users (id uuid PRIMARY KEY DEFAULT gen_random_uuid());
+                DO \$fn\$ BEGIN
+                  IF NOT EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace WHERE proname = 'uid' AND n.nspname = 'auth') THEN
+                    CREATE FUNCTION auth.uid() RETURNS uuid LANGUAGE sql STABLE AS \$body\$ SELECT NULL::uuid \$body\$;
+                  END IF;
+                END \$fn\$;
+                DO \$\$ BEGIN
+                  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'service_role') THEN CREATE ROLE service_role; END IF;
+                  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'authenticated') THEN CREATE ROLE authenticated; END IF;
+                  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'anon') THEN CREATE ROLE anon; END IF;
+                END \$\$;"
+      - name: Apply DB migrations (E2E needs full schema incl. views)
+        run: bun run db:migrate
+      - name: Seed E2E fixture games
+        run: |
+          docker exec ${{ job.services.postgres.id }} psql -U postgres -d gamedeals_test \
+            -c "INSERT INTO games (\"cheapsharkId\", title) VALUES ('612', 'Outer Wilds'), ('999', 'E2E Fixture Game') ON CONFLICT DO NOTHING;"
       - name: Build
         run: bun --bun next build
       - name: E2E Tests

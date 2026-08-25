@@ -1,34 +1,89 @@
 name: Cron Jobs
 on:
   schedule:
+    # Every 15 min: discord flash deals (Vercel Hobby allows only 2 crons,
+    # so all schedules live here and hit the deployed endpoints via HTTP).
+    - cron: '*/15 * * * *'
+    # Daily 09:00 UTC (06h BRT): affiliate report to Slack
+    - cron: '0 9 * * *'
+    # Daily 13:00 UTC (10h BRT): Pinterest auto-pin
+    - cron: '0 13 * * *'
+    # Daily 15:00 UTC (12h BRT): X/Twitter bot
+    - cron: '0 15 * * *'
+    # Monday 12:00 UTC (09h BRT): weekly free-games digest
+    - cron: '0 12 * * 1'
+    # Sunday 02:00 UTC (23h BRT): top-deals digest
+    - cron: '0 2 * * 0'
+    # Every 4h: price ingest + typesense reindex (existing ops jobs)
     - cron: '0 */4 * * *'
+    # Daily 03:00 UTC: reindex (kept from original schedule)
+    - cron: '0 3 * * *'
+    # Daily 06:00 UTC (03h BRT): check alerts
+    - cron: '0 6 * * *'
   workflow_dispatch:
 
 jobs:
-  cron:
+  call-cron:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     env:
       VERCEL_APP_URL: ${{ secrets.VERCEL_APP_URL }}
       CRON_SECRET: ${{ secrets.CRON_SECRET }}
     steps:
+      # Ops crons (existing)
       - name: ingest-prices
+        if: github.event.schedule == '0 */4 * * *' || github.event_name == 'workflow_dispatch'
         run: |
           curl -sSf -X GET "$VERCEL_APP_URL/api/cron/ingest-prices" \
             -H "Authorization: Bearer $CRON_SECRET" \
             -w "ingest-prices: HTTP %{http_code}\n"
-        timeout-minutes: 4
-
       - name: reindex-typesense
+        if: github.event.schedule == '0 3 * * *' || github.event_name == 'workflow_dispatch'
         run: |
           curl -sSf -X GET "$VERCEL_APP_URL/api/cron/reindex-typesense" \
             -H "Authorization: Bearer $CRON_SECRET" \
             -w "reindex-typesense: HTTP %{http_code}\n"
-        timeout-minutes: 4
-
       - name: check-alerts
+        if: github.event.schedule == '0 6 * * *' || github.event_name == 'workflow_dispatch'
         run: |
           curl -sSf -X GET "$VERCEL_APP_URL/api/cron/check-alerts" \
             -H "Authorization: Bearer $CRON_SECRET" \
             -w "check-alerts: HTTP %{http_code}\n"
-        timeout-minutes: 4
+
+      # Sprint 4 monetization crons
+      - name: weekly-free-games
+        if: github.event.schedule == '0 12 * * 1'
+        run: |
+          curl -sSf -X GET "$VERCEL_APP_URL/api/cron/weekly-free-games" \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            -w "weekly-free-games: HTTP %{http_code}\n"
+      - name: top-deals-digest
+        if: github.event.schedule == '0 2 * * 0'
+        run: |
+          curl -sSf -X GET "$VERCEL_APP_URL/api/cron/top-deals-digest" \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            -w "top-deals-digest: HTTP %{http_code}\n"
+      - name: pinterest-daily
+        if: github.event.schedule == '0 13 * * *'
+        run: |
+          curl -sSf -X GET "$VERCEL_APP_URL/api/cron/pinterest-daily" \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            -w "pinterest-daily: HTTP %{http_code}\n"
+      - name: twitter-daily
+        if: github.event.schedule == '0 15 * * *'
+        run: |
+          curl -sSf -X GET "$VERCEL_APP_URL/api/cron/twitter-daily" \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            -w "twitter-daily: HTTP %{http_code}\n"
+      - name: affiliate-report
+        if: github.event.schedule == '0 9 * * *'
+        run: |
+          curl -sSf -X GET "$VERCEL_APP_URL/api/cron/affiliate-report" \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            -w "affiliate-report: HTTP %{http_code}\n"
+      - name: discord-flash-deals
+        if: github.event.schedule == '*/15 * * * *'
+        run: |
+          curl -sSf --max-time 120 -X GET "$VERCEL_APP_URL/api/cron/discord-flash-deals" \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            -w "discord-flash-deals: HTTP %{http_code}\n"

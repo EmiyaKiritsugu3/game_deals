@@ -114,7 +114,7 @@ describe('getGameRating', () => {
 describe('getAvgRating', () => {
   it('returns zeros when no ratings in view', async () => {
     select.mockResolvedValueOnce([]);
-    const result = await getAvgRating('game-1');
+    const result = await getAvgRating('11111111-1111-4111-8111-111111111111');
     expect(result).toEqual({ average: 0, count: 0, bayesianAvg: 0 });
   });
 
@@ -127,7 +127,7 @@ describe('getAvgRating', () => {
         bayesianAvg: '4.17',
       },
     ]);
-    const result = await getAvgRating('game-1');
+    const result = await getAvgRating('11111111-1111-4111-8111-111111111111');
     expect(result).toEqual({ average: 4.2, count: 10, bayesianAvg: 4.17 });
   });
 
@@ -140,7 +140,7 @@ describe('getAvgRating', () => {
         bayesianAvg: '3.00',
       },
     ]);
-    const result = await getAvgRating('game-1');
+    const result = await getAvgRating('11111111-1111-4111-8111-111111111111');
     expect(result).toEqual({ average: 3, count: 1, bayesianAvg: 3 });
   });
 });

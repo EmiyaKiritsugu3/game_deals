@@ -68,3 +68,4 @@ pnpm-lock.yaml
 
 # omo audit tool artifacts
 .omo/
+.next/
