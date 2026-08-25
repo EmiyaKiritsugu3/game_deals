@@ -1,0 +1,25 @@
+src/app/api/cron/twitter-daily/route.ts
+  s_0b6bbc8796ba6a::t_033e344bfbccf0 3,16,19-20,22,24
+src/app/api/cron/pinterest-daily/route.ts
+  s_0b6bbc8796ba6a::t_033e344bfbccf0 3,16,20-21,32
+src/lib/social-cron-shared.ts
+  s_0b6bbc8796ba6a::t_f4144d991ae2fb 1-61
+src/app/api/cron/discord-flash-deals/route.ts
+  s_0b6bbc8796ba6a::t_033e344bfbccf0 4,19,23-24,35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "ea44a4ea6ba876b72304e9fd6a19ee87c7589db4",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "x-preview-f-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
