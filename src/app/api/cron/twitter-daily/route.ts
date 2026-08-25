@@ -1,19 +1,8 @@
-import { sql } from 'drizzle-orm';
-import { db } from '@/db';
-import { socialPosts } from '@/db/schema';
 import { verifyCronAuth } from '@/lib/cron-auth';
 import { cronError, cronLog } from '@/lib/cron-log';
+import { claimDeal, loadCandidates } from '@/lib/social-cron-shared';
 import { createTweet } from '@/lib/social-post';
 import { handleCronError } from '../_lib/errors';
-
-interface DealRow {
-  [key: string]: unknown;
-  dealId: string;
-  title: string;
-  salePrice: number;
-  normalPrice: number;
-  savings: number;
-}
 
 /**
  * Cron: X/Twitter daily bot (Task 3.2).
@@ -24,40 +13,15 @@ export async function GET(request: Request) {
   if (authError) return authError;
 
   try {
-    const result = await db.execute<DealRow>(sql`
-      SELECT d."dealID" AS "dealId", g."title" AS title,
-             d."salePrice"::float AS "salePrice",
-             d."normalPrice"::float AS "normalPrice",
-             ROUND((1 - d."salePrice" / NULLIF(d."normalPrice", 0)) * 100)::int AS savings
-      FROM deals d
-      JOIN games g ON g."cheapsharkId" = d."gameID"
-      WHERE d."salePrice" > 0
-        AND (1 - d."salePrice" / NULLIF(d."normalPrice", 0)) * 100 >= 50
-        AND NOT EXISTS (
-          SELECT 1 FROM social_posts sp
-          WHERE sp.channel = 'x' AND sp."deal_id" = d."dealID"
-        )
-      ORDER BY savings DESC
-      LIMIT 1
-    `);
-
-    const rows = result as unknown as DealRow[];
-    const row = rows[0];
+    const [row] = await loadCandidates(50, 1, 'x');
     if (!row) return Response.json({ ok: true, posted: 0, note: 'no candidate' });
 
-    const claimed = await db
-      .insert(socialPosts)
-      .values({ channel: 'x', dealId: row.dealId })
-      .onConflictDoNothing()
-      .returning({ id: socialPosts.id });
+    const release = await claimDeal('x', row.dealId);
+    if (!release) return Response.json({ ok: true, posted: 0, note: 'already posted' });
 
-    if (claimed.length === 0) {
-      return Response.json({ ok: true, posted: 0, note: 'already posted' });
-    }
-
-    const ok = await createTweet(row as never);
+    const ok = await createTweet(row);
     if (!ok) {
-      await db.delete(socialPosts).where(sql`id = ${claimed[0]?.id}`);
+      await release();
       return Response.json({ ok: false, posted: 0, note: 'post failed' });
     }
 
