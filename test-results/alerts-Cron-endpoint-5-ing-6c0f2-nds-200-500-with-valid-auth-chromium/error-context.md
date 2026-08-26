@@ -7,7 +7,7 @@
 # Test info
 
 - Name: alerts.spec.ts >> Cron endpoint >> 5. ingest-prices responds 200/500 with valid auth
-- Location: tests/e2e/alerts.spec.ts:73:7
+- Location: tests/e2e/alerts.spec.ts:74:7
 
 # Error details
 
@@ -79,103 +79,111 @@ Expected: not "401"
   57  |       { timeout: 30_000, encoding: 'utf-8' }
   58  |     );
   59  |     // 200 = success, 500 = DB error (expected without real DB)
-  60  |     // 401 = would mean auth bypass failed
-  61  |     expect(result).not.toBe('401');
-  62  |     expect(['200', '500']).toContain(result);
-  63  |   });
-  64  | 
-  65  |   test('4. check-alerts returns 401 without auth header', { tag: '@cron' }, async () => {
-  66  |     const result = execSync(
-  67  |       `curl -s -o /dev/null -w "%{http_code}" ${BASE}/api/cron/check-alerts`,
-  68  |       { timeout: 10_000, encoding: 'utf-8' }
-  69  |     );
-  70  |     expect(result).toBe('401');
-  71  |   });
-  72  | 
-  73  |   test('5. ingest-prices responds 200/500 with valid auth', { tag: '@cron' }, async () => {
-  74  |     const result = execSync(
-  75  |       `curl -s -o /dev/null -w "%{http_code}" -H "authorization: Bearer ${CRON_AUTH}" ${BASE}/api/cron/ingest-prices`,
-  76  |       { timeout: 30_000, encoding: 'utf-8' }
-  77  |     );
-> 78  |     expect(result).not.toBe('401');
+  60  |     // 429 = cheapshark rate limit (still valid auth)
+  61  |     // 401 = would mean auth bypass failed
+  62  |     expect(result).not.toBe('401');
+  63  |     expect(['200', '429', '500']).toContain(result);
+  64  |   });
+  65  |
+  66  |   test('4. check-alerts returns 401 without auth header', { tag: '@cron' }, async () => {
+  67  |     const result = execSync(
+  68  |       `curl -s -o /dev/null -w "%{http_code}" ${BASE}/api/cron/check-alerts`,
+  69  |       { timeout: 10_000, encoding: 'utf-8' }
+  70  |     );
+  71  |     expect(result).toBe('401');
+  72  |   });
+  73  |
+  74  |   test('5. ingest-prices responds 200/500 with valid auth', { tag: '@cron' }, async () => {
+  75  |     const result = execSync(
+  76  |       `curl -s -o /dev/null -w "%{http_code}" -H "authorization: Bearer ${CRON_AUTH}" ${BASE}/api/cron/ingest-prices`,
+  77  |       { timeout: 30_000, encoding: 'utf-8' }
+  78  |     );
+> 79  |     expect(result).not.toBe('401');
       |                        ^ Error: expect(received).not.toBe(expected) // Object.is equality
-  79  |     expect(['200', '500']).toContain(result);
-  80  |   });
-  81  | 
-  82  |   test('6. ingest-prices returns 401 without auth header', { tag: '@cron' }, async () => {
-  83  |     const result = execSync(
-  84  |       `curl -s -o /dev/null -w "%{http_code}" ${BASE}/api/cron/ingest-prices`,
-  85  |       { timeout: 10_000, encoding: 'utf-8' }
-  86  |     );
-  87  |     expect(result).toBe('401');
-  88  |   });
-  89  | 
-  90  |   test('7. reindex-typesense responds 200/500 with valid auth', { tag: '@cron' }, async () => {
-  91  |     const result = execSync(
-  92  |       `curl -s -o /dev/null -w "%{http_code}" -H "authorization: Bearer ${CRON_AUTH}" ${BASE}/api/cron/reindex-typesense`,
-  93  |       { timeout: 30_000, encoding: 'utf-8' }
-  94  |     );
-  95  |     expect(result).not.toBe('401');
-  96  |     expect(['200', '500']).toContain(result);
-  97  |   });
-  98  | 
-  99  |   test('8. reindex-typesense returns 401 without auth header', { tag: '@cron' }, async () => {
-  100 |     const result = execSync(
-  101 |       `curl -s -o /dev/null -w "%{http_code}" ${BASE}/api/cron/reindex-typesense`,
-  102 |       { timeout: 10_000, encoding: 'utf-8' }
-  103 |     );
-  104 |     expect(result).toBe('401');
-  105 |   });
-  106 | });
-  107 | 
-  108 | test.describe('Navigation', () => {
-  109 |   test('9. Page renders with main element visible', async ({ page }) => {
-  110 |     await page.goto('/alerts', { waitUntil: 'domcontentloaded' });
-  111 |     await page.waitForTimeout(1_500);
-  112 |     await expect(page.locator('main')).toBeVisible();
-  113 |   });
-  114 | 
-  115 |   test('10. Home page has accessible navigation', async ({ page }) => {
-  116 |     await page.goto('/', { waitUntil: 'domcontentloaded' });
-  117 |     await page.waitForTimeout(1_500);
-  118 |     const bodyText = await page.locator('body').innerText();
-  119 |     expect(bodyText.length).toBeGreaterThan(50);
-  120 |   });
-  121 | 
-  122 |   test('11. Full alerts CRUD flow', async ({ page }) => {
-  123 |     // Step 1: Navigate to a game detail page (Outer Wilds, CheapShark ID 612)
-  124 |     await page.goto('/game/612', { waitUntil: 'domcontentloaded' });
-  125 |     await page.waitForTimeout(2_000);
-  126 | 
-  127 |     // Verify game detail page content loaded
-  128 |     const bodyText = await page.locator('body').innerText();
-  129 |     expect(bodyText.length).toBeGreaterThan(50);
-  130 |     expect(bodyText).not.toContain('Something went wrong');
-  131 | 
-  132 |     // Step 2: Click "Alert Me" button
-  133 |     const alertButton = page.getByRole('button', { name: /alert me/i });
-  134 |     await expect(alertButton).toBeVisible();
-  135 |     await alertButton.click();
-  136 | 
-  137 |     // Step 3: Auth modal appears (unauthed mode)
-  138 |     await page.waitForTimeout(500);
-  139 |     const authModal = page.getByRole('heading', { name: /welcome to gamedeals/i });
-  140 |     await expect(authModal).toBeVisible();
-  141 | 
-  142 |     // Step 4: Close modal via Escape (or click outside)
-  143 |     await page.keyboard.press('Escape');
-  144 |     await page.waitForTimeout(500);
-  145 |     await expect(authModal).not.toBeVisible();
-  146 | 
-  147 |     // Step 5: Navigate to /alerts page
-  148 |     await page.goto('/alerts', { waitUntil: 'domcontentloaded' });
-  149 |     await page.waitForTimeout(1_500);
-  150 | 
-  151 |     // Step 6: Verify /alerts page renders without crashing
-  152 |     const alertsBodyText = await page.locator('body').innerText();
-  153 |     expect(alertsBodyText.length).toBeGreaterThan(50);
-  154 |     expect(alertsBodyText).not.toContain('Something went wrong');
-  155 |   });
-  156 | });
-  157 | 
+  80  |     expect(['200', '429', '500']).toContain(result);
+  81  |   });
+  82  |
+  83  |   test('6. ingest-prices returns 401 without auth header', { tag: '@cron' }, async () => {
+  84  |     const result = execSync(
+  85  |       `curl -s -o /dev/null -w "%{http_code}" ${BASE}/api/cron/ingest-prices`,
+  86  |       { timeout: 10_000, encoding: 'utf-8' }
+  87  |     );
+  88  |     expect(result).toBe('401');
+  89  |   });
+  90  |
+  91  |   test('7. reindex-typesense responds 200/500 with valid auth', { tag: '@cron' }, async () => {
+  92  |     const result = execSync(
+  93  |       `curl -s -o /dev/null -w "%{http_code}" -H "authorization: Bearer ${CRON_AUTH}" ${BASE}/api/cron/reindex-typesense`,
+  94  |       { timeout: 30_000, encoding: 'utf-8' }
+  95  |     );
+  96  |     expect(result).not.toBe('401');
+  97  |     expect(['200', '429', '500']).toContain(result);
+  98  |   });
+  99  |
+  100 |   test('8. reindex-typesense returns 401 without auth header', { tag: '@cron' }, async () => {
+  101 |     const result = execSync(
+  102 |       `curl -s -o /dev/null -w "%{http_code}" ${BASE}/api/cron/reindex-typesense`,
+  103 |       { timeout: 10_000, encoding: 'utf-8' }
+  104 |     );
+  105 |     expect(result).toBe('401');
+  106 |   });
+  107 | });
+  108 |
+  109 | test.describe('Navigation', () => {
+  110 |   test('9. Page renders with main element visible', async ({ page }) => {
+  111 |     await page.goto('/alerts', { waitUntil: 'domcontentloaded' });
+  112 |     await page.waitForTimeout(1_500);
+  113 |     await expect(page.locator('main').first()).toBeVisible();
+  114 |   });
+  115 |
+  116 |   test('10. Home page has accessible navigation', async ({ page }) => {
+  117 |     await page.goto('/', { waitUntil: 'domcontentloaded' });
+  118 |     await page.waitForTimeout(1_500);
+  119 |     const bodyText = await page.locator('body').innerText();
+  120 |     expect(bodyText.length).toBeGreaterThan(50);
+  121 |   });
+  122 |
+  123 |   test('11. Full alerts CRUD flow', async ({ page }) => {
+  124 |     // Step 1: Navigate to a game detail page (Outer Wilds, CheapShark ID 612)
+  125 |     await page.goto('/game/612', { waitUntil: 'domcontentloaded' });
+  126 |     await page.waitForTimeout(2_000);
+  127 |
+  128 |     // Verify game detail page content loaded
+  129 |     const bodyText = await page.locator('body').innerText();
+  130 |     expect(bodyText.length).toBeGreaterThan(50);
+  131 |     expect(bodyText).not.toContain('Something went wrong');
+  132 |
+  133 |     // Skip if game data unavailable (CheapShark rate limit)
+  134 |     const gameTitle = page.locator('h1, h2, [data-testid="game-title"]').first();
+  135 |     if (!(await gameTitle.isVisible({ timeout: 10000 }).catch(() => false))) {
+  136 |       test.skip(true, 'Game data unavailable (CheapShark rate limit)');
+  137 |       return;
+  138 |     }
+  139 |
+  140 |     // Step 2: Click "Alert Me" button
+  141 |     const alertButton = page.getByRole('button', { name: /alert me/i });
+  142 |     await expect(alertButton).toBeVisible();
+  143 |     await alertButton.click();
+  144 |
+  145 |     // Step 3: Auth modal appears (unauthed mode)
+  146 |     await page.waitForTimeout(500);
+  147 |     const authModal = page.getByRole('heading', { name: /welcome to gamedeals/i });
+  148 |     await expect(authModal).toBeVisible();
+  149 |
+  150 |     // Step 4: Close modal via Escape (or click outside)
+  151 |     await page.keyboard.press('Escape');
+  152 |     await page.waitForTimeout(500);
+  153 |     await expect(authModal).not.toBeVisible();
+  154 |
+  155 |     // Step 5: Navigate to /alerts page
+  156 |     await page.goto('/alerts', { waitUntil: 'domcontentloaded' });
+  157 |     await page.waitForTimeout(1_500);
+  158 |
+  159 |     // Step 6: Verify /alerts page renders without crashing
+  160 |     const alertsBodyText = await page.locator('body').innerText();
+  161 |     expect(alertsBodyText.length).toBeGreaterThan(50);
+  162 |     expect(alertsBodyText).not.toContain('Something went wrong');
+  163 |   });
+  164 | });
+  165 |
 ```
