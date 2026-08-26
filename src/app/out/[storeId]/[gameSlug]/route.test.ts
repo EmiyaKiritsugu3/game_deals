@@ -68,6 +68,19 @@ describe('GET /out/[storeId]/[gameSlug]', () => {
     expect(response.status).toBe(302);
   });
 
+  it('blocks redirect and redirects home when url has malicious protocol', async () => {
+    execute.mockResolvedValue([
+      { url: 'javascript://www.humblebundle.com/%0aalert(1)', storeId: '11' },
+    ]);
+
+    const response = await GET(new Request('http://localhost:3000/out/11/awesome-game'), {
+      params: Promise.resolve({ storeId: '11', gameSlug: 'awesome-game' }),
+    });
+
+    expect(response.status).toBe(302);
+    expect(response.headers.get('location')).toContain('/');
+  });
+
   it('logs error when affiliate click insert fails (L3)', async () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
     execute
