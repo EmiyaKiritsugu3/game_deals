@@ -1,0 +1,27 @@
+tests/unit/seo/sitemap.test.ts
+  s_0b6bbc8796ba6a::t_89cab0a340b680 1-9,12-32,35-61,63-64
+  s_0b6bbc8796ba6a::t_d78042110dcf12 10-11
+src/app/sitemap.ts
+  s_0b6bbc8796ba6a::t_ed6abbea2fb06a 1,3,5-6,9-10,12-22,25-37,40-128
+scripts/dev-loop.sh
+  s_0b6bbc8796ba6a::t_797477db66989d 41-42,58
+  s_0b6bbc8796ba6a::t_e7d52fb7bb391c 83,92
+docs/backlog.md
+  s_0b6bbc8796ba6a::t_064831bdb8f523 25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "3e1dd159c71f272157fddb53d2233ce4a252c97f",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "x-preview-f-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
