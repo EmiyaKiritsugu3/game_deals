@@ -5,3 +5,6 @@
 ## 2024-05-24 - Consistent Keyboard Focus Indicators
 **Learning:** While checking accessibility on key interactive elements (e.g., custom icon buttons, game card triggers), I found that many had hover states but lacked visible focus indicators for keyboard users. Adding a consistent focus ring pattern greatly improves accessibility without compromising the design.
 **Action:** Always apply `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2` (or similar utility classes from the established design system) to all interactive elements (`button`, `a`, `input`, etc.) to ensure keyboard navigability.
+## 2024-08-26 - Add Keyboard Focus States to Interactive Elements
+**Learning:** Custom interactive UI components like `AddToListButton` and `InstallPWAButton` often omit default browser focus indicators due to their bespoke Tailwind styling and hover transitions, leaving keyboard-only users without a clear sense of focus.
+**Action:** Always explicitly append standard focus-visible styles (e.g., `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2`) to all interactive elements to maintain accessibility alongside custom aesthetics.
