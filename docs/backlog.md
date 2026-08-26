@@ -22,7 +22,7 @@ Regras do loop:
 ---
 
 ## T1: Sitemap dinâmico via generateSitemaps()
-- status: doing
+- status: done
 - depends: none
 - risk: auto
 - spec: Migrar sitemap custom (~250 linhas em 7 route handlers) para
