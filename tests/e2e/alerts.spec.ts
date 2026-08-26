@@ -57,9 +57,10 @@ test.describe('Cron endpoint', () => {
       { timeout: 30_000, encoding: 'utf-8' }
     );
     // 200 = success, 500 = DB error (expected without real DB)
+    // 429 = cheapshark rate limit (still valid auth)
     // 401 = would mean auth bypass failed
     expect(result).not.toBe('401');
-    expect(['200', '500']).toContain(result);
+    expect(['200', '429', '500']).toContain(result);
   });
 
   test('4. check-alerts returns 401 without auth header', { tag: '@cron' }, async () => {
@@ -76,7 +77,7 @@ test.describe('Cron endpoint', () => {
       { timeout: 30_000, encoding: 'utf-8' }
     );
     expect(result).not.toBe('401');
-    expect(['200', '500']).toContain(result);
+    expect(['200', '429', '500']).toContain(result);
   });
 
   test('6. ingest-prices returns 401 without auth header', { tag: '@cron' }, async () => {
@@ -93,7 +94,7 @@ test.describe('Cron endpoint', () => {
       { timeout: 30_000, encoding: 'utf-8' }
     );
     expect(result).not.toBe('401');
-    expect(['200', '500']).toContain(result);
+    expect(['200', '429', '500']).toContain(result);
   });
 
   test('8. reindex-typesense returns 401 without auth header', { tag: '@cron' }, async () => {
