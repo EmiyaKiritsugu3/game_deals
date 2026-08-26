@@ -38,8 +38,8 @@ first_todo_task() {
   awk '
     /^## T[0-9]+:/ {id=$2; instate=1; st=""; dep="none"; next}
     instate && /^## / {instate=0}
-    instate && /^- status:/ {st=$2}
-    instate && /^- depends:/ {dep=$2}
+    instate && /^- status:/ {st=$3}
+    instate && /^- depends:/ {dep=$3}
     instate && /^- spec:/ {
       ok=1
       if (st=="todo" && dep!="none") {
@@ -55,7 +55,7 @@ first_todo_task() {
 
 deps_satisfied() { # $1=depends value ("none" or "T7, T2")
   [ "$1" = "none" ] && return 0
-  for d in $(echo "$1" | tr ',' ' '); do
+  for d in $(echo "$1" | tr -d ',' | tr ' ' '\n' | sed '/^$/d'); do
     [ "$(task_field "$d" status)" = "done" ] || return 1
   done
   return 0
@@ -80,6 +80,7 @@ wait_for_ci() { # $1=pr number -> 0 if all checks green
 
 TASK=""
 while IFS='|' read -r id dep; do
+  id="${id%:}"
   if deps_satisfied "$dep"; then TASK="$id"; break; fi
 done < <(first_todo_task)
 
@@ -88,7 +89,7 @@ if [ -z "${TASK:-}" ]; then
   exit 0
 fi
 
-RISK="$(task_field "$TASK" risk)"
+RISK="$(task_field "$TASK" risk | awk '{print $1}')"
 SPEC="$(awk -v t="## $TASK:" 'index($0,t)==1{inblk=1;next} inblk&&/^## /{exit} inblk{print}' "$BACKLOG")"
 echo "picked $TASK (risk: $RISK)"
 
