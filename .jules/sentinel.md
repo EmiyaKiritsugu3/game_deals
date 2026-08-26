@@ -15,3 +15,7 @@
 **Vulnerability:** XSS vulnerability in `src/app/game/[id]/page.tsx` where user-controlled game titles were serialized into JSON-LD scripts using `JSON.stringify` directly in `dangerouslySetInnerHTML`. An attacker could inject `</script><script>alert(1)</script>` into the title.
 **Learning:** `JSON.stringify` does not escape HTML control characters like `<` or `>`. When rendering this JSON directly into a script tag using React's `dangerouslySetInnerHTML`, it can break out of the script context and execute malicious JavaScript.
 **Prevention:** Always escape HTML control characters when injecting JSON into script tags. Use `.replace(/</g, '\\u003c')` so the unicode escape is correctly preserved in the JavaScript string and not evaluated as an unescaped literal `<`.
+## 2026-08-26 - DOM XSS in OutRedirector via new URL() Protocol Preservation
+**Vulnerability:** The `isDomainAllowed` function in `src/app/out/[storeId]/[gameSlug]/route.ts` checked `url.hostname` against an allowlist, but did not check `url.protocol`.
+**Learning:** `new URL()` successfully parses payloads like `javascript://store.steampowered.com/%0aalert(1)`. The hostname is correctly identified as `store.steampowered.com` (passing the allowlist check), but the protocol remains `javascript:`. Returning this directly to `NextResponse.redirect()` could lead to XSS.
+**Prevention:** Always explicitly check `url.protocol === 'http:' || url.protocol === 'https:'` when validating external URLs parsed by `new URL()`, even if the hostname has been validated.
