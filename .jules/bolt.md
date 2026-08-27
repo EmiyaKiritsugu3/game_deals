@@ -12,3 +12,11 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+
+## 2024-10-18 - [Avoid Math.max with spread mapped arrays]
+**Learning:** Using `Math.max(...array.map(...))` creates unnecessary O(N) memory allocations and can potentially exceed the maximum call stack size for very large arrays.
+**Action:** Always prefer a single-pass O(N) `for...of` loop or inline tracking of maximum values over `Math.max` combined with the spread operator and `.map()`.
+
+## 2026-08-27 - [Codebase-specific learning: Journaling expectations]
+**Learning:** Adding generic JavaScript performance tips to the journal, rather than specific codebase architectural learnings, violates the Bolt persona guidelines for critical learnings.
+**Action:** Only log optimizations when they provide a deep codebase-specific learning, reveal a pattern or anti-pattern heavily used in the repository, or show how this specific application handles performance in unexpected ways. Do not log routine array/loop optimizations in the future.

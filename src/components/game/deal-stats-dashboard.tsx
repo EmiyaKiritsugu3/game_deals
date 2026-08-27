@@ -53,11 +53,20 @@ export function DealStatsDashboard({ deals }: DealStatsDashboardProps) {
         color: 'oklch(0.82 0.2 300)',
       },
     ];
+
+    // ⚡ Bolt Optimization: Use inline max tracking instead of Math.max(...buckets.map())
+    // to avoid unnecessary array mapping allocations.
+    let maxBucketCount = 0;
     for (const d of deduped) {
       const b = buckets.find((b) => d.savingsNum >= b.min && d.savingsNum < b.max);
-      if (b) b.count++;
+      if (b) {
+        b.count++;
+        if (b.count > maxBucketCount) {
+          maxBucketCount = b.count;
+        }
+      }
     }
-    const maxBucket = Math.max(...buckets.map((b) => b.count), 1);
+    const maxBucket = Math.max(maxBucketCount, 1);
 
     // Store share (top 5 stores)
     const storeCounts = new Map<
