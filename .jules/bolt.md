@@ -12,3 +12,7 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+
+## 2026-08-29 - [Cache static third-party API fetches in dynamic routes]
+**Learning:** Found an uncached `fetch()` call to the CheapShark stores API within a Server Component on a dynamic search route. Because the Next.js App Router doesn't cache `fetch` requests implicitly across users/requests in dynamic routes, this caused a blocking network request on every single page render for rarely changing data.
+**Action:** Always append explicit Next.js caching directives (e.g. `{ next: { revalidate: 86400 } }`) to `fetch` calls for static or slow-changing third-party data within server components, especially on high-traffic or dynamic search routes, to eliminate redundant network roundtrips and improve TTFB.
