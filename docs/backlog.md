@@ -32,7 +32,7 @@ Regras do loop:
   testes unitários de sitemap atualizados; biome/tsc/build verdes.
 
 ## T2: Testes de rota pros crons de digest
-- status: doing
+- status: done
 - depends: none
 - risk: auto
 - spec: route tests para weekly-free-games e top-deals-digest seguindo o
