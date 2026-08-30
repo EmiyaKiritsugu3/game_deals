@@ -1,0 +1,22 @@
+docs/backlog.md
+  s_0b6bbc8796ba6a::t_25235e2b88ea3b 35
+tests/unit/routes/digest-cron.test.ts
+  s_0b6bbc8796ba6a::t_85a1f8a2d5f221 1-15,17-66,68-127
+  s_0b6bbc8796ba6a::t_a083425c7c89bc 16,67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "ebad4a063e3f810f5338361f78f2fd2cf9c09669",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "deepseek-ai/deepseek-v4-flash-0731"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
