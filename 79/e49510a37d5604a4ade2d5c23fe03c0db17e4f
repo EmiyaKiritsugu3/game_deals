@@ -1,0 +1,23 @@
+tests/unit/routes/postback.test.ts
+  s_118e325dc31872::t_306d22a0f97aa7 7-8,23-24,37-57
+  s_118e325dc31872::t_aa0498bd1d838e 58-59
+src/app/api/postback/route.ts
+  s_118e325dc31872::t_30e9c5ea761cf8 6,36-40
+  s_118e325dc31872::t_99916275bf4a63 41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "79e49510a37d5604a4ade2d5c23fe03c0db17e4f",
+  "prompts": {},
+  "sessions": {
+    "s_118e325dc31872": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c8064c73-8cf1-4916-b190-29609492a4c1",
+        "model": "muse-spark-1.2-contributor-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
