@@ -65,7 +65,7 @@ gauntlet() {
   echo "── gauntlet ──"
   ./node_modules/.bin/biome check src/ tests/ || return 1
   ./node_modules/.bin/tsc --noEmit || return 1
-  bun --bun vitest run --reporter=basic || return 1
+  bun --bun vitest run || return 1
 }
 
 wait_for_ci() { # $1=pr number -> 0 if all checks green
