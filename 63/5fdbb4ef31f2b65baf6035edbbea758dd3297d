@@ -1,0 +1,26 @@
+docs/backlog.md
+  s_876022108ec587::t_7483653a415c4f 53
+tests/unit/routes/postback.test.ts
+  s_876022108ec587::t_52d5121907f2f8 36-45,47-49,51-52,54-60
+  s_876022108ec587::t_da3ef88ee78fbf 46,50,53
+  s_876022108ec587::t_1e3e2f12810770 7-8,23
+src/app/api/postback/route.ts
+  s_876022108ec587::t_f4179e7a7289c7 6
+  s_876022108ec587::t_f51606434c6b21 36-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "635fdbb4ef31f2b65baf6035edbbea758dd3297d",
+  "prompts": {},
+  "sessions": {
+    "s_876022108ec587": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ae367a62-58e7-409c-bc4c-48f01598b847",
+        "model": "deepseek-ai/deepseek-v4-flash-0731"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
