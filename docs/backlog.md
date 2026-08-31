@@ -41,7 +41,7 @@ Regras do loop:
   happy path chama sendDigestToSubscribers, erro → handleCronError.
 
 ## T3: Extrair layout compartilhado das newsletter pages
-- status: doing
+- status: todo
 - depends: none
 - risk: auto
 - spec: confirmed/page.tsx e unsubscribed/page.tsx compartilham estrutura —
