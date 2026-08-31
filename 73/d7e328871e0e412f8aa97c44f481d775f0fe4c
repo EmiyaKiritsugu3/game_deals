@@ -1,0 +1,19 @@
+scripts/dev-loop.sh
+  s_0b6bbc8796ba6a::t_ef0c7a30d8d234 68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "73d7e328871e0e412f8aa97c44f481d775f0fe4c",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "deepseek-ai/deepseek-v4-flash-0731"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
