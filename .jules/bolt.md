@@ -12,3 +12,7 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+
+## 2026-08-31 - [Optimizing batch processing by avoiding Array map/spread and reduce overhead]
+**Learning:** Found an unnecessary `Math.max(...list.map(d => d.savingsNum))` pattern used to find the top discount and a `.reduce` operation to calculate the average savings. Using array mapping with spreading incurs O(N) memory allocation and processing overhead, and doing both calculations sequentially causes multiple passes over the same dataset. This degrades performance during UI renders.
+**Action:** Always replace combinations of map, spread, and reduce with a single-pass O(N) `for...of` loop to iterate over the dataset once, computing both the sum and the maximum simultaneously. This achieves O(1) space complexity and eliminates unnecessary garbage collection overhead.
