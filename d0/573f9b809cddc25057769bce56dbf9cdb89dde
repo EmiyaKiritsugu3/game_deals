@@ -1,0 +1,41 @@
+src/app/newsletter/confirmed/page.tsx
+  s_4b2e365486ca8e::t_c33cede754a517 11
+  s_4b2e365486ca8e::t_1326f3d4ff50a5 2,8-10,12-13
+src/app/newsletter/unsubscribed/page.tsx
+  s_4b2e365486ca8e::t_27140a2035695b 2,8-12
+src/components/NewsletterStatusPage.tsx
+  s_4b2e365486ca8e::t_d8106e1dc4b619 5,10,15
+  s_4b2e365486ca8e::t_ac155f66dae0a9 24
+  s_4b2e365486ca8e::t_5d0caef35a7168 1-4,6-9,11-14,16-23
+sonar-project.properties
+  s_4b2e365486ca8e::t_9fe744ab2816d1 19
+src/components/NewsletterStatusPage.test.tsx
+  s_4b2e365486ca8e::t_545fb3288bb6d0 1-14,16-18,20
+  s_4b2e365486ca8e::t_ac155f66dae0a9 15,19,21
+docs/backlog.md
+  s_0b6bbc8796ba6a::t_4bdb86ad428533 44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "d0573f9b809cddc25057769bce56dbf9cdb89dde",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "unknown"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    },
+    "s_4b2e365486ca8e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "480fc7b4-cd14-4dcd-bdbe-96707fa99d57",
+        "model": "deepseek-ai/deepseek-v4-flash-0731"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
