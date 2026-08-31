@@ -50,7 +50,7 @@ Regras do loop:
   Aceite: visual idêntico, sonar duplication passa sem exclusão.
 
 ## T4: Rate limit no postback receiver
-- status: todo
+- status: blocked
 - depends: none
 - risk: review
 - spec: POST /api/postback aceita N req/min por IP usando assertRateLimit
