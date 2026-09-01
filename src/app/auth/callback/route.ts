@@ -6,7 +6,10 @@ function safeNext(next: string | null, origin: string): string {
   if (!next) return `${origin}/`;
   try {
     const nextUrl = new URL(next, origin);
-    if (nextUrl.origin !== origin) {
+    if (
+      nextUrl.origin !== origin ||
+      (nextUrl.protocol !== 'http:' && nextUrl.protocol !== 'https:')
+    ) {
       return `${origin}/`;
     }
     return nextUrl.toString();
