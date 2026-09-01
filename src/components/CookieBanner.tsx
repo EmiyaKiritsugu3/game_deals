@@ -54,6 +54,7 @@ export default function CookieBanner() {
         <button
           type="button"
           onClick={reject}
+          className="focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           style={{
             background: 'transparent',
             border: '1px solid rgba(255,255,255,0.2)',
@@ -69,7 +70,7 @@ export default function CookieBanner() {
         <button
           type="button"
           onClick={accept}
-          className="bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground"
+          className="bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           style={{
             padding: '0.5rem 1rem',
             borderRadius: '6px',

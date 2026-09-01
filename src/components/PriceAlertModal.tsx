@@ -130,7 +130,7 @@ export default function PriceAlertModal({
             <span>{saveError}</span>
             <button
               type="button"
-              className="bg-transparent border border-[hsl(0,65%,50%,0.3)] text-[hsl(0,65%,50%)] px-3 py-1 rounded-md cursor-pointer font-bold text-xs shrink-0 ml-2"
+              className="bg-transparent border border-[hsl(0,65%,50%,0.3)] text-[hsl(0,65%,50%)] px-3 py-1 rounded-md cursor-pointer font-bold text-xs shrink-0 ml-2 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
               onClick={() => setSaveError(null)}
             >
               Dismiss
@@ -141,7 +141,7 @@ export default function PriceAlertModal({
         <div className="grid grid-cols-2 gap-4">
           <button
             type="button"
-            className="px-4 py-3.5 rounded-lg font-bold text-base cursor-pointer transition-all flex items-center justify-center gap-2 bg-muted/50 text-foreground border border-border/50 hover:bg-muted"
+            className="px-4 py-3.5 rounded-lg font-bold text-base cursor-pointer transition-all flex items-center justify-center gap-2 bg-muted/50 text-foreground border border-border/50 hover:bg-muted focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
             onClick={onClose}
             disabled={isSaving}
           >
@@ -149,7 +149,7 @@ export default function PriceAlertModal({
           </button>
           <button
             type="button"
-            className="px-4 py-3.5 rounded-lg font-bold text-base cursor-pointer transition-all flex items-center justify-center gap-2 bg-primary text-primary-foreground border-none hover:opacity-90 hover:shadow-[0_4px_15px_color-mix(in_srgb,var(--primary)_30%,transparent)]"
+            className="px-4 py-3.5 rounded-lg font-bold text-base cursor-pointer transition-all flex items-center justify-center gap-2 bg-primary text-primary-foreground border-none hover:opacity-90 hover:shadow-[0_4px_15px_color-mix(in_srgb,var(--primary)_30%,transparent)] focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
             onClick={handleSave}
             disabled={isSaving}
             data-testid="create-alert-button"
@@ -159,7 +159,7 @@ export default function PriceAlertModal({
           {hasAlert(gameID) && (
             <button
               type="button"
-              className="col-span-2 bg-transparent border-none text-[hsl(0,60%,70%)] text-sm font-semibold mt-2 cursor-pointer hover:underline"
+              className="col-span-2 bg-transparent border-none text-[hsl(0,60%,70%)] text-sm font-semibold mt-2 cursor-pointer hover:underline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
               onClick={handleRemove}
               disabled={isSaving}
               data-testid="remove-alert-button"
