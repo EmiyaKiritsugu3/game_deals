@@ -1,0 +1,45 @@
+src/lib/affiliate-config.ts
+  s_474f627f715022::t_cb17f72603d995 36,42,48,54
+src/lib/affiliate-config.test.ts
+  s_474f627f715022::t_b27fcb52e7cf62 50
+src/services/api.test.ts
+  s_0b6bbc8796ba6a::t_80b26d747f82ad 314
+src/app/deals/page.tsx
+  s_474f627f715022::t_8d843ccdcdbb4f 1-9,11,13-14,17-20,24-30,35-38,40-61,63-67,76-78,82-93,95-99,101-110,112-127,129,131-155,158-179,181-218
+  s_474f627f715022::t_d8df09216c1f1a 69-73,94,100,111,156-157
+  s_474f627f715022::t_ee8698c9c10e8b 180
+  s_474f627f715022::t_b03d652a889291 12,16,130
+  s_474f627f715022::t_b1cbd08945a76b 21-23,31-34,39,62,68,74-75,79-81
+  s_474f627f715022::t_7cc9d0b034ab44 10,15,128
+src/services/api.ts
+  s_474f627f715022::t_d0e74d5db610cd 114-122
+  s_474f627f715022::t_a50a29ebdcb161 123
+src/app/deals/by-store/[slug]/page.tsx
+  s_474f627f715022::t_d97b257567ea4f 14,41-42
+docs/backlog.md
+  s_0b6bbc8796ba6a::t_9132fcd373ebfe 62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "48cda3ca8af51835d3d4abe057cc353f1885af7c",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "deepseek-ai/deepseek-v4-flash-0731"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    },
+    "s_474f627f715022": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "899ed6f5-76c0-4a67-96a1-b5f28e66d54f",
+        "model": "muse-spark-1.2-contributor-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
