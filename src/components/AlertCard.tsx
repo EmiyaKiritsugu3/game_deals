@@ -71,7 +71,7 @@ export default function AlertCard({ alert, onDelete, isDeleting }: AlertCardProp
       <div className="px-5 py-3 border-t border-border/50 flex gap-3">
         <button
           type="button"
-          className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg border border-[hsl(0,65%,50%,0.3)] bg-[hsl(0,65%,50%,0.15)] text-[hsl(0,65%,28%)] font-bold text-sm cursor-pointer hover:bg-[hsl(0,65%,50%,0.15)] hover:border-[hsl(0,65%,50%)] hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg border border-[hsl(0,65%,50%,0.3)] bg-[hsl(0,65%,50%,0.15)] text-[hsl(0,65%,28%)] font-bold text-sm cursor-pointer hover:bg-[hsl(0,65%,50%,0.15)] hover:border-[hsl(0,65%,50%)] hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           onClick={onDelete}
           disabled={isDeleting}
           aria-label={`Delete alert for ${alert.title}`}
@@ -82,7 +82,7 @@ export default function AlertCard({ alert, onDelete, isDeleting }: AlertCardProp
         {alert.cheapshark_id ? (
           <Link
             href={`/game/${alert.cheapshark_id}`}
-            className="inline-flex items-center justify-center flex-1 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground font-bold text-sm no-underline hover:-translate-y-0.5 hover:shadow-[0_4px_12px_color-mix(in_srgb,var(--primary)_30%,transparent)] transition-all"
+            className="inline-flex items-center justify-center flex-1 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground font-bold text-sm no-underline hover:-translate-y-0.5 hover:shadow-[0_4px_12px_color-mix(in_srgb,var(--primary)_30%,transparent)] transition-all focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           >
             View Game
           </Link>
