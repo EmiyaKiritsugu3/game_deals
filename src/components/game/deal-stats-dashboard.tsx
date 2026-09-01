@@ -386,35 +386,29 @@ function PriceTierDonut({
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
 
-  // Pre-compute each tier's dash length + offset using a pure reduce.
-  // Mutating a let-variable (even inside useMemo) triggers the
-  // react-hooks/immutability lint rule, so we use a functional accumulator.
   const arcs = React.useMemo(() => {
-    return tiers.reduce<
-      Array<{
-        label: string;
-        count: number;
-        color: string;
-        dashLength: number;
-        startOffset: number;
-      }>
-    >((acc, t) => {
+    const result: Array<{
+      label: string;
+      count: number;
+      color: string;
+      dashLength: number;
+      startOffset: number;
+    }> = [];
+    let startOffset = 0;
+    for (let i = 0; i < tiers.length; i++) {
+      const t = tiers[i];
       const pct = t.count / total;
       const dashLength = pct * circumference;
-      const startOffset =
-        acc.length > 0 ? acc[acc.length - 1].startOffset + acc[acc.length - 1].dashLength : 0;
-      return [
-        // biome-ignore lint/performance/noAccumulatingSpread: known-size array
-        ...acc,
-        {
-          label: t.label,
-          count: t.count,
-          color: t.color,
-          dashLength,
-          startOffset,
-        },
-      ];
-    }, []);
+      result.push({
+        label: t.label,
+        count: t.count,
+        color: t.color,
+        dashLength,
+        startOffset,
+      });
+      startOffset += dashLength;
+    }
+    return result;
   }, [tiers, total, circumference]);
 
   return (
