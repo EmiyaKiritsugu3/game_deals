@@ -1,0 +1,32 @@
+src/app/deals/by-store/[slug]/page.tsx
+  s_474f627f715022::t_e38484e72c4393 78,84
+  s_474f627f715022::t_ab83b4c1b4d725 39-40,42-43
+src/services/api.test.ts
+  s_474f627f715022::t_428d36e9c776ae 314
+src/app/deals/[slug]/page.tsx
+  s_474f627f715022::t_e38484e72c4393 62,69
+tests/unit/routes/deals-hub.test.ts
+  s_474f627f715022::t_20e2c3dee0972a 6,87-89
+  s_474f627f715022::t_adc5cbd9ee6cf6 1-5,7-86,90-100
+src/services/api.ts
+  s_474f627f715022::t_0dc15efb106a3e 124
+  s_474f627f715022::t_cf02cf338b42d7 115
+src/app/deals/by-genre/[slug]/page.tsx
+  s_474f627f715022::t_e38484e72c4393 75-76
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "3841fc283b612d160273ef895e86cffcfa5d7153",
+  "prompts": {},
+  "sessions": {
+    "s_474f627f715022": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "899ed6f5-76c0-4a67-96a1-b5f28e66d54f",
+        "model": "muse-spark-1.2-contributor-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
