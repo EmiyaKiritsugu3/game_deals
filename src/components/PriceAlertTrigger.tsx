@@ -48,6 +48,7 @@ export default function PriceAlertTrigger({
         onClick={handleClick}
         title={activeAlert ? 'Edit Price Alert' : 'Set Price Alert'}
         data-testid="price-alert-trigger"
+        aria-label={activeAlert ? 'Alert Active' : 'Alert Me'}
       >
         {activeAlert ? <BellRing size={20} fill="currentColor" /> : <Bell size={20} />}
         <span>{activeAlert ? 'Alert Active' : 'Alert Me'}</span>
