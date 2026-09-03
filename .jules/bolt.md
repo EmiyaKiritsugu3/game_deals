@@ -12,3 +12,7 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+
+## 2024-11-20 - [Avoid Array allocation for computing Max Values]
+**Learning:** For functions processing many deals or iterating over large collections of prices to find out maximum or total sum, using `Math.max(...list.map(...))` incurs O(N) memory allocations, spreading a massive array into arguments can exceed the JavaScript engine's call stack size, and combined with another `.reduce()` for sum, it requires multiple sequential iterations.
+**Action:** Replace `Math.max(...list.map(...))` and `.reduce()` sequentially with a single-pass `for...of` loop to ensure O(1) memory complexity and robust execution.
