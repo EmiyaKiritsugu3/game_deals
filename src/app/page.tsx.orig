@@ -151,8 +151,6 @@ export default function Home() {
     let totalSavingsNum = 0;
     let maxSavingsNum = 0;
 
-    // ⚡ Bolt Performance: Single-pass iteration prevents O(N) memory allocation from .map()
-    // and avoids call stack size limits from spreading large arrays into Math.max()
     for (const d of list) {
       totalSavingsNum += d.savingsNum;
       if (d.savingsNum > maxSavingsNum) {
