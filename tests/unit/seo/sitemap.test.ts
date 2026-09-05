@@ -7,12 +7,13 @@ vi.mock('@/db', () => ({ db: { execute } }));
 const { default: sitemap, generateSitemaps } = await import('@/app/sitemap');
 
 describe('generateSitemaps', () => {
-  it('declares 8 sitemap ids (static, collections, deals, games-0..4)', async () => {
+  it('declares 9 sitemap ids (static, collections, deals, blog, games-0..4)', async () => {
     const ids = (await generateSitemaps()).map((s) => s.id);
     expect(ids).toEqual([
       'static',
       'collections',
       'deals',
+      'blog',
       'games-0',
       'games-1',
       'games-2',
@@ -58,6 +59,12 @@ describe('sitemap(id)', () => {
   it('games chunk returns empty on DB failure (never breaks sitemap)', async () => {
     execute.mockRejectedValueOnce(new Error('db down'));
     await expect(call('games-3')).resolves.toEqual([]);
+  });
+
+  it('blog lists published posts, never breaks without content dir', async () => {
+    const entries = await call('blog');
+    expect(Array.isArray(entries)).toBe(true);
+    expect(entries.every((e) => e.url.includes('/blog/'))).toBe(true);
   });
 
   it('unknown id yields empty list', async () => {
