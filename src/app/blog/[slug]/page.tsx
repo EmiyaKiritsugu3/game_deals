@@ -13,11 +13,11 @@ function renderBody(body: string) {
     .map((block) => block.trim())
     .filter(Boolean)
     .map((block) => {
-      const h = /^##\s+(.+)$/.exec(block);
+      const h = block.startsWith('## ') ? block.slice(3).trim() : null;
       if (h) {
         return (
-          <h2 key={`h-${h[1]}`} className="text-xl font-bold mt-8 mb-3">
-            {h[1]}
+          <h2 key={`h-${h}`} className="text-xl font-bold mt-8 mb-3">
+            {h}
           </h2>
         );
       }

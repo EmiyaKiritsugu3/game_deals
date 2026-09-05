@@ -44,7 +44,7 @@ export async function listSlugs(): Promise<string[]> {
     return files
       .filter((f) => f.endsWith('.md'))
       .map((f) => f.slice(0, -3))
-      .sort();
+      .sort((a, b) => a.localeCompare(b));
   } catch {
     return [];
   }
