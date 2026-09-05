@@ -1,0 +1,22 @@
+package.json
+  s_0b6bbc8796ba6a::t_6cc3cdeef96891 14
+  s_0b6bbc8796ba6a::t_700eb7b49d951b 53,63
+bun.lock
+  s_0b6bbc8796ba6a::t_4f3494b52c575f 9,19,64,517,519,545,547,549,551,553,555,557,559,561,563,565,901,1289-1290
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "968efc0666e935c26b7ed6c076d9de14bcbb0d2a",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "muse-spark-1.3-contributor-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
