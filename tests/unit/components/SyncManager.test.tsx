@@ -28,6 +28,12 @@ vi.mock('zustand/middleware', () => ({
   persist: (config: unknown, _options: Record<string, unknown>) => config,
 }));
 
+// ponytail: sentry/nextjs 10.73 ships broken node CJS shims; stub the whole
+// module so the import chain through useSyncHooks never loads them in tests.
+vi.mock('@sentry/nextjs', () => ({
+  captureException: vi.fn(),
+}));
+
 vi.mock('@/store/authStore', () => ({
   useAuth: () => ({
     user: mocks.authUser,

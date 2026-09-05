@@ -24,3 +24,13 @@ Object.defineProperty(globalThis, 'IntersectionObserver', {
   writable: true,
   configurable: true,
 });
+
+// ponytail: sentry/nextjs 10.73 ships broken node CJS shims (fileURLToPath on
+// ESM url); global stub keeps every suite green regardless of import chain.
+vi.mock('@sentry/nextjs', () => ({
+  captureException: vi.fn(),
+  captureMessage: vi.fn(),
+  withScope: vi.fn((fn: (scope: { setTag: () => void }) => void) =>
+    fn({ setTag: () => {} })
+  ),
+}));
