@@ -15,6 +15,7 @@ export async function generateSitemaps() {
     { id: 'static' },
     { id: 'collections' },
     { id: 'deals' },
+    { id: 'blog' },
     ...[0, 1, 2, 3, 4].map((n) => ({ id: `games-${n}` })),
   ];
 }
@@ -90,6 +91,22 @@ function dealEntries(): MetadataRoute.Sitemap {
   }));
 }
 
+async function blogEntries(): Promise<MetadataRoute.Sitemap> {
+  try {
+    const { listPublished } = await import('@/lib/blog');
+    const posts = await listPublished();
+    const site = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gamedeals.com.br';
+    return posts.map((p) => ({
+      url: `${site}/blog/${p.slug}`,
+      lastModified: new Date(`${p.date}T12:00:00Z`),
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    }));
+  } catch {
+    return [];
+  }
+}
+
 async function loadGameChunk(chunk: number): Promise<MetadataRoute.Sitemap> {
   try {
     const result = await db.execute<{ cheapsharkId: string }>(
@@ -119,6 +136,8 @@ export default async function sitemap(props: {
       return collectionEntries();
     case 'deals':
       return dealEntries();
+    case 'blog':
+      return blogEntries();
     default: {
       const m = /^games-(\d)$/.exec(id);
       if (!m) return [];
