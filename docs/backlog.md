@@ -59,7 +59,7 @@ Regras do loop:
   legítimos de redes distintas.
 
 ## T5: Página /deals índice navegável
-- status: todo
+- status: done
 - depends: none
 - risk: auto
 - spec: Hub linkando by-store ×13, by-genre ×4 e under-X ×3 com contagem
@@ -67,7 +67,7 @@ Regras do loop:
   Aceite: build verde, página prerenderizada, links todos 200.
 
 ## T6: Health check estendido (deps externas)
-- status: todo
+- status: doing
 - depends: none
 - risk: auto
 - spec: /api/health checa CheapShark (HEAD com timeout 3s) e Typesense
