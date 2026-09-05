@@ -15,3 +15,7 @@
 **Vulnerability:** XSS vulnerability in `src/app/game/[id]/page.tsx` where user-controlled game titles were serialized into JSON-LD scripts using `JSON.stringify` directly in `dangerouslySetInnerHTML`. An attacker could inject `</script><script>alert(1)</script>` into the title.
 **Learning:** `JSON.stringify` does not escape HTML control characters like `<` or `>`. When rendering this JSON directly into a script tag using React's `dangerouslySetInnerHTML`, it can break out of the script context and execute malicious JavaScript.
 **Prevention:** Always escape HTML control characters when injecting JSON into script tags. Use `.replace(/</g, '\\u003c')` so the unicode escape is correctly preserved in the JavaScript string and not evaluated as an unescaped literal `<`.
+## 2026-09-05 - [Javascript URI Allowlist Bypass]
+**Vulnerability:** Simple hostname checks for domains can be bypassed by constructing malicious URLs with the javascript: protocol (e.g., javascript://allowed-domain.com/...). This can lead to XSS/Open Redirects if the constructed URL is later used.
+**Learning:** The URL interface parses javascript:// URLs setting the hostname successfully but allowing arbitrary JS execution upon navigation.
+**Prevention:** Always validate that the URL protocol is explicitly http: or https: when working with redirect URLs or allowlists.
