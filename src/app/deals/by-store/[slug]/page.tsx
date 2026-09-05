@@ -37,6 +37,8 @@ async function buildStoreMap(): Promise<Record<string, string>> {
     if (!name) continue;
     bySlug[toSlug(name)] = id;
   }
+  // short alias used in sitemap/hub: "humble" → Humble Store (11)
+  if (bySlug['humble-store'] && !bySlug.humble) bySlug.humble = bySlug['humble-store'];
   return bySlug;
 }
 

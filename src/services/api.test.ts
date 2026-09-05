@@ -29,6 +29,7 @@ import { fallbackDeals } from '@/data/fallbackDeals';
 import {
   formatTimeAgo,
   getDeals,
+  getDealsCount,
   getDrmType,
   getGame,
   getGamesBatch,
@@ -297,6 +298,7 @@ describe('getStores', () => {
 
     expect(result['1']).toBe('Steam');
     expect(result['7']).toBe('GOG');
+    expect(result['38']).toBe('Nuuvem');
     expect(result['101']).toBe('CDKeys');
     expect(result['102']).toBe('Kinguin');
     expect(result['103']).toBe('Eneba');
@@ -311,7 +313,8 @@ describe('getStores', () => {
 
     const result = await getStores();
 
-    expect(Object.keys(result)).toHaveLength(4);
+    expect(Object.keys(result)).toHaveLength(5);
+    expect(result['38']).toBe('Nuuvem');
     expect(result['101']).toBe('CDKeys');
     expect(result['102']).toBe('Kinguin');
     expect(result['103']).toBe('Eneba');
@@ -474,5 +477,65 @@ describe('getGamesBatch', () => {
     mockFetchGamesBatchFromCheapShark.mockRejectedValueOnce(new Error('API error'));
     const result = await getGamesBatch(['1']);
     expect(result).toEqual({});
+  });
+});
+
+// ---------------------------------------------------------------------------
+// getDealsCount — X-Total-Page-Count header path
+// ---------------------------------------------------------------------------
+
+describe('getDealsCount', () => {
+  const mockFetch = vi.fn();
+
+  beforeEach(() => {
+    vi.stubGlobal('fetch', mockFetch);
+    mockFetch.mockReset();
+  });
+
+  function headerFetch(total: string | number, jsonData: unknown = [{ dummy: 1 }]) {
+    return {
+      ok: true,
+      // node 20 has Headers class
+      headers: { get: (k: string) => (k === 'x-total-page-count' ? String(total) : null) },
+      json: () => Promise.resolve(jsonData),
+    };
+  }
+
+  it('returns x-total-page-count when header present (best path)', async () => {
+    mockFetch.mockResolvedValueOnce(headerFetch('3000'));
+    expect(await getDealsCount({ storeID: '1', onSale: '1' })).toBe(3000);
+  });
+
+  it('falls back to array length when header missing', async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      headers: { get: () => null },
+      json: () => Promise.resolve([{ x: 1 }, { x: 2 }, { x: 3 }]),
+    });
+    expect(await getDealsCount({ upperPrice: '10' })).toBe(3);
+  });
+
+  it('returns 0 when response not ok', async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      headers: { get: () => null },
+      json: () => Promise.resolve([]),
+    });
+    expect(await getDealsCount()).toBe(0);
+  });
+
+  it('returns 0 when fetch throws', async () => {
+    mockFetch.mockRejectedValueOnce(new Error('net'));
+    expect(await getDealsCount({ AAA: '1' })).toBe(0);
+  });
+
+  it('fetches pageSize=1 and pageNumber=0 with revalidate 3600', async () => {
+    mockFetch.mockResolvedValueOnce(headerFetch('42'));
+    await getDealsCount({ storeID: '11' });
+    const url = new URL(mockFetch.mock.calls[0][0] as string);
+    expect(url.searchParams.get('pageSize')).toBe('1');
+    expect(url.searchParams.get('pageNumber')).toBe('0');
+    const opts = mockFetch.mock.calls[0][1] as { next: { revalidate: number } };
+    expect(opts.next.revalidate).toBe(3600);
   });
 });
