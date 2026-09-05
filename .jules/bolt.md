@@ -12,3 +12,6 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+## 2026-08-11 - [Optimize map/reduce array iteration into single-pass]
+**Learning:** Found sequential '.reduce()' and 'Math.max(...list.map(...))' on potentially large array of deals in 'src/app/page.tsx' to calculate statistics. The '.map()' operation causes unnecessary O(N) memory allocation and expanding a large array inside 'Math.max' can result in exceeding the maximum call stack size. Furthermore, performing multiple passes over the array is less CPU efficient.
+**Action:** Replaced sequential operations with a single-pass 'for...of' loop to calculate both average and maximum savings simultaneously, achieving O(1) space complexity and robustness against huge arrays.
