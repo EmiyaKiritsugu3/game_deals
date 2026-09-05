@@ -1,0 +1,34 @@
+src/app/sitemap.ts
+  s_0b6bbc8796ba6a::t_f5e86de8ba04a0 18
+  s_0b6bbc8796ba6a::t_cc59734505795b 139-140
+  s_0b6bbc8796ba6a::t_f90bf33003dc67 94-109
+src/app/blog/[slug]/page.tsx
+  s_0b6bbc8796ba6a::t_69b3b4ac0bc04a 15
+  s_0b6bbc8796ba6a::t_8e5bf672bca058 19,25
+  s_0b6bbc8796ba6a::t_a086cafff84367 1-14,16-18,20-24,26-106
+content/blog/jogos-gratis-da-semana.md
+  s_0b6bbc8796ba6a::t_bc4d226c212d89 1-19
+tests/unit/seo/sitemap.test.ts
+  s_0b6bbc8796ba6a::t_f7c51416a1665e 10,16
+  s_0b6bbc8796ba6a::t_85be23b31458c2 64-69
+src/lib/blog.ts
+  s_0b6bbc8796ba6a::t_1acb867142827a 1-71
+tests/unit/lib/blog.test.ts
+  s_0b6bbc8796ba6a::t_786686eda24766 1-47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "3e82f63bdc8a480dcdad103433110eef70663d2a",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "muse-spark-1.3-contributor-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
