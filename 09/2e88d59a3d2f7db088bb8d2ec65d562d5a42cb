@@ -1,0 +1,24 @@
+tests/unit/lib/blog-fs.test.ts
+  s_0b6bbc8796ba6a::t_9c621291daa3bc 4-7
+  s_0b6bbc8796ba6a::t_c4834c1b52635e 1-3,8-70
+tests/unit/app/blog-page.test.tsx
+  s_0b6bbc8796ba6a::t_c7cfcb46adc13d 13-17
+  s_0b6bbc8796ba6a::t_9b237c6ecbdbd5 1-7,12,18-67
+  s_0b6bbc8796ba6a::t_7b85bb945ef892 8-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "092e88d59a3d2f7db088bb8d2ec65d562d5a42cb",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "muse-spark-1.3-contributor-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
