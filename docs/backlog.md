@@ -85,7 +85,7 @@ Regras do loop:
   week" renderiza com CTA pros deals citados.
 
 ## T8: Cron semanal gera draft de blog post
-- status: doing
+- status: done
 - depends: T7, T2
 - risk: review
 - spec: Novo endpoint /api/cron/weekly-blog-post agendado no cron.yml
