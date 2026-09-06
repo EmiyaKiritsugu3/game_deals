@@ -12,3 +12,6 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+## 2025-02-14 - Replace Sequential Map/Reduce with Single-Pass Loop
+**Learning:** Sequential use of `Math.max(...list.map(...))` and `.reduce()` on datasets iterates over the array multiple times. Additionally, `.map()` creates an O(N) intermediate array memory allocation, and the spread operator `...` risks a "Maximum call stack size exceeded" error for large arrays.
+**Action:** Replace `Math.max(...list.map(...))` and `.reduce()` chaining with a single-pass `for...of` loop to calculate statistics. This provides O(1) space complexity, avoids multiple O(N) traversals, and eliminates the risk of call stack overflow.
