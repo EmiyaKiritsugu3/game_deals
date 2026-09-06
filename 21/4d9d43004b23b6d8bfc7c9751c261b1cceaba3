@@ -1,0 +1,33 @@
+tests/unit/lib/admin-revenue.test.ts
+  s_fef28df23a7cda::t_b9511963c3e8eb 1,3-40,44-49
+  s_fef28df23a7cda::t_f420d95e301a77 2,41-43
+tests/unit/routes/admin-revenue-export.test.ts
+  s_fef28df23a7cda::t_30c61506df6f0a 1-76
+docs/backlog.md
+  s_fef28df23a7cda::t_508b19db8c21d4 98
+src/app/api/admin/revenue/export/route.ts
+  s_fef28df23a7cda::t_a44a14c80b5616 1-6,8-35,37-56
+  s_fef28df23a7cda::t_b5c08f67423e5a 7,36
+src/app/admin/revenue/page.tsx
+  s_fef28df23a7cda::t_b5c08f67423e5a 53
+  s_fef28df23a7cda::t_252fa26b05b30b 3-9,22-25,35,46-50,52,54,70-92
+src/lib/admin-revenue.ts
+  s_fef28df23a7cda::t_b5c08f67423e5a 12,40
+  s_fef28df23a7cda::t_885602090d9e2e 1-11,13-39,41-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "214d9d43004b23b6d8bfc7c9751c261b1cceaba3",
+  "prompts": {},
+  "sessions": {
+    "s_fef28df23a7cda": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "cc060727-dba1-416c-9c29-8ab4dd63dc91",
+        "model": "muse-spark-1.3-contributor-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
