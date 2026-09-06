@@ -1,5 +1,12 @@
 import { sql } from 'drizzle-orm';
 import { db } from '@/db';
+import {
+  parseRevenuePeriod,
+  periodDays,
+  periodLabel,
+  REVENUE_PERIODS,
+  type RevenuePeriod,
+} from '@/lib/admin-revenue';
 import { requireAdmin } from '@/lib/require-admin';
 
 export const dynamic = 'force-dynamic';
@@ -12,7 +19,10 @@ interface RevenueRow {
   revenue_cents: number;
 }
 
-async function loadRevenue(): Promise<RevenueRow[]> {
+async function loadRevenue(period: RevenuePeriod): Promise<RevenueRow[]> {
+  const days = periodDays(period);
+  const where =
+    days === null ? sql`` : sql`WHERE ac.timestamp > now() - make_interval(days => ${days})`;
   const rows = (await db.execute(sql`
     SELECT
       ac."storeId" AS store_id,
@@ -22,7 +32,7 @@ async function loadRevenue(): Promise<RevenueRow[]> {
       COALESCE(sum(CASE WHEN conv.status IN ('approved', 'paid') THEN conv."commissionCents" ELSE 0 END), 0)::int AS revenue_cents
     FROM affiliate_clicks ac
     LEFT JOIN affiliate_conversions conv ON conv."clickId" = ac.id
-    WHERE ac.timestamp > now() - interval '30 days'
+    ${where}
     GROUP BY ac."storeId", day
     ORDER BY day DESC, ac."storeId"
   `)) as unknown as RevenueRow[];
@@ -33,9 +43,15 @@ function formatCents(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`;
 }
 
-export default async function RevenuePage() {
+export default async function RevenuePage({
+  searchParams,
+}: Readonly<{
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}>) {
   await requireAdmin();
-  const rows = await loadRevenue();
+  const params = await searchParams;
+  const period = parseRevenuePeriod(typeof params.period === 'string' ? params.period : undefined);
+  const rows = await loadRevenue(period);
 
   const totals = rows.reduce(
     (acc, r) => {
@@ -51,7 +67,29 @@ export default async function RevenuePage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Revenue (last 30 days</h1>
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <h1 className="text-2xl font-bold">Revenue ({periodLabel(period)})</h1>
+        <div className="flex items-center gap-2">
+          {REVENUE_PERIODS.map((p) => (
+            <a
+              key={p}
+              href={p === '30d' ? '/admin/revenue' : `/admin/revenue?period=${p}`}
+              aria-current={p === period ? 'page' : undefined}
+              className={`rounded-md border px-3 py-1 text-sm ${
+                p === period ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
+              }`}
+            >
+              {p === 'all' ? 'All' : p}
+            </a>
+          ))}
+          <a
+            href={`/api/admin/revenue/export?period=${period}`}
+            className="rounded-md border px-3 py-1 text-sm font-medium hover:bg-muted"
+          >
+            Export CSV
+          </a>
+        </div>
+      </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div className="rounded-lg border p-4">

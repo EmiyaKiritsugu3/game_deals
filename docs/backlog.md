@@ -95,7 +95,7 @@ Regras do loop:
   trocando flag.
 
 ## T9: Admin revenue: filtro por período + CSV export
-- status: todo
+- status: doing
 - depends: none
 - risk: review
 - spec: /admin/revenue ganha select 7d/30d/90d/all + botão export CSV
