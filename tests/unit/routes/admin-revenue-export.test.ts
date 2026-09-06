@@ -58,6 +58,9 @@ describe('GET /api/admin/revenue/export', () => {
       'store_id,clicks,conversions,revenue_cents\nsteam,2,1,150\n'
     );
     expect(chunks()).toContain('make_interval');
+    expect(chunks()).toContain('FULL OUTER JOIN');
+    expect(chunks()).toContain('affiliate_conversions');
+    expect(chunks()).toContain('convertedAt');
   });
 
   it('all period omits time filter', async () => {
@@ -65,6 +68,7 @@ describe('GET /api/admin/revenue/export', () => {
     expect(res.status).toBe(200);
     expect(res.headers.get('content-disposition')).toContain('revenue-all.csv');
     expect(chunks()).not.toContain('make_interval');
+    expect(chunks()).toContain('FULL OUTER JOIN');
   });
 
   it('invalid period falls back to 30d', async () => {

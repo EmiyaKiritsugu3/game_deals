@@ -34,17 +34,35 @@ export async function GET(request: Request): Promise<Response> {
 
   const where =
     days === null ? sql`` : sql`WHERE ac.timestamp > now() - make_interval(days => ${days})`;
+  const whereConv =
+    days === null ? sql`` : sql`WHERE c."convertedAt" > now() - make_interval(days => ${days})`;
+  // ponytail: two independent per-store aggregates (clicks from clicks table,
+  // conversions from conversions table) — FULL OUTER JOIN keeps click-less
+  // conversions (postback without matching clickId) and conversion-less stores.
   const rows = (await db.execute(sql`
+    WITH clicks AS (
+      SELECT ac."storeId" AS store_id, count(*)::int AS clicks
+      FROM affiliate_clicks ac
+      ${where}
+      GROUP BY ac."storeId"
+    ),
+    conv AS (
+      SELECT
+        c."storeId" AS store_id,
+        count(*)::int AS conversions,
+        COALESCE(sum(CASE WHEN c.status IN ('approved', 'paid') THEN c."commissionCents" ELSE 0 END), 0)::int AS revenue_cents
+      FROM affiliate_conversions c
+      ${whereConv}
+      GROUP BY c."storeId"
+    )
     SELECT
-      ac."storeId" AS store_id,
-      count(*)::int AS clicks,
-      count(DISTINCT conv.id)::int AS conversions,
-      COALESCE(sum(CASE WHEN conv.status IN ('approved', 'paid') THEN conv."commissionCents" ELSE 0 END), 0)::int AS revenue_cents
-    FROM affiliate_clicks ac
-    LEFT JOIN affiliate_conversions conv ON conv."clickId" = ac.id
-    ${where}
-    GROUP BY ac."storeId"
-    ORDER BY ac."storeId"
+      COALESCE(clicks.store_id, conv.store_id) AS store_id,
+      COALESCE(clicks.clicks, 0) AS clicks,
+      COALESCE(conv.conversions, 0) AS conversions,
+      COALESCE(conv.revenue_cents, 0) AS revenue_cents
+    FROM clicks
+    FULL OUTER JOIN conv ON conv.store_id = clicks.store_id
+    ORDER BY store_id
   `)) as unknown as StoreRevenueRow[];
 
   return new Response(toStoreCsv(rows), {

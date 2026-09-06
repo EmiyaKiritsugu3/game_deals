@@ -21,20 +21,43 @@ interface RevenueRow {
 
 async function loadRevenue(period: RevenuePeriod): Promise<RevenueRow[]> {
   const days = periodDays(period);
+  // ponytail: daily click rows from clicks table, daily conv sums from
+  // conversions table (own storeId, own convertedAt) — LEFT JOIN keeps
+  // click-less conversions visible instead of dropping them.
   const where =
     days === null ? sql`` : sql`WHERE ac.timestamp > now() - make_interval(days => ${days})`;
+  const whereConv =
+    days === null ? sql`` : sql`WHERE c."convertedAt" > now() - make_interval(days => ${days})`;
   const rows = (await db.execute(sql`
+    WITH clicks AS (
+      SELECT
+        ac."storeId" AS store_id,
+        date_trunc('day', ac.timestamp)::date::text AS day,
+        count(*)::int AS clicks
+      FROM affiliate_clicks ac
+      ${where}
+      GROUP BY ac."storeId", day
+    ),
+    conv AS (
+      SELECT
+        c."storeId" AS store_id,
+        date_trunc('day', c."convertedAt")::date::text AS day,
+        count(*)::int AS conversions,
+        COALESCE(sum(CASE WHEN c.status IN ('approved', 'paid') THEN c."commissionCents" ELSE 0 END), 0)::int AS revenue_cents
+      FROM affiliate_conversions c
+      ${whereConv}
+      GROUP BY c."storeId", day
+    )
     SELECT
-      ac."storeId" AS store_id,
-      date_trunc('day', ac.timestamp)::date::text AS day,
-      count(*)::int AS clicks,
-      count(DISTINCT conv.id)::int AS conversions,
-      COALESCE(sum(CASE WHEN conv.status IN ('approved', 'paid') THEN conv."commissionCents" ELSE 0 END), 0)::int AS revenue_cents
-    FROM affiliate_clicks ac
-    LEFT JOIN affiliate_conversions conv ON conv."clickId" = ac.id
-    ${where}
-    GROUP BY ac."storeId", day
-    ORDER BY day DESC, ac."storeId"
+      COALESCE(clicks.store_id, conv.store_id) AS store_id,
+      COALESCE(clicks.day, conv.day) AS day,
+      COALESCE(clicks.clicks, 0) AS clicks,
+      COALESCE(conv.conversions, 0) AS conversions,
+      COALESCE(conv.revenue_cents, 0) AS revenue_cents
+    FROM clicks
+    FULL OUTER JOIN conv
+      ON conv.store_id = clicks.store_id AND conv.day = clicks.day
+    ORDER BY day DESC, store_id
   `)) as unknown as RevenueRow[];
   return rows;
 }
@@ -70,18 +93,29 @@ export default async function RevenuePage({
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         <h1 className="text-2xl font-bold">Revenue ({periodLabel(period)})</h1>
         <div className="flex items-center gap-2">
-          {REVENUE_PERIODS.map((p) => (
-            <a
-              key={p}
-              href={p === '30d' ? '/admin/revenue' : `/admin/revenue?period=${p}`}
-              aria-current={p === period ? 'page' : undefined}
-              className={`rounded-md border px-3 py-1 text-sm ${
-                p === period ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
-              }`}
+          <form method="get" className="flex items-center gap-2">
+            <label htmlFor="period" className="text-sm text-muted-foreground">
+              Period
+            </label>
+            <select
+              id="period"
+              name="period"
+              defaultValue={period}
+              className="rounded-md border bg-background px-3 py-1 text-sm"
             >
-              {p === 'all' ? 'All' : p}
-            </a>
-          ))}
+              {REVENUE_PERIODS.map((p) => (
+                <option key={p} value={p}>
+                  {p === 'all' ? 'All' : p}
+                </option>
+              ))}
+            </select>
+            <button
+              type="submit"
+              className="rounded-md border px-3 py-1 text-sm font-medium hover:bg-muted"
+            >
+              Apply
+            </button>
+          </form>
           <a
             href={`/api/admin/revenue/export?period=${period}`}
             className="rounded-md border px-3 py-1 text-sm font-medium hover:bg-muted"
