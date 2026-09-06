@@ -1,0 +1,34 @@
+src/lib/blog-draft.ts
+  s_0b6bbc8796ba6a::t_d6a3ba87047769 110
+  s_0b6bbc8796ba6a::t_90d09b3eaaec9c 1-90,102-109,111-123
+  s_0b6bbc8796ba6a::t_2f08911620d946 91-101
+tests/unit/routes/weekly-blog-post.test.ts
+  s_0b6bbc8796ba6a::t_7c7f34d69de104 14-21
+  s_0b6bbc8796ba6a::t_f8c0f1b300796a 1-13,22-116
+.github/workflows/cron.yml
+  s_0b6bbc8796ba6a::t_d80cb3febd8a82 15-16
+  s_0b6bbc8796ba6a::t_5c826f81754e8f 62-67
+src/app/api/cron/weekly-blog-post/route.ts
+  s_0b6bbc8796ba6a::t_7ca8087847af7e 1-12,17-68
+  s_0b6bbc8796ba6a::t_0f16b28011c374 13-16
+tests/unit/lib/blog-draft.test.ts
+  s_0b6bbc8796ba6a::t_0f16b28011c374 8
+  s_0b6bbc8796ba6a::t_b083c79b71b79c 1-7,9-36,41-115
+  s_0b6bbc8796ba6a::t_36ff45903512be 37-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "f55b9a5fc228c9fa807ec890160463eb79053657",
+  "prompts": {},
+  "sessions": {
+    "s_0b6bbc8796ba6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c3736f9-e11a-447d-b937-1562cfe96a7a",
+        "model": "muse-spark-1.3-contributor-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
