@@ -1,0 +1,26 @@
+tests/unit/routes/admin-revenue-export.test.ts
+  s_fef28df23a7cda::t_520b3a2b14a1c2 61-63,71
+src/app/admin/revenue/page.tsx
+  s_fef28df23a7cda::t_63fb9e7ac35ad9 24-26,29-30,32-50,52-60
+  s_fef28df23a7cda::t_79082aa12ba547 97-104,106-118
+  s_fef28df23a7cda::t_c6dbec69f7cc85 96
+src/app/api/admin/revenue/export/route.ts
+  s_fef28df23a7cda::t_280e85fe6a3129 41,43-57,59-65
+  s_fef28df23a7cda::t_a4e6e6cea7510b 37-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "0dd93c57ebc91a35b7c8c60748d1cf52fcdd3bee",
+  "prompts": {},
+  "sessions": {
+    "s_fef28df23a7cda": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "cc060727-dba1-416c-9c29-8ab4dd63dc91",
+        "model": "muse-spark-1.3-contributor-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
