@@ -15,3 +15,8 @@
 **Vulnerability:** XSS vulnerability in `src/app/game/[id]/page.tsx` where user-controlled game titles were serialized into JSON-LD scripts using `JSON.stringify` directly in `dangerouslySetInnerHTML`. An attacker could inject `</script><script>alert(1)</script>` into the title.
 **Learning:** `JSON.stringify` does not escape HTML control characters like `<` or `>`. When rendering this JSON directly into a script tag using React's `dangerouslySetInnerHTML`, it can break out of the script context and execute malicious JavaScript.
 **Prevention:** Always escape HTML control characters when injecting JSON into script tags. Use `.replace(/</g, '\\u003c')` so the unicode escape is correctly preserved in the JavaScript string and not evaluated as an unescaped literal `<`.
+
+## 2023-10-27 - new URL() Allows javascript: Protocol Bypassing Hostname Allowlists
+**Vulnerability:** The `new URL()` API parses `javascript://allowed-domain.com/path` with a `hostname` of `allowed-domain.com` and a `protocol` of `javascript:`. If only `url.hostname` is validated against an allowlist, malicious `javascript:` URIs can bypass the check and cause XSS when used in a redirect or link.
+**Learning:** `new URL()` properly extracts hostnames even for pseudo-protocols like `javascript:`. Relying solely on a hostname allowlist is insufficient to guarantee URL safety.
+**Prevention:** When authorizing redirects or links via `new URL()` against an allowlist, always explicitly validate the protocol (e.g., `url.protocol === 'http:' || url.protocol === 'https:'`).
