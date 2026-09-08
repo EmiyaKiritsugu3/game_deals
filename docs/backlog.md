@@ -103,7 +103,7 @@ Regras do loop:
   existente mantido.
 
 ## T10: Lighthouse CI budget
-- status: todo
+- status: doing
 - depends: none
 - risk: auto
 - spec: Adicionar lhci ao nightly.yml: rodar contra preview URL, budgets

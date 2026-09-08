@@ -1,0 +1,18 @@
+{
+  "ci": {
+    "collect": {
+      "url": ["${LHCI_URL}/", "${LHCI_URL}/deals/under-10", "${LHCI_URL}/search"],
+      "numberOfRuns": 1
+    },
+    "assert": {
+      "assertions": {
+        "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }],
+        "total-blocking-time": ["error", { "maxNumericValue": 300 }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}
