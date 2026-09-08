@@ -1,0 +1,22 @@
+tests/unit/ci/lighthouse-config.test.ts
+  s_fef28df23a7cda::t_5f79a807c21ed7 33,36-38
+  s_fef28df23a7cda::t_8d5fef1f43e4dc 12,14,16
+.github/workflows/nightly.yml
+  s_fef28df23a7cda::t_c8cbbfbc3cf9bd 119-123
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "25d03e045fe834360a75a71937febff731939325",
+  "prompts": {},
+  "sessions": {
+    "s_fef28df23a7cda": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "cc060727-dba1-416c-9c29-8ab4dd63dc91",
+        "model": "muse-spark-1.3-contributor-free"
+      },
+      "human_author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
