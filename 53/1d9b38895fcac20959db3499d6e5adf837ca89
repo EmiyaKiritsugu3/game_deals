@@ -1,0 +1,14 @@
+docs/backlog.md
+  h_5d68cec99831c8 106
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "531d9b38895fcac20959db3499d6e5adf837ca89",
+  "prompts": {},
+  "humans": {
+    "h_5d68cec99831c8": {
+      "author": "EmiyaKiritsugu3 <inamarjunior2@gmail.com>"
+    }
+  }
+}
