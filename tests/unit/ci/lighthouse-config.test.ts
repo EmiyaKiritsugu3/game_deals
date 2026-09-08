@@ -9,19 +9,11 @@ function loadJson(path: string): unknown {
 }
 
 describe('lighthouserc.json budgets (T10)', () => {
-  it('covers the three spec pages', () => {
+  it('carries no collect.url — URLs come from CLI flags (LHCI does not expand ${} in JSON)', () => {
     const cfg = loadJson('lighthouserc.json') as {
-      ci: { collect: { url: string[] } };
+      ci: { collect: { url?: string[] } };
     };
-    // biome-ignore lint/suspicious/noTemplateCurlyInString: asserting literal ${} placeholders
-    expect(cfg.ci.collect.url).toEqual([
-      // biome-ignore lint/suspicious/noTemplateCurlyInString: literal LHCI env placeholder
-      '${LHCI_URL}/',
-      // biome-ignore lint/suspicious/noTemplateCurlyInString: literal LHCI env placeholder
-      '${LHCI_URL}/deals/under-10',
-      // biome-ignore lint/suspicious/noTemplateCurlyInString: literal LHCI env placeholder
-      '${LHCI_URL}/search',
-    ]);
+    expect(cfg.ci.collect.url).toBeUndefined();
   });
 
   it('enforces LCP/CLS/TBT budgets from spec', () => {
@@ -38,10 +30,12 @@ describe('lighthouserc.json budgets (T10)', () => {
 describe('nightly.yml lighthouse job (T10)', () => {
   const yml = readFileSync(join(root, '.github/workflows/nightly.yml'), 'utf8');
 
-  it('defines a lighthouse job using lighthouserc + preview URL', () => {
+  it('passes the three spec pages via CLI flags with shell-expanded URL', () => {
     expect(yml).toContain('lighthouse:');
     expect(yml).toMatch(/bunx @lhci\/cli@[\d.]+ autorun/);
+    for (const path of ['/', '/deals/under-10', '/search']) {
+      expect(yml).toContain(`--collect.url="$LHCI_URL${path}"`);
+    }
     expect(yml).toContain('VERCEL_APP_URL');
-    expect(yml).toContain('LHCI_URL');
   });
 });
