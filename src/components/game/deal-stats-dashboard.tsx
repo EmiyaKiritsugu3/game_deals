@@ -57,7 +57,10 @@ export function DealStatsDashboard({ deals }: DealStatsDashboardProps) {
       const b = buckets.find((b) => d.savingsNum >= b.min && d.savingsNum < b.max);
       if (b) b.count++;
     }
-    const maxBucket = Math.max(...buckets.map((b) => b.count), 1);
+    let maxBucket = 1;
+    for (const b of buckets) {
+      if (b.count > maxBucket) maxBucket = b.count;
+    }
 
     // Store share (top 5 stores)
     const storeCounts = new Map<
