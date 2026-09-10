@@ -12,3 +12,6 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+## 2024-11-25 - Avoid O(N log N) sorting and array allocation in gameDataToDeal
+**Learning:** `[...arr].sort(...)[0]` pattern in `src/app/collections/[slug]/page.tsx` was causing unnecessary memory allocations and an O(N log N) operation for finding minimum price.
+**Action:** Replaced `[...arr].sort(...)[0]` with a call to the `getCheapestDeal` utility which finds the minimum value in O(N) without array allocation.
