@@ -6,7 +6,12 @@ const { execute, authGetUser, resolveGameUuid } = vi.hoisted(() => ({
   resolveGameUuid: vi.fn(),
 }));
 
-vi.mock('@/db', () => ({ db: { execute } }));
+const insertMock = vi.fn().mockReturnValue({ values: vi.fn().mockReturnValue({ onConflictDoNothing: vi.fn().mockResolvedValue([]), onConflictDoUpdate: vi.fn().mockReturnValue({ returning: vi.fn().mockResolvedValue([{ xp: 10 }]) }) }) });
+const selectMock = vi.fn().mockReturnValue({ from: vi.fn().mockReturnValue({ innerJoin: vi.fn().mockReturnValue({ where: vi.fn().mockReturnValue({ groupBy: vi.fn().mockReturnValue({ limit: vi.fn().mockResolvedValue([]) }) }) }), where: vi.fn().mockResolvedValue([]) }) });
+const updateMock = vi.fn().mockReturnValue({ set: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([]) }) });
+vi.mock('@/db', () => ({
+  db: { execute, insert: vi.fn().mockReturnValue({ values: vi.fn().mockReturnValue({ onConflictDoUpdate: vi.fn().mockReturnValue({ returning: vi.fn().mockResolvedValue([{ xp: 10 }]) }), onConflictDoNothing: vi.fn().mockResolvedValue([]) }) }), select: vi.fn().mockReturnValue({ from: vi.fn().mockReturnValue({ innerJoin: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([]) }), where: vi.fn().mockResolvedValue([{ count: 0 }]) }) }), update: vi.fn().mockReturnValue({ set: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([]) }) }) }
+}));
 
 vi.mock('@/utils/supabase/server', () => ({
   createClient: () => Promise.resolve({ auth: { getUser: () => authGetUser() } }),
