@@ -144,7 +144,7 @@ export const getStores = cache(async function getStores(): Promise<Record<string
   return map;
 });
 
-export async function getGame(id: string): Promise<GameDetails> {
+export const getGame = cache(async function getGame(id: string): Promise<GameDetails> {
   try {
     const game = await fetchGameFromCheapShark(id);
     if (!game) return null as unknown as never;
@@ -155,7 +155,7 @@ export async function getGame(id: string): Promise<GameDetails> {
     console.error('getGame error:', error);
     return null as unknown as never;
   }
-}
+});
 
 export async function getGamesBatch(ids: string[]): Promise<Record<string, GameDetails>> {
   const result: Record<string, GameDetails> = {};
