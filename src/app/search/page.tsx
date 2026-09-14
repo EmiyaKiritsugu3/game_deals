@@ -8,9 +8,9 @@ export const metadata = {
 };
 
 async function getActiveStores(): Promise<Store[]> {
-  const storesResponse = (await fetch('https://www.cheapshark.com/api/1.0/stores').then((res) =>
-    res.json()
-  )) as Store[];
+  const storesResponse = (await fetch('https://www.cheapshark.com/api/1.0/stores', {
+    next: { revalidate: 86400 },
+  }).then((res) => res.json())) as Store[];
   // CheapShark returns an error body under rate limit — never crash the page for store filters.
   if (!Array.isArray(storesResponse)) return [];
   return storesResponse.filter((s) => s.isActive === 1);
