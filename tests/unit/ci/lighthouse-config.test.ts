@@ -9,7 +9,7 @@ function loadJson(path: string): unknown {
 }
 
 describe('lighthouserc.json budgets (T10)', () => {
-  it('carries no collect.url — URLs come from CLI flags (LHCI does not expand ${} in JSON)', () => {
+  it(`carries no collect.url — URLs come from CLI flags (LHCI does not expand \${} in JSON)`, () => {
     const cfg = loadJson('lighthouserc.json') as {
       ci: { collect: { url?: string[] } };
     };
