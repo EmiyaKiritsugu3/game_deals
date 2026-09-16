@@ -45,6 +45,11 @@ function applyAffiliateParams(url: string, storeId: string, clickId: string): st
 
   const parsedUrl = new URL(url || config.baseUrl);
 
+  if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+    console.warn(`Blocked redirect to non-http(s) protocol: ${parsedUrl.protocol}`);
+    return '';
+  }
+
   if (!isDomainAllowed(parsedUrl)) {
     console.warn(`Blocked redirect to non-allowlisted domain: ${parsedUrl.hostname}`);
     return '';
