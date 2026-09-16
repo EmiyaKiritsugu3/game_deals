@@ -66,7 +66,6 @@ function applyAffiliateParams(url: string, storeId: string, clickId: string): st
 
   const finalUrl = parsedUrl.toString();
   const finalParsed = new URL(finalUrl);
-
   if (!isDomainAllowed(finalParsed)) {
     console.warn(
       `Blocked redirect to non-allowlisted domain after param append: ${finalParsed.hostname}`
