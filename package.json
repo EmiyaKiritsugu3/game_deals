@@ -38,7 +38,7 @@
     "test:integration": "bun --bun vitest run --config vitest.integration.config.ts",
     "tdd": "bun --bun vitest --changed --reporter=verbose --watch",
     "knip": "bunx knip",
-    "audit": "bun audit --audit-level=high",
+    "audit:deps": "bun audit --audit-level=high",
     "check": "bash scripts/check.sh",
     "fallow": "fallow",
     "sonar:local": "bun run test:coverage && sonar-scanner -Dsonar.projectKey=EmiyaKiritsugu3_game_deals -Dsonar.organization=emiyakiritsugu3 -Dsonar.sources=./src -Dsonar.host.url=https://sonarcloud.io -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info -Dsonar.exclusions='src/data/collections.ts,src/data/bundles.ts,**/*.test.ts,**/*.test.tsx,**/*.spec.ts,**/node_modules/**,**/.next/**,**/coverage/**,src/app/globals.css'",
