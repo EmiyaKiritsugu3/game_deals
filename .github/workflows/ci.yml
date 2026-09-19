@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   quality:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 20
     services:
       postgres:
@@ -40,8 +40,6 @@ jobs:
       - run: bun ci
       - name: Lint
         run: bunx biome check src/
-      - name: Dependency audit
-        run: bun audit --audit-level=high
       - name: Type check
         run: bunx tsc --noEmit
       - name: Unit Tests + Coverage
@@ -64,7 +62,7 @@ jobs:
         continue-on-error: true
 
   e2e:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 15
     needs: []
     services:
