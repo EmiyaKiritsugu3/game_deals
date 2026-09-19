@@ -41,7 +41,7 @@ jobs:
       - name: Lint
         run: bunx biome check src/
       - name: Dependency audit
-        run: bun audit --audit-level=high
+        run: npm audit --audit-level=high
       - name: Type check
         run: bunx tsc --noEmit
       - name: Unit Tests + Coverage
@@ -56,7 +56,7 @@ jobs:
       - name: Setup env
         run: cp .env.example .env.local
       - name: Build
-        run: bun --bun next build
+        run: bun run build
       - name: Dead code
         run: bunx knip --no-exit-code
       - name: Fallow audit
@@ -118,7 +118,7 @@ jobs:
           docker exec ${{ job.services.postgres.id }} psql -U postgres -d gamedeals_test \
             -c "INSERT INTO games (\"cheapsharkId\", title) VALUES ('612', 'Outer Wilds'), ('999', 'E2E Fixture Game') ON CONFLICT DO NOTHING;"
       - name: Build
-        run: bun --bun next build
+        run: bun run build
       - name: E2E Tests
         run: bunx playwright test
       - name: Upload Playwright report
