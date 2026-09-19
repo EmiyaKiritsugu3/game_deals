@@ -1,7 +1,7 @@
-## 2026-06-29 - Missing Focus States on Interactive Icon Buttons
-**Learning:** Custom interactive icon components in this app (e.g., HeartButton, NotificationBell, SidebarModal close button) frequently omit focus states despite having hover animations, negatively impacting keyboard accessibility.
-**Action:** Ensure that all newly created or modified interactive elements, especially icon-only buttons without default browser styles, include explicit `focus-visible` utility classes (e.g., `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2`).
+## 2024-05-24 - Interactive Element Accessibility
+**Learning:** For custom tab-like navigation (e.g., `WishlistTabs.tsx`), `role="tab"` and `role="tablist"` shouldn't be added without full keyboard arrow navigation implementation. Instead, native `<button>` elements with `aria-current="page"` (or `"true"`) are better for simple state toggles, and `focus-visible` states are critical since custom styles often strip default browser outlines.
+**Action:** Always add explicit `focus-visible:outline-2 focus-visible:outline-primary` classes to interactive elements that have custom hover/active styles, and use semantic native elements over incomplete ARIA patterns.
 
-## 2024-05-24 - Consistent Keyboard Focus Indicators
-**Learning:** While checking accessibility on key interactive elements (e.g., custom icon buttons, game card triggers), I found that many had hover states but lacked visible focus indicators for keyboard users. Adding a consistent focus ring pattern greatly improves accessibility without compromising the design.
-**Action:** Always apply `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2` (or similar utility classes from the established design system) to all interactive elements (`button`, `a`, `input`, etc.) to ensure keyboard navigability.
+## 2024-05-24 - Interactive Element Accessibility
+**Learning:** For custom tab-like navigation (e.g., `WishlistTabs.tsx`), `role="tab"` and `role="tablist"` shouldn't be added without full keyboard arrow navigation implementation. Instead, native `<button>` elements with `aria-current="page"` (or `"true"`) are better for simple state toggles, and `focus-visible` states are critical since custom styles often strip default browser outlines.
+**Action:** Always add explicit `focus-visible:outline-2 focus-visible:outline-primary` classes to interactive elements that have custom hover/active styles, and use semantic native elements over incomplete ARIA patterns.
