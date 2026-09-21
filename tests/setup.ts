@@ -30,7 +30,5 @@ Object.defineProperty(globalThis, 'IntersectionObserver', {
 vi.mock('@sentry/nextjs', () => ({
   captureException: vi.fn(),
   captureMessage: vi.fn(),
-  withScope: vi.fn((fn: (scope: { setTag: () => void }) => void) =>
-    fn({ setTag: () => {} })
-  ),
+  withScope: vi.fn((fn: (scope: { setTag: () => void }) => void) => fn({ setTag: () => {} })),
 }));

@@ -33,7 +33,7 @@ function ListSelector({
             <button
               type="button"
               key={list.id}
-              className="w-full px-4 py-3 bg-muted/50 border border-border rounded-lg text-foreground flex items-center justify-between cursor-pointer transition-colors duration-200 hover:bg-muted font-medium"
+              className="w-full px-4 py-3 bg-muted/50 border border-border rounded-lg text-foreground flex items-center justify-between cursor-pointer transition-colors duration-200 hover:bg-muted font-medium focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
               onClick={() => handleAdd(list.id)}
               disabled={addMutation.isPending}
             >
@@ -57,11 +57,11 @@ function ListSelector({
           aria-label="New playlist name"
           value={newListName}
           onChange={(e) => setNewListName(e.target.value)}
-          className="bg-black/30 border border-border rounded-lg p-3 text-foreground text-[0.95rem] placeholder:text-muted-foreground"
+          className="bg-black/30 border border-border rounded-lg p-3 text-foreground text-[0.95rem] placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         />
         <button
           type="button"
-          className="bg-green-500 text-black border-none rounded-lg p-3 font-bold cursor-pointer transition-opacity duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="bg-green-500 text-black border-none rounded-lg p-3 font-bold cursor-pointer transition-opacity duration-200 disabled:opacity-30 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           disabled={createMutation.isPending || !newListName.trim()}
           onClick={() => handleCreate()}
         >
@@ -146,7 +146,7 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
 
         <button
           type="button"
-          className="bg-none border-none text-muted-foreground w-full p-2 cursor-pointer"
+          className="bg-none border-none text-muted-foreground w-full p-2 cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 focus-visible:rounded"
           onClick={onClose}
         >
           Cancel
