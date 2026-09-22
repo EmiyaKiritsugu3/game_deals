@@ -15,3 +15,8 @@
 **Vulnerability:** XSS vulnerability in `src/app/game/[id]/page.tsx` where user-controlled game titles were serialized into JSON-LD scripts using `JSON.stringify` directly in `dangerouslySetInnerHTML`. An attacker could inject `</script><script>alert(1)</script>` into the title.
 **Learning:** `JSON.stringify` does not escape HTML control characters like `<` or `>`. When rendering this JSON directly into a script tag using React's `dangerouslySetInnerHTML`, it can break out of the script context and execute malicious JavaScript.
 **Prevention:** Always escape HTML control characters when injecting JSON into script tags. Use `.replace(/</g, '\\u003c')` so the unicode escape is correctly preserved in the JavaScript string and not evaluated as an unescaped literal `<`.
+
+## 2024-05-20 - [Protocol Validation for Hostname Checks]
+**Vulnerability:** A redirect endpoint relying solely on `URL.hostname` for validation against an allowlist was vulnerable to XSS and SSRF via `javascript://[allowed-domain]/[payload]`.
+**Learning:** `new URL()` parses the hostname of a `javascript:` or custom protocol URI identically to HTTP/HTTPS. A purely hostname-based allowlist (`ALLOWED_DOMAINS.has(url.hostname)`) allows arbitrary protocols to bypass the check. When passed to a redirect sink, this results in Cross-Site Scripting.
+**Prevention:** Always explicitly validate the `.protocol` property (e.g., `url.protocol === 'http:' || url.protocol === 'https:'`) when validating arbitrary external URLs before redirecting or fetching.
