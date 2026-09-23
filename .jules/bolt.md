@@ -12,3 +12,7 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+
+## 2024-10-25 - [Preventing Waterfall Network Requests with nested Promise.all]
+**Learning:** Sequential `await Promise.all()` statements in server components block execution, forcing subsequent concurrent groups to wait until the previous group finishes, increasing TTFB and page load latency (the waterfall anti-pattern).
+**Action:** When executing independent, concurrent operations in groups (e.g. mapping across multiple different arrays of parameters), wrap the individual `Promise.all` calls within an outer, single `Promise.all([Promise.all(...), Promise.all(...)])` to run all I/O boundary requests fully concurrently.
