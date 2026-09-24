@@ -1,5 +1,6 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 1,
   "workspaces": {
     "": {
       "name": "game-deals",
@@ -55,10 +56,6 @@
       },
     },
   },
-  "trustedDependencies": [
-    "esbuild",
-    "@sentry/cli",
-  ],
   "overrides": {
     "adm-zip": "^0.6.0",
     "axios": "^1.18.0",
