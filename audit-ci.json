@@ -7,7 +7,11 @@
     "GHSA-5ctm-8h37-h4p6",
     "GHSA-492v-c6pp-mqqv",
     "GHSA-267c-6grr-h53f",
-    "GHSA-36qx-fr4f-26g5"
+    "GHSA-36qx-fr4f-26g5",
+    "GHSA-7q85-xj36-vmfc",
+    "GHSA-p293-qw3h-jr36",
+    "GHSA-2xp9-vwfh-vxw4",
+    "GHSA-rgj7-g3m4-5g8c"
   ],
   "report-type": "summary"
 }
