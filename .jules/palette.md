@@ -5,3 +5,7 @@
 ## 2024-05-24 - Consistent Keyboard Focus Indicators
 **Learning:** While checking accessibility on key interactive elements (e.g., custom icon buttons, game card triggers), I found that many had hover states but lacked visible focus indicators for keyboard users. Adding a consistent focus ring pattern greatly improves accessibility without compromising the design.
 **Action:** Always apply `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2` (or similar utility classes from the established design system) to all interactive elements (`button`, `a`, `input`, etc.) to ensure keyboard navigability.
+
+## 2024-05-25 - ARIA Tab Pattern Fallback
+**Learning:** When building tab-based navigation, using `role="tablist"` and `role="tab"` without implementing the full W3C ARIA tab pattern (like keyboard arrow navigation) creates a broken experience for assistive technologies.
+**Action:** Rely on native `<button>` elements and use `aria-current="true"` to denote the active state instead of using improper ARIA tab roles, ensuring functional and accessible navigation.
