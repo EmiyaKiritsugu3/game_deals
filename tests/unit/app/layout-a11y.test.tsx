@@ -33,10 +33,12 @@ describe('Layout accessibility', () => {
     const { default: RootLayout } = await import('@/app/layout');
 
     const layout = await RootLayout({
-      children: <div>Page content</div>,
+      children: <main>Page content</main>,
     });
 
-    render(layout);
+    // render(layout) fails with "In HTML, <html> cannot be a child of <div>."
+    // because jsdom wrapper renders inside a div.
+    render(<>{layout}</>);
 
     const skipLink = screen.getByRole('link', { name: /skip to content|skip to main/i });
     expect(skipLink).toHaveAttribute('href', '#main-content');
