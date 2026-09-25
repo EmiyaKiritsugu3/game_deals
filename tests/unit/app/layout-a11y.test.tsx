@@ -36,8 +36,9 @@ describe('Layout accessibility', () => {
       children: <main>Page content</main>,
     });
 
-    // render(layout) fails with "In HTML, <html> cannot be a child of <div>."
-    // because jsdom wrapper renders inside a div.
+    // render(layout) with a custom container that isn't `document.body` or `document.documentElement`
+    // still causes a hydration error when returning `<html>`. We will suppress console.error for this test.
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
     render(<>{layout}</>);
 
     const skipLink = screen.getByRole('link', { name: /skip to content|skip to main/i });
@@ -45,5 +46,6 @@ describe('Layout accessibility', () => {
 
     const main = document.querySelector('main');
     expect(main).toHaveAttribute('id', 'main-content');
+    consoleError.mockRestore();
   });
 });
