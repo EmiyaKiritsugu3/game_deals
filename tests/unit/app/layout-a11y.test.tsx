@@ -33,15 +33,19 @@ describe('Layout accessibility', () => {
     const { default: RootLayout } = await import('@/app/layout');
 
     const layout = await RootLayout({
-      children: <div>Page content</div>,
+      children: <main>Page content</main>,
     });
 
-    render(layout);
+    // render(layout) with a custom container that isn't `document.body` or `document.documentElement`
+    // still causes a hydration error when returning `<html>`. We will suppress console.error for this test.
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    render(<>{layout}</>);
 
     const skipLink = screen.getByRole('link', { name: /skip to content|skip to main/i });
     expect(skipLink).toHaveAttribute('href', '#main-content');
 
     const main = document.querySelector('main');
     expect(main).toHaveAttribute('id', 'main-content');
+    consoleError.mockRestore();
   });
 });
