@@ -25,6 +25,7 @@ export async function generateMetadata({
 }
 
 function gameDataToDeal(gameData: GameDetails, gameID: string): DealWithStore {
+  /* ⚡ Bolt Performance: Use O(N) getCheapestDeal instead of O(N log N) sorting just to find minimum value */
   const bestDeal = getCheapestDeal(gameData.deals);
   const deal: Deal = {
     internalName: gameID,
