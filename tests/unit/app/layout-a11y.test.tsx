@@ -2,6 +2,7 @@
  * @vitest-environment jsdom
  */
 import { render, screen } from '@testing-library/react';
+import type React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@vercel/analytics/react', () => ({ Analytics: () => null }));
@@ -12,17 +13,19 @@ vi.mock('next/font/google', () => ({
   Space_Grotesk: () => ({ variable: '--font-display' }),
 }));
 vi.mock('nuqs/adapters/next/app', () => ({
-  NuqsAdapter: ({ children }: { children: React.ReactNode }) => children,
+  NuqsAdapter: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 vi.mock('next-themes', () => ({
-  ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  ThemeProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   useTheme: () => ({ theme: 'dark', setTheme: () => {} }),
 }));
 vi.mock('@/components/CookieBanner', () => ({ default: () => null }));
 vi.mock('@/components/Navbar', () => ({ default: () => null }));
 vi.mock('@/components/SyncManager', () => ({ default: () => null }));
-vi.mock('@/providers/ReactQueryProvider', () => ({
-  default: ({ children }: { children: React.ReactNode }) => children,
+vi.mock('@/components/providers', () => ({
+  Providers: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="mock-providers">{children}</div>
+  ),
 }));
 vi.mock('next/headers', () => ({
   headers: () => new Map(),
@@ -33,10 +36,10 @@ describe('Layout accessibility', () => {
     const { default: RootLayout } = await import('@/app/layout');
 
     const layout = await RootLayout({
-      children: <div>Page content</div>,
+      children: <div data-testid="page-content">Page content</div>,
     });
 
-    render(layout);
+    render(layout as React.ReactElement);
 
     const skipLink = screen.getByRole('link', { name: /skip to content|skip to main/i });
     expect(skipLink).toHaveAttribute('href', '#main-content');
