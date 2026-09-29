@@ -19,6 +19,14 @@ describe('WishlistTabs', () => {
     expect(screen.getByText('My Alerts (3)')).toBeInTheDocument();
   });
 
+  it('applies aria-current="true" to the active tab', () => {
+    render(<WishlistTabs {...defaultProps} activeTab="wishlist" />);
+    const wishlistBtn = screen.getByText('Wishlist (5)').closest('button');
+    const alertsBtn = screen.getByText('My Alerts (3)').closest('button');
+    expect(wishlistBtn).toHaveAttribute('aria-current', 'true');
+    expect(alertsBtn).not.toHaveAttribute('aria-current');
+  });
+
   it('calls onTabChange with "wishlist" when wishlist tab is clicked', () => {
     const onTabChange = vi.fn();
     render(<WishlistTabs {...defaultProps} onTabChange={onTabChange} />);
