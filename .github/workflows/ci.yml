@@ -56,6 +56,8 @@ jobs:
       - name: Setup env
         run: cp .env.example .env.local
       - name: Build
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gamedeals_test
         run: bun --bun next build
       - name: Dead code
         run: bunx knip --no-exit-code
@@ -118,6 +120,8 @@ jobs:
           docker exec ${{ job.services.postgres.id }} psql -U postgres -d gamedeals_test \
             -c "INSERT INTO games (\"cheapsharkId\", title) VALUES ('612', 'Outer Wilds'), ('999', 'E2E Fixture Game') ON CONFLICT DO NOTHING;"
       - name: Build
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gamedeals_test
         run: bun --bun next build
       - name: E2E Tests
         run: bunx playwright test
