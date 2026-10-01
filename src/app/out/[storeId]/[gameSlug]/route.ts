@@ -36,6 +36,7 @@ async function lookupDealUrl(storeId: string): Promise<string> {
 }
 
 function isDomainAllowed(url: URL): boolean {
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return false;
   return ALLOWED_DOMAINS.has(url.hostname);
 }
 
