@@ -53,34 +53,10 @@ export function DealStatsDashboard({ deals }: DealStatsDashboardProps) {
         color: 'oklch(0.82 0.2 300)',
       },
     ];
-    for (const d of deduped) {
-      const b = buckets.find((b) => d.savingsNum >= b.min && d.savingsNum < b.max);
-      if (b) b.count++;
-    }
-    const maxBucket = Math.max(...buckets.map((b) => b.count), 1);
-
-    // Store share (top 5 stores)
     const storeCounts = new Map<
       string,
       { name: string; logo?: string; count: number; verified: boolean }
     >();
-    for (const d of deduped) {
-      if (!d.store) continue;
-      const existing = storeCounts.get(d.store.storeID) ?? {
-        name: d.store.storeName,
-        logo: d.store.logoUrl,
-        count: 0,
-        verified: isOfficialRetailer(d.storeID),
-      };
-      existing.count++;
-      storeCounts.set(d.store.storeID, existing);
-    }
-    const topStores = Array.from(storeCounts.values())
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 5);
-    const totalStoreDeals = topStores.reduce((s, st) => s + st.count, 0) || 1;
-
-    // Price tier breakdown (donut chart)
     const tiers = [
       {
         label: 'Free',
@@ -118,18 +94,61 @@ export function DealStatsDashboard({ deals }: DealStatsDashboardProps) {
         color: 'oklch(0.6 0.1 240)',
       },
     ];
+
+    let totalSavingsNum = 0;
+    let totalNormalSaleDiff = 0;
+    let verifiedCount = 0;
+
+    // Single pass optimization: compute buckets, stores, tiers, and aggregates simultaneously
     for (const d of deduped) {
+      // 1. Savings Distribution Buckets
+      const b = buckets.find((b) => d.savingsNum >= b.min && d.savingsNum < b.max);
+      if (b) b.count++;
+
+      // 2. Store Share
+      if (d.store) {
+        const existing = storeCounts.get(d.store.storeID) ?? {
+          name: d.store.storeName,
+          logo: d.store.logoUrl,
+          count: 0,
+          verified: isOfficialRetailer(d.storeID),
+        };
+        existing.count++;
+        storeCounts.set(d.store.storeID, existing);
+      }
+
+      // 3. Price Tiers
       const t = tiers.find((t) => d.salePriceNum >= t.min && d.salePriceNum < t.max);
       if (t) t.count++;
+
+      // 4. Aggregates
+      totalSavingsNum += d.savingsNum;
+      totalNormalSaleDiff += d.normalPriceNum - d.salePriceNum;
+      if (isOfficialRetailer(d.storeID)) {
+        verifiedCount++;
+      }
     }
-    const totalTiers = tiers.reduce((s, t) => s + t.count, 0) || 1;
+
+    let maxBucket = 1;
+    for (const b of buckets) {
+      if (b.count > maxBucket) maxBucket = b.count;
+    }
+
+    const topStores = Array.from(storeCounts.values())
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+
+    let totalStoreDeals = 0;
+    for (const st of topStores) totalStoreDeals += st.count;
+    if (totalStoreDeals === 0) totalStoreDeals = 1;
+
+    let totalTiers = 0;
+    for (const t of tiers) totalTiers += t.count;
+    if (totalTiers === 0) totalTiers = 1;
 
     // Aggregate stats
-    const avgSavings = deduped.length
-      ? Math.round(deduped.reduce((s, d) => s + d.savingsNum, 0) / deduped.length)
-      : 0;
-    const totalSavings = deduped.reduce((s, d) => s + (d.normalPriceNum - d.salePriceNum), 0);
-    const verifiedCount = deduped.filter((d) => isOfficialRetailer(d.storeID)).length;
+    const avgSavings = deduped.length ? Math.round(totalSavingsNum / deduped.length) : 0;
+    const totalSavings = totalNormalSaleDiff;
 
     return {
       buckets,
@@ -386,35 +405,31 @@ function PriceTierDonut({
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
 
-  // Pre-compute each tier's dash length + offset using a pure reduce.
-  // Mutating a let-variable (even inside useMemo) triggers the
-  // react-hooks/immutability lint rule, so we use a functional accumulator.
+  // Pre-compute each tier's dash length + offset using a single-pass loop
+  // instead of reduce with accumulating spread.
   const arcs = React.useMemo(() => {
-    return tiers.reduce<
-      Array<{
-        label: string;
-        count: number;
-        color: string;
-        dashLength: number;
-        startOffset: number;
-      }>
-    >((acc, t) => {
+    const result: Array<{
+      label: string;
+      count: number;
+      color: string;
+      dashLength: number;
+      startOffset: number;
+    }> = [];
+
+    let currentOffset = 0;
+    for (const t of tiers) {
       const pct = t.count / total;
       const dashLength = pct * circumference;
-      const startOffset =
-        acc.length > 0 ? acc[acc.length - 1].startOffset + acc[acc.length - 1].dashLength : 0;
-      return [
-        // biome-ignore lint/performance/noAccumulatingSpread: known-size array
-        ...acc,
-        {
-          label: t.label,
-          count: t.count,
-          color: t.color,
-          dashLength,
-          startOffset,
-        },
-      ];
-    }, []);
+      result.push({
+        label: t.label,
+        count: t.count,
+        color: t.color,
+        dashLength,
+        startOffset: currentOffset,
+      });
+      currentOffset += dashLength;
+    }
+    return result;
   }, [tiers, total, circumference]);
 
   return (
