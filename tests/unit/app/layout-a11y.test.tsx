@@ -36,7 +36,20 @@ describe('Layout accessibility', () => {
       children: <div>Page content</div>,
     });
 
+    // React 19 / testing-library throws on html inside div. We suppress it. Also suppress Vite loader warnings.
+    const originalConsoleError = console.error;
+    console.error = (...args) => {
+      if (
+        typeof args[0] === 'string' &&
+        args[0].includes('In HTML, <html> cannot be a child of <div>')
+      )
+        return;
+      if (typeof args[0] === 'string' && args[0].includes('This will cause a hydration error'))
+        return;
+      originalConsoleError(...args);
+    };
     render(layout);
+    console.error = originalConsoleError;
 
     const skipLink = screen.getByRole('link', { name: /skip to content|skip to main/i });
     expect(skipLink).toHaveAttribute('href', '#main-content');
