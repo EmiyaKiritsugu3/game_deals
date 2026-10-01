@@ -6,7 +6,7 @@ const { execute, authGetUser, resolveGameUuid } = vi.hoisted(() => ({
   resolveGameUuid: vi.fn(),
 }));
 
-vi.mock('@/db', () => ({ db: { execute } }));
+vi.mock('@/db', () => ({ db: { execute, select: vi.fn().mockReturnValue({ from: vi.fn().mockReturnValue({ where: vi.fn().mockReturnValue([{ count: 1 }]), innerJoin: vi.fn().mockReturnValue({ where: vi.fn().mockReturnValue([]) }) }) }), insert: vi.fn().mockReturnValue({ values: vi.fn().mockReturnValue({ onConflictDoUpdate: vi.fn().mockReturnValue(Promise.resolve()) }) }) } }));
 
 vi.mock('@/utils/supabase/server', () => ({
   createClient: () => Promise.resolve({ auth: { getUser: () => authGetUser() } }),
