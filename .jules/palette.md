@@ -5,6 +5,3 @@
 ## 2024-05-24 - Consistent Keyboard Focus Indicators
 **Learning:** While checking accessibility on key interactive elements (e.g., custom icon buttons, game card triggers), I found that many had hover states but lacked visible focus indicators for keyboard users. Adding a consistent focus ring pattern greatly improves accessibility without compromising the design.
 **Action:** Always apply `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2` (or similar utility classes from the established design system) to all interactive elements (`button`, `a`, `input`, etc.) to ensure keyboard navigability.
-## 2026-10-02 - Accessibility: In-Page Tabs Require aria-current="true"
-**Learning:** When adding ARIA active states to custom tab buttons used for in-page toggles (like switching between Wishlist and Alerts), `aria-current="page"` is incorrect because the user is not navigating to a new URL. The correct attribute is `aria-current="true"`.
-**Action:** Always use `aria-current="true"` for in-page toggles and reserve `aria-current="page"` for actual page navigations (e.g., Navbar links).
