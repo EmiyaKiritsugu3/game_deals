@@ -148,7 +148,7 @@ export default function Home() {
   const stats = React.useMemo(() => {
     const list = dealsQuery.data?.deals ?? [];
 
-    // ⚡ Bolt: Single-pass O(N) time, O(1) space loop to compute sum and max savings concurrently.
+    // ⚡ Bolt: Single-pass O(1) loop to compute sum and max savings concurrently.
     // Impact: Avoids multiple iterations and an unnecessary O(N) array allocation from .map()
     let sumSavings = 0;
     let maxSavings = 0;
