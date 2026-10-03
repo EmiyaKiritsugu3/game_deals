@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 import { db } from '@/db';
 import { verifyPostbackAuth } from '@/lib/postback-auth';
+import { assertRateLimit } from '@/lib/server-action-rate-limit';
 
 const VALID_STATUSES = new Set(['pending', 'approved', 'reversed', 'paid']);
 
@@ -31,6 +32,12 @@ interface PostbackPayload {
 export async function POST(request: Request): Promise<NextResponse> {
   const authError = verifyPostbackAuth(request);
   if (authError) return authError;
+
+  try {
+    await assertRateLimit('postback', null, 60, 60_000);
+  } catch {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+  }
 
   let payload: PostbackPayload;
   try {
