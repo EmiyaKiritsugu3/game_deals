@@ -11,7 +11,7 @@ export async function fetchGamesBatchFromCheapShark(
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000);
     const res = await fetch(url.toString(), {
-      headers: { 'User-Agent': 'GameDeals/1.0 (https://gamedeals.com.br)' },
+      headers: { 'User-Agent': 'GameDeals/1.0 (https://gamedeals.com)' },
       signal: controller.signal,
       next: { revalidate: 3600 },
     });
@@ -30,7 +30,7 @@ export async function fetchGameFromCheapShark(id: string): Promise<GameDetails |
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
     const res = await fetch(url.toString(), {
-      headers: { 'User-Agent': 'GameDeals/1.0 (https://gamedeals.com.br)' },
+      headers: { 'User-Agent': 'GameDeals/1.0 (https://gamedeals.com)' },
       signal: controller.signal,
       next: { revalidate: 3600 },
     });

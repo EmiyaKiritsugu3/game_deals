@@ -29,7 +29,7 @@ describe('sitemap(id)', () => {
   it('static includes home + key routes', async () => {
     const entries = await call('static');
     const urls = entries.map((e) => e.url);
-    expect(urls).toContain('https://gamedeals.com.br');
+    expect(urls).toContain('https://gamedeals.com');
     expect(urls.some((u) => u.endsWith('/deals'))).toBe(true);
   });
 
@@ -51,8 +51,8 @@ describe('sitemap(id)', () => {
     execute.mockResolvedValueOnce([{ cheapsharkId: '612' }, { cheapsharkId: '123' }]);
     const entries = await call('games-1');
     expect(entries.map((e) => e.url)).toEqual([
-      'https://gamedeals.com.br/game/612',
-      'https://gamedeals.com.br/game/123',
+      'https://gamedeals.com/game/612',
+      'https://gamedeals.com/game/123',
     ]);
   });
 

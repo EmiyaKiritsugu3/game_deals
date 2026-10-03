@@ -7,7 +7,7 @@ beforeEach(() => {
   fetchMock.mockReset();
   vi.stubGlobal('fetch', fetchMock);
   process.env.RESEND_API_KEY = 're_test_key';
-  process.env.RESEND_FROM_EMAIL = 'test@gamedeals.com.br';
+  process.env.RESEND_FROM_EMAIL = 'test@gamedeals.com';
 });
 
 afterEach(() => {

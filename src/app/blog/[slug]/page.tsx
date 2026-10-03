@@ -78,7 +78,7 @@ export default async function BlogPostPage({
       <main className="container">
         <div className="pt-8 pb-16 max-w-2xl mx-auto">
           <p className="text-sm text-muted-foreground mb-2">
-            {new Date(`${post.date}T12:00:00Z`).toLocaleDateString('pt-BR')}
+            {new Date(`${post.date}T12:00:00Z`).toLocaleDateString('en-US')}
           </p>
           <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
           <p className="text-muted-foreground mb-6">{post.description}</p>

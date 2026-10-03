@@ -53,7 +53,7 @@ describe('buildOG', () => {
       siteName: 'GameDeals',
       type: 'website',
     });
-    expect(result.url).toBe('https://gamedeals.com.br/game/123');
+    expect(result.url).toBe('https://gamedeals.com/game/123');
     const ogImages = result.images as Array<{
       url: string;
       width: number;
@@ -67,7 +67,7 @@ describe('buildOG', () => {
 
   it('constructs URL with empty id', () => {
     const result = buildOG('Game', 'desc', 'thumb.jpg', '');
-    expect(result.url).toBe('https://gamedeals.com.br/game/');
+    expect(result.url).toBe('https://gamedeals.com/game/');
   });
 
   it('handles empty thumb string', () => {

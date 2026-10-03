@@ -1,5 +1,6 @@
 import { setTimeout as sleep } from 'node:timers/promises';
 import { sendEmail } from './resend';
+import { formatUSD, SITE_URL } from './site';
 
 export interface DigestDeal {
   title: string;
@@ -24,12 +25,11 @@ async function getSubscribers(): Promise<string[]> {
   return subs.map((s) => s.email);
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gamedeals.com.br';
 const CHUNK_SIZE = 50;
 const BATCH_DELAY_MS = 1_000;
 
 function money(n: number): string {
-  return `R$ ${n.toFixed(2).replace('.', ',')}`;
+  return formatUSD(n);
 }
 
 /** Escape untrusted strings (deal titles/thumbs come from CheapShark) for safe HTML interpolation. */
@@ -80,7 +80,7 @@ export function digestHtml(deals: DigestDeal[], heading: string): string {
 ${items}
 <tr><td style="padding-top:16px;font-size:12px;color:#64748b">
 Enviado porque você assinou a newsletter do GameDeals ·
-<a href="${SITE_URL}" style="color:#64748b">gamedeals.com.br</a>
+<a href="${SITE_URL}" style="color:#64748b">gamedeals.com</a>
 </td></tr>
 </table>
 </td></tr>

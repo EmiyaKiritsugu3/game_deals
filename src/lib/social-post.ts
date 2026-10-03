@@ -4,7 +4,8 @@
  * ponytail: official SDKs heavy; API surfaces used are 2 POSTs each.
  */
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gamedeals.com.br';
+import { formatUSD, SITE_URL } from './site';
+
 const TIMEOUT_MS = 10_000;
 
 export interface SocialDeal {
@@ -48,7 +49,7 @@ export async function createPinterestPin(deal: SocialDeal): Promise<boolean> {
     {
       board_id: boardId,
       title: `${deal.title} - ${Math.round(deal.savings)}% OFF | GameDeals`,
-      description: `De R$ ${deal.normalPrice.toFixed(2)} por R$ ${deal.salePrice.toFixed(2)} no GameDeals`,
+      description: `From ${formatUSD(deal.normalPrice)} for ${formatUSD(deal.salePrice)} on GameDeals`,
       link: `${SITE_URL}/game/${deal.dealId}`,
       media_source: { source_type: 'image_url', url: `${SITE_URL}/og.png/${deal.dealId}` },
     },
@@ -63,8 +64,8 @@ export async function createTweet(deal: SocialDeal): Promise<boolean> {
   if (!token) return false;
 
   const text =
-    `🔥 ${deal.title} está ${Math.round(deal.savings)}% OFF! ` +
-    `De R$ ${deal.normalPrice.toFixed(2)} por R$ ${deal.salePrice.toFixed(2)}\n` +
+    `🔥 ${deal.title} is ${Math.round(deal.savings)}% OFF! ` +
+    `From ${formatUSD(deal.normalPrice)} for ${formatUSD(deal.salePrice)}\n` +
     `${SITE_URL}/game/${deal.dealId}`;
   const truncated = text.length > 280 ? `${text.slice(0, 277)}...` : text;
 

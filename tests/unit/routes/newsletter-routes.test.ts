@@ -37,7 +37,7 @@ import { GET as confirmGET } from '@/app/api/subscribe/confirm/route';
 import { GET as unsubGET } from '@/app/api/unsubscribe/route';
 
 beforeEach(() => {
-  process.env.NEXT_PUBLIC_SITE_URL = 'https://gamedeals.com.br';
+  process.env.NEXT_PUBLIC_SITE_URL = 'https://gamedeals.com';
   updateChain.set.mockClear();
   updateChain.where.mockClear().mockResolvedValue([]);
   selectChain.limit.mockClear().mockResolvedValue([]);

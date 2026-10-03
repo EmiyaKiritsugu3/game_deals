@@ -18,7 +18,7 @@ describe('PremiumPage', () => {
   it('renders benefits and CTA', () => {
     render(<PremiumPage />);
     expect(screen.getByRole('heading', { name: /premium/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /assinar/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /subscribe/i })).toBeInTheDocument();
   });
 
   it('redirects to checkout url on success', async () => {
@@ -43,6 +43,6 @@ describe('PremiumPage', () => {
     const user = userEvent.setup();
     render(<PremiumPage />);
     await user.click(screen.getByRole('button'));
-    await waitFor(() => expect(screen.getByText(/não foi possível/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/could not start checkout/i)).toBeInTheDocument());
   });
 });

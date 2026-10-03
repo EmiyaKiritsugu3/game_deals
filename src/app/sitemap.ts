@@ -2,7 +2,8 @@ import { sql } from 'drizzle-orm';
 import type { MetadataRoute } from 'next';
 import { db } from '@/db';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gamedeals.com.br';
+import { SITE_URL } from '@/lib/site';
+
 const GAMES_CHUNK = 10_000;
 
 /**
@@ -95,9 +96,8 @@ async function blogEntries(): Promise<MetadataRoute.Sitemap> {
   try {
     const { listPublished } = await import('@/lib/blog');
     const posts = await listPublished();
-    const site = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gamedeals.com.br';
     return posts.map((p) => ({
-      url: `${site}/blog/${p.slug}`,
+      url: `${SITE_URL}/blog/${p.slug}`,
       lastModified: new Date(`${p.date}T12:00:00Z`),
       changeFrequency: 'weekly' as const,
       priority: 0.6,

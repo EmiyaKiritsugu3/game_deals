@@ -18,7 +18,7 @@ export async function POST(): Promise<Response> {
     const url = await createCheckoutSession({
       userId: user.id,
       userEmail: user.email,
-      origin: process.env.NEXT_PUBLIC_SITE_URL ?? new URL('https://gamedeals.com.br').origin,
+      origin: process.env.NEXT_PUBLIC_SITE_URL ?? new URL('https://gamedeals.com').origin,
     });
 
     return Response.json({ url });
