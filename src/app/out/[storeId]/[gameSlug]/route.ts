@@ -20,11 +20,14 @@ function getClientIp(request: Request): string {
   return 'unknown';
 }
 
-async function lookupDealUrl(storeId: string): Promise<string> {
+async function lookupDealUrl(storeId: string, gameSlug: string): Promise<string> {
   try {
+    // Join with games table to correctly attribute the deal to the requested game
     const [deal] = (await db.execute(sql`
-      SELECT url, "storeId" FROM deals
-      WHERE "storeId" = ${storeId}
+      SELECT d.url, d."storeId"
+      FROM deals d
+      JOIN games g ON d."gameId" = g.id
+      WHERE d."storeId" = ${storeId} AND g."cheapsharkId" = ${gameSlug}
       LIMIT 1
     `)) as unknown as Array<{ url: string | null; storeId: string }>;
 
@@ -96,7 +99,7 @@ export async function GET(
 
   const clickId = randomUUID();
 
-  let targetUrl = await lookupDealUrl(storeId);
+  let targetUrl = await lookupDealUrl(storeId, gameSlug);
   targetUrl = applyAffiliateParams(targetUrl, storeId, clickId);
 
   if (targetUrl) {
