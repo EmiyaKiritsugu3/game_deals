@@ -36,7 +36,6 @@ describe('Layout accessibility', () => {
       children: <div>Page content</div>,
     });
 
-    // React 19 / testing-library throws on html inside div. We suppress it. Also suppress Vite loader warnings.
     const originalConsoleError = console.error;
     console.error = (...args) => {
       if (

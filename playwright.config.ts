@@ -25,9 +25,23 @@ export default defineConfig({
   ],
   // Production mode for stable visuals (next dev can cause OOM per AGENTS.md)
   webServer: {
-    command: 'DATABASE_URL="${DATABASE_URL:-postgres://localhost:5432/gamedeals_test}" bun next build && DATABASE_URL="${DATABASE_URL:-postgres://localhost:5432/gamedeals_test}" bun next start',
+    command: 'bun --bun next build && bun --bun next start',
     port: 3000,
     timeout: 300_000,
     reuseExistingServer: true,
+    env: {
+      DATABASE_URL: process.env.DATABASE_URL || 'postgres://localhost:5432/gamedeals_test',
+      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost:54321',
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
+        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'test',
+      CRON_SECRET: process.env.CRON_SECRET || 'placeholder-cron-secret',
+    },
+    env: {
+      DATABASE_URL: process.env.DATABASE_URL || 'postgres://localhost:5432/gamedeals_test',
+      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost:54321',
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
+        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'test',
+      CRON_SECRET: process.env.CRON_SECRET || 'placeholder-cron-secret',
+    },
   },
 });
