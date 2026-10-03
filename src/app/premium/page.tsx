@@ -16,7 +16,7 @@ export default function PremiumPage() {
       if (data.url) window.location.href = data.url;
       else throw new Error();
     } catch {
-      setError('Não foi possível iniciar o checkout. Tente novamente.');
+      setError('Could not start checkout. Please try again.');
       setLoading(false);
     }
   }
@@ -25,12 +25,12 @@ export default function PremiumPage() {
     <main className="container flex min-h-[70vh] max-w-2xl flex-col items-center justify-center gap-6 py-16 text-center">
       <h1 className="text-4xl font-bold text-white">GameDeals Premium 🏆</h1>
       <p className="max-w-md text-sm text-white/80">
-        Sem anúncios, alertas prioritários e suporte ao projeto. Cancele quando quiser.
+        No ads, priority alerts, and support for the project. Cancel anytime.
       </p>
       <ul className="flex flex-col gap-2 text-left text-sm text-white/90">
-        <li>🚫 Zero anúncios em todo o site</li>
-        <li>⚡ Alertas de preço prioritários</li>
-        <li>❤️ Ajuda a manter o GameDeals no ar</li>
+        <li>🚫 Zero ads across the site</li>
+        <li>⚡ Priority price alerts</li>
+        <li>❤️ Helps keep GameDeals running</li>
       </ul>
       <button
         type="button"
@@ -38,10 +38,10 @@ export default function PremiumPage() {
         disabled={loading}
         className="rounded-lg bg-cyan-400 px-8 py-3 font-semibold text-cyan-950 transition hover:bg-cyan-300 disabled:opacity-50"
       >
-        {loading ? 'Redirecionando…' : 'Assinar por R$ 10/mês'}
+        {loading ? 'Redirecting…' : 'Subscribe for $10/month'}
       </button>
       {error && <p className="text-sm text-red-400">{error}</p>}
-      <p className="text-xs text-white/60">Pagamento seguro processado pelo Stripe.</p>
+      <p className="text-xs text-white/60">Secure payment processed by Stripe.</p>
     </main>
   );
 }

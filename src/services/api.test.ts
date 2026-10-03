@@ -100,8 +100,8 @@ describe('getDrmType', () => {
 
 describe('getRegionTag', () => {
   it('always returns Brazilian flag', () => {
-    expect(getRegionTag('1')).toBe('🇧🇷');
-    expect(getRegionTag('999')).toBe('🇧🇷');
+    expect(getRegionTag('1')).toBeNull();
+    expect(getRegionTag('999')).toBeNull();
   });
 });
 
@@ -205,7 +205,7 @@ describe('getDeals', () => {
     const result = await getDeals();
 
     expect(mockFetch).toHaveBeenCalledWith(defaultDealUrl, {
-      headers: { 'User-Agent': 'GameDeals/1.0 (https://gamedeals.com.br)' },
+      headers: { 'User-Agent': 'GameDeals/1.0 (https://gamedeals.com)' },
       signal: expect.any(AbortSignal),
       next: { revalidate: 3600 },
     });
@@ -223,7 +223,7 @@ describe('getDeals', () => {
     expect(mockFetch).toHaveBeenCalledWith(
       'https://www.cheapshark.com/api/1.0/deals?storeID=1&pageSize=5',
       {
-        headers: { 'User-Agent': 'GameDeals/1.0 (https://gamedeals.com.br)' },
+        headers: { 'User-Agent': 'GameDeals/1.0 (https://gamedeals.com)' },
         signal: expect.any(AbortSignal),
         next: { revalidate: 3600 },
       }
@@ -330,7 +330,7 @@ describe('getStores', () => {
     await getStores();
 
     expect(mockFetch).toHaveBeenCalledWith('https://www.cheapshark.com/api/1.0/stores', {
-      headers: { 'User-Agent': 'GameDeals/1.0 (https://gamedeals.com.br)' },
+      headers: { 'User-Agent': 'GameDeals/1.0 (https://gamedeals.com)' },
       signal: expect.any(AbortSignal),
       next: { revalidate: 86400 },
     });

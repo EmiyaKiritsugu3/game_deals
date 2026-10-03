@@ -1,10 +1,9 @@
 import { verifyCronAuth } from '@/lib/cron-auth';
 import { cronError, cronLog } from '@/lib/cron-log';
 import { postDiscordEmbed } from '@/lib/discord-webhook';
+import { formatUSD, SITE_URL } from '@/lib/site';
 import { claimDeal, loadCandidates } from '@/lib/social-cron-shared';
 import { handleCronError } from '../_lib/errors';
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gamedeals.com.br';
 
 /**
  * Cron: Discord flash-deal posts (Task 4.1).
@@ -26,7 +25,7 @@ export async function GET(request: Request) {
       const ok = await postDiscordEmbed({
         title: `🔥 ${row.title} — ${Math.round(row.savings)}% OFF`,
         url: `${SITE_URL}/game/${row.dealId}`,
-        description: `De R$ ${row.normalPrice.toFixed(2)} por R$ ${row.salePrice.toFixed(2)}`,
+        description: `From ${formatUSD(row.normalPrice)} for ${formatUSD(row.salePrice)}`,
         color: 0x22d3ee,
         image: row.thumb ? { url: row.thumb } : undefined,
       });

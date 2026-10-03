@@ -30,7 +30,7 @@ function applyOutAffiliateParams(url: URL, store: string | null): void {
   const storeLower = store?.toLowerCase() || '';
   if (storeLower.includes('humble')) {
     url.searchParams.append('charity', 'gamedeals');
-    url.searchParams.append('partner', 'gamedealsBR');
+    url.searchParams.append('partner', 'gamedeals');
   } else if (storeLower.includes('eneba')) {
     url.searchParams.append('af_id', 'gamedeals_prod');
   } else if (storeLower.includes('cdkeys')) {
@@ -38,7 +38,7 @@ function applyOutAffiliateParams(url: URL, store: string | null): void {
   } else if (storeLower.includes('fanatical')) {
     url.searchParams.append('aff_id', 'gamedeals_fnt');
   } else {
-    url.searchParams.append('ref', 'gamedealsBR_gen');
+    url.searchParams.append('ref', 'gamedeals_gen');
   }
 }
 

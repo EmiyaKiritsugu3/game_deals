@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { getHighResImage } from '@/services/api';
+import { SITE_URL } from './site';
 
-export const SITE_URL = 'https://gamedeals.com.br';
+export { SITE_URL };
 
 export function extractTitle(gameTitle: string, bestPrice: string | undefined): string {
   return `${gameTitle} — Best Price: $${bestPrice || 'N/A'}`;

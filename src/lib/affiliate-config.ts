@@ -8,7 +8,7 @@ export interface AffiliateConfig {
  * Affiliate program IDs.
  *
  * - env: read at click time via `AFF_*` vars; fall back to current placeholder if unset.
- * - Placeholders (e.g. 'gamedealsBR') are NOT recognized by any real program — clicks
+ * - Placeholders (e.g. 'gamedeals') are NOT recognized by any real program — clicks
  *   will not earn commission until real IDs land in `.env.local`.
  * - Apply at: Humble (PartnerStack), Fanatical (Impact), Eneba (Impact),
  *   CDKeys (CJ), Kinguin Partner, Gamivo Partner.
@@ -18,7 +18,7 @@ export const affiliateConfig: Record<string, AffiliateConfig> = {
     baseUrl: 'https://www.humblebundle.com',
     params: () => ({
       charity: process.env.AFF_HUMBLE_CHARITY ?? 'gamedeals',
-      partner: process.env.AFF_HUMBLE_PARTNER ?? 'gamedealsBR',
+      partner: process.env.AFF_HUMBLE_PARTNER ?? 'gamedeals',
     }),
   },
   '15': {

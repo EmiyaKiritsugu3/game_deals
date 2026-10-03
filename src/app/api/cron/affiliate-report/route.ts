@@ -34,11 +34,11 @@ export async function GET(request: Request) {
     const cents = row?.commissionCents ?? 0;
 
     await postSlackMessage(
-      `📊 *Affiliate report* (24h)\n• Clicks: ${clicks}\n• Conversions: ${conversions}\n• Commission: R$ ${(cents / 100).toFixed(2)}`
+      `📊 *Affiliate report* (24h)\n• Clicks: ${clicks}\n• Conversions: ${conversions}\n• Commission: $ ${(cents / 100).toFixed(2)}`
     );
 
     cronLog({ cron: 'affiliate-report', event: 'sent', clicks, conversions, cents });
-    return Response.json({ ok: true, clicks, conversions, commissionBRL: cents / 100 });
+    return Response.json({ ok: true, clicks, conversions, commissionUSD: cents / 100 });
   } catch (err) {
     cronError({ cron: 'affiliate-report' }, err);
     return handleCronError(err);

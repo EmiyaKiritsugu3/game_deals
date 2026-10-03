@@ -50,15 +50,15 @@ describe('toDraftDeals', () => {
     expect(out[0]).toMatchObject({ title: 'Free Game', store: 'Steam', gameID: '612' });
   });
 
-  it('falls back to Loja <id> for unknown store', () => {
+  it('falls back to Store <id> for unknown store', () => {
     const out = toDraftDeals([rawDeal({ storeID: '99' })], {});
-    expect(out[0].store).toBe('Loja 99');
+    expect(out[0].store).toBe('Store 99');
   });
 });
 
 describe('draftSlug', () => {
   it('date-based', () => {
-    expect(draftSlug(new Date('2026-09-07T13:00:00Z'))).toBe('jogos-gratis-da-semana-2026-09-07');
+    expect(draftSlug(new Date('2026-09-07T13:00:00Z'))).toBe('free-games-of-the-week-2026-09-07');
   });
 });
 
@@ -95,8 +95,8 @@ describe('uniqueSlug + saveDraft', () => {
     const spy = vi.spyOn(fs, 'readFile');
     spy.mockRejectedValueOnce(new Error('ENOENT'));
     const { uniqueSlug } = await import('@/lib/blog-draft');
-    await expect(uniqueSlug('jogos-gratis-da-semana-2026-09-07')).resolves.toBe(
-      'jogos-gratis-da-semana-2026-09-07'
+    await expect(uniqueSlug('free-games-of-the-week-2026-09-07')).resolves.toBe(
+      'free-games-of-the-week-2026-09-07'
     );
     spy.mockRestore();
   });

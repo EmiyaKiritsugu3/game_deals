@@ -5,11 +5,11 @@ import { db } from '@/db';
 import { newsletterSubscribers } from '@/db/schema';
 import { ResendError, sendEmail } from '@/lib/resend';
 import { assertRateLimit } from '@/lib/server-action-rate-limit';
+import { SITE_URL } from '@/lib/site';
 
 export type SubscribeState = { ok: boolean; message: string };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gamedeals.com.br';
 
 /**
  * Newsletter signup — double opt-in.

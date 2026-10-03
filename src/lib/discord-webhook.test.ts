@@ -16,7 +16,7 @@ afterEach(() => {
 describe('postDiscordEmbed', () => {
   const embed = {
     title: 'Test deal',
-    url: 'https://gamedeals.com.br/game/123',
+    url: 'https://gamedeals.com/game/123',
     description: '-50%',
   };
 

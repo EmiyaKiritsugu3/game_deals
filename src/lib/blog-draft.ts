@@ -2,6 +2,7 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import type { Deal } from '@/types/game';
 import { getPost, parsePost } from './blog';
+import { formatUSD } from './site';
 
 export const DRAFT_MIN_WORDS = 600;
 export const DRAFT_MIN_DEALS = 3;
@@ -18,8 +19,8 @@ export interface DraftDeal {
 
 const BLOG_DIR = path.join(process.cwd(), 'content', 'blog');
 
-function brl(n: number): string {
-  return `R$ ${n.toFixed(2).replace('.', ',')}`;
+function usd(n: number): string {
+  return formatUSD(n);
 }
 
 /** CheapShark deal → draft deal, salePrice===0 only (caller filters). */
@@ -31,13 +32,13 @@ export function toDraftDeals(raw: Deal[], stores: Record<string, string>): Draft
       salePrice: 0,
       normalPrice: Number(d.normalPrice),
       savings: Math.round(Number(d.savings)),
-      store: stores[d.storeID] ?? `Loja ${d.storeID}`,
+      store: stores[d.storeID] ?? `Store ${d.storeID}`,
       gameID: d.gameID,
     }));
 }
 
 export function draftSlug(now: Date): string {
-  return `jogos-gratis-da-semana-${now.toISOString().slice(0, 10)}`;
+  return `free-games-of-the-week-${now.toISOString().slice(0, 10)}`;
 }
 
 /** First free slug: base, base-2, base-3… (getPost returns null when missing). */
@@ -55,26 +56,26 @@ function dealSection(d: DraftDeal): string {
   return [
     `## ${d.title}`,
     '',
-    `${d.title} está gratuito para resgatar: de ${brl(d.normalPrice)} por R$ 0,00 ` +
-      `(${d.savings}% de desconto) na ${d.store}. É o tipo de oferta que some rápido — ` +
-      `a janela de resgate costuma durar poucos dias e, quando fecha, o preço volta ao normal. ` +
-      `Se você já tinha o jogo na lista de desejos, esta é a melhor hora possível para garantir a sua cópia.`,
+    `${d.title} is free to claim right now: from ${usd(d.normalPrice)} down to $0.00 ` +
+      `(${d.savings}% off) on ${d.store}. These offers disappear fast — ` +
+      `the claim window usually lasts just a few days, and once it closes the price goes back to normal. ` +
+      `If the game was already on your wishlist, this is the best possible time to grab your copy.`,
     '',
-    `Para garantir o seu, abra a página do jogo, clique em resgatar e confira se ele apareceu ` +
-      `na sua biblioteca antes de fechar a aba. Vale fazer isso mesmo que você não pretenda jogar agora: ` +
-      `uma vez resgatado, o jogo é seu para sempre. Se o botão de resgate não aparecer de primeira, ` +
-      `recarregue a página ou tente em uma aba anônima — as lojas costumam exigir login para liberar o resgate.`,
+    `To claim it, open the game page, hit redeem and check that it showed up ` +
+      `in your library before closing the tab. Worth doing even if you don't plan to play right now: ` +
+      `once redeemed, the game is yours forever. If the redeem button doesn't show up at first, ` +
+      `reload the page or try an incognito tab — stores usually require login to release the claim.`,
     '',
   ].join('\n');
 }
 
 export function buildDraftMarkdown(deals: DraftDeal[], now: Date): string {
   const iso = now.toISOString().slice(0, 10);
-  const br = iso.split('-').reverse().join('/');
+  const us = iso.split('-').join('/');
   const front = [
     '---',
-    `title: Jogos grátis da semana — ${br}`,
-    `description: ${deals.length} jogos gratuitos para resgatar esta semana nas principais lojas de PC. Oferta por tempo limitado.`,
+    `title: Free games of the week — ${us}`,
+    `description: ${deals.length} free games to claim this week across major PC stores. Limited-time offer.`,
     `date: ${iso}`,
     'published: false',
     `dealIds: ${deals.map((d) => d.gameID).join(', ')}`,
@@ -82,29 +83,29 @@ export function buildDraftMarkdown(deals: DraftDeal[], now: Date): string {
     '',
   ].join('\n');
   const intro = [
-    'Toda semana as lojas de PC liberam jogos gratuitos por tempo limitado, e este resumo reúne ' +
-      `os destaques que valem o seu clique. Todos os preços foram verificados no momento da publicação — ` +
-      `resgate o quanto antes, porque quando a janela fecha o preço volta ao normal. ` +
-      `A lista abaixo traz ${deals.length} jogos gratuitos desta semana, cada um com link direto para a página de resgate.`,
+    'Every week PC stores release free games for a limited time, and this roundup collects ' +
+      `the highlights worth your click. All prices were verified at publishing time — ` +
+      `claim as soon as possible, because once the window closes the price goes back to normal. ` +
+      `The list below has ${deals.length} free games this week, each with a direct link to the claim page.`,
     '',
   ].join('\n');
   const howto = [
-    '## Como resgatar',
+    '## How to redeem',
     '',
-    'O processo é o mesmo em praticamente todas as lojas: abra a página do jogo pelo link do resumo, ' +
-      `faça login na sua conta e clique no botão de resgate ou de compra com preço zero. Confira se o jogo ` +
-      `apareceu na sua biblioteca antes de fechar a aba — às vezes o pedido fica alguns minutos como ` +
-      `pendente antes de ser liberado. Se algum jogo da lista já voltou ao preço normal quando você chegou, ` +
-      `não desanime: as lojas renovam as ofertas gratuitas toda semana e o próximo resumo já está a caminho. ` +
-      `Vale também conferir se há DLCs ou pacotes gratuitos na mesma página, que muitas vezes passam despercebidos.`,
+    'The process is the same on virtually every store: open the game page from the roundup link, ' +
+      `log in to your account and click the redeem button (or buy at zero price). Check that the game ` +
+      `showed up in your library before closing the tab — sometimes the order sits as ` +
+      `pending for a few minutes before clearing. If a game on the list is back to full price by the time you arrive, ` +
+      `don't give up: stores refresh the free offers every week and the next roundup is already on its way. ` +
+      `Also check for free DLCs or packs on the same page, which often go unnoticed.`,
     '',
   ].join('\n');
   const outro = [
-    '## Dica final',
+    '## Final tip',
     '',
-    'Ative os alertas de preço do GameDeals para os jogos pagos da sua lista de desejos: assim você ' +
-      `é avisado quando eles entrarem em promoção. E volte toda segunda-feira — este resumo é atualizado ` +
-      `automaticamente com os novos jogos gratuitos da semana.`,
+    'Turn on GameDeals price alerts for the paid games on your wishlist: that way you ' +
+      `get notified when they go on sale. And come back every Monday — this roundup is updated ` +
+      `automatically with the new free games of the week.`,
     '',
   ].join('\n');
   return front + intro + deals.map(dealSection).join('\n') + howto + outro;

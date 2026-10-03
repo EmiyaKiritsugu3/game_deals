@@ -3,7 +3,7 @@
  * ponytail: react-email adds heavy deps for 2 templates; inline strings scale fine here.
  */
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gamedeals.com.br';
+import { SITE_URL } from './site';
 
 function layout(title: string, bodyHtml: string, unsubscribeToken?: string): string {
   const unsub = unsubscribeToken
@@ -25,7 +25,7 @@ function layout(title: string, bodyHtml: string, unsubscribeToken?: string): str
         <tr><td style="padding:8px 32px 32px;font-size:14px;line-height:1.6;color:#cbd5e1">${bodyHtml}</td></tr>
         ${unsub}
         <tr><td style="padding:24px;border-top:1px solid #334155;font-size:11px;color:#64748b;text-align:center">
-          © ${new Date().getFullYear()} GameDeals — Melhores promoções de jogos, todo dia.
+          © ${new Date().getFullYear()} GameDeals — Best game deals, every day.
         </td></tr>
       </table>
     </td></tr>
@@ -36,20 +36,20 @@ function layout(title: string, bodyHtml: string, unsubscribeToken?: string): str
 
 export function welcomeEmail(): { subject: string; html: string } {
   return {
-    subject: 'Bem-vindo ao GameDeals! 🎮',
+    subject: 'Welcome to GameDeals! 🎮',
     html: layout(
-      'Você está dentro!',
-      `<p>Olá!</p>
-       <p>A partir de agora você recebe as melhores promoções de jogos direto no seu e-mail:</p>
+      "You're in!",
+      `<p>Hello!</p>
+       <p>From now on you'll get the best game deals straight to your inbox:</p>
        <ul>
-         <li>🔥 Descontos acima de 70%</li>
-         <li>🆓 Jogos grátis toda semana</li>
-         <li>📉 Alertas de preço no seu jogo favorito</li>
+         <li>🔥 Discounts over 70%</li>
+         <li>🆓 Free games every week</li>
+         <li>📉 Price alerts for your favorite games</li>
        </ul>
        <p style="margin:24px 0">
-         <a href="${SITE_URL}/deals/under-10" style="display:inline-block;background:#22d3ee;color:#0f172a;font-weight:600;padding:12px 24px;border-radius:8px;text-decoration:none">Ver deals under R$10 →</a>
+         <a href="${SITE_URL}/deals/under-10" style="display:inline-block;background:#22d3ee;color:#0f172a;font-weight:600;padding:12px 24px;border-radius:8px;text-decoration:none">See deals under $10 →</a>
        </p>
-       <p>Nenhum spam. Cancele quando quiser.</p>`
+       <p>No spam. Unsubscribe anytime.</p>`
     ),
   };
 }

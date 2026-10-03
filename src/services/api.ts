@@ -22,7 +22,7 @@ import type { Deal, GameDetails, Store } from '@/types/game';
 const BASE_URL = 'https://www.cheapshark.com/api/1.0';
 
 const API_HEADERS = {
-  'User-Agent': 'GameDeals/1.0 (https://gamedeals.com.br)',
+  'User-Agent': 'GameDeals/1.0 (https://gamedeals.com)',
 };
 
 export { formatTimeAgo, getHighResImage } from '@/utils/pricing';
@@ -45,7 +45,7 @@ export function getDrmType(storeID: string): { label: string; icon: string } {
 }
 
 export function getRegionTag(_storeID: string): string | null {
-  return '🇧🇷';
+  return null;
 }
 
 export async function getDeals(params?: Record<string, string>): Promise<Deal[]> {
