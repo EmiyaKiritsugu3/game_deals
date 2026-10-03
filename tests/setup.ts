@@ -1,5 +1,10 @@
 import '@testing-library/jest-dom';
+import dotenv from 'dotenv';
 import { vi } from 'vitest';
+
+// Load .env.local explicitly: test runner must not depend on the JS runtime
+// auto-loading dotenv (behavior differs between bun 1.3/1.4 and node).
+dotenv.config({ path: '.env.local' });
 
 // ponytail: rate limit is infra, not business logic — no-op in tests to avoid
 // next/headers "outside request scope" + DB coupling in unit tests.
