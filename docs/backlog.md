@@ -59,7 +59,7 @@ Regras do loop:
   legítimos de redes distintas.
 
 ## T5: Página /deals índice navegável
-- status: todo
+- status: done
 - depends: none
 - risk: auto
 - spec: Hub linkando by-store ×13, by-genre ×4 e under-X ×3 com contagem
@@ -67,7 +67,7 @@ Regras do loop:
   Aceite: build verde, página prerenderizada, links todos 200.
 
 ## T6: Health check estendido (deps externas)
-- status: todo
+- status: done
 - depends: none
 - risk: auto
 - spec: /api/health checa CheapShark (HEAD com timeout 3s) e Typesense
@@ -75,7 +75,7 @@ Regras do loop:
   Status 200 se DB ok (degradado tolerante), 503 só se DB cair.
 
 ## T7: Blog infra mínima (MDX local)
-- status: todo
+- status: done
 - depends: T5
 - risk: review
 - spec: /blog/[slug] lendo markdown de content/blog/*.md com frontmatter
@@ -85,7 +85,7 @@ Regras do loop:
   week" renderiza com CTA pros deals citados.
 
 ## T8: Cron semanal gera draft de blog post
-- status: todo
+- status: done
 - depends: T7, T2
 - risk: review
 - spec: Novo endpoint /api/cron/weekly-blog-post agendado no cron.yml
@@ -95,7 +95,7 @@ Regras do loop:
   trocando flag.
 
 ## T9: Admin revenue: filtro por período + CSV export
-- status: todo
+- status: done
 - depends: none
 - risk: review
 - spec: /admin/revenue ganha select 7d/30d/90d/all + botão export CSV
@@ -103,7 +103,7 @@ Regras do loop:
   existente mantido.
 
 ## T10: Lighthouse CI budget
-- status: todo
+- status: done
 - depends: none
 - risk: auto
 - spec: Adicionar lhci ao nightly.yml: rodar contra preview URL, budgets

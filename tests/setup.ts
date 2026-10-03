@@ -1,5 +1,10 @@
 import '@testing-library/jest-dom';
+import dotenv from 'dotenv';
 import { vi } from 'vitest';
+
+// Load .env.local explicitly: test runner must not depend on the JS runtime
+// auto-loading dotenv (behavior differs between bun 1.3/1.4 and node).
+dotenv.config({ path: '.env.local' });
 
 // ponytail: rate limit is infra, not business logic — no-op in tests to avoid
 // next/headers "outside request scope" + DB coupling in unit tests.
@@ -24,3 +29,13 @@ Object.defineProperty(globalThis, 'IntersectionObserver', {
   writable: true,
   configurable: true,
 });
+
+// ponytail: sentry/nextjs 10.73 ships broken node CJS shims (fileURLToPath on
+// ESM url); global stub keeps every suite green regardless of import chain.
+vi.mock('@sentry/nextjs', () => ({
+  captureException: vi.fn(),
+  captureMessage: vi.fn(),
+  withScope: vi.fn((fn: (scope: { setTag: () => void }) => void) =>
+    fn({ setTag: () => {} })
+  ),
+}));

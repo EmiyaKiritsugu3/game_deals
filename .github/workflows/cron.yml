@@ -12,6 +12,8 @@ on:
     - cron: '0 15 * * *'
     # Monday 12:00 UTC (09h BRT): weekly free-games digest
     - cron: '0 12 * * 1'
+    # Monday 13:00 UTC (10h BRT): weekly blog draft (T8)
+    - cron: '0 13 * * 1'
     # Sunday 02:00 UTC (23h BRT): top-deals digest
     - cron: '0 2 * * 0'
     # Every 4h: price ingest + typesense reindex (existing ops jobs)
@@ -57,6 +59,12 @@ jobs:
           curl -sSf -X GET "$VERCEL_APP_URL/api/cron/weekly-free-games" \
             -H "Authorization: Bearer $CRON_SECRET" \
             -w "weekly-free-games: HTTP %{http_code}\n"
+      - name: weekly-blog-post
+        if: github.event.schedule == '0 13 * * 1'
+        run: |
+          curl -sSf -X GET "$VERCEL_APP_URL/api/cron/weekly-blog-post" \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            -w "weekly-blog-post: HTTP %{http_code}\n"
       - name: top-deals-digest
         if: github.event.schedule == '0 2 * * 0'
         run: |

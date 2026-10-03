@@ -1,5 +1,12 @@
 import { sql } from 'drizzle-orm';
 import { db } from '@/db';
+import {
+  parseRevenuePeriod,
+  periodDays,
+  periodLabel,
+  REVENUE_PERIODS,
+  type RevenuePeriod,
+} from '@/lib/admin-revenue';
 import { requireAdmin } from '@/lib/require-admin';
 
 export const dynamic = 'force-dynamic';
@@ -12,19 +19,45 @@ interface RevenueRow {
   revenue_cents: number;
 }
 
-async function loadRevenue(): Promise<RevenueRow[]> {
+async function loadRevenue(period: RevenuePeriod): Promise<RevenueRow[]> {
+  const days = periodDays(period);
+  // ponytail: daily click rows from clicks table, daily conv sums from
+  // conversions table (own storeId, own convertedAt) — LEFT JOIN keeps
+  // click-less conversions visible instead of dropping them.
+  const where =
+    days === null ? sql`` : sql`WHERE ac.timestamp > now() - make_interval(days => ${days})`;
+  const whereConv =
+    days === null ? sql`` : sql`WHERE c."convertedAt" > now() - make_interval(days => ${days})`;
   const rows = (await db.execute(sql`
+    WITH clicks AS (
+      SELECT
+        ac."storeId" AS store_id,
+        date_trunc('day', ac.timestamp)::date::text AS day,
+        count(*)::int AS clicks
+      FROM affiliate_clicks ac
+      ${where}
+      GROUP BY ac."storeId", day
+    ),
+    conv AS (
+      SELECT
+        c."storeId" AS store_id,
+        date_trunc('day', c."convertedAt")::date::text AS day,
+        count(*)::int AS conversions,
+        COALESCE(sum(CASE WHEN c.status IN ('approved', 'paid') THEN c."commissionCents" ELSE 0 END), 0)::int AS revenue_cents
+      FROM affiliate_conversions c
+      ${whereConv}
+      GROUP BY c."storeId", day
+    )
     SELECT
-      ac."storeId" AS store_id,
-      date_trunc('day', ac.timestamp)::date::text AS day,
-      count(*)::int AS clicks,
-      count(DISTINCT conv.id)::int AS conversions,
-      COALESCE(sum(CASE WHEN conv.status IN ('approved', 'paid') THEN conv."commissionCents" ELSE 0 END), 0)::int AS revenue_cents
-    FROM affiliate_clicks ac
-    LEFT JOIN affiliate_conversions conv ON conv."clickId" = ac.id
-    WHERE ac.timestamp > now() - interval '30 days'
-    GROUP BY ac."storeId", day
-    ORDER BY day DESC, ac."storeId"
+      COALESCE(clicks.store_id, conv.store_id) AS store_id,
+      COALESCE(clicks.day, conv.day) AS day,
+      COALESCE(clicks.clicks, 0) AS clicks,
+      COALESCE(conv.conversions, 0) AS conversions,
+      COALESCE(conv.revenue_cents, 0) AS revenue_cents
+    FROM clicks
+    FULL OUTER JOIN conv
+      ON conv.store_id = clicks.store_id AND conv.day = clicks.day
+    ORDER BY day DESC, store_id
   `)) as unknown as RevenueRow[];
   return rows;
 }
@@ -33,9 +66,15 @@ function formatCents(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`;
 }
 
-export default async function RevenuePage() {
+export default async function RevenuePage({
+  searchParams,
+}: Readonly<{
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}>) {
   await requireAdmin();
-  const rows = await loadRevenue();
+  const params = await searchParams;
+  const period = parseRevenuePeriod(typeof params.period === 'string' ? params.period : undefined);
+  const rows = await loadRevenue(period);
 
   const totals = rows.reduce(
     (acc, r) => {
@@ -51,7 +90,40 @@ export default async function RevenuePage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Revenue (last 30 days</h1>
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <h1 className="text-2xl font-bold">Revenue ({periodLabel(period)})</h1>
+        <div className="flex items-center gap-2">
+          <form method="get" className="flex items-center gap-2">
+            <label htmlFor="period" className="text-sm text-muted-foreground">
+              Period
+            </label>
+            <select
+              id="period"
+              name="period"
+              defaultValue={period}
+              className="rounded-md border bg-background px-3 py-1 text-sm"
+            >
+              {REVENUE_PERIODS.map((p) => (
+                <option key={p} value={p}>
+                  {p === 'all' ? 'All' : p}
+                </option>
+              ))}
+            </select>
+            <button
+              type="submit"
+              className="rounded-md border px-3 py-1 text-sm font-medium hover:bg-muted"
+            >
+              Apply
+            </button>
+          </form>
+          <a
+            href={`/api/admin/revenue/export?period=${period}`}
+            className="rounded-md border px-3 py-1 text-sm font-medium hover:bg-muted"
+          >
+            Export CSV
+          </a>
+        </div>
+      </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div className="rounded-lg border p-4">

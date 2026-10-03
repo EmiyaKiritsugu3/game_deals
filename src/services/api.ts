@@ -78,6 +78,34 @@ export async function getDeals(params?: Record<string, string>): Promise<Deal[]>
   }
 }
 
+export async function getDealsCount(params?: Record<string, string>): Promise<number> {
+  const url = new URL(`${BASE_URL}/deals`);
+  if (params) {
+    for (const [k, v] of Object.entries(params)) url.searchParams.append(k, v);
+  }
+  url.searchParams.set('pageSize', '1');
+  url.searchParams.set('pageNumber', '0');
+  if (!url.searchParams.has('onSale')) url.searchParams.set('onSale', '1');
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(url.toString(), {
+      headers: API_HEADERS,
+      signal: controller.signal,
+      next: { revalidate: 3600 },
+    });
+    clearTimeout(timeout);
+    if (!res.ok) return 0;
+    const header = res.headers.get('x-total-page-count');
+    const total = header ? Number.parseInt(header, 10) : Number.NaN;
+    if (Number.isFinite(total) && total > 0) return total;
+    const data = (await res.json()) as unknown;
+    return Array.isArray(data) ? data.length : 0;
+  } catch {
+    return 0;
+  }
+}
+
 // ⚡ Bolt: Cache the store list to prevent redundant fetches and map rebuilds
 // during a single server-side render pass, especially when rendering many GameCards or DealRows.
 // React.cache deduplicates function calls with the same arguments in a single render pass.
@@ -107,6 +135,7 @@ export const getStores = cache(async function getStores(): Promise<Record<string
     console.error('getStores error:', _error);
   }
 
+  map['38'] = 'Nuuvem';
   map['101'] = 'CDKeys';
   map['102'] = 'Kinguin';
   map['103'] = 'Eneba';
