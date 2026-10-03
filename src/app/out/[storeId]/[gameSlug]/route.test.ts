@@ -54,6 +54,18 @@ describe('GET /out/[storeId]/[gameSlug]', () => {
     expect(track).not.toHaveBeenCalled();
   });
 
+  it('blocks javascript: protocol with allowlisted hostname (Sentinel #320)', async () => {
+    execute.mockResolvedValue([{ url: 'javascript://www.humblebundle.com/x', storeId: '11' }]);
+
+    const response = await GET(new Request('http://localhost:3000/out/11/awesome-game'), {
+      params: Promise.resolve({ storeId: '11', gameSlug: 'awesome-game' }),
+    });
+
+    expect(response.status).toBe(302);
+    expect(response.headers.get('location')).toContain('/');
+    expect(track).not.toHaveBeenCalled();
+  });
+
   it('does not block redirect on track failure', async () => {
     track.mockRejectedValueOnce(new Error('Analytics error'));
     execute.mockResolvedValue([
