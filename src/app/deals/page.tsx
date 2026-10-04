@@ -29,15 +29,12 @@ async function safeCount(params: Record<string, string>): Promise<number> {
 }
 
 export default async function DealsHubPage() {
-  const storeCounts = await Promise.all(
-    STORE_HUB.map((s) => safeCount({ storeID: s.storeId, onSale: '1' }))
-  );
-  const genreCounts = await Promise.all(
-    GENRE_HUB.map((g) => safeCount({ ...g.query, onSale: '1' }))
-  );
-  const priceCounts = await Promise.all(
-    PRICE_HUB.map((p) => safeCount({ ...p.query, onSale: '1' }))
-  );
+  // ⚡ Bolt: Batch independent Promise.all requests into a single Promise.all to prevent sequential network waterfalls and execute all fetching concurrently.
+  const [storeCounts, genreCounts, priceCounts] = await Promise.all([
+    Promise.all(STORE_HUB.map((s) => safeCount({ storeID: s.storeId, onSale: '1' }))),
+    Promise.all(GENRE_HUB.map((g) => safeCount({ ...g.query, onSale: '1' }))),
+    Promise.all(PRICE_HUB.map((p) => safeCount({ ...p.query, onSale: '1' }))),
+  ]);
 
   const allLinks = [
     ...STORE_HUB.map((s, i) => ({
