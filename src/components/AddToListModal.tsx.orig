@@ -123,11 +123,6 @@ export default function AddToListModal({ gameId, onClose }: AddToListModalProps)
       className="fixed inset-0 bg-black/85 backdrop-blur-sm flex items-center justify-center z-[2000] p-5 cursor-pointer"
       onClose={handleClose}
       onClick={handleClose}
-      onKeyDown={(e) => {
-        if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
-          handleClose();
-        }
-      }}
     >
       <div
         className="bg-card border border-border rounded-2xl w-full max-w-[400px] p-6 text-foreground shadow-[0_20px_40px_rgba(0,0,0,0.5)] cursor-default"
