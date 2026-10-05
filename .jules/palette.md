@@ -5,3 +5,7 @@
 ## 2024-05-24 - Consistent Keyboard Focus Indicators
 **Learning:** While checking accessibility on key interactive elements (e.g., custom icon buttons, game card triggers), I found that many had hover states but lacked visible focus indicators for keyboard users. Adding a consistent focus ring pattern greatly improves accessibility without compromising the design.
 **Action:** Always apply `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2` (or similar utility classes from the established design system) to all interactive elements (`button`, `a`, `input`, etc.) to ensure keyboard navigability.
+
+## 2026-10-05 - Event Bubbling in Dialog Modals
+**Learning:** When adding `onKeyDown` listeners to `<dialog>` wrappers or modal backdrops to handle quick-dismiss actions (like closing on `Enter` or `Space`), those events can inadvertently be triggered by inner inputs or buttons due to React event bubbling. This causes unintended side effects, such as typing a space in a text input instantly closing the modal.
+**Action:** Always check that the event originated from the intended target (`e.target === e.currentTarget`) when handling keydown events on wrapper elements that contain other interactive fields.
