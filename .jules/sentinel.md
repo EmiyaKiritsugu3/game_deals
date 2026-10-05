@@ -15,3 +15,7 @@
 **Vulnerability:** XSS vulnerability in `src/app/game/[id]/page.tsx` where user-controlled game titles were serialized into JSON-LD scripts using `JSON.stringify` directly in `dangerouslySetInnerHTML`. An attacker could inject `</script><script>alert(1)</script>` into the title.
 **Learning:** `JSON.stringify` does not escape HTML control characters like `<` or `>`. When rendering this JSON directly into a script tag using React's `dangerouslySetInnerHTML`, it can break out of the script context and execute malicious JavaScript.
 **Prevention:** Always escape HTML control characters when injecting JSON into script tags. Use `.replace(/</g, '\\u003c')` so the unicode escape is correctly preserved in the JavaScript string and not evaluated as an unescaped literal `<`.
+## 2025-02-15 - Unvalidated URL Protocol in Auth Redirects
+**Vulnerability:** The `safeNext` function in Next.js API routes incorrectly allowed `javascript:` URLs if passed via the `next` query parameter. While `origin !== origin` validation was present, Next.js's `NextResponse.redirect()` doesn't inherently sanitize `javascript:` URIs, leading to potential open redirects/XSS execution.
+**Learning:** Next.js `NextResponse.redirect()` must be protected against malicious URI protocols before passing dynamically constructed URLs.
+**Prevention:** Always validate URL protocols explicitly (e.g., `url.protocol === 'http:' || url.protocol === 'https:'`) rather than solely relying on `URL.origin` checks which evaluate to `null` for `javascript:` URIs.
