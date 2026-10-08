@@ -106,6 +106,15 @@ export async function GET(
 
     track('affiliate_click', { store_id: storeId, game_slug: gameSlug }).catch(() => {});
 
+    try {
+      const parsedUrl = new URL(targetUrl);
+      if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+        return NextResponse.redirect(new URL('/', request.url), 302);
+      }
+    } catch {
+      return NextResponse.redirect(new URL('/', request.url), 302);
+    }
+
     return NextResponse.redirect(targetUrl, 302);
   }
 
