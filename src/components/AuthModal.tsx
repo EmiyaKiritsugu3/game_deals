@@ -41,12 +41,18 @@ function AuthFormFields({
   setEmail: (v: string) => void;
 }>) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2">
+      <label htmlFor="auth-modal-email" className="text-sm font-semibold text-foreground">
+        Email Address
+      </label>
       <input
+        id="auth-modal-email"
         type="email"
-        placeholder="Email"
+        placeholder="you@example.com"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        required
+        className="w-full rounded-lg border border-border/50 bg-card/40 px-3 py-2.5 text-sm transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary placeholder:text-muted-foreground"
       />
     </div>
   );
