@@ -97,7 +97,7 @@ describe('AuthModal', () => {
     const AuthModal = (await import('@/components/AuthModal')).default;
     render(<AuthModal isOpen={true} onClose={vi.fn()} />);
 
-    fireEvent.change(screen.getByPlaceholderText('Email'), {
+    fireEvent.change(screen.getByPlaceholderText('you@example.com'), {
       target: { value: 'test@example.com' },
     });
     fireEvent.click(screen.getByText('Send Magic Link'));
@@ -116,7 +116,7 @@ describe('AuthModal', () => {
     const AuthModal = (await import('@/components/AuthModal')).default;
     render(<AuthModal isOpen={true} onClose={vi.fn()} />);
 
-    fireEvent.change(screen.getByPlaceholderText('Email'), {
+    fireEvent.change(screen.getByPlaceholderText('you@example.com'), {
       target: { value: 'test@example.com' },
     });
     fireEvent.click(screen.getByText('Send Magic Link'));
@@ -134,7 +134,7 @@ describe('AuthModal', () => {
     const AuthModal = (await import('@/components/AuthModal')).default;
     render(<AuthModal isOpen={true} onClose={vi.fn()} />);
 
-    fireEvent.change(screen.getByPlaceholderText('Email'), {
+    fireEvent.change(screen.getByPlaceholderText('you@example.com'), {
       target: { value: 'test@example.com' },
     });
     fireEvent.click(screen.getByText('Send Magic Link'));
