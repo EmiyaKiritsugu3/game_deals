@@ -5,3 +5,7 @@
 ## 2024-05-24 - Consistent Keyboard Focus Indicators
 **Learning:** While checking accessibility on key interactive elements (e.g., custom icon buttons, game card triggers), I found that many had hover states but lacked visible focus indicators for keyboard users. Adding a consistent focus ring pattern greatly improves accessibility without compromising the design.
 **Action:** Always apply `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2` (or similar utility classes from the established design system) to all interactive elements (`button`, `a`, `input`, etc.) to ensure keyboard navigability.
+
+## 2026-10-10 - Add Focus State to Notification Mark All Read Button
+**Learning:** Found that the "Mark all read" button in the notification dropdown lacked a visible focus indicator, which is a common issue with bare-bones custom buttons that don't have default browser styling and thus pose a barrier for keyboard users.
+**Action:** Consistently added `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2` to simple interactive elements, ensuring keyboard users have clear feedback on focus.

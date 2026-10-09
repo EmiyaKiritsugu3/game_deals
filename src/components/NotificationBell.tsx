@@ -119,7 +119,7 @@ export default function NotificationBell() {
             {unread > 0 && (
               <button
                 type="button"
-                className="bg-none border-none text-xs text-primary cursor-pointer"
+                className="bg-none border-none text-xs text-primary cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
