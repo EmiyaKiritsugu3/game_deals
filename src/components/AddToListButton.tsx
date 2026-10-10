@@ -6,8 +6,8 @@ import { cn } from '@/lib/utils';
 import AddToListModal from './AddToListModal';
 
 const variantClasses: Record<string, string> = {
-  icon: 'inline-flex items-center justify-center rounded-full p-0 w-8 h-8 border border-border hover:scale-105 hover:bg-[hsl(142,100%,50%)] hover:text-black transition-all backdrop-blur',
-  full: 'inline-flex items-center justify-center gap-2 rounded-xl bg-muted px-5 py-2.5 text-sm font-bold w-full border border-border hover:scale-105 hover:bg-[hsl(142,100%,50%)] hover:text-black transition-all backdrop-blur',
+  icon: 'inline-flex items-center justify-center rounded-full p-0 w-8 h-8 border border-border hover:scale-105 hover:bg-[hsl(142,100%,50%)] hover:text-black transition-all backdrop-blur focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2',
+  full: 'inline-flex items-center justify-center gap-2 rounded-xl bg-muted px-5 py-2.5 text-sm font-bold w-full border border-border hover:scale-105 hover:bg-[hsl(142,100%,50%)] hover:text-black transition-all backdrop-blur focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2',
 };
 
 interface AddToListButtonProps {
