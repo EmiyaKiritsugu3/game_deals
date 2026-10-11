@@ -12,3 +12,7 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+
+## 2024-10-18 - [Batch Independent API Requests]
+**Learning:** Found sequential `await Promise.all()` calls where network requests had to wait for the previous group to finish before starting, which increases total server blocking time unnecessarily. This creates a waterfall delay where the total TTFB is roughly the sum of the maximum time from each `Promise.all()`.
+**Action:** Always batch independent `Promise.all()` fetching operations into a single outer `Promise.all([Promise.all(group1), Promise.all(group2)])` to run them concurrently. This pattern ensures the total wait time is bounded by the longest individual request, instead of the sum of the longest requests in each group.
