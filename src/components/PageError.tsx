@@ -57,6 +57,7 @@ export default function PageError({ error, reset, pageName }: Readonly<PageError
             fontWeight: 500,
             cursor: 'pointer',
           }}
+          className="focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         >
           Try again
         </button>
