@@ -72,4 +72,13 @@ describe('WishlistTabs', () => {
       expect(btn.tagName).toBe('BUTTON');
     });
   });
+
+  it('sets aria-current="true" on the active tab', () => {
+    render(<WishlistTabs {...defaultProps} activeTab="alerts" />);
+    const wishlistBtn = screen.getByText('Wishlist (5)').closest('button');
+    const alertsBtn = screen.getByText('My Alerts (3)').closest('button');
+
+    expect(alertsBtn).toHaveAttribute('aria-current', 'true');
+    expect(wishlistBtn).not.toHaveAttribute('aria-current');
+  });
 });
