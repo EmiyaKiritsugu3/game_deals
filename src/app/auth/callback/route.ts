@@ -9,6 +9,9 @@ function safeNext(next: string | null, origin: string): string {
     if (nextUrl.origin !== origin) {
       return `${origin}/`;
     }
+    if (nextUrl.protocol !== 'http:' && nextUrl.protocol !== 'https:') {
+      return `${origin}/`;
+    }
     return nextUrl.toString();
   } catch {
     return `${origin}/`;
