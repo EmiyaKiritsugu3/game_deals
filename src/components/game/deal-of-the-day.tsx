@@ -91,7 +91,7 @@ export function DealOfTheDay({ deals, onOpenDetail }: DealOfTheDayProps) {
             <button
               type="button"
               onClick={() => onOpenDetail?.(deal)}
-              className="absolute inset-0 size-full"
+              className="absolute inset-0 size-full focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
               aria-label={`View ${deal.title} details`}
             >
               {imgOk ? (

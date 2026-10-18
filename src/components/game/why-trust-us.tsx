@@ -143,7 +143,7 @@ function CommitmentButton({
     <button
       type="button"
       onClick={() => openLegalDoc(docKey)}
-      className="group inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-card/40 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-all hover:border-primary/40 hover:text-primary"
+      className="group inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-card/40 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-all hover:border-primary/40 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
     >
       {label}
       <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />

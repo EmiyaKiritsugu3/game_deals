@@ -118,7 +118,7 @@ function ArchiveCard({
       <button
         type="button"
         onClick={() => onOpenDetail?.(deal)}
-        className="relative block aspect-[16/10] w-full overflow-hidden bg-card/60"
+        className="relative block aspect-[16/10] w-full overflow-hidden bg-card/60 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         aria-label={`View ${deal.title} details`}
       >
         {imgOk ? (
@@ -201,7 +201,7 @@ function ArchiveCard({
               })
             }
             className={cn(
-              'grid size-8 place-items-center rounded-lg border transition-all hover:scale-110',
+              'grid size-8 place-items-center rounded-lg border transition-all hover:scale-110 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2',
               has
                 ? 'border-hot/50 bg-hot/20 text-hot'
                 : 'border-border/50 bg-card/40 text-muted-foreground hover:border-hot/50 hover:text-hot'

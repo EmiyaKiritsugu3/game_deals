@@ -55,7 +55,7 @@ const DOCS: Record<LegalDocKey, LegalDoc> = {
             cookies) for your wishlist and preferences. See our{' '}
             <button
               type="button"
-              className="font-medium text-primary underline-offset-2 hover:underline"
+              className="font-medium text-primary underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
               onClick={() =>
                 window.dispatchEvent(
                   new CustomEvent('dealforge:open-legal', {
@@ -106,7 +106,7 @@ const DOCS: Record<LegalDocKey, LegalDoc> = {
             affects the price you pay. See our{' '}
             <button
               type="button"
-              className="font-medium text-primary underline-offset-2 hover:underline"
+              className="font-medium text-primary underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
               onClick={() =>
                 window.dispatchEvent(
                   new CustomEvent('dealforge:open-legal', {
@@ -230,7 +230,7 @@ const DOCS: Record<LegalDocKey, LegalDoc> = {
             extra cost to you. This is how DEALFORGE stays free. See our{' '}
             <button
               type="button"
-              className="font-medium text-primary underline-offset-2 hover:underline"
+              className="font-medium text-primary underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
               onClick={() =>
                 window.dispatchEvent(
                   new CustomEvent('dealforge:open-legal', {

@@ -62,7 +62,7 @@ export function FilterBar(props: FilterBarProps) {
               <button
                 type="button"
                 onClick={() => props.onSearchChange('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-muted-foreground hover:text-foreground"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                 aria-label="Clear"
               >
                 <X className="size-3.5" />
@@ -217,7 +217,7 @@ function StoreButton({
       type="button"
       onClick={onClick}
       className={cn(
-        'flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-medium transition-all',
+        'flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-medium transition-all focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2',
         active
           ? 'border-primary/40 bg-primary/10 text-primary'
           : 'border-border/50 bg-card/30 text-foreground hover:border-primary/30 hover:bg-accent/30'
