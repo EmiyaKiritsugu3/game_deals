@@ -100,8 +100,7 @@ export function SocialLoginButtons({ onSignIn, loading, disabled }: SocialLoginB
               'group relative flex h-11 flex-col items-center justify-center gap-1 rounded-xl border border-border/50 bg-card/40 backdrop-blur-md transition-all duration-300',
               'hover:bg-accent/30 hover:shadow-md hover:-translate-y-0.5',
               hoverCls,
-              'disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background'
+              'disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2'
             )}
           >
             {isLoading ? (

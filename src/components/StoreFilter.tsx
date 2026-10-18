@@ -46,7 +46,7 @@ export default function StoreFilter({
         <button
           type="button"
           onClick={onSelectAll}
-          className="bg-transparent border border-border text-muted-foreground text-xs px-2 py-1 rounded-lg cursor-pointer font-inherit hover:text-foreground hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed"
+          className="bg-transparent border border-border text-muted-foreground text-xs px-2 py-1 rounded-lg cursor-pointer font-inherit hover:text-foreground hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           disabled={!onSelectAll}
         >
           Select All
@@ -54,7 +54,7 @@ export default function StoreFilter({
         <button
           type="button"
           onClick={onClearAll}
-          className="bg-transparent border border-border text-muted-foreground text-xs px-2 py-1 rounded-lg cursor-pointer font-inherit hover:text-foreground hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed"
+          className="bg-transparent border border-border text-muted-foreground text-xs px-2 py-1 rounded-lg cursor-pointer font-inherit hover:text-foreground hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           disabled={!onClearAll}
         >
           Clear All

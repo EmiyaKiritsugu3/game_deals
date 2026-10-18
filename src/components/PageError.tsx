@@ -47,6 +47,7 @@ export default function PageError({ error, reset, pageName }: Readonly<PageError
         <button
           type="button"
           onClick={reset}
+          className="focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           style={{
             padding: '0.625rem 1.5rem',
             backgroundColor: 'hsl(150 88% 27%)',

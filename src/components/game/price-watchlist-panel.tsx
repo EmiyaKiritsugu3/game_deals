@@ -89,7 +89,7 @@ export function PriceWatchlistPanel() {
               type="button"
               onClick={() => setSortBy(opt.key)}
               className={cn(
-                'rounded-md px-2.5 py-1 font-medium transition-all',
+                'rounded-md px-2.5 py-1 font-medium transition-all focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2',
                 sortBy === opt.key
                   ? 'bg-primary/15 text-primary'
                   : 'text-muted-foreground hover:text-foreground'
