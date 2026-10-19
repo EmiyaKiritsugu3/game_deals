@@ -21,7 +21,7 @@ export function DensityToggle({ value, onChange }: DensityToggleProps) {
         type="button"
         onClick={() => onChange('comfortable')}
         className={cn(
-          'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-all',
+          'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-all focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2',
           value === 'comfortable'
             ? 'bg-primary/15 text-primary shadow-sm'
             : 'text-muted-foreground hover:text-foreground'
@@ -35,7 +35,7 @@ export function DensityToggle({ value, onChange }: DensityToggleProps) {
         type="button"
         onClick={() => onChange('compact')}
         className={cn(
-          'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-all',
+          'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-all focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2',
           value === 'compact'
             ? 'bg-primary/15 text-primary shadow-sm'
             : 'text-muted-foreground hover:text-foreground'
