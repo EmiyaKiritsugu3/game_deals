@@ -98,7 +98,7 @@ jobs:
         run: bunx playwright test
       - name: Upload Playwright report
         if: failure()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: playwright-report-nightly
           path: playwright-report/
@@ -138,7 +138,7 @@ jobs:
           bun test --coverage 2>&1 | tee coverage-nightly.txt
           grep -E "All files| Branches | Lines |Functions|Statements" coverage-nightly.txt || true
       - name: Upload coverage data
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: coverage-nightly
           path: |
