@@ -12,3 +12,7 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+
+## 2024-10-19 - Removed accumulating spread operator in deal-stats-dashboard.tsx
+**Learning:** React component re-rendering triggers react-hooks/immutability when mutating local variables, which tempts using accumulating spread operations (`...acc`) inside reductions. This scales linearly in time and quadratically in allocations per step (`O(n^2)`). The `deal-stats-dashboard` component did this for dashboard rendering.
+**Action:** Used `acc.push(newItem); return acc;` inside `Array.prototype.reduce()` to safely build an array without causing O(n^2) accumulating spreads. The array being built is local to the `useMemo` block anyway so mutating it inside `reduce` is functionally pure.
