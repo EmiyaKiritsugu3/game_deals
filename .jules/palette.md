@@ -5,3 +5,6 @@
 ## 2024-05-24 - Consistent Keyboard Focus Indicators
 **Learning:** While checking accessibility on key interactive elements (e.g., custom icon buttons, game card triggers), I found that many had hover states but lacked visible focus indicators for keyboard users. Adding a consistent focus ring pattern greatly improves accessibility without compromising the design.
 **Action:** Always apply `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2` (or similar utility classes from the established design system) to all interactive elements (`button`, `a`, `input`, etc.) to ensure keyboard navigability.
+## 2024-10-19 - Keyboard Accessibility for Density Toggle
+**Learning:** The grid density toggle buttons (`comfortable` / `compact`) in the UI lacked focus-visible outlines, making them difficult for keyboard users to identify when navigating.
+**Action:** Always add standard tailwind keyboard focus styling (`focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2`) to interactive toggles, even within groups, to ensure clear visual focus indication.
