@@ -14,7 +14,7 @@ import { getBrowserClient } from '@/lib/supabase-browser';
 import { cn } from '@/lib/utils';
 
 const socialBtnBase =
-  'flex items-center justify-center gap-3 p-[0.85rem] rounded-lg border bg-background text-foreground font-semibold cursor-pointer transition-colors duration-200 hover:bg-muted active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed';
+  'flex items-center justify-center gap-3 p-[0.85rem] rounded-lg border bg-background text-foreground font-semibold cursor-pointer transition-colors duration-200 hover:bg-muted active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2';
 
 const messageTypeClasses: Record<string, string> = {
   success:
@@ -47,6 +47,9 @@ function AuthFormFields({
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        aria-label="Email address"
+        className="w-full px-4 py-3 bg-muted/50 border border-border rounded-lg text-foreground text-[0.95rem] outline-none transition-colors focus-visible:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 placeholder:text-muted-foreground"
+        required
       />
     </div>
   );
@@ -163,7 +166,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           {/* loginButton: primary bg, rounded-lg, p-[0.85rem], font-bold, hover:opacity-90, active:scale-[0.98], disabled:opacity-50 */}
           <button
             type="submit"
-            className="mt-2 rounded-lg bg-primary text-primary-foreground p-[0.85rem] font-bold text-base cursor-pointer transition-opacity duration-200 hover:opacity-90 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-2 rounded-lg bg-primary text-primary-foreground p-[0.85rem] font-bold text-base cursor-pointer transition-opacity duration-200 hover:opacity-90 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
             disabled={isLoading}
           >
             {isLoading ? 'Sending...' : 'Send Magic Link'}
