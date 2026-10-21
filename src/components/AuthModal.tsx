@@ -106,7 +106,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         <div className="flex flex-col gap-3">
           <button
             type="button"
-            className={`${socialBtnBase} border-[#4285f4]`}
+            className={`${socialBtnBase} border-[#4285f4] focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2`}
             onClick={() => handleSocialLogin('google')}
             disabled={isLoading}
           >
@@ -115,7 +115,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           </button>
           <button
             type="button"
-            className={`${socialBtnBase} border-[#5865f2]`}
+            className={`${socialBtnBase} border-[#5865f2] focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2`}
             onClick={() => handleSocialLogin('discord')}
             disabled={isLoading}
           >
@@ -132,7 +132,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           </button>
           <button
             type="button"
-            className={`${socialBtnBase} border-[#333333]`}
+            className={`${socialBtnBase} border-[#333333] focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2`}
             onClick={() => handleSocialLogin('github')}
             disabled={isLoading}
           >
@@ -163,7 +163,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           {/* loginButton: primary bg, rounded-lg, p-[0.85rem], font-bold, hover:opacity-90, active:scale-[0.98], disabled:opacity-50 */}
           <button
             type="submit"
-            className="mt-2 rounded-lg bg-primary text-primary-foreground p-[0.85rem] font-bold text-base cursor-pointer transition-opacity duration-200 hover:opacity-90 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-2 rounded-lg bg-primary text-primary-foreground p-[0.85rem] font-bold text-base cursor-pointer transition-opacity duration-200 hover:opacity-90 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
             disabled={isLoading}
           >
             {isLoading ? 'Sending...' : 'Send Magic Link'}

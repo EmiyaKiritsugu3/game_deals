@@ -5,3 +5,6 @@
 ## 2024-05-24 - Consistent Keyboard Focus Indicators
 **Learning:** While checking accessibility on key interactive elements (e.g., custom icon buttons, game card triggers), I found that many had hover states but lacked visible focus indicators for keyboard users. Adding a consistent focus ring pattern greatly improves accessibility without compromising the design.
 **Action:** Always apply `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2` (or similar utility classes from the established design system) to all interactive elements (`button`, `a`, `input`, etc.) to ensure keyboard navigability.
+## 2023-10-21 - Added missing focus-visible and aria-labels on icon-only buttons
+**Learning:** Found several interactive buttons (SearchBox, UserMenu, AuthModal social logins) lacking proper focus states (`focus-visible:outline-2 focus-visible:outline-primary/ring`) for keyboard navigation and aria-labels for screen reader accessibility.
+**Action:** Always verify icon-only buttons include `aria-label` or text equivalents, and ensure consistent focus indication (`focus-visible:outline-*`) is applied across all interactable elements for better keyboard and screen-reader support.
