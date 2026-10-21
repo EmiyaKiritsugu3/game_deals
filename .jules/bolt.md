@@ -12,3 +12,7 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+
+## 2024-05-19 - Removed O(N^2) spread operator inside reduce
+**Learning:** In `deal-stats-dashboard.tsx`, there was an accumulation using the spread operator (`...acc`) inside a `reduce` function call. This leads to $O(N^2)$ memory allocation and copying, negatively impacting performance. We can instead mutate the accumulator `acc` using `acc.push(...)` and return `acc` to achieve the same result with $O(N)$ performance, as `acc` is only mutated locally within the `reduce` scope (which is safe).
+**Action:** When performing array accumulation inside `reduce`, avoid using the spread operator (`...acc`). Mutate the accumulator array directly using `.push(...)` instead.
