@@ -48,8 +48,15 @@ export function MiniSparkline({
   }
 
   const pad = 3;
-  const min = Math.min(...validPrices, lowest ?? Infinity);
-  const max = Math.max(...validPrices);
+  let min = lowest ?? Infinity;
+  let max = -Infinity;
+  for (const price of validPrices) {
+    if (price < min) min = price;
+    if (price > max) max = price;
+  }
+  if (max === -Infinity) {
+    max = min;
+  }
   const range = max - min || 1;
   const stepX = (width - pad * 2) / (validPrices.length - 1);
   const y = (price: number) => height - pad - ((price - min) / range) * (height - pad * 2);

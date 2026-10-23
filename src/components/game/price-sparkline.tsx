@@ -38,8 +38,15 @@ export function PriceSparkline({
     );
   }
 
-  const min = Math.min(...prices, cheapestEver ?? Infinity);
-  const max = Math.max(...prices);
+  let min = cheapestEver ?? Infinity;
+  let max = -Infinity;
+  for (const price of prices) {
+    if (price < min) min = price;
+    if (price > max) max = price;
+  }
+  if (max === -Infinity) {
+    max = min;
+  }
   const range = max - min || 1;
 
   const stepX = (width - pad * 2) / (points.length - 1);
