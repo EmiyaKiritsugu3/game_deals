@@ -15,3 +15,7 @@
 **Vulnerability:** XSS vulnerability in `src/app/game/[id]/page.tsx` where user-controlled game titles were serialized into JSON-LD scripts using `JSON.stringify` directly in `dangerouslySetInnerHTML`. An attacker could inject `</script><script>alert(1)</script>` into the title.
 **Learning:** `JSON.stringify` does not escape HTML control characters like `<` or `>`. When rendering this JSON directly into a script tag using React's `dangerouslySetInnerHTML`, it can break out of the script context and execute malicious JavaScript.
 **Prevention:** Always escape HTML control characters when injecting JSON into script tags. Use `.replace(/</g, '\\u003c')` so the unicode escape is correctly preserved in the JavaScript string and not evaluated as an unescaped literal `<`.
+## 2024-10-24 - XSS in safeNext via Protocol Evasion
+**Vulnerability:** The `safeNext` function in `src/app/auth/callback/route.ts` checked `url.origin === origin` but did not validate the protocol. This allowed malicious URLs like `javascript://localhost:3000/%0Aalert(1)` which bypass simple string checks, leading to XSS when redirected.
+**Learning:** The URL constructor can parse pseudo-protocols successfully. To be completely secure against XSS via `javascript:` or `data:` URIs during redirects, you must explicitly validate that the protocol is safe (e.g., `url.protocol === 'http:' || url.protocol === 'https:'`).
+**Prevention:** Always check both `origin` and `protocol` when validating URLs for redirects to ensure safety from protocol evasion attacks.
