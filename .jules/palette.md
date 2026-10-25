@@ -5,3 +5,6 @@
 ## 2024-05-24 - Consistent Keyboard Focus Indicators
 **Learning:** While checking accessibility on key interactive elements (e.g., custom icon buttons, game card triggers), I found that many had hover states but lacked visible focus indicators for keyboard users. Adding a consistent focus ring pattern greatly improves accessibility without compromising the design.
 **Action:** Always apply `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2` (or similar utility classes from the established design system) to all interactive elements (`button`, `a`, `input`, etc.) to ensure keyboard navigability.
+## 2024-10-25 - Search Form Accessibility
+**Learning:** Icon-only buttons within search forms (even those with a visible text input) are often skipped for ARIA labels because developers assume the form context is sufficient. However, screen readers announce the button itself out-of-context when navigating by buttons.
+**Action:** Always add an explicit `aria-label` (e.g., "Submit search") to icon-only submit buttons, regardless of their visual proximity to a labeled input field.
