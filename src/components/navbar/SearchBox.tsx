@@ -50,6 +50,7 @@ export function SearchBox() {
         <button
           type="submit"
           className="absolute left-3 text-muted-foreground flex items-center justify-center peer-focus:text-primary"
+          aria-label="Submit search"
         >
           <Search size={20} />
         </button>
