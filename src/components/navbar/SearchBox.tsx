@@ -49,7 +49,8 @@ export function SearchBox() {
         />
         <button
           type="submit"
-          className="absolute left-3 text-muted-foreground flex items-center justify-center peer-focus:text-primary"
+          className="absolute left-3 text-muted-foreground flex items-center justify-center peer-focus:text-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 rounded"
+          aria-label="Submit search"
         >
           <Search size={20} />
         </button>
