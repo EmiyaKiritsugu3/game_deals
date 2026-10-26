@@ -12,3 +12,7 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+
+## 2026-11-20 - [Avoid Array Spreads in Math.max]
+**Learning:** Using `Math.max(...list.map(x => x.val))` creates an unnecessary O(N) memory allocation and can cause stack overflows on very large arrays. For performance critical components (like `Home` rendering top discounts or deal dashboards), this forces the JS engine to allocate a new array on every render pass.
+**Action:** Replace `Math.max(...arr.map(...))` with a single-pass `for...of` loop tracking the maximum manually to ensure O(1) memory overhead and improved rendering performance.
