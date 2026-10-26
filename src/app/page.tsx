@@ -150,7 +150,13 @@ export default function Home() {
     const avgSavings = list.length
       ? Math.round(list.reduce((s, d) => s + d.savingsNum, 0) / list.length)
       : 0;
-    const topDiscount = list.length ? Math.round(Math.max(...list.map((d) => d.savingsNum))) : 0;
+
+    let maxSavings = 0;
+    for (const d of list) {
+      if (d.savingsNum > maxSavings) maxSavings = d.savingsNum;
+    }
+    const topDiscount = list.length ? Math.round(maxSavings) : 0;
+
     // Marketing-friendly "stores tracked" stat — pad live count to a nicer
     // round number, but keep it truthful by appending a "+" suffix.
     const liveStores = storesQuery.data?.stores.length ?? 0;
