@@ -43,9 +43,9 @@ export default function AlertFormFields({
           step={0.01}
           value={targetPrice}
           onChange={(e) => onTargetPriceChange(Number.parseFloat(e.target.value))}
-          className="w-full h-1.5 bg-muted rounded-sm appearance-none outline-none mb-6 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-[3px] [&::-webkit-slider-thumb]:border-card [&::-webkit-slider-thumb]:shadow-[0_0_10px_color-mix(in_srgb,var(--primary)_40%,transparent)] [&::-webkit-slider-thumb]:active:scale-110"
+          className="w-full h-1.5 bg-muted rounded-sm appearance-none outline-none mb-6 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-[3px] [&::-webkit-slider-thumb]:border-card [&::-webkit-slider-thumb]:shadow-[0_0_10px_color-mix(in_srgb,var(--primary)_40%,transparent)] [&::-webkit-slider-thumb]:active:scale-110"
         />
-        <div className="flex items-center bg-background border border-border rounded-lg px-4 py-2">
+        <div className="flex items-center bg-background border border-border rounded-lg px-4 py-2 focus-within:outline-2 focus-within:outline-primary focus-within:outline-offset-2">
           <span className="text-muted-foreground font-semibold mr-2">$</span>
           <input
             type="number"
@@ -62,12 +62,12 @@ export default function AlertFormFields({
         <label className="flex items-center gap-3 cursor-pointer select-none">
           <input
             type="checkbox"
-            className="sr-only"
+            className="sr-only peer"
             checked={isKeyshopAllowed}
             onChange={() => onKeyshopAllowedChange(!isKeyshopAllowed)}
           />
           <div
-            className={`w-[18px] h-[18px] rounded border-2 border-border flex items-center justify-center transition-all ${isKeyshopAllowed ? 'bg-primary border-primary' : ''}`}
+            className={`w-[18px] h-[18px] rounded border-2 border-border flex items-center justify-center transition-all peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-focus-visible:outline-offset-2 ${isKeyshopAllowed ? 'bg-primary border-primary' : ''}`}
           >
             {isKeyshopAllowed && (
               <svg
