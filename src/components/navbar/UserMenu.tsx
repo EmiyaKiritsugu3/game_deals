@@ -93,6 +93,7 @@ export function UserMenu({ user, serverUser }: UserMenuProps) {
     <div className="relative flex items-center" ref={wrapperRef}>
       <button
         className="flex items-center gap-3 cursor-pointer px-2.5 py-1.5 rounded-full bg-muted/30 border border-border/50 hover:bg-muted/60 transition-colors"
+        aria-label="User menu"
         onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {

@@ -5,6 +5,7 @@ export function AuthSection({ onLoginClickAction }: Readonly<{ onLoginClickActio
   return (
     <button
       type="button"
+      aria-label="Login"
       className="bg-gradient-to-br from-primary to-[hsl(260,70%,60%)] text-foreground border-none px-5 py-2 rounded-lg font-bold text-sm cursor-pointer flex items-center gap-2 hover:opacity-90 hover:shadow-[0_4px_15px_color-mix(in_srgb,var(--primary)_30%,transparent)] transition-all"
       onClick={onLoginClickAction}
     >
