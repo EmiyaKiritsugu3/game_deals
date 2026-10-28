@@ -24,9 +24,14 @@ export async function generateMetadata({
 }
 
 function gameDataToDeal(gameData: GameDetails, gameID: string): DealWithStore {
-  const bestDeal = [...gameData.deals].sort(
-    (a, b) => Number.parseFloat(a.price) - Number.parseFloat(b.price)
-  )[0];
+  // ⚡ Bolt: Replace O(N log N) sort + O(N) array allocation with O(N) linear search for better performance in server-side batch loops
+  let bestDeal = gameData.deals[0];
+  for (let i = 1; i < gameData.deals.length; i++) {
+    if (Number.parseFloat(gameData.deals[i].price) < Number.parseFloat(bestDeal.price)) {
+      bestDeal = gameData.deals[i];
+    }
+  }
+
   const deal: Deal = {
     internalName: gameID,
     title: gameData.info.title,
