@@ -5,3 +5,7 @@
 ## 2024-05-24 - Consistent Keyboard Focus Indicators
 **Learning:** While checking accessibility on key interactive elements (e.g., custom icon buttons, game card triggers), I found that many had hover states but lacked visible focus indicators for keyboard users. Adding a consistent focus ring pattern greatly improves accessibility without compromising the design.
 **Action:** Always apply `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2` (or similar utility classes from the established design system) to all interactive elements (`button`, `a`, `input`, etc.) to ensure keyboard navigability.
+
+## 2026-10-28 - Missing Aria Labels on Action Buttons
+**Learning:** Found that multiple interactive elements like the User Menu, Auth Section (Login), Notification Bell "Mark all as read", and Price Alert Trigger were missing explicit `aria-label` attributes, making them confusing or inaccessible to screen reader users. The labels should provide clear context about the button's action.
+**Action:** When adding or updating icon-based buttons or buttons with dynamic states, ensure they have descriptive `aria-label` attributes that accurately convey their purpose to assistive technologies.

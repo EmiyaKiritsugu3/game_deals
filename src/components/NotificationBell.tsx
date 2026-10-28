@@ -120,6 +120,7 @@ export default function NotificationBell() {
               <button
                 type="button"
                 className="bg-none border-none text-xs text-primary cursor-pointer"
+                aria-label="Mark all as read"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
