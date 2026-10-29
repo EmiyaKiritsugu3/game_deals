@@ -403,17 +403,15 @@ function PriceTierDonut({
       const dashLength = pct * circumference;
       const startOffset =
         acc.length > 0 ? acc[acc.length - 1].startOffset + acc[acc.length - 1].dashLength : 0;
-      return [
-        // biome-ignore lint/performance/noAccumulatingSpread: known-size array
-        ...acc,
-        {
-          label: t.label,
-          count: t.count,
-          color: t.color,
-          dashLength,
-          startOffset,
-        },
-      ];
+
+      acc.push({
+        label: t.label,
+        count: t.count,
+        color: t.color,
+        dashLength,
+        startOffset,
+      });
+      return acc;
     }, []);
   }, [tiers, total, circumference]);
 
