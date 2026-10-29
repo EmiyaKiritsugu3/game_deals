@@ -12,3 +12,7 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+
+## 2024-10-30 - Pure Reduce Optimization
+**Learning:** Found an unnecessary pattern of `return [...acc, item]` inside `Array.prototype.reduce()` while calculating `PriceTierDonut` values. This pattern is problematic because it allocates a new array for every iteration, making it O(N²) in terms of time complexity and memory allocations.
+**Action:** Instead of spreading the accumulator array in a `reduce` callback, mutate the accumulator directly using `acc.push(item)` and `return acc`. This transforms the operation back to an O(N) complexity while retaining the functional behavior of `reduce`.
