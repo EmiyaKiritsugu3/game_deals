@@ -12,3 +12,7 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+
+## 2026-08-11 - [Optimize stats calculation in page.tsx]
+**Learning:** `Math.max(...list.map())` creates an intermediate array, causing unnecessary memory allocation and risking a 'Maximum call stack size exceeded' error if `list` is large.
+**Action:** Replace multiple passes (reduce + map) and `Math.max(...array)` spreads with a single-pass `for...of` iteration to calculate total and max values simultaneously. This eliminates O(N) memory allocation and improves efficiency.
