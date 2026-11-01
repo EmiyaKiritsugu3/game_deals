@@ -12,3 +12,7 @@
 ## 2024-10-18 - [Optimizing batch processing by avoiding Array sorts]
 **Learning:** For functions processing many deals or iterating over large collections of prices, using `[...arr].sort(...)[0]` incurs O(N log N) time complexity plus unnecessary O(N) memory allocations per iteration. In server-side batch operations (like `fetchGamesBatchFromCheapShark` or iterating over saved wishlists), this adds up to measurable CPU time overhead.
 **Action:** Implemented a single-pass O(N) iteration helper (`getCheapestDeal`) to replace sort-based minimum finding. Always favor linear search over array duplication and sorting when extracting min/max values.
+
+## 2024-11-20 - [Avoid Map and Spread into Math.max]
+**Learning:** Spreading an array resulting from a `.map()` into `Math.max(...list.map(fn))` creates an unnecessary O(N) memory allocation and risks a "Maximum call stack size exceeded" error if the list is large, because `Math.max` receives each item as a function argument.
+**Action:** Replace `Math.max(...list.map(fn))` with a single-pass `for...of` loop to compute the maximum value directly. This avoids the extra array allocation, prevents stack overflow, and allows combining other aggregations (like sums) in the same pass.
