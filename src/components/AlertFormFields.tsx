@@ -62,12 +62,12 @@ export default function AlertFormFields({
         <label className="flex items-center gap-3 cursor-pointer select-none">
           <input
             type="checkbox"
-            className="sr-only"
+            className="sr-only peer"
             checked={isKeyshopAllowed}
             onChange={() => onKeyshopAllowedChange(!isKeyshopAllowed)}
           />
           <div
-            className={`w-[18px] h-[18px] rounded border-2 border-border flex items-center justify-center transition-all ${isKeyshopAllowed ? 'bg-primary border-primary' : ''}`}
+            className={`w-[18px] h-[18px] rounded border-2 border-border flex items-center justify-center transition-all peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-focus-visible:outline-offset-2 ${isKeyshopAllowed ? 'bg-primary border-primary' : ''}`}
           >
             {isKeyshopAllowed && (
               <svg
