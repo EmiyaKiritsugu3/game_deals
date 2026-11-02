@@ -351,10 +351,15 @@ function PriceHistoryCard({
   storeDeals: DealEntry[];
 }) {
   const points = React.useMemo<SparklinePoint[]>(() => {
-    // Average of current store prices as a mid checkpoint
-    const avgCurrent = storeDeals.length
-      ? storeDeals.reduce((s, d) => s + d.priceNum, 0) / storeDeals.length
-      : currentPrice;
+    // Average of current store prices as a mid checkpoint, optimized with single pass
+    let avgCurrent = currentPrice;
+    if (storeDeals.length > 0) {
+      let sum = 0;
+      for (let i = 0; i < storeDeals.length; i++) {
+        sum += storeDeals[i].priceNum;
+      }
+      avgCurrent = sum / storeDeals.length;
+    }
 
     return [
       {
