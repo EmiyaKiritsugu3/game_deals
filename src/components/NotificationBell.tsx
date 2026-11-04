@@ -25,7 +25,7 @@ function NotificationBellButton({
           onClick();
         }
       }}
-      aria-label="Notifications"
+      aria-label={`Notifications${unread > 0 ? ` (${unread} unread)` : ''}`}
     >
       <Bell size={20} />
       {unread > 0 && (
@@ -60,7 +60,8 @@ function NotificationItem({
         type: 'button' as const,
         onClick: () => onRead(notification.id),
         className:
-          'block w-full p-3 bg-none border-none text-inherit text-left cursor-pointer font-inherit hover:bg-muted',
+          'block w-full p-3 bg-none border-none text-inherit text-left cursor-pointer font-inherit hover:bg-muted focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2',
+        'aria-label': `Mark notification "${notification.title}" as read`,
       };
   return (
     <li
@@ -119,7 +120,8 @@ export default function NotificationBell() {
             {unread > 0 && (
               <button
                 type="button"
-                className="bg-none border-none text-xs text-primary cursor-pointer"
+                className="bg-none border-none text-xs text-primary cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 rounded-sm"
+                aria-label="Mark all notifications as read"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
