@@ -6,15 +6,16 @@
 
 # Test info
 
-- Name: alerts.spec.ts >> Cron endpoint >> 7. reindex-typesense responds 200/500 with valid auth
-- Location: tests/e2e/alerts.spec.ts:90:7
+- Name: alerts.spec.ts >> Price alerts page >> 2. /alerts route returns 200 (page renders successfully)
+- Location: tests/e2e/alerts.spec.ts:47:7
 
 # Error details
 
 ```
-Error: expect(received).not.toBe(expected) // Object.is equality
+Error: expect(received).toBe(expected) // Object.is equality
 
-Expected: not "401"
+Expected: 200
+Received: 500
 ```
 
 # Test source
@@ -68,7 +69,8 @@ Expected: not "401"
   46  | 
   47  |   test('2. /alerts route returns 200 (page renders successfully)', async ({ page }) => {
   48  |     const response = await page.request.get('/alerts');
-  49  |     expect(response.status()).toBe(200);
+> 49  |     expect(response.status()).toBe(200);
+      |                               ^ Error: expect(received).toBe(expected) // Object.is equality
   50  |   });
   51  | });
   52  | 
@@ -114,8 +116,7 @@ Expected: not "401"
   92  |       `curl -s -o /dev/null -w "%{http_code}" -H "authorization: Bearer ${CRON_AUTH}" ${BASE}/api/cron/reindex-typesense`,
   93  |       { timeout: 30_000, encoding: 'utf-8' }
   94  |     );
-> 95  |     expect(result).not.toBe('401');
-      |                        ^ Error: expect(received).not.toBe(expected) // Object.is equality
+  95  |     expect(result).not.toBe('401');
   96  |     expect(['200', '500']).toContain(result);
   97  |   });
   98  | 
@@ -132,7 +133,7 @@ Expected: not "401"
   109 |   test('9. Page renders with main element visible', async ({ page }) => {
   110 |     await page.goto('/alerts', { waitUntil: 'domcontentloaded' });
   111 |     await page.waitForTimeout(1_500);
-  112 |     await expect(page.locator('main')).toBeVisible();
+  112 |     await expect(page.locator('main').first()).toBeVisible();
   113 |   });
   114 | 
   115 |   test('10. Home page has accessible navigation', async ({ page }) => {
@@ -152,30 +153,22 @@ Expected: not "401"
   129 |     expect(bodyText.length).toBeGreaterThan(50);
   130 |     expect(bodyText).not.toContain('Something went wrong');
   131 | 
-  132 |     // Step 2: Click "Alert Me" button
-  133 |     const alertButton = page.getByRole('button', { name: /alert me/i });
-  134 |     await expect(alertButton).toBeVisible();
-  135 |     await alertButton.click();
-  136 | 
-  137 |     // Step 3: Auth modal appears (unauthed mode)
-  138 |     await page.waitForTimeout(500);
-  139 |     const authModal = page.getByRole('heading', { name: /welcome to gamedeals/i });
-  140 |     await expect(authModal).toBeVisible();
-  141 | 
-  142 |     // Step 4: Close modal via Escape (or click outside)
-  143 |     await page.keyboard.press('Escape');
-  144 |     await page.waitForTimeout(500);
-  145 |     await expect(authModal).not.toBeVisible();
-  146 | 
-  147 |     // Step 5: Navigate to /alerts page
-  148 |     await page.goto('/alerts', { waitUntil: 'domcontentloaded' });
-  149 |     await page.waitForTimeout(1_500);
-  150 | 
-  151 |     // Step 6: Verify /alerts page renders without crashing
-  152 |     const alertsBodyText = await page.locator('body').innerText();
-  153 |     expect(alertsBodyText.length).toBeGreaterThan(50);
-  154 |     expect(alertsBodyText).not.toContain('Something went wrong');
-  155 |   });
-  156 | });
-  157 | 
+  132 |     // Skip if game data unavailable (CheapShark rate limit) — the
+  133 |     // /game not-found branch renders an h1, so gate on real game content.
+  134 |     if (bodyText.includes('Game not found')) {
+  135 |       test.skip(true, 'Game data unavailable (CheapShark rate limit)');
+  136 |       return;
+  137 |     }
+  138 |
+  139 |     // Step 2: Click "Alert Me" button
+  140 |     const alertButton = page.getByRole('button', { name: /alert me/i });
+  141 |     await expect(alertButton).toBeVisible();
+  142 |     await alertButton.click();
+  143 |
+  144 |     // Step 3: Auth modal appears (unauthed mode)
+  145 |     await page.waitForTimeout(500);
+  146 |     const authModal = page.getByRole('heading', { name: /welcome to gamedeals/i });
+  147 |     await expect(authModal).toBeVisible();
+  148 |
+  149 |     // Step 4: Close modal via Escape (or click outside)
 ```

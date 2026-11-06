@@ -6,32 +6,30 @@
 
 # Test info
 
-- Name: alerts.spec.ts >> Cron endpoint >> 5. ingest-prices responds 200/500 with valid auth
-- Location: tests/e2e/alerts.spec.ts:73:7
+- Name: alerts.spec.ts >> Cron endpoint >> 8. reindex-typesense returns 401 without auth header
+- Location: tests/e2e/alerts.spec.ts:99:7
 
 # Error details
 
 ```
-Error: expect(received).not.toBe(expected) // Object.is equality
+Error: expect(received).toBe(expected) // Object.is equality
 
-Expected: not "401"
+Expected: "401"
+Received: "500"
 ```
 
 # Test source
 
 ```ts
-  1   | import { execSync } from 'node:child_process';
-  2   | import { expect, type Page, test } from '@playwright/test';
-  3   | 
   4   | const BASE = 'http://localhost:3000';
   5   | const CRON_AUTH = process.env.CRON_SECRET ?? 'placeholder-cron-secret';
-  6   | 
+  6   |
   7   | async function blockProblematicRequests(page: Page) {
   8   |   await page.route('**/*', async (route) => {
   9   |     const url = route.request().url();
   10  |     const u = new URL(url);
   11  |     const pathname = u.pathname;
-  12  | 
+  12  |
   13  |     if (pathname.startsWith('/wishlist') && !pathname.startsWith('/wishlist/shared')) {
   14  |       await route.abort();
   15  |       return;
@@ -50,14 +48,14 @@ Expected: not "401"
   28  |     }
   29  |   });
   30  | }
-  31  | 
+  31  |
   32  | test.describe('Price alerts page', () => {
   33  |   test.beforeEach(async ({ page }) => {
   34  |     test.setTimeout(120_000);
   35  |     page.setDefaultTimeout(120_000);
   36  |     await blockProblematicRequests(page);
   37  |   });
-  38  | 
+  38  |
   39  |   test('1. /alerts page renders without crashing (unauthed)', async ({ page }) => {
   40  |     await page.goto('/alerts', { waitUntil: 'domcontentloaded' });
   41  |     await page.waitForTimeout(1_000);
@@ -65,13 +63,13 @@ Expected: not "401"
   43  |     expect(body.length).toBeGreaterThan(50);
   44  |     expect(body).not.toContain('Something went wrong');
   45  |   });
-  46  | 
+  46  |
   47  |   test('2. /alerts route returns 200 (page renders successfully)', async ({ page }) => {
   48  |     const response = await page.request.get('/alerts');
   49  |     expect(response.status()).toBe(200);
   50  |   });
   51  | });
-  52  | 
+  52  |
   53  | test.describe('Cron endpoint', () => {
   54  |   test('3. check-alerts responds 200/500 with valid auth', { tag: '@cron' }, async () => {
   55  |     const result = execSync(
@@ -83,7 +81,7 @@ Expected: not "401"
   61  |     expect(result).not.toBe('401');
   62  |     expect(['200', '500']).toContain(result);
   63  |   });
-  64  | 
+  64  |
   65  |   test('4. check-alerts returns 401 without auth header', { tag: '@cron' }, async () => {
   66  |     const result = execSync(
   67  |       `curl -s -o /dev/null -w "%{http_code}" ${BASE}/api/cron/check-alerts`,
@@ -91,17 +89,16 @@ Expected: not "401"
   69  |     );
   70  |     expect(result).toBe('401');
   71  |   });
-  72  | 
+  72  |
   73  |   test('5. ingest-prices responds 200/500 with valid auth', { tag: '@cron' }, async () => {
   74  |     const result = execSync(
   75  |       `curl -s -o /dev/null -w "%{http_code}" -H "authorization: Bearer ${CRON_AUTH}" ${BASE}/api/cron/ingest-prices`,
   76  |       { timeout: 30_000, encoding: 'utf-8' }
   77  |     );
-> 78  |     expect(result).not.toBe('401');
-      |                        ^ Error: expect(received).not.toBe(expected) // Object.is equality
+  78  |     expect(result).not.toBe('401');
   79  |     expect(['200', '500']).toContain(result);
   80  |   });
-  81  | 
+  81  |
   82  |   test('6. ingest-prices returns 401 without auth header', { tag: '@cron' }, async () => {
   83  |     const result = execSync(
   84  |       `curl -s -o /dev/null -w "%{http_code}" ${BASE}/api/cron/ingest-prices`,
@@ -109,7 +106,7 @@ Expected: not "401"
   86  |     );
   87  |     expect(result).toBe('401');
   88  |   });
-  89  | 
+  89  |
   90  |   test('7. reindex-typesense responds 200/500 with valid auth', { tag: '@cron' }, async () => {
   91  |     const result = execSync(
   92  |       `curl -s -o /dev/null -w "%{http_code}" -H "authorization: Bearer ${CRON_AUTH}" ${BASE}/api/cron/reindex-typesense`,
@@ -118,64 +115,72 @@ Expected: not "401"
   95  |     expect(result).not.toBe('401');
   96  |     expect(['200', '500']).toContain(result);
   97  |   });
-  98  | 
+  98  |
   99  |   test('8. reindex-typesense returns 401 without auth header', { tag: '@cron' }, async () => {
   100 |     const result = execSync(
   101 |       `curl -s -o /dev/null -w "%{http_code}" ${BASE}/api/cron/reindex-typesense`,
   102 |       { timeout: 10_000, encoding: 'utf-8' }
   103 |     );
-  104 |     expect(result).toBe('401');
+> 104 |     expect(result).toBe('401');
+      |                    ^ Error: expect(received).toBe(expected) // Object.is equality
   105 |   });
   106 | });
-  107 | 
+  107 |
   108 | test.describe('Navigation', () => {
   109 |   test('9. Page renders with main element visible', async ({ page }) => {
   110 |     await page.goto('/alerts', { waitUntil: 'domcontentloaded' });
   111 |     await page.waitForTimeout(1_500);
-  112 |     await expect(page.locator('main')).toBeVisible();
+  112 |     await expect(page.locator('main').first()).toBeVisible();
   113 |   });
-  114 | 
+  114 |
   115 |   test('10. Home page has accessible navigation', async ({ page }) => {
   116 |     await page.goto('/', { waitUntil: 'domcontentloaded' });
   117 |     await page.waitForTimeout(1_500);
   118 |     const bodyText = await page.locator('body').innerText();
   119 |     expect(bodyText.length).toBeGreaterThan(50);
   120 |   });
-  121 | 
+  121 |
   122 |   test('11. Full alerts CRUD flow', async ({ page }) => {
   123 |     // Step 1: Navigate to a game detail page (Outer Wilds, CheapShark ID 612)
   124 |     await page.goto('/game/612', { waitUntil: 'domcontentloaded' });
   125 |     await page.waitForTimeout(2_000);
-  126 | 
+  126 |
   127 |     // Verify game detail page content loaded
   128 |     const bodyText = await page.locator('body').innerText();
   129 |     expect(bodyText.length).toBeGreaterThan(50);
   130 |     expect(bodyText).not.toContain('Something went wrong');
-  131 | 
-  132 |     // Step 2: Click "Alert Me" button
-  133 |     const alertButton = page.getByRole('button', { name: /alert me/i });
-  134 |     await expect(alertButton).toBeVisible();
-  135 |     await alertButton.click();
-  136 | 
-  137 |     // Step 3: Auth modal appears (unauthed mode)
-  138 |     await page.waitForTimeout(500);
-  139 |     const authModal = page.getByRole('heading', { name: /welcome to gamedeals/i });
-  140 |     await expect(authModal).toBeVisible();
-  141 | 
-  142 |     // Step 4: Close modal via Escape (or click outside)
-  143 |     await page.keyboard.press('Escape');
-  144 |     await page.waitForTimeout(500);
-  145 |     await expect(authModal).not.toBeVisible();
-  146 | 
-  147 |     // Step 5: Navigate to /alerts page
-  148 |     await page.goto('/alerts', { waitUntil: 'domcontentloaded' });
-  149 |     await page.waitForTimeout(1_500);
-  150 | 
-  151 |     // Step 6: Verify /alerts page renders without crashing
-  152 |     const alertsBodyText = await page.locator('body').innerText();
-  153 |     expect(alertsBodyText.length).toBeGreaterThan(50);
-  154 |     expect(alertsBodyText).not.toContain('Something went wrong');
-  155 |   });
-  156 | });
-  157 | 
+  131 |
+  132 |     // Skip if game data unavailable (CheapShark rate limit) — the
+  133 |     // /game not-found branch renders an h1, so gate on real game content.
+  134 |     if (bodyText.includes('Game not found')) {
+  135 |       test.skip(true, 'Game data unavailable (CheapShark rate limit)');
+  136 |       return;
+  137 |     }
+  138 |
+  139 |     // Step 2: Click "Alert Me" button
+  140 |     const alertButton = page.getByRole('button', { name: /alert me/i });
+  141 |     await expect(alertButton).toBeVisible();
+  142 |     await alertButton.click();
+  143 |
+  144 |     // Step 3: Auth modal appears (unauthed mode)
+  145 |     await page.waitForTimeout(500);
+  146 |     const authModal = page.getByRole('heading', { name: /welcome to gamedeals/i });
+  147 |     await expect(authModal).toBeVisible();
+  148 |
+  149 |     // Step 4: Close modal via Escape (or click outside)
+  150 |     await page.keyboard.press('Escape');
+  151 |     await page.waitForTimeout(500);
+  152 |     await expect(authModal).not.toBeVisible();
+  153 |
+  154 |     // Step 5: Navigate to /alerts page
+  155 |     await page.goto('/alerts', { waitUntil: 'domcontentloaded' });
+  156 |     await page.waitForTimeout(1_500);
+  157 |
+  158 |     // Step 6: Verify /alerts page renders without crashing
+  159 |     const alertsBodyText = await page.locator('body').innerText();
+  160 |     expect(alertsBodyText.length).toBeGreaterThan(50);
+  161 |     expect(alertsBodyText).not.toContain('Something went wrong');
+  162 |   });
+  163 | });
+  164 |
 ```

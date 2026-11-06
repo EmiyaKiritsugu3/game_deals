@@ -91,7 +91,7 @@ jobs:
       - name: Setup env
         run: cp .env.example .env.local
       - name: Build
-        run: bun --bun next build
+        run: bun run build
       - name: Run DB migrations
         run: bunx drizzle-kit migrate
       - name: Full E2E suite
