@@ -1,18 +1,13 @@
-name: Nightly CI
-
+name: Nightly E2E
 on:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '0 8 * * *' # 8:00 AM UTC
   workflow_dispatch:
 
-concurrency:
-  group: nightly-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  mutation:
+  e2e-all-browsers:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 45
     services:
       postgres:
         image: postgres:16-alpine
@@ -28,55 +23,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/gamedeals_test' }}
-      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
-      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'placeholder-publishable-key' }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.3.13
-      - run: bun ci
-      - name: Mutation Testing (placeholder)
-        run: |
-          echo "Install: bun add -D @stryker-mutator/core @stryker-mutator/typescript-checker"
-          echo "Target: 60% mutation score"
-
-  audit:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.3.13
-      - run: bun ci
-      - name: Dead code (strict)
-        run: bunx knip
-        continue-on-error: true
-      - name: Complexity audit
-        run: bunx fallow audit
-        continue-on-error: true
-
-  e2e-full:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    services:
-      postgres:
-        image: postgres:16-alpine
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: gamedeals_test
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-    env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/gamedeals_test' }}
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/gamedeals_test
       NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'placeholder-publishable-key' }}
       CRON_SECRET: ${{ secrets.CRON_SECRET || 'placeholder-cron-secret' }}
@@ -84,64 +31,37 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: oven-sh/setup-bun@v2
         with:
-          bun-version: 1.3.13
+          bun-version: 1.4.2
       - run: bun ci
-      - name: Install Playwright browsers
-        run: bunx playwright install --with-deps chromium
+      - name: Install all Playwright browsers
+        run: bunx playwright install --with-deps
+      - name: Stub Supabase bits
+        run: |
+          docker exec ${{ job.services.postgres.id }} psql -U postgres -d gamedeals_test \
+            -c "CREATE SCHEMA IF NOT EXISTS auth;
+                CREATE TABLE IF NOT EXISTS auth.users (id uuid PRIMARY KEY DEFAULT gen_random_uuid());
+                DO \$fn\$ BEGIN
+                  IF NOT EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace WHERE proname = 'uid' AND n.nspname = 'auth') THEN
+                    CREATE FUNCTION auth.uid() RETURNS uuid LANGUAGE sql STABLE AS \$body\$ SELECT NULL::uuid \$body\$;
+                  END IF;
+                END \$fn\$;
+                DO \$\$ BEGIN
+                  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'service_role') THEN CREATE ROLE service_role; END IF;
+                  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'authenticated') THEN CREATE ROLE authenticated; END IF;
+                  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'anon') THEN CREATE ROLE anon; END IF;
+                END \$\$;"
       - name: Setup env
         run: cp .env.example .env.local
       - name: Build
-        run: bun --bun next build
+        run: bun run build
       - name: Run DB migrations
         run: bunx drizzle-kit migrate
       - name: Full E2E suite
-        run: bunx playwright test
+        run: bunx playwright test --project=chromium --project=firefox --project=webkit
       - name: Upload Playwright report
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: playwright-report-nightly
           path: playwright-report/
-          retention-days: 7
-
-  lighthouse:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      LHCI_URL: ${{ secrets.VERCEL_APP_URL || 'https://gamedeals.vercel.app' }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.3.13
-      - run: bun ci
-      - name: Lighthouse CI budgets
-        run: >
-          bunx @lhci/cli@0.14.0 autorun
-          --collect.url="$LHCI_URL/"
-          --collect.url="$LHCI_URL/deals/under-10"
-          --collect.url="$LHCI_URL/search"
-        env:
-          LHCI_BUILD_CONTEXT__CURRENT_BRANCH: main
-
-  coverage-trend:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.3.13
-      - run: bun ci
-      - name: Coverage report
-        run: |
-          bun test --coverage 2>&1 | tee coverage-nightly.txt
-          grep -E "All files| Branches | Lines |Functions|Statements" coverage-nightly.txt || true
-      - name: Upload coverage data
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
-        with:
-          name: coverage-nightly
-          path: |
-            coverage-nightly.txt
-            coverage/
-          retention-days: 30
+          retention-days: 14

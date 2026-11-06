@@ -5,3 +5,7 @@
 ## 2024-05-24 - Consistent Keyboard Focus Indicators
 **Learning:** While checking accessibility on key interactive elements (e.g., custom icon buttons, game card triggers), I found that many had hover states but lacked visible focus indicators for keyboard users. Adding a consistent focus ring pattern greatly improves accessibility without compromising the design.
 **Action:** Always apply `focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2` (or similar utility classes from the established design system) to all interactive elements (`button`, `a`, `input`, etc.) to ensure keyboard navigability.
+
+## 2024-11-06 - Hidden Checkbox Keyboard Accessibility Focus
+**Learning:** When using custom checkboxes built with hidden `sr-only` inputs, keyboard users often lose context because the hidden input receives focus but the custom visual checkbox elements do not display it. Adding the `peer` class to the input and `peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-focus-visible:outline-offset-2` to the adjacent visible wrapper correctly surfaces keyboard focus state.
+**Action:** When implementing hidden accessible inputs that rely on visual sibling elements for display, always wrap the input with `peer` and style the sibling using `peer-focus-visible` to ensure keyboard navigation visibility.

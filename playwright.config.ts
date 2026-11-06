@@ -7,7 +7,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'list',
+  reporter: process.env.CI ? [['list'], ['html']] : 'list',
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
@@ -25,7 +25,7 @@ export default defineConfig({
   ],
   // Production mode for stable visuals (next dev can cause OOM per AGENTS.md)
   webServer: {
-    command: 'bun --bun next build && bun --bun next start',
+    command: 'npm run build && npm run start',
     port: 3000,
     timeout: 300_000,
     reuseExistingServer: true,
