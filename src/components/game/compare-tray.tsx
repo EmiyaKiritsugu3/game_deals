@@ -138,22 +138,20 @@ function CompareDialog({
   if (items.length === 0) return null;
 
   // Compute winners
-  const cheapest = items.reduce(
-    (min, d) => (d.salePriceNum < min.salePriceNum ? d : min),
-    items[0]
-  );
-  const biggestSavings = items.reduce(
-    (max, d) => (d.savingsNum > max.savingsNum ? d : max),
-    items[0]
-  );
-  const highestRated = items.reduce(
-    (max, d) => (d.dealRatingNum > max.dealRatingNum ? d : max),
-    items[0]
-  );
-  const bestMetacritic = items.reduce(
-    (max, d) => (d.metacriticScoreNum > max.metacriticScoreNum ? d : max),
-    items[0]
-  );
+  let cheapest = items[0];
+  let biggestSavings = items[0];
+  let highestRated = items[0];
+  let bestMetacritic = items[0];
+  let lowestRetail = items[0];
+  let newestRelease = items[0];
+  for (const d of items) {
+    if (d.salePriceNum < cheapest.salePriceNum) cheapest = d;
+    if (d.savingsNum > biggestSavings.savingsNum) biggestSavings = d;
+    if (d.dealRatingNum > highestRated.dealRatingNum) highestRated = d;
+    if (d.metacriticScoreNum > bestMetacritic.metacriticScoreNum) bestMetacritic = d;
+    if (d.normalPriceNum > lowestRetail.normalPriceNum) lowestRetail = d;
+    if (d.releaseDateMs > newestRelease.releaseDateMs) newestRelease = d;
+  }
 
   const isWinner = (deal: DealWithStore, winner: DealWithStore) => deal.dealID === winner.dealID;
 
@@ -183,7 +181,7 @@ function CompareDialog({
           ${d.normalPrice}
         </span>
       ),
-      winner: items.reduce((max, d) => (d.normalPriceNum > max.normalPriceNum ? d : max), items[0]),
+      winner: lowestRetail,
     },
     {
       label: 'Savings',
@@ -251,7 +249,7 @@ function CompareDialog({
       label: 'Released',
       icon: Calendar,
       render: (d) => <span className="text-xs text-muted-foreground">{d.releaseDateLabel}</span>,
-      winner: items.reduce((max, d) => (d.releaseDateMs > max.releaseDateMs ? d : max), items[0]),
+      winner: newestRelease,
     },
   ];
 
