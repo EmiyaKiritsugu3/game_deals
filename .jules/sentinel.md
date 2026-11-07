@@ -15,3 +15,7 @@
 **Vulnerability:** XSS vulnerability in `src/app/game/[id]/page.tsx` where user-controlled game titles were serialized into JSON-LD scripts using `JSON.stringify` directly in `dangerouslySetInnerHTML`. An attacker could inject `</script><script>alert(1)</script>` into the title.
 **Learning:** `JSON.stringify` does not escape HTML control characters like `<` or `>`. When rendering this JSON directly into a script tag using React's `dangerouslySetInnerHTML`, it can break out of the script context and execute malicious JavaScript.
 **Prevention:** Always escape HTML control characters when injecting JSON into script tags. Use `.replace(/</g, '\\u003c')` so the unicode escape is correctly preserved in the JavaScript string and not evaluated as an unescaped literal `<`.
+## 2024-11-07 - Explicit protocol validation for open redirects
+**Vulnerability:** Open redirect / XSS via javascript: or data: URIs in auth redirect parameter.
+**Learning:** Under the WHATWG URL spec, javascript: or data: URIs evaluate to an origin of the literal string 'null'. While an origin === expectedOrigin check might inadvertently reject them, explicitly validating that the protocol is safe (e.g., http: or https:) is the required defense-in-depth practice to prevent XSS and open redirects.
+**Prevention:** Always explicitly check URL protocols (http/https) before redirecting or using URLs provided by user input, rather than relying solely on origin checks.
