@@ -11,11 +11,14 @@
     "axios": "^1.20.0",
     "brace-expansion": "^5.0.12",
     "esbuild": ">=0.24.3",
+    "source-map-js": "^1.2.2",
+    "vite": "^8.2.4",
+    "zod": "^4.6.6",
     "fast-uri": "^3.1.6",
     "nanoid": "^3.3.16",
     "postcss": "^8.5.10",
     "sharp": "^0.35.5",
-    "undici": "^7.30.0"
+    "undici": "^7.30.1"
   },
   "scripts": {
     "dev": "bun --bun next dev",
@@ -38,7 +41,6 @@
     "test:integration": "bun --bun vitest run --config vitest.integration.config.ts",
     "tdd": "bun --bun vitest --changed --reporter=verbose --watch",
     "knip": "bunx knip",
-    "audit": "bun audit --audit-level=high",
     "check": "bash scripts/check.sh",
     "fallow": "fallow",
     "sonar:local": "bun run test:coverage && npx -y sonarqube-scanner -Dsonar.projectKey=EmiyaKiritsugu3_game_deals -Dsonar.organization=emiyakiritsugu3 -Dsonar.sources=./src -Dsonar.host.url=https://sonarcloud.io -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info -Dsonar.exclusions='src/data/collections.ts,src/data/bundles.ts,**/*.test.ts,**/*.test.tsx,**/*.spec.ts,**/node_modules/**,**/.next/**,**/coverage/**,src/app/globals.css'",
@@ -50,7 +52,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
-    "@sentry/nextjs": "^10.73.0",
+    "@sentry/nextjs": "^10.75.2",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.108.2",
     "@tanstack/react-query": "^5.101.1",
@@ -63,7 +65,7 @@
     "fast-uri": "3.1.6",
     "input-otp": "^1.4.2",
     "lucide-react": "^1.21.0",
-    "next": "16.3.8",
+    "next": "16.4.1",
     "next-themes": "^0.4.6",
     "postgres": "^3.4.9",
     "react": "19.2.7",
