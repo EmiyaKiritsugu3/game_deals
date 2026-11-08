@@ -28,12 +28,16 @@ import { useWishlist } from '@/store/wishlist';
 
 export function WishlistDrawer() {
   const { items, isOpen, setOpen, clear, remove } = useWishlist();
-  const totalSavings = items.reduce(
-    (sum, i) => sum + (Number(i.normalPrice) - Number(i.salePrice)),
-    0
-  );
-  const totalCurrent = items.reduce((sum, i) => sum + Number(i.salePrice), 0);
-  const totalRetail = items.reduce((sum, i) => sum + Number(i.normalPrice), 0);
+
+  // Calculate totals in a single pass to save CPU time
+  let totalSavings = 0;
+  let totalCurrent = 0;
+  let totalRetail = 0;
+  for (const i of items) {
+    totalSavings += Number(i.normalPrice) - Number(i.salePrice);
+    totalCurrent += Number(i.salePrice);
+    totalRetail += Number(i.normalPrice);
+  }
   const avgSavings = totalRetail > 0 ? Math.round((totalSavings / totalRetail) * 100) : 0;
 
   // Track which item is "expanded" (showing the sparkline + price stats).

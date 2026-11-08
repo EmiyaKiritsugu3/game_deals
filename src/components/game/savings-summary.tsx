@@ -30,10 +30,16 @@ function useCountUp(target: number, durationMs = 900) {
 
 export function SavingsSummary({ deals }: SavingsSummaryProps) {
   const stats = React.useMemo(() => {
-    const totalRetail = deals.reduce((s, d) => s + d.normalPriceNum, 0);
-    const totalCurrent = deals.reduce((s, d) => s + d.salePriceNum, 0);
+    // Single pass aggregation to avoid multiple array iterations
+    let totalRetail = 0;
+    let totalCurrent = 0;
+    let freeCount = 0;
+    for (const d of deals) {
+      totalRetail += d.normalPriceNum;
+      totalCurrent += d.salePriceNum;
+      if (d.isFree) freeCount++;
+    }
     const totalSaved = Math.max(0, totalRetail - totalCurrent);
-    const freeCount = deals.filter((d) => d.isFree).length;
     return {
       totalRetail,
       totalCurrent,
