@@ -124,12 +124,16 @@ export function DealStatsDashboard({ deals }: DealStatsDashboardProps) {
     }
     const totalTiers = tiers.reduce((s, t) => s + t.count, 0) || 1;
 
-    // Aggregate stats
-    const avgSavings = deduped.length
-      ? Math.round(deduped.reduce((s, d) => s + d.savingsNum, 0) / deduped.length)
-      : 0;
-    const totalSavings = deduped.reduce((s, d) => s + (d.normalPriceNum - d.salePriceNum), 0);
-    const verifiedCount = deduped.filter((d) => isOfficialRetailer(d.storeID)).length;
+    // Aggregate stats in a single pass to save CPU cycles
+    let totalSavingsSum = 0;
+    let totalSavings = 0;
+    let verifiedCount = 0;
+    for (const d of deduped) {
+      totalSavingsSum += d.savingsNum;
+      totalSavings += d.normalPriceNum - d.salePriceNum;
+      if (isOfficialRetailer(d.storeID)) verifiedCount++;
+    }
+    const avgSavings = deduped.length ? Math.round(totalSavingsSum / deduped.length) : 0;
 
     return {
       buckets,
